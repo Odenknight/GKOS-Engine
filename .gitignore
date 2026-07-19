@@ -1,0 +1,13 @@
+node_modules/
+dist/
+*.map
+*.tgz
+*.log
+.DS_Store
+
+# Codex/AI tooling state and alternate package-manager artifacts (repo is npm-based)
+.codex/
+.pnpm-store/
+pnpm-lock.yaml
+pnpm-workspace.yaml
+.claude/
