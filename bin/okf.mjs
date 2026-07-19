@@ -22,9 +22,9 @@
  * Requires `npm run build` once (dist/kosmos-core.mjs).
  */
 import { readFile, readdir, stat, writeFile } from "node:fs/promises";
-import { watch } from "node:fs";
+import { watch, realpathSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { pathToFileURL, fileURLToPath } from "node:url";
 
 const coreUrl = new URL("../dist/kosmos-core.mjs", import.meta.url);
 let core;
@@ -347,8 +347,27 @@ export async function main(argv = process.argv.slice(2)) {
   return 0;
 }
 
-/* Run only when invoked directly (kept importable for tests). */
-const invokedDirectly = process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url;
+/* Run only when invoked directly (kept importable for tests).
+ * Compare the *realpath* of process.argv[1] against this module's own realpath.
+ * Node resolves import.meta.url to the module's REAL path while argv[1] keeps
+ * the AS-INVOKED path, so under `npm link`, global bin shims, or pnpm/npm
+ * workspace symlinks (symlinked package dirs) the raw-string comparison fails,
+ * main() never runs, and the CLI exits 0 with zero output. Realpath resolution
+ * canonicalizes both sides. If realpath throws (e.g. argv[1] gone from disk),
+ * fall back to the raw URL comparison rather than crashing. This module must
+ * stay side-effect-free on import (it is imported by GKOS-Engine-Lite's wrapper
+ * and by tests), so the guard must only fire on genuine direct invocation. */
+function isInvokedDirectly() {
+  const invokedPath = process.argv[1];
+  if (!invokedPath) return false;
+  try {
+    return realpathSync(invokedPath) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return pathToFileURL(invokedPath).href === import.meta.url;
+  }
+}
+
+const invokedDirectly = isInvokedDirectly();
 if (invokedDirectly) {
   const code = await main();
   if (typeof code === "number" && code !== 0) process.exit(code);
