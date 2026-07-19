@@ -39,6 +39,7 @@ const {
   ENGINE_VERSION,
   OKF23_POLICY,
   buildGraph,
+  codeUnitCompare,
   buildGraphitiEpisodesWithContent,
   contentHash,
   isAttachmentPath,
@@ -80,9 +81,9 @@ export async function scanCorpus(dir) {
     }
   }
   await walk(dir, "");
-  files.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
-  attachments.sort((a, b) => a.localeCompare(b));
-  folders.sort((a, b) => a.localeCompare(b));
+  files.sort((a, b) => codeUnitCompare(a.relativePath, b.relativePath));
+  attachments.sort(codeUnitCompare);
+  folders.sort(codeUnitCompare);
   return { files, attachments, folders };
 }
 
@@ -115,7 +116,7 @@ function projectionsFrom(files, folders) {
     if (!projection) continue;
     out.push({ path: node.path, projection });
   }
-  out.sort((a, b) => a.path.localeCompare(b.path));
+  out.sort((a, b) => codeUnitCompare(a.path, b.path));
   return { graph, projections: out };
 }
 
@@ -130,7 +131,7 @@ export async function runValidate(dir) {
   for (const { path, projection } of projections) {
     const diagnostics = [...projection.diagnostics]
       .map((d) => ({ code: d.code, severity: d.severity, field: d.field ?? null, message: d.message }))
-      .sort((a, b) => a.code.localeCompare(b.code) || (a.field ?? "").localeCompare(b.field ?? "") || a.message.localeCompare(b.message));
+      .sort((a, b) => codeUnitCompare(a.code, b.code) || codeUnitCompare(a.field ?? "", b.field ?? "") || codeUnitCompare(a.message, b.message));
     for (const d of diagnostics) if (counts[d.severity] != null) counts[d.severity]++;
     notes.push({ path, diagnostics });
   }

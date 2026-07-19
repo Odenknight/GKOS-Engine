@@ -4,5 +4,5 @@
  * (Kosmos-Oden, GKOS-Engine-Lite) have their own separate version constants
  * for their own product identity; this one is the engine's alone.
  */
-export const ENGINE_VERSION = "1.0.0";
+export const ENGINE_VERSION = "1.0.3";
 export const ENGINE_NAME = "gkos-engine";

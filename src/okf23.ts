@@ -8,6 +8,7 @@
  * governed writer and never changes a source note.
  */
 import { ENGINE_VERSION } from "./version";
+import { codeUnitCompare } from "./paths";
 import type {
   OkfAssessment,
   OkfAssessmentScores,
@@ -583,7 +584,7 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
 
 /** Recalculate derived assessment after corpus-level diagnostics/resolution. */
 export function refreshOkf23Assessment(projection: OkfProjection): void {
-  projection.diagnostics.sort((a, b) => a.code.localeCompare(b.code) || (a.field ?? "").localeCompare(b.field ?? "") || a.message.localeCompare(b.message));
+  projection.diagnostics.sort((a, b) => codeUnitCompare(a.code, b.code) || codeUnitCompare(a.field ?? "", b.field ?? "") || codeUnitCompare(a.message, b.message));
   projection.assessment = assessOkf23(projection);
   projection.derived.labels = [...new Set([
     ...projection.derived.labels.filter((x): x is string => typeof x === "string" && !x.startsWith("assessment:")),
