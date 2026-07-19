@@ -41,7 +41,7 @@ entry and the module the CLI and tests import.
 ## Library usage
 
 ```js
-import { buildGraph, buildOkf23Projection, KOSMOS_VERSION } from "gkos-engine";
+import { buildGraph, buildOkf23Projection, ENGINE_VERSION } from "gkos-engine";
 ```
 
 Everything re-exported from `src/index.ts` is public surface.

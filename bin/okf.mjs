@@ -36,7 +36,7 @@ try {
 }
 
 const {
-  KOSMOS_VERSION,
+  ENGINE_VERSION,
   OKF23_POLICY,
   buildGraph,
   buildGraphitiEpisodesWithContent,
@@ -98,7 +98,7 @@ export function corpusHash(files) {
 
 export function buildBlock(files) {
   return {
-    engine_version: KOSMOS_VERSION,
+    engine_version: ENGINE_VERSION,
     policy_hash: OKF23_POLICY.hash,
     corpus_hash: corpusHash(files),
     generated_at: new Date().toISOString(),
@@ -200,7 +200,7 @@ async function buildGraphOnce({ vaultDir, graphOut, episodesOut, groupId }) {
   const graph = buildGraph(files, folders);
   graph.diagnostics.attachments = attachments.length;
   const out = {
-    kosmos: KOSMOS_VERSION,
+    engine: ENGINE_VERSION,
     vault: basename(vaultDir),
     build: buildBlock(files),
     nodes: graph.nodes,
@@ -248,7 +248,7 @@ function watchGraph(config) {
 }
 
 /* ---------------- CLI ---------------- */
-const USAGE = `okf (GKOS Engine) v${KOSMOS_VERSION}
+const USAGE = `okf (GKOS Engine) v${ENGINE_VERSION}
 Usage:
   okf validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
   okf assess   <dir> [--json]                         per-note documentation-quality scores/labels

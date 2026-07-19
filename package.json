@@ -1,11 +1,16 @@
 {
   "name": "gkos-engine",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GKOS Engine — the canonical deterministic engine implementing OKF+ 2.3 (parse, validate, project, assess, graph, export) under GKOS governance. Obsidian-free, reusable core consumed by Kosmos-Oden and GKOS-Engine-Lite.",
   "type": "module",
   "main": "./dist/kosmos-core.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/kosmos-core.mjs"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/kosmos-core.mjs",
+      "default": "./dist/kosmos-core.mjs"
+    }
   },
   "bin": {
     "okf": "./bin/okf.mjs"
@@ -22,6 +27,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "build": "node scripts/build.mjs",
+    "prepare": "node scripts/build.mjs",
     "pretest": "node scripts/build.mjs",
     "test": "node --test \"test/*.test.mjs\""
   },

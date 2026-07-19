@@ -84,7 +84,7 @@ export interface OkfAssessment {
   targetUid: string | null;
   profile: "okf-plus-2.3-validating-projection";
   policy: { id: string; version: string; hash: string; weights: Record<string, number>; missingValueBehavior: string };
-  assessor: { id: "tool:kosmos-oden"; engineVersion: string };
+  assessor: { id: "tool:gkos-engine"; engineVersion: string };
   inputHash: string;
   calculatedAt: string;
   scores: OkfAssessmentScores;

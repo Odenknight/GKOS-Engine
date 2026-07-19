@@ -1,7 +1,8 @@
 /**
- * Single source of truth for the Kosmos-Oden version.
- * scripts/check-versions.mjs asserts that package.json, manifest.json and
- * versions.json stay in sync with this constant (CI fails otherwise).
+ * Single source of truth for the GKOS Engine's own version identity.
+ * Tracks package.json's "version" field — bump both together. Consumers
+ * (Kosmos-Oden, GKOS-Engine-Lite) have their own separate version constants
+ * for their own product identity; this one is the engine's alone.
  */
-export const KOSMOS_VERSION = "0.6.5";
-export const KOSMOS_NAME = "kosmos-oden";
+export const ENGINE_VERSION = "1.0.0";
+export const ENGINE_NAME = "gkos-engine";

@@ -7,7 +7,7 @@
  * and calculates deterministic documentation-quality assessments. It is not a
  * governed writer and never changes a source note.
  */
-import { KOSMOS_VERSION } from "./version";
+import { ENGINE_VERSION } from "./version";
 import type {
   OkfAssessment,
   OkfAssessmentScores,
@@ -430,7 +430,7 @@ export function assessOkf23(projection: OkfProjection): OkfAssessment {
     assessmentId: `assessment:${projection.contentHash.replace(/[^a-z0-9]/gi, "-")}`,
     targetUid: uid, profile: OKF23_PROFILE,
     policy: { id: OKF23_POLICY.id, version: OKF23_POLICY.version, hash: OKF23_POLICY.hash, weights: { ...OKF23_POLICY.weights }, missingValueBehavior: OKF23_POLICY.missingValueBehavior },
-    assessor: { id: "tool:kosmos-oden", engineVersion: KOSMOS_VERSION }, inputHash: `fnv1a32:${projection.contentHash}`,
+    assessor: { id: "tool:gkos-engine", engineVersion: ENGINE_VERSION }, inputHash: `fnv1a32:${projection.contentHash}`,
     calculatedAt: deterministicAt, scores: components, exclusions, labels: { derived: [label] }, diagnostics: [...diagnostics],
     interpretation: "documentation-and-support-quality-not-truth",
   };
