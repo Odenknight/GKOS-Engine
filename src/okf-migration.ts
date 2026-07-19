@@ -295,7 +295,12 @@ const list = (fm: StrictFrontmatter, key: string): string[] | undefined => {
   return f?.kind === "list" ? [...(f.values ?? [])] : undefined;
 };
 const nonempty = (v: unknown): v is string => typeof v === "string" && v.trim().length > 0;
-const validTimestamp = (v: string | undefined): boolean => Boolean(v && /^\d{4}-\d{2}-\d{2}T.*Z$/.test(v) && !Number.isNaN(Date.parse(v)));
+// Accept canonical UTC Zulu (…Z) and ISO-8601 local time with an explicit
+// numeric ±HH:MM UTC offset (e.g. 2026-07-19T14:42:07-04:00). Nothing looser:
+// a naive wall-clock value with no zone designator is still rejected.
+const OKF_TIMESTAMP_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+export const isValidOkfTimestamp = (v: string | undefined): boolean => Boolean(v && OKF_TIMESTAMP_RE.test(v) && !Number.isNaN(Date.parse(v)));
+const validTimestamp = isValidOkfTimestamp;
 const safeWikiTargets = (field: ParsedField | undefined): boolean => {
   if (!field || field.kind !== "list") return false;
   if (!(field.values?.length)) return true;
@@ -316,7 +321,7 @@ function okfValidation(fm: StrictFrontmatter): OkfMigrationFinding[] {
   if (scalar(fm, "okf_version") !== "2.2") f.push({ code: "invalid-okf-version", message: `okf_version must be exactly "2.2".` });
   if (!UUID_V4.test(scalar(fm, "uid") ?? "")) f.push({ code: "invalid-uid", message: "uid must be a lowercase UUIDv4." });
   if (!TYPES.has(scalar(fm, "type") ?? "")) f.push({ code: "invalid-type", message: "type must be episodic, semantic, or procedural." });
-  if (!validTimestamp(scalar(fm, "timestamp"))) f.push({ code: "invalid-timestamp", message: "timestamp must be a UTC ISO-8601 value ending in Z." });
+  if (!validTimestamp(scalar(fm, "timestamp"))) f.push({ code: "invalid-timestamp", message: "timestamp must be an ISO-8601 value in UTC (…Z) or with a numeric ±HH:MM offset." });
   if (!EPISTEMIC.has(scalar(fm, "epistemic_state") ?? "")) f.push({ code: "invalid-epistemic-state", message: "epistemic_state is missing or invalid." });
   const scope = scalar(fm, "scope") ?? "";
   if (!SCOPES.has(scope)) f.push({ code: "invalid-scope", message: "scope is missing or invalid." });
