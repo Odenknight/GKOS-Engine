@@ -1,6 +1,6 @@
 {
   "name": "gkos-engine",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "GKOS Engine — the canonical deterministic engine implementing OKF+ 2.3 (parse, validate, project, assess, graph, export) under GKOS governance. Obsidian-free, reusable core consumed by Kosmos-Oden and GKOS-Engine-Lite.",
   "type": "module",
   "main": "./dist/kosmos-core.mjs",
