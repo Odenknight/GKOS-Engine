@@ -46,6 +46,42 @@ import { buildGraph, buildOkf23Projection, ENGINE_VERSION } from "gkos-engine";
 
 Everything re-exported from `src/index.ts` is public surface.
 
+### Projection options
+
+`buildOkf23Projection(raw, sourcePath, contentHash, legacy, options?)` accepts an
+optional `Okf23ProjectionOptions`:
+
+- **`defaultSensitivity`** — effective sensitivity applied when a note declares
+  no `sensitivity` field. The engine **fails closed**: out of the box a missing
+  sensitivity resolves to `secret` (`FAIL_CLOSED_SENSITIVITY_DEFAULT`), per
+  GKOS §11, and `OKF-SENSITIVITY-001` fires so the defaulting is always visible
+  in diagnostics. Downstream plugins may surface this as a user-facing setting.
+  The value is validated against the seven-level vocabulary; an unrecognized
+  value falls back to `secret`. An **authored** classification (including a
+  legitimately open one) is respected as-is — the default only governs the
+  missing case.
+
+  ```js
+  buildOkf23Projection(raw, path, hash, null, { defaultSensitivity: "internal" });
+  ```
+
+  The engine ships **no PII/sensitive-content detection**. If a deployment adds
+  detection it may only **raise** effective sensitivity (per the exported
+  `SENSITIVITY_RANK` ladder), never lower it.
+
+### Effective-state contracts
+
+- **Epistemic state** — an `epistemic_state` outside the frozen twelve-state
+  vocabulary raises `OKF-EPISTEMIC-002` (error) and projects `effective.epistemicState`
+  to the null-weight fallback `unknown`, with a machine-detectable
+  `effective.epistemicStateDefaulted: true`. The invalid value is retained on
+  `authored.epistemicState` and echoed in the diagnostic for repair; an
+  `upgrade-all` migration run rewrites it to the conservative default.
+- **Temporal** — a naive wall-clock timestamp (no `Z`, no numeric ±HH:MM offset)
+  in `created_at`/`updated_at` raises `OKF-TEMPORAL-001` (warning), matching the
+  schema and the stamper. The projection, stamper (`isValidOkfTimestamp`), and
+  schema share one validator so they cannot drift.
+
 ## CLI: `okf`
 
 The `okf` binary runs the engine over any folder of Markdown notes — no Obsidian
