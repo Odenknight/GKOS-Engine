@@ -218,11 +218,14 @@ Body.`;
   assert.equal(projection.extensions.authorship_origin, undefined, "flat governance keys are not extensions");
 });
 
-test("missing sensitivity defaults to internal and invalid sensitivity fails closed", () => {
+// DIV-002: missing sensitivity fails closed to the restricted default (secret),
+// configurable and raise-only. (Updated from the old behavior, which resolved
+// missing sensitivity to the mid-open "internal" level.)
+test("missing sensitivity fails closed to secret by default and invalid sensitivity fails closed", () => {
   const missing = note.replace(/sensitivity:[\s\S]*?provenance:/, "provenance:");
   const p1 = buildOkf23Projection(missing, "Missing.md", "m:1", null);
-  assert.equal(p1.effective.sensitivity, "internal");
-  assert.ok(p1.diagnostics.some((d) => d.code === "OKF-SENSITIVITY-001"));
+  assert.equal(p1.effective.sensitivity, "secret");
+  assert.ok(p1.diagnostics.some((d) => d.code === "OKF-SENSITIVITY-001"), "OKF-SENSITIVITY-001 still fires so defaulting stays visible");
   const invalid = note.replace('level: "restricted"', 'level: "unclassified"');
   const p2 = buildOkf23Projection(invalid, "Invalid.md", "i:1", null);
   assert.equal(p2.effective.sensitivity, "secret");
@@ -230,6 +233,21 @@ test("missing sensitivity defaults to internal and invalid sensitivity fails clo
   const flat = `---\nokf_version: "2.2"\nuid: "11111111-1111-4111-8111-111111111111"\ntype: "semantic"\ntitle: "Flat"\ntimestamp: "2026-07-01T00:00:00Z"\nepistemic_state: "fact"\nsensitivity: "typo"\n---\nBody`;
   const graph = buildGraph([{ relativePath: "Flat.md", extension: "md", content: flat }], []);
   assert.equal(graph.nodes.find((node) => node.path === "Flat.md").okf.projection.effective.sensitivity, "secret");
+});
+
+test("DIV-002: defaultSensitivity option is honored, validated, and never lowers an authored classification", () => {
+  const missing = note.replace(/sensitivity:[\s\S]*?provenance:/, "provenance:");
+  // A deployment may relax the default to a less restrictive level.
+  const relaxed = buildOkf23Projection(missing, "Missing.md", "m:2", null, { defaultSensitivity: "internal" });
+  assert.equal(relaxed.effective.sensitivity, "internal");
+  assert.ok(relaxed.diagnostics.some((d) => d.code === "OKF-SENSITIVITY-001"));
+  // An out-of-vocabulary option value is ignored and falls back to secret.
+  const bogus = buildOkf23Projection(missing, "Missing.md", "m:3", null, { defaultSensitivity: "nonsense" });
+  assert.equal(bogus.effective.sensitivity, "secret");
+  // The default never overrides an authored classification, even a more open one.
+  const publicNote = note.replace('level: "restricted"', 'level: "public"');
+  const p = buildOkf23Projection(publicNote, "Public.md", "p:1", null, { defaultSensitivity: "secret" });
+  assert.equal(p.effective.sensitivity, "public");
 });
 
 test("DIV-001: naive wall-clock created_at emits an OKF-TEMPORAL diagnostic", () => {

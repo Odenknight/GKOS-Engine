@@ -46,6 +46,29 @@ import { buildGraph, buildOkf23Projection, ENGINE_VERSION } from "gkos-engine";
 
 Everything re-exported from `src/index.ts` is public surface.
 
+### Projection options
+
+`buildOkf23Projection(raw, sourcePath, contentHash, legacy, options?)` accepts an
+optional `Okf23ProjectionOptions`:
+
+- **`defaultSensitivity`** — effective sensitivity applied when a note declares
+  no `sensitivity` field. The engine **fails closed**: out of the box a missing
+  sensitivity resolves to `secret` (`FAIL_CLOSED_SENSITIVITY_DEFAULT`), per
+  GKOS §11, and `OKF-SENSITIVITY-001` fires so the defaulting is always visible
+  in diagnostics. Downstream plugins may surface this as a user-facing setting.
+  The value is validated against the seven-level vocabulary; an unrecognized
+  value falls back to `secret`. An **authored** classification (including a
+  legitimately open one) is respected as-is — the default only governs the
+  missing case.
+
+  ```js
+  buildOkf23Projection(raw, path, hash, null, { defaultSensitivity: "internal" });
+  ```
+
+  The engine ships **no PII/sensitive-content detection**. If a deployment adds
+  detection it may only **raise** effective sensitivity (per the exported
+  `SENSITIVITY_RANK` ladder), never lower it.
+
 ### Effective-state contracts
 
 - **Temporal** — a naive wall-clock timestamp (no `Z`, no numeric ±HH:MM offset)

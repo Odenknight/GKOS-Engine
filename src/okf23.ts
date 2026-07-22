@@ -82,6 +82,38 @@ const EPISTEMIC_STATES = new Set([
 const SENSITIVITY_LEVELS: OkfSensitivity[] = [
   "public", "internal", "restricted", "confidential", "regulated", "phi", "secret",
 ];
+// Ordering used for "raise-only, never lower" comparisons. Higher index = more
+// restrictive. Any automatic detection (none ships today — see below) may only
+// move effective sensitivity UP this ladder, never down.
+export const SENSITIVITY_RANK: Record<OkfSensitivity, number> = Object.freeze(
+  Object.fromEntries(SENSITIVITY_LEVELS.map((level, index) => [level, index])) as Record<OkfSensitivity, number>,
+);
+// GKOS §11 fail-closed default: a note that declares NO sensitivity resolves to
+// the most restrictive practical level out of the box. Deployments may relax
+// this via Okf23ProjectionOptions.defaultSensitivity (validated below), but the
+// engine ships closed.
+export const FAIL_CLOSED_SENSITIVITY_DEFAULT: OkfSensitivity = "secret";
+
+/** Options controlling deterministic projection behavior. */
+export interface Okf23ProjectionOptions {
+  /**
+   * Effective sensitivity applied when a note declares no sensitivity field.
+   * Fail-closed to {@link FAIL_CLOSED_SENSITIVITY_DEFAULT} ("secret") when
+   * omitted. Validated against the seven-level vocabulary; an unrecognized
+   * value falls back to "secret". Downstream plugins may surface this as a
+   * user-facing "default sensitivity" setting.
+   *
+   * NOTE: the engine ships NO PII/sensitive-content detection. If a deployment
+   * adds detection, it must only RAISE effective sensitivity above this default
+   * (never lower it) — the projection enforces raise-only via SENSITIVITY_RANK.
+   */
+  defaultSensitivity?: OkfSensitivity;
+}
+
+function resolveDefaultSensitivity(options?: Okf23ProjectionOptions): OkfSensitivity {
+  const configured = options?.defaultSensitivity;
+  return configured && SENSITIVITY_LEVELS.includes(configured) ? configured : FAIL_CLOSED_SENSITIVITY_DEFAULT;
+}
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const NAMESPACED_ID = /^[a-z][a-z0-9_.-]*:[a-z0-9][a-z0-9_.:/-]{2,}$/i;
 const SHA256 = /^sha256:[0-9a-f]{64}$/i;
@@ -445,7 +477,7 @@ export function assessOkf23(projection: OkfProjection): OkfAssessment {
 }
 
 /** Build an origin-preserving projection for canonical v2.3 and legacy notes. */
-export function buildOkf23Projection(raw: string, sourcePath: string, contentHash: string, legacy: OkfData | null): OkfProjection | undefined {
+export function buildOkf23Projection(raw: string, sourcePath: string, contentHash: string, legacy: OkfData | null, options: Okf23ProjectionOptions = {}): OkfProjection | undefined {
   const parsed = parseOkf23Frontmatter(raw);
   const data = parsed.data;
   const version = text(data.okf_version);
@@ -557,11 +589,24 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
     }
   }
 
+  // Fail-closed sensitivity (DIV-002 / GKOS §11): a note that declares no
+  // sensitivity resolves to the configured restricted default ("secret" out of
+  // the box), NOT to a mid-open level. The default is configurable per
+  // deployment via options.defaultSensitivity but can only be relaxed
+  // explicitly; the engine never silently defaults to an open level.
+  // OKF-SENSITIVITY-001 keeps firing so the defaulting stays visible.
   const rawSensitivity = text(record(data.sensitivity).level) ?? flatSensitivity ?? legacy?.sensitivity ?? null;
-  let effectiveSensitivity: OkfSensitivity = OKF23_POLICY.sensitivityDefault;
-  if (!rawSensitivity) diagnostics.push(diagnostic("OKF-SENSITIVITY-001", "warning", "Sensitivity is missing; effective sensitivity defaults to internal.", sourcePath, "sensitivity.level"));
+  const defaultSensitivity = resolveDefaultSensitivity(options);
+  let effectiveSensitivity: OkfSensitivity = defaultSensitivity;
+  if (!rawSensitivity) diagnostics.push(diagnostic("OKF-SENSITIVITY-001", "warning", `Sensitivity is missing; effective sensitivity fails closed to the restricted default (${defaultSensitivity}).`, sourcePath, "sensitivity.level"));
   else if (SENSITIVITY_LEVELS.includes(rawSensitivity as OkfSensitivity)) effectiveSensitivity = rawSensitivity as OkfSensitivity;
   else { effectiveSensitivity = "secret"; diagnostics.push(diagnostic("OKF-SENSITIVITY-005", "error", "Invalid sensitivity fails closed to secret for effective access control.", sourcePath, "sensitivity.level")); }
+  // Detection hook (raise-only, per SENSITIVITY_RANK): no PII/sensitive-content
+  // detection ships in the engine today. If a deployment adds one, it plugs in
+  // here and may only INCREASE effectiveSensitivity above the value resolved
+  // from the authored/default classification — never lower it. An authored
+  // classification (including a legitimately open one) is otherwise respected
+  // as-is; the fail-closed default only governs the MISSING-sensitivity case.
 
   const provenance = record(authored.provenance);
   const refs = list(provenance.source_refs).filter((x) => text(x));
