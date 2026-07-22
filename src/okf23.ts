@@ -9,6 +9,7 @@
  */
 import { ENGINE_VERSION } from "./version";
 import { codeUnitCompare } from "./paths";
+import { isValidOkfTimestamp } from "./timestamps";
 import type {
   OkfAssessment,
   OkfAssessmentScores,
@@ -538,6 +539,23 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
   const epistemicState = text(authored.epistemicState);
   if (epistemicState && !EPISTEMIC_STATES.has(epistemicState)) diagnostics.push(diagnostic("OKF-EPISTEMIC-002", "error", `Unknown epistemic state: ${epistemicState}.`, sourcePath, "epistemic.state"));
   if (epistemicState === "accepted" && !hasApproval(origins.approved, authored)) diagnostics.push(diagnostic("OKF-EPISTEMIC-004", "warning", "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.", sourcePath, "epistemic.state"));
+
+  // Temporal diagnostic (DIV-001): a naive wall-clock timestamp (no Z, no
+  // numeric offset) is rejected by the schema and the stamper; the projection
+  // must flag it too, using the SAME shared validator (isValidOkfTimestamp).
+  for (const [field, value] of [
+    ["created_at", text(data.created_at) ?? legacy?.timestamp ?? null],
+    ["updated_at", text(data.updated_at)],
+  ] as const) {
+    if (value && !isValidOkfTimestamp(value)) {
+      diagnostics.push(diagnostic(
+        "OKF-TEMPORAL-001", "warning",
+        `${field} "${value}" is not a portable timestamp: it lacks a UTC "Z" designator or a numeric ±HH:MM offset (naive wall-clock is rejected by the schema and the stamper).`,
+        sourcePath, field,
+        "Rewrite as ISO-8601 with an explicit zone, e.g. 2026-07-20T12:00:00Z or 2026-07-20T12:00:00-04:00.",
+      ));
+    }
+  }
 
   const rawSensitivity = text(record(data.sensitivity).level) ?? flatSensitivity ?? legacy?.sensitivity ?? null;
   let effectiveSensitivity: OkfSensitivity = OKF23_POLICY.sensitivityDefault;

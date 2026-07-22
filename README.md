@@ -46,6 +46,13 @@ import { buildGraph, buildOkf23Projection, ENGINE_VERSION } from "gkos-engine";
 
 Everything re-exported from `src/index.ts` is public surface.
 
+### Effective-state contracts
+
+- **Temporal** — a naive wall-clock timestamp (no `Z`, no numeric ±HH:MM offset)
+  in `created_at`/`updated_at` raises `OKF-TEMPORAL-001` (warning), matching the
+  schema and the stamper. The projection, stamper (`isValidOkfTimestamp`), and
+  schema share one validator so they cannot drift.
+
 ## CLI: `okf`
 
 The `okf` binary runs the engine over any folder of Markdown notes — no Obsidian

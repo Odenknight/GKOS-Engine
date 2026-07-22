@@ -232,6 +232,30 @@ test("missing sensitivity defaults to internal and invalid sensitivity fails clo
   assert.equal(graph.nodes.find((node) => node.path === "Flat.md").okf.projection.effective.sensitivity, "secret");
 });
 
+test("DIV-001: naive wall-clock created_at emits an OKF-TEMPORAL diagnostic", () => {
+  const naive = `---
+okf_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec9b0"
+title: "Naive timestamp"
+type: "semantic"
+created_at: 2026-07-20 12:00:00
+epistemic_state: "fact"
+sensitivity: "restricted"
+authorship_origin: "authored"
+tags: []
+---
+Body.`;
+  const p = buildOkf23Projection(naive, "Naive.md", "n:1", null);
+  const temporal = p.diagnostics.filter((d) => d.code.startsWith("OKF-TEMPORAL"));
+  assert.equal(temporal.length, 1, `expected one OKF-TEMPORAL diagnostic, got: ${JSON.stringify(p.diagnostics)}`);
+  assert.equal(temporal[0].field, "created_at");
+  assert.ok(temporal[0].severity === "warning" || temporal[0].severity === "error", "severity is warning-or-error");
+  // A properly zoned timestamp raises no temporal diagnostic.
+  const zoned = naive.replace("created_at: 2026-07-20 12:00:00", 'created_at: "2026-07-20T12:00:00Z"');
+  const clean = buildOkf23Projection(zoned, "Zoned.md", "n:2", null);
+  assert.equal(clean.diagnostics.some((d) => d.code.startsWith("OKF-TEMPORAL")), false);
+});
+
 // --- Same-indent block-sequence regression (Defect B) ---------------------
 // A `- ` list whose items sit at the SAME indent as the mapping key is valid
 // YAML (Obsidian emits this). Before the fix, parseBlock only accepted items
