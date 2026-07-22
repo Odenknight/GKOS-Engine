@@ -93,6 +93,10 @@ export const SENSITIVITY_RANK: Record<OkfSensitivity, number> = Object.freeze(
 // this via Okf23ProjectionOptions.defaultSensitivity (validated below), but the
 // engine ships closed.
 export const FAIL_CLOSED_SENSITIVITY_DEFAULT: OkfSensitivity = "secret";
+// Fallback effective epistemic state for a value outside the frozen twelve-state
+// vocabulary. "unknown" is one of the twelve states (see EPISTEMIC_STATES) and is
+// the GKOS-designated null-weight state.
+export const EPISTEMIC_FALLBACK_STATE = "unknown" as const;
 
 /** Options controlling deterministic projection behavior. */
 export interface Okf23ProjectionOptions {
@@ -568,9 +572,26 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
   const uid = text(authored.uid);
   if (!uid) diagnostics.push(diagnostic("OKF-IDENTITY-001", "warning", "The note has no canonical UID and remains path-bound.", sourcePath, "uid", "Assign a stable UUIDv7 through an authorized migration."));
   else if (!UUID.test(uid) && !NAMESPACED_ID.test(uid)) diagnostics.push(diagnostic("OKF-IDENTITY-002", "error", "The UID is neither a UUID nor a policy-permitted namespaced globally unique identifier.", sourcePath, "uid"));
-  const epistemicState = text(authored.epistemicState);
-  if (epistemicState && !EPISTEMIC_STATES.has(epistemicState)) diagnostics.push(diagnostic("OKF-EPISTEMIC-002", "error", `Unknown epistemic state: ${epistemicState}.`, sourcePath, "epistemic.state"));
-  if (epistemicState === "accepted" && !hasApproval(origins.approved, authored)) diagnostics.push(diagnostic("OKF-EPISTEMIC-004", "warning", "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.", sourcePath, "epistemic.state"));
+  // Epistemic state: the AUTHORED value (kept verbatim on authored.epistemicState
+  // and echoed in the diagnostic below) is never silently erased, but a value
+  // outside the frozen twelve-state vocabulary must not flow through as the
+  // EFFECTIVE state. It falls back to "unknown" (null-weight) with a
+  // machine-detectable defaulted-marking on the effective projection so a
+  // consumer reading only effective state still treats the note as unknown.
+  const authoredEpistemicState = text(authored.epistemicState);
+  let effectiveEpistemicState = authoredEpistemicState;
+  let epistemicStateDefaulted = false;
+  if (authoredEpistemicState && !EPISTEMIC_STATES.has(authoredEpistemicState)) {
+    diagnostics.push(diagnostic(
+      "OKF-EPISTEMIC-002", "error",
+      `Unknown epistemic state: ${authoredEpistemicState}. Effective state falls back to "${EPISTEMIC_FALLBACK_STATE}" (null-weight); the invalid value is retained here for repair.`,
+      sourcePath, "epistemic.state",
+      `Rewrite epistemic.state (or the flat epistemic_state property) to one of the twelve valid GKOS states, e.g. "hypothesis" or "${EPISTEMIC_FALLBACK_STATE}". An upgrade-all migration run rewrites invalid states to the conservative default automatically.`,
+    ));
+    effectiveEpistemicState = EPISTEMIC_FALLBACK_STATE;
+    epistemicStateDefaulted = true;
+  }
+  if (authoredEpistemicState === "accepted" && !hasApproval(origins.approved, authored)) diagnostics.push(diagnostic("OKF-EPISTEMIC-004", "warning", "Accepted state lacks an approval or authorization record; acceptance is not treated as verified authority.", sourcePath, "epistemic.state"));
 
   // Temporal diagnostic (DIV-001): a naive wall-clock timestamp (no Z, no
   // numeric offset) is rejected by the schema and the stamper; the projection
@@ -625,14 +646,14 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
   derivedLabels.push(uid ? (UUID.test(uid) || NAMESPACED_ID.test(uid) ? "identity:stable" : "identity:invalid") : "identity:missing");
   derivedLabels.push(refs.length ? (hash && SHA256.test(hash) ? "provenance:traceable" : "provenance:partial") : "provenance:missing");
   derivedLabels.push(`sensitivity:${effectiveSensitivity}`);
-  if (epistemicState) derivedLabels.push(`epistemic:${epistemicState}`);
+  if (effectiveEpistemicState) derivedLabels.push(`epistemic:${effectiveEpistemicState}`);
   origins.derived.labels = [...new Set(derivedLabels)].sort();
   origins.derived.sensitivity = effectiveSensitivity;
   origins.derived.effectiveSensitivityReason = rawSensitivity ? "authored-source-classification" : "policy-default";
   const effective: OkfOriginProjection = {
     tags: [...(authored.tags ?? [])],
     labels: [...new Set([...origins.authored.labels, ...origins.derived.labels, ...origins.approved.labels])],
-    relationships: {}, epistemicState, sensitivity: effectiveSensitivity,
+    relationships: {}, epistemicState: effectiveEpistemicState, epistemicStateDefaulted, sensitivity: effectiveSensitivity,
   };
   for (const origin of [origins.authored, origins.derived, origins.approved]) for (const [kind, items] of Object.entries(origin.relationships)) {
     effective.relationships[kind] = [...(effective.relationships[kind] ?? []), ...items];

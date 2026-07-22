@@ -274,6 +274,24 @@ Body.`;
   assert.equal(clean.diagnostics.some((d) => d.code.startsWith("OKF-TEMPORAL")), false);
 });
 
+test("DIV-003: invalid epistemic state falls back to unknown with defaulted-marking and retained diagnostic", () => {
+  const invalid = note.replace('state: "hypothesis"', 'state: "gospel"');
+  const p = buildOkf23Projection(invalid, "Gospel.md", "g:1", null);
+  // Effective state is the null-weight fallback, machine-detectable via the flag.
+  assert.equal(p.effective.epistemicState, "unknown");
+  assert.equal(p.effective.epistemicStateDefaulted, true);
+  // The original invalid value is retained on the authored projection and in the diagnostic.
+  assert.equal(p.authored.epistemicState, "gospel");
+  const epi = p.diagnostics.find((d) => d.code === "OKF-EPISTEMIC-002");
+  assert.ok(epi, "OKF-EPISTEMIC-002 still fires");
+  assert.equal(epi.severity, "error");
+  assert.ok(epi.message.includes("gospel"), "diagnostic retains the invalid value");
+  // A valid state carries no defaulted-marking.
+  const valid = buildOkf23Projection(note, "Valid.md", "v:1", null);
+  assert.equal(valid.effective.epistemicStateDefaulted, false);
+  assert.equal(valid.effective.epistemicState, "hypothesis");
+});
+
 // --- Same-indent block-sequence regression (Defect B) ---------------------
 // A `- ` list whose items sit at the SAME indent as the mapping key is valid
 // YAML (Obsidian emits this). Before the fix, parseBlock only accepted items

@@ -71,6 +71,12 @@ optional `Okf23ProjectionOptions`:
 
 ### Effective-state contracts
 
+- **Epistemic state** — an `epistemic_state` outside the frozen twelve-state
+  vocabulary raises `OKF-EPISTEMIC-002` (error) and projects `effective.epistemicState`
+  to the null-weight fallback `unknown`, with a machine-detectable
+  `effective.epistemicStateDefaulted: true`. The invalid value is retained on
+  `authored.epistemicState` and echoed in the diagnostic for repair; an
+  `upgrade-all` migration run rewrites it to the conservative default.
 - **Temporal** — a naive wall-clock timestamp (no `Z`, no numeric ±HH:MM offset)
   in `created_at`/`updated_at` raises `OKF-TEMPORAL-001` (warning), matching the
   schema and the stamper. The projection, stamper (`isValidOkfTimestamp`), and
