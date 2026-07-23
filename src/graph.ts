@@ -16,7 +16,7 @@
 import { colorForArea } from "./colors";
 import { parseMarkdownFile, type ParsedMarkdown } from "./markdown";
 import { parseOkfPlus, parseOkfTimestamp } from "./okf";
-import { buildOkf23Projection, okf23Inverse, okf23RelationTargets, refreshOkf23Assessment } from "./okf23";
+import { buildOkf23Projection, okf23Inverse, okf23RelationTargets, refreshOkf23Assessment, type Okf23ProjectionOptions } from "./okf23";
 import {
   areaFromFilePath,
   areaFromPath,
@@ -72,8 +72,12 @@ export interface NoteRecord {
   okf: OkfData | null;
 }
 
-/** Parse ONE file into a cacheable record (the expensive step). */
-export function parseSourceFile(f: SourceFile): NoteRecord {
+/** Parse ONE file into a cacheable record (the expensive step). The optional
+ *  projection options (e.g. the fail-closed {@link Okf23ProjectionOptions.defaultSensitivity})
+ *  are forwarded to buildOkf23Projection so deployments can configure the
+ *  projection default end-to-end; omitting them preserves the fail-closed
+ *  "secret" default (backward compatible). */
+export function parseSourceFile(f: SourceFile, options: Okf23ProjectionOptions = {}): NoteRecord {
   const ext = f.extension?.toLowerCase() ?? extensionFromPath(f.relativePath);
   const content = f.content ?? "";
   const parseable = !!ext && PARSEABLE.has(ext);
@@ -82,7 +86,7 @@ export function parseSourceFile(f: SourceFile): NoteRecord {
     : { data: {}, content: "", links: [], tags: [], aliases: [] };
   const hash = contentHash(content);
   const okf = parseable ? parseOkfPlus(parsed.data, parsed.content) : null;
-  const projection = parseable ? buildOkf23Projection(content, normalizeVaultRelative(f.relativePath), hash, okf) : undefined;
+  const projection = parseable ? buildOkf23Projection(content, normalizeVaultRelative(f.relativePath), hash, okf, options) : undefined;
   if (okf && projection) okf.projection = projection;
   return {
     relativePath: normalizeVaultRelative(f.relativePath),
@@ -435,8 +439,10 @@ function graphUid(node: KosmosNode | undefined): string | null {
   return typeof uid === "string" ? uid : node?.okf?.uid ?? null;
 }
 
-/** Full build convenience: parse every file, then assemble. */
-export function buildGraph(files: SourceFile[], folders: string[], now?: number): KosmosGraph {
-  const records = files.map(parseSourceFile);
+/** Full build convenience: parse every file, then assemble. The optional
+ *  projection options thread to every parseSourceFile call so a full build
+ *  honors a configured defaultSensitivity; omitting them is fail-closed. */
+export function buildGraph(files: SourceFile[], folders: string[], now?: number, options: Okf23ProjectionOptions = {}): KosmosGraph {
+  const records = files.map((f) => parseSourceFile(f, options));
   return assembleGraph(records, folders, { now });
 }
