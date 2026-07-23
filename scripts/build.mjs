@@ -50,6 +50,18 @@ try {
   writeFileSync(resolve(root, "dist/kosmos-core.mjs"), core);
   console.log("built dist/kosmos-core.mjs");
 
+  // Desktop-agent sidecar entry. Two node-platform bundles from the same
+  // source: an ESM bundle for `node dist/...mjs` runs and the test suite, and
+  // a CJS bundle that the Node SEA flow (scripts/build-sea.mjs) requires as its
+  // single-file entry (SEA only accepts CommonJS).
+  const desktopEsm = await bundle("src/desktop-agent.ts", { platform: "node", format: "esm" });
+  writeFileSync(resolve(root, "dist/kosmos-desktop-agent.mjs"), desktopEsm);
+  console.log("built dist/kosmos-desktop-agent.mjs");
+
+  const desktopCjs = await bundle("src/desktop-agent.ts", { platform: "node", format: "cjs" });
+  writeFileSync(resolve(root, "dist/kosmos-desktop-agent.cjs"), desktopCjs);
+  console.log("built dist/kosmos-desktop-agent.cjs");
+
   // Invoke TypeScript's JS entry point directly via node (not the .cmd/.sh
   // shim) so this works identically across platforms with no shell involved.
   const tscJs = resolve(root, "node_modules/typescript/bin/tsc");
