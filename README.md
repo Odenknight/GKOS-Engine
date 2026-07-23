@@ -65,6 +65,23 @@ optional `Okf23ProjectionOptions`:
   buildOkf23Projection(raw, path, hash, null, { defaultSensitivity: "internal" });
   ```
 
+  The same `Okf23ProjectionOptions` now threads through the indexing path so
+  deployments can configure the projection default end-to-end, not just on a
+  direct `buildOkf23Projection` call. `parseSourceFile(f, options?)` and
+  `buildGraph(files, folders, now?, options?)` forward the options, and
+  `new KosmosIndex(options?)` applies them to **every** internal projection —
+  including incrementally re-parsed notes via `applyChanges`, so an incremental
+  update honors the same default as a full `setFiles` build:
+
+  ```js
+  const index = new KosmosIndex({ defaultSensitivity: "internal" });
+  index.setFiles(files, folders);   // full build honors the default
+  index.applyChanges({ changed });  // incremental reparse honors it too
+  ```
+
+  Omitting the parameter anywhere in this path keeps the fail-closed `secret`
+  default (backward compatible).
+
   The engine ships **no PII/sensitive-content detection**. If a deployment adds
   detection it may only **raise** effective sensitivity (per the exported
   `SENSITIVITY_RANK` ladder), never lower it.
