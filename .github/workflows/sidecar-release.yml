@@ -73,3 +73,49 @@ jobs:
             GKOS Engine Desktop install guide for the open-anyway steps
             (macOS right-click → Open / `xattr`; Windows SmartScreen
             "More info → Run anyway").
+
+  # The standalone 3D viewer built in Odenknight/Kosmos-Oden ships alongside the
+  # sidecar so a release carries both halves of the desktop viewer story: the
+  # loopback API (the binaries above) and the page that consumes it. The HTML is
+  # OS-independent, so a single linux job fetches it and attaches it once — no
+  # need to duplicate it across the SEA matrix (which would also race the
+  # upload). It appends to the same release the matrix legs publish to.
+  viewer-asset:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download standalone viewer HTML from Kosmos-Oden
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          mkdir -p viewer
+          # Newest `viewer-v*` release, falling back to the tag known-good at
+          # authoring time if the query returns nothing.
+          TAG="$(gh release list --repo Odenknight/Kosmos-Oden --limit 30 \
+                  --json tagName --jq '[.[].tagName | select(startswith("viewer-v"))] | first' \
+                || true)"
+          if [ -z "$TAG" ] || [ "$TAG" = "null" ]; then
+            TAG="viewer-v0.6.9-rc1"
+          fi
+          echo "Using Kosmos-Oden viewer release: $TAG"
+          echo "VIEWER_TAG=$TAG" >> "$GITHUB_ENV"
+          gh release download "$TAG" --repo Odenknight/Kosmos-Oden \
+            --pattern vault-kosmos.html --dir viewer --clobber
+          test -s viewer/vault-kosmos.html
+
+      - name: Attach viewer HTML to this release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: viewer/vault-kosmos.html
+          fail_on_unmatched_files: true
+          append_body: true
+          body: |
+
+            ---
+            `vault-kosmos.html` — the standalone 3D viewer built in
+            Odenknight/Kosmos-Oden at ${{ env.VIEWER_TAG }}; consumes this
+            sidecar's loopback API
+            (`?api=http://127.0.0.1:<port>&token=<bearer>`, `/health` + `/graph`).
