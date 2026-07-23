@@ -146,14 +146,16 @@ test("server binds 127.0.0.1 only (loopback)", async () => {
   });
 });
 
-function req(port, path, headers = {}) {
+function req(port, path, headers = {}, method = "GET") {
   return new Promise((resolve, reject) => {
     const r = http.request(
-      { host: LOOPBACK_HOST, port, path, method: "GET", headers },
+      { host: LOOPBACK_HOST, port, path, method, headers },
       (res) => {
         let body = "";
         res.on("data", (c) => (body += c));
-        res.on("end", () => resolve({ status: res.statusCode, body }));
+        res.on("end", () =>
+          resolve({ status: res.statusCode, headers: res.headers, body }),
+        );
       },
     );
     r.on("error", reject);
@@ -175,5 +177,73 @@ test("server returns 200 with the bearer token and projects effective sensitivit
     const parsed = JSON.parse(res.body);
     const note = parsed.notes.find((n) => n.path === "a.md");
     assert.equal(note.sensitivity, "internal", "unlabeled note takes the configured default");
+  });
+});
+
+// ---- scoped CORS for the desktop viewer ---------------------------------
+
+test("OPTIONS preflight from an allowed origin → 204 with reflected CORS headers, no token needed", async () => {
+  await withServer(async (_server, _token, addr) => {
+    for (const origin of [
+      "tauri://localhost",
+      "https://tauri.localhost",
+      "http://tauri.localhost",
+      "null",
+    ]) {
+      const res = await req(addr.port, "/graph", { origin }, "OPTIONS");
+      assert.equal(res.status, 204, `preflight ${origin} → 204`);
+      assert.equal(res.headers["access-control-allow-origin"], origin, "ACAO reflects origin");
+      assert.equal(res.headers["vary"], "Origin");
+      assert.equal(res.headers["access-control-allow-headers"], "Authorization");
+      assert.equal(res.headers["access-control-allow-methods"], "GET, OPTIONS");
+    }
+  });
+});
+
+test("OPTIONS preflight from a disallowed origin → no ACAO (browser will block)", async () => {
+  await withServer(async (_server, _token, addr) => {
+    const res = await req(addr.port, "/graph", { origin: "https://evil.example" }, "OPTIONS");
+    assert.equal(res.status, 204);
+    assert.equal(res.headers["access-control-allow-origin"], undefined, "no CORS for evil origin");
+  });
+});
+
+test("GET from an allowed origin with a valid token → 200 with ACAO reflected", async () => {
+  await withServer(async (_server, token, addr) => {
+    const res = await req(addr.port, "/graph", {
+      origin: "tauri://localhost",
+      authorization: `Bearer ${token}`,
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.headers["access-control-allow-origin"], "tauri://localhost");
+    assert.equal(res.headers["vary"], "Origin");
+  });
+});
+
+test("GET from an allowed origin WITHOUT a token → 401 (auth still enforced)", async () => {
+  await withServer(async (_server, _token, addr) => {
+    const res = await req(addr.port, "/graph", { origin: "tauri://localhost" });
+    assert.equal(res.status, 401, "preflight bypass does not bypass auth on the real request");
+    // CORS still reflected so the browser can surface the 401 to the page.
+    assert.equal(res.headers["access-control-allow-origin"], "tauri://localhost");
+  });
+});
+
+test("GET from a disallowed origin → no ACAO even with a valid token", async () => {
+  await withServer(async (_server, token, addr) => {
+    const res = await req(addr.port, "/graph", {
+      origin: "https://evil.example",
+      authorization: `Bearer ${token}`,
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.headers["access-control-allow-origin"], undefined);
+  });
+});
+
+test("GET with no Origin (same-origin / non-browser) → 200 and no CORS headers", async () => {
+  await withServer(async (_server, token, addr) => {
+    const res = await req(addr.port, "/graph", { authorization: `Bearer ${token}` });
+    assert.equal(res.status, 200);
+    assert.equal(res.headers["access-control-allow-origin"], undefined, "no behavior change");
   });
 });

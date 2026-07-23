@@ -58,6 +58,24 @@ export const DEFAULT_PORT = 4814;
 export const LOOPBACK_HOST = "127.0.0.1";
 export const DEBOUNCE_MS = 500;
 
+/**
+ * CORS allowlist for the loopback API. The sidecar is same-origin to no one:
+ * the only legitimate cross-origin callers are the desktop shell's webview
+ * (Tauri serves the app under `tauri://localhost` on mac/Linux and
+ * `https://tauri.localhost` on Windows; some configurations use
+ * `http://tauri.localhost`) and a viewer opened from the local filesystem
+ * (a `file://` document reports the opaque Origin `null`). Only these origins
+ * get CORS headers; every other Origin (a drive-by website, say) gets none, so
+ * the browser blocks its fetch. The bearer token is still required on the
+ * actual GET — CORS only decides whether the browser HANDS the response back.
+ */
+export const CORS_ALLOWLIST: readonly string[] = [
+  "tauri://localhost",
+  "https://tauri.localhost",
+  "http://tauri.localhost",
+  "null",
+];
+
 /** Extensions the engine parses as notes (mirrors graph.ts PARSEABLE). */
 const NOTE_EXTS = new Set(["md", "markdown", "base"]);
 
@@ -288,8 +306,35 @@ export function createAgentServer(opts: {
   const { index, token, getStatus } = opts;
   const vault = opts.vaultName ?? "vault";
 
-  const send = (res: http.ServerResponse, code: number, body: unknown): void => {
+  /**
+   * Resolve the request's Origin against the allowlist. Returns the exact
+   * origin string to reflect, or null when the request has no Origin (same
+   * origin / non-browser caller — no CORS needed) or an Origin that is not
+   * allowlisted (a drive-by site — deliberately no CORS headers so the browser
+   * blocks it).
+   */
+  const allowedOrigin = (req: http.IncomingMessage): string | null => {
+    const origin = req.headers["origin"];
+    if (!origin || Array.isArray(origin)) return null;
+    return CORS_ALLOWLIST.includes(origin) ? origin : null;
+  };
+
+  /** Apply the CORS response headers for an allowlisted origin. */
+  const applyCorsHeaders = (res: http.ServerResponse, origin: string): void => {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Headers", "Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  };
+
+  const send = (
+    res: http.ServerResponse,
+    code: number,
+    body: unknown,
+    origin?: string | null,
+  ): void => {
     const json = JSON.stringify(body);
+    if (origin) applyCorsHeaders(res, origin);
     res.writeHead(code, { "content-type": "application/json; charset=utf-8" });
     res.end(json);
   };
@@ -303,9 +348,25 @@ export function createAgentServer(opts: {
   };
 
   return http.createServer((req, res) => {
-    // Token required on EVERY request, no exceptions (spec).
+    const origin = allowedOrigin(req);
+
+    // CORS preflight: the browser sends OPTIONS with no credentials to learn
+    // whether the real request is permitted. It CANNOT carry the bearer token,
+    // so we must answer it BEFORE the auth gate. Allowlisted origins get a 204
+    // with the CORS headers; any other origin gets a bare 204 with no CORS
+    // headers (the browser then blocks the real request). The subsequent GET
+    // still enforces the token.
+    if (req.method === "OPTIONS") {
+      if (origin) applyCorsHeaders(res, origin);
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+
+    // Token required on EVERY non-preflight request, no exceptions (spec). CORS
+    // headers are still reflected on the 401 so a browser can read the status.
     if (!authorized(req)) {
-      send(res, 401, { error: "unauthorized", detail: "Bearer token required." });
+      send(res, 401, { error: "unauthorized", detail: "Bearer token required." }, origin);
       return;
     }
 
@@ -313,14 +374,19 @@ export function createAgentServer(opts: {
     const route = url.pathname.replace(/\/+$/, "") || "/";
 
     if (req.method !== "GET") {
-      send(res, 405, { error: "method_not_allowed", detail: "Read-only agent API; GET only." });
+      send(
+        res,
+        405,
+        { error: "method_not_allowed", detail: "Read-only agent API; GET only." },
+        origin,
+      );
       return;
     }
 
     switch (route) {
       case "/":
       case "/health": {
-        send(res, 200, getStatus());
+        send(res, 200, getStatus(), origin);
         return;
       }
       case "/notes": {
@@ -334,21 +400,21 @@ export function createAgentServer(opts: {
             type: n.type ?? null,
             sensitivity: n.okf?.projection?.effective.sensitivity ?? null,
           }));
-        send(res, 200, { notes, count: notes.length });
+        send(res, 200, { notes, count: notes.length }, origin);
         return;
       }
       case "/graph": {
-        send(res, 200, index.graph ?? { nodes: [], links: [] });
+        send(res, 200, index.graph ?? { nodes: [], links: [] }, origin);
         return;
       }
       case "/graphiti/episodes": {
         const graph = index.graph;
         const episodes = graph ? buildGraphitiEpisodes(graph, { vault }) : [];
-        send(res, 200, { episodes, count: episodes.length });
+        send(res, 200, { episodes, count: episodes.length }, origin);
         return;
       }
       default:
-        send(res, 404, { error: "not_found", detail: route });
+        send(res, 404, { error: "not_found", detail: route }, origin);
     }
   });
 }
