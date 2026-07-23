@@ -164,6 +164,70 @@ is equivalent to `okf graph` (plus `export graphiti` when `--episodes` is given)
 node bin/okf.mjs <vault-dir> [graph.json] [--episodes <out.json>] [--group-id <ns>] [--watch]
 ```
 
+## Desktop agent
+
+`src/desktop-agent.ts` (built to `dist/kosmos-desktop-agent.mjs`, compiled
+per-platform into a Node SEA single binary `kosmos-agent`) is the headless
+sidecar for **GKOS Engine Desktop**. It points the engine at a notes folder,
+watches for changes, and serves a **loopback-only** read-only agent API for
+local agents (Claude Desktop, Cursor, …).
+
+```sh
+npm run build           # emits dist/kosmos-desktop-agent.{mjs,cjs}
+node dist/kosmos-desktop-agent.mjs \
+  --notes /path/to/notes --default-sensitivity internal --port 4814 \
+  --status-file /path/to/desktop-agent.status.json
+
+node scripts/build-sea.mjs   # compiles the SEA binary for the current OS
+```
+
+### Flags
+
+| Flag | Required | Default | Notes |
+| --- | --- | --- | --- |
+| `--notes <dir>` | yes | — | Notes folder to index and watch. |
+| `--default-sensitivity <level>` | no | `secret` | One of the seven levels (`public`, `internal`, `restricted`, `confidential`, `regulated`, `phi`, `secret`). Invalid/missing **fails closed to `secret`**. Governs UNLABELED notes only; **raise-only** — it can never lower an authored classification. |
+| `--port <n>` | no | `4814` | Loopback port. Invalid values fall back to the default. |
+| `--status-file <path>` | no | `<notes>/.okf/desktop-agent.status.json` | Where the shell reads health/state. |
+
+There is **no `--host` option**: the server binds `127.0.0.1` only (GKOS §11.4
+local-only default; no cloud/LAN access). Passing `--host` is a hard error.
+
+### Bearer token
+
+Generated on first run (`crypto.randomBytes(32)` hex) and persisted to
+`desktop-agent.token` alongside the status file (written `0600`; advisory on
+Windows). **Every request requires it** (`Authorization: Bearer <token>`);
+missing/invalid → `401`. The `token_path` is published in the status file so the
+shell can render quick-connect snippets.
+
+### Status file schema
+
+```json
+{
+  "pid": 30880,
+  "port": 4814,
+  "url": "http://127.0.0.1:4814/",
+  "token_path": "…/desktop-agent.token",
+  "notes_dir": "…/notes",
+  "default_sensitivity": "internal",
+  "notes_indexed": 3,
+  "state": "indexing | serving | error",
+  "last_scan_iso": "2026-07-23T07:07:05.017Z"
+}
+```
+
+### Endpoints (all GET, all token-gated)
+
+- `GET /` · `GET /health` — the status document above.
+- `GET /notes` — `{ notes: [{ id, path, label, type, sensitivity }], count }`
+  where `sensitivity` is the effective (post-projection) level.
+- `GET /graph` — the current `KosmosGraph`.
+- `GET /graphiti/episodes` — Graphiti projection episodes for the current graph.
+
+The engine surface stays read-only; the raise-only invariant and fail-closed
+sensitivity default are unchanged — no new governance surface is added.
+
 ## License
 
 MIT. See [LICENSE](./LICENSE).

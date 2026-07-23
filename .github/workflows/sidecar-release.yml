@@ -1,0 +1,75 @@
+name: Sidecar release
+
+# Builds the desktop-agent SEA single binary (`kosmos-agent`) on each matching
+# CI OS — SEA cannot cross-compile — and attaches the binaries to the tag's
+# GitHub Release. Binaries are UNSIGNED (build spec decision 1); the shell
+# repo (GKOS-Engine-Lite) consumes them as its Tauri sidecar.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            arch: x64
+          - os: macos-latest
+            arch: arm64
+          - os: macos-13
+            arch: x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install (clean, from lockfile)
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build bundles
+        run: npm run build
+
+      - name: Tests
+        run: npm test
+
+      - name: Build SEA binary
+        run: node scripts/build-sea.mjs
+
+      - name: Collect binary
+        shell: bash
+        run: |
+          mkdir -p out
+          cp dist/kosmos-agent-* out/
+
+      - name: Upload run artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kosmos-agent-${{ matrix.os }}-${{ matrix.arch }}
+          path: out/*
+
+      - name: Attach to release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*
+          fail_on_unmatched_files: true
+          body: |
+            Unsigned pre-release sidecar binaries (`kosmos-agent`). See the
+            GKOS Engine Desktop install guide for the open-anyway steps
+            (macOS right-click → Open / `xattr`; Windows SmartScreen
+            "More info → Run anyway").
