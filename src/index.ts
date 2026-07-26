@@ -25,3 +25,4 @@ export * from "./graph";
 export * from "./graphiti";
 export * from "./incremental";
 export * from "./demo";
+export * from "./intelligence";

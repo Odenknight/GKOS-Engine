@@ -19,6 +19,10 @@ jobs:
           node-version: 22
           cache: npm
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Install (clean, from lockfile)
         run: npm ci
 
@@ -30,6 +34,17 @@ jobs:
 
       - name: Tests
         run: npm test
+
+      - name: Optional intelligence contract tests
+        env:
+          PYTHONPATH: services/gkos-intelligence/src
+        run: python -m unittest discover -s services/gkos-intelligence/tests -v
+
+      - name: Package contents smoke test
+        run: |
+          npm run pack:check
+          python -m pip install --no-deps ./services/gkos-intelligence
+          gkos-intelligence --help
 
       - name: CLI smoke test (validate + assess)
         run: |

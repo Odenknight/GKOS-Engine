@@ -11,6 +11,7 @@ import http from "node:http";
 import { once } from "node:events";
 
 import {
+  DESKTOP_AGENT_USAGE,
   parseArgs,
   Debouncer,
   createAgentServer,
@@ -25,6 +26,12 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 // ---- arg validation ----------------------------------------------------
+
+test("deployment helper has non-technical command help", () => {
+  assert.match(DESKTOP_AGENT_USAGE, /protected, read-only note map/i);
+  assert.match(DESKTOP_AGENT_USAGE, /never edits/i);
+  assert.match(DESKTOP_AGENT_USAGE, /--notes <folder>/);
+});
 
 test("parseArgs: valid sensitivity is honored", () => {
   const a = parseArgs(["--notes", "/x", "--default-sensitivity", "internal"]);

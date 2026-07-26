@@ -86,6 +86,23 @@ export interface DesktopAgentArgs {
   statusFile: string;
 }
 
+export const DESKTOP_AGENT_USAGE = `kosmos-agent (GKOS Engine Desktop helper) v${ENGINE_VERSION}
+
+Runs the protected, read-only note map used by GKOS Engine Desktop.
+
+Usage:
+  kosmos-agent --notes <folder> [options]
+
+Options:
+  --notes <folder>                 Notes folder to read (required)
+  --default-sensitivity <level>    Privacy level for unlabeled notes (default: secret)
+  --port <number>                  Local connection port (default: 4814)
+  --status-file <path>             Status file location
+  --help                           Show this help
+
+This helper reads notes but never edits them. It accepts connections from this
+computer only.`;
+
 /**
  * Parse CLI args. Mirrors the spec exactly:
  *   --notes <dir>                 REQUIRED (throws when absent)
@@ -421,6 +438,10 @@ export function createAgentServer(opts: {
 
 /** Entry point: scan → index → watch → serve. */
 export async function main(argv = process.argv.slice(2)): Promise<void> {
+  if (argv.includes("--help") || argv.includes("-h")) {
+    console.log(DESKTOP_AGENT_USAGE);
+    return;
+  }
   const args = parseArgs(argv);
   const tokenPath = path.join(path.dirname(args.statusFile), "desktop-agent.token");
   const vaultName = path.basename(args.notesDir) || "vault";
@@ -529,8 +550,8 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   process.on("SIGTERM", shutdown);
 }
 
-// Auto-run only for a real CLI/SEA invocation (always carries --notes), never
-// when the module is imported by the test runner.
-if (process.argv.slice(2).includes("--notes")) {
+// Auto-run only for a real CLI/SEA invocation, never when imported by tests.
+const invocationArgs = process.argv.slice(2);
+if (invocationArgs.includes("--notes") || invocationArgs.includes("--help") || invocationArgs.includes("-h")) {
   void main();
 }

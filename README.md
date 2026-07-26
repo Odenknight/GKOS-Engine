@@ -13,6 +13,33 @@ downstream products consume rather than re-vendor.
 This is an *implementation*, not the GKOS standard itself. The standard lives at
 [github.com/Odenknight/gkos-standard](https://github.com/Odenknight/gkos-standard).
 
+## Optional intelligence sidecar
+
+Version 1.1 adds a versioned, proposal-only contract for optional AI
+assistance. The TypeScript engine remains deterministic, LLM-independent, and
+fully functional offline. It does not import DSPy and exposes no automatic
+proposal-apply operation.
+
+The separately installable Python service under
+`services/gkos-intelligence/` uses DSPy to suggest diagnostic explanations,
+metadata repairs, relationships, sensitivity raises, claim extraction,
+contradictions, and documentation improvements. Its JSON responses use
+`gkos.intelligence.v1` and must pass `validateIntelligenceResponse()` before
+use.
+
+- Proposals cannot set authoritative state.
+- Sensitivity proposals are raise-only.
+- Mismatched targets, unknown types, malformed responses, and unsafe fields
+  fail closed.
+- Suggestions require a separate authorized workflow to become authored or
+  approved state.
+
+See [the sidecar README](services/gkos-intelligence/README.md) for optional
+installation. Normal engine commands require no Python, model, credentials, or
+network access.
+
+See [ROADMAP.md](ROADMAP.md) for the completed 1.1 scope and planned hardening.
+
 ## OKF+ 2.3 dialects
 
 Both OKF+ 2.3 dialects are supported:

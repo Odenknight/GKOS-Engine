@@ -50,6 +50,13 @@ jobs:
       - name: Build SEA binary
         run: node scripts/build-sea.mjs
 
+      - name: Smoke-test SEA binary
+        shell: bash
+        run: |
+          binary="$(find dist -maxdepth 1 -type f -name 'kosmos-agent-*' | head -n 1)"
+          test -n "$binary"
+          "$binary" --help | grep -q "protected, read-only note map"
+
       - name: Collect binary
         shell: bash
         run: |

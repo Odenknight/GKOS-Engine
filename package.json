@@ -1,7 +1,7 @@
 {
   "name": "gkos-engine",
-  "version": "1.0.9",
-  "description": "GKOS Engine — the canonical deterministic engine implementing OKF+ 2.3 (parse, validate, project, assess, graph, export) under GKOS governance. Obsidian-free, reusable core consumed by Kosmos-Oden and GKOS-Engine-Lite.",
+  "version": "1.1.0",
+  "description": "GKOS Engine — canonical deterministic OKF+ 2.3 engine with an optional, proposal-only DSPy intelligence sidecar; offline validation, projection, assessment, graph, and export remain authoritative.",
   "type": "module",
   "main": "./dist/kosmos-core.mjs",
   "types": "./dist/index.d.ts",
@@ -17,8 +17,12 @@
   },
   "files": [
     "dist/",
+    "!dist/kosmos-agent-*",
+    "!dist/sea-config.json",
+    "!dist/sea-prep.blob",
     "bin/",
-    "src/"
+    "src/",
+    "services/gkos-intelligence/"
   ],
   "engines": {
     "node": ">=22 <25",
@@ -29,7 +33,9 @@
     "build": "node scripts/build.mjs",
     "prepare": "node scripts/build.mjs",
     "pretest": "node scripts/build.mjs",
-    "test": "node --test \"test/*.test.mjs\""
+    "test": "node --test \"test/*.test.mjs\"",
+    "test:intelligence": "python -m unittest discover -s services/gkos-intelligence/tests -v",
+    "pack:check": "node scripts/check-pack.mjs"
   },
   "license": "MIT",
   "author": "OdenKnight",
@@ -39,7 +45,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.20.1",
-    "esbuild": "0.21.5",
+    "esbuild": "^0.28.1",
     "postject": "^1.0.0-alpha.6",
     "typescript": "5.9.3"
   }

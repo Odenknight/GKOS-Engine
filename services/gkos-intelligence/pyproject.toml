@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gkos-intelligence"
+version = "1.0.0"
+description = "Optional DSPy proposal sidecar for the deterministic GKOS Engine"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "OdenKnight" }]
+dependencies = ["dspy>=3.0,<4"]
+
+[project.scripts]
+gkos-intelligence = "gkos_intelligence.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gkos_intelligence"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
