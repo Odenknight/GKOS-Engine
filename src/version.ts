@@ -5,5 +5,5 @@
  * this engine version verbatim (its desktop app versions separately as
  * desktop-vA.B.C), so a bump here is followed by a Lite pin bump.
  */
-export const ENGINE_VERSION = "1.1.2";
+export const ENGINE_VERSION = "1.1.3";
 export const ENGINE_NAME = "gkos-engine";
