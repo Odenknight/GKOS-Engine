@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.2
+
+- Documented that `OKF23_POLICY.sensitivityDefault` is a hash-locked mirror of
+  the canonical policy JSON and is superseded for the missing-sensitivity path,
+  which has failed closed to `secret` since v1.0.6. No behavior change.
+- Added a VERSIONING.md pointer to the canonical policy in `gkos-standard`.
+
 ## 1.1.1
 
 - Added cross-arch SEA support to `scripts/build-sea.mjs` via

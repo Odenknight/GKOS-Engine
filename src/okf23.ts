@@ -38,6 +38,14 @@ export const OKF23_POLICY = Object.freeze({
     contradiction_status: 0.10,
     review_readiness: 0.10,
   }),
+  // HASH-LOCKED FIELD, NOT A RUNTIME KNOB. This mirrors `sensitivity_default`
+  // in the canonical policy JSON whose SHA-256 is `hash` above; changing the
+  // value here would desync the constant from the hash the engine publishes.
+  // It is SUPERSEDED for the missing-sensitivity path: since v1.0.6 the engine
+  // fails closed, and resolveDefaultSensitivity() returns
+  // FAIL_CLOSED_SENSITIVITY_DEFAULT ("secret") — or a deployment's explicit
+  // Okf23ProjectionOptions.defaultSensitivity — never this value. Nothing in
+  // the engine reads this field; it exists solely for policy-document fidelity.
   sensitivityDefault: "internal" as OkfSensitivity,
   assessmentThresholds: Object.freeze([
     [0.90, "assessment:strongly-documented"],

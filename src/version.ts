@@ -1,8 +1,9 @@
 /**
  * Single source of truth for the GKOS Engine's own version identity.
- * Tracks package.json's "version" field — bump both together. Consumers
- * (Kosmos-Oden, GKOS-Engine-Lite) have their own separate version constants
- * for their own product identity; this one is the engine's alone.
+ * Tracks package.json's "version" field — bump both together. See VERSIONING.md.
+ * Kosmos-Oden carries its own product version. GKOS-Engine-Lite's CLI adopts
+ * this engine version verbatim (its desktop app versions separately as
+ * desktop-vA.B.C), so a bump here is followed by a Lite pin bump.
  */
-export const ENGINE_VERSION = "1.1.1";
+export const ENGINE_VERSION = "1.1.2";
 export const ENGINE_NAME = "gkos-engine";
