@@ -1,6 +1,6 @@
 {
   "name": "gkos-engine",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "GKOS Engine — canonical deterministic OKF+ 2.3 engine with an optional, proposal-only DSPy intelligence sidecar; offline validation, projection, assessment, graph, and export remain authoritative.",
   "type": "module",
   "main": "./dist/kosmos-core.mjs",

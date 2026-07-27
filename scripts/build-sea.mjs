@@ -1,29 +1,58 @@
 /**
  * Build a Node SEA (Single Executable Application) of the desktop-agent
- * sidecar for the CURRENT platform.
+ * sidecar, for the host platform/arch or — on macOS — for the other arch.
  *
  * Flow (Node 22+ SEA, https://nodejs.org/api/single-executable-applications.html):
  *   1. write sea-config.json (main = the CJS bundle, SEA requires CommonJS)
  *   2. node --experimental-sea-config sea-config.json  → dist/sea-prep.blob
- *   3. copy the running node binary to the target output name
- *   4. postject-inject the blob into the copy under NODE_SEA_BLOB, using the
+ *   3. obtain the base node binary for the TARGET:
+ *        - host target  → copy the running process.execPath
+ *        - cross target → download the official nodejs.org tarball for that
+ *          arch, verify its sha256 against the release's SHASUMS256.txt, and
+ *          extract bin/node from it
+ *   4. postject-inject the blob into that binary under NODE_SEA_BLOB, using the
  *      standard fuse sentinel; on macOS also pass --macho-segment-name NODE_SEA
  *
- * Cross-compilation is NOT supported by SEA: each target is built on its
- * matching CI OS (windows-latest / macos-latest). This script is OS-agnostic —
- * it derives the target triple and output name from process.platform/arch, so
- * the same script runs unchanged on every runner. UNSIGNED (build spec
- * decision 1): no codesign/signtool step.
+ * Cross-ARCH is supported on macOS (an arm64 runner can produce the
+ * x86_64-apple-darwin sidecar); cross-PLATFORM is not — each OS still builds on
+ * its matching runner. UNSIGNED (build spec decision 1): no Developer ID
+ * codesign/notarization step; macOS binaries carry only the ad-hoc signature
+ * the loader requires for a modified Mach-O.
  *
  * Usage:
- *   node scripts/build.mjs          # produce dist/kosmos-desktop-agent.cjs
- *   node scripts/build-sea.mjs      # produce dist/<target-name>
+ *   node scripts/build.mjs                          # produce dist/kosmos-desktop-agent.cjs
+ *   node scripts/build-sea.mjs                      # host arch
+ *   node scripts/build-sea.mjs --target-arch x64    # cross (macOS arm64 host → Intel)
+ *   node scripts/build-sea.mjs --target-arch x64 --node-version v22.20.0
  */
 import { execFileSync } from "node:child_process";
-import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { createHash } from "node:crypto";
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import {
+  findExpectedSha256,
+  nodeBinaryPathInTarball,
+  nodeTarballName,
+  nodeTarballUrl,
+  outputName,
+  parseArgs,
+  planNodeSource,
+  resolveCrossNodeVersion,
+  resolveTarget,
+  shasumsUrl,
+} from "./sea-target.mjs";
 
 const require = createRequire(import.meta.url);
 
@@ -43,24 +72,6 @@ function detectFuse(filePath) {
   const m = /NODE_SEA_FUSE_[0-9a-f]{32}/.exec(buf.toString("latin1"));
   if (!m) throw new Error("Could not locate the SEA fuse sentinel in the node binary.");
   return m[0];
-}
-
-/** Map process.platform/arch → { triple, exeSuffix }. */
-function resolveTarget() {
-  const { platform, arch } = process;
-  if (platform === "win32") {
-    return { triple: "x86_64-pc-windows-msvc", exeSuffix: ".exe", macho: false };
-  }
-  if (platform === "darwin") {
-    const triple = arch === "arm64" ? "aarch64-apple-darwin" : "x86_64-apple-darwin";
-    return { triple, exeSuffix: "", macho: true };
-  }
-  if (platform === "linux") {
-    // Not a shipped target (v1 non-goal), but keep the script runnable locally.
-    const triple = arch === "arm64" ? "aarch64-unknown-linux-gnu" : "x86_64-unknown-linux-gnu";
-    return { triple, exeSuffix: "", macho: false };
-  }
-  throw new Error(`Unsupported platform for SEA: ${platform}/${arch}`);
 }
 
 function resolvePostject() {
@@ -99,15 +110,96 @@ function stripPeSignature(filePath) {
   console.log(`stripped Authenticode signature (${certSize} bytes) from ${filePath}`);
 }
 
+/**
+ * Drop the Mach-O code signature so postject can rewrite the binary; the
+ * caller re-signs ad-hoc afterwards. `codesign` is arch-agnostic — an arm64
+ * host operates on an x86_64 Mach-O with no Rosetta involved, which is what
+ * makes the cross-arch build possible. Official darwin tarballs ship signed,
+ * so this runs on the download path; the host path is already handled inside
+ * postject.
+ */
+function removeMachoSignature(filePath) {
+  try {
+    execFileSync("codesign", ["--remove-signature", filePath], { stdio: "inherit" });
+    console.log(`removed Mach-O signature from ${filePath}`);
+  } catch (err) {
+    // `--remove-signature` can exit non-zero on an already-unsigned binary,
+    // which is benign. Anything else is fatal: we must not hand postject a
+    // binary we failed to unsign.
+    let stillSigned = false;
+    try {
+      execFileSync("codesign", ["--verify", filePath], { stdio: "ignore" });
+      stillSigned = true; // verifies ⇒ a valid signature is still attached
+    } catch {
+      stillSigned = false;
+    }
+    if (stillSigned) throw err;
+    console.log(`no Mach-O signature to remove from ${filePath}`);
+  }
+}
+
+/** Re-apply an ad-hoc signature after injection (required on modern macOS). */
+function adhocSignMacho(filePath) {
+  execFileSync("codesign", ["--sign", "-", "--force", filePath], { stdio: "inherit" });
+  console.log(`ad-hoc signed ${filePath}`);
+}
+
+/** Download to a Buffer, failing loudly on any non-200. */
+async function download(url) {
+  console.log(`fetching ${url}`);
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`GET ${url} failed: ${res.status} ${res.statusText}`);
+  return Buffer.from(await res.arrayBuffer());
+}
+
+/**
+ * Fetch the official node build for a cross target, verify it against the
+ * release's published SHASUMS256.txt, and extract bin/node.
+ * No checksum match ⇒ no binary. There is no unverified fallback path.
+ */
+async function fetchCrossNodeBinary({ version, platform, arch, destPath }) {
+  const tarName = nodeTarballName(version, platform, arch);
+  const shasumsText = (await download(shasumsUrl(version))).toString("utf8");
+  const tarball = await download(nodeTarballUrl(version, platform, arch));
+  const expected = findExpectedSha256(shasumsText, tarName);
+  const actual = createHash("sha256").update(tarball).digest("hex");
+  if (actual !== expected) {
+    throw new Error(
+      `Checksum mismatch for ${tarName}\n  expected ${expected}\n  actual   ${actual}`,
+    );
+  }
+  console.log(`sha256 verified for ${tarName}: ${actual}`);
+
+  const work = mkdtempSync(join(tmpdir(), "kosmos-sea-"));
+  try {
+    const tarPath = join(work, tarName);
+    writeFileSync(tarPath, tarball);
+    const member = nodeBinaryPathInTarball(version, platform, arch);
+    execFileSync("tar", ["-xzf", tarPath, "-C", work, member], { stdio: "inherit" });
+    copyFileSync(join(work, member), destPath);
+    execFileSync("chmod", ["+x", destPath], { stdio: "inherit" });
+  } finally {
+    rmSync(work, { recursive: true, force: true });
+  }
+}
+
+const { targetArch, nodeVersion } = parseArgs(process.argv.slice(2));
+const targetPlatform = process.platform;
+const source = planNodeSource(process.platform, process.arch, targetPlatform, targetArch);
+
 const cjsEntry = resolve(dist, "kosmos-desktop-agent.cjs");
 if (!existsSync(cjsEntry)) {
   console.error(`missing ${cjsEntry} — run \`node scripts/build.mjs\` first.`);
   process.exit(1);
 }
 
-const { triple, exeSuffix, macho } = resolveTarget();
-const outName = `kosmos-agent-${triple}${exeSuffix}`;
+const target = resolveTarget(targetPlatform, targetArch);
+const { macho } = target;
+const outName = outputName(target);
 const outPath = resolve(dist, outName);
+console.log(
+  `SEA target: ${target.triple} (${source.mode} node) — host ${process.platform}/${process.arch}`,
+);
 
 // 1. sea-config.json
 const seaConfigPath = resolve(dist, "sea-config.json");
@@ -131,14 +223,30 @@ writeFileSync(
 console.log("generating SEA blob…");
 execFileSync(process.execPath, ["--experimental-sea-config", seaConfigPath], { stdio: "inherit" });
 
-// 3. copy the node binary
-console.log(`copying node binary → ${outName}`);
-copyFileSync(process.execPath, outPath);
+// 3. obtain the base node binary for the target
+if (source.mode === "host") {
+  console.log(`copying node binary → ${outName}`);
+  copyFileSync(process.execPath, outPath);
+} else {
+  const crossVersion = resolveCrossNodeVersion(nodeVersion);
+  console.log(`cross build: downloading node ${crossVersion} for ${targetPlatform}/${targetArch}`);
+  await fetchCrossNodeBinary({
+    version: crossVersion,
+    platform: targetPlatform,
+    arch: targetArch,
+    destPath: outPath,
+  });
+}
 
 // 3b. On Windows the official node.exe is signed; strip it so postject can
-// find the fuse sentinel. (macOS is re-signed ad-hoc by postject itself.)
-if (process.platform === "win32") {
+// find the fuse sentinel. On macOS, postject re-signs ad-hoc for the host copy,
+// but a freshly downloaded tarball binary carries the upstream signature —
+// remove it first (codesign is arch-agnostic, so an arm64 host can unsign an
+// x86_64 Mach-O) and re-sign ad-hoc after injection.
+if (targetPlatform === "win32") {
   stripPeSignature(outPath);
+} else if (macho && source.mode === "download") {
+  removeMachoSignature(outPath);
 }
 
 // 4. postject inject
@@ -156,6 +264,10 @@ if (macho) injectArgs.push("--macho-segment-name", "NODE_SEA");
 
 console.log("injecting blob with postject…");
 execFileSync(process.execPath, injectArgs, { stdio: "inherit" });
+
+if (macho && source.mode === "download") {
+  adhocSignMacho(outPath);
+}
 
 const sizeMb = (statSync(outPath).size / (1024 * 1024)).toFixed(1);
 console.log(`built ${outPath} (${sizeMb} MB)`);
