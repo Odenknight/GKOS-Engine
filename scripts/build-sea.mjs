@@ -114,9 +114,10 @@ function stripPeSignature(filePath) {
  * Drop the Mach-O code signature so postject can rewrite the binary; the
  * caller re-signs ad-hoc afterwards. `codesign` is arch-agnostic — an arm64
  * host operates on an x86_64 Mach-O with no Rosetta involved, which is what
- * makes the cross-arch build possible. Official darwin tarballs ship signed,
- * so this runs on the download path; the host path is already handled inside
- * postject.
+ * makes the cross-arch build possible. Runs unconditionally: both a
+ * downloaded official tarball binary and the host runner's own node install
+ * carry a signature that injection invalidates, and postject does not sign
+ * anything itself.
  */
 function removeMachoSignature(filePath) {
   try {
@@ -239,13 +240,14 @@ if (source.mode === "host") {
 }
 
 // 3b. On Windows the official node.exe is signed; strip it so postject can
-// find the fuse sentinel. On macOS, postject re-signs ad-hoc for the host copy,
-// but a freshly downloaded tarball binary carries the upstream signature —
-// remove it first (codesign is arch-agnostic, so an arm64 host can unsign an
-// x86_64 Mach-O) and re-sign ad-hoc after injection.
+// find the fuse sentinel. On macOS, injection invalidates whatever signature
+// the binary already carries — the host runner's own node install (host
+// mode) and a freshly downloaded tarball binary (download mode) alike — so
+// remove it unconditionally before injecting (codesign is arch-agnostic, so
+// an arm64 host can unsign an x86_64 Mach-O) and re-sign ad-hoc afterward.
 if (targetPlatform === "win32") {
   stripPeSignature(outPath);
-} else if (macho && source.mode === "download") {
+} else if (macho) {
   removeMachoSignature(outPath);
 }
 
@@ -265,7 +267,7 @@ if (macho) injectArgs.push("--macho-segment-name", "NODE_SEA");
 console.log("injecting blob with postject…");
 execFileSync(process.execPath, injectArgs, { stdio: "inherit" });
 
-if (macho && source.mode === "download") {
+if (macho) {
   adhocSignMacho(outPath);
 }
 
