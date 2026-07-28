@@ -73,6 +73,12 @@ const RELATION_TYPES = [
   "quotes", "interprets", "tests", "replicates", "fails_to_replicate", "extends",
   "narrows", "generalizes", "implements", "governed_by", "reviewed_by", "approved_by",
   "supersedes", "superseded_by", "related_to", "part_of", "has_part",
+  // 2026-07-27 fix: these three are valid 2.3 relations (see src/okf.ts RELATIONS
+  // and gkos-standard schemas/okf-common.defs.json relationType enum) and were
+  // present in LEGACY_FIELDS but missing here, so splitRelations() and the flat
+  // editable-Property loop silently DROPPED any refines/blocks/documents edge
+  // projected from a 2.3 note.
+  "refines", "blocks", "documents",
 ] as const;
 const INVERSES: Record<string, string> = {
   supports: "supported_by", contradicts: "contradicted_by", depends_on: "required_by",
@@ -82,6 +88,10 @@ const INVERSES: Record<string, string> = {
   generalizes: "specialized_by", implements: "implemented_by", governed_by: "governs",
   reviewed_by: "reviews", approved_by: "approves", supersedes: "superseded_by",
   superseded_by: "supersedes", related_to: "related_to", part_of: "has_part", has_part: "part_of",
+  // 2026-07-27 fix: inverses for the three previously-dropped relations, using the
+  // standard's `_by` convention (mirrors supersedes→superseded_by,
+  // contradicts→contradicted_by).
+  refines: "refined_by", blocks: "blocked_by", documents: "documented_by",
 };
 const EPISTEMIC_STATES = new Set([
   "unknown", "observation", "reported", "inferred", "hypothesis", "modeled",

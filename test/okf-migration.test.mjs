@@ -319,6 +319,57 @@ Body bytes remain exact.
   assert.ok(entry.proposedContent.endsWith("Body bytes remain exact.\n"));
 });
 
+// 2026-07-27 fix (Bug 2): the 12→5 epistemic down-map must be epistemically
+// humble. Unasserted 2.3 states (unknown/observation/reported) previously mapped
+// to `fact` through 2.2 migration, silently promoting unasserted content to fact
+// status. They now map to `hypothesis`; only an explicitly `accepted` state maps
+// to `fact` (and `supported`→`verified_inference`).
+test("unasserted epistemic states migrate to hypothesis, not fact; accepted stays fact", async () => {
+  // A beta.10-generated 2.3 note (duplicate timestamps) forces the editable-2.2
+  // downgrade path, which is where editableEpistemicState() runs.
+  const noteFor = (state) => `---
+okf_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec932"
+title: "Generated"
+type: "semantic"
+created_at: "2026-07-01T00:00:00Z"
+updated_at: "2026-07-01T01:00:00Z"
+authorship:
+  origin: "authored"
+  author_id: "migration:human-review-required"
+epistemic:
+  state: "${state}"
+sensitivity:
+  level: "secret"
+provenance:
+  source_kind: "migration"
+  extraction:
+    method: "deterministic-migration"
+review: {}
+assessment: {}
+labels:
+  authored: []
+  derived: []
+  proposed: []
+  approved: []
+created_at: "2026-07-02T00:00:00Z"
+updated_at: "2026-07-02T01:00:00Z"
+---
+Body bytes remain exact.
+`;
+  const check = async (state, expected) => {
+    const plan = await createOkfMigrationPlan([{ path: "Generated.md", content: noteFor(state) }], options());
+    assert.equal(plan.entries[0].status, "needs-okf-plus", `${state} triggers editable downgrade`);
+    assert.match(plan.entries[0].proposedContent, new RegExp(`epistemic_state: "${expected}"`), `${state} -> ${expected}`);
+  };
+  await check("unknown", "hypothesis");
+  await check("observation", "hypothesis");
+  await check("reported", "hypothesis");
+  await check("contested", "hypothesis");
+  await check("accepted", "fact");
+  await check("supported", "verified_inference");
+});
+
 // ── v1.0.5: auto-stamper timestamp collision fix ──────────────────────────────
 
 test("converting a plain note carrying stamper created_at/updated_at to flat 2.3 emits each key once and preserves the stamper's created_at", async () => {

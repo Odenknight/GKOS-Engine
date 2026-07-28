@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.2.0
+
+- **BREAKING (projection output):** `refines`, `blocks`, and `documents` are now
+  first-class relations in the 2.3 projector. They were valid relations in
+  `src/okf.ts` and the `gkos-standard` relationType enum, and were listed in
+  `LEGACY_FIELDS`, but were missing from `okf23.ts` `RELATION_TYPES` — so
+  `splitRelations()` and the flat editable-Property merge silently DROPPED any
+  `refines:`/`blocks:`/`documents:` edge projected from a 2.3 note. They now
+  project forward and generate inverse edges `refined_by` / `blocked_by` /
+  `documented_by` (following the standard's `_by` inverse convention, mirroring
+  `supersedes`→`superseded_by` and `contradicts`→`contradicted_by`). Graphs of
+  vaults using these relations gain edges that were previously absent.
+- **BREAKING (migration output):** the 12→5 epistemic down-map in
+  `editableEpistemicState()` is now epistemically humble. Previously the
+  unasserted 2.3 states `unknown`/`observation`/`reported` (and `accepted`) all
+  migrated to `fact`, silently promoting unasserted content to fact status. Now
+  `unknown`/`observation`/`reported`/`contested` migrate to `hypothesis`,
+  `accepted` migrates to `fact`, and `supported` migrates to `verified_inference`.
+  A note that used to migrate to `fact` may now migrate to `hypothesis`.
+- Fixed the `test:intelligence` npm script: `python -m unittest discover` ignored
+  the pytest-only `pythonpath` in `pyproject.toml` and failed out-of-box with
+  `ModuleNotFoundError: gkos_intelligence`. It now runs `python -m pytest
+  services/gkos-intelligence`, which honors `[tool.pytest.ini_options]
+  pythonpath = ["src"]`. (Requires `dspy>=3.0,<4` for the 4 contract tests.)
+
 ## 1.1.2
 
 - Documented that `OKF23_POLICY.sensitivityDefault` is a hash-locked mirror of

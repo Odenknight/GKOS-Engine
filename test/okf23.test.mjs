@@ -353,3 +353,91 @@ Body.`;
     `no OKF-SCHEMA-001, got: ${JSON.stringify(projection.diagnostics)}`
   );
 });
+
+// 2026-07-27 fix (Bug 1): refines/blocks/documents were valid 2.3 relations
+// (src/okf.ts RELATIONS + gkos-standard relationType enum) but were missing from
+// okf23.ts RELATION_TYPES, so splitRelations() and the inverse-edge loop silently
+// DROPPED them. This asserts they now project forward AND generate inverse edges.
+test("refines/blocks/documents now project forward and generate inverse edges (was silently dropped)", () => {
+  const source = `---
+okf_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec9b1"
+title: "Refiner"
+type: "semantic"
+created_at: "2026-07-16T20:00:00Z"
+updated_at: "2026-07-17T20:00:00Z"
+authorship:
+  origin: "authored"
+epistemic:
+  state: "hypothesis"
+sensitivity:
+  level: "internal"
+provenance: { }
+relationships:
+  refines:
+    - target: "019b2d14-4230-7db7-87d4-7d81cfaec9b2"
+      origin: "authored"
+  blocks:
+    - target: "019b2d14-4230-7db7-87d4-7d81cfaec9b2"
+      origin: "authored"
+  documents:
+    - target: "019b2d14-4230-7db7-87d4-7d81cfaec9b2"
+      origin: "authored"
+review: { }
+assessment: { }
+labels:
+  authored: []
+  derived: []
+  proposed: []
+  approved: []
+---
+Body.`;
+  const target = `---
+okf_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec9b2"
+title: "Refined"
+type: "semantic"
+created_at: "2026-07-16T20:00:00Z"
+updated_at: "2026-07-17T20:00:00Z"
+authorship:
+  origin: "authored"
+epistemic:
+  state: "hypothesis"
+sensitivity:
+  level: "internal"
+provenance: { }
+relationships:
+  related_to: []
+review: { }
+assessment: { }
+labels:
+  authored: []
+  derived: []
+  proposed: []
+  approved: []
+---
+Body.`;
+
+  // Projection level: the authored relations survive splitRelations() and the
+  // flat editable-Property merge instead of being dropped.
+  const projection = buildOkf23Projection(source, "Claims/Refiner.md", "r:1", null);
+  assert.ok(projection.authored.relationships.refines, "refines relation preserved");
+  assert.ok(projection.authored.relationships.blocks, "blocks relation preserved");
+  assert.ok(projection.authored.relationships.documents, "documents relation preserved");
+
+  // Graph level: forward semantic edges + inverse derived edges on the target.
+  const graph = buildGraph([
+    { relativePath: "Claims/Refiner.md", extension: "md", content: source },
+    { relativePath: "Claims/Refined.md", extension: "md", content: target },
+  ], ["Claims"], Date.parse("2026-07-18T00:00:00Z"));
+  for (const label of ["refines", "blocks", "documents"]) {
+    assert.ok(
+      graph.links.some((link) => link.source === "file:Claims/Refiner.md" && link.target === "file:Claims/Refined.md" && link.kind === "semantic" && link.label === label),
+      `forward ${label} edge present`
+    );
+  }
+  const targetDerived = graph.nodes.find((node) => node.path === "Claims/Refined.md").okf.projection.derived.relationships;
+  assert.ok(targetDerived.refined_by, "inverse refined_by edge present on target");
+  assert.ok(targetDerived.blocked_by, "inverse blocked_by edge present on target");
+  assert.ok(targetDerived.documented_by, "inverse documented_by edge present on target");
+});

@@ -547,7 +547,12 @@ function editableEpistemicState(value: unknown): string {
   if (state === "inferred" || state === "modeled" || state === "supported") return "verified_inference";
   if (state === "refuted") return "refuted";
   if (state === "retracted" || state === "superseded") return "deprecated";
-  if (state === "unknown" || state === "observation" || state === "reported" || state === "accepted") return "fact";
+  // 2026-07-27 fix (epistemic humility): only an explicitly `accepted` 2.3 state
+  // may migrate to `fact`. Unasserted states (unknown/observation/reported) and
+  // `contested` are NOT fact — they fall through to `hypothesis` below. Previously
+  // unknown/observation/reported also mapped to `fact`, silently promoting
+  // unasserted content to fact status through 2.2 migration.
+  if (state === "accepted") return "fact";
   return "hypothesis";
 }
 
