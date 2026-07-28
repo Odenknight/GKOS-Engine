@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.3
+
+- Reissued the intended 1.1.2 maintenance contents as 1.1.3 because the
+  v1.1.2 tag and release had already been consumed by unrelated parallel work.
+- Synchronized package.json, package-lock.json, and ENGINE_VERSION at 1.1.3.
+- Canonical release commit: `72c4a3268c9db132f2f9dd5aaa7eb7075e6bab2a`.
+
 ## 1.1.2
 
 - Documented that `OKF23_POLICY.sensitivityDefault` is a hash-locked mirror of
