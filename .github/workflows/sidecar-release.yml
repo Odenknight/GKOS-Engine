@@ -47,6 +47,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verify release identity
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          package_version="$(node -p "require('./package.json').version")"
+          engine_version="$(sed -n 's/.*ENGINE_VERSION = "\([^"]*\)".*/\1/p' src/version.ts)"
+          if [ "$tag" != "$package_version" ] || [ "$tag" != "$engine_version" ]; then
+            echo "::error::tag $tag, package $package_version, and ENGINE_VERSION $engine_version must match" >&2
+            exit 1
+          fi
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
