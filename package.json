@@ -37,7 +37,7 @@
     "test:intelligence": "python -m pytest services/gkos-intelligence",
     "pack:check": "node scripts/check-pack.mjs"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "author": "OdenKnight",
   "repository": {
     "type": "git",
