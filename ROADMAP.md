@@ -1,38 +1,51 @@
-# GKOS Engine Roadmap
+# GKOS Engine roadmap
 
-GKOS Engine remains a deterministic, offline-capable authority. Intelligence
-features stay optional, proposal-only, and subordinate to engine validation.
+**Ecosystem role:** canonical deterministic, platform-neutral implementation of
+GKX under GKOS. Normative meaning and exchange contracts are owned by
+[gkos-standard](https://github.com/Odenknight/gkos-standard); downstream
+products consume this engine rather than re-vendoring it.
+
+GKOS Engine remains offline-capable. Intelligence features stay optional,
+proposal-only, and subordinate to deterministic validation.
 
 ## Delivered in 1.1
 
 - `gkos.intelligence.v1` request, response, and proposal contract.
-- Deterministic validation of proposal types, targets, patches, confidence,
-  evidence references, generator identity, and contract versions.
-- Raise-only sensitivity enforcement across every proposal path.
+- Deterministic validation of proposals and raise-only sensitivity enforcement.
 - Optional Python/DSPy loopback service with honest readiness reporting.
-- TypeScript, Python, npm-package, wheel, and SEA deployment checks.
+- TypeScript, Python, npm, wheel, and SEA deployment checks.
 - Windows and macOS SEA release workflow.
 
 ## Next: 1.1.x hardening
 
-- Build a reviewed evaluation set covering malformed, adversarial, scientific,
-  legal, personal, and regulated notes.
-- Add offline comparison reports for analyzer versions and model providers.
-- Add contract compatibility fixtures shared by TypeScript and Python.
-- Add signed checksums and software-bill-of-materials files to releases.
-- Keep all improvements optional and preserve zero-AI deterministic operation.
+- Build a reviewed adversarial and domain-diverse evaluation set.
+- Add offline analyzer/provider comparison reports.
+- Add TypeScript/Python contract compatibility fixtures.
+- Add signed checksums and software bills of materials to releases.
+- Publish traceability from implemented GKX contracts to tests and release
+  compatibility evidence.
+- Preserve zero-AI deterministic operation.
 
 ## Later: 1.2
 
 - Reviewer-feedback records for accepted, rejected, and edited suggestions.
-- Offline DSPy optimization jobs with explicit call and cost ceilings.
-- Domain-specific analyzers selected behind ordinary product actions.
+- Offline DSPy optimization with explicit call and cost ceilings.
+- Domain analyzers behind ordinary product actions.
 - Candidate contradiction, evidence-gap, and relationship ranking.
-- A contract-v2 design review only if v1 cannot evolve compatibly.
+- Contract-v2 review only if v1 cannot evolve compatibly.
+
+## Ecosystem gates
+
+- Contract changes are proposed to `gkos-standard` before implementation.
+- Engine releases precede coordinated KRS and Engine-Lite adoption.
+- KRS-Lite receives no automatic upgrade; eligible fixes are selective backports.
+- This engine is an implementation and does not independently confer GKOS
+  conformance or satisfy the second-independent-implementation gate.
 
 ## Not planned
 
 - Automatic authoritative writes or approvals.
-- AI changes that bypass schema, policy, or authorization.
+- Bypassing schema, policy, or authorization.
 - Automatic sensitivity lowering.
-- Making Python, DSPy, a model, or network access mandatory.
+- Mandatory Python, DSPy, model, or network access.
+- Product-specific UI or Obsidian behavior.
