@@ -1,13 +1,18 @@
 # GKOS Engine
 
-The canonical deterministic engine implementing **OKF+ 2.3** — parse, validate,
+The canonical deterministic engine implementing **GKX 2.3** — parse, validate,
 project, assess, graph, and export — under **GKOS** governance.
+
+**Naming compatibility:** GKX (Governed Knowledge Exchange) is the current name
+for the model formerly published as OKF+. The engine continues to accept and
+expose existing OKF+ 2.2/2.3 identifiers while the versioned compatibility
+migration is completed; no document rewrite is required by the rename alone.
 
 This repository is the single source of truth for the engine. It is
 **Obsidian-free, DOM-free, platform-neutral** TypeScript: a reusable core that
 downstream products consume rather than re-vendor.
 
-- **Kosmos-Oden** (the Obsidian plugin) consumes this package.
+- **Kosmos Research Studio (KRS)** (the `Kosmos-Oden` Obsidian plugin) consumes this package.
 - **GKOS-Engine-Lite** consumes this package.
 
 This is an *implementation*, not the GKOS standard itself. The standard lives at
