@@ -20,10 +20,11 @@ This is an *implementation*, not the GKOS standard itself. The standard lives at
 
 ## Optional intelligence sidecar
 
-Version 1.1 adds a versioned, proposal-only contract for optional AI
+Version 1.2 includes a versioned, proposal-only contract for optional AI
 assistance. The TypeScript engine remains deterministic, LLM-independent, and
-fully functional offline. It does not import DSPy and exposes no automatic
-proposal-apply operation.
+fully functional offline. It does not import DSPy, provides no automatic filesystem-write operation, and
+does not automatically apply intelligence-generated proposals. It may construct
+hash-bound enrichment plans for separate, explicitly reviewed handling.
 
 The separately installable Python service under
 `services/gkos-intelligence/` uses DSPy to suggest diagnostic explanations,
@@ -140,7 +141,7 @@ once first.
 Every command embeds a deterministic `build:` block on its output:
 
 ```json
-{ "engine_version": "0.6.5",
+{ "engine_version": "1.2.0",
   "policy_hash": "sha256:…",
   "corpus_hash": "…",
   "generated_at": "2026-07-19T…Z" }
@@ -262,4 +263,7 @@ sensitivity default are unchanged — no new governance surface is added.
 
 ## License
 
-MIT. See [LICENSE](./LICENSE).
+First-party software is licensed under Apache-2.0. Documentation and original
+graphics are licensed under CC BY 4.0 as described in [LICENSE](./LICENSE).
+See [NOTICE](NOTICE), [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and
+[TRADEMARKS.md](TRADEMARKS.md).
