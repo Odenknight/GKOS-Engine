@@ -8,7 +8,7 @@ products consume this engine rather than re-vendoring it.
 GKOS Engine remains offline-capable. Intelligence features stay optional,
 proposal-only, and subordinate to deterministic validation.
 
-## Delivered in 1.1
+## Delivered through 1.2
 
 - `gkos.intelligence.v1` request, response, and proposal contract.
 - Deterministic validation of proposals and raise-only sensitivity enforcement.
@@ -16,7 +16,7 @@ proposal-only, and subordinate to deterministic validation.
 - TypeScript, Python, npm, wheel, and SEA deployment checks.
 - Windows and macOS SEA release workflow.
 
-## Next: 1.1.x hardening
+## Next: 1.2.x hardening
 
 - Build a reviewed adversarial and domain-diverse evaluation set.
 - Add offline analyzer/provider comparison reports.
@@ -26,12 +26,17 @@ proposal-only, and subordinate to deterministic validation.
   compatibility evidence.
 - Preserve zero-AI deterministic operation.
 
-## Later: 1.2
+## Completed or partially completed in 1.2
 
-- Reviewer-feedback records for accepted, rejected, and edited suggestions.
+- Reviewer-feedback and enrichment-plan structures are available for explicitly reviewed handling; automatic application is not provided.
+- Candidate contradiction, evidence-gap, relationship, classification, and documentation proposals are supported through the v1 intelligence contract.
+- Request-level task binding and fail-closed proposal validation are enforced.
+
+## Later
+
 - Offline DSPy optimization with explicit call and cost ceilings.
-- Domain analyzers behind ordinary product actions.
-- Candidate contradiction, evidence-gap, and relationship ranking.
+- Additional domain analyzers behind ordinary product actions.
+- Cross-language compatibility fixtures and installed-service integration tests.
 - Contract-v2 review only if v1 cannot evolve compatibly.
 
 ## Ecosystem gates
