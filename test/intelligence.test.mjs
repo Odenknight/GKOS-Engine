@@ -84,3 +84,38 @@ test("response validation drops unsafe proposals", () => {
   assert.equal(result.proposals.length, 1);
   assert.equal(result.proposals[0].proposalId, "proposal:test-002");
 });
+
+
+test("response accepts proposal matching the requested task", () => {
+  const request = {
+    contractVersion: INTELLIGENCE_CONTRACT_VERSION,
+    requestId: "request:test-match",
+    task: "classification_raise",
+    targetId: "note:alpha",
+    effectiveSensitivity: "confidential",
+  };
+  const result = validateIntelligenceResponse({
+    contractVersion: INTELLIGENCE_CONTRACT_VERSION,
+    requestId: request.requestId,
+    proposals: [proposal()],
+  }, request);
+  assert.equal(result.valid, true);
+  assert.equal(result.proposals.length, 1);
+});
+
+test("response rejects a safe proposal type not authorized by the requested task", () => {
+  const request = {
+    contractVersion: INTELLIGENCE_CONTRACT_VERSION,
+    requestId: "request:test-mismatch",
+    task: "diagnostic_explanation",
+    targetId: "note:alpha",
+  };
+  const result = validateIntelligenceResponse({
+    contractVersion: INTELLIGENCE_CONTRACT_VERSION,
+    requestId: request.requestId,
+    proposals: [proposal({ proposalType: "metadata_repair", proposedPatch: { title: "Candidate" } })],
+  }, request);
+  assert.equal(result.valid, false);
+  assert.equal(result.proposals.length, 0);
+  assert.ok(result.diagnostics.some((d) => d.code === "GKOS-INTELLIGENCE-021"));
+});
