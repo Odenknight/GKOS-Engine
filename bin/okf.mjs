@@ -4,7 +4,7 @@
  *
  * Builds a Kosmos graph, validates and assesses a folder of Markdown notes,
  * and exports Graphiti episodes, using the deterministic GKOS Engine core
- * (the same OKF+ 2.3 semantics the Kosmos-Oden Obsidian plugin consumes).
+ * (the same GKX 2.3 semantics the Kosmos-Oden Obsidian plugin consumes).
  *
  * Canonical (named) subcommands:
  *   okf validate <dir>
@@ -106,7 +106,7 @@ export function buildBlock(files) {
   };
 }
 
-/** Every file node's OKF+ 2.3 projection (corpus-aware, sorted by path). */
+/** Every file node's GKX 2.3 projection (corpus-aware, sorted by path). */
 function projectionsFrom(files, folders) {
   const graph = buildGraph(files, folders);
   const out = [];
@@ -147,7 +147,7 @@ export async function runValidate(dir) {
 function printValidate(result) {
   const { summary, notes } = result;
   console.log(`okf validate — engine ${result.build.engine_version}, corpus ${result.build.corpus_hash}`);
-  console.log(`  notes scanned: ${summary.notes_scanned} (with OKF+ projection: ${summary.notes_with_projection})`);
+  console.log(`  notes scanned: ${summary.notes_scanned} (with GKX projection: ${summary.notes_with_projection})`);
   console.log(`  diagnostics: ${SEVERITIES.map((s) => `${s}=${summary.diagnostics[s]}`).join("  ")}`);
   for (const note of notes) {
     if (!note.diagnostics.length) continue;

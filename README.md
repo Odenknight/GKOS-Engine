@@ -18,6 +18,14 @@ downstream products consume rather than re-vendor.
 This is an *implementation*, not the GKOS standard itself. The standard lives at
 [github.com/Odenknight/gkos-standard](https://github.com/Odenknight/gkos-standard).
 
+The Engine is the ecosystem's canonical deterministic implementation path, but
+it does not amend the standard merely by shipping behavior. New behavior may
+run as explicitly experimental and generate field evidence; it becomes
+normative only after review and acceptance through the GKOS Decision Record
+process. Downstream products that perform authoritative GKX parsing,
+validation, assessment, canonicalization, migration, or projection depend on
+this Engine or disclose a frozen verified baseline and approved differences.
+
 ## Optional intelligence sidecar
 
 Version 1.2 includes a versioned, proposal-only contract for optional AI
@@ -46,14 +54,14 @@ network access.
 
 See [ROADMAP.md](ROADMAP.md) for the completed 1.1 scope and planned hardening.
 
-## OKF+ 2.3 dialects
+## GKX 2.3 dialects
 
-Both OKF+ 2.3 dialects are supported:
+Both GKX 2.3 dialects are supported:
 
 - **Agent-Ready (flat 2.3)** — flat, human/agent-editable frontmatter.
 - **Machine Dialect (nested 2.3)** — the nested machine projection.
 
-The engine parses either, produces a validating OKF+ 2.3 projection, and derives
+The engine parses either, produces a validating GKX 2.3 projection, and derives
 diagnostics and documentation-quality assessments deterministically.
 
 ## Install / build
