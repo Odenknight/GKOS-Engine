@@ -196,6 +196,14 @@ export function validateIntelligenceResponse(
   const proposals: IntelligenceProposal[] = [];
   const diagnostics: OkfDiagnostic[] = [];
   for (const candidate of value.proposals) {
+    if (!isRecord(candidate) || candidate.proposalType !== request.task) {
+      diagnostics.push(issue(
+        "GKOS-INTELLIGENCE-021",
+        `Proposal type ${isRecord(candidate) ? String(candidate.proposalType) : "(missing)"} is not authorized by requested task ${request.task}.`,
+        "proposalType",
+      ));
+      continue;
+    }
     const result = validateIntelligenceProposal(candidate, {
       targetId: request.targetId,
       effectiveSensitivity: request.effectiveSensitivity,
