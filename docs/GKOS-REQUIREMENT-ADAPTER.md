@@ -1,7 +1,9 @@
 # GKOS requirement adapter
 
-**Status:** Informative, non-normative implementation mapping  
-**Implementation:** GKOS-Engine post-1.2 unreleased development work  
+**Status:** Informative, non-normative implementation mapping
+
+**Implementation:** GKOS-Engine 1.3.0 release candidate
+
 **Standard target:** GKOS-2026-08-05 v0.77 accepted development target — **UNPUBLISHED**
 
 This document maps permanent GKOS requirements to GKOS-Engine observations and
@@ -51,4 +53,3 @@ The serialized projection field `conformanceClaim` remains unchanged for
 compatibility. In Engine types and source it is explicitly scoped to the
 Engine's reader/assessor capability; it is not a GKOS GCP claim or independent
 qualification result.
-

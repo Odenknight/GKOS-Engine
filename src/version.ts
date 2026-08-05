@@ -5,5 +5,5 @@
  * In particular, a GKOS-Engine release must not imply a change to a frozen
  * consumer's exact Engine pin.
  */
-export const ENGINE_VERSION = "1.2.0";
+export const ENGINE_VERSION = "1.3.0";
 export const ENGINE_NAME = "gkos-engine";

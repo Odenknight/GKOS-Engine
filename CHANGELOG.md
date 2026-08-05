@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.3.0
+
+- Established **GKOS-Engine** as the canonical product name and **GKX 2.3** as
+  the schema/model name across runtime output, package metadata, documentation,
+  and source-facing APIs. Protected compatibility identifiers remain unchanged:
+  `okf_version`, `.okf/`, `OKF-*` diagnostic codes, the `okf` binary, and
+  existing `Okf*` TypeScript exports.
+- Added the canonical `dist/gkos-engine.mjs` package entry point and public
+  `gkos-engine/adapter`, `gkos-engine/gkx`, and `gkos-engine/graphiti` subpaths.
+  The immutable, framework-neutral `createGkosEngineAdapter()` lets downstream
+  products inject parsing, full graph builds, and incremental indexes without
+  importing Engine internals. The historical `dist/kosmos-core.mjs` path remains
+  as a compatibility entry point.
+- Added canonical GKX aliases for supported parser, projection, assessment,
+  relation, graph, and incremental-index APIs.
+- Newly authored identities now default to lowercase RFC 9562 UUIDv7. Migration
+  preserves valid lowercase UUIDv4 and UUIDv7 identities, rejects namespaced
+  identifiers as authored note UIDs, and continues to allow namespaced
+  relationship and evidence targets.
+- Preserved every valid direct-successor lineage branch. A predecessor's
+  `invalid_at` now uses the earliest direct-successor timestamp that is not
+  earlier than the predecessor, without selecting an authoritative branch.
+- Added non-normative traceability from Engine behavior and tests to the
+  permanent GKOS conformance, identity, and lineage requirement identifiers.
+  This mapping is implementation evidence, not a GCP profile or conformance
+  claim; the associated GKOS v0.77 standard target remains unpublished.
+- Clarified that downstream consumers own their release cadence and exact pins;
+  publishing this Engine version does not advance GKOS-Engine-Lite or another
+  frozen consumer.
+
 ## 1.2.0
 
 - **BREAKING (projection output):** `refines`, `blocks`, and `documents` are now

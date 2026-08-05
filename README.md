@@ -141,7 +141,7 @@ once first.
 Every command embeds a deterministic `build:` block on its output:
 
 ```json
-{ "engine_version": "1.2.0",
+{ "engine_version": "1.3.0",
   "policy_hash": "sha256:…",
   "corpus_hash": "…",
   "generated_at": "2026-07-19T…Z" }

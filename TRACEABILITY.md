@@ -1,7 +1,9 @@
 # GKOS-Engine traceability
 
-**Code line:** post-1.2 unreleased GKOS-Engine development work  
-**Package metadata:** `1.2.0` compatibility identity; no `1.3.0` release is assigned  
+**Code line:** GKOS-Engine 1.3.0 release candidate
+
+**Package metadata:** `1.3.0`; intended signed tag `v1.3.0`
+
 **Standard target:** accepted GKOS v0.77 development target — **UNPUBLISHED**
 
 This record connects the Engine implementation to the permanent requirement
@@ -27,8 +29,8 @@ non-normative mapping is in
 | Lineage | `GKOS-LINEAGE-001..003` | Branch-preserving normalization, temporally valid `invalid_at`, no-winner behavior, and lineage tests |
 
 The trace is evidence of implemented behavior only. It is not independent
-verification, a GCP profile result, publication of GKOS v0.77, or assignment of
-an Engine 1.3 release.
+verification, a GCP profile result, publication of GKOS v0.77, or proof that
+the 1.3.0 GitHub or npm release has been published.
 
 ## Open boundary
 
@@ -36,4 +38,3 @@ Canonical edge direction, duplicate handling, cycle treatment, resolver
 precedence, derived `HEAD`, temporal fallback order, inverse vocabulary, and
 serialization determinism remain unresolved standard topics. Existing code and
 tests for them are not promoted to permanent requirements by this record.
-
