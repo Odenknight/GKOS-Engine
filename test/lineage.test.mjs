@@ -94,7 +94,7 @@ test("unresolved lineage target warns and is skipped", () => {
   assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("unresolved-target")));
 });
 
-test("multiple direct successors: earliest successor wins invalid_at, warning emitted", () => {
+test("multiple direct successors preserve every branch; earliest valid time sets invalid_at without a winner", () => {
   const graph = buildGraph(
     [
       note("v1.md", "type: idea\ntimestamp: 2026-01-01"),
@@ -104,11 +104,18 @@ test("multiple direct successors: earliest successor wins invalid_at, warning em
     []
   );
   const v1 = byId(graph, "file:v1.md");
-  assert.equal(v1.okf.invalidAt, byId(graph, "file:v2b.md").validAt); // earliest successor
+  const v2a = byId(graph, "file:v2a.md");
+  const v2b = byId(graph, "file:v2b.md");
+  assert.equal(v1.okf.invalidAt, v2b.validAt);
+  assert.deepEqual(v1.okf.supersededByIds, ["file:v2a.md", "file:v2b.md"]);
+  assert.equal(v2a.okf.head, true);
+  assert.equal(v2b.okf.head, true);
+  assert.equal(graph.links.filter((link) => link.kind === "lineage").length, 2);
   assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("multiple-successors")));
+  assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("without selecting an authoritative branch")));
 });
 
-test("successor timestamp earlier than predecessor -> warning", () => {
+test("successor timestamp earlier than predecessor remains a branch but cannot set invalid_at", () => {
   const graph = buildGraph(
     [
       note("v1.md", "type: idea\ntimestamp: 2026-05-01"),
@@ -116,7 +123,26 @@ test("successor timestamp earlier than predecessor -> warning", () => {
     ],
     []
   );
+  const v1 = byId(graph, "file:v1.md");
+  assert.equal(v1.okf.invalidAt, null);
+  assert.deepEqual(v1.okf.supersededByIds, ["file:v2.md"]);
+  assert.equal(graph.links.filter((link) => link.kind === "lineage").length, 1);
   assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("successor-before-predecessor")));
+});
+
+test("earliest temporally valid successor excludes an invalid earlier branch", () => {
+  const graph = buildGraph(
+    [
+      note("v1.md", "type: idea\ntimestamp: 2026-05-01"),
+      note("invalid-earlier.md", "type: idea\ntimestamp: 2026-01-01\nsupersedes:\n  - v1"),
+      note("valid-later.md", "type: idea\ntimestamp: 2026-06-01\nsupersedes:\n  - v1"),
+    ],
+    []
+  );
+  const v1 = byId(graph, "file:v1.md");
+  assert.equal(v1.okf.invalidAt, byId(graph, "file:valid-later.md").validAt);
+  assert.deepEqual(v1.okf.supersededByIds, ["file:invalid-earlier.md", "file:valid-later.md"]);
+  assert.equal(graph.links.filter((link) => link.kind === "lineage").length, 2);
 });
 
 test("HEAD is derived from lineage participation, never from a frontmatter field (§3.4)", () => {

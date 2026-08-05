@@ -5,10 +5,32 @@ import {
   OKF23_POLICY,
   buildGraph,
   buildOkf23Projection,
+  okf23RelationTargets,
   parseOkf23Frontmatter,
 } from "../dist/kosmos-core.mjs";
 
 const CANONICAL_POLICY = '{"assessment_thresholds":[[0.9,"assessment:strongly-documented"],[0.75,"assessment:well-documented"],[0.6,"assessment:partially-supported"],[0.4,"assessment:weakly-supported"],[0.01,"assessment:insufficient"],[0,"assessment:invalid-or-untraceable"]],"compatible_okf_versions":["2.3"],"missing_value_behavior":"exclude-null-and-renormalize","policy_id":"policy:okf23-default-v1","policy_version":"1.0.0","sensitivity_default":"internal","weights":{"contradiction_status":0.1,"evidence_support":0.2,"provenance_quality":0.2,"relationship_integrity":0.15,"review_readiness":0.1,"structural_completeness":0.15,"temporal_freshness":0.1}}';
+
+test("namespaced identifiers remain relationship targets but cannot be authored note UIDs", () => {
+  const raw = `---
+okf_version: "2.3"
+uid: "source:authored-note"
+title: "Namespaced target"
+type: "semantic"
+created_at: "2026-08-05T00:00:00Z"
+epistemic_state: "hypothesis"
+relationships:
+  related_to:
+    - target: "source:paper-001"
+---
+Body`;
+  const projection = buildOkf23Projection(raw, "Namespaced.md", "hash:namespaced", null);
+  assert.ok(projection.diagnostics.some((diagnostic) => diagnostic.code === "OKF-IDENTITY-002" && diagnostic.field === "uid"));
+  assert.ok(okf23RelationTargets(projection).some((relation) => relation.target === "source:paper-001"));
+
+  const graph = buildGraph([{ relativePath: "Namespaced.md", content: raw }], []);
+  assert.equal(graph.okfUidIndex["source:authored-note"], undefined);
+});
 
 const note = `---
 okf_version: "2.3"

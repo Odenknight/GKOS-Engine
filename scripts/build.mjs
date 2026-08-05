@@ -1,11 +1,12 @@
 /**
- * GKOS Engine build.
+ * GKOS-Engine build.
  *
  * Bundles the modular TypeScript core (src/index.ts and its siblings) into a
  * single fully-inlined ESM bundle consumed by the CLI (bin/okf.mjs) and the
  * test suite, and emits type declarations for TypeScript consumers:
  *
- *   dist/kosmos-core.mjs   ESM bundle of the deterministic GKOS Engine core
+ *   dist/gkos-engine.mjs   canonical ESM bundle of GKOS-Engine
+ *   dist/kosmos-core.mjs   compatibility entry point for existing consumers
  *   dist/index.d.ts        type declarations (+ per-module .d.ts)
  *
  * Obsidian-free, DOM-free, platform-neutral — reusable from any Node consumer.
@@ -17,7 +18,7 @@
  * "exports" fields.
  *
  * Usage:
- *   node scripts/build.mjs        build dist/kosmos-core.mjs + dist/*.d.ts
+ *   node scripts/build.mjs        build dist/gkos-engine.mjs + compatibility artifacts + declarations
  */
 import esbuild from "esbuild";
 import { execFileSync } from "node:child_process";
@@ -47,8 +48,26 @@ async function bundle(entry, opts = {}) {
 
 try {
   const core = await bundle("src/index.ts");
-  writeFileSync(resolve(root, "dist/kosmos-core.mjs"), core);
-  console.log("built dist/kosmos-core.mjs");
+  writeFileSync(resolve(root, "dist/gkos-engine.mjs"), core);
+  console.log("built dist/gkos-engine.mjs");
+
+  // Keep the historical artifact path loadable. The package entry point is
+  // canonical, but direct-path consumers must not break during the naming
+  // transition.
+  writeFileSync(
+    resolve(root, "dist/kosmos-core.mjs"),
+    'export * from "./gkos-engine.mjs";\n',
+  );
+  console.log("built dist/kosmos-core.mjs (compatibility entry point)");
+
+  for (const [entry, output] of [
+    ["src/adapter.ts", "dist/adapter.mjs"],
+    ["src/gkx.ts", "dist/gkx.mjs"],
+    ["src/graphiti-adapter.ts", "dist/graphiti-adapter.mjs"],
+  ]) {
+    writeFileSync(resolve(root, output), await bundle(entry));
+    console.log(`built ${output}`);
+  }
 
   // Desktop-agent sidecar entry. Two node-platform bundles from the same
   // source: an ESM bundle for `node dist/...mjs` runs and the test suite, and

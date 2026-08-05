@@ -148,7 +148,9 @@ const EPISTEMIC = new Set(["fact", "verified_inference", "hypothesis", "deprecat
 const SCOPES = new Set(["global", "project", "tenant", "node", "agent", "entity"]);
 const SENSITIVITIES = new Set(["public", "internal", "restricted", "confidential", "regulated", "phi", "secret"]);
 const UUID_V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
-const VALID_UID = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|[a-z][a-z0-9._-]{1,31}:[A-Za-z0-9][A-Za-z0-9._:/-]{1,255})$/i;
+const UUID_V7 = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+const VALID_AUTHORED_UID = (value: string | undefined): value is string =>
+  Boolean(value && (UUID_V4.test(value) || UUID_V7.test(value)));
 
 const yamlUnquote = (raw: string): string => {
   const s = raw.trim();
@@ -334,7 +336,7 @@ function okfValidation(fm: StrictFrontmatter): OkfMigrationFinding[] {
   requireString("description"); requireString("timestamp"); requireString("epistemic_state");
   requireString("scope"); requireString("sensitivity");
   if (scalar(fm, "okf_version") !== "2.2") f.push({ code: "invalid-okf-version", message: `okf_version must be exactly "2.2".` });
-  if (!UUID_V4.test(scalar(fm, "uid") ?? "")) f.push({ code: "invalid-uid", message: "uid must be a lowercase UUIDv4." });
+  if (!VALID_AUTHORED_UID(scalar(fm, "uid"))) f.push({ code: "invalid-uid", message: "uid must be a lowercase UUIDv4 or UUIDv7." });
   if (!TYPES.has(scalar(fm, "type") ?? "")) f.push({ code: "invalid-type", message: "type must be episodic, semantic, or procedural." });
   if (!validTimestamp(scalar(fm, "timestamp"))) f.push({ code: "invalid-timestamp", message: "timestamp must be an ISO-8601 value in UTC (…Z) or with a numeric ±HH:MM offset." });
   if (!EPISTEMIC.has(scalar(fm, "epistemic_state") ?? "")) f.push({ code: "invalid-epistemic-state", message: "epistemic_state is missing or invalid." });
@@ -364,7 +366,7 @@ function invalidExplicitGovernance(fm: StrictFrontmatter): OkfMigrationFinding[]
     if (!v || !allowed.has(v)) out.push({ code: `invalid-explicit-${key}`, message: `Existing ${key} is invalid and requires human review; it will not be overwritten.` });
   };
   if (fm.byKey.has("okf_version") && scalar(fm, "okf_version") !== "2.2") out.push({ code: "different-okf-version", message: "A different explicit okf_version requires compatibility review." });
-  if (fm.byKey.has("uid") && !UUID_V4.test(scalar(fm, "uid") ?? "")) out.push({ code: "invalid-explicit-uid", message: "Existing uid is not a lowercase UUIDv4 and will not be replaced automatically." });
+  if (fm.byKey.has("uid") && !VALID_AUTHORED_UID(scalar(fm, "uid"))) out.push({ code: "invalid-explicit-uid", message: "Existing uid is not a lowercase UUIDv4 or UUIDv7 and will not be replaced automatically." });
   checkEnum("type", TYPES); checkEnum("epistemic_state", EPISTEMIC); checkEnum("scope", SCOPES); checkEnum("sensitivity", SENSITIVITIES);
   if (fm.byKey.has("timestamp") && !validTimestamp(scalar(fm, "timestamp"))) out.push({ code: "invalid-explicit-timestamp", message: "Existing timestamp is invalid and will not be replaced automatically." });
   for (const key of [...LINEAGE_KEYS, ...RELATION_KEYS]) {
@@ -422,11 +424,11 @@ function upgradeOverrides(fm: StrictFrontmatter): {
   if (fm.byKey.has("okf_version") && scalar(fm, "okf_version") !== "2.2") {
     replace("okf_version", "override-okf-version", "Existing okf_version will be normalized to the human-editable 2.2 authoring format; the original value is retained in migration salvage.");
   }
-  if (fm.byKey.has("uid") && !UUID_V4.test(scalar(fm, "uid") ?? "")) {
-    replace("uid", "override-invalid-uid", "Invalid legacy uid will be replaced with a new lowercase UUIDv4; the original value is retained in migration salvage.");
+  if (fm.byKey.has("uid") && !VALID_AUTHORED_UID(scalar(fm, "uid"))) {
+    replace("uid", "override-invalid-uid", "Invalid legacy uid will be replaced with a new lowercase UUIDv7; the original value is retained in migration salvage.");
   }
   if (fm.byKey.has("id")) {
-    replace("id", "override-legacy-id", UUID_V4.test(scalar(fm, "id") ?? "")
+    replace("id", "override-legacy-id", VALID_AUTHORED_UID(scalar(fm, "id"))
       ? "Legacy id will be migrated to uid and removed from frontmatter; the original value is retained in migration salvage."
       : "Invalid legacy id will be removed and replaced by a new uid; the original value is retained in migration salvage.");
   }
@@ -644,7 +646,7 @@ function proposedEditableOkf22(
   if (fm.state !== "valid") throw new Error("generated OKF+ 2.3 frontmatter is not safely bounded");
   const eol = fm.eol;
   const uidValue = nativeText(data.uid);
-  const uid = uidValue && VALID_UID.test(uidValue) ? uidValue : generatedUid;
+  const uid = VALID_AUTHORED_UID(uidValue) ? uidValue : generatedUid;
   const title = nativeText(data.title) ?? fileTitle(source.path);
   const type = nativeText(data.type);
   const created = nativeText(data.created_at)
@@ -716,7 +718,7 @@ function proposedOkf(
       ? new Date(source.modifiedTime!).toISOString()
       : createdAt;
   const existingUid = scalar(fm, "uid");
-  const actualUid = existingUid && UUID_V4.test(existingUid) ? existingUid : uid;
+  const actualUid = VALID_AUTHORED_UID(existingUid) ? existingUid : uid;
   const existingType = scalar(fm, "type");
   const existingEpistemic = scalar(fm, "epistemic_state");
   const existingScope = scalar(fm, "scope");
@@ -783,7 +785,7 @@ function proposedNativeOkf23(
       ? new Date(source.modifiedTime!).toISOString()
       : createdAt;
   const existingUid = scalar(fm, "uid");
-  const actualUid = existingUid && UUID_V4.test(existingUid) ? existingUid : uid;
+  const actualUid = VALID_AUTHORED_UID(existingUid) ? existingUid : uid;
   const existingType = scalar(fm, "type");
   const existingEpistemic = scalar(fm, "epistemic_state");
   const existingScope = scalar(fm, "scope");
@@ -961,9 +963,9 @@ export function applyOkfEnrichmentFrontmatter(
 
 function migrationUid(fm: StrictFrontmatter, generate: () => string, allowLegacyId = false): string {
   const existingUid = scalar(fm, "uid");
-  if (existingUid && UUID_V4.test(existingUid)) return existingUid;
+  if (VALID_AUTHORED_UID(existingUid)) return existingUid;
   const legacyId = allowLegacyId ? scalar(fm, "id") : undefined;
-  if (legacyId && UUID_V4.test(legacyId)) return legacyId;
+  if (VALID_AUTHORED_UID(legacyId)) return legacyId;
   return generate();
 }
 
@@ -972,6 +974,26 @@ export function makeOkfUuidV4(): string {
   if (!c || typeof c.getRandomValues !== "function") throw new Error("OKF+ migration requires crypto.getRandomValues; refusing insecure UID generation.");
   const b = new Uint8Array(16); c.getRandomValues(b);
   b[6] = (b[6] & 0x0f) | 0x40; b[8] = (b[8] & 0x3f) | 0x80;
+  const h = [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+}
+
+/** Create a lowercase RFC 9562 UUIDv7 for a newly authored GKX identity. */
+export function makeGkxUuidV7(nowMs = Date.now()): string {
+  if (!Number.isSafeInteger(nowMs) || nowMs < 0 || nowMs > 0xffffffffffff) {
+    throw new Error("GKX UUIDv7 generation requires a non-negative 48-bit Unix millisecond timestamp.");
+  }
+  const c: any = (globalThis as any).crypto;
+  if (!c || typeof c.getRandomValues !== "function") throw new Error("GKX migration requires crypto.getRandomValues; refusing insecure UID generation.");
+  const b = new Uint8Array(16);
+  c.getRandomValues(b);
+  let timestamp = BigInt(nowMs);
+  for (let i = 5; i >= 0; i--) {
+    b[i] = Number(timestamp & 0xffn);
+    timestamp >>= 8n;
+  }
+  b[6] = (b[6] & 0x0f) | 0x70;
+  b[8] = (b[8] & 0x3f) | 0x80;
   const h = [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
 }
@@ -1151,7 +1173,7 @@ export async function createOkfMigrationPlan(
   const { now: suppliedNow, uuid: suppliedUuid, mode = "safe-onboarding", ...overrides } = options;
   const defaults: OkfMigrationDefaults = { ...DEFAULT_OKF_MIGRATION_DEFAULTS, ...overrides } as OkfMigrationDefaults;
   const now = suppliedNow ?? (() => new Date());
-  const uuid = suppliedUuid ?? makeOkfUuidV4;
+  const uuid = suppliedUuid ?? makeGkxUuidV7;
   const createdAt = now().toISOString();
   const runId = `okf-${createdAt.replace(/[-:.]/g, "").replace("Z", "Z")}-${uuid().slice(0, 8)}`;
   const entries: OkfMigrationEntry[] = [];
@@ -1160,7 +1182,7 @@ export async function createOkfMigrationPlan(
     entries.push(await auditOne(source, { createdAt, defaults, uuid, mode }));
   }
   const uidMap = new Map<string, OkfMigrationEntry[]>();
-  for (const entry of entries) if (entry.uid && VALID_UID.test(entry.uid)) {
+  for (const entry of entries) if (VALID_AUTHORED_UID(entry.uid)) {
     const group = uidMap.get(entry.uid) ?? []; group.push(entry); uidMap.set(entry.uid, group);
   }
   for (const [uid, group] of uidMap) if (group.length > 1) {

@@ -1,13 +1,12 @@
 /**
- * Kosmos Core — shared types.
+ * GKOS-Engine — shared types.
  *
- * Every surface (Obsidian plugin, standalone HTML viewer, Agent API, Graphiti
- * exporter, kosmos-build CLI) consumes these types so the same vault produces
+ * Every downstream surface consumes these types so the same source collection produces
  * materially the same nodes, links, lineage, HEAD status, temporal state and
  * Graphiti episode structure no matter how it is accessed.
  */
 
-/** A source file discovered by any source (Obsidian vault, directory scan, CLI). */
+/** A source file discovered by any source (workspace, directory scan, CLI, or application adapter). */
 export interface SourceFile {
   relativePath: string;
   /** File name including extension. */
@@ -94,9 +93,13 @@ export interface OkfAssessment {
   interpretation: "documentation-and-support-quality-not-truth";
 }
 
-/** OKF+ v2.3 Validating Projection Profile attached to a source note. */
+/** GKX 2.3 validating projection attached to a source note. */
 export interface OkfProjection {
   profile: "okf-plus-2.3-validating-projection";
+  /**
+   * Compatibility field describing the Engine's projection capability.
+   * This is not a GKOS GCP conformance claim or qualification result.
+   */
   conformanceClaim: "reader-and-deterministic-assessor";
   mode: "strict-v2.3" | "compatible" | "legacy";
   sourceVersion: string | null;
@@ -141,7 +144,7 @@ export type OkfRelation =
   | "has_part"
   | "related_to";
 
-/** OKF+ (Open Knowledge Format Plus) data parsed from one note. */
+/** GKX data parsed from one note. `OkfData` remains a compatibility API name. */
 export interface OkfData {
   okfVersion?: string;
   /** Stable external identity. A valid v2.2 value is a lowercase UUIDv4. */
@@ -164,11 +167,11 @@ export interface OkfData {
   relations: Partial<Record<OkfRelation, string[]>>;
   /** Titles from the footer `**Related:**` line. */
   related: string[];
-  /** Origin-preserving OKF+ v2.3 validation and assessment projection. */
+  /** Origin-preserving GKX 2.3 validation and assessment projection. */
   projection?: OkfProjection;
 }
 
-/** Node-level OKF+ projection attached to graph nodes after lineage/temporal passes. */
+/** Node-level GKX projection attached to graph nodes after lineage/temporal passes. */
 export interface OkfNodeState extends OkfData {
   /** Resolved node ids this note supersedes (canonical: this note is NEWER). */
   supersedesIds?: string[];

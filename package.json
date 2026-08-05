@@ -1,15 +1,30 @@
 {
   "name": "gkos-engine",
   "version": "1.2.0",
-  "description": "GKOS Engine — canonical deterministic OKF+ 2.3 engine with an optional, proposal-only DSPy intelligence sidecar; offline validation, projection, assessment, graph, and export remain authoritative.",
+  "description": "GKOS-Engine — canonical deterministic GKX 2.3 engine with an optional, proposal-only DSPy intelligence sidecar; offline validation, projection, assessment, graph, and export remain authoritative.",
   "type": "module",
-  "main": "./dist/kosmos-core.mjs",
+  "main": "./dist/gkos-engine.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/kosmos-core.mjs",
-      "default": "./dist/kosmos-core.mjs"
+      "import": "./dist/gkos-engine.mjs",
+      "default": "./dist/gkos-engine.mjs"
+    },
+    "./adapter": {
+      "types": "./dist/adapter.d.ts",
+      "import": "./dist/adapter.mjs",
+      "default": "./dist/adapter.mjs"
+    },
+    "./gkx": {
+      "types": "./dist/gkx.d.ts",
+      "import": "./dist/gkx.mjs",
+      "default": "./dist/gkx.mjs"
+    },
+    "./graphiti": {
+      "types": "./dist/graphiti-adapter.d.ts",
+      "import": "./dist/graphiti-adapter.mjs",
+      "default": "./dist/graphiti-adapter.mjs"
     }
   },
   "bin": {

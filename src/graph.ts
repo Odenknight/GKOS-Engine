@@ -16,7 +16,7 @@
 import { colorForArea } from "./colors";
 import { parseMarkdownFile, type ParsedMarkdown } from "./markdown";
 import { parseOkfPlus, parseOkfTimestamp } from "./okf";
-import { buildOkf23Projection, okf23Inverse, okf23RelationTargets, refreshOkf23Assessment, type Okf23ProjectionOptions } from "./okf23";
+import { buildOkf23Projection, isValidGkxAuthoredUid, okf23Inverse, okf23RelationTargets, refreshOkf23Assessment, type Okf23ProjectionOptions } from "./okf23";
 import {
   areaFromFilePath,
   areaFromPath,
@@ -200,11 +200,11 @@ export function assembleGraph(
     addFileToResolver(resolver, rec.relativePath, node.id, rec.parsed.aliases);
   }
 
-  // ---- OKF+ v2.3 UID index and corpus-level identity diagnostics ----
+  // ---- GKX 2.3 UID index and corpus-level identity diagnostics ----
   const uidCandidates = new Map<string, NoteRecord[]>();
   for (const rec of records) {
     const uid = rec.okf?.projection?.authored.uid;
-    if (typeof uid !== "string" || !uid) continue;
+    if (!isValidGkxAuthoredUid(uid)) continue;
     const arr = uidCandidates.get(uid);
     if (arr) arr.push(rec); else uidCandidates.set(uid, [rec]);
   }
@@ -427,7 +427,9 @@ export function assembleGraph(
     // Core owns temporal semantics; consumers must not depend on a renderer
     // mutation to discover the graph's time range.
     __timeSpan: temporal.timeSpan,
-    okfProfile: "OKF+ v2.3 Validating Projection Profile",
+    // The property key remains a compatibility identifier; the display value
+    // uses the current model name.
+    okfProfile: "GKX 2.3 Validating Projection Profile",
     okfUidIndex: Object.fromEntries([...uidIndex.entries()].sort(([a], [b]) => codeUnitCompare(a, b))),
     okfAssessments: records.flatMap((rec) => rec.okf?.projection ? [rec.okf.projection.assessment] : []),
     okfDiagnostics: records.flatMap((rec) => rec.okf?.projection?.diagnostics ?? []),
@@ -436,7 +438,9 @@ export function assembleGraph(
 
 function graphUid(node: KosmosNode | undefined): string | null {
   const uid = node?.okf?.projection?.authored.uid;
-  return typeof uid === "string" ? uid : node?.okf?.uid ?? null;
+  if (isValidGkxAuthoredUid(uid)) return uid;
+  const compatibilityUid = node?.okf?.uid;
+  return isValidGkxAuthoredUid(compatibilityUid) ? compatibilityUid : null;
 }
 
 /** Full build convenience: parse every file, then assemble. The optional

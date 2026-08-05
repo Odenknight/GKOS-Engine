@@ -1,9 +1,9 @@
 /**
- * Kosmos Core — public surface.
+ * GKOS-Engine — public surface.
  *
- * One graph-semantics implementation (§2.2). The Obsidian plugin, the
- * standalone HTML viewer, the Agent API (REST + MCP), the Graphiti exporter
- * and the kosmos-build CLI all import from here and only from here.
+ * Downstream products import this framework-neutral surface instead of engine
+ * internals. Compatibility exports remain available alongside canonical GKX
+ * names so existing consumers can migrate without changing serialized data.
  */
 export * from "./types";
 export * from "./version";
@@ -26,3 +26,6 @@ export * from "./graphiti";
 export * from "./incremental";
 export * from "./demo";
 export * from "./intelligence";
+export * from "./gkx";
+export * from "./adapter";
+export * from "./graphiti-adapter";

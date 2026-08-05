@@ -6,7 +6,9 @@
  *
  *     valid_at   = OKF+ timestamp, or the documented fallback
  *                  (file created-time, else modified-time, else index time)
- *     invalid_at = earliest valid_at of any DIRECT successor, or null
+ *     invalid_at = earliest temporally valid valid_at of any DIRECT successor,
+ *                  or null. Every branch remains present; this does not select
+ *                  an authoritative successor.
  *
  * A note is current while invalid_at == null. A lineage note is HEAD when it
  * participates in a lineage AND has no successor — never derived from the
@@ -48,7 +50,10 @@ export function computeTemporalState(
     let inv: number | null = null;
     for (const s of successors) {
       const sv = validAt.get(s);
-      if (sv != null && (inv == null || sv < inv)) inv = sv;
+      // A malformed branch dated before its predecessor remains visible in the
+      // lineage graph and diagnostics but cannot create an impossible negative
+      // validity interval.
+      if (sv != null && sv >= n.validAtMs && (inv == null || sv < inv)) inv = sv;
     }
     invalidAt.set(n.id, inv);
     head.set(n.id, lineage.members.has(n.id) && successors.length === 0);

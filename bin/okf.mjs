@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * okf — the GKOS Engine CLI.
+ * okf — the GKOS-Engine CLI.
  *
  * Builds a Kosmos graph, validates and assesses a folder of Markdown notes,
- * and exports Graphiti episodes, using the deterministic GKOS Engine core
- * (the same OKF+ 2.3 semantics the Kosmos-Oden Obsidian plugin consumes).
+ * and exports Graphiti episodes, using the deterministic GKOS-Engine core
+ * (the same GKX 2.3 semantics consumed by downstream products).
  *
  * Canonical (named) subcommands:
  *   okf validate <dir>
@@ -19,19 +19,19 @@
  * Every command embeds a deterministic `build:` block
  * (engine_version, policy_hash, corpus_hash, generated_at).
  *
- * Requires `npm run build` once (dist/kosmos-core.mjs).
+ * Requires `npm run build` once (dist/gkos-engine.mjs).
  */
 import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import { watch, realpathSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 
-const coreUrl = new URL("../dist/kosmos-core.mjs", import.meta.url);
+const coreUrl = new URL("../dist/gkos-engine.mjs", import.meta.url);
 let core;
 try {
   core = await import(coreUrl.href);
 } catch (e) {
-  console.error("okf: dist/kosmos-core.mjs not found — run `npm run build` first.");
+  console.error("okf: dist/gkos-engine.mjs not found — run `npm run build` first.");
   process.exit(1);
 }
 
@@ -106,7 +106,7 @@ export function buildBlock(files) {
   };
 }
 
-/** Every file node's OKF+ 2.3 projection (corpus-aware, sorted by path). */
+/** Every file node's GKX 2.3 projection (corpus-aware, sorted by path). */
 function projectionsFrom(files, folders) {
   const graph = buildGraph(files, folders);
   const out = [];
@@ -147,7 +147,7 @@ export async function runValidate(dir) {
 function printValidate(result) {
   const { summary, notes } = result;
   console.log(`okf validate — engine ${result.build.engine_version}, corpus ${result.build.corpus_hash}`);
-  console.log(`  notes scanned: ${summary.notes_scanned} (with OKF+ projection: ${summary.notes_with_projection})`);
+  console.log(`  notes scanned: ${summary.notes_scanned} (with GKX projection: ${summary.notes_with_projection})`);
   console.log(`  diagnostics: ${SEVERITIES.map((s) => `${s}=${summary.diagnostics[s]}`).join("  ")}`);
   for (const note of notes) {
     if (!note.diagnostics.length) continue;
@@ -249,7 +249,7 @@ function watchGraph(config) {
 }
 
 /* ---------------- CLI ---------------- */
-const USAGE = `okf (GKOS Engine) v${ENGINE_VERSION}
+const USAGE = `okf (GKOS-Engine) v${ENGINE_VERSION}
 Usage:
   okf validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
   okf assess   <dir> [--json]                         per-note documentation-quality scores/labels
@@ -355,8 +355,8 @@ export async function main(argv = process.argv.slice(2)) {
  * main() never runs, and the CLI exits 0 with zero output. Realpath resolution
  * canonicalizes both sides. If realpath throws (e.g. argv[1] gone from disk),
  * fall back to the raw URL comparison rather than crashing. This module must
- * stay side-effect-free on import (it is imported by GKOS-Engine-Lite's wrapper
- * and by tests), so the guard must only fire on genuine direct invocation. */
+ * stay side-effect-free on import (it is imported by compatibility wrappers
+ * and tests), so the guard must only fire on genuine direct invocation. */
 function isInvokedDirectly() {
   const invokedPath = process.argv[1];
   if (!invokedPath) return false;

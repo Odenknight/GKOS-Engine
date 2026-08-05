@@ -2,8 +2,8 @@ name: Sidecar release
 
 # Builds the desktop-agent SEA single binary (`kosmos-agent`) and attaches the
 # binaries to the tag's GitHub Release. Binaries are UNSIGNED (build spec
-# decision 1); the shell repo (GKOS-Engine-Lite) consumes them as its Tauri
-# sidecar.
+# decision 1). Downstream consumers choose and verify their own exact pins;
+# publishing an Engine release does not advance any frozen consumer.
 #
 # Runner policy (issue #9): SEA cannot cross-compile across OSes, so Windows
 # and macOS each build on their own runner. Across ARCHES on macOS it now can:
@@ -95,7 +95,7 @@ jobs:
               echo "Rosetta 2 available — enforcing functional smoke test."
             else
               native=0
-              echo "::warning::Rosetta 2 unavailable on this runner; the x86_64 binary passed its Mach-O arch and ad-hoc signature gates but could not be executed here. Functional coverage for this asset comes from GKOS-Engine-Lite desktop-build, which runs 'kosmos-agent --help' while assembling the Intel .dmg."
+              echo "::warning::Rosetta 2 unavailable on this runner; the x86_64 binary passed its Mach-O arch and ad-hoc signature gates but could not be executed here."
             fi
           fi
           if [ "$native" = "1" ]; then

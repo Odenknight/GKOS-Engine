@@ -138,6 +138,16 @@ function resolveDefaultSensitivity(options?: Okf23ProjectionOptions): OkfSensiti
 }
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const NAMESPACED_ID = /^[a-z][a-z0-9_.-]*:[a-z0-9][a-z0-9_.:/-]{2,}$/i;
+
+/**
+ * Authored note identities use UUIDs. Namespaced identifiers remain valid
+ * relationship/evidence targets but cannot become a note's canonical UID.
+ */
+export const isValidGkxAuthoredUid = (value: unknown): value is string =>
+  typeof value === "string" && UUID.test(value);
+
+export const isValidGkxTargetIdentifier = (value: unknown): value is string =>
+  typeof value === "string" && (UUID.test(value) || NAMESPACED_ID.test(value));
 const SHA256 = /^sha256:[0-9a-f]{64}$/i;
 
 interface YamlLine { indent: number; text: string; line: number }
@@ -422,7 +432,7 @@ export function assessOkf23(projection: OkfProjection): OkfAssessment {
   const relationships = record(frontmatter.relationships);
 
   const structureParts: Array<[number, boolean]> = [
-    [0.15, Boolean(uid && (UUID.test(uid) || NAMESPACED_ID.test(uid)))],
+    [0.15, isValidGkxAuthoredUid(uid)],
     [0.05, Boolean(text(a.title))], [0.10, Boolean(text(a.type))],
     [0.10, Boolean(text(a.createdAt) && !Number.isNaN(Date.parse(text(a.createdAt)!)))],
     [0.10, Object.keys(record(a.authorship)).length > 0], [0.10, Boolean(text(epistemic.state))],
@@ -506,8 +516,8 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
   if (!parsed.present && !legacy) return undefined;
   const mode: OkfProjection["mode"] = version === "2.3" ? "strict-v2.3" : version ? "compatible" : "legacy";
   const diagnostics: OkfDiagnostic[] = parsed.issues.map((issue) => diagnostic("OKF-SCHEMA-001", "error", `${issue.message} (line ${issue.line})`, sourcePath, "frontmatter"));
-  if (version && version !== "2.3") diagnostics.push(diagnostic("OKF-SCHEMA-002", "info", `OKF+ ${version} is read through the compatibility projection; the source note was not rewritten.`, sourcePath, "okf_version"));
-  if (!version) diagnostics.push(diagnostic("OKF-SCHEMA-003", "warning", "No OKF+ version is declared; legacy compatibility semantics apply.", sourcePath, "okf_version"));
+  if (version && version !== "2.3") diagnostics.push(diagnostic("OKF-SCHEMA-002", "info", `GKX compatibility input ${version} is read through the projection; the source note was not rewritten.`, sourcePath, "okf_version"));
+  if (!version) diagnostics.push(diagnostic("OKF-SCHEMA-003", "warning", "No GKX compatibility version is declared; legacy semantics apply.", sourcePath, "okf_version"));
 
   const origins: Record<OkfOrigin, OkfOriginProjection> = {
     authored: blankProjection(), derived: blankProjection(), proposed: blankProjection(), approved: blankProjection(),
@@ -546,7 +556,7 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
 
   if (version === "2.3") {
     const requiredScalars = ["okf_version", "uid", "title", "type", "created_at"];
-    for (const key of requiredScalars) if (!text(data[key])) diagnostics.push(diagnostic("OKF-SCHEMA-004", "error", `Required OKF+ 2.3 field ${key} is missing or empty.`, sourcePath, key));
+    for (const key of requiredScalars) if (!text(data[key])) diagnostics.push(diagnostic("OKF-SCHEMA-004", "error", `Required GKX 2.3 field ${key} is missing or empty.`, sourcePath, key));
     // Governance blocks are optional in-note: the flat editable profile keeps
     // them out of frontmatter and the projection supplies in-memory defaults
     // (spec §2.1 permits derived metadata to live outside the source note).
@@ -554,13 +564,13 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
     // may be a flat scalar level.
     const optionalBlocks = ["authorship", "epistemic", "provenance", "relationships", "evidence", "lineage", "review", "assessment", "authorization", "labels"];
     for (const key of optionalBlocks) if (data[key] != null && (typeof data[key] !== "object" || Array.isArray(data[key]))) {
-      diagnostics.push(diagnostic("OKF-SCHEMA-004", "error", `OKF+ 2.3 block ${key} must be a mapping when present.`, sourcePath, key));
+      diagnostics.push(diagnostic("OKF-SCHEMA-004", "error", `GKX 2.3 block ${key} must be a mapping when present.`, sourcePath, key));
     }
     if (data.sensitivity != null && typeof data.sensitivity !== "string" && (typeof data.sensitivity !== "object" || Array.isArray(data.sensitivity))) {
-      diagnostics.push(diagnostic("OKF-SCHEMA-004", "error", "OKF+ 2.3 sensitivity must be a flat level or a mapping.", sourcePath, "sensitivity"));
+      diagnostics.push(diagnostic("OKF-SCHEMA-004", "error", "GKX 2.3 sensitivity must be a flat level or a mapping.", sourcePath, "sensitivity"));
     }
     if (!text(record(data.epistemic).state) && !text(data.epistemic_state)) {
-      diagnostics.push(diagnostic("OKF-SCHEMA-004", "error", "OKF+ 2.3 requires an epistemic state (epistemic.state or flat epistemic_state).", sourcePath, "epistemic.state"));
+      diagnostics.push(diagnostic("OKF-SCHEMA-004", "error", "GKX 2.3 requires an epistemic state (epistemic.state or flat epistemic_state).", sourcePath, "epistemic.state"));
     }
   }
 
@@ -589,7 +599,7 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
 
   const uid = text(authored.uid);
   if (!uid) diagnostics.push(diagnostic("OKF-IDENTITY-001", "warning", "The note has no canonical UID and remains path-bound.", sourcePath, "uid", "Assign a stable UUIDv7 through an authorized migration."));
-  else if (!UUID.test(uid) && !NAMESPACED_ID.test(uid)) diagnostics.push(diagnostic("OKF-IDENTITY-002", "error", "The UID is neither a UUID nor a policy-permitted namespaced globally unique identifier.", sourcePath, "uid"));
+  else if (!isValidGkxAuthoredUid(uid)) diagnostics.push(diagnostic("OKF-IDENTITY-002", "error", "An authored note UID must be a UUID; namespaced identifiers are valid only as relationship or evidence targets.", sourcePath, "uid"));
   // Epistemic state: the AUTHORED value (kept verbatim on authored.epistemicState
   // and echoed in the diagnostic below) is never silently erased, but a value
   // outside the frozen twelve-state vocabulary must not flow through as the
@@ -661,7 +671,7 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
 
   const extensions = Object.fromEntries(Object.entries(data).filter(([key]) => !CORE_FIELDS.has(key) && !LEGACY_FIELDS.has(key)));
   const derivedLabels = origins.derived.labels.filter((x): x is string => typeof x === "string");
-  derivedLabels.push(uid ? (UUID.test(uid) || NAMESPACED_ID.test(uid) ? "identity:stable" : "identity:invalid") : "identity:missing");
+  derivedLabels.push(uid ? (isValidGkxAuthoredUid(uid) ? "identity:stable" : "identity:invalid") : "identity:missing");
   derivedLabels.push(refs.length ? (hash && SHA256.test(hash) ? "provenance:traceable" : "provenance:partial") : "provenance:missing");
   derivedLabels.push(`sensitivity:${effectiveSensitivity}`);
   if (effectiveEpistemicState) derivedLabels.push(`epistemic:${effectiveEpistemicState}`);
@@ -681,6 +691,8 @@ export function buildOkf23Projection(raw: string, sourcePath: string, contentHas
     (effective.evidence as Record<string, unknown[]>)[kind].push(...list(record(origin.evidence)[kind]));
   }
   const projection: OkfProjection = {
+    // Compatibility field: this names an implementation capability only. It
+    // is not a GKOS GCP profile claim or independent conformance evidence.
     profile: OKF23_PROFILE, conformanceClaim: "reader-and-deterministic-assessor", mode,
     sourceVersion: version, sourcePath, contentHash, rawFrontmatter: data, extensions,
     authored, derived: origins.derived, proposed: origins.proposed, approved: origins.approved, effective,

@@ -2,9 +2,23 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   createOkfMigrationPlan,
+  makeGkxUuidV7,
   publicOkfMigrationPlan,
   verifyOkfMigrationPlan,
 } from "../dist/kosmos-core.mjs";
+
+test("new GKX identities use lowercase UUIDv7", async () => {
+  const nowMs = Date.parse("2026-08-05T12:34:56.789Z");
+  const generated = makeGkxUuidV7(nowMs);
+  assert.match(generated, /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+  assert.equal(Number.parseInt(generated.replace(/-/g, "").slice(0, 12), 16), nowMs);
+
+  const plan = await createOkfMigrationPlan(
+    [{ path: "New.md", content: "# New\n" }],
+    { now: () => new Date(nowMs), mode: "convert-to-23" },
+  );
+  assert.match(plan.entries[0].proposedContent, /^uid: "[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"$/m);
+});
 
 const UUIDS = [
   "00000000-0000-4000-8000-000000000001",
@@ -41,6 +55,26 @@ forked_to: []
 ---
 Body.
 `;
+
+test("valid lowercase UUIDv4 and UUIDv7 identities survive conversion without rewrite", async () => {
+  const v4 = "11111111-1111-4111-8111-111111111111";
+  const v7 = "019b2d14-4230-7db7-87d4-7d81cfaec932";
+  const plan = await createOkfMigrationPlan([
+    { path: "Legacy-v4.md", content: validOkf },
+    { path: "Current-v7.md", content: validOkf.replaceAll(v4, v7) },
+  ], { ...options(), mode: "convert-to-23" });
+  assert.match(plan.entries.find((entry) => entry.path === "Legacy-v4.md").proposedContent, new RegExp(`^uid: "${v4}"$`, "m"));
+  assert.match(plan.entries.find((entry) => entry.path === "Current-v7.md").proposedContent, new RegExp(`^uid: "${v7}"$`, "m"));
+});
+
+test("namespaced identifiers are blocked as authored note UIDs", async () => {
+  const plan = await createOkfMigrationPlan([
+    { path: "Namespaced.md", content: validOkf.replaceAll("11111111-1111-4111-8111-111111111111", "source:paper-001") },
+  ], options());
+  assert.equal(plan.entries[0].status, "blocked");
+  assert.ok(plan.entries[0].findings.some((finding) => finding.code === "invalid-explicit-uid"));
+  assert.equal(plan.entries[0].proposedContent, undefined);
+});
 
 const nativeOkf23 = `---
 okf_version: "2.3"

@@ -1,5 +1,5 @@
 /**
- * GKOS Engine — Desktop Agent sidecar (headless).
+ * GKOS-Engine — desktop agent sidecar (headless).
  *
  * A single self-contained entry point compiled per-platform into a Node SEA
  * binary (`kosmos-agent`). It points the deterministic engine at a notes
@@ -86,9 +86,9 @@ export interface DesktopAgentArgs {
   statusFile: string;
 }
 
-export const DESKTOP_AGENT_USAGE = `kosmos-agent (GKOS Engine Desktop helper) v${ENGINE_VERSION}
+export const DESKTOP_AGENT_USAGE = `kosmos-agent (GKOS-Engine desktop helper) v${ENGINE_VERSION}
 
-Runs the protected, read-only note map used by GKOS Engine Desktop.
+Runs the protected, read-only note map exposed by GKOS-Engine to downstream desktop surfaces.
 
 Usage:
   kosmos-agent --notes <folder> [options]

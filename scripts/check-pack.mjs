@@ -21,7 +21,11 @@ if (forbidden.length) {
   throw new Error(`npm package contains platform-specific SEA artifacts:\n${forbidden.join("\n")}`);
 }
 for (const required of [
+  "dist/gkos-engine.mjs",
   "dist/kosmos-core.mjs",
+  "dist/adapter.mjs",
+  "dist/gkx.mjs",
+  "dist/graphiti-adapter.mjs",
   "dist/kosmos-desktop-agent.mjs",
   "services/gkos-intelligence/pyproject.toml",
   "services/gkos-intelligence/src/gkos_intelligence/server.py",

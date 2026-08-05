@@ -188,7 +188,7 @@ export function normalizeLineage(
       warnings.push({
         code: "multiple-successors",
         nodeId: older,
-        message: `"${name}" has ${newers.length} direct successors; invalid_at uses the earliest`,
+        message: `"${name}" has ${newers.length} direct successors; invalid_at uses the earliest temporally valid successor without selecting an authoritative branch`,
       });
     }
     const on = byId.get(older);
