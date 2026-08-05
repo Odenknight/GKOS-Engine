@@ -28,7 +28,7 @@
     }
   },
   "bin": {
-    "okf": "./bin/okf.mjs"
+    "okf": "bin/okf.mjs"
   },
   "files": [
     "dist/",
@@ -57,7 +57,7 @@
   "author": "OdenKnight",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Odenknight/GKOS-Engine.git"
+    "url": "git+https://github.com/Odenknight/GKOS-Engine.git"
   },
   "devDependencies": {
     "@types/node": "^22.20.1",
