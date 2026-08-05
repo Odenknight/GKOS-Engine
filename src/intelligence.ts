@@ -1,8 +1,8 @@
 import {
   FAIL_CLOSED_SENSITIVITY_DEFAULT,
   SENSITIVITY_RANK,
-} from "./okf23";
-import type { OkfDiagnostic, OkfSensitivity } from "./types";
+} from "./gkx23";
+import type { GkxDiagnostic, GkxSensitivity } from "./types";
 
 export const INTELLIGENCE_CONTRACT_VERSION = "gkos.intelligence.v1" as const;
 
@@ -49,8 +49,8 @@ export interface IntelligenceRequest {
   task: IntelligenceProposalType;
   targetId: string;
   noteText?: string;
-  diagnostic?: OkfDiagnostic;
-  effectiveSensitivity?: OkfSensitivity;
+  diagnostic?: GkxDiagnostic;
+  effectiveSensitivity?: GkxSensitivity;
 }
 
 export interface IntelligenceResponse {
@@ -61,12 +61,12 @@ export interface IntelligenceResponse {
 
 export interface IntelligenceProposalContext {
   targetId: string;
-  effectiveSensitivity?: OkfSensitivity;
+  effectiveSensitivity?: GkxSensitivity;
 }
 
 export interface IntelligenceValidationResult {
   valid: boolean;
-  diagnostics: OkfDiagnostic[];
+  diagnostics: GkxDiagnostic[];
 }
 
 const SAFE_PATCH_FIELDS: Record<IntelligenceProposalType, ReadonlySet<string>> = {
@@ -85,7 +85,7 @@ const SAFE_PATCH_FIELDS: Record<IntelligenceProposalType, ReadonlySet<string>> =
 const SENSITIVITY_LEVELS = new Set(Object.keys(SENSITIVITY_RANK));
 const ID = /^[A-Za-z0-9][A-Za-z0-9._:/-]{2,255}$/;
 
-function issue(code: string, message: string, field?: string): OkfDiagnostic {
+function issue(code: string, message: string, field?: string): GkxDiagnostic {
   return {
     code,
     severity: "error",
@@ -99,11 +99,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-function patchSensitivity(patch: Record<string, unknown>): OkfSensitivity | null {
+function patchSensitivity(patch: Record<string, unknown>): GkxSensitivity | null {
   const raw = patch.sensitivity;
-  if (typeof raw === "string" && SENSITIVITY_LEVELS.has(raw)) return raw as OkfSensitivity;
+  if (typeof raw === "string" && SENSITIVITY_LEVELS.has(raw)) return raw as GkxSensitivity;
   if (isRecord(raw) && typeof raw.level === "string" && SENSITIVITY_LEVELS.has(raw.level)) {
-    return raw.level as OkfSensitivity;
+    return raw.level as GkxSensitivity;
   }
   return null;
 }
@@ -118,7 +118,7 @@ export function validateIntelligenceProposal(
   value: unknown,
   context: IntelligenceProposalContext,
 ): IntelligenceValidationResult {
-  const diagnostics: OkfDiagnostic[] = [];
+  const diagnostics: GkxDiagnostic[] = [];
   if (!isRecord(value)) {
     return { valid: false, diagnostics: [issue("GKOS-INTELLIGENCE-001", "Proposal must be a JSON object.")] };
   }
@@ -185,7 +185,7 @@ export function validateIntelligenceProposal(
 export function validateIntelligenceResponse(
   value: unknown,
   request: IntelligenceRequest,
-): { valid: boolean; proposals: IntelligenceProposal[]; diagnostics: OkfDiagnostic[] } {
+): { valid: boolean; proposals: IntelligenceProposal[]; diagnostics: GkxDiagnostic[] } {
   if (!isRecord(value) || value.contractVersion !== INTELLIGENCE_CONTRACT_VERSION || value.requestId !== request.requestId || !Array.isArray(value.proposals)) {
     return {
       valid: false,
@@ -194,7 +194,7 @@ export function validateIntelligenceResponse(
     };
   }
   const proposals: IntelligenceProposal[] = [];
-  const diagnostics: OkfDiagnostic[] = [];
+  const diagnostics: GkxDiagnostic[] = [];
   for (const candidate of value.proposals) {
     if (!isRecord(candidate) || candidate.proposalType !== request.task) {
       diagnostics.push(issue(

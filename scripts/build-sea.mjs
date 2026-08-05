@@ -20,7 +20,7 @@
  * the loader requires for a modified Mach-O.
  *
  * Usage:
- *   node scripts/build.mjs                          # produce dist/kosmos-desktop-agent.cjs
+ *   node scripts/build.mjs                          # produce dist/gkos-desktop-agent.cjs
  *   node scripts/build-sea.mjs                      # host arch
  *   node scripts/build-sea.mjs --target-arch x64    # cross (macOS arm64 host → Intel)
  *   node scripts/build-sea.mjs --target-arch x64 --node-version v22.20.0
@@ -171,7 +171,7 @@ async function fetchCrossNodeBinary({ version, platform, arch, destPath }) {
   }
   console.log(`sha256 verified for ${tarName}: ${actual}`);
 
-  const work = mkdtempSync(join(tmpdir(), "kosmos-sea-"));
+  const work = mkdtempSync(join(tmpdir(), "gkos-sea-"));
   try {
     const tarPath = join(work, tarName);
     writeFileSync(tarPath, tarball);
@@ -188,7 +188,7 @@ const { targetArch, nodeVersion } = parseArgs(process.argv.slice(2));
 const targetPlatform = process.platform;
 const source = planNodeSource(process.platform, process.arch, targetPlatform, targetArch);
 
-const cjsEntry = resolve(dist, "kosmos-desktop-agent.cjs");
+const cjsEntry = resolve(dist, "gkos-desktop-agent.cjs");
 if (!existsSync(cjsEntry)) {
   console.error(`missing ${cjsEntry} — run \`node scripts/build.mjs\` first.`);
   process.exit(1);

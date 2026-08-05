@@ -19,8 +19,8 @@ import {
   SENSITIVITY_LEVELS,
   DEFAULT_PORT,
   LOOPBACK_HOST,
-} from "../dist/kosmos-desktop-agent.mjs";
-import { KosmosIndex } from "../dist/kosmos-core.mjs";
+} from "../dist/gkos-desktop-agent.mjs";
+import { GkxIndex } from "../dist/gkos-engine.mjs";
 import { mkdtempSync, rmSync, readFileSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -119,10 +119,10 @@ test("loadOrCreateToken generates a 64-hex token and reuses it on subsequent run
 // A note WITH frontmatter (so a projection is built) but NO sensitivity field
 // — the unlabeled case the configured default governs.
 const UNLABELED =
-  '---\nokf_version: "2.3"\nuid: "note:a"\ntitle: A\ntype: note\ncreated_at: 2026-01-01T00:00:00Z\nepistemic_state: observation\n---\nBody';
+  '---\ngkx_version: "2.3"\nuid: "note:a"\ntitle: A\ntype: note\ncreated_at: 2026-01-01T00:00:00Z\nepistemic_state: observation\n---\nBody';
 
 async function withServer(fn) {
-  const index = new KosmosIndex({ defaultSensitivity: "internal" });
+  const index = new GkxIndex({ defaultSensitivity: "internal" });
   index.setFiles([{ relativePath: "a.md", content: UNLABELED, kind: "note" }], []);
   const token = "test-token-abc";
   const getStatus = () => ({

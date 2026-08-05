@@ -1,20 +1,16 @@
 #!/usr/bin/env node
 /**
- * okf — the GKOS-Engine CLI.
+ * gkx — the GKOS-Engine CLI.
  *
- * Builds a Kosmos graph, validates and assesses a folder of Markdown notes,
+ * Builds a Gkx graph, validates and assesses a folder of Markdown notes,
  * and exports Graphiti episodes, using the deterministic GKOS-Engine core
  * (the same GKX 2.3 semantics consumed by downstream products).
  *
  * Canonical (named) subcommands:
- *   okf validate <dir>
- *   okf assess   <dir> [--json]
- *   okf graph    <dir> -o graph.json [--watch]
- *   okf export graphiti <dir> --episodes episodes.json [--group-id <ns>]
- *
- * Deprecated positional alias (kept working unchanged for backward compat):
- *   okf <vault-dir> [graph.json] [--episodes episodes.json]
- *       [--group-id <ns>] [--watch]
+ *   gkx validate <dir>
+ *   gkx assess   <dir> [--json]
+ *   gkx graph    <dir> -o graph.json [--watch]
+ *   gkx export graphiti <dir> --episodes episodes.json [--group-id <ns>]
  *
  * Every command embeds a deterministic `build:` block
  * (engine_version, policy_hash, corpus_hash, generated_at).
@@ -31,13 +27,13 @@ let core;
 try {
   core = await import(coreUrl.href);
 } catch (e) {
-  console.error("okf: dist/gkos-engine.mjs not found — run `npm run build` first.");
+  console.error("gkx: dist/gkos-engine.mjs not found — run `npm run build` first.");
   process.exit(1);
 }
 
 const {
   ENGINE_VERSION,
-  OKF23_POLICY,
+  GKX23_POLICY,
   buildGraph,
   codeUnitCompare,
   buildGraphitiEpisodesWithContent,
@@ -100,7 +96,7 @@ export function corpusHash(files) {
 export function buildBlock(files) {
   return {
     engine_version: ENGINE_VERSION,
-    policy_hash: OKF23_POLICY.hash,
+    policy_hash: GKX23_POLICY.hash,
     corpus_hash: corpusHash(files),
     generated_at: new Date().toISOString(),
   };
@@ -112,7 +108,7 @@ function projectionsFrom(files, folders) {
   const out = [];
   for (const node of graph.nodes) {
     if (node.kind !== "file") continue;
-    const projection = node.okf?.projection;
+    const projection = node.gkx?.projection;
     if (!projection) continue;
     out.push({ path: node.path, projection });
   }
@@ -122,7 +118,7 @@ function projectionsFrom(files, folders) {
 
 const SEVERITIES = ["critical", "error", "warning", "info"];
 
-/* ---------------- okf validate ---------------- */
+/* ---------------- gkx validate ---------------- */
 export async function runValidate(dir) {
   const { files, folders } = await scanCorpus(resolve(dir));
   const { projections } = projectionsFrom(files, folders);
@@ -146,7 +142,7 @@ export async function runValidate(dir) {
 
 function printValidate(result) {
   const { summary, notes } = result;
-  console.log(`okf validate — engine ${result.build.engine_version}, corpus ${result.build.corpus_hash}`);
+  console.log(`gkx validate — engine ${result.build.engine_version}, corpus ${result.build.corpus_hash}`);
   console.log(`  notes scanned: ${summary.notes_scanned} (with GKX projection: ${summary.notes_with_projection})`);
   console.log(`  diagnostics: ${SEVERITIES.map((s) => `${s}=${summary.diagnostics[s]}`).join("  ")}`);
   for (const note of notes) {
@@ -156,10 +152,10 @@ function printValidate(result) {
       console.log(`    [${d.severity}] ${d.code}${d.field ? ` (${d.field})` : ""}: ${d.message}`);
     }
   }
-  console.log(result.ok ? "okf validate: OK" : "okf validate: FAILED — error/critical diagnostics present");
+  console.log(result.ok ? "gkx validate: OK" : "gkx validate: FAILED — error/critical diagnostics present");
 }
 
-/* ---------------- okf assess ---------------- */
+/* ---------------- gkx assess ---------------- */
 export async function runAssess(dir) {
   const { files, folders } = await scanCorpus(resolve(dir));
   const { projections } = projectionsFrom(files, folders);
@@ -186,7 +182,7 @@ function printAssess(result, asJson) {
     console.log(JSON.stringify(result.notes, null, 2));
     return;
   }
-  console.log(`okf assess — engine ${result.build.engine_version}, corpus ${result.build.corpus_hash}`);
+  console.log(`gkx assess — engine ${result.build.engine_version}, corpus ${result.build.corpus_hash}`);
   console.log(`  notes scanned: ${result.summary.notes_scanned} (assessed: ${result.summary.notes_assessed})`);
   for (const n of result.notes) {
     const overall = n.overall == null ? "  n/a" : n.overall.toFixed(4);
@@ -194,7 +190,7 @@ function printAssess(result, asJson) {
   }
 }
 
-/* ---------------- okf graph / export graphiti (legacy build path) ---------------- */
+/* ---------------- gkx graph / export graphiti ---------------- */
 async function buildGraphOnce({ vaultDir, graphOut, episodesOut, groupId }) {
   const t0 = Date.now();
   const { files, attachments, folders } = await scanCorpus(vaultDir);
@@ -215,7 +211,7 @@ async function buildGraphOnce({ vaultDir, graphOut, episodesOut, groupId }) {
     attachments,
   };
   await writeFile(graphOut, JSON.stringify(out, null, 2));
-  console.log(`okf: ${files.length} notes, ${folders.length} folders, ${attachments.length} attachments -> ${graphOut} (${Date.now() - t0} ms)`);
+  console.log(`gkx: ${files.length} notes, ${folders.length} folders, ${attachments.length} attachments -> ${graphOut} (${Date.now() - t0} ms)`);
   for (const w of graph.diagnostics.lineageWarnings) console.warn("  lineage:", w);
 
   if (episodesOut) {
@@ -226,38 +222,35 @@ async function buildGraphOnce({ vaultDir, graphOut, episodesOut, groupId }) {
       groupId: groupId || undefined,
     });
     await writeFile(episodesOut, JSON.stringify(episodes, null, 2));
-    console.log(`okf: ${episodes.length} Graphiti episodes -> ${episodesOut}`);
+    console.log(`gkx: ${episodes.length} Graphiti episodes -> ${episodesOut}`);
   }
 }
 
 function watchGraph(config) {
-  console.log("okf: watching for changes (Ctrl+C to stop)…");
+  console.log("gkx: watching for changes (Ctrl+C to stop)…");
   let timer = null;
   const trigger = (event, name) => {
     if (name && shouldIgnoreVaultPath(String(name).replace(/\\/g, "/"))) return;
     clearTimeout(timer);
     timer = setTimeout(() => {
-      buildGraphOnce(config).catch((e) => console.error("okf:", e.message));
+      buildGraphOnce(config).catch((e) => console.error("gkx:", e.message));
     }, 400);
   };
   try {
     watch(config.vaultDir, { recursive: true }, trigger);
   } catch {
-    console.log("okf: recursive watch unavailable, polling every 5 s");
-    setInterval(() => { buildGraphOnce(config).catch((e) => console.error("okf:", e.message)); }, 5000);
+    console.log("gkx: recursive watch unavailable, polling every 5 s");
+    setInterval(() => { buildGraphOnce(config).catch((e) => console.error("gkx:", e.message)); }, 5000);
   }
 }
 
 /* ---------------- CLI ---------------- */
-const USAGE = `okf (GKOS-Engine) v${ENGINE_VERSION}
+const USAGE = `gkx (GKOS-Engine) v${ENGINE_VERSION}
 Usage:
-  okf validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
-  okf assess   <dir> [--json]                         per-note documentation-quality scores/labels
-  okf graph    <dir> -o <graph.json> [--watch]        canonical Kosmos graph (stable serialization)
-  okf export graphiti <dir> --episodes <out.json> [--group-id <ns>]
-
-Deprecated positional alias (still supported):
-  okf <vault-dir> [graph.json] [--episodes <out.json>] [--group-id <ns>] [--watch]`;
+  gkx validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
+  gkx assess   <dir> [--json]                         per-note documentation-quality scores/labels
+  gkx graph    <dir> -o <graph.json> [--watch]        canonical Gkx graph (stable serialization)
+  gkx export graphiti <dir> --episodes <out.json> [--group-id <ns>]`;
 
 function parseFlags(args) {
   const flags = new Set();
@@ -290,19 +283,19 @@ export async function main(argv = process.argv.slice(2)) {
     if (flags.has("help")) { console.log(USAGE); return 0; }
 
     if (first === "validate") {
-      if (!positional[0]) { console.error("okf validate: <dir> required"); return 1; }
+      if (!positional[0]) { console.error("gkx validate: <dir> required"); return 1; }
       const result = await runValidate(positional[0]);
       printValidate(result);
       return result.ok ? 0 : 1;
     }
     if (first === "assess") {
-      if (!positional[0]) { console.error("okf assess: <dir> required"); return 1; }
+      if (!positional[0]) { console.error("gkx assess: <dir> required"); return 1; }
       const result = await runAssess(positional[0]);
       printAssess(result, flags.has("json"));
       return 0;
     }
     if (first === "graph") {
-      if (!positional[0]) { console.error("okf graph: <dir> required"); return 1; }
+      if (!positional[0]) { console.error("gkx graph: <dir> required"); return 1; }
       const config = {
         vaultDir: resolve(positional[0]),
         graphOut: resolve(opts.o || positional[1] || "graph.json"),
@@ -315,8 +308,8 @@ export async function main(argv = process.argv.slice(2)) {
     }
     if (first === "export") {
       const kind = positional[0];
-      if (kind !== "graphiti") { console.error(`okf export: unknown target '${kind ?? ""}' (supported: graphiti)`); return 1; }
-      if (!positional[1]) { console.error("okf export graphiti: <dir> required"); return 1; }
+      if (kind !== "graphiti") { console.error(`gkx export: unknown target '${kind ?? ""}' (supported: graphiti)`); return 1; }
+      if (!positional[1]) { console.error("gkx export graphiti: <dir> required"); return 1; }
       const episodesOut = opts.episodes ? resolve(opts.episodes) : resolve("graphiti-episodes.json");
       const config = {
         vaultDir: resolve(positional[1]),
@@ -330,21 +323,9 @@ export async function main(argv = process.argv.slice(2)) {
     return 1;
   }
 
-  /* ---- deprecated positional alias: <vault> [graph.json] [--episodes …] ---- */
-  const { flags, opts, positional } = parseFlags(argv);
-  if (flags.has("help") || positional.length < 1) {
-    console.log(USAGE);
-    return flags.has("help") ? 0 : 1;
-  }
-  const config = {
-    vaultDir: resolve(positional[0]),
-    graphOut: resolve(positional[1] || "graph.json"),
-    episodesOut: opts.episodes ? resolve(opts.episodes) : null,
-    groupId: opts.groupId,
-  };
-  await buildGraphOnce(config);
-  if (flags.has("watch")) watchGraph(config);
-  return 0;
+  console.error(`gkx: unknown command '${first}'`);
+  console.error(USAGE);
+  return 1;
 }
 
 /* Run only when invoked directly (kept importable for tests).
@@ -355,8 +336,8 @@ export async function main(argv = process.argv.slice(2)) {
  * main() never runs, and the CLI exits 0 with zero output. Realpath resolution
  * canonicalizes both sides. If realpath throws (e.g. argv[1] gone from disk),
  * fall back to the raw URL comparison rather than crashing. This module must
- * stay side-effect-free on import (it is imported by compatibility wrappers
- * and tests), so the guard must only fire on genuine direct invocation. */
+ * stay side-effect-free on import for test harnesses, so the guard must only
+ * fire on genuine direct invocation. */
 function isInvokedDirectly() {
   const invokedPath = process.argv[1];
   if (!invokedPath) return false;

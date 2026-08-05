@@ -1,10 +1,10 @@
 /**
- * okf CLI (kosmos-build.mjs) MVP tests.
+ * gkx CLI (gkos-build.mjs) MVP tests.
  *
- * Proves: (1) the `.okf` scan-ignore fix, (2) the deterministic `build:` block,
+ * Proves: (1) the `.gkx` scan-ignore fix, (2) the deterministic `build:` block,
  * and (3) the conformance property that the CLI path produces diagnostics and
  * scores byte-identical to calling the embedded core (buildGraph /
- * buildOkf23Projection) directly, exactly as test/okf23.test.mjs exercises it.
+ * buildGkx23Projection) directly, exactly as test/gkx23.test.mjs exercises it.
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -14,17 +14,18 @@ import { join } from "node:path";
 import {
   DEFAULT_IGNORED_DIRS,
   buildGraph,
-} from "../dist/kosmos-core.mjs";
+} from "../dist/gkos-engine.mjs";
 import {
   scanCorpus,
   runValidate,
   runAssess,
   corpusHash,
-} from "../bin/okf.mjs";
+  main,
+} from "../bin/gkx.mjs";
 
 // (1) clean flat editable 2.3 note — no error diagnostics expected.
 const CLEAN = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaec935"
 title: "Flat editable"
 type: "semantic"
@@ -40,7 +41,7 @@ Body.`;
 
 // (2) 2.3 note with a diagnostic-triggering issue: a non-UID identity.
 const BROKEN = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "not-a-valid-uid"
 title: "Broken identity"
 type: "semantic"
@@ -50,36 +51,48 @@ sensitivity: "internal"
 ---
 Body.`;
 
-// (3) plain unadorned note — no frontmatter, no OKF+ projection.
+// (3) plain unadorned note — no frontmatter, no GKX projection.
 const PLAIN = `# Just a note\nNo frontmatter here.`;
 
 async function makeCorpus() {
-  const dir = await mkdtemp(join(tmpdir(), "okf-cli-"));
+  const dir = await mkdtemp(join(tmpdir(), "gkx-cli-"));
   await writeFile(join(dir, "clean.md"), CLEAN);
   await writeFile(join(dir, "broken.md"), BROKEN);
   await writeFile(join(dir, "plain.md"), PLAIN);
   // A governance artifact that must NOT be indexed as a corpus attachment.
-  await mkdir(join(dir, ".okf", "migrations", "x"), { recursive: true });
-  await writeFile(join(dir, ".okf", "migrations", "x", "plan.json"), JSON.stringify({ plan: true }));
+  await mkdir(join(dir, ".gkx", "migrations", "x"), { recursive: true });
+  await writeFile(join(dir, ".gkx", "migrations", "x", "plan.json"), JSON.stringify({ plan: true }));
   return dir;
 }
 
-test("DEFAULT_IGNORED_DIRS includes .okf", () => {
-  assert.ok(DEFAULT_IGNORED_DIRS.includes(".okf"));
+test("DEFAULT_IGNORED_DIRS includes .gkx", () => {
+  assert.ok(DEFAULT_IGNORED_DIRS.includes(".gkx"));
 });
 
-test("directory scan skips .okf/ contents (no plan.json attachment)", async () => {
+test("the removed positional command form fails instead of acting as an alias", async () => {
+  const originalError = console.error;
+  const messages = [];
+  console.error = (...parts) => messages.push(parts.join(" "));
+  try {
+    assert.equal(await main(["some-directory"]), 1);
+    assert.match(messages.join("\n"), /unknown command 'some-directory'/);
+  } finally {
+    console.error = originalError;
+  }
+});
+
+test("directory scan skips .gkx/ contents (no plan.json attachment)", async () => {
   const dir = await makeCorpus();
   try {
     const { files, attachments } = await scanCorpus(dir);
     assert.equal(files.length, 3);
-    assert.deepEqual(attachments, [], ".okf/migrations/x/plan.json must not surface as an attachment");
+    assert.deepEqual(attachments, [], ".gkx/migrations/x/plan.json must not surface as an attachment");
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
 });
 
-test("okf validate exits non-zero on the broken note and lists per-note diagnostics", async () => {
+test("gkx validate exits non-zero on the broken note and lists per-note diagnostics", async () => {
   const dir = await makeCorpus();
   try {
     const result = await runValidate(dir);
@@ -89,7 +102,7 @@ test("okf validate exits non-zero on the broken note and lists per-note diagnost
     assert.equal(result.ok, false, "error diagnostics must fail the run");
     assert.ok(result.summary.diagnostics.error >= 1);
     const broken = result.notes.find((n) => n.path === "broken.md");
-    assert.ok(broken.diagnostics.some((d) => d.code === "OKF-IDENTITY-002" && d.severity === "error"));
+    assert.ok(broken.diagnostics.some((d) => d.code === "GKX-IDENTITY-002" && d.severity === "error"));
     // deterministic build block shape
     assert.equal(typeof result.build.engine_version, "string");
     assert.ok(result.build.policy_hash.startsWith("sha256:"));
@@ -99,7 +112,7 @@ test("okf validate exits non-zero on the broken note and lists per-note diagnost
   }
 });
 
-test("okf assess reports per-note scores/labels for projected notes only", async () => {
+test("gkx assess reports per-note scores/labels for projected notes only", async () => {
   const dir = await makeCorpus();
   try {
     const result = await runAssess(dir);
@@ -120,13 +133,13 @@ test("conformance: CLI path == embedded buildGraph path (identical diagnostics +
     const assess = await runAssess(dir);
 
     // Embedded path: rebuild the same SourceFile set the CLI scan produced and
-    // call buildGraph directly, as test/okf23.test.mjs does.
+    // call buildGraph directly, as test/gkx23.test.mjs does.
     const { files, folders } = await scanCorpus(dir);
     const graph = buildGraph(files, folders);
 
     for (const cliNote of validate.notes) {
       const node = graph.nodes.find((n) => n.kind === "file" && n.path === cliNote.path);
-      const embedded = [...node.okf.projection.diagnostics]
+      const embedded = [...node.gkx.projection.diagnostics]
         .map((d) => ({ code: d.code, severity: d.severity, field: d.field ?? null, message: d.message }))
         .sort((a, b) => a.code.localeCompare(b.code) || (a.field ?? "").localeCompare(b.field ?? "") || a.message.localeCompare(b.message));
       assert.deepEqual(cliNote.diagnostics, embedded, `diagnostics for ${cliNote.path} must match embedded core`);
@@ -134,8 +147,8 @@ test("conformance: CLI path == embedded buildGraph path (identical diagnostics +
 
     for (const cliNote of assess.notes) {
       const node = graph.nodes.find((n) => n.kind === "file" && n.path === cliNote.path);
-      assert.deepEqual(cliNote.scores, { ...node.okf.projection.assessment.scores }, `scores for ${cliNote.path} must match embedded core`);
-      assert.equal(cliNote.overall, node.okf.projection.assessment.scores.overall);
+      assert.deepEqual(cliNote.scores, { ...node.gkx.projection.assessment.scores }, `scores for ${cliNote.path} must match embedded core`);
+      assert.equal(cliNote.overall, node.gkx.projection.assessment.scores.overall);
     }
   } finally {
     await rm(dir, { recursive: true, force: true });

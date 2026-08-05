@@ -20,9 +20,9 @@ async function run(bin, args, cwd) {
   }
 }
 
-// A minimal flat OKF+ 2.3 note so `validate` produces stable, non-trivial output.
+// A minimal flat GKX 2.3 note so `validate` produces stable, non-trivial output.
 const NOTE = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaec9c0"
 title: "Symlink fixture"
 type: "semantic"
@@ -44,7 +44,7 @@ Body.`;
 // the junction path; Node resolves import.meta.url to the REAL path while
 // argv[1] keeps the junction path, exercising the exact mismatch that made the
 // unfixed guard false — causing a silent exit-0 no-op.
-test("okf invoked through a symlinked/junctioned package dir still runs", async () => {
+test("gkx invoked through a symlinked/junctioned package dir still runs", async () => {
   const tmp = mkdtempSync(join(tmpdir(), "gkos-symlink-"));
   const linkRoot = join(tmp, "linked-pkg");
   const notesDir = join(tmp, "notes");
@@ -69,7 +69,7 @@ test("okf invoked through a symlinked/junctioned package dir still runs", async 
       // Symlink/junction creation genuinely unavailable. Fall back to driving
       // the module with a spoofed argv[1] that differs from the real path and
       // assert it does NOT falsely auto-run (guard stays import-safe).
-      const bin = join(root, "bin/okf.mjs");
+      const bin = join(root, "bin/gkx.mjs");
       const spoofed = join(root, "some", "other", "invoked", "path.mjs");
       const { stdout } = await execFileAsync(
         process.execPath,
@@ -80,8 +80,8 @@ test("okf invoked through a symlinked/junctioned package dir still runs", async 
       return;
     }
 
-    const linkedBin = join(linkRoot, "bin/okf.mjs");
-    const directBin = join(root, "bin/okf.mjs");
+    const linkedBin = join(linkRoot, "bin/gkx.mjs");
+    const directBin = join(root, "bin/gkx.mjs");
 
     // --help through the junctioned path: must exit 0 with non-empty stdout.
     const help = await run(linkedBin, ["--help"]);

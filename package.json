@@ -1,7 +1,7 @@
 {
   "name": "gkos-engine",
-  "version": "1.3.0",
-  "description": "GKOS-Engine — canonical deterministic GKX 2.3 engine with an optional, proposal-only DSPy intelligence sidecar; offline validation, projection, assessment, graph, and export remain authoritative.",
+  "version": "2.0.0",
+  "description": "GKOS-Engine — canonical deterministic GKX engine with an optional, proposal-only DSPy intelligence sidecar; offline validation, projection, assessment, graph, and export remain authoritative.",
   "type": "module",
   "main": "./dist/gkos-engine.mjs",
   "types": "./dist/index.d.ts",
@@ -28,11 +28,11 @@
     }
   },
   "bin": {
-    "okf": "bin/okf.mjs"
+    "gkx": "bin/gkx.mjs"
   },
   "files": [
     "dist/",
-    "!dist/kosmos-agent-*",
+    "!dist/gkos-agent-*",
     "!dist/sea-config.json",
     "!dist/sea-prep.blob",
     "bin/",

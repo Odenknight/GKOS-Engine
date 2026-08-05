@@ -5,22 +5,22 @@
  * engine upgrade in one place instead of importing implementation modules.
  */
 import { buildGraph, parseSourceFile, type NoteRecord } from "./graph";
-import { KosmosIndex } from "./incremental";
-import type { Okf23ProjectionOptions } from "./okf23";
-import type { KosmosGraph, SourceFile } from "./types";
+import { GkxIndex } from "./incremental";
+import type { Gkx23ProjectionOptions } from "./gkx23";
+import type { GkxGraph, SourceFile } from "./types";
 import { ENGINE_NAME, ENGINE_VERSION } from "./version";
 
 export interface GkosEngineAdapterOptions {
   /** Deterministic projection policy shared by full and incremental builds. */
-  projection?: Okf23ProjectionOptions;
+  projection?: Gkx23ProjectionOptions;
 }
 
 export interface GkosEngineAdapter {
   readonly name: typeof ENGINE_NAME;
   readonly version: string;
   parseSourceFile(file: SourceFile): NoteRecord;
-  buildGraph(files: SourceFile[], folders?: string[], now?: number): KosmosGraph;
-  createIndex(): KosmosIndex;
+  buildGraph(files: SourceFile[], folders?: string[], now?: number): GkxGraph;
+  createIndex(): GkxIndex;
 }
 
 /**
@@ -38,6 +38,6 @@ export function createGkosEngineAdapter(
     parseSourceFile: (file: SourceFile) => parseSourceFile(file, projection),
     buildGraph: (files: SourceFile[], folders: string[] = [], now?: number) =>
       buildGraph(files, folders, now, projection),
-    createIndex: () => new KosmosIndex(projection),
+    createIndex: () => new GkxIndex(projection),
   });
 }

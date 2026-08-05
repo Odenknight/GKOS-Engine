@@ -32,7 +32,7 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
-      - name: Build (dist/kosmos-core.mjs)
+      - name: Build (dist/gkos-engine.mjs)
         run: npm run build
 
       - name: Tests
@@ -51,5 +51,5 @@ jobs:
 
       - name: CLI smoke test (validate + assess)
         run: |
-          node bin/okf.mjs --help
-          node bin/okf.mjs assess . --json >/dev/null
+          node bin/gkx.mjs --help
+          node bin/gkx.mjs assess . --json >/dev/null

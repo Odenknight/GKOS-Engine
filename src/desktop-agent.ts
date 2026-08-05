@@ -2,7 +2,7 @@
  * GKOS-Engine — desktop agent sidecar (headless).
  *
  * A single self-contained entry point compiled per-platform into a Node SEA
- * binary (`kosmos-agent`). It points the deterministic engine at a notes
+ * binary (`gkos-agent`). It points the deterministic engine at a notes
  * folder, watches for changes, and serves a LOOPBACK-ONLY read-only agent API
  * for local agents (Claude Desktop, Cursor, etc.).
  *
@@ -17,10 +17,10 @@
  *     lower, an authored classification.
  *
  * This module is transport-neutral engine glue: it reuses the engine's public
- * surface (`KosmosIndex`, `parseSourceFile`, `buildGraphitiEpisodes`) rather
+ * surface (`GkxIndex`, `parseSourceFile`, `buildGraphitiEpisodes`) rather
  * than reimplementing projection. The repo has no standalone agent-server
  * module to import (the agent server currently lives plugin-coupled in
- * Kosmos-Oden), so the minimal loopback transport is defined here.
+ * Gkx-Oden), so the minimal loopback transport is defined here.
  */
 import * as http from "node:http";
 import * as fs from "node:fs";
@@ -30,20 +30,20 @@ import * as crypto from "node:crypto";
 import type { AddressInfo } from "node:net";
 
 import {
-  KosmosIndex,
+  GkxIndex,
   buildGraphitiEpisodes,
   DEFAULT_IGNORED_DIRS,
   shouldIgnoreVaultPath,
   normalizeVaultRelative,
   extensionFromPath,
   ENGINE_VERSION,
-  type OkfSensitivity,
+  type GkxSensitivity,
   type SourceFile,
   type IndexChanges,
 } from "./index";
 
 /** The seven-level sensitivity vocabulary (GKOS §11), fail-closed to secret. */
-export const SENSITIVITY_LEVELS: readonly OkfSensitivity[] = [
+export const SENSITIVITY_LEVELS: readonly GkxSensitivity[] = [
   "public",
   "internal",
   "restricted",
@@ -81,17 +81,17 @@ const NOTE_EXTS = new Set(["md", "markdown", "base"]);
 
 export interface DesktopAgentArgs {
   notesDir: string;
-  defaultSensitivity: OkfSensitivity;
+  defaultSensitivity: GkxSensitivity;
   port: number;
   statusFile: string;
 }
 
-export const DESKTOP_AGENT_USAGE = `kosmos-agent (GKOS-Engine desktop helper) v${ENGINE_VERSION}
+export const DESKTOP_AGENT_USAGE = `gkos-agent (GKOS-Engine desktop helper) v${ENGINE_VERSION}
 
 Runs the protected, read-only note map exposed by GKOS-Engine to downstream desktop surfaces.
 
 Usage:
-  kosmos-agent --notes <folder> [options]
+  gkos-agent --notes <folder> [options]
 
 Options:
   --notes <folder>                 Notes folder to read (required)
@@ -109,7 +109,7 @@ computer only.`;
  *   --default-sensitivity <level> validated against the seven-level vocab;
  *                                 invalid/missing → "secret" (fail-closed)
  *   --port <n>                    default 4814; invalid → default
- *   --status-file <path>          default <notesDir>/.okf/desktop-agent.status.json
+ *   --status-file <path>          default <notesDir>/.gkx/desktop-agent.status.json
  * `--host` is intentionally unsupported.
  */
 export function parseArgs(argv: string[]): DesktopAgentArgs {
@@ -133,9 +133,9 @@ export function parseArgs(argv: string[]): DesktopAgentArgs {
   }
 
   const rawSensitivity = map.get("default-sensitivity");
-  const defaultSensitivity: OkfSensitivity =
-    rawSensitivity && SENSITIVITY_LEVELS.includes(rawSensitivity as OkfSensitivity)
-      ? (rawSensitivity as OkfSensitivity)
+  const defaultSensitivity: GkxSensitivity =
+    rawSensitivity && SENSITIVITY_LEVELS.includes(rawSensitivity as GkxSensitivity)
+      ? (rawSensitivity as GkxSensitivity)
       : "secret";
 
   const rawPort = map.get("port");
@@ -145,7 +145,7 @@ export function parseArgs(argv: string[]): DesktopAgentArgs {
 
   const statusFile = map.get("status-file")
     ? path.resolve(map.get("status-file")!)
-    : path.resolve(notesDir, ".okf", "desktop-agent.status.json");
+    : path.resolve(notesDir, ".gkx", "desktop-agent.status.json");
 
   return { notesDir: path.resolve(notesDir), defaultSensitivity, port, statusFile };
 }
@@ -201,7 +201,7 @@ export interface ScanResult {
 
 /**
  * Recursively scan the notes directory into engine SourceFile inputs, honoring
- * DEFAULT_IGNORED_DIRS (incl. `.okf`). Markdown/base files are loaded with
+ * DEFAULT_IGNORED_DIRS (incl. `.gkx`). Markdown/base files are loaded with
  * content (notes); everything else is recorded as an attachment path. Paths
  * are normalized vault-relative (POSIX) exactly as the plugin scanner does.
  */
@@ -269,7 +269,7 @@ export interface StatusDoc {
   url: string;
   token_path: string;
   notes_dir: string;
-  default_sensitivity: OkfSensitivity;
+  default_sensitivity: GkxSensitivity;
   notes_indexed: number;
   state: "indexing" | "serving" | "error";
   last_scan_iso: string | null;
@@ -311,11 +311,11 @@ export interface AgentServerHandle {
 
 /**
  * Create the loopback-only read-only agent API. The `index` is the live
- * KosmosIndex; endpoints project its current graph. Every request requires the
+ * GkxIndex; endpoints project its current graph. Every request requires the
  * bearer token (401 otherwise). The server binds 127.0.0.1 and nothing else.
  */
 export function createAgentServer(opts: {
-  index: KosmosIndex;
+  index: GkxIndex;
   token: string;
   getStatus: () => StatusDoc;
   vaultName?: string;
@@ -415,7 +415,7 @@ export function createAgentServer(opts: {
             path: n.path,
             label: n.label,
             type: n.type ?? null,
-            sensitivity: n.okf?.projection?.effective.sensitivity ?? null,
+            sensitivity: n.gkx?.projection?.effective.sensitivity ?? null,
           }));
         send(res, 200, { notes, count: notes.length }, origin);
         return;
@@ -448,7 +448,7 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
 
   let state: StatusDoc["state"] = "indexing";
   let lastScanIso: string | null = null;
-  const index = new KosmosIndex({ defaultSensitivity: args.defaultSensitivity });
+  const index = new GkxIndex({ defaultSensitivity: args.defaultSensitivity });
 
   const token = loadOrCreateToken(tokenPath);
 
@@ -535,7 +535,7 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
     writeStatus();
     // eslint-disable-next-line no-console
     console.log(
-      `kosmos-agent v${ENGINE_VERSION} serving ${index.noteCount} notes on http://${LOOPBACK_HOST}:${args.port}/ (loopback only)`,
+      `gkos-agent v${ENGINE_VERSION} serving ${index.noteCount} notes on http://${LOOPBACK_HOST}:${args.port}/ (loopback only)`,
     );
     // eslint-disable-next-line no-console
     console.log(`token: ${tokenPath}  status: ${args.statusFile}`);

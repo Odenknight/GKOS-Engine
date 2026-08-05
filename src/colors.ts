@@ -1,4 +1,4 @@
-/** Kosmos Core — deterministic area palette (shared by every surface). */
+/** Gkx Core — deterministic area palette (shared by every surface). */
 import { hashString } from "./paths";
 
 const preferredAreaPalette = new Map<string, string>([

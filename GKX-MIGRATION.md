@@ -1,18 +1,13 @@
-# GKX naming and compatibility migration
+# GKX 2.0 breaking change
 
-GKX (Governed Knowledge Exchange) is the current name for the technical model
-formerly published as OKF+. This engine adopts GKX in current-facing prose
-without breaking the existing executable contract.
+GKOS-Engine 2.0.0 adopts the GKX 2.0 contract as its only public schema and
+runtime surface.
 
-For the current release line:
+- Use `gkx_version` in documents.
+- Use `.gkx/` for engine state.
+- Use `GKX-*` diagnostic identifiers.
+- Invoke the CLI as `gkx`.
+- Use `Gkx*` public APIs and GKX source modules.
 
-- OKF+ 2.2 and 2.3 documents remain accepted inputs.
-- `okf`-named modules, types, commands, fields, adapters, and paths remain stable
-  compatibility identifiers.
-- Consumers should display GKX as the canonical name and identify OKF+ as the
-  legacy/compatibility name where needed.
-- Historical changelog entries and versioned fixtures retain their original
-  terminology.
-
-Machine-facing renames require a later versioned schema and deprecation plan.
-They must not be inferred from this display-name transition.
+The release removes prior naming aliases. Consumers must update their stored
+documents, invocation scripts, integrations, and imports before adopting 2.0.0.

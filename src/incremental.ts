@@ -1,5 +1,5 @@
 /**
- * Kosmos Core — incremental index (§10).
+ * Gkx Core — incremental index (§10).
  *
  * Maintains `path -> parsed note` / `path -> content hash` / `path -> file
  * metadata` caches so that a single-note change costs ONE parse:
@@ -18,9 +18,9 @@
  * enough of the cache that diffing costs more than rebuilding.
  */
 import { assembleGraph, parseSourceFile, type NoteRecord } from "./graph";
-import type { Okf23ProjectionOptions } from "./okf23";
+import type { Gkx23ProjectionOptions } from "./gkx23";
 import { contentHash, normalizeVaultRelative } from "./paths";
-import type { GraphDelta, KosmosDiagnostics, KosmosGraph, SourceFile } from "./types";
+import type { GraphDelta, GkxDiagnostics, GkxGraph, SourceFile } from "./types";
 
 export interface IndexChanges {
   changed?: SourceFile[];
@@ -34,7 +34,7 @@ export interface IndexChanges {
 }
 
 export interface IndexUpdate {
-  graph: KosmosGraph;
+  graph: GkxGraph;
   delta: GraphDelta;
 }
 
@@ -46,7 +46,7 @@ interface GraphSignature {
   links: Set<string>;
 }
 
-function signatureOf(graph: KosmosGraph): GraphSignature {
+function signatureOf(graph: GkxGraph): GraphSignature {
   const nodes = new Set<string>();
   for (const n of graph.nodes) nodes.add(n.id);
   const links = new Set<string>();
@@ -60,21 +60,21 @@ function setsDiffer(a: Set<string>, b: Set<string>): boolean {
   return false;
 }
 
-export class KosmosIndex {
+export class GkxIndex {
   private records = new Map<string, NoteRecord>();
   private folders: string[] = [];
   private attachments: string[] = [];
   private prevSig: GraphSignature | null = null;
   private prevNodeMeta = new Map<string, string>();
-  graph: KosmosGraph | null = null;
+  graph: GkxGraph | null = null;
   /** Cumulative number of parseSourceFile calls (test/benchmark observability). */
   parseCount = 0;
   /** Deterministic projection options (e.g. the fail-closed defaultSensitivity)
    *  threaded to every parseSourceFile call so incrementally-reparsed notes
    *  resolve missing sensitivity to the SAME configured default as a full build. */
-  private readonly projectionOptions: Okf23ProjectionOptions;
+  private readonly projectionOptions: Gkx23ProjectionOptions;
 
-  constructor(projectionOptions: Okf23ProjectionOptions = {}) {
+  constructor(projectionOptions: Gkx23ProjectionOptions = {}) {
     this.projectionOptions = projectionOptions;
   }
 
@@ -199,22 +199,22 @@ export class KosmosIndex {
     };
   }
 
-  getDiagnostics(): KosmosDiagnostics | null {
+  getDiagnostics(): GkxDiagnostics | null {
     return this.graph?.diagnostics ?? null;
   }
 
-  private metaOf(graph: KosmosGraph): Map<string, string> {
+  private metaOf(graph: GkxGraph): Map<string, string> {
     const meta = new Map<string, string>();
     for (const n of graph.nodes) {
       meta.set(
         n.id,
-        `${n.label}${n.status ?? ""}${n.type ?? ""}${n.tags.join(",")}${n.aliases.join(",")}${n.validAt ?? ""}${n.okf?.invalidAt ?? ""}${n.okf?.head ? 1 : 0}`
+        `${n.label}${n.status ?? ""}${n.type ?? ""}${n.tags.join(",")}${n.aliases.join(",")}${n.validAt ?? ""}${n.gkx?.invalidAt ?? ""}${n.gkx?.head ? 1 : 0}`
       );
     }
     return meta;
   }
 
-  private assemble(): KosmosGraph {
+  private assemble(): GkxGraph {
     const graph = assembleGraph([...this.records.values()], this.folders);
     graph.diagnostics.attachments = this.attachments.length;
     this.graph = graph;

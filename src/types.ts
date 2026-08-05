@@ -35,7 +35,7 @@ export interface ParsedLink {
   heading?: string;
 }
 
-export type OkfSensitivity =
+export type GkxSensitivity =
   | "public"
   | "internal"
   | "restricted"
@@ -44,9 +44,9 @@ export type OkfSensitivity =
   | "phi"
   | "secret";
 
-export type OkfOrigin = "authored" | "derived" | "proposed" | "approved";
+export type GkxOrigin = "authored" | "derived" | "proposed" | "approved";
 
-export interface OkfDiagnostic {
+export interface GkxDiagnostic {
   code: string;
   severity: "info" | "warning" | "error" | "critical";
   field?: string;
@@ -57,17 +57,17 @@ export interface OkfDiagnostic {
   targetUid?: string;
 }
 
-export interface OkfOriginProjection {
+export interface GkxOriginProjection {
   /** Source navigation/discovery tags. These are not governed labels. */
   tags?: string[];
   labels: unknown[];
   relationships: Record<string, unknown[]>;
   epistemicState?: string | null;
-  sensitivity?: OkfSensitivity | null;
+  sensitivity?: GkxSensitivity | null;
   [field: string]: unknown;
 }
 
-export interface OkfAssessmentScores {
+export interface GkxAssessmentScores {
   structural_completeness: number | null;
   provenance_quality: number | null;
   evidence_support: number | null;
@@ -78,24 +78,24 @@ export interface OkfAssessmentScores {
   overall: number | null;
 }
 
-export interface OkfAssessment {
+export interface GkxAssessment {
   assessmentId: string;
   targetUid: string | null;
-  profile: "okf-plus-2.3-validating-projection";
+  profile: "gkx-2.3-validating-projection";
   policy: { id: string; version: string; hash: string; weights: Record<string, number>; missingValueBehavior: string };
   assessor: { id: "tool:gkos-engine"; engineVersion: string };
   inputHash: string;
   calculatedAt: string;
-  scores: OkfAssessmentScores;
+  scores: GkxAssessmentScores;
   exclusions: string[];
   labels: { derived: string[] };
-  diagnostics: OkfDiagnostic[];
+  diagnostics: GkxDiagnostic[];
   interpretation: "documentation-and-support-quality-not-truth";
 }
 
 /** GKX 2.3 validating projection attached to a source note. */
-export interface OkfProjection {
-  profile: "okf-plus-2.3-validating-projection";
+export interface GkxProjection {
+  profile: "gkx-2.3-validating-projection";
   /**
    * Compatibility field describing the Engine's projection capability.
    * This is not a GKOS GCP conformance claim or qualification result.
@@ -107,16 +107,16 @@ export interface OkfProjection {
   contentHash: string;
   rawFrontmatter: Record<string, unknown>;
   extensions: Record<string, unknown>;
-  authored: OkfOriginProjection;
-  derived: OkfOriginProjection;
-  proposed: OkfOriginProjection;
-  approved: OkfOriginProjection;
-  effective: OkfOriginProjection;
-  diagnostics: OkfDiagnostic[];
-  assessment: OkfAssessment;
+  authored: GkxOriginProjection;
+  derived: GkxOriginProjection;
+  proposed: GkxOriginProjection;
+  approved: GkxOriginProjection;
+  effective: GkxOriginProjection;
+  diagnostics: GkxDiagnostic[];
+  assessment: GkxAssessment;
 }
 
-export type OkfRelation =
+export type GkxRelation =
   | "depends_on"
   | "supports"
   | "derives_from"
@@ -144,9 +144,9 @@ export type OkfRelation =
   | "has_part"
   | "related_to";
 
-/** GKX data parsed from one note. `OkfData` remains a compatibility API name. */
-export interface OkfData {
-  okfVersion?: string;
+/** Canonical GKX data parsed from one note. */
+export interface GkxData {
+  gkxVersion?: string;
   /** Stable external identity. A valid v2.2 value is a lowercase UUIDv4. */
   uid?: string;
   type?: string;
@@ -156,7 +156,7 @@ export interface OkfData {
   epistemicState?: string;
   scope?: string;
   scopeId?: string;
-  sensitivity?: OkfSensitivity;
+  sensitivity?: GkxSensitivity;
   resource?: string;
   /** As authored in frontmatter (titles/paths, unresolved). */
   supersedes: string[];
@@ -164,15 +164,15 @@ export interface OkfData {
   forkedFrom: string[];
   forkedTo: string[];
   /** Explicit typed v2.2 relationships, kept separate from body wikilinks. */
-  relations: Partial<Record<OkfRelation, string[]>>;
+  relations: Partial<Record<GkxRelation, string[]>>;
   /** Titles from the footer `**Related:**` line. */
   related: string[];
   /** Origin-preserving GKX 2.3 validation and assessment projection. */
-  projection?: OkfProjection;
+  projection?: GkxProjection;
 }
 
 /** Node-level GKX projection attached to graph nodes after lineage/temporal passes. */
-export interface OkfNodeState extends OkfData {
+export interface GkxNodeState extends GkxData {
   /** Resolved node ids this note supersedes (canonical: this note is NEWER). */
   supersedesIds?: string[];
   /** Resolved node ids that supersede this note (canonical projection). */
@@ -185,7 +185,7 @@ export interface OkfNodeState extends OkfData {
 
 export type NodeKind = "file" | "folder" | "unresolved";
 
-export interface KosmosNode {
+export interface GkxNode {
   id: string;
   kind: NodeKind;
   path: string;
@@ -196,9 +196,9 @@ export interface KosmosNode {
   size?: number;
   createdAt?: string;
   updatedAt?: string;
-  /** ISO time from which this note is valid (OKF+ timestamp or documented fallback). */
+  /** ISO time from which this note is valid (GKX timestamp or documented fallback). */
   validAt?: string;
-  okf?: OkfNodeState | null;
+  gkx?: GkxNodeState | null;
   type?: string;
   status?: string;
   priority?: string;
@@ -219,7 +219,7 @@ export type LinkKind =
   | "lineage"
   | "contains";
 
-export interface KosmosLink {
+export interface GkxLink {
   id: string;
   source: string;
   target: string;
@@ -243,7 +243,7 @@ export interface GraphStats {
 
 /** Diagnostics surface (build directive §32). Exposed via the Agent API,
  *  the standalone diagnostics panel and debug hooks. Never contains secrets. */
-export interface KosmosDiagnostics {
+export interface GkxDiagnostics {
   notes: number;
   folders: number;
   attachments: number;
@@ -257,17 +257,17 @@ export interface KosmosDiagnostics {
   lastIncrementalUpdateMs?: number;
 }
 
-export interface KosmosGraph {
-  nodes: KosmosNode[];
-  links: KosmosLink[];
+export interface GkxGraph {
+  nodes: GkxNode[];
+  links: GkxLink[];
   stats: GraphStats;
   areas: string[];
   tags: string[];
   statuses: string[];
   types: string[];
-  diagnostics: KosmosDiagnostics;
+  diagnostics: GkxDiagnostics;
   /** Populated lazily by the renderer. */
-  nodeById?: Map<string, KosmosNode>;
+  nodeById?: Map<string, GkxNode>;
   [extra: string]: unknown;
 }
 
@@ -301,7 +301,7 @@ export interface LineageModel {
 
 /** Graphiti episode (getzep/graphiti `EpisodeType.json` compatible). */
 export interface GraphitiEpisode {
-  /** Stable episode identity: OKF+ uid when valid, deterministic fallback otherwise. */
+  /** Stable episode identity: GKX uid when valid, deterministic fallback otherwise. */
   uuid: string;
   name: string;
   episode_body: string;

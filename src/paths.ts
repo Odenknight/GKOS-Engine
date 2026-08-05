@@ -1,4 +1,4 @@
-/** Kosmos Core — path utilities. Deterministic, POSIX-normalized vault paths. */
+/** Gkx Core — path utilities. Deterministic, POSIX-normalized vault paths. */
 
 export const toPosixPath = (s: string): string =>
   s.replace(/\\/g, "/").replace(/\/+/g, "/");
@@ -54,7 +54,7 @@ export function vaultDepth(p: string): number {
 }
 
 /** Default metadata folders skipped by every scanner (§8). Configurable later. */
-export const DEFAULT_IGNORED_DIRS = [".okf", ".obsidian", ".git", "node_modules", ".trash"];
+export const DEFAULT_IGNORED_DIRS = [".gkx", ".obsidian", ".git", "node_modules", ".trash"];
 
 export function shouldIgnoreVaultPath(p: string, ignoredDirs: string[] = DEFAULT_IGNORED_DIRS): boolean {
   const n = normalizeVaultRelative(p);

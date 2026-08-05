@@ -4,7 +4,7 @@ import {
   INTELLIGENCE_CONTRACT_VERSION,
   validateIntelligenceProposal,
   validateIntelligenceResponse,
-} from "../dist/kosmos-core.mjs";
+} from "../dist/gkos-engine.mjs";
 
 function proposal(overrides = {}) {
   return {

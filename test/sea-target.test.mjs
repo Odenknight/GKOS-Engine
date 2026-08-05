@@ -67,11 +67,11 @@ test("resolveTarget maps platform/arch to the shipped triples", () => {
 });
 
 test("outputName produces the exact release asset names the desktop build expects", () => {
-  assert.equal(outputName(resolveTarget("darwin", "x64")), "kosmos-agent-x86_64-apple-darwin");
-  assert.equal(outputName(resolveTarget("darwin", "arm64")), "kosmos-agent-aarch64-apple-darwin");
+  assert.equal(outputName(resolveTarget("darwin", "x64")), "gkos-agent-x86_64-apple-darwin");
+  assert.equal(outputName(resolveTarget("darwin", "arm64")), "gkos-agent-aarch64-apple-darwin");
   assert.equal(
     outputName(resolveTarget("win32", "x64")),
-    "kosmos-agent-x86_64-pc-windows-msvc.exe",
+    "gkos-agent-x86_64-pc-windows-msvc.exe",
   );
 });
 

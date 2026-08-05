@@ -1,44 +1,35 @@
-/**
- * Canonical GKX-facing names for the stable compatibility implementation.
- *
- * Serialized profile names, `okf_version`, `.okf/`, `OKF-*` diagnostics and
- * the `okf` binary are intentionally unchanged. Existing `Okf*` TypeScript
- * names also remain exported for source compatibility.
- */
+/** Canonical GKX public surface for the GKOS-Engine 2.x line. */
 export type {
-  OkfSensitivity as GkxSensitivity,
-  OkfOrigin as GkxOrigin,
-  OkfDiagnostic as GkxDiagnostic,
-  OkfOriginProjection as GkxOriginProjection,
-  OkfAssessmentScores as GkxAssessmentScores,
-  OkfAssessment as GkxAssessment,
-  OkfProjection as GkxProjection,
-  OkfRelation as GkxRelation,
-  OkfData as GkxData,
-  OkfNodeState as GkxNodeState,
-  KosmosNode as GkxNode,
-  KosmosLink as GkxLink,
-  KosmosDiagnostics as GkxDiagnostics,
-  KosmosGraph as GkxGraph,
+  GkxSensitivity,
+  GkxOrigin,
+  GkxDiagnostic,
+  GkxOriginProjection,
+  GkxAssessmentScores,
+  GkxAssessment,
+  GkxProjection,
+  GkxRelation,
+  GkxData,
+  GkxNodeState,
+  GkxNode,
+  GkxLink,
+  GkxDiagnostics,
+  GkxGraph,
 } from "./types";
 
-export type { Okf23ProjectionOptions as Gkx23ProjectionOptions } from "./okf23";
+export type { Gkx23ProjectionOptions } from "./gkx23";
+
+export { parseGkx, parseGkxTimestamp } from "./gkx-parser";
 
 export {
-  parseOkfPlus as parseGkx,
-  parseOkfTimestamp as parseGkxTimestamp,
-} from "./okf";
+  GKX23_PROFILE,
+  GKX23_POLICY,
+  assessGkx23,
+  buildGkx23Projection,
+  parseGkx23Frontmatter,
+  refreshGkx23Assessment,
+  gkx23RelationTargets,
+  gkx23Inverse,
+} from "./gkx23";
 
-export {
-  OKF23_PROFILE as GKX23_PROFILE,
-  OKF23_POLICY as GKX23_POLICY,
-  assessOkf23 as assessGkx23,
-  buildOkf23Projection as buildGkx23Projection,
-  parseOkf23Frontmatter as parseGkx23Frontmatter,
-  refreshOkf23Assessment as refreshGkx23Assessment,
-  okf23RelationTargets as gkx23RelationTargets,
-  okf23Inverse as gkx23Inverse,
-} from "./okf23";
-
-export { KosmosIndex as GkxIndex } from "./incremental";
-export { makeGkxUuidV7 } from "./okf-migration";
+export { GkxIndex } from "./incremental";
+export { makeGkxUuidV7 } from "./gkx-migration";

@@ -8,7 +8,7 @@ products consume this engine rather than re-vendoring it.
 GKOS Engine remains offline-capable. Intelligence features stay optional,
 proposal-only, and subordinate to deterministic validation.
 
-## Delivered through 1.2
+## Delivered through 2.0
 
 - `gkos.intelligence.v1` request, response, and proposal contract.
 - Deterministic validation of proposals and raise-only sensitivity enforcement.
@@ -16,17 +16,17 @@ proposal-only, and subordinate to deterministic validation.
 - TypeScript, Python, npm, wheel, and SEA deployment checks.
 - Windows and macOS SEA release workflow.
 
-## Next: 1.2.x hardening
+## Next: 2.0.x hardening
 
 - Build a reviewed adversarial and domain-diverse evaluation set.
 - Add offline analyzer/provider comparison reports.
-- Add TypeScript/Python contract compatibility fixtures.
+- Add TypeScript/Python contract interoperability fixtures.
 - Add signed checksums and software bills of materials to releases.
 - Publish traceability from implemented GKX contracts to tests and release
-  compatibility evidence.
+  interoperability evidence.
 - Preserve zero-AI deterministic operation.
 
-## Completed or partially completed in 1.2
+## Completed or partially completed in 2.0
 
 - Reviewer-feedback and enrichment-plan structures are available for explicitly reviewed handling; automatic application is not provided.
 - Candidate contradiction, evidence-gap, relationship, classification, and documentation proposals are supported through the v1 intelligence contract.
@@ -36,8 +36,8 @@ proposal-only, and subordinate to deterministic validation.
 
 - Offline DSPy optimization with explicit call and cost ceilings.
 - Additional domain analyzers behind ordinary product actions.
-- Cross-language compatibility fixtures and installed-service integration tests.
-- Contract-v2 review only if v1 cannot evolve compatibly.
+- Cross-language interoperability fixtures and installed-service integration tests.
+- Contract review when the active contract cannot evolve safely.
 
 ## Ecosystem gates
 

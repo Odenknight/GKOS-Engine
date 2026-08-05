@@ -1,7 +1,7 @@
 /** Temporal projection tests (§4.1, §24): the ONE shared projector. */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildGraph, projectAtTime } from "../dist/kosmos-core.mjs";
+import { buildGraph, projectAtTime } from "../dist/gkos-engine.mjs";
 
 const T = (iso) => Date.parse(iso);
 
@@ -19,7 +19,7 @@ function chainProjectables() {
     .map((n) => ({
       id: n.id,
       validAtMs: Date.parse(n.validAt),
-      invalidAtMs: n.okf?.invalidAt ? Date.parse(n.okf.invalidAt) : null,
+      invalidAtMs: n.gkx?.invalidAt ? Date.parse(n.gkx.invalidAt) : null,
     }));
 }
 

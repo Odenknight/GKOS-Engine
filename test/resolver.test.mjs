@@ -7,7 +7,7 @@ import {
   resolveLinkTarget,
   resolveTitleRef,
   buildGraph,
-} from "../dist/kosmos-core.mjs";
+} from "../dist/gkos-engine.mjs";
 
 function fixtureResolver() {
   const r = createResolver();

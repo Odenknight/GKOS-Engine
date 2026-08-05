@@ -1,5 +1,5 @@
 /**
- * Kosmos Core — canonical lineage normalization (§3).
+ * Gkx Core — canonical lineage normalization (§3).
  *
  * Internally lineage is ONE canonical directed relationship:
  *
@@ -27,7 +27,7 @@ export interface LineageInput {
   /** Raw declared references, as authored. */
   declaredSupersedes: string[];
   declaredSupersededBy: string[];
-  /** valid_at in ms (already computed from OKF+ timestamp or fallback). */
+  /** valid_at in ms (already computed from GKX timestamp or fallback). */
   validAtMs: number | null;
 }
 

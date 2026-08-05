@@ -2,18 +2,18 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import {
-  OKF23_POLICY,
+  GKX23_POLICY,
   buildGraph,
-  buildOkf23Projection,
-  okf23RelationTargets,
-  parseOkf23Frontmatter,
-} from "../dist/kosmos-core.mjs";
+  buildGkx23Projection,
+  gkx23RelationTargets,
+  parseGkx23Frontmatter,
+} from "../dist/gkos-engine.mjs";
 
-const CANONICAL_POLICY = '{"assessment_thresholds":[[0.9,"assessment:strongly-documented"],[0.75,"assessment:well-documented"],[0.6,"assessment:partially-supported"],[0.4,"assessment:weakly-supported"],[0.01,"assessment:insufficient"],[0,"assessment:invalid-or-untraceable"]],"compatible_okf_versions":["2.3"],"missing_value_behavior":"exclude-null-and-renormalize","policy_id":"policy:okf23-default-v1","policy_version":"1.0.0","sensitivity_default":"internal","weights":{"contradiction_status":0.1,"evidence_support":0.2,"provenance_quality":0.2,"relationship_integrity":0.15,"review_readiness":0.1,"structural_completeness":0.15,"temporal_freshness":0.1}}';
+const CANONICAL_POLICY = '{"assessment_thresholds":[[0.9,"assessment:strongly-documented"],[0.75,"assessment:well-documented"],[0.6,"assessment:partially-supported"],[0.4,"assessment:weakly-supported"],[0.01,"assessment:insufficient"],[0,"assessment:invalid-or-untraceable"]],"compatible_gkx_versions":["2.3"],"missing_value_behavior":"exclude-null-and-renormalize","policy_id":"policy:gkx23-default-v1","policy_version":"1.0.0","sensitivity_default":"internal","weights":{"contradiction_status":0.1,"evidence_support":0.2,"provenance_quality":0.2,"relationship_integrity":0.15,"review_readiness":0.1,"structural_completeness":0.15,"temporal_freshness":0.1}}';
 
 test("namespaced identifiers remain relationship targets but cannot be authored note UIDs", () => {
   const raw = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "source:authored-note"
 title: "Namespaced target"
 type: "semantic"
@@ -24,16 +24,16 @@ relationships:
     - target: "source:paper-001"
 ---
 Body`;
-  const projection = buildOkf23Projection(raw, "Namespaced.md", "hash:namespaced", null);
-  assert.ok(projection.diagnostics.some((diagnostic) => diagnostic.code === "OKF-IDENTITY-002" && diagnostic.field === "uid"));
-  assert.ok(okf23RelationTargets(projection).some((relation) => relation.target === "source:paper-001"));
+  const projection = buildGkx23Projection(raw, "Namespaced.md", "hash:namespaced", null);
+  assert.ok(projection.diagnostics.some((diagnostic) => diagnostic.code === "GKX-IDENTITY-002" && diagnostic.field === "uid"));
+  assert.ok(gkx23RelationTargets(projection).some((relation) => relation.target === "source:paper-001"));
 
   const graph = buildGraph([{ relativePath: "Namespaced.md", content: raw }], []);
-  assert.equal(graph.okfUidIndex["source:authored-note"], undefined);
+  assert.equal(graph.gkxUidIndex["source:authored-note"], undefined);
 });
 
 const note = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaec932"
 title: "A governed hypothesis"
 type: "hypothesis"
@@ -98,24 +98,24 @@ x-lab-extension:
 # Hypothesis
 Body remains source content.`;
 
-test("OKF+ 2.3 nested parser preserves extensions and scalar types", () => {
-  const parsed = parseOkf23Frontmatter(note);
+test("GKX 2.3 nested parser preserves extensions and scalar types", () => {
+  const parsed = parseGkx23Frontmatter(note);
   assert.equal(parsed.present, true);
   assert.deepEqual(parsed.issues, []);
-  assert.equal(parsed.data.okf_version, "2.3");
+  assert.equal(parsed.data.gkx_version, "2.3");
   assert.equal(parsed.data.epistemic.confidence, 0.35);
   assert.equal(parsed.data.sensitivity.level, "restricted");
   assert.equal(parsed.data["x-lab-extension"].sample, true);
 });
 
-test("bundled OKF+ 2.3 policy hash matches its canonical deterministic input", () => {
-  assert.equal(OKF23_POLICY.hash, `sha256:${createHash("sha256").update(CANONICAL_POLICY).digest("hex")}`);
+test("bundled GKX 2.3 policy hash matches its canonical deterministic input", () => {
+  assert.equal(GKX23_POLICY.hash, `sha256:${createHash("sha256").update(CANONICAL_POLICY).digest("hex")}`);
 });
 
-test("OKF+ 2.3 projection separates origins and scores documentation, not truth", () => {
-  const projection = buildOkf23Projection(note, "Claims/Test.md", "abc:123", null);
+test("GKX 2.3 projection separates origins and scores documentation, not truth", () => {
+  const projection = buildGkx23Projection(note, "Claims/Test.md", "abc:123", null);
   assert.ok(projection);
-  assert.equal(projection.profile, "okf-plus-2.3-validating-projection");
+  assert.equal(projection.profile, "gkx-2.3-validating-projection");
   assert.equal(projection.authored.epistemicState, "hypothesis");
   assert.equal(projection.effective.sensitivity, "restricted");
   assert.deepEqual(projection.authored.tags, ["navigation-only"]);
@@ -126,7 +126,7 @@ test("OKF+ 2.3 projection separates origins and scores documentation, not truth"
   assert.equal(projection.approved.labels.length, 1);
   assert.ok(projection.derived.labels.includes("identity:stable"));
   assert.equal(projection.assessment.interpretation, "documentation-and-support-quality-not-truth");
-  assert.equal(projection.assessment.policy.id, "policy:okf23-default-v1");
+  assert.equal(projection.assessment.policy.id, "policy:gkx23-default-v1");
   assert.ok(projection.assessment.scores.overall > 0);
   assert.equal(projection.assessment.scores.evidence_support > 0, true);
 });
@@ -137,7 +137,7 @@ test("UID-first typed relationships resolve canonically and proposed edges stay 
     .replace('title: "A governed hypothesis"', 'title: "Target"')
     .replace(/relationships:[\s\S]*?evidence:/, "relationships:\n  related_to: []\nevidence:");
   const proposed = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaec934"
 title: "Proposal only"
 type: "proposal"
@@ -165,7 +165,7 @@ labels:
     { relativePath: "Claims/Target.md", extension: "md", content: target },
     { relativePath: "Claims/Proposal.md", extension: "md", content: proposed },
   ], ["Claims"], Date.parse("2026-07-18T00:00:00Z"));
-  assert.equal(graph.okfUidIndex["019b2d14-4230-7db7-87d4-7d81cfaec933"], "file:Claims/Target.md");
+  assert.equal(graph.gkxUidIndex["019b2d14-4230-7db7-87d4-7d81cfaec933"], "file:Claims/Target.md");
   assert.ok(graph.links.some((link) => link.source === "file:Claims/Source.md" && link.target === "file:Claims/Target.md" && link.kind === "semantic" && link.label === "related_to"));
   assert.equal(graph.links.some((link) => link.source === "file:Claims/Proposal.md" && link.target === "file:Claims/Target.md" && link.kind === "semantic"), false);
 });
@@ -189,8 +189,8 @@ test("native 2.3 wikilink targets yield to flat Obsidian relationship correction
   assert.equal(links.length, 1);
   assert.equal(links[0].label, "related_to");
   assert.equal(graph.links.some((link) => link.source === "file:Claims/Source.md" && link.target === "file:Claims/Original.md" && link.kind === "semantic"), false);
-  const projection = graph.nodes.find((node) => node.path === "Claims/Source.md").okf.projection;
-  assert.ok(!projection.diagnostics.some((diagnostic) => diagnostic.code === "OKF-RELATIONSHIP-001" && diagnostic.field === "relationships.related_to"));
+  const projection = graph.nodes.find((node) => node.path === "Claims/Source.md").gkx.projection;
+  assert.ok(!projection.diagnostics.some((diagnostic) => diagnostic.code === "GKX-RELATIONSHIP-001" && diagnostic.field === "relationships.related_to"));
 });
 
 test("duplicate UID reuse fails closed and is excluded from the UID index", () => {
@@ -199,17 +199,17 @@ test("duplicate UID reuse fails closed and is excluded from the UID index", () =
     { relativePath: "A.md", extension: "md", content: note },
     { relativePath: "B.md", extension: "md", content: other },
   ], [], Date.parse("2026-07-18T00:00:00Z"));
-  assert.equal(graph.okfUidIndex["019b2d14-4230-7db7-87d4-7d81cfaec932"], undefined);
+  assert.equal(graph.gkxUidIndex["019b2d14-4230-7db7-87d4-7d81cfaec932"], undefined);
   for (const path of ["A.md", "B.md"]) {
-    const projection = graph.nodes.find((node) => node.path === path).okf.projection;
-    assert.ok(projection.diagnostics.some((d) => d.code === "OKF-IDENTITY-003"));
-    assert.ok(projection.diagnostics.some((d) => d.code === "OKF-IDENTITY-004"));
+    const projection = graph.nodes.find((node) => node.path === path).gkx.projection;
+    assert.ok(projection.diagnostics.some((d) => d.code === "GKX-IDENTITY-003"));
+    assert.ok(projection.diagnostics.some((d) => d.code === "GKX-IDENTITY-004"));
   }
 });
 
 test("flat editable 2.3 profile validates and projects governance from flat properties", () => {
   const flat23 = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaec935"
 title: "Flat editable"
 type: "semantic"
@@ -229,10 +229,10 @@ related_to:
   - "[[Neighbor]]"
 ---
 Body.`;
-  const projection = buildOkf23Projection(flat23, "Flat23.md", "f:1", null);
+  const projection = buildGkx23Projection(flat23, "Flat23.md", "f:1", null);
   assert.ok(projection);
   assert.equal(projection.mode, "strict-v2.3");
-  assert.ok(!projection.diagnostics.some((d) => d.code === "OKF-SCHEMA-004"), "no missing-block schema errors for the flat profile");
+  assert.ok(!projection.diagnostics.some((d) => d.code === "GKX-SCHEMA-004"), "no missing-block schema errors for the flat profile");
   assert.equal(projection.authored.epistemicState, "reported");
   assert.equal(projection.effective.sensitivity, "restricted");
   assert.equal(projection.authored.assertionOrigin, "authored");
@@ -245,36 +245,36 @@ Body.`;
 // missing sensitivity to the mid-open "internal" level.)
 test("missing sensitivity fails closed to secret by default and invalid sensitivity fails closed", () => {
   const missing = note.replace(/sensitivity:[\s\S]*?provenance:/, "provenance:");
-  const p1 = buildOkf23Projection(missing, "Missing.md", "m:1", null);
+  const p1 = buildGkx23Projection(missing, "Missing.md", "m:1", null);
   assert.equal(p1.effective.sensitivity, "secret");
-  assert.ok(p1.diagnostics.some((d) => d.code === "OKF-SENSITIVITY-001"), "OKF-SENSITIVITY-001 still fires so defaulting stays visible");
+  assert.ok(p1.diagnostics.some((d) => d.code === "GKX-SENSITIVITY-001"), "GKX-SENSITIVITY-001 still fires so defaulting stays visible");
   const invalid = note.replace('level: "restricted"', 'level: "unclassified"');
-  const p2 = buildOkf23Projection(invalid, "Invalid.md", "i:1", null);
+  const p2 = buildGkx23Projection(invalid, "Invalid.md", "i:1", null);
   assert.equal(p2.effective.sensitivity, "secret");
 
-  const flat = `---\nokf_version: "2.2"\nuid: "11111111-1111-4111-8111-111111111111"\ntype: "semantic"\ntitle: "Flat"\ntimestamp: "2026-07-01T00:00:00Z"\nepistemic_state: "fact"\nsensitivity: "typo"\n---\nBody`;
+  const flat = `---\ngkx_version: "2.2"\nuid: "11111111-1111-4111-8111-111111111111"\ntype: "semantic"\ntitle: "Flat"\ntimestamp: "2026-07-01T00:00:00Z"\nepistemic_state: "fact"\nsensitivity: "typo"\n---\nBody`;
   const graph = buildGraph([{ relativePath: "Flat.md", extension: "md", content: flat }], []);
-  assert.equal(graph.nodes.find((node) => node.path === "Flat.md").okf.projection.effective.sensitivity, "secret");
+  assert.equal(graph.nodes.find((node) => node.path === "Flat.md").gkx.projection.effective.sensitivity, "secret");
 });
 
 test("DIV-002: defaultSensitivity option is honored, validated, and never lowers an authored classification", () => {
   const missing = note.replace(/sensitivity:[\s\S]*?provenance:/, "provenance:");
   // A deployment may relax the default to a less restrictive level.
-  const relaxed = buildOkf23Projection(missing, "Missing.md", "m:2", null, { defaultSensitivity: "internal" });
+  const relaxed = buildGkx23Projection(missing, "Missing.md", "m:2", null, { defaultSensitivity: "internal" });
   assert.equal(relaxed.effective.sensitivity, "internal");
-  assert.ok(relaxed.diagnostics.some((d) => d.code === "OKF-SENSITIVITY-001"));
+  assert.ok(relaxed.diagnostics.some((d) => d.code === "GKX-SENSITIVITY-001"));
   // An out-of-vocabulary option value is ignored and falls back to secret.
-  const bogus = buildOkf23Projection(missing, "Missing.md", "m:3", null, { defaultSensitivity: "nonsense" });
+  const bogus = buildGkx23Projection(missing, "Missing.md", "m:3", null, { defaultSensitivity: "nonsense" });
   assert.equal(bogus.effective.sensitivity, "secret");
   // The default never overrides an authored classification, even a more open one.
   const publicNote = note.replace('level: "restricted"', 'level: "public"');
-  const p = buildOkf23Projection(publicNote, "Public.md", "p:1", null, { defaultSensitivity: "secret" });
+  const p = buildGkx23Projection(publicNote, "Public.md", "p:1", null, { defaultSensitivity: "secret" });
   assert.equal(p.effective.sensitivity, "public");
 });
 
-test("DIV-001: naive wall-clock created_at emits an OKF-TEMPORAL diagnostic", () => {
+test("DIV-001: naive wall-clock created_at emits an GKX-TEMPORAL diagnostic", () => {
   const naive = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaec9b0"
 title: "Naive timestamp"
 type: "semantic"
@@ -285,31 +285,31 @@ authorship_origin: "authored"
 tags: []
 ---
 Body.`;
-  const p = buildOkf23Projection(naive, "Naive.md", "n:1", null);
-  const temporal = p.diagnostics.filter((d) => d.code.startsWith("OKF-TEMPORAL"));
-  assert.equal(temporal.length, 1, `expected one OKF-TEMPORAL diagnostic, got: ${JSON.stringify(p.diagnostics)}`);
+  const p = buildGkx23Projection(naive, "Naive.md", "n:1", null);
+  const temporal = p.diagnostics.filter((d) => d.code.startsWith("GKX-TEMPORAL"));
+  assert.equal(temporal.length, 1, `expected one GKX-TEMPORAL diagnostic, got: ${JSON.stringify(p.diagnostics)}`);
   assert.equal(temporal[0].field, "created_at");
   assert.ok(temporal[0].severity === "warning" || temporal[0].severity === "error", "severity is warning-or-error");
   // A properly zoned timestamp raises no temporal diagnostic.
   const zoned = naive.replace("created_at: 2026-07-20 12:00:00", 'created_at: "2026-07-20T12:00:00Z"');
-  const clean = buildOkf23Projection(zoned, "Zoned.md", "n:2", null);
-  assert.equal(clean.diagnostics.some((d) => d.code.startsWith("OKF-TEMPORAL")), false);
+  const clean = buildGkx23Projection(zoned, "Zoned.md", "n:2", null);
+  assert.equal(clean.diagnostics.some((d) => d.code.startsWith("GKX-TEMPORAL")), false);
 });
 
 test("DIV-003: invalid epistemic state falls back to unknown with defaulted-marking and retained diagnostic", () => {
   const invalid = note.replace('state: "hypothesis"', 'state: "gospel"');
-  const p = buildOkf23Projection(invalid, "Gospel.md", "g:1", null);
+  const p = buildGkx23Projection(invalid, "Gospel.md", "g:1", null);
   // Effective state is the null-weight fallback, machine-detectable via the flag.
   assert.equal(p.effective.epistemicState, "unknown");
   assert.equal(p.effective.epistemicStateDefaulted, true);
   // The original invalid value is retained on the authored projection and in the diagnostic.
   assert.equal(p.authored.epistemicState, "gospel");
-  const epi = p.diagnostics.find((d) => d.code === "OKF-EPISTEMIC-002");
-  assert.ok(epi, "OKF-EPISTEMIC-002 still fires");
+  const epi = p.diagnostics.find((d) => d.code === "GKX-EPISTEMIC-002");
+  assert.ok(epi, "GKX-EPISTEMIC-002 still fires");
   assert.equal(epi.severity, "error");
   assert.ok(epi.message.includes("gospel"), "diagnostic retains the invalid value");
   // A valid state carries no defaulted-marking.
-  const valid = buildOkf23Projection(note, "Valid.md", "v:1", null);
+  const valid = buildGkx23Projection(note, "Valid.md", "v:1", null);
   assert.equal(valid.effective.epistemicStateDefaulted, false);
   assert.equal(valid.effective.epistemicState, "hypothesis");
 });
@@ -322,7 +322,7 @@ test("DIV-003: invalid epistemic state falls back to unknown with defaulted-mark
 
 test("same-indent flat block sequence under a top-level key parses", () => {
   const doc = 'top:\ntags:\n- a\n- b\nafter: "x"';
-  const { data, issues } = parseOkf23Frontmatter(`---\n${doc}\n---\nBody.`);
+  const { data, issues } = parseGkx23Frontmatter(`---\n${doc}\n---\nBody.`);
   assert.deepEqual(data.tags, ["a", "b"], "same-indent list is captured");
   assert.equal(data.after, "x", "a following same-indent key still terminates the list");
   assert.equal(data.top, null);
@@ -331,14 +331,14 @@ test("same-indent flat block sequence under a top-level key parses", () => {
 
 test("same-indent block sequence under a NESTED key parses", () => {
   const doc = 'labels:\n  authored:\n  - x\n  - y\n  system:\n  - z';
-  const { data, issues } = parseOkf23Frontmatter(`---\n${doc}\n---\nBody.`);
+  const { data, issues } = parseGkx23Frontmatter(`---\n${doc}\n---\nBody.`);
   assert.deepEqual(data.labels, { authored: ["x", "y"], system: ["z"] });
   assert.equal(issues.length, 0, `no parse issues, got: ${JSON.stringify(issues)}`);
 });
 
 test("mixed doc: same-indent list followed by another same-level key", () => {
   const doc = 'title: "T"\ntags:\n- one\n- two\ntype: "semantic"';
-  const { data, issues } = parseOkf23Frontmatter(`---\n${doc}\n---\nBody.`);
+  const { data, issues } = parseGkx23Frontmatter(`---\n${doc}\n---\nBody.`);
   assert.equal(data.title, "T");
   assert.deepEqual(data.tags, ["one", "two"]);
   assert.equal(data.type, "semantic");
@@ -347,14 +347,14 @@ test("mixed doc: same-indent list followed by another same-level key", () => {
 
 test("deeper-indent block sequence still parses unchanged", () => {
   const doc = 'tags:\n  - a\n  - b';
-  const { data, issues } = parseOkf23Frontmatter(`---\n${doc}\n---\nBody.`);
+  const { data, issues } = parseGkx23Frontmatter(`---\n${doc}\n---\nBody.`);
   assert.deepEqual(data.tags, ["a", "b"]);
   assert.equal(issues.length, 0);
 });
 
 test("flat 2.3 note with same-indent tags projects tags with zero schema errors", () => {
   const flat = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaec9aa"
 title: "Same indent tags"
 type: "semantic"
@@ -368,21 +368,21 @@ tags:
 - beta
 ---
 Body.`;
-  const projection = buildOkf23Projection(flat, "SameIndent.md", "si:1", null);
+  const projection = buildGkx23Projection(flat, "SameIndent.md", "si:1", null);
   assert.deepEqual(projection.authored.tags, ["alpha", "beta"]);
   assert.ok(
-    !projection.diagnostics.some((d) => d.code === "OKF-SCHEMA-001"),
-    `no OKF-SCHEMA-001, got: ${JSON.stringify(projection.diagnostics)}`
+    !projection.diagnostics.some((d) => d.code === "GKX-SCHEMA-001"),
+    `no GKX-SCHEMA-001, got: ${JSON.stringify(projection.diagnostics)}`
   );
 });
 
 // 2026-07-27 fix (Bug 1): refines/blocks/documents were valid 2.3 relations
-// (src/okf.ts RELATIONS + gkos-standard relationType enum) but were missing from
-// okf23.ts RELATION_TYPES, so splitRelations() and the inverse-edge loop silently
+// (src/gkx.ts RELATIONS + gkos-standard relationType enum) but were missing from
+// gkx23.ts RELATION_TYPES, so splitRelations() and the inverse-edge loop silently
 // DROPPED them. This asserts they now project forward AND generate inverse edges.
 test("refines/blocks/documents now project forward and generate inverse edges (was silently dropped)", () => {
   const source = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaec9b1"
 title: "Refiner"
 type: "semantic"
@@ -415,7 +415,7 @@ labels:
 ---
 Body.`;
   const target = `---
-okf_version: "2.3"
+gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaec9b2"
 title: "Refined"
 type: "semantic"
@@ -442,7 +442,7 @@ Body.`;
 
   // Projection level: the authored relations survive splitRelations() and the
   // flat editable-Property merge instead of being dropped.
-  const projection = buildOkf23Projection(source, "Claims/Refiner.md", "r:1", null);
+  const projection = buildGkx23Projection(source, "Claims/Refiner.md", "r:1", null);
   assert.ok(projection.authored.relationships.refines, "refines relation preserved");
   assert.ok(projection.authored.relationships.blocks, "blocks relation preserved");
   assert.ok(projection.authored.relationships.documents, "documents relation preserved");
@@ -458,7 +458,7 @@ Body.`;
       `forward ${label} edge present`
     );
   }
-  const targetDerived = graph.nodes.find((node) => node.path === "Claims/Refined.md").okf.projection.derived.relationships;
+  const targetDerived = graph.nodes.find((node) => node.path === "Claims/Refined.md").gkx.projection.derived.relationships;
   assert.ok(targetDerived.refined_by, "inverse refined_by edge present on target");
   assert.ok(targetDerived.blocked_by, "inverse blocked_by edge present on target");
   assert.ok(targetDerived.documented_by, "inverse documented_by edge present on target");

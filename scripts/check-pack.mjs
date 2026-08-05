@@ -15,18 +15,17 @@ if (jsonStart < 0 || jsonEnd < jsonStart) throw new Error(`npm pack did not retu
 const report = JSON.parse(raw.slice(jsonStart, jsonEnd + 1))[0];
 const files = report.files.map((entry) => entry.path);
 const forbidden = files.filter((file) =>
-  /(?:^|\/)(?:kosmos-agent-[^/]+|sea-config\.json|sea-prep\.blob)$/.test(file),
+  /(?:^|\/)(?:gkos-agent-[^/]+|sea-config\.json|sea-prep\.blob)$/.test(file),
 );
 if (forbidden.length) {
   throw new Error(`npm package contains platform-specific SEA artifacts:\n${forbidden.join("\n")}`);
 }
 for (const required of [
   "dist/gkos-engine.mjs",
-  "dist/kosmos-core.mjs",
   "dist/adapter.mjs",
   "dist/gkx.mjs",
   "dist/graphiti-adapter.mjs",
-  "dist/kosmos-desktop-agent.mjs",
+  "dist/gkos-desktop-agent.mjs",
   "services/gkos-intelligence/pyproject.toml",
   "services/gkos-intelligence/src/gkos_intelligence/server.py",
 ]) {

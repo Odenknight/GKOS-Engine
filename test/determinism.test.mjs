@@ -11,7 +11,7 @@
  */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { KosmosIndex, buildGraph, codeUnitCompare } from "../dist/kosmos-core.mjs";
+import { GkxIndex, buildGraph, codeUnitCompare } from "../dist/gkos-engine.mjs";
 
 // Fixed file timestamps so identical INPUT is fully specified (otherwise the
 // parser falls back to Date.now() and wall-clock leaks in — not a sort defect).
@@ -58,8 +58,8 @@ test("two consecutive full builds of the same fixture are byte-identical", () =>
     const { indexedAt, durationMs, ...stableStats } = stats;
     return { ...rest, diagnostics: stableDiag, stats: stableStats };
   };
-  const a = new KosmosIndex();
-  const b = new KosmosIndex();
+  const a = new GkxIndex();
+  const b = new GkxIndex();
   const ga = a.setFiles(fixture(), []).graph;
   const gb = b.setFiles(fixture(), []).graph;
   assert.equal(JSON.stringify(stripVolatile(ga)), JSON.stringify(stripVolatile(gb)));

@@ -91,7 +91,7 @@ export function resolveTarget(platform, arch) {
 
 /** Output file name for a resolved target. */
 export function outputName({ triple, exeSuffix }) {
-  return `kosmos-agent-${triple}${exeSuffix}`;
+  return `gkos-agent-${triple}${exeSuffix}`;
 }
 
 /**

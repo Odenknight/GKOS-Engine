@@ -1,10 +1,10 @@
-/** Kosmos Core — built-in demo vault (used by the standalone "Load Demo" and plugin boot). */
-import type { KosmosGraph, KosmosLink, KosmosNode } from "./types";
+/** Gkx Core — built-in demo vault (used by the standalone "Load Demo" and plugin boot). */
+import type { GkxGraph, GkxLink, GkxNode } from "./types";
 
 const demoAreas = [
   { path: "00_Atlas", label: "Atlas", color: "#7dd3fc", tags: ["map", "structure"], notes: ["Knowledge Constellation", "Navigation Principles", "Concept Cartography", "Open Questions", "Semantic Landmarks", "Routes and Tours", "Depth Cues", "Graph Vocabulary"] },
   { path: "10_Research", label: "Research", color: "#a78bfa", tags: ["research", "signal"], notes: ["Literature Radar", "AI Interface Notes", "Spatial Computing", "Local First Systems", "Cognitive Load", "Human Attention", "Pattern Library", "Insight Pipeline"] },
-  { path: "20_Projects", label: "Projects", color: "#34d399", tags: ["project", "active"], notes: ["Vault Kosmos", "Learning Studio", "Publishing Engine", "Workshop Planner", "Knowledge Garden", "Presentation Route Alpha", "Review Dashboard", "Automation Console"] },
+  { path: "20_Projects", label: "Projects", color: "#34d399", tags: ["project", "active"], notes: ["Vault Gkx", "Learning Studio", "Publishing Engine", "Workshop Planner", "Knowledge Garden", "Presentation Route Alpha", "Review Dashboard", "Automation Console"] },
   { path: "30_Sources", label: "Sources", color: "#fbbf24", tags: ["source", "reference"], notes: ["Obsidian Graph", "Three Dimensional UI", "Local Data Ethics", "Graph Layout Notes", "WebGL Performance", "File Watchers", "Navigation Research", "Interface Atmosphere"] },
   { path: "40_Writing", label: "Writing", color: "#fb7185", tags: ["writing", "draft"], notes: ["Public Alpha Story", "Demo Walkthrough", "Design Notes", "Launch Checklist", "Field Report", "Narrative Arc", "Readme Draft", "Release Notes"] },
   { path: "50_People", label: "People", color: "#f472b6", tags: ["people", "context"], notes: ["Research Partners", "Workshop Audience", "Maintainers", "Learners", "Editors", "Decision Makers", "Power Users", "Future Contributors"] },
@@ -12,12 +12,12 @@ const demoAreas = [
 ];
 const unresolvedTargets = ["Future Knowledge Engine", "Immersive Presentation Mode", "Semantic Embeddings"];
 
-function addLink(links: KosmosLink[], kind: KosmosLink["kind"], source: string, target: string, label?: string): void {
+function addLink(links: GkxLink[], kind: GkxLink["kind"], source: string, target: string, label?: string): void {
   if (!source || !target || source === target) return;
   links.push({ id: `${kind}:${source}->${target}:${links.length}`, source, target, kind, label });
 }
 
-function applyDemoCounts(nodes: KosmosNode[], links: KosmosLink[]): void {
+function applyDemoCounts(nodes: GkxNode[], links: GkxLink[]): void {
   const byId = new Map(nodes.map((n) => [n.id, n]));
   for (const l of links) {
     if (l.kind === "contains") continue;
@@ -28,9 +28,9 @@ function applyDemoCounts(nodes: KosmosNode[], links: KosmosLink[]): void {
   }
 }
 
-export function createDemoVaultGraph(now = Date.now()): KosmosGraph {
-  const nodes: KosmosNode[] = [];
-  const links: KosmosLink[] = [];
+export function createDemoVaultGraph(now = Date.now()): GkxGraph {
+  const nodes: GkxNode[] = [];
+  const links: GkxLink[] = [];
   nodes.push({ id: "folder:.", kind: "folder", path: "", label: "Demo Vault", area: "Vault", depth: 0, tags: [], aliases: [], color: "#e2e8f0", outgoing: 0, incoming: 0 });
   for (const a of demoAreas) {
     nodes.push({ id: `folder:${a.path}`, kind: "folder", path: a.path, label: a.label, area: a.path, depth: 1, tags: a.tags, aliases: [], color: a.color, outgoing: 0, incoming: 0 });
@@ -114,7 +114,7 @@ export interface DemoEvent {
 }
 
 export function createDemoVaultEvents(now = Date.now()): DemoEvent[] {
-  const paths = ["20_Projects/Vault Kosmos.md", "40_Writing/Public Alpha Story.md", "00_Atlas/Routes and Tours.md", "30_Sources/WebGL Performance.md", "10_Research/Spatial Computing.md", "50_People/Future Contributors.md", "20_Projects/Presentation Route Alpha.md", "40_Writing/Demo Walkthrough.md"];
+  const paths = ["20_Projects/Vault Gkx.md", "40_Writing/Public Alpha Story.md", "00_Atlas/Routes and Tours.md", "30_Sources/WebGL Performance.md", "10_Research/Spatial Computing.md", "50_People/Future Contributors.md", "20_Projects/Presentation Route Alpha.md", "40_Writing/Demo Walkthrough.md"];
   return paths.map((path, i) => ({
     id: `demo-event:${i}`,
     type: i % 3 === 0 ? ("add" as const) : ("change" as const),

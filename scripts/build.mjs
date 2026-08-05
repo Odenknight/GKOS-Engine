@@ -2,11 +2,10 @@
  * GKOS-Engine build.
  *
  * Bundles the modular TypeScript core (src/index.ts and its siblings) into a
- * single fully-inlined ESM bundle consumed by the CLI (bin/okf.mjs) and the
+ * single fully-inlined ESM bundle consumed by the CLI (bin/gkx.mjs) and the
  * test suite, and emits type declarations for TypeScript consumers:
  *
  *   dist/gkos-engine.mjs   canonical ESM bundle of GKOS-Engine
- *   dist/kosmos-core.mjs   compatibility entry point for existing consumers
  *   dist/index.d.ts        type declarations (+ per-module .d.ts)
  *
  * Obsidian-free, DOM-free, platform-neutral — reusable from any Node consumer.
@@ -18,16 +17,19 @@
  * "exports" fields.
  *
  * Usage:
- *   node scripts/build.mjs        build dist/gkos-engine.mjs + compatibility artifacts + declarations
+ *   node scripts/build.mjs        build dist/gkos-engine.mjs + declarations
  */
 import esbuild from "esbuild";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
+// A breaking namespace migration must not leave stale generated modules in
+// the published package. Recreate dist from source on every build.
+rmSync(resolve(root, "dist"), { recursive: true, force: true });
 mkdirSync(resolve(root, "dist"), { recursive: true });
 
 async function bundle(entry, opts = {}) {
@@ -51,15 +53,6 @@ try {
   writeFileSync(resolve(root, "dist/gkos-engine.mjs"), core);
   console.log("built dist/gkos-engine.mjs");
 
-  // Keep the historical artifact path loadable. The package entry point is
-  // canonical, but direct-path consumers must not break during the naming
-  // transition.
-  writeFileSync(
-    resolve(root, "dist/kosmos-core.mjs"),
-    'export * from "./gkos-engine.mjs";\n',
-  );
-  console.log("built dist/kosmos-core.mjs (compatibility entry point)");
-
   for (const [entry, output] of [
     ["src/adapter.ts", "dist/adapter.mjs"],
     ["src/gkx.ts", "dist/gkx.mjs"],
@@ -74,12 +67,12 @@ try {
   // a CJS bundle that the Node SEA flow (scripts/build-sea.mjs) requires as its
   // single-file entry (SEA only accepts CommonJS).
   const desktopEsm = await bundle("src/desktop-agent.ts", { platform: "node", format: "esm" });
-  writeFileSync(resolve(root, "dist/kosmos-desktop-agent.mjs"), desktopEsm);
-  console.log("built dist/kosmos-desktop-agent.mjs");
+  writeFileSync(resolve(root, "dist/gkos-desktop-agent.mjs"), desktopEsm);
+  console.log("built dist/gkos-desktop-agent.mjs");
 
   const desktopCjs = await bundle("src/desktop-agent.ts", { platform: "node", format: "cjs" });
-  writeFileSync(resolve(root, "dist/kosmos-desktop-agent.cjs"), desktopCjs);
-  console.log("built dist/kosmos-desktop-agent.cjs");
+  writeFileSync(resolve(root, "dist/gkos-desktop-agent.cjs"), desktopCjs);
+  console.log("built dist/gkos-desktop-agent.cjs");
 
   // Invoke TypeScript's JS entry point directly via node (not the .cmd/.sh
   // shim) so this works identically across platforms with no shell involved.
