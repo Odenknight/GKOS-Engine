@@ -12,7 +12,7 @@ This repository is the single source of truth for the engine. It is
 **Obsidian-free, DOM-free, platform-neutral** TypeScript: a reusable core that
 downstream products consume rather than re-vendor.
 
-- **Kosmos Research Studio (KRS)** (the `Kosmos-Oden` Obsidian plugin) consumes this package.
+- **`Kosmos-Oden`** (the Obsidian reference application) consumes this package.
 - **GKOS-Engine-Lite** consumes this package.
 
 This is an *implementation*, not the GKOS standard itself. The standard lives at
@@ -46,14 +46,15 @@ network access.
 
 See [ROADMAP.md](ROADMAP.md) for the completed 1.1 scope and planned hardening.
 
-## OKF+ 2.3 dialects
+## GKX 2.3 dialects
 
-Both OKF+ 2.3 dialects are supported:
+Both GKX 2.3 dialects are supported. Existing `okf_version` values retain their
+spelling as compatibility identifiers:
 
 - **Agent-Ready (flat 2.3)** — flat, human/agent-editable frontmatter.
 - **Machine Dialect (nested 2.3)** — the nested machine projection.
 
-The engine parses either, produces a validating OKF+ 2.3 projection, and derives
+The engine parses either, produces a validating GKX 2.3 projection, and derives
 diagnostics and documentation-quality assessments deterministically.
 
 ## Install / build
