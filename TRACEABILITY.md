@@ -1,8 +1,8 @@
 # GKOS-Engine traceability
 
-**Code line:** GKOS-Engine 2.0.0
+**Code line:** GKOS-Engine 2.0.1
 
-**Package metadata:** `2.0.0`; intended signed tag `v2.0.0`
+**Package metadata:** `2.0.1`; intended signed tag `v2.0.1`
 
 **Standard target:** GKOS v0.77 authorized developmental publication;
 non-consensus.
@@ -54,5 +54,5 @@ remains `UNEVALUATED`.
 
 The repository-surface rebrand checks are recorded in
 [`evidence/2026-08-05-gkx-2.0-repository-verification.md`](evidence/2026-08-05-gkx-2.0-repository-verification.md).
-Runtime validation is completed only against the final 2.0.0 implementation
+Runtime validation is completed only against the final 2.0.1 implementation
 tree.

@@ -1,3 +1,5 @@
 dist/gkos-agent-*
 dist/sea-config.json
 dist/sea-prep.blob
+**/__pycache__/
+**/*.py[cod]

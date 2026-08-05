@@ -1,10 +1,10 @@
 # GKOS-Engine
 
-**GKOS-Engine 2.0.0** is the canonical deterministic engine for **GKX 2.0**.
+**GKOS-Engine 2.0.1** is the canonical deterministic engine for **GKX 2.0**.
 It parses, validates, projects, assesses, graphs, and exports governed knowledge
 records under GKOS governance.
 
-Version 2.0.0 is a breaking release. It uses the GKX namespace throughout:
+Version 2.0 is a breaking release line. It uses the GKX namespace throughout:
 `gkx_version`, `.gkx/`, `GKX-*` diagnostics, `gkx` commands, and `Gkx*` public
 APIs. No former command, field, path, diagnostic, or API aliases are supported.
 
@@ -110,7 +110,7 @@ The `gkx` binary runs the engine over a folder of Markdown records. Run
 Every command embeds a deterministic `build:` block in its output:
 
 ```json
-{ "engine_version": "2.0.0",
+{ "engine_version": "2.0.1",
   "policy_hash": "sha256:…",
   "corpus_hash": "…",
   "generated_at": "2026-08-05T…Z" }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1
+
+- Excluded generated Python bytecode and cache directories from the npm
+  package after 2.0.0 exposed them during publication-time sidecar testing.
+- No runtime or GKX contract changes from 2.0.0.
+
 ## 2.0.0
 
 - **Breaking rebrand:** the schema and runtime surface use the GKX namespace.
