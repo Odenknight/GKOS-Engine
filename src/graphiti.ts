@@ -172,16 +172,42 @@ function sagaFor(node: GkxNode): { id: string; kind: string } | null {
   return null;
 }
 
+function graphitiObjectRef(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const raw = value.trim();
+  if (!raw || /[\u0000-\u001f\u007f]/.test(raw)) return null;
+
+  // Never turn a serialized mapping fragment into a graph node. This catches
+  // Python/JSON-shaped values such as "{'target': '[[Note" that leaked through
+  // permissive YAML or legacy metadata parsing as a plain string.
+  if (/^[{[]\s*['"]?(?:target|target_uid|uid)['"]?\s*:/i.test(raw)) return null;
+
+  const hasWikiSyntax = raw.includes("[[") || raw.includes("]]");
+  if (hasWikiSyntax) {
+    const wiki = /^\[\[([^\]\r\n]+)\]\]$/.exec(raw);
+    if (!wiki) return null;
+    const target = wiki[1].split("|")[0].split("#")[0].trim();
+    return target || null;
+  }
+
+  // Object/array delimiters are not valid canonical relationship references.
+  if (/[{}\[\]]/.test(raw)) return null;
+  return raw;
+}
+
 function effectiveRelationshipEntries(node: GkxNode): Array<{ relation: GkxRelation | string; target: string }> {
   const source = node.gkx?.projection?.effective.relationships ?? node.gkx?.relations ?? {};
   const output: Array<{ relation: GkxRelation | string; target: string }> = [];
   for (const [relation, rawTargets] of Object.entries(source)) {
     const targets = Array.isArray(rawTargets) ? rawTargets : [rawTargets];
     for (const rawTarget of targets) {
-      if (typeof rawTarget === "string") output.push({ relation, target: rawTarget });
-      else if (rawTarget && typeof rawTarget === "object" && typeof (rawTarget as any).target === "string") {
-        output.push({ relation, target: String((rawTarget as any).target) });
-      }
+      const value = typeof rawTarget === "string"
+        ? rawTarget
+        : rawTarget && typeof rawTarget === "object"
+          ? (rawTarget as any).target ?? (rawTarget as any).target_uid ?? (rawTarget as any).uid
+          : null;
+      const target = graphitiObjectRef(value);
+      if (target) output.push({ relation, target });
     }
   }
   return output.filter((item, index, all) =>

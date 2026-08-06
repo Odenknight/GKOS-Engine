@@ -111,3 +111,27 @@ test("combined extraction remains opt-in and metrics require real denominators",
   assert.equal(metrics.edgeAccuracy,1);
   assert.equal(metrics.tokenCost,0.04);
 });
+
+test("Graphiti export rejects serialized mappings and malformed wikilink object refs", () => {
+  const malformed = buildGraph([{
+    relativePath: "Malformed.md",
+    content: `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec933"
+title: Malformed
+type: note
+created_at: "2026-07-18T12:00:00.000Z"
+relationships:
+  related_to:
+    - "{'target': '[[Q - LLM Config for MacPro2013 and R720"
+    - "[[Unclosed target"
+    - "[[Valid target|alias#section]]"
+---
+Body`,
+  }], []);
+
+  const triples = buildGraphitiEpisodes(malformed).filter((episode) => episode.source === "fact_triple");
+  assert.equal(triples.length, 1);
+  assert.equal(JSON.parse(triples[0].episode_body).object_ref, "Valid target");
+  assert.ok(triples.every((episode) => !episode.episode_body.includes("{'target'")));
+});
