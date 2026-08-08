@@ -18,6 +18,29 @@ downstream products consume rather than re-vendor.
 This is an implementation, not the GKOS standard itself. The standard lives at
 [github.com/Odenknight/gkos-standard](https://github.com/Odenknight/gkos-standard).
 
+## Experimental scientific trace evaluation
+
+GKOS-Engine now exposes deterministic Scientific Research Trace Profile (SRTP)
+draft parsing, canonicalization, validation, event-chain checks, artifact
+binding, rerun comparison, assessment, and re-entry checks through the isolated
+`experimentalScience` namespace. This helps downstream products detect missing,
+replayed, duplicated, or mismatched research evidence without changing the
+default GKX pipeline.
+
+The evaluator is experimental and deliberately narrow. It evaluates structural
+evidence under stated policies; it does not execute research, decide scientific
+truth, grant authority, approve promotion, or replace expert review. Recognized
+partial or unevaluated states remain honest diagnostics rather than being
+promoted to `PASS`.
+
+The release suite exercises the experimental API, adversarial traces, and an
+exact read-only mirror of Standard catalog `SRTP-DRAFT-FIXTURES-0.1.1`, manifest
+SHA-256
+`ed9cc63b50ecf332b96c576af9139370a1c708b6145224d881cafefdde8aa651`.
+Standard owns the provisional, informative, non-normative draft; Suite stages
+proposal-only records for this evaluator, while Marshal and KRS Lite remain
+execution-evidence producers rather than Engine authority sources.
+
 ## Optional intelligence sidecar
 
 The separately installable Python service under `services/gkos-intelligence/`
