@@ -28,3 +28,6 @@ export * from "./intelligence";
 export * from "./gkx";
 export * from "./adapter";
 export * from "./graphiti-adapter";
+
+/** Non-normative draft SRTP support. It is opt-in and does not alter GKX defaults. */
+export * as experimentalScience from "./science/index";

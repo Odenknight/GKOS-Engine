@@ -147,7 +147,7 @@ export type GkxRelation =
 /** Canonical GKX data parsed from one note. */
 export interface GkxData {
   gkxVersion?: string;
-  /** Stable external identity. A valid v2.2 value is a lowercase UUIDv4. */
+  /** Stable external identity. Legacy flat GKX 2.2 records use a lowercase UUIDv4. */
   uid?: string;
   type?: string;
   title?: string;
@@ -163,7 +163,7 @@ export interface GkxData {
   supersededBy: string[];
   forkedFrom: string[];
   forkedTo: string[];
-  /** Explicit typed v2.2 relationships, kept separate from body wikilinks. */
+  /** Explicit typed relationships from legacy flat GKX 2.2 records, separate from body wikilinks. */
   relations: Partial<Record<GkxRelation, string[]>>;
   /** Titles from the footer `**Related:**` line. */
   related: string[];

@@ -71,6 +71,38 @@ import { buildGraph, buildGkx23Projection, ENGINE_VERSION } from "gkos-engine";
 
 Everything re-exported from `src/index.ts` is public surface.
 
+### Experimental scientific trace support
+
+Draft Scientific Research Trace Profile support is available only through the
+`experimentalScience` namespace. It is deterministic and offline, validates
+trace evidence and bindings, and never executes research, decides scientific
+truth, grants authority, or changes the default GKX pipeline.
+
+```js
+import { experimentalScience } from "gkos-engine";
+
+const parsed = experimentalScience.parseScientificRecord(providerJson, {
+  experimentalScienceProfile: true,
+});
+const validation = experimentalScience.validateScientificRecord(parsed, {
+  experimentalScienceProfile: true,
+});
+```
+
+`assessScientificTrace()` accepts verifier results under
+`policy.verificationEvidence`. Event-chain integrity, artifact traceability,
+and re-entry completeness remain `UNEVALUATED` until verifier evidence covers
+every corresponding record; field presence alone can never produce `PASS`.
+
+The draft identifier is not a normative GKOS profile. See
+[`docs/VERSION-PROFILE-COMPATIBILITY.md`](docs/VERSION-PROFILE-COMPATIBILITY.md)
+for the package, namespace, projection and historical-version distinctions.
+`SRTP_DRAFT_FIXTURE_BASELINE` records standard base commit `351330ce`, the
+workspace-draft catalog's exact SHA-256, catalog `SRTP-DRAFT-FIXTURES-0.1.1`,
+and its compatible version coordinates.
+The exact catalog test runs when that standard checkout is available; an absent
+catalog is skipped and remains unevaluated, never an implied pass.
+
 ### Projection options
 
 `buildGkx23Projection(raw, sourcePath, contentHash, document, options?)` accepts
