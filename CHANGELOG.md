@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.1.0
+
+- Added deterministic, source-content-read-only Navigation 1.0 discovery, classification,
+  candidates/manifests, semantic and text diff, audit, authorized context packs,
+  incremental invalidation, re-entry planning, and bounded supersession evaluation.
+- Added explicit append-only, optimistic, idempotent, receipt-bound Governance Store
+  interfaces and an in-memory test adapter.
+- Added `./navigation` and `./governance` exports and non-mutating `gkx nav`
+  commands. Source writes, applies, deletes, and records are rejected.
+- Declared the integration-only, non-qualifying Navigation evidence boundary.
+- Changed the Navigation-enabled MOC convention to the canonical five only:
+  `index`, `_index`, `readme`, `moc`, and `contents`. The former heuristic names
+  `home`, `map`, `overview`, `dashboard`, `start`, and `toc` are now flagged and
+  require human-governed promotion. This can be projection-observable for
+  consumers that enable Navigation; non-Navigation behavior is unchanged.
+- Added bounded, attenuated, expiring supersession evaluation with a
+  three-state deterministic predicate, escalation-only checker, append-only
+  deferred review, and affected-grant overdue freeze.
+- Deferred NAV-002, the undefined Walk Test, and all source-content mutation to
+  a separately reviewed future write executor.
+
 ## 2.0.1
 
 - Excluded generated Python bytecode and cache directories from the npm

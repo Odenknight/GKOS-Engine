@@ -1,11 +1,38 @@
 # GKOS-Engine traceability
 
-**Code line:** GKOS-Engine 2.0.1
+**Code line:** GKOS-Engine 2.1.0
 
-**Package metadata:** `2.0.1`; intended signed tag `v2.0.1`
+**Package metadata:** `2.1.0`; release target `v2.1.0`
 
-**Standard target:** GKOS v0.77 authorized developmental publication;
-non-consensus.
+**Standard traceability:** active IDs at pinned commit
+`f3a3a1695263f162d2660b0f7b37116bba7db12e`; implementation evidence only.
+
+## Navigation 2.1 / R15 mapping
+
+| Active requirement ID | Non-normative Engine evidence |
+| --- | --- |
+| `GKOS-RECEIPT-001` | `src/governance/types.ts`, `src/governance/state-change-receipt.ts`; receipt-role binding tests |
+| `GKOS-RECEIPT-002` | `src/governance/store.ts`; fail-closed durability and optimistic-precondition tests |
+| `GKOS-RECEIPT-003` | `src/governance/store.ts`; idempotent replay and conflicting-operation tests |
+| `GKOS-POLICY-001` | Versioned Navigation configuration, delegation predicate, review, and retention policy references |
+| `GKOS-RETENTION-001` | `src/navigation/delegation.ts`; evaluation-only hold boundary, with no disposition API |
+| `GKOS-RETENTION-002` | Mandatory unavailable or indeterminate hold evaluation blocks and routes review |
+| `GKOS-RETENTION-003` | Capability and CLI gates make archive deletion unavailable in 2.1.0 |
+| `GKOS-REENTRY-001` | `src/navigation/reentry.ts`; every re-entry result is a distinct Layer-1 source proposal |
+| `GKOS-REENTRY-002` | Exact predecessor identity/version/digest is context only; no standing is inherited |
+| `GKOS-REENTRY-003` | Supersession has an effect only after an explicit declaration request |
+| `GKOS-REENTRY-004` | Predecessor mutation, merging, and retention/disposition are rejected by contract and tests |
+| `GKOS-DELEGATION-001` | `src/navigation/delegation.ts`; exact actor, operation, vault, and object-class scope |
+| `GKOS-DELEGATION-002` | Child grants must be attenuated from an identified parent authority |
+| `GKOS-DELEGATION-003` | `notBefore` and expiry are enforced against an explicit evaluation time |
+| `GKOS-DELEGATION-004` | Deterministic `routine | major | indeterminate` predicate; only routine may proceed |
+| `GKOS-DELEGATION-005` | Checker input is escalation-only and has no major/indeterminate-to-routine path |
+| `GKOS-DELEGATION-006` | Append-only deferred review and affected-grant overdue freeze with bounded exception |
+
+The corresponding executable evidence is in `test/governance.test.mjs`,
+`test/navigation.test.mjs`, `test/navigation-determinism.test.mjs`, and
+`test/navigation-architecture.test.mjs`. Retention support is evaluation-only:
+the Engine implements no archive deletion or disposition API in 2.1.0.
 
 This record connects implementation behavior to the permanent GKOS requirement
 registry without treating the engine as normative. The detailed non-normative
@@ -54,5 +81,5 @@ remains `UNEVALUATED`.
 
 The repository-surface rebrand checks are recorded in
 [`evidence/2026-08-05-gkx-2.0-repository-verification.md`](evidence/2026-08-05-gkx-2.0-repository-verification.md).
-Runtime validation is completed only against the final 2.0.1 implementation
-tree.
+Release validation is recorded only against the final 2.1.0 implementation
+tree in `evidence/2026-08-16-navigation-2.1.0-verification.md`.

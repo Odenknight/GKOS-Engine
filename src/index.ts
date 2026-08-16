@@ -6,6 +6,7 @@
  */
 export * from "./types";
 export * from "./version";
+export * from "./canonical";
 export * from "./paths";
 export * from "./colors";
 export * from "./markdown";
@@ -28,6 +29,8 @@ export * from "./intelligence";
 export * from "./gkx";
 export * from "./adapter";
 export * from "./graphiti-adapter";
+export * from "./navigation/index";
+export * from "./governance/index";
 
 /** Non-normative draft SRTP support. It is opt-in and does not alter GKX defaults. */
 export * as experimentalScience from "./science/index";

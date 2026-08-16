@@ -57,6 +57,8 @@ try {
     ["src/adapter.ts", "dist/adapter.mjs"],
     ["src/gkx.ts", "dist/gkx.mjs"],
     ["src/graphiti-adapter.ts", "dist/graphiti-adapter.mjs"],
+    ["src/navigation/index.ts", "dist/navigation.mjs"],
+    ["src/governance/index.ts", "dist/governance.mjs"],
   ]) {
     writeFileSync(resolve(root, output), await bundle(entry));
     console.log(`built ${output}`);

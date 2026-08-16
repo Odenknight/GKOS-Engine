@@ -5,7 +5,7 @@
  * In particular, a GKOS-Engine release must not imply a change to a frozen
  * consumer's exact Engine pin.
  */
-export const ENGINE_VERSION = "2.0.1";
+export const ENGINE_VERSION = "2.1.0";
 export const ENGINE_NAME = "gkos-engine";
 
 /** Public GKX naming generation used by the Engine 2.x breaking namespace. */

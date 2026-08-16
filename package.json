@@ -1,7 +1,7 @@
 {
   "name": "gkos-engine",
-  "version": "2.0.1",
-  "description": "GKOS-Engine — canonical deterministic GKX engine with an optional, proposal-only DSPy intelligence sidecar; offline validation, projection, assessment, graph, and export remain authoritative.",
+  "version": "2.1.0",
+  "description": "Deterministic GKX validation, projection, graph, and source-content-read-only Navigation with explicit governance boundaries.",
   "type": "module",
   "main": "./dist/gkos-engine.mjs",
   "types": "./dist/index.d.ts",
@@ -25,6 +25,16 @@
       "types": "./dist/graphiti-adapter.d.ts",
       "import": "./dist/graphiti-adapter.mjs",
       "default": "./dist/graphiti-adapter.mjs"
+    },
+    "./navigation": {
+      "types": "./dist/navigation/index.d.ts",
+      "import": "./dist/navigation.mjs",
+      "default": "./dist/navigation.mjs"
+    },
+    "./governance": {
+      "types": "./dist/governance/index.d.ts",
+      "import": "./dist/governance.mjs",
+      "default": "./dist/governance.mjs"
     }
   },
   "bin": {
@@ -37,6 +47,16 @@
     "!dist/sea-prep.blob",
     "bin/",
     "src/",
+    "contracts/",
+    "docs/",
+    "evidence/ENGINE-NAV-CONTRACT-1.0.0.json",
+    "evidence/2026-08-16-navigation-2.1.0-verification.md",
+    "README.md",
+    "TECHNICAL_README.md",
+    "BEGINNERS_GUIDE.md",
+    "COMPAT.md",
+    "CHANGELOG.md",
+    "TRACEABILITY.md",
     "services/gkos-intelligence/",
     "!services/gkos-intelligence/**/__pycache__/**",
     "!services/gkos-intelligence/**/*.pyc",
@@ -52,6 +72,8 @@
     "prepare": "node scripts/build.mjs",
     "pretest": "node scripts/build.mjs",
     "test": "node --test \"test/*.test.mjs\"",
+    "pretest:navigation": "node scripts/build.mjs",
+    "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
     "test:intelligence": "python -m pytest services/gkos-intelligence",
     "pack:check": "node scripts/check-pack.mjs",
     "check:license": "node scripts/check-license.mjs"
