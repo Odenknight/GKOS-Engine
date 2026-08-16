@@ -42,7 +42,48 @@ const {
   isNotePath,
   shouldIgnoreVaultPath,
   stripFrontmatter,
+  discoverNavigation,
+  buildVaultNavigationConfig,
+  auditNavigation,
+  generateNavigationCandidates,
+  diffNavigation,
+  compileNavigationContext,
+  planReentry,
+  planMocNamePromotion,
 } = core;
+
+const NAV_POLICY = Object.freeze({ id: "engine.cli.public-only-discoverability", version: "1.0.0" });
+const NAV_CONFIG_ID = "018f0000-0000-7000-8000-000000000001";
+
+function frontmatterValue(content, key) {
+  const match = new RegExp(`^${key}\\s*:\\s*["']?([^"'\\r\\n#]+)`, "im").exec(content);
+  return match?.[1]?.trim();
+}
+
+async function navigationInputs(scan, vaultId) {
+  const snapshot = {
+    vaultId,
+    directories: scan.folders,
+    sources: scan.files.map((file) => ({
+      relativePath: file.relativePath,
+      content: file.content,
+      stableId: frontmatterValue(file.content, "uid"),
+      version: frontmatterValue(file.content, "gkx_version"),
+      sensitivity: frontmatterValue(file.content, "sensitivity"),
+      title: frontmatterValue(file.content, "title") ?? file.name?.replace(/\.(?:md|markdown)$/i, ""),
+    })),
+  };
+  const config = await buildVaultNavigationConfig({
+    configId: NAV_CONFIG_ID,
+    version: 1,
+    vaultId,
+    promotedMocNames: [],
+    createdAt: "2026-08-15T00:00:00Z",
+    createdBy: "tool:gkx-cli",
+    policy: NAV_POLICY,
+  });
+  return { snapshot, config };
+}
 
 /* ---------------- read-only corpus scan (same ignore rules as every surface) ---------------- */
 export async function scanCorpus(dir) {
@@ -250,27 +291,65 @@ Usage:
   gkx validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
   gkx assess   <dir> [--json]                         per-note documentation-quality scores/labels
   gkx graph    <dir> -o <graph.json> [--watch]        canonical Gkx graph (stable serialization)
-  gkx export graphiti <dir> --episodes <out.json> [--group-id <ns>]`;
+  gkx export graphiti <dir> --episodes <out.json> [--group-id <ns>]
+  gkx nav scan|audit <dir> [--json]
+  gkx nav render <dir> --stdout
+  gkx nav diff <before-dir> <after-dir>
+  gkx nav context <dir> --recipient <id> --purpose <purpose> --stdout
+  gkx nav reentry-plan --predecessor <id> --predecessor-version <v> --predecessor-digest <sha256> --input <file>
+                       --new-source-id <id> --new-source-version <v> --acquired-at <ISO-Z> --actor <id>
+  gkx nav promotion-plan --proposal-id <uuidv7> --operation-id <uuidv7> --vault-id <id>
+                         --name <name> --actor <id> --proposed-at <ISO-Z>
+
+Navigation is source-content read-only. nav write/apply/delete/record are rejected.`;
 
 function parseFlags(args) {
   const flags = new Set();
-  const opts = { o: null, episodes: null, groupId: null };
+  const opts = {
+    o: null, episodes: null, groupId: null, operationId: null, proposalId: null, vaultId: null,
+    predecessorId: null, predecessorVersion: null, predecessorDigest: null, input: null,
+    newSourceId: null, newSourceVersion: null, newSourcePath: null, acquiredAt: null,
+    actor: null, name: null, proposedAt: null, recipient: null, recipientClass: null,
+    purpose: null, itemBudget: "50", tokenBudget: "12000",
+  };
   const positional = [];
+  const unknownFlags = [];
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
     if (a === "--watch") flags.add("watch");
     else if (a === "--json") flags.add("json");
+    else if (a === "--stdout") flags.add("stdout");
     else if (a === "--help" || a === "-h") flags.add("help");
     else if (a === "-o" || a === "--out") opts.o = args[++i];
     else if (a === "--episodes") opts.episodes = args[++i];
     else if (a === "--group-id") opts.groupId = args[++i];
+    else if (a === "--operation-id") opts.operationId = args[++i];
+    else if (a === "--proposal-id") opts.proposalId = args[++i];
+    else if (a === "--vault-id") opts.vaultId = args[++i];
+    else if (a === "--predecessor" || a === "--predecessor-id") opts.predecessorId = args[++i];
+    else if (a === "--predecessor-version") opts.predecessorVersion = args[++i];
+    else if (a === "--predecessor-digest") opts.predecessorDigest = args[++i];
+    else if (a === "--input") opts.input = args[++i];
+    else if (a === "--new-source-id") opts.newSourceId = args[++i];
+    else if (a === "--new-source-version") opts.newSourceVersion = args[++i];
+    else if (a === "--new-source-path") opts.newSourcePath = args[++i];
+    else if (a === "--acquired-at") opts.acquiredAt = args[++i];
+    else if (a === "--actor") opts.actor = args[++i];
+    else if (a === "--name") opts.name = args[++i];
+    else if (a === "--proposed-at") opts.proposedAt = args[++i];
+    else if (a === "--recipient") opts.recipient = args[++i];
+    else if (a === "--recipient-class") opts.recipientClass = args[++i];
+    else if (a === "--purpose") opts.purpose = args[++i];
+    else if (a === "--item-budget") opts.itemBudget = args[++i];
+    else if (a === "--token-budget") opts.tokenBudget = args[++i];
+    else if (a.startsWith("-")) unknownFlags.push(a);
     else positional.push(a);
   }
-  return { flags, opts, positional };
+  return { flags, opts, positional, unknownFlags };
 }
 
 export async function main(argv = process.argv.slice(2)) {
-  const subcommands = new Set(["validate", "assess", "graph", "export"]);
+  const subcommands = new Set(["validate", "assess", "graph", "export", "nav"]);
   const first = argv[0];
 
   if (!first || first === "--help" || first === "-h") {
@@ -279,7 +358,8 @@ export async function main(argv = process.argv.slice(2)) {
   }
 
   if (subcommands.has(first)) {
-    const { flags, opts, positional } = parseFlags(argv.slice(1));
+    const { flags, opts, positional, unknownFlags } = parseFlags(argv.slice(1));
+    if (unknownFlags.length) { console.error(`gkx: unsupported flag(s): ${unknownFlags.join(", ")}`); return 2; }
     if (flags.has("help")) { console.log(USAGE); return 0; }
 
     if (first === "validate") {
@@ -287,6 +367,91 @@ export async function main(argv = process.argv.slice(2)) {
       const result = await runValidate(positional[0]);
       printValidate(result);
       return result.ok ? 0 : 1;
+    }
+    if (first === "nav") {
+      const action = positional.shift();
+      if (["write", "apply", "delete", "record", "archive-delete", "rollback", "moc-apply"].includes(action)) {
+        console.error(`gkx nav ${action}: rejected; Navigation 2.1 is source-content read-only`);
+        return 2;
+      }
+      if (opts.o || opts.episodes || flags.has("watch")) {
+        console.error("gkx nav: output/write/watch flags are unavailable; Navigation 2.1 commands emit plans or stdout only");
+        return 2;
+      }
+      if (action === "reentry-plan") {
+        try {
+          if (!opts.input) throw new Error("--input is required");
+          const bytes = await readFile(resolve(opts.input), "utf8");
+          const plan = await planReentry(
+            { stableId: opts.predecessorId, version: opts.predecessorVersion, digest: opts.predecessorDigest },
+            {
+              bytes,
+              sourceId: opts.newSourceId,
+              sourceVersion: opts.newSourceVersion,
+              path: opts.newSourcePath ?? opts.input,
+              acquiredAt: opts.acquiredAt,
+              acquiredBy: { id: opts.actor, class: "human" },
+              acquisitionMethod: "gkx-cli-file-read",
+            },
+            { id: "engine.reentry-plan", version: "1.0.0" },
+          );
+          console.log(JSON.stringify(plan, null, 2));
+          if (plan.status === "rejected") return 2;
+          return 0;
+        } catch (error) { console.error(`gkx nav reentry-plan: ${error.message}`); return 1; }
+      }
+      if (action === "promotion-plan") {
+        try {
+          console.log(JSON.stringify(planMocNamePromotion({
+            proposalId: opts.proposalId,
+            operationId: opts.operationId,
+            vaultId: opts.vaultId,
+            observedName: opts.name,
+            observedPaths: [],
+            proposedBy: { id: opts.actor, class: "human" },
+            proposedAt: opts.proposedAt,
+          }), null, 2));
+          return 0;
+        } catch (error) { console.error(`gkx nav promotion-plan: ${error.message}`); return 1; }
+      }
+      const dir = positional[0];
+      if (!dir) { console.error(`gkx nav ${action ?? ""}: <dir> required`); return 1; }
+      if (action === "diff") {
+        if (!positional[1]) { console.error("gkx nav diff: <before-dir> <after-dir> required"); return 1; }
+        const [before, after] = await Promise.all([scanCorpus(resolve(dir)), scanCorpus(resolve(positional[1]))]);
+        const beforeInputs = await navigationInputs(before, basename(resolve(dir)));
+        const afterInputs = await navigationInputs(after, basename(resolve(positional[1])));
+        process.stdout.write((await diffNavigation(beforeInputs.snapshot, afterInputs.snapshot)).text);
+        return 0;
+      }
+      const snapshot = await scanCorpus(resolve(dir));
+      const inputs = await navigationInputs(snapshot, basename(resolve(dir)));
+      const discovery = discoverNavigation(inputs.snapshot, inputs.config);
+      if (action === "scan") console.log(JSON.stringify(discovery, null, 2));
+      else if (action === "audit") console.log(JSON.stringify(await auditNavigation(inputs.snapshot, inputs.config), null, 2));
+      else if (action === "render") {
+        if (!flags.has("stdout")) { console.error("gkx nav render: --stdout is required; file output is unavailable in 2.1"); return 2; }
+        const result = await generateNavigationCandidates(inputs.snapshot, inputs.config);
+        console.log(JSON.stringify(result, null, 2));
+      } else if (action === "context") {
+        if (!flags.has("stdout")) { console.error("gkx nav context: --stdout is required; file output is unavailable in 2.1"); return 2; }
+        if (!opts.recipient || !opts.purpose) { console.error("gkx nav context: --recipient and --purpose are required"); return 2; }
+        const recipientClass = opts.recipientClass ?? "human";
+        if (!["human", "agent", "system", "service"].includes(recipientClass)) { console.error("gkx nav context: invalid --recipient-class"); return 2; }
+        const publicOnlyPolicy = {
+          ...NAV_POLICY,
+          canDiscover: ({ object }) => object.sensitivity === "public" ? "allow" : "deny",
+        };
+        const pack = await compileNavigationContext(inputs.snapshot, {
+          recipient: { id: opts.recipient, class: recipientClass },
+          purpose: opts.purpose,
+          itemBudget: Number(opts.itemBudget),
+          tokenBudget: Number(opts.tokenBudget),
+          generationPolicy: NAV_POLICY,
+        }, publicOnlyPolicy);
+        console.log(pack.canonicalBytes);
+      } else { console.error(`gkx nav: unknown read-only command '${action ?? ""}'`); return 1; }
+      return 0;
     }
     if (first === "assess") {
       if (!positional[0]) { console.error("gkx assess: <dir> required"); return 1; }

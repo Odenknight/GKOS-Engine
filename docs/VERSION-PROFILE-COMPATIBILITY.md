@@ -5,7 +5,8 @@ and the Engine never rewrites stored data merely to make their numbers match.
 
 | Machine value | Category | Meaning | Compatibility disposition |
 | --- | --- | --- | --- |
-| `gkos-engine` `2.0.1` | Package version | Current npm/Engine release identity. | Must match `ENGINE_VERSION` and `package.json`; no future release is preassigned. |
+| `gkos-engine` `2.1.0` | Package version | Current npm/Engine release identity. | Must match `ENGINE_VERSION` and `package.json`; no future release is preassigned. |
+| Navigation `1.0.0` | Engine integration contract | Deterministic source-content-read-only Navigation behavior. | Integration-only; not NAV-002 or a GKOS/GCP qualification profile. |
 | GKX `2.0` | Public exchange namespace | Breaking 2.x public naming generation (`gkx_version`, `.gkx/`, `GKX-*`, `Gkx*`). | Remains the public namespace; it is not a record-schema declaration. |
 | `gkx-2.0-validating-projection` | Current draft-suite projection coordinate | Projection coordinate named by `SRTP-DRAFT-0.1` in the provisional standard matrix. | Used only for draft-suite compatibility evaluation; it does not rewrite the existing Engine API. |
 | `gkx-2.3-validating-projection` | Historical Engine projection identifier | Existing serialized origin-preserving validation/assessment projection. | `GKX23_PROFILE` and stored evidence retain it; it is not silently rewritten. |

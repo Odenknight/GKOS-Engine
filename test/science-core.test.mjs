@@ -93,11 +93,11 @@ test("external actor/context bindings do not become impossible record-resolution
 });
 
 test("version/profile matrix locks distinct existing identifiers and default behavior", () => {
-  assert.equal(ENGINE_VERSION, "2.0.1");
+  assert.equal(ENGINE_VERSION, "2.1.0");
   assert.equal(GKX_PUBLIC_NAMESPACE, "2.0");
   assert.equal(GKX23_PROFILE, "gkx-2.3-validating-projection");
   assert.deepEqual(VERSION_PROFILE_COMPATIBILITY, {
-    enginePackageVersion: "2.0.1",
+    enginePackageVersion: "2.1.0",
     publicExchangeNamespace: "2.0",
     validatingProjectionProfile: "gkx-2.3-validating-projection",
     validatingProjectionApi: "buildGkx23Projection",

@@ -35,6 +35,9 @@ jobs:
       - name: Build (dist/gkos-engine.mjs)
         run: npm run build
 
+      - name: Navigation architecture and contract gates
+        run: npm run test:navigation
+
       - name: Tests
         run: npm test
 

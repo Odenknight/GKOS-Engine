@@ -14,6 +14,15 @@ import {
 import { createGkosEngineAdapter as createAdapterFromSubpath } from "gkos-engine/adapter";
 import { GKX23_PROFILE as gkxProfileFromSubpath } from "gkos-engine/gkx";
 import { buildGraphitiEpisodes as graphitiFromSubpath } from "gkos-engine/graphiti";
+import {
+  NAVIGATION_CAPABILITIES as navigationCapabilitiesFromSubpath,
+  discoverNavigation as discoverNavigationFromSubpath,
+  generateNavigationCandidates as generateNavigationCandidatesFromSubpath,
+} from "gkos-engine/navigation";
+import {
+  InMemoryGovernanceStore as GovernanceStoreFromSubpath,
+  buildStateChangeReceipt as buildStateChangeReceiptFromSubpath,
+} from "gkos-engine/governance";
 
 test("canonical GKX API is available from the engine and package subpaths", () => {
   assert.equal(GKX23_PROFILE, "gkx-2.3-validating-projection");
@@ -24,6 +33,11 @@ test("canonical GKX API is available from the engine and package subpaths", () =
   assert.equal(createAdapterFromSubpath().name, ENGINE_NAME);
   assert.equal(gkxProfileFromSubpath, GKX23_PROFILE);
   assert.equal(typeof graphitiFromSubpath, "function");
+  assert.equal(typeof discoverNavigationFromSubpath, "function");
+  assert.equal(typeof generateNavigationCandidatesFromSubpath, "function");
+  assert.equal(navigationCapabilitiesFromSubpath.navigation.source_content_write, false);
+  assert.equal(typeof GovernanceStoreFromSubpath, "function");
+  assert.equal(typeof buildStateChangeReceiptFromSubpath, "function");
 });
 
 test("downstream adapter is immutable, policy-bound, and product-neutral", () => {

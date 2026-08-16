@@ -1,8 +1,10 @@
 # GKOS-Engine
 
-**GKOS-Engine 2.0.1** is the canonical deterministic engine for **GKX 2.0**.
-It parses, validates, projects, assesses, graphs, and exports governed knowledge
-records under GKOS governance.
+**GKOS-Engine 2.1.0** is a deterministic toolkit for working with governed
+knowledge records. It parses, validates, projects, assesses, graphs, and
+exports GKX 2.0 records. Its new Navigation tools can find map-of-content
+(MOC) pages, propose consistent indexes, compare changes, audit a knowledge
+vault, assemble permission-filtered context, and plan safe re-entry.
 
 Version 2.0 is a breaking release line. It uses the GKX namespace throughout:
 `gkx_version`, `.gkx/`, `GKX-*` diagnostics, `gkx` commands, and `Gkx*` public
@@ -17,6 +19,57 @@ downstream products consume rather than re-vendor.
 
 This is an implementation, not the GKOS standard itself. The standard lives at
 [github.com/Odenknight/gkos-standard](https://github.com/Odenknight/gkos-standard).
+
+## What Navigation 2.1 does
+
+Navigation 2.1 analyzes a snapshot supplied by your application. It can:
+
+- discover and classify navigation pages;
+- generate byte-reproducible MOC candidates without applying them;
+- explain text and semantic changes, including stable-identity moves;
+- audit stale candidates, malformed markers, lineage, configuration, archive,
+  context-budget, and discoverability problems;
+- build context packs only after access policy has filtered protected objects;
+- plan a human-edited artifact as a new Layer-1 source; and
+- evaluate narrowly delegated supersession declarations without granting
+  general write authority.
+
+The five built-in MOC basenames are exactly `index`, `_index`, `readme`, `moc`,
+and `contents`. Names such as `home`, `map`, `overview`, `dashboard`, `start`,
+and `toc` are no longer silent aliases. They are reported for human review and
+can become vault-wide names only through an explicit, governed promotion.
+
+### Safety boundary
+
+Navigation is **source-content read-only**. It never rewrites, replaces,
+archives, or deletes human/source vault content. The CLI emits analysis and
+plans to stdout and has no mutation command. A host may append governance
+metadata only through an explicitly configured `GovernanceStore`, valid
+authority, optimistic preconditions, idempotency, and durable State-Change
+Receipt binding. The included in-memory store is a test adapter, not a hidden
+vault writer.
+
+Navigation Context Packs are Engine artifacts, not GKOS Layer-6 Context
+Manifests. The integration fixture pack tests Engine compatibility only and
+does not create GKOS or GCP conformance standing.
+
+### Try the read-only CLI
+
+```sh
+npm install
+npm run build
+
+node bin/gkx.mjs nav scan ./my-notes
+node bin/gkx.mjs nav audit ./my-notes
+node bin/gkx.mjs nav render ./my-notes --stdout
+node bin/gkx.mjs nav context ./my-notes \
+  --recipient alice --purpose research --stdout
+```
+
+For a first walkthrough, see [BEGINNERS_GUIDE.md](BEGINNERS_GUIDE.md). API and
+architecture details are in [TECHNICAL_README.md](TECHNICAL_README.md), with
+the normative Engine integration surface in
+[`docs/NAVIGATION-CONTRACT.md`](docs/NAVIGATION-CONTRACT.md).
 
 ## Experimental scientific trace evaluation
 
@@ -165,7 +218,7 @@ The `gkx` binary runs the engine over a folder of Markdown records. Run
 Every command embeds a deterministic `build:` block in its output:
 
 ```json
-{ "engine_version": "2.0.1",
+{ "engine_version": "2.1.0",
   "policy_hash": "sha256:…",
   "corpus_hash": "…",
   "generated_at": "2026-08-05T…Z" }

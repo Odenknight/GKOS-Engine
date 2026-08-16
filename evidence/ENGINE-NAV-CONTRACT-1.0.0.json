@@ -1,0 +1,12 @@
+{
+  "manifest_id": "ENGINE-NAV-CONTRACT-1.0.0",
+  "engine_version": "2.1.0",
+  "navigation_contract": "1.0.0",
+  "standing": "integration-only",
+  "gkos_conformance": false,
+  "qualification_profile": null,
+  "binding_mechanism": "host-supplied GovernanceStore; in-memory-test-adapter for tests only",
+  "source_content_effect": "read-only",
+  "standard_traceability_commit": "f3a3a1695263f162d2660b0f7b37116bba7db12e",
+  "deferred": ["NAV-002", "Walk Test", "source apply", "archive deletion", "locks", "rollback executor", "2.2 write executor"]
+}

@@ -11,7 +11,7 @@ export const SRTP_DRAFT_FIXTURE_BASELINE = Object.freeze({
     gkos_publication: ["GKOS-2026-08-05 v0.78"],
     gkx_namespace: ["2.0"],
     projection_profile: ["gkx-2.0-validating-projection"],
-    engine_package: ["2.0.1"],
+    engine_package: ["2.0.1", "2.1.0"],
   }),
   qualifying: false,
 });

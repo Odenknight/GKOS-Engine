@@ -1,0 +1,17 @@
+{
+  "suite": "ENGINE-NAV-CONTRACT-1.0.0",
+  "suite_version": "1.0.0",
+  "engine_version": "2.1.0",
+  "navigation_contract": "1.0.0",
+  "standing": "integration-only",
+  "gkos_conformance": false,
+  "evidence_population": "engine-implementation-tests",
+  "source_content_effect": "read-only",
+  "governance_effect": "host-adapter-append-only",
+  "fixture_manifest": "fixtures.manifest.json",
+  "standard_traceability": {
+    "standing": "informative-non-normative",
+    "pinned_commit": "f3a3a1695263f162d2660b0f7b37116bba7db12e",
+    "registry_snapshot": "standard-requirements.json"
+  }
+}
