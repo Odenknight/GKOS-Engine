@@ -12,8 +12,10 @@ const cli = resolve("bin/gkx.mjs");
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), "gkx-nav-cli-"));
   await mkdir(join(root, "topic"));
+  await mkdir(join(root, "_archive", "moc-runs", "demo"), { recursive: true });
   await writeFile(join(root, "topic", "Public.md"), "---\nuid: 123e4567-e89b-42d3-a456-426614174000\nsensitivity: public\ntitle: Public\n---\nPUBLIC-BODY\n");
   await writeFile(join(root, "topic", "Secret.md"), "---\nuid: 123e4567-e89b-42d3-a456-426614174001\nsensitivity: secret\ntitle: SECRET-TITLE\n---\nSECRET-BODY\n");
+  await writeFile(join(root, "_archive", "moc-runs", "demo", "Planted.md"), "---\nuid: 123e4567-e89b-42d3-a456-426614174002\nsensitivity: public\ntitle: ARCHIVED-TITLE\n---\nARCHIVED-LIVE-CONTEXT-BUG\n");
   return root;
 }
 
@@ -38,6 +40,7 @@ test("all nav analysis commands emit stdout and leave source bytes untouched", a
   assert.match(context.stdout, /engine\.navigation-context-pack/);
   assert.match(context.stdout, /PUBLIC-BODY/);
   assert.doesNotMatch(context.stdout, /SECRET-BODY|SECRET-TITLE/);
+  assert.doesNotMatch(context.stdout, /ARCHIVED-LIVE-CONTEXT-BUG|ARCHIVED-TITLE/);
   const diff = await exec(process.execPath, [cli, "nav", "diff", root, root]);
   assert.equal(diff.stdout, "");
   assert.deepEqual(await treeBytes(root), before);

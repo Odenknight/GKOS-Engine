@@ -1,8 +1,8 @@
-# GKOS-Engine 2.1.0 technical guide
+# GKOS-Engine 2.1.1 technical guide
 
 This document describes the Engine Navigation 1.0 implementation for library,
 platform, security, and governance integrators. The public package version is
-`2.1.0`; the Engine-owned Navigation integration contract is `1.0.0`.
+`2.1.1`; the Engine-owned Navigation integration contract is `1.0.0`.
 
 ## Scope and effect boundary
 
@@ -12,7 +12,7 @@ The release has two implemented planes and one reserved future plane:
 | --- | --- | --- |
 | NavigationCore (`src/navigation`) | Snapshot discovery, classification, candidates, diffs, audits, context, invalidation, re-entry plans, policy evaluation | Pure with respect to filesystem state; returns values only |
 | Governance (`src/governance`) | Receipt-role validation and an explicit append-only store contract | Governed metadata append through a host adapter; never source-content mutation |
-| 2.2 write executor | Candidate application, archival, locks, stale-plan checks, rollback | Not present in 2.1.0 |
+| 2.2 write executor | Candidate application, archival, locks, stale-plan checks, rollback | Not present in 2.1.1 |
 
 NavigationCore cannot transitively import `node:fs`, `node:fs/promises`, or
 `node:child_process`. A release-blocking test walks its complete local import

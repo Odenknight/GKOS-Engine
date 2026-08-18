@@ -2,6 +2,7 @@ import { canonicalJson, deepFreeze, sha256Bytes } from "../canonical";
 import { ENGINE_VERSION } from "../version";
 import { codeUnitCompare, normalizeVaultRelative, posixBasename, withoutExtension } from "../paths";
 import { canonicalNavigationSources, navigationSourceDigest } from "./determinism";
+import { shouldIgnoreNavigationArchivePath } from "./archive-ignore";
 import type {
   DiscoverabilityPolicy,
   NavigationContextEntry,
@@ -28,6 +29,7 @@ export async function compileNavigationContext(
   const allowed = [];
   for (const source of canonicalNavigationSources(snapshot)) {
     const path = normalizeVaultRelative(source.relativePath);
+    if (shouldIgnoreNavigationArchivePath(path)) continue;
     const id = source.stableId ?? `path:${path}`;
     const sensitivity = source.sensitivity ?? "secret";
     let decision: "allow" | "deny" | "indeterminate" = "indeterminate";

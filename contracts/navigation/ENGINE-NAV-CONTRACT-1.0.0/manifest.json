@@ -1,7 +1,7 @@
 {
   "suite": "ENGINE-NAV-CONTRACT-1.0.0",
   "suite_version": "1.0.0",
-  "engine_version": "2.1.0",
+  "engine_version": "2.1.1",
   "navigation_contract": "1.0.0",
   "standing": "integration-only",
   "gkos_conformance": false,

@@ -1,7 +1,7 @@
 # Beginner's guide to GKOS-Engine Navigation
 
 This guide helps you safely explore a folder of Markdown notes with
-GKOS-Engine 2.1.0. You do not need to understand GKOS layers or governance
+GKOS-Engine 2.1.1. You do not need to understand GKOS layers or governance
 internals before trying the read-only commands.
 
 ## What Navigation is

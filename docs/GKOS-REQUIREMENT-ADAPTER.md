@@ -1,6 +1,6 @@
 # GKOS requirement adapter
 
-**Implementation:** GKOS-Engine 2.1.0
+**Implementation:** GKOS-Engine 2.1.1
 
 **Authority:** The companion GKOS Standard owns requirement semantics and
 conformance status. This document is implementation evidence only.
@@ -38,7 +38,7 @@ requirements or make NAV-001/NAV-002 qualifying.
 | `GKOS-RECEIPT-002` | Only the store transitions proposed to committed at durable publication. | `src/governance/store.ts`, receipt/durability negative tests | In-memory adapter is test-only. |
 | `GKOS-RECEIPT-003` | Operation and idempotency replay produce exactly one governed effect. | `src/governance/store.ts`, replay tests | Host adapters declare their binding mechanism. |
 | `GKOS-POLICY-001` | Config, discovery, context, predicate, review, and hold behavior bind versioned policy references. | `src/navigation/types.ts`, Navigation tests | Deployment owns criteria and thresholds. |
-| `GKOS-RETENTION-001` | A deployment hold predicate can be evaluated without deleting. | `src/navigation/delegation.ts`, retention tests | Evaluation-only in 2.1.0. |
+| `GKOS-RETENTION-001` | A deployment hold predicate can be evaluated without deleting. | `src/navigation/delegation.ts`, retention tests | Evaluation-only in 2.1.1. |
 | `GKOS-RETENTION-002` | Hold, indeterminate, unavailable, and policy error block disposition and route review. | `evaluateRetentionHold`, negative tests | No retention executor. |
 | `GKOS-RETENTION-003` | Capability and CLI gates advertise and enforce no archive deletion. | `src/navigation/capabilities.ts`, CLI/architecture tests | Deletion remains future work. |
 | `GKOS-REENTRY-001` | Every accepted re-entry plan creates a distinct Layer-1 source proposal. | `src/navigation/reentry.ts`, re-entry tests | Plan only. |

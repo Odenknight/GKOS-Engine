@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.1
+
+- Fixed `gkx nav context` and `compileNavigationContext()` to
+  exclude exactly `_archive/moc-runs/**`, matching Navigation scan, candidate,
+  and contract behavior. The defect was discovered during external demo testing
+  in a live environment: Engine 2.1.0 could incorrectly serve an allowed
+  archived note as current context; affected context packs now omit it.
+
 ## 2.1.0
 
 - Added deterministic, source-content-read-only Navigation 1.0 discovery, classification,
