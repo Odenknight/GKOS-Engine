@@ -17,8 +17,19 @@ downstream products consume rather than re-vendor.
 - **Kosmos Research Studio (KRS)** consumes this package.
 - **GKOS-Engine-Lite** consumes this package.
 
-This is an implementation, not the GKOS standard itself. The standard lives at
-[github.com/Odenknight/gkos-standard](https://github.com/Odenknight/gkos-standard).
+## Relationship to GKOS
+
+GKOS-Engine 2.1.1 at this repository revision implements deterministic
+GKOS/GKX parsing, validation, assessment, graph, and projection machinery. It
+is downstream of
+[gkos-standard](https://github.com/Odenknight/gkos-standard): implementation
+behavior cannot amend the standard or create an alternate schema authority.
+
+GKOS-Engine is the standard project's reference implementation. It is not an
+independent implementation for the future second-implementation gate. Exact
+compatibility is governed by the standard's current compatibility matrix and
+the immutable release evidence cited by a specific claim; matching version
+numbers or passing this repository's tests do not establish GKOS conformance.
 
 ## What Navigation 2.1 does
 
