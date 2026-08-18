@@ -10,11 +10,11 @@
 
 ## Product integration status
 
-| Consumer | 2.1.0 status | Remaining work |
+| Consumer | 2.1.1 status | Remaining work |
 | --- | --- | --- |
 | Existing Engine API users | Backward-compatible when Navigation is not enabled | Update exact pin and rerun existing tests |
-| Kosmos-Oden / KRS | Engine capability is available; product repository is not changed by this release | Pin 2.1.0; route changes through Engine deltas; replace eleven-name heuristic only behind Navigation; add promotion UX and release note |
-| GKOS-Engine-Lite and other consumers | No polyfill is supplied | Pin 2.1.0 directly before enabling Navigation |
+| Kosmos-Oden / KRS | Engine capability is available; product repository is not changed by this release | Pin 2.1.1; route changes through Engine deltas; replace eleven-name heuristic only behind Navigation; add promotion UX and release note |
+| GKOS-Engine-Lite and other consumers | No polyfill is supplied | Pin 2.1.1 directly before enabling Navigation |
 
 Every enabling consumer must publish the exact Engine and contract versions,
 capabilities, Governance Store configuration state, unavailable write effects,

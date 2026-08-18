@@ -1,6 +1,6 @@
 # Navigation contract 1.0.0
 
-GKOS-Engine 2.1.0 exposes a pure, deterministic Navigation projection.
+GKOS-Engine 2.1.1 exposes a pure, deterministic Navigation projection.
 Identical source snapshot, configuration, policy version, Engine version,
 Navigation contract version, and explicit governed inputs produce identical
 classifications, candidate bytes, diffs, audit findings, deterministic

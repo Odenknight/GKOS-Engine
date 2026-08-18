@@ -1,8 +1,8 @@
 # GKOS-Engine traceability
 
-**Code line:** GKOS-Engine 2.1.0
+**Code line:** GKOS-Engine 2.1.1
 
-**Package metadata:** `2.1.0`; release target `v2.1.0`
+**Package metadata:** `2.1.1`; release target `v2.1.1`
 
 **Standard traceability:** active IDs at pinned commit
 `f3a3a1695263f162d2660b0f7b37116bba7db12e`; implementation evidence only.
@@ -17,7 +17,7 @@
 | `GKOS-POLICY-001` | Versioned Navigation configuration, delegation predicate, review, and retention policy references |
 | `GKOS-RETENTION-001` | `src/navigation/delegation.ts`; evaluation-only hold boundary, with no disposition API |
 | `GKOS-RETENTION-002` | Mandatory unavailable or indeterminate hold evaluation blocks and routes review |
-| `GKOS-RETENTION-003` | Capability and CLI gates make archive deletion unavailable in 2.1.0 |
+| `GKOS-RETENTION-003` | Capability and CLI gates make archive deletion unavailable in 2.1.1 |
 | `GKOS-REENTRY-001` | `src/navigation/reentry.ts`; every re-entry result is a distinct Layer-1 source proposal |
 | `GKOS-REENTRY-002` | Exact predecessor identity/version/digest is context only; no standing is inherited |
 | `GKOS-REENTRY-003` | Supersession has an effect only after an explicit declaration request |
@@ -32,7 +32,7 @@
 The corresponding executable evidence is in `test/governance.test.mjs`,
 `test/navigation.test.mjs`, `test/navigation-determinism.test.mjs`, and
 `test/navigation-architecture.test.mjs`. Retention support is evaluation-only:
-the Engine implements no archive deletion or disposition API in 2.1.0.
+the Engine implements no archive deletion or disposition API in 2.1.1.
 
 This record connects implementation behavior to the permanent GKOS requirement
 registry without treating the engine as normative. The detailed non-normative
@@ -81,5 +81,6 @@ remains `UNEVALUATED`.
 
 The repository-surface rebrand checks are recorded in
 [`evidence/2026-08-05-gkx-2.0-repository-verification.md`](evidence/2026-08-05-gkx-2.0-repository-verification.md).
-Release validation is recorded only against the final 2.1.0 implementation
-tree in `evidence/2026-08-16-navigation-2.1.0-verification.md`.
+The original Navigation release validation is recorded against the final 2.1.0
+implementation tree in `evidence/2026-08-16-navigation-2.1.0-verification.md`;
+2.1.1 adds the archive-isolation regression and release-gate evidence.

@@ -189,9 +189,10 @@ test("artifact diff reason-codes policy/config/managed/human/order changes", asy
   assert.ok(reasons.includes("MANAGED_REGION_CHANGED"));
 });
 
-test("context pack filters before aggregation, fails closed, obeys budget, and cannot claim Layer 6", async () => {
+test("context pack excludes Navigation archives before aggregation, fails closed, obeys budget, and cannot claim Layer 6", async () => {
   const input = snapshot([
     source("public.md", "public body", "public:id", { sensitivity: "public", relationships: [{ kind: "related_to", targetStableId: "secret:id" }] }),
+    source("_archive/moc-runs/demo/planted.md", "ARCHIVED-LIVE-CONTEXT-BUG", "archive:id", { sensitivity: "public", title: "ARCHIVED-TITLE" }),
     source("SECRET-PATH.md", "SECRET-BODY", "secret:id", { sensitivity: "secret", title: "SECRET-TITLE" }),
     source("missing.md", "MISSING-SENSITIVITY", "missing:id"),
   ]);
@@ -202,7 +203,7 @@ test("context pack filters before aggregation, fails closed, obeys budget, and c
   assert.equal(pack.gkos_context_manifest, false);
   assert.equal(pack.entries.length, 1);
   assert.deepEqual(pack.entries[0].relationships, []);
-  for (const marker of ["SECRET-PATH", "SECRET-BODY", "SECRET-TITLE", "secret:id", "MISSING-SENSITIVITY", "missing:id"]) assert.equal(pack.canonicalBytes.includes(marker), false, marker);
+  for (const marker of ["ARCHIVED-LIVE-CONTEXT-BUG", "ARCHIVED-TITLE", "archive:id", "SECRET-PATH", "SECRET-BODY", "SECRET-TITLE", "secret:id", "MISSING-SENSITIVITY", "missing:id"]) assert.equal(pack.canonicalBytes.includes(marker), false, marker);
   assert.equal(pack.omissions.length, 0); // denied existence is not represented as an omission
   assert.match(pack.digest, /^sha256:[0-9a-f]{64}$/);
   const reversed = await compileNavigationContext(snapshot([...input.sources].reverse()), request, policy);
