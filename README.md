@@ -1,6 +1,6 @@
 # GKOS-Engine
 
-**GKOS-Engine 2.1.0** is a deterministic toolkit for working with governed
+**GKOS-Engine 2.1.1** is a deterministic toolkit for working with governed
 knowledge records. It parses, validates, projects, assesses, graphs, and
 exports GKX 2.0 records. Its new Navigation tools can find map-of-content
 (MOC) pages, propose consistent indexes, compare changes, audit a knowledge
@@ -218,7 +218,7 @@ The `gkx` binary runs the engine over a folder of Markdown records. Run
 Every command embeds a deterministic `build:` block in its output:
 
 ```json
-{ "engine_version": "2.1.0",
+{ "engine_version": "2.1.1",
   "policy_hash": "sha256:…",
   "corpus_hash": "…",
   "generated_at": "2026-08-05T…Z" }
