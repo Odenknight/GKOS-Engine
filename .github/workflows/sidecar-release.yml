@@ -52,6 +52,52 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Verify release identity
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag_version="${GITHUB_REF_NAME#v}"
+          package_version="$(node -p "require('./package.json').version")"
+          lock_version="$(node -p "require('./package-lock.json').version")"
+          lock_root_version="$(node -p "require('./package-lock.json').packages[''].version")"
+          engine_version="$(
+            sed -n 's/^export const ENGINE_VERSION = "\([^"]*\)";$/\1/p' \
+              src/version.ts
+          )"
+          python_package_version="$(
+            sed -n 's/^version = "\([^"]*\)"$/\1/p' \
+              services/gkos-intelligence/pyproject.toml |
+            head -n 1
+          )"
+          python_program_version="$(
+            sed -n 's/^PROGRAM_VERSION = "\([^"]*\)"$/\1/p' \
+              services/gkos-intelligence/src/gkos_intelligence/__init__.py
+          )"
+          identities=(
+            "$package_version"
+            "$lock_version"
+            "$lock_root_version"
+            "$engine_version"
+            "$python_package_version"
+            "$python_program_version"
+          )
+          for identity in "${identities[@]}"; do
+            if [[ -z "$identity" || "$identity" != "$tag_version" ]]; then
+              echo "::error::release identity mismatch"
+              printf '%s\n' \
+                "tag=$tag_version" \
+                "package=$package_version" \
+                "lock=$lock_version" \
+                "lock-root=$lock_root_version" \
+                "engine=$engine_version" \
+                "python-package=$python_package_version" \
+                "python-program=$python_program_version"
+              exit 1
+            fi
+          done
+          echo "Release identity verified: $tag_version"
+
       - name: Install (clean, from lockfile)
         run: npm ci
 
