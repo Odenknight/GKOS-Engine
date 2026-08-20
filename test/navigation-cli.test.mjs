@@ -8,6 +8,7 @@ import { promisify } from "node:util";
 
 const exec = promisify(execFile);
 const cli = resolve("bin/gkx.mjs");
+const core = await import("../dist/gkos-engine.mjs");
 
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), "gkx-nav-cli-"));
@@ -44,6 +45,50 @@ test("all nav analysis commands emit stdout and leave source bytes untouched", a
   const diff = await exec(process.execPath, [cli, "nav", "diff", root, root]);
   assert.equal(diff.stdout, "");
   assert.deepEqual(await treeBytes(root), before);
+});
+
+test("nav context rejects duplicate public identities with stable code and no source metadata", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkx-nav-duplicate-"));
+  const uid = "123e4567-e89b-42d3-a456-426614174777";
+  await writeFile(join(root, "ONE-SECRET-NAME.md"), `---\nuid: ${uid}\nsensitivity: public\n---\nONE-SECRET-BODY\n`);
+  await writeFile(join(root, "TWO-SECRET-NAME.md"), `---\nuid: ${uid}\nsensitivity: public\n---\nTWO-SECRET-BODY\n`);
+  await assert.rejects(
+    exec(process.execPath, [cli, "nav", "context", root, "--recipient", "human:reader", "--purpose", "review", "--stdout"]),
+    (error) => error.code === 3
+      && /engine\.navigation-context-rejection/.test(error.stderr)
+      && /GKX-IDENTITY-003/.test(error.stderr)
+      && /GKX-IDENTITY-004/.test(error.stderr)
+      && !/SECRET-NAME|SECRET-BODY/.test(error.stderr + error.stdout),
+  );
+  const request = { recipient: { id: "human:reader", class: "human" }, purpose: "review", itemBudget: 50, tokenBudget: 12000, generationPolicy: { id: "engine.cli.public-only-discoverability", version: "1.0.0" } };
+  const policy = { ...request.generationPolicy, canDiscover: ({ object }) => object.sensitivity === "public" ? "allow" : "deny" };
+  await assert.rejects(
+    core.compileNavigationContext({ vaultId: root, sources: [
+      { relativePath: "ONE-SECRET-NAME.md", stableId: uid, sensitivity: "public", content: "ONE-SECRET-BODY\n" },
+      { relativePath: "TWO-SECRET-NAME.md", stableId: uid, sensitivity: "public", content: "TWO-SECRET-BODY\n" },
+    ] }, request, policy),
+    (error) => error.code === "NAV_CONTEXT_PROJECTION_REJECTED" && error.reasonCodes.join(",") === "GKX-IDENTITY-003,GKX-IDENTITY-004",
+  );
+});
+
+test("nav context rejects an invalid authored UID before successful projection", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkx-nav-invalid-uid-"));
+  await writeFile(join(root, "invalid.md"), "---\nuid: not-a-uuid\nsensitivity: public\n---\nbody\n");
+  await assert.rejects(
+    exec(process.execPath, [cli, "nav", "context", root, "--recipient", "human:reader", "--purpose", "review", "--stdout"]),
+    (error) => error.code === 3 && /GKX-IDENTITY-002/.test(error.stderr) && !/invalid\.md|not-a-uuid|body/.test(error.stderr + error.stdout),
+  );
+});
+
+test("recipient value alone never changes built-in public-only context eligibility", async () => {
+  const root = await fixture();
+  const outputs = [];
+  for (const recipient of ["human:alice", "human:bob"]) {
+    const result = await exec(process.execPath, [cli, "nav", "context", root, "--recipient", recipient, "--purpose", "review", "--stdout"]);
+    const parsed = JSON.parse(result.stdout);
+    outputs.push(parsed.entries.map(({ id, digest, sensitivity }) => ({ id, digest, sensitivity })));
+  }
+  assert.deepEqual(outputs[0], outputs[1]);
 });
 test("nav mutation verbs and output/write flags are rejected", async () => {
   const root = await fixture();

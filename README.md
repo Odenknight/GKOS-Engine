@@ -1,6 +1,6 @@
 # GKOS-Engine
 
-**GKOS-Engine 2.1.1** is a deterministic toolkit for working with governed
+**GKOS-Engine 2.1.2** is a deterministic toolkit for working with governed
 knowledge records. It parses, validates, projects, assesses, graphs, and
 exports GKX 2.0 records. Its new Navigation tools can find map-of-content
 (MOC) pages, propose consistent indexes, compare changes, audit a knowledge
@@ -19,7 +19,7 @@ downstream products consume rather than re-vendor.
 
 ## Relationship to GKOS
 
-GKOS-Engine 2.1.1 at this repository revision implements deterministic
+GKOS-Engine 2.1.2 at this repository revision implements deterministic
 GKOS/GKX parsing, validation, assessment, graph, and projection machinery. It
 is downstream of
 [gkos-standard](https://github.com/Odenknight/gkos-standard): implementation
@@ -52,13 +52,19 @@ can become vault-wide names only through an explicit, governed promotion.
 
 ### Safety boundary
 
-Navigation is **source-content read-only**. It never rewrites, replaces,
+GKOS Navigation 2.1 is **source-content read-only**. It never rewrites, replaces,
 archives, or deletes human/source vault content. The CLI emits analysis and
 plans to stdout and has no mutation command. A host may append governance
 metadata only through an explicitly configured `GovernanceStore`, valid
 authority, optimistic preconditions, idempotency, and durable State-Change
 Receipt binding. The included in-memory store is a test adapter, not a hidden
 vault writer.
+
+This claim is intentionally scoped. `gkx graph` writes its requested graph
+file; `gkx export graphiti` writes graph and episode files; the desktop agent
+writes its token and status files; migration/enrichment builds reviewed
+proposals and apply-plan material; and a configured Governance Store appends
+governed records. None of those surfaces is a Navigation source-vault writer.
 
 Navigation Context Packs are Engine artifacts, not GKOS Layer-6 Context
 Manifests. The integration fixture pack tests Engine compatibility only and
@@ -298,6 +304,13 @@ node scripts/build-sea.mjs
 
 There is no `--host` option: the server binds `127.0.0.1` only. Every request
 requires the bearer token generated on first run.
+
+That token protects the local HTTP transport; it is not user identity, SSO,
+tenancy, RBAC, or enterprise authorization. CORS is a browser-origin boundary
+and does not replace bearer authentication. On Linux and macOS the token is
+created with mode `0600`; Windows access follows the containing directory's
+ACL. The token is reused while its file exists and rotates when the file is
+removed and the agent restarts.
 
 ### Endpoints
 

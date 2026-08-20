@@ -50,6 +50,8 @@ const {
   compileNavigationContext,
   planReentry,
   planMocNamePromotion,
+  isValidGkxAuthoredUid,
+  NavigationContextRejectedError,
 } = core;
 
 const NAV_POLICY = Object.freeze({ id: "engine.cli.public-only-discoverability", version: "1.0.0" });
@@ -61,6 +63,8 @@ function frontmatterValue(content, key) {
 }
 
 async function navigationInputs(scan, vaultId) {
+  const { projections } = projectionsFrom(scan.files, scan.folders);
+  const diagnosticsByPath = new Map(projections.map(({ path, projection }) => [path, projection.diagnostics.map(({ code, severity }) => ({ code, severity }))]));
   const snapshot = {
     vaultId,
     directories: scan.folders,
@@ -71,6 +75,17 @@ async function navigationInputs(scan, vaultId) {
       version: frontmatterValue(file.content, "gkx_version"),
       sensitivity: frontmatterValue(file.content, "sensitivity"),
       title: frontmatterValue(file.content, "title") ?? file.name?.replace(/\.(?:md|markdown)$/i, ""),
+      diagnostics: [
+        ...(diagnosticsByPath.get(file.relativePath) ?? []),
+        ...(() => {
+          const uid = frontmatterValue(file.content, "uid");
+          const sensitivity = frontmatterValue(file.content, "sensitivity");
+          const extra = [];
+          if (uid && !isValidGkxAuthoredUid(uid)) extra.push({ code: "GKX-IDENTITY-002", severity: "error" });
+          if (sensitivity && !["public", "internal", "restricted", "confidential", "regulated", "phi", "secret"].includes(sensitivity)) extra.push({ code: "GKX-SENSITIVITY-005", severity: "error" });
+          return extra;
+        })(),
+      ],
     })),
   };
   const config = await buildVaultNavigationConfig({
@@ -442,13 +457,21 @@ export async function main(argv = process.argv.slice(2)) {
           ...NAV_POLICY,
           canDiscover: ({ object }) => object.sensitivity === "public" ? "allow" : "deny",
         };
-        const pack = await compileNavigationContext(inputs.snapshot, {
+        let pack;
+        try { pack = await compileNavigationContext(inputs.snapshot, {
           recipient: { id: opts.recipient, class: recipientClass },
           purpose: opts.purpose,
           itemBudget: Number(opts.itemBudget),
           tokenBudget: Number(opts.tokenBudget),
           generationPolicy: NAV_POLICY,
-        }, publicOnlyPolicy);
+        }, publicOnlyPolicy); }
+        catch (error) {
+          if (error instanceof NavigationContextRejectedError || error?.code === "NAV_CONTEXT_PROJECTION_REJECTED") {
+            console.error(JSON.stringify(error.rejection ?? { artifact_kind: "engine.navigation-context-rejection", status: "rejected", reason_codes: error.reasonCodes ?? [] }));
+            return 3;
+          }
+          throw error;
+        }
         console.log(pack.canonicalBytes);
       } else { console.error(`gkx nav: unknown read-only command '${action ?? ""}'`); return 1; }
       return 0;

@@ -1,8 +1,8 @@
-# GKOS-Engine 2.1.1 technical guide
+# GKOS-Engine 2.1.2 technical guide
 
 This document describes the Engine Navigation 1.0 implementation for library,
 platform, security, and governance integrators. The public package version is
-`2.1.1`; the Engine-owned Navigation integration contract is `1.0.0`.
+`2.1.2`; the Engine-owned Navigation integration contract is `1.0.0`.
 
 ## Scope and effect boundary
 
@@ -12,7 +12,7 @@ The release has two implemented planes and one reserved future plane:
 | --- | --- | --- |
 | NavigationCore (`src/navigation`) | Snapshot discovery, classification, candidates, diffs, audits, context, invalidation, re-entry plans, policy evaluation | Pure with respect to filesystem state; returns values only |
 | Governance (`src/governance`) | Receipt-role validation and an explicit append-only store contract | Governed metadata append through a host adapter; never source-content mutation |
-| 2.2 write executor | Candidate application, archival, locks, stale-plan checks, rollback | Not present in 2.1.1 |
+| 2.2 write executor | Candidate application, archival, locks, stale-plan checks, rollback | Not present in 2.1.2 |
 
 NavigationCore cannot transitively import `node:fs`, `node:fs/promises`, or
 `node:child_process`. A release-blocking test walks its complete local import
@@ -169,6 +169,15 @@ errors all suppress the source before relationships, counts, warnings,
 omissions, or budget aggregation. Relationships to suppressed objects are also
 removed. No hidden-item placeholder or tombstone policy is invented.
 
+After hidden sources disappear, the shared projection eligibility gate rejects
+the entire pack if any otherwise discoverable source has an `error` or
+`critical` diagnostic. Warnings and informational diagnostics remain
+nonblocking. The library throws `NavigationContextRejectedError`, whose
+`reasonCodes` and `rejection.reason_codes` contain stable diagnostic codes only;
+the CLI prints the same rejection and exits `3`. It does not print diagnostic
+prose or source metadata. Duplicate canonical identity is always blocking, and
+a successful pack can never contain duplicate entry IDs.
+
 The result declares:
 
 ```json
@@ -271,8 +280,52 @@ gkx nav promotion-plan --proposal-id <uuidv7> --operation-id <uuidv7>
   --vault-id <id> --name <basename> --actor <id> --proposed-at <ISO-Z>
 ```
 
-The CLI's context command intentionally uses a public-only policy. Applications
-with authenticated policy context should call the typed library API.
+The CLI's context command intentionally uses the named `public-only` policy.
+Only explicitly public sources are eligible. `--recipient` is recorded in the
+artifact but does not authenticate that recipient or grant access; changing it
+alone never changes eligibility. Enterprise authorization requires a host policy
+adapter supplied to the typed library API.
+
+A policy adapter can combine identity, group/role, purpose, and a sensitivity
+ceiling while retaining explicit deny and indeterminate outcomes:
+
+```js
+const policy = {
+  id: "enterprise:discoverability", version: "1",
+  canDiscover({ recipient, purpose, object }) {
+    const user = directory.lookup(recipient.id);       // host boundary
+    if (!user) return "indeterminate";
+    if (user.deniedObjectIds.has(object.id)) return "deny";
+    if (!user.roles.includes("researcher") || purpose !== "research") return "deny";
+    return sensitivityRank(object.sensitivity) <= sensitivityRank(user.ceiling)
+      ? "allow" : "deny";
+  },
+};
+```
+
+The Engine passes the authored/effective sensitivity to the adapter and emits it
+unchanged; an adapter decision cannot rewrite or lower the classification.
+Thrown adapter errors resolve to indeterminate and are suppressed.
+
+## Runtime, portability, and ingestion boundary
+
+The npm package declares Node `>=22 <25` and npm `>=10`. “No runtime
+dependencies” means no third-party entries in the npm `dependencies` field; it
+does not mean no platform runtime. The optional Python intelligence service is a
+separate Python 3.11+ process with its own installation and operating boundary.
+After dependencies are installed and the package is built, deterministic local
+validation, graph, Navigation, and package-library operations can run air-gapped.
+Installing/building dependencies and any external connector operation may need
+a package registry or provider network.
+
+Release CI qualifies Linux on Node 22, 23, and 24. The code and desktop tests
+also cover platform-neutral behavior and Windows-specific token documentation,
+but no universal portability claim is made beyond published release evidence.
+
+GKOS-Engine owns the provider-neutral ingestion contract documented in
+`docs/INGESTION-CONTRACT.md`. Provider connectors remain separate packages.
+This repository ships no direct Google Docs, Notion, SharePoint, or Confluence
+connector and no MCP server.
 
 ## Verification and evidence standing
 
@@ -284,8 +337,10 @@ npm run typecheck
 npm run build
 npm run test:navigation
 npm test
+npm run test:intelligence
 npm run pack:check
 npm run check:license
+npm run check:nomenclature
 ```
 
 `contracts/navigation/ENGINE-NAV-CONTRACT-1.0.0` is integration-only and sets

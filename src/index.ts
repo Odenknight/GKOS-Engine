@@ -26,6 +26,7 @@ export * from "./graphiti";
 export * from "./incremental";
 export * from "./demo";
 export * from "./intelligence";
+export * from "./ingestion";
 export * from "./gkx";
 export * from "./adapter";
 export * from "./graphiti-adapter";

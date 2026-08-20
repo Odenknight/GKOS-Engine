@@ -117,27 +117,27 @@ test("pinned R15 traceability references only active allocated identifiers", asy
 
 test("package exports and build products include Navigation, Governance, and contract pack", async () => {
   const pkg = JSON.parse(await readFile(resolve("package.json"), "utf8"));
-  assert.equal(pkg.version, "2.1.1");
+  assert.equal(pkg.version, "2.1.2");
   assert.equal(pkg.exports["./navigation"].types, "./dist/navigation/index.d.ts");
   assert.equal(pkg.exports["./governance"].types, "./dist/governance/index.d.ts");
   await Promise.all(["dist/navigation/index.d.ts", "dist/governance/index.d.ts", "dist/navigation.mjs", "dist/governance.mjs"].map((path) => readFile(resolve(path))));
 });
 
-test("2.1.1 release metadata and documentation claims are synchronized", async () => {
+test("2.1.2 release metadata and documentation claims are synchronized", async () => {
   const [pkg, lock, version, pyproject, pythonInit, readme, changelog, compat] = await Promise.all([
     readFile(resolve("package.json"), "utf8"), readFile(resolve("package-lock.json"), "utf8"),
     readFile(resolve("src/version.ts"), "utf8"), readFile(resolve("services/gkos-intelligence/pyproject.toml"), "utf8"),
     readFile(resolve("services/gkos-intelligence/src/gkos_intelligence/__init__.py"), "utf8"),
     readFile(resolve("README.md"), "utf8"), readFile(resolve("CHANGELOG.md"), "utf8"), readFile(resolve("COMPAT.md"), "utf8"),
   ]);
-  assert.equal(JSON.parse(pkg).version, "2.1.1");
-  assert.equal(JSON.parse(lock).version, "2.1.1");
-  assert.equal(JSON.parse(lock).packages[""].version, "2.1.1");
-  assert.match(version, /ENGINE_VERSION\s*=\s*"2\.1\.1"/);
-  assert.match(pyproject, /^version\s*=\s*"2\.1\.1"/m);
-  assert.match(pythonInit, /PROGRAM_VERSION\s*=\s*"2\.1\.1"/);
-  assert.match(readme, /GKOS-Engine 2\.1\.1/);
+  assert.equal(JSON.parse(pkg).version, "2.1.2");
+  assert.equal(JSON.parse(lock).version, "2.1.2");
+  assert.equal(JSON.parse(lock).packages[""].version, "2.1.2");
+  assert.match(version, /ENGINE_VERSION\s*=\s*"2\.1\.2"/);
+  assert.match(pyproject, /^version\s*=\s*"2\.1\.2"/m);
+  assert.match(pythonInit, /PROGRAM_VERSION\s*=\s*"2\.1\.2"/);
+  assert.match(readme, /GKOS-Engine 2\.1\.2/);
   assert.match(readme, /source-content read-only/);
-  assert.match(changelog, /^## 2\.1\.1$/m);
-  assert.match(compat, /2\.1\.0 \| 2\.1\.1/);
+  assert.match(changelog, /^## 2\.1\.2$/m);
+  assert.match(compat, /2\.1\.1 \| 2\.1\.2/);
 });

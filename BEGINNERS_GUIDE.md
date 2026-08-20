@@ -1,7 +1,7 @@
 # Beginner's guide to GKOS-Engine Navigation
 
 This guide helps you safely explore a folder of Markdown notes with
-GKOS-Engine 2.1.1. You do not need to understand GKOS layers or governance
+GKOS-Engine 2.1.2. You do not need to understand GKOS layers or governance
 internals before trying the read-only commands.
 
 ## What Navigation is
@@ -99,6 +99,11 @@ The CLI only allows sources whose sensitivity is explicitly `public`. Missing,
 denied, or uncertain access fails closed. Protected notes are removed before
 relationships and counts are assembled, so their existence is not indirectly
 revealed.
+
+`--recipient` is recorded for traceability. It does not log in that person or
+grant access, so changing the recipient alone cannot reveal more notes. If an
+otherwise public source has a blocking validation error, context generation
+fails closed with exit code `3` and stable reason codes.
 
 The result is a Navigation Context Pack. It is not a GKOS Context Manifest and
 does not grant Layer-6 authority.

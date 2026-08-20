@@ -1,6 +1,6 @@
 # Navigation contract 1.0.0
 
-GKOS-Engine 2.1.1 exposes a pure, deterministic Navigation projection.
+GKOS-Engine 2.1.2 exposes a pure, deterministic Navigation projection.
 Identical source snapshot, configuration, policy version, Engine version,
 Navigation contract version, and explicit governed inputs produce identical
 classifications, candidate bytes, diffs, audit findings, deterministic
@@ -32,6 +32,13 @@ Discoverability filtering occurs before projection aggregation. `deny`,
 `indeterminate`, and policy failure suppress an object and its relationships
 without placeholders or count leakage. A Navigation Context Pack always
 declares that it is not a GKOS Context Manifest.
+
+After suppression, every error or critical diagnostic on an otherwise
+discoverable source rejects the complete context pack. Warnings and information
+remain nonblocking. The machine surface reports stable reason codes, and the CLI
+uses exit code `3`; neither surface includes source metadata in the rejection.
+Duplicate canonical identity is blocking. A successful pack cannot contain two
+entries with the same ID or an identity excluded from canonical resolution.
 
 Governed metadata may change only through an explicit host-supplied Governance
 Store. The store contract is append-only, idempotent, optimistic-

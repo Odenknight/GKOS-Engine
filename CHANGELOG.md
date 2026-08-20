@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.1.2
+
+- Added a shared fail-closed validation-to-context gate. Discoverable sources
+  with error/critical diagnostics or duplicate canonical identities now reject
+  the whole pack with stable reason codes; CLI rejection exits with code 3 and
+  discloses no source metadata.
+- Documented the exact Navigation, graph/export, desktop, governance,
+  authorization, authentication, dependency, platform, connector, and MCP
+  boundaries.
+- Added the provider-neutral ingestion envelope while keeping provider SDKs,
+  credentials, and network behavior outside the deterministic core.
+- Added release-matrix coverage, desktop authentication recovery checks, and a
+  tracked-content legacy-nomenclature gate.
+
 ## 2.1.1
 
 - Fixed `gkx nav context` and `compileNavigationContext()` to

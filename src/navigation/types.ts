@@ -24,6 +24,19 @@ export interface NavigationSource {
   title?: string;
   sensitivity?: string;
   relationships?: readonly NavigationRelationship[];
+  /** Validation facts supplied by the same corpus validation pass used by the host. */
+  diagnostics?: readonly NavigationProjectionDiagnostic[];
+}
+
+export interface NavigationProjectionDiagnostic {
+  code: string;
+  severity: "info" | "warning" | "error" | "critical";
+}
+
+export interface NavigationProjectionEligibility {
+  eligible: boolean;
+  /** Stable machine codes only. Never contains source metadata or diagnostic prose. */
+  reasonCodes: string[];
 }
 
 export interface NavigationSnapshot {
@@ -219,6 +232,12 @@ export interface NavigationContextPack {
   warnings: string[];
   canonicalBytes: string;
   digest: string;
+}
+
+export interface NavigationContextRejection {
+  artifact_kind: "engine.navigation-context-rejection";
+  status: "rejected";
+  reason_codes: string[];
 }
 
 export interface ReentryPredecessorRef {

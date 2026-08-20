@@ -31,7 +31,11 @@ function materialize(file, seen = new Set()) {
   return graph;
 }
 
-test("mirrors the exact provisional standard SRTP fixture catalog when available", { skip: !existsSync(catalogPath) }, () => {
+test("mirrors the exact provisional standard SRTP fixture catalog when available", {
+  skip: !existsSync(catalogPath)
+    ? `requires external gkos-standard fixture catalog SRTP-DRAFT-FIXTURES-0.1.1 at ${catalogPath}`
+    : false,
+}, () => {
   const catalogBytes = readFileSync(catalogPath);
   const catalog = JSON.parse(catalogBytes.toString("utf8"));
   assert.equal(catalog.profile, science.SRTP_DRAFT_FIXTURE_BASELINE.profile);

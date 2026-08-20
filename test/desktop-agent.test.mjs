@@ -109,9 +109,28 @@ test("loadOrCreateToken generates a 64-hex token and reuses it on subsequent run
     assert.equal(t1, t2, "token persists across runs");
     assert.equal(readFileSync(p, "utf8").trim(), t1);
     assert.ok(statSync(p).isFile());
+    if (process.platform !== "win32") assert.equal(statSync(p).mode & 0o777, 0o600);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test("deleting the token file rotates it on recovery", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-tok-rotate-"));
+  try {
+    const p = join(dir, "desktop-agent.token");
+    const first = loadOrCreateToken(p);
+    rmSync(p);
+    const rotated = loadOrCreateToken(p);
+    assert.notEqual(rotated, first);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("server returns 401 with an incorrect bearer token", async () => {
+  await withServer(async (_server, _token, addr) => {
+    const res = await req(addr.port, "/health", { authorization: "Bearer incorrect" });
+    assert.equal(res.status, 401);
+  });
 });
 
 // ---- server: loopback bind + token gate ---------------------------------

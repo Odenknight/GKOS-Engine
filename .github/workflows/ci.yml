@@ -11,12 +11,16 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 23, 24]
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ matrix.node }}
           cache: npm
 
       - uses: actions/setup-python@v5
@@ -35,16 +39,19 @@ jobs:
       - name: Build (dist/gkos-engine.mjs)
         run: npm run build
 
+      - name: Legacy nomenclature gate (tracked and generated release content)
+        run: npm run check:nomenclature
+
       - name: Navigation architecture and contract gates
         run: npm run test:navigation
 
       - name: Tests
         run: npm test
 
-      - name: Optional intelligence contract tests
+      - name: Intelligence contract tests
         env:
           PYTHONPATH: services/gkos-intelligence/src
-        run: python -m unittest discover -s services/gkos-intelligence/tests -v
+        run: npm run test:intelligence
 
       - name: Package contents smoke test
         run: |
@@ -56,3 +63,6 @@ jobs:
         run: |
           node bin/gkx.mjs --help
           node bin/gkx.mjs assess . --json >/dev/null
+
+      - name: Clean tracked tree after release checks
+        run: git diff --exit-code

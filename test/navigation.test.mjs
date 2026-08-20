@@ -14,6 +14,8 @@ import {
   buildVaultNavigationConfig,
   classifyNavigation,
   compileNavigationContext,
+  evaluateNavigationProjectionEligibility,
+  NavigationContextRejectedError,
   createNavigationIndex,
   diffNavigation,
   diffNavigationArtifact,
@@ -208,6 +210,72 @@ test("context pack excludes Navigation archives before aggregation, fails closed
   assert.match(pack.digest, /^sha256:[0-9a-f]{64}$/);
   const reversed = await compileNavigationContext(snapshot([...input.sources].reverse()), request, policy);
   assert.equal(reversed.canonicalBytes, pack.canonicalBytes);
+});
+
+test("projection gate rejects discoverable duplicate identities deterministically without denied metadata", async () => {
+  const request = { recipient: human, purpose: "read", itemBudget: 10, tokenBudget: 10000, generationPolicy: POLICY };
+  const publicOnly = { id: "public-only", version: "1", canDiscover: ({ object }) => object.sensitivity === "public" ? "allow" : "deny" };
+  const duplicate = "018f0000-0000-7000-8000-000000000777";
+  const cases = [
+    [source("a.md", "same", duplicate, { sensitivity: "public" }), source("b.md", "same", duplicate, { sensitivity: "public" }), ["GKX-IDENTITY-003"]],
+    [source("a.md", "one", duplicate, { sensitivity: "public" }), source("b.md", "two", duplicate, { sensitivity: "public" }), ["GKX-IDENTITY-003", "GKX-IDENTITY-004"]],
+    [source("public.md", "visible", duplicate, { sensitivity: "public" }), source("HIDDEN-PATH.md", "HIDDEN-BODY", duplicate, { sensitivity: "secret", title: "HIDDEN-TITLE" }), ["GKX-IDENTITY-003", "GKX-IDENTITY-004"]],
+    [source("lineage-a.md", "same", duplicate, { sensitivity: "public", diagnostics: [{ code: "GKX-LINEAGE-001", severity: "error" }] }), source("lineage-b.md", "same", duplicate, { sensitivity: "public" }), ["GKX-IDENTITY-003", "GKX-LINEAGE-001"]],
+  ];
+  for (const [left, right, expected] of cases) {
+    const a = snapshot([left, right]);
+    const b = snapshot([right, left]);
+    assert.deepEqual(evaluateNavigationProjectionEligibility(a, request, publicOnly).reasonCodes, expected);
+    assert.deepEqual(evaluateNavigationProjectionEligibility(b, request, publicOnly).reasonCodes, expected);
+    for (const input of [a, b]) await assert.rejects(
+      compileNavigationContext(input, request, publicOnly),
+      (error) => error instanceof NavigationContextRejectedError
+        && error.exitCode === 3
+        && JSON.stringify(error.rejection) === JSON.stringify({ artifact_kind: "engine.navigation-context-rejection", status: "rejected", reason_codes: expected })
+        && !JSON.stringify(error).includes("HIDDEN"),
+    );
+  }
+});
+
+test("projection gate evaluates all blocking severities and keeps safe warnings projectable", async () => {
+  const request = { recipient: human, purpose: "read", itemBudget: 10, tokenBudget: 10000, generationPolicy: POLICY };
+  const allow = { id: "allow", version: "1", canDiscover: () => "allow" };
+  for (const [severity, eligible] of [["info", true], ["warning", true], ["error", false], ["critical", false]]) {
+    const input = snapshot([source("note.md", "body", undefined, { sensitivity: "public", diagnostics: [{ code: `TEST-${severity.toUpperCase()}`, severity }] })]);
+    assert.equal(evaluateNavigationProjectionEligibility(input, request, allow).eligible, eligible);
+    if (eligible) assert.equal((await compileNavigationContext(input, request, allow)).entries[0].id, "path:note.md");
+  }
+  for (const code of ["GKX-IDENTITY-002", "GKX-SENSITIVITY-005", "GKX-SCHEMA-004", "GKX-LINEAGE-001", "GKX-ARCHIVE-001", "GKX-CANONICAL-001", "GKX-DIGEST-001"]) {
+    const input = snapshot([source("note.md", "body", undefined, { sensitivity: "public", diagnostics: [{ code, severity: "error" }] })]);
+    assert.deepEqual(evaluateNavigationProjectionEligibility(input, request, allow), { eligible: false, reasonCodes: [code] });
+  }
+});
+
+test("policy exceptions suppress sources and adapters cannot rewrite authored sensitivity", async () => {
+  const request = { recipient: human, purpose: "read", itemBudget: 10, tokenBudget: 10000, generationPolicy: POLICY };
+  const input = snapshot([source("protected.md", "body", "protected", { sensitivity: "secret" })]);
+  const indeterminate = await compileNavigationContext(input, request, { id: "throws", version: "1", canDiscover: () => { throw new Error("provider unavailable"); } });
+  assert.equal(indeterminate.entries.length, 0);
+  const authorized = await compileNavigationContext(input, request, { id: "ceiling", version: "1", canDiscover: () => "allow" });
+  assert.equal(authorized.entries[0].sensitivity, "secret");
+  assert.equal(input.sources[0].sensitivity, "secret");
+});
+
+test("denied duplicates and archived duplicates are silent; valid path identity succeeds", async () => {
+  const request = { recipient: human, purpose: "read", itemBudget: 10, tokenBudget: 10000, generationPolicy: POLICY };
+  const publicOnly = { id: "public-only", version: "1", canDiscover: ({ object }) => object.sensitivity === "public" ? "allow" : "deny" };
+  const secretOnly = snapshot([
+    source("HIDDEN-A.md", "A", "same", { sensitivity: "secret" }),
+    source("HIDDEN-B.md", "B", "same", { sensitivity: "secret" }),
+  ]);
+  assert.equal((await compileNavigationContext(secretOnly, request, publicOnly)).canonicalBytes.includes("HIDDEN"), false);
+  const archive = snapshot([
+    source("live.md", "live", "same", { sensitivity: "public" }),
+    source("_archive/moc-runs/x/old.md", "old", "same", { sensitivity: "public" }),
+    source("path-only.md", "path", undefined, { sensitivity: "public" }),
+  ]);
+  const pack = await compileNavigationContext(archive, request, publicOnly);
+  assert.deepEqual(pack.entries.map((entry) => entry.id), ["same", "path:path-only.md"]);
 });
 
 test("audit detects stale/digest/config/archive/manifest/context and discoverability failures deterministically", async () => {

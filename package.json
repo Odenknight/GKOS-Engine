@@ -1,6 +1,6 @@
 {
   "name": "gkos-engine",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Deterministic GKX validation, projection, graph, and source-content-read-only Navigation with explicit governance boundaries.",
   "type": "module",
   "main": "./dist/gkos-engine.mjs",
@@ -51,6 +51,7 @@
     "docs/",
     "evidence/ENGINE-NAV-CONTRACT-1.0.0.json",
     "evidence/2026-08-16-navigation-2.1.0-verification.md",
+    "evidence/2026-08-20-navigation-2.1.2-corrective-verification.md",
     "README.md",
     "TECHNICAL_README.md",
     "BEGINNERS_GUIDE.md",
@@ -74,9 +75,10 @@
     "test": "node --test \"test/*.test.mjs\"",
     "pretest:navigation": "node scripts/build.mjs",
     "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
-    "test:intelligence": "python -m pytest services/gkos-intelligence",
+    "test:intelligence": "node scripts/test-intelligence.mjs",
     "pack:check": "node scripts/check-pack.mjs",
-    "check:license": "node scripts/check-license.mjs"
+    "check:license": "node scripts/check-license.mjs",
+    "check:nomenclature": "node scripts/check-nomenclature.mjs"
   },
   "license": "Apache-2.0",
   "author": "OdenKnight",
