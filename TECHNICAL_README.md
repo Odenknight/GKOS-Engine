@@ -318,9 +318,10 @@ validation, graph, Navigation, and package-library operations can run air-gapped
 Installing/building dependencies and any external connector operation may need
 a package registry or provider network.
 
-Release CI qualifies Linux on Node 22, 23, and 24. The code and desktop tests
-also cover platform-neutral behavior and Windows-specific token documentation,
-but no universal portability claim is made beyond published release evidence.
+Release CI is configured to qualify Linux on Node 22, 23, and 24. The code and
+desktop tests also cover platform-neutral behavior and Windows-specific token
+documentation, but no universal portability claim is made beyond published
+release evidence.
 
 GKOS-Engine owns the provider-neutral ingestion contract documented in
 `docs/INGESTION-CONTRACT.md`. Provider connectors remain separate packages.
