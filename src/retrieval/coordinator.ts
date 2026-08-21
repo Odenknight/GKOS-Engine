@@ -1,5 +1,5 @@
-import { lstat, readFile, realpath, stat } from "node:fs/promises";
-import { resolve, sep } from "node:path";
+import { lstat, readFile, stat } from "node:fs/promises";
+import { resolve } from "node:path";
 import { isValidRetrievalSourcePath, retrievalLineCoordinates } from "./chunker";
 import { RETRIEVAL_CONTRACT_VERSION, RETRIEVAL_MAX_RESULT_BYTES, RETRIEVAL_MMR_DEFAULT_LAMBDA, RETRIEVAL_PARENT_EXPANSION_MAX_CHILD_TOKENS, RETRIEVAL_RRF_DEFAULT_K } from "./contracts";
 import { assessRetrievalConfidence } from "./confidence";
@@ -7,6 +7,7 @@ import { retrievalCodeUnitCompare, retrievalSha256, stableJson } from "./digest"
 import { appliedFilterNames, matchesRetrievalFilters, validateRetrievalFilters } from "./filters";
 import { maximalMarginalRelevance, reciprocalRankFusion } from "./fusion";
 import { lexicalCitationSpans, lexicalQueryClauses } from "./lexical";
+import { canonicalPath, canonicalPathContains } from "./path-security";
 import { buildRetrievalGeneration, type BuiltRetrievalGeneration, type RetrievalGenerationInput, openActiveRetrievalStore, SqliteRetrievalStore } from "./sqlite-store";
 import type {
   DiscoverabilityDecision,
@@ -287,32 +288,25 @@ export async function indexRetrievalGeneration(
   }
 }
 
-function filesystemPathKey(path: string): string {
-  return process.platform === "win32" ? path.toLowerCase() : path;
-}
-
 export function vaultSourceReader(vaultRoot: string): (sourcePath: string) => Promise<Uint8Array> {
   const requestedRoot = resolve(vaultRoot);
   const rootPromise = (async () => {
-    const rootState = await lstat(requestedRoot);
+    const actualRoot = await canonicalPath(requestedRoot, { alias_error: "SOURCE_ROOT_ALIAS_REJECTED" });
+    const rootState = await lstat(actualRoot);
     if (!rootState.isDirectory() || rootState.isSymbolicLink()) throw new Error("SOURCE_ROOT_ALIAS_REJECTED");
-    const actualRoot = await realpath(requestedRoot);
-    if (filesystemPathKey(actualRoot) !== filesystemPathKey(requestedRoot)) throw new Error("SOURCE_ROOT_ALIAS_REJECTED");
     return actualRoot;
   })();
   return async (sourcePath) => {
     if (!isValidRetrievalSourcePath(sourcePath)) throw new Error("SOURCE_PATH_INVALID");
     const root = await rootPromise;
-    const path = resolve(root, sourcePath);
-    const foldedRoot = filesystemPathKey(root);
-    const foldedPath = filesystemPathKey(path);
-    if (!foldedPath.startsWith(`${foldedRoot}${sep}`)) throw new Error("SOURCE_PATH_OUTSIDE_VAULT");
-    const linkState = await lstat(path);
+    const requestedPath = resolve(root, sourcePath);
+    if (!canonicalPathContains(root, requestedPath)) throw new Error("SOURCE_PATH_OUTSIDE_VAULT");
+    const actual = await canonicalPath(requestedPath, { alias_error: "SOURCE_ALIAS_REJECTED" });
+    if (!canonicalPathContains(root, actual)) throw new Error("SOURCE_PATH_OUTSIDE_VAULT");
+    const linkState = await lstat(actual);
     if (!linkState.isFile() || linkState.isSymbolicLink()) throw new Error("SOURCE_ALIAS_REJECTED");
-    const actual = await realpath(path);
-    if (filesystemPathKey(actual) !== foldedPath) throw new Error("SOURCE_ALIAS_REJECTED");
-    if ((await stat(path)).nlink > 1) throw new Error("SOURCE_HARDLINK_REJECTED");
-    return readFile(path);
+    if ((await stat(actual)).nlink > 1) throw new Error("SOURCE_HARDLINK_REJECTED");
+    return readFile(actual);
   };
 }
 

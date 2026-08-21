@@ -1,5 +1,5 @@
 import { DatabaseSync } from "node:sqlite";
-import { chmodSync, lstatSync, mkdirSync, readFileSync, realpathSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, lstatSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, parse, resolve } from "node:path";
 import { ENGINE_VERSION } from "../version";
 import {
@@ -12,6 +12,7 @@ import { validateRetrievalChunk } from "./chunker";
 import { retrievalCanonicalDigest, retrievalCodeUnitCompare, stableJson } from "./digest";
 import { cosineSimilarity } from "./fusion";
 import { lexicalQueryClauses, lexicalScanMatches, lexicalSignal } from "./lexical";
+import { canonicalPathSync, sameCanonicalPath } from "./path-security";
 import type { RankedInput } from "./fusion";
 import type { RetrievalChunk, RetrievalProjectionManifest, SqliteLexicalBackend } from "./types";
 
@@ -165,14 +166,6 @@ function validateStateDirectory(path: string): string {
   return absolute;
 }
 
-function sameFilesystemPath(left: string, right: string): boolean {
-  const resolvedLeft = resolve(left);
-  const resolvedRight = resolve(right);
-  return process.platform === "win32"
-    ? resolvedLeft.toLowerCase() === resolvedRight.toLowerCase()
-    : resolvedLeft === resolvedRight;
-}
-
 function pathExists(path: string): boolean {
   try { lstatSync(path); return true; }
   catch (error) {
@@ -181,29 +174,19 @@ function pathExists(path: string): boolean {
   }
 }
 
-function assertExistingAncestorIsUnaliased(target: string): void {
-  let existing = resolve(target);
-  while (!pathExists(existing)) {
-    const parent = dirname(existing);
-    if (parent === existing) throw new Error("RETRIEVAL_STATE_ANCESTOR_MISSING");
-    existing = parent;
-  }
-  const link = lstatSync(existing);
-  if (!link.isDirectory() || link.isSymbolicLink() || !sameFilesystemPath(realpathSync(existing), existing)) throw new Error("RETRIEVAL_STATE_ANCESTOR_ALIAS_REJECTED");
-}
-
 function assertRealStateDirectory(directory: string): string {
-  const real = realpathSync(directory);
-  if (!sameFilesystemPath(real, directory)) throw new Error("RETRIEVAL_STATE_DIRECTORY_SYMLINK_REJECTED");
-  return real;
+  const canonical = canonicalPathSync(directory, { alias_error: "RETRIEVAL_STATE_DIRECTORY_SYMLINK_REJECTED" });
+  if (!lstatSync(canonical).isDirectory()) throw new Error("RETRIEVAL_STATE_DIRECTORY_SYMLINK_REJECTED");
+  return canonical;
 }
 
 function assertPlainContainedFile(path: string, directory: string): void {
-  if (!sameFilesystemPath(dirname(resolve(path)), directory)) throw new Error("RETRIEVAL_STATE_PATH_ESCAPE");
-  if (pathExists(path)) {
-    const link = lstatSync(path);
+  const canonical = canonicalPathSync(path, { allow_missing: true, alias_error: "RETRIEVAL_STATE_SYMLINK_REJECTED" });
+  if (!sameCanonicalPath(dirname(canonical), directory)) throw new Error("RETRIEVAL_STATE_PATH_ESCAPE");
+  if (pathExists(canonical)) {
+    const link = lstatSync(canonical);
     if (link.isSymbolicLink() || !link.isFile()) throw new Error("RETRIEVAL_STATE_SYMLINK_REJECTED");
-    if (statSync(path).nlink > 1) throw new Error("RETRIEVAL_STATE_HARDLINK_REJECTED");
+    if (statSync(canonical).nlink > 1) throw new Error("RETRIEVAL_STATE_HARDLINK_REJECTED");
   }
 }
 
@@ -529,8 +512,8 @@ export function buildRetrievalGeneration(input: RetrievalGenerationInput): Built
   // active pointer or leave a partial database behind.
   validateGenerationChunkBindings(input.chunks);
   const lexicalBackend = resolveLexicalBackend(input.lexical_backend);
-  const directory = validateStateDirectory(input.state_directory);
-  assertExistingAncestorIsUnaliased(directory);
+  const requestedDirectory = validateStateDirectory(input.state_directory);
+  const directory = canonicalPathSync(requestedDirectory, { allow_missing: true, alias_error: "RETRIEVAL_STATE_ANCESTOR_ALIAS_REJECTED" });
   mkdirSync(directory, { recursive: true, mode: 0o700 });
   assertRealStateDirectory(directory);
   hardenDirectoryPermissions(directory);
@@ -593,8 +576,7 @@ function statSafe(path: string): boolean {
 }
 
 export function openActiveRetrievalStore(stateDirectory: string): SqliteRetrievalStore {
-  const directory = validateStateDirectory(stateDirectory);
-  assertRealStateDirectory(directory);
+  const directory = assertRealStateDirectory(validateStateDirectory(stateDirectory));
   hardenDirectoryPermissions(directory);
   const pointerPath = join(directory, "active-retrieval.json");
   assertPlainContainedFile(pointerPath, directory);
@@ -606,7 +588,6 @@ export function openActiveRetrievalStore(stateDirectory: string): SqliteRetrieva
   const databasePath = join(directory, pointer.database_file);
   assertPlainContainedFile(databasePath, directory);
   hardenFilePermissions(databasePath);
-  if (!sameFilesystemPath(realpathSync(databasePath), databasePath)) throw new Error("RETRIEVAL_DATABASE_SYMLINK_REJECTED");
   const store = new SqliteRetrievalStore(databasePath);
   if (stableJson(store.manifest) !== stableJson(pointer.manifest)) { store.close(); throw new Error("RETRIEVAL_POINTER_MANIFEST_MISMATCH"); }
   return store;
@@ -616,12 +597,13 @@ export class SqliteRetrievalStore {
   readonly #database: DatabaseSync;
   readonly manifest: RetrievalProjectionManifest;
   readonly fts5_available: boolean;
-  constructor(readonly database_path: string) {
-    const databasePath = resolve(database_path);
-    if (database_path.includes("\0") || !statSafe(databasePath)) throw new Error("RETRIEVAL_DATABASE_MISSING");
+  readonly database_path: string;
+  constructor(database_path: string) {
+    if (database_path.includes("\0") || !statSafe(resolve(database_path))) throw new Error("RETRIEVAL_DATABASE_MISSING");
+    const databasePath = canonicalPathSync(database_path, { alias_error: "RETRIEVAL_DATABASE_ALIAS_REJECTED" });
+    this.database_path = databasePath;
     const link = lstatSync(databasePath);
     if (!link.isFile() || link.isSymbolicLink() || statSync(databasePath).nlink > 1) throw new Error("RETRIEVAL_DATABASE_ALIAS_REJECTED");
-    if (!sameFilesystemPath(realpathSync(databasePath), databasePath)) throw new Error("RETRIEVAL_DATABASE_ALIAS_REJECTED");
     if (pathExists(`${databasePath}-wal`) || pathExists(`${databasePath}-shm`)) throw new Error("RETRIEVAL_DATABASE_SIDECAR_REJECTED");
     hardenFilePermissions(databasePath);
     // Published generations are immutable derived artifacts.  Open them

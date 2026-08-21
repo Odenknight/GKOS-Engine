@@ -1,8 +1,9 @@
-import { access, lstat, readFile, realpath, stat } from "node:fs/promises";
+import { access, lstat, readFile, stat } from "node:fs/promises";
 import { homedir } from "node:os";
-import { dirname, isAbsolute, join, relative, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { createRerankProvider, createVectorProvider, type ProviderAdapterDependencies } from "./providers";
 import { retrievalCanonicalDigest, stableJson } from "./digest";
+import { canonicalPath, canonicalPathContains, sameCanonicalPath } from "./path-security";
 import type { RerankProvider, RerankProviderConfig, VectorProvider, VectorProviderConfig } from "./types";
 
 export const GKOS_HOST_CONFIG_VERSION = 1 as const;
@@ -245,28 +246,21 @@ export function parseGkosToml(text: string): ParsedGkosToml {
 
 async function exists(path: string): Promise<boolean> { try { await access(path); return true; } catch { return false; } }
 
-const samePath = (left: string, right: string): boolean => process.platform === "win32" ? left.toLowerCase() === right.toLowerCase() : left === right;
-
-function isAtOrWithinPath(candidate: string, root: string): boolean {
-  const relation = relative(resolve(root), resolve(candidate));
-  return relation === "" || (relation !== ".." && !relation.startsWith(`..${process.platform === "win32" ? "\\" : "/"}`) && !isAbsolute(relation));
-}
-
-async function readConfigBytes(path: string): Promise<string> {
+async function readConfigBytes(path: string): Promise<{ canonical_path: string; text: string }> {
   const absolute = resolve(path);
-  const link = await lstat(absolute);
-  if (!link.isFile() || link.isSymbolicLink() || link.size > 1_048_576 || (await stat(absolute)).nlink > 1) throw new Error("GKOS_CONFIG_ALIAS_OR_SIZE_REJECTED");
-  if (!samePath(await realpath(absolute), absolute)) throw new Error("GKOS_CONFIG_ALIAS_REJECTED");
-  return readFile(absolute, "utf8");
+  const canonical = await canonicalPath(absolute, { alias_error: "GKOS_CONFIG_ALIAS_REJECTED" });
+  const link = await lstat(canonical);
+  if (!link.isFile() || link.isSymbolicLink() || link.size > 1_048_576 || (await stat(canonical)).nlink > 1) throw new Error("GKOS_CONFIG_ALIAS_OR_SIZE_REJECTED");
+  return { canonical_path: canonical, text: await readFile(canonical, "utf8") };
 }
 
 async function readTrusted(path: string, provenance: TrustedConfigProvenance): Promise<TrustedGkosConfig> {
-  const absolute = resolve(path);
-  const document = parseGkosToml(await readConfigBytes(absolute));
+  const loaded = await readConfigBytes(path);
+  const document = parseGkosToml(loaded.text);
   for (const section of ["vectors", "reranker"]) {
     if (typeof document[section]?.token === "string") throw new Error("GKOS_CONFIG_LITERAL_SECRET_REJECTED");
   }
-  return { path: absolute, provenance, document, configuration_digest: retrievalCanonicalDigest(document) };
+  return { path: loaded.canonical_path, provenance, document, configuration_digest: retrievalCanonicalDigest(document) };
 }
 
 async function findWorkspaceRoot(start: string): Promise<string | undefined> {
@@ -289,8 +283,13 @@ const SAFE_VAULT_RETRIEVAL_KEYS = new Set(["parent_expansion", "parent_expansion
 
 export async function rejectUnsafeVaultConfig(vaultRoot: string, selectedTrustedPath?: string): Promise<void> {
   const candidate = resolve(vaultRoot, "gkos.toml");
-  if (!(await exists(candidate)) || (selectedTrustedPath && samePath(candidate, resolve(selectedTrustedPath)))) return;
-  const document = parseGkosToml(await readConfigBytes(candidate));
+  if (!(await exists(candidate))) return;
+  const loaded = await readConfigBytes(candidate);
+  if (selectedTrustedPath) {
+    const selected = await canonicalPath(selectedTrustedPath, { alias_error: "GKOS_CONFIG_ALIAS_REJECTED" });
+    if (sameCanonicalPath(loaded.canonical_path, selected)) return;
+  }
+  const document = parseGkosToml(loaded.text);
   for (const [section, values] of Object.entries(document)) {
     if (section === "" && Object.keys(values).every((key) => key === "config_version")) continue;
     if (section === "retrieval" && Object.keys(values).every((key) => SAFE_VAULT_RETRIEVAL_KEYS.has(key))) continue;
@@ -307,7 +306,15 @@ export async function discoverTrustedGkosConfig(options: TrustedConfigDiscoveryO
   // cannot promote its provider/service config into trusted operator config;
   // only an explicitly supplied workspace_root, explicit config, or opted-in
   // trusted CWD may do that.
-  const trustedWorkspaceConfig = workspaceConfig && (!options.vault_root || options.workspace_root || !isAtOrWithinPath(workspaceConfig, options.vault_root))
+  let workspaceInsideVault = false;
+  if (workspaceConfig && options.vault_root && !options.workspace_root) {
+    const [candidate, vault] = await Promise.all([
+      canonicalPath(workspaceConfig, { allow_missing: true, alias_error: "GKOS_CONFIG_ALIAS_REJECTED" }),
+      canonicalPath(options.vault_root, { allow_missing: true, alias_error: "GKOS_CONFIG_ALIAS_REJECTED" }),
+    ]);
+    workspaceInsideVault = canonicalPathContains(vault, candidate);
+  }
+  const trustedWorkspaceConfig = workspaceConfig && (!options.vault_root || options.workspace_root || !workspaceInsideVault)
     ? workspaceConfig
     : undefined;
   const candidates: Array<[string | undefined, TrustedConfigProvenance]> = [
