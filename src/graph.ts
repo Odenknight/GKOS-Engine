@@ -37,6 +37,28 @@ import {
   type Resolver,
 } from "./resolver";
 import { normalizeLineage, type LineageInput } from "./lineage";
+import {
+  bindGkxCanonicalCandidateLedger,
+  bindGkxLineageDeclarationReceipts,
+  type GkxCanonicalCandidateDeclarationReceipt,
+  type GkxCanonicalCandidateLedger,
+  type GkxCanonicalCandidateRecordReceipt,
+  type GkxCanonicalResolutionTierReceipt,
+  type GkxLineageDeclarationReceipt,
+} from "./lineage-receipts";
+import {
+  bindCanonicalCandidateRecord,
+  canonicalCandidateKeys,
+  canonicalCandidateRecordKey,
+  canonicalCandidateSourceSnapshot,
+} from "./canonical-candidates";
+import { canonicalSourceDeclarations } from "./canonical-declarations";
+import {
+  addCanonicalResolverCandidate,
+  canonicalLinkResolutionTiers,
+  canonicalTitleResolutionTiers,
+  createCanonicalResolverCandidateIndex,
+} from "./resolver-internal";
 import { computeTemporalState, resolveValidAt } from "./temporal";
 import type {
   GkxDiagnostics,
@@ -44,6 +66,7 @@ import type {
   GkxLink,
   GkxNode,
   GkxData,
+  GkxOrigin,
   SourceFile,
 } from "./types";
 
@@ -185,8 +208,30 @@ export function assembleGraph(
   folders: string[],
   opts: AssembleOptions = {}
 ): GkxGraph {
+  return assembleGraphCore(records, folders, opts, null);
+}
+
+/** Package-private capability path used by GkxIndex/buildGraph only. */
+export function assembleGraphWithCanonicalCandidates(
+  records: NoteRecord[],
+  candidateRecords: readonly NoteRecord[],
+  folders: string[],
+  opts: AssembleOptions = {},
+): GkxGraph {
+  return assembleGraphCore(records, folders, opts, candidateRecords);
+}
+
+function assembleGraphCore(
+  records: NoteRecord[],
+  folders: string[],
+  opts: AssembleOptions,
+  candidateRecords: readonly NoteRecord[] | null,
+): GkxGraph {
   const t0 = Date.now();
   const now = opts.now ?? t0;
+  // Capture the complete immutable candidate authority before compatibility
+  // node/path maps or graph diagnostics can collapse/mutate cross-record data.
+  const candidateLedger = candidateRecords === null ? null : buildCanonicalCandidateLedger(candidateRecords, now);
   const nodes = new Map<string, GkxNode>();
   const links: GkxLink[] = [];
   const resolver: Resolver = createResolver();
@@ -255,20 +300,33 @@ export function assembleGraph(
     const id = fileNodeId(rec.relativePath);
     const node = nodes.get(id);
     if (!node) continue;
-    const projectedRelations = rec.gkx.projection ? gkx23RelationTargets(rec.gkx.projection) : [];
-    const canonicalV23 = rec.gkx.projection?.sourceVersion === "2.3";
-    const lineageBlock = rec.gkx.projection?.authored.lineage as Record<string, unknown> | undefined;
-    const predecessor = typeof lineageBlock?.predecessor_uid === "string" ? [lineageBlock.predecessor_uid] : [];
-    const successor = typeof lineageBlock?.successor_uid === "string" ? [lineageBlock.successor_uid] : [];
+    const declarations = canonicalSourceDeclarations(rec).filter((declaration) => declaration.category === "lineage");
+    const supersedesRelations = declarations.filter((declaration) => declaration.field === "supersedes");
+    const supersededByRelations = declarations.filter((declaration) => declaration.field === "superseded_by");
     lineageInputs.push({
       id,
       label: node.label,
-      declaredSupersedes: [...(canonicalV23 ? projectedRelations.filter((r) => r.type === "supersedes" && r.origin !== "proposed").map((r) => r.target) : rec.gkx.supersedes), ...predecessor],
-      declaredSupersededBy: [...(canonicalV23 ? projectedRelations.filter((r) => r.type === "superseded_by" && r.origin !== "proposed").map((r) => r.target) : rec.gkx.supersededBy), ...successor],
+      declaredSupersedes: supersedesRelations.map((relation) => relation.target),
+      declaredSupersededBy: supersededByRelations.map((relation) => relation.target),
+      declaredSupersedesOrigins: supersedesRelations.map((relation) => relation.origin),
+      declaredSupersededByOrigins: supersededByRelations.map((relation) => relation.origin),
       validAtMs: node.validAt ? Date.parse(node.validAt) : null,
     });
   }
-  const lineage = normalizeLineage(lineageInputs, (ref) => uidIndex.has(ref) ? { id: uidIndex.get(ref), ambiguous: false } : resolveTitleRef(resolver, ref));
+  const lineageReceipts: GkxLineageDeclarationReceipt[] = [];
+  const lineage = normalizeLineage(
+    lineageInputs,
+    (ref) => uidIndex.has(ref) ? { id: uidIndex.get(ref), ambiguous: false } : resolveTitleRef(resolver, ref),
+    (receipt) => lineageReceipts.push({
+      source_node_id: receipt.sourceId,
+      field: receipt.field,
+      origin: receipt.origin,
+      raw_reference: receipt.rawReference,
+      resolved_node_id: receipt.resolvedId ?? null,
+      status: receipt.status,
+      duplicate: receipt.duplicate,
+    }),
+  );
 
   // Attach stable lineage diagnostics to the originating v2.3 projection.
   const recordById = new Map(records.map((rec) => [fileNodeId(rec.relativePath), rec]));
@@ -404,7 +462,7 @@ export function assembleGraph(
   };
   opts.onDiagnostics?.(diagnostics);
 
-  return {
+  const graph: GkxGraph = {
     nodes: list,
     links,
     stats: {
@@ -434,6 +492,106 @@ export function assembleGraph(
     gkxAssessments: records.flatMap((rec) => rec.gkx?.projection ? [rec.gkx.projection.assessment] : []),
     gkxDiagnostics: records.flatMap((rec) => rec.gkx?.projection?.diagnostics ?? []),
   };
+  bindGkxLineageDeclarationReceipts(graph, lineageReceipts);
+  if (candidateLedger !== null) bindGkxCanonicalCandidateLedger(graph, candidateLedger);
+  return graph;
+}
+
+function buildCanonicalCandidateLedger(
+  candidateRecords: readonly NoteRecord[],
+  now: number,
+): GkxCanonicalCandidateLedger {
+  const resolver = createCanonicalResolverCandidateIndex();
+  const uidCandidates = new Map<string, string[]>();
+  const records: GkxCanonicalCandidateRecordReceipt[] = [];
+  for (const record of candidateRecords) {
+    const recordKey = canonicalCandidateRecordKey(record);
+    const snapshot = canonicalCandidateSourceSnapshot(record);
+    addCanonicalResolverCandidate(resolver, snapshot.relative_path, recordKey, snapshot.aliases);
+    const sourceUid = snapshot.gkx?.projection?.authored.uid;
+    if (isValidGkxAuthoredUid(sourceUid)) {
+      const candidates = uidCandidates.get(sourceUid) ?? [];
+      candidates.push(recordKey);
+      uidCandidates.set(sourceUid, candidates);
+    }
+    const authoredTime = parseGkxTimestamp(snapshot.gkx);
+    const validityRecorded = authoredTime !== null || snapshot.created_time !== null || snapshot.modified_time !== null;
+    const validAtMs = validityRecorded ? resolveValidAt(
+      authoredTime,
+      snapshot.created_time ?? undefined,
+      snapshot.modified_time ?? undefined,
+      0,
+    ) : null;
+    records.push({
+      record_key: recordKey,
+      source_path: snapshot.relative_path,
+      canonical_node_id: fileNodeId(snapshot.relative_path),
+      source_uid: isValidGkxAuthoredUid(sourceUid) ? sourceUid : null,
+      valid_at: validAtMs !== null && Number.isFinite(validAtMs) ? new Date(validAtMs).toISOString() : null,
+      parser_content_fingerprint: snapshot.parser_content_fingerprint,
+      source_digest: snapshot.source_digest,
+      intrinsic_diagnostics: Object.freeze((snapshot.gkx?.projection?.diagnostics ?? []).map((diagnostic) => Object.freeze({
+        code: diagnostic.code,
+        severity: diagnostic.severity,
+        field: diagnostic.field ?? null,
+      }))),
+      snapshot,
+    });
+  }
+  for (const values of uidCandidates.values()) values.sort(codeUnitCompare);
+  const declarations: GkxCanonicalCandidateDeclarationReceipt[] = [];
+  const seenBySourceField = new Map<string, Set<string>>();
+  for (const record of [...records].sort((left, right) => codeUnitCompare(left.record_key, right.record_key))) {
+    for (const declaration of record.snapshot.declarations) {
+      const titleTiers = declaration.category === "link"
+        ? canonicalLinkResolutionTiers(resolver, record.source_path, declaration.target)
+        : canonicalTitleResolutionTiers(resolver, declaration.target);
+      const tiers: GkxCanonicalResolutionTierReceipt[] = [
+        ...(declaration.category === "link" ? [] : [{
+          basis: "uid_exact" as const,
+          candidate_record_keys: Object.freeze([...(uidCandidates.get(declaration.target) ?? [])]),
+        }]),
+        ...titleTiers.map((tier) => ({
+          basis: tier.basis,
+          candidate_record_keys: Object.freeze([...tier.candidate_keys]),
+        })),
+      ];
+      const selectedKeys = (() => {
+        for (const tier of tiers) if (tier.candidate_record_keys.length > 0) return tier.candidate_record_keys;
+        return Object.freeze([] as string[]);
+      })();
+      let globalStatus: GkxCanonicalCandidateDeclarationReceipt["global_status"] = "unresolved";
+      let resolved: string | null = null;
+      if (selectedKeys.length > 1) globalStatus = "ambiguous";
+      else if (selectedKeys.length === 1) {
+        resolved = selectedKeys[0];
+        globalStatus = resolved === record.record_key ? "self" : "resolved";
+      }
+      const seenKey = `${record.record_key}\u0001${declaration.category}\u0001${declaration.field}`;
+      const seen = seenBySourceField.get(seenKey) ?? new Set<string>();
+      const duplicate = resolved !== null && seen.has(resolved);
+      if (resolved !== null) seen.add(resolved);
+      seenBySourceField.set(seenKey, seen);
+      declarations.push({
+        source_record_key: record.record_key,
+        category: declaration.category,
+        field: declaration.field,
+        origin: declaration.origin,
+        declaration_index: declaration.declaration_index,
+        raw_reference: declaration.target,
+        resolution_tiers: Object.freeze(tiers),
+        global_status: globalStatus,
+        global_resolved_record_key: resolved,
+        global_duplicate: duplicate,
+      });
+    }
+  }
+  declarations.sort((left, right) =>
+    codeUnitCompare(left.source_record_key, right.source_record_key) ||
+    codeUnitCompare(left.category, right.category) ||
+    codeUnitCompare(left.field, right.field) ||
+    left.declaration_index - right.declaration_index);
+  return { records: records.sort((left, right) => codeUnitCompare(left.record_key, right.record_key)), declarations };
 }
 
 function graphUid(node: GkxNode | undefined): string | null {
@@ -447,6 +605,17 @@ function graphUid(node: GkxNode | undefined): string | null {
  *  projection options thread to every parseSourceFile call so a full build
  *  honors a configured defaultSensitivity; omitting them is fail-closed. */
 export function buildGraph(files: SourceFile[], folders: string[], now?: number, options: Gkx23ProjectionOptions = {}): GkxGraph {
-  const records = files.map((f) => parseSourceFile(f, options));
-  return assembleGraph(records, folders, { now });
+  const keys = canonicalCandidateKeys(files);
+  const records = files.map((file, index) => {
+    const record = parseSourceFile(file, options);
+    bindCanonicalCandidateRecord(record, keys[index], file);
+    return record;
+  });
+  const representatives = new Map<string, { key: string; record: NoteRecord }>();
+  for (const record of records) {
+    const key = canonicalCandidateRecordKey(record);
+    const prior = representatives.get(record.relativePath);
+    if (!prior || key < prior.key) representatives.set(record.relativePath, { key, record });
+  }
+  return assembleGraphWithCanonicalCandidates([...representatives.values()].map((item) => item.record), records, folders, { now });
 }

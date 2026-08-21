@@ -24,8 +24,8 @@ const FIXTURE_ROOT = resolve(
   "test/fixtures/compatibility/full-v2.1.2",
 );
 const FIXED_PROCESSING_TIME = "2026-08-20T00:00:00.000Z";
-const PHASE_1_ADDITIVE_SEARCH_HELP = `  gkx search <query> --kb-path <dir> [--limit <n>]    public-only lexical retrieval with exact citations
-             [--config <trusted-gkos.toml>] [--trust-cwd-config]
+const ADDITIVE_RETRIEVAL_SEARCH_HELP = `  gkx search <query> --kb-path <dir> [--limit <n>]    public-only lexical retrieval with exact citations
+             [--as-of <GKX-timestamp>] [--config <trusted-gkos.toml>] [--trust-cwd-config]
 `;
 const SOURCE_A = `---
 gkx_version: "2.3"
@@ -65,8 +65,8 @@ const jsonBytes = (value) =>
   Buffer.from(JSON.stringify(value, null, 2) + "\n", "utf8");
 
 function withoutPhase1SearchHelp(help) {
-  assert.equal(help.split(PHASE_1_ADDITIVE_SEARCH_HELP).length - 1, 1, "Phase 1 additive search help must occur exactly once");
-  return help.replace(PHASE_1_ADDITIVE_SEARCH_HELP, "");
+  assert.equal(help.split(ADDITIVE_RETRIEVAL_SEARCH_HELP).length - 1, 1, "additive retrieval search help must occur exactly once");
+  return help.replace(ADDITIVE_RETRIEVAL_SEARCH_HELP, "");
 }
 
 function compatibilityCorpus() {

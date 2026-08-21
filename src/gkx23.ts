@@ -10,6 +10,7 @@
 import { ENGINE_VERSION } from "./version";
 import { codeUnitCompare } from "./paths";
 import { isValidGkxTimestamp } from "./timestamps";
+import { GKX23_RELATION_TYPES } from "./gkx23-relationship-types";
 import type {
   GkxAssessment,
   GkxAssessmentScores,
@@ -68,18 +69,7 @@ const LEGACY_FIELDS = new Set([
   "forked_from", "forked_to", "forked_by", "depends_on", "derives_from",
   "contradicts", "refines", "implements", "blocks", "documents", "cites", "related_to",
 ]);
-const RELATION_TYPES = [
-  "supports", "contradicts", "depends_on", "derived_from", "derives_from", "cites",
-  "quotes", "interprets", "tests", "replicates", "fails_to_replicate", "extends",
-  "narrows", "generalizes", "implements", "governed_by", "reviewed_by", "approved_by",
-  "supersedes", "superseded_by", "related_to", "part_of", "has_part",
-  // 2026-07-27 fix: these three are valid 2.3 relations (see src/gkx.ts RELATIONS
-  // and gkos-standard schemas/gkx-common.defs.json relationType enum) and were
-  // present in LEGACY_FIELDS but missing here, so splitRelations() and the flat
-  // editable-Property loop silently DROPPED any refines/blocks/documents edge
-  // projected from a 2.3 note.
-  "refines", "blocks", "documents",
-] as const;
+const RELATION_TYPES = GKX23_RELATION_TYPES;
 const INVERSES: Record<string, string> = {
   supports: "supported_by", contradicts: "contradicted_by", depends_on: "required_by",
   derived_from: "source_of", derives_from: "source_of", cites: "cited_by", quotes: "quoted_by",

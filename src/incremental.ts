@@ -17,9 +17,22 @@
  * reports — a full rebuild, because bulk imports/deletes/renames invalidate
  * enough of the cache that diffing costs more than rebuilding.
  */
-import { assembleGraph, parseSourceFile, type NoteRecord } from "./graph";
+import { assembleGraphWithCanonicalCandidates, parseSourceFile, type NoteRecord } from "./graph";
+import {
+  bindCanonicalCandidateRecord,
+  canonicalCandidateKeys,
+  canonicalCandidateRecordDescriptor,
+  canonicalCandidateRecordKey,
+  canonicalCandidateRecordParserSignature,
+  canonicalCandidateSourceDescriptor,
+  canonicalCandidateSourceParserSignature,
+  canonicalCandidateSourceSnapshot,
+  cloneCanonicalCandidateRecord,
+  rebindRenamedCanonicalCandidateRecords,
+  validateCanonicalCandidateRecordKeys,
+} from "./canonical-candidates";
 import type { Gkx23ProjectionOptions } from "./gkx23";
-import { contentHash, normalizeVaultRelative } from "./paths";
+import { extensionFromPath, normalizeVaultRelative } from "./paths";
 import type { GraphDelta, GkxDiagnostics, GkxGraph, SourceFile } from "./types";
 
 export interface IndexChanges {
@@ -60,8 +73,18 @@ function setsDiffer(a: Set<string>, b: Set<string>): boolean {
   return false;
 }
 
+function cloneCompatibilityRecord(record: NoteRecord): NoteRecord {
+  return {
+    ...record,
+    parsed: JSON.parse(JSON.stringify(record.parsed)),
+    gkx: record.gkx === null ? null : JSON.parse(JSON.stringify(record.gkx)),
+  };
+}
+
 export class GkxIndex {
   private records = new Map<string, NoteRecord>();
+  /** Complete parser-input multiset, including equal normalized paths. */
+  private candidateRecords = new Map<string, NoteRecord>();
   private folders: string[] = [];
   private attachments: string[] = [];
   private prevSig: GraphSignature | null = null;
@@ -95,30 +118,97 @@ export class GkxIndex {
     return this.records;
   }
 
+  private rebuildDeterministicRepresentatives(): void {
+    this.records.clear();
+    const representatives = new Map<string, { key: string; record: NoteRecord }>();
+    for (const [key, record] of this.candidateRecords) {
+      const prior = representatives.get(record.relativePath);
+      if (!prior || key < prior.key) representatives.set(record.relativePath, { key, record });
+    }
+    for (const { record } of representatives.values()) {
+      this.records.set(record.relativePath, cloneCompatibilityRecord(record));
+    }
+  }
+
+  /**
+   * Publish staged compatibility records without replacing the historically
+   * live Map returned by getRecords(). All fallible parsing, validation, and
+   * graph assembly has completed before this method is called.
+   */
+  private commitCompatibilityRecords(publicRecords: Map<string, NoteRecord>): void {
+    if (this.records === publicRecords) return;
+    const stagedRecords = this.records;
+    publicRecords.clear();
+    for (const [path, record] of stagedRecords) publicRecords.set(path, record);
+    this.records = publicRecords;
+  }
+
+  private validateActiveCandidateContentBindings(): void {
+    validateCanonicalCandidateRecordKeys([...this.candidateRecords.values()]);
+    const parserFingerprintByDigest = new Map<string, string>();
+    for (const record of this.candidateRecords.values()) {
+      const snapshot = canonicalCandidateSourceSnapshot(record);
+      const priorParserFingerprint = parserFingerprintByDigest.get(snapshot.source_digest);
+      if (priorParserFingerprint !== undefined && priorParserFingerprint !== snapshot.parser_content_fingerprint) {
+        throw new Error("GKX_CANONICAL_SOURCE_DIGEST_COLLISION");
+      }
+      parserFingerprintByDigest.set(snapshot.source_digest, snapshot.parser_content_fingerprint);
+    }
+  }
+
   /** Full load: parse everything, assemble, remember signature. */
   setFiles(files: SourceFile[], folders: string[] = [], attachments: string[] = []): IndexUpdate {
     const t0 = Date.now();
-    this.records.clear();
-    for (const f of files) {
-      const rec = parseSourceFile(f, this.projectionOptions);
-      this.parseCount++;
-      this.records.set(rec.relativePath, rec);
-    }
-    this.folders = folders.slice();
-    this.attachments = attachments.slice();
-    const graph = this.assemble();
-    graph.diagnostics.lastFullBuildMs = Date.now() - t0;
-    this.prevSig = signatureOf(graph);
-    this.prevNodeMeta = this.metaOf(graph);
-    const delta: GraphDelta = {
-      addedNodes: graph.nodes.map((n) => n.id),
-      removedNodes: [],
-      changedNodes: [],
-      topologyChanged: true,
-      reparsed: files.length,
-      fullRebuild: true,
+    const priorState = {
+      candidateRecords: this.candidateRecords,
+      records: this.records,
+      folders: this.folders,
+      attachments: this.attachments,
+      prevSig: this.prevSig,
+      prevNodeMeta: this.prevNodeMeta,
+      graph: this.graph,
+      parseCount: this.parseCount,
     };
-    return { graph, delta };
+    try {
+      const candidateKeys = canonicalCandidateKeys(files);
+      this.records = new Map();
+      this.candidateRecords = new Map();
+      for (const [index, f] of files.entries()) {
+        const rec = parseSourceFile(f, this.projectionOptions);
+        bindCanonicalCandidateRecord(rec, candidateKeys[index], f);
+        this.parseCount++;
+        if (this.candidateRecords.has(candidateKeys[index])) throw new Error("GKX_CANONICAL_RECORD_KEY_DUPLICATE");
+        this.candidateRecords.set(candidateKeys[index], rec);
+      }
+      this.validateActiveCandidateContentBindings();
+      this.rebuildDeterministicRepresentatives();
+      this.folders = folders.slice();
+      this.attachments = attachments.slice();
+      const graph = this.assemble();
+      graph.diagnostics.lastFullBuildMs = Date.now() - t0;
+      this.prevSig = signatureOf(graph);
+      this.prevNodeMeta = this.metaOf(graph);
+      const delta: GraphDelta = {
+        addedNodes: graph.nodes.map((n) => n.id),
+        removedNodes: [],
+        changedNodes: [],
+        topologyChanged: true,
+        reparsed: files.length,
+        fullRebuild: true,
+      };
+      this.commitCompatibilityRecords(priorState.records);
+      return { graph, delta };
+    } catch (error) {
+      this.candidateRecords = priorState.candidateRecords;
+      this.records = priorState.records;
+      this.folders = priorState.folders;
+      this.attachments = priorState.attachments;
+      this.prevSig = priorState.prevSig;
+      this.prevNodeMeta = priorState.prevNodeMeta;
+      this.graph = priorState.graph;
+      this.parseCount = priorState.parseCount;
+      throw error;
+    }
   }
 
   /** Incremental update: parse only genuinely-changed content. */
@@ -127,6 +217,32 @@ export class GkxIndex {
     const changed = changes.changed ?? [];
     const removed = changes.removed ?? [];
     const renames = changes.renames ?? [];
+    const normalizedRenameSources = renames.map((rename) => normalizeVaultRelative(rename.from));
+    if (new Set(normalizedRenameSources).size !== normalizedRenameSources.length) {
+      throw new Error("GKX_INCREMENTAL_RENAME_SOURCE_DUPLICATE");
+    }
+    for (const rename of renames) {
+      const fromExtension = extensionFromPath(normalizeVaultRelative(rename.from)) ?? null;
+      const toExtension = extensionFromPath(normalizeVaultRelative(rename.to)) ?? null;
+      if (fromExtension !== toExtension) {
+        throw new Error("GKX_INCREMENTAL_RENAME_REPARSE_REQUIRED");
+      }
+    }
+
+    const priorState = {
+      candidateRecords: this.candidateRecords,
+      records: this.records,
+      folders: this.folders,
+      attachments: this.attachments,
+      prevSig: this.prevSig,
+      prevNodeMeta: this.prevNodeMeta,
+      graph: this.graph,
+      parseCount: this.parseCount,
+    };
+    this.candidateRecords = new Map([...priorState.candidateRecords].map(([key, record]) => [key, cloneCanonicalCandidateRecord(record)]));
+    this.records = new Map(priorState.records);
+
+    try {
 
     const touched = removed.length + changed.length + renames.length;
     const structural =
@@ -141,25 +257,100 @@ export class GkxIndex {
     // keys, then write all `to` keys. A `to` that names a path outside the
     // batch is treated as replaced — the rename wins, matching filesystem
     // rename semantics (mv overwrites its target).
-    const moves: Array<{ to: string; rec: NoteRecord }> = [];
+    const candidateMoves: Array<{ to: string; records: NoteRecord[] }> = [];
+    const renameSources = new Set(normalizedRenameSources);
     for (const r of renames) {
       const from = normalizeVaultRelative(r.from);
-      const rec = this.records.get(from);
-      if (rec) moves.push({ to: normalizeVaultRelative(r.to), rec });
+      const candidates = [...this.candidateRecords.values()].filter((candidate) => candidate.relativePath === from);
+      if (candidates.length) candidateMoves.push({ to: normalizeVaultRelative(r.to), records: candidates });
     }
-    for (const r of renames) this.records.delete(normalizeVaultRelative(r.from));
-    for (const { to, rec } of moves) this.records.set(to, { ...rec, relativePath: to });
-    for (const p of removed) this.records.delete(normalizeVaultRelative(p));
-    for (const f of changed) {
-      const path = normalizeVaultRelative(f.relativePath);
-      const prev = this.records.get(path);
-      // Hash gate: identical content (e.g. touch without edit) costs nothing.
-      if (prev && f.content != null && prev.hash === contentHash(f.content)) continue;
-      const rec = parseSourceFile(f, this.projectionOptions);
-      this.parseCount++;
-      reparsed++;
-      this.records.set(path, rec);
+    for (const move of candidateMoves) {
+      for (const record of move.records) this.candidateRecords.delete(canonicalCandidateRecordKey(record));
     }
+    // A destination outside the rename-source set is replaced before all
+    // incoming groups are combined. This mirrors filesystem rename semantics
+    // without silently retaining an overwritten candidate.
+    for (const destination of new Set(candidateMoves.map((move) => move.to))) {
+      if (renameSources.has(destination)) continue;
+      for (const record of [...this.candidateRecords.values()]) {
+        if (record.relativePath === destination) this.candidateRecords.delete(canonicalCandidateRecordKey(record));
+      }
+    }
+    const movesByDestination = new Map<string, NoteRecord[]>();
+    for (const move of candidateMoves) {
+      const group = movesByDestination.get(move.to) ?? [];
+      group.push(...move.records);
+      movesByDestination.set(move.to, group);
+    }
+    for (const [destination, records] of movesByDestination) {
+      for (const record of records) record.relativePath = destination;
+      rebindRenamedCanonicalCandidateRecords(records, destination);
+      for (const record of records) {
+        const key = canonicalCandidateRecordKey(record);
+        if (this.candidateRecords.has(key)) throw new Error("GKX_CANONICAL_RECORD_KEY_DUPLICATE");
+        this.candidateRecords.set(key, record);
+      }
+    }
+    for (const p of removed) {
+      const path = normalizeVaultRelative(p);
+      for (const record of [...this.candidateRecords.values()]) {
+        if (record.relativePath === path) this.candidateRecords.delete(canonicalCandidateRecordKey(record));
+      }
+    }
+    const changedByPath = new Map<string, SourceFile[]>();
+    for (const file of changed) {
+      const path = normalizeVaultRelative(file.relativePath);
+      const group = changedByPath.get(path) ?? [];
+      group.push(file);
+      changedByPath.set(path, group);
+    }
+    for (const [path, group] of changedByPath) {
+      const previous = [...this.candidateRecords.values()].filter((record) => record.relativePath === path);
+      const incomingDescriptors = group.map(canonicalCandidateSourceDescriptor).sort();
+      const previousDescriptors = previous.map(canonicalCandidateRecordDescriptor).sort();
+      // The complete canonical parser descriptor, including source times and
+      // extension/size, gates reparsing. Content equality alone is not enough
+      // because those fields can change canonical validAt and identity bytes.
+      if (incomingDescriptors.length === previousDescriptors.length &&
+          incomingDescriptors.every((descriptor, index) => descriptor === previousDescriptors[index])) continue;
+      for (const record of previous) this.candidateRecords.delete(canonicalCandidateRecordKey(record));
+      const keys = canonicalCandidateKeys(group);
+      const reusableBySignature = new Map<string, NoteRecord[]>();
+      for (const record of previous.sort((left, right) => {
+        const leftKey = canonicalCandidateRecordKey(left);
+        const rightKey = canonicalCandidateRecordKey(right);
+        return leftKey < rightKey ? -1 : leftKey > rightKey ? 1 : 0;
+      })) {
+        const signature = canonicalCandidateRecordParserSignature(record);
+        const candidates = reusableBySignature.get(signature) ?? [];
+        candidates.push(record);
+        reusableBySignature.set(signature, candidates);
+      }
+      for (const [index, file] of group.entries()) {
+        const signature = canonicalCandidateSourceParserSignature(file);
+        const reusable = reusableBySignature.get(signature)?.shift();
+        const record = reusable === undefined
+          ? parseSourceFile(file, this.projectionOptions)
+          : {
+              ...reusable,
+              relativePath: normalizeVaultRelative(file.relativePath),
+              ext: file.extension?.toLowerCase() ?? reusable.ext,
+              size: Number(file.size ?? (file.content ?? "").length),
+              mtimeMs: file.modifiedTime,
+              btimeMs: file.createdTime,
+            };
+        bindCanonicalCandidateRecord(record, keys[index], file);
+        if (reusable === undefined) {
+          this.parseCount++;
+          reparsed++;
+        }
+        const key = canonicalCandidateRecordKey(record);
+        if (this.candidateRecords.has(key)) throw new Error("GKX_CANONICAL_RECORD_KEY_DUPLICATE");
+        this.candidateRecords.set(key, record);
+      }
+    }
+    this.validateActiveCandidateContentBindings();
+    this.rebuildDeterministicRepresentatives();
     if (changes.folders) this.folders = changes.folders.slice();
     if (changes.attachments) this.attachments = changes.attachments.slice();
 
@@ -186,7 +377,7 @@ export class GkxIndex {
     this.prevSig = sig;
     this.prevNodeMeta = meta;
 
-    return {
+    const update = {
       graph,
       delta: {
         addedNodes,
@@ -197,6 +388,19 @@ export class GkxIndex {
         fullRebuild: structural,
       },
     };
+    this.commitCompatibilityRecords(priorState.records);
+    return update;
+    } catch (error) {
+      this.candidateRecords = priorState.candidateRecords;
+      this.records = priorState.records;
+      this.folders = priorState.folders;
+      this.attachments = priorState.attachments;
+      this.prevSig = priorState.prevSig;
+      this.prevNodeMeta = priorState.prevNodeMeta;
+      this.graph = priorState.graph;
+      this.parseCount = priorState.parseCount;
+      throw error;
+    }
   }
 
   getDiagnostics(): GkxDiagnostics | null {
@@ -215,7 +419,10 @@ export class GkxIndex {
   }
 
   private assemble(): GkxGraph {
-    const graph = assembleGraph([...this.records.values()], this.folders);
+    const candidates = [...this.candidateRecords.entries()]
+      .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+      .map(([, record]) => record);
+    const graph = assembleGraphWithCanonicalCandidates([...this.records.values()], candidates, this.folders);
     graph.diagnostics.attachments = this.attachments.length;
     this.graph = graph;
     return graph;

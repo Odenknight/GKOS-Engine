@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { types as utilTypes } from "node:util";
 
 export function retrievalSha256(value: string | Uint8Array): string {
   return `sha256:${createHash("sha256").update(value).digest("hex")}`;
@@ -22,6 +23,9 @@ function assertWellFormedUtf16(value: string): void {
 }
 
 function stableJsonValue(value: unknown, ancestors: Set<object>): string {
+  if (value !== null && typeof value === "object" && utilTypes.isProxy(value)) {
+    throw new TypeError("Retrieval canonical JSON rejects proxies.");
+  }
   if (value === null || typeof value === "boolean") return JSON.stringify(value);
   if (typeof value === "string") {
     assertWellFormedUtf16(value);

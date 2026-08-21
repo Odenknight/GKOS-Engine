@@ -68,6 +68,13 @@ try {
   // outside the platform-neutral root and NavigationCore bundles.
   writeFileSync(resolve(root, "dist/retrieval.mjs"), await bundle("src/retrieval/index.ts", { platform: "node" }));
   console.log("built dist/retrieval.mjs");
+  writeFileSync(resolve(root, "dist/retrieval-host.mjs"), await bundle("src/retrieval/host.ts", { platform: "node" }));
+  console.log("built dist/retrieval-host.mjs");
+  // The CLI corpus scanner needs the same alias/reparse/8.3 semantics as the
+  // retrieval host, but legacy commands must not eagerly load node:sqlite.
+  // Keep the small filesystem boundary in its own lazily imported bundle.
+  writeFileSync(resolve(root, "dist/retrieval-path-security.mjs"), await bundle("src/retrieval/path-security.ts", { platform: "node" }));
+  console.log("built dist/retrieval-path-security.mjs");
 
   // Desktop-agent sidecar entry. Two node-platform bundles from the same
   // source: an ESM bundle for `node dist/...mjs` runs and the test suite, and

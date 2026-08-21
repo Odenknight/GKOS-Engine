@@ -21,7 +21,14 @@ export * from "./resolver";
 export * from "./lineage";
 export * from "./temporal";
 export * from "./timestamps";
-export * from "./graph";
+export {
+  fileNodeId,
+  folderNodeId,
+  parseSourceFile,
+  assembleGraph,
+  buildGraph,
+} from "./graph";
+export type { NoteRecord, AssembleOptions } from "./graph";
 export * from "./graphiti";
 export * from "./incremental";
 export * from "./demo";

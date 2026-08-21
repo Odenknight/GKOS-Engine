@@ -1,5 +1,6 @@
 import { isValidGkxAuthoredUid } from "../gkx23";
 import { normalizeVaultRelative } from "../paths";
+import { types as utilTypes } from "node:util";
 import { RETRIEVAL_CHUNKER_VERSION, RETRIEVAL_CONTRACT_VERSION, RETRIEVAL_MAX_CHUNK_BYTES, RETRIEVAL_TOKENIZER_VERSION } from "./contracts";
 import { retrievalCanonicalDigest, retrievalSha256 } from "./digest";
 import type { ChunkMarkdownInput, ChunkingOptions, RetrievalChunk, RetrievalChunkMetadata } from "./types";
@@ -248,6 +249,7 @@ function assertPlainJsonValue(value: unknown, label: string, ancestors = new Set
     return;
   }
   if (typeof value !== "object") throw new Error(`${label}_JSON_VALUE_INVALID`);
+  if (utilTypes.isProxy(value)) throw new Error(`${label}_JSON_PROXY_INVALID`);
   if (ancestors.has(value)) throw new Error(`${label}_JSON_CYCLE_INVALID`);
   ancestors.add(value);
   try {
@@ -276,10 +278,17 @@ function assertPlainJsonValue(value: unknown, label: string, ancestors = new Set
 }
 
 function assertStringArray(value: unknown, label: string): asserts value is string[] {
-  if (!Array.isArray(value) || value.some((item) => typeof item !== "string")) throw new Error(`${label}_INVALID`);
+  if (!Array.isArray(value) || utilTypes.isProxy(value)) throw new Error(`${label}_INVALID`);
+  const keys = Reflect.ownKeys(value);
+  if (keys.some((key) => typeof key !== "string" || (key !== "length" && !/^(?:0|[1-9][0-9]*)$/u.test(key))) ||
+      Object.keys(value).length !== value.length) throw new Error(`${label}_INVALID`);
+  for (let index = 0; index < value.length; index++) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+    if (!descriptor?.enumerable || !("value" in descriptor) || typeof descriptor.value !== "string") throw new Error(`${label}_INVALID`);
+  }
 }
 
-function validateChunkMetadata(value: unknown): asserts value is RetrievalChunkMetadata {
+export function validateRetrievalChunkMetadata(value: unknown): asserts value is RetrievalChunkMetadata {
   assertPlainJsonValue(value, "RETRIEVAL_CHUNK_METADATA");
   if (value === null || Array.isArray(value) || typeof value !== "object") throw new Error("RETRIEVAL_CHUNK_METADATA_INVALID");
   const metadata = value as Record<string, unknown>;
@@ -322,7 +331,7 @@ function validateChunkMarkdownInput(input: unknown): asserts input is ChunkMarkd
   for (const field of ["supersedes", "superseded_by"] as const) {
     if (record[field] !== undefined) assertStringArray(record[field], `RETRIEVAL_SOURCE_ENVELOPE_${field.toUpperCase()}`);
   }
-  if (record.metadata !== undefined) validateChunkMetadata(record.metadata);
+  if (record.metadata !== undefined) validateRetrievalChunkMetadata(record.metadata);
   // Also seal every source/top-level string to the canonical JSON data model,
   // including well-formed UTF-16 and safe numeric extension values.
   try { retrievalCanonicalDigest(record); }
@@ -330,7 +339,7 @@ function validateChunkMarkdownInput(input: unknown): asserts input is ChunkMarkd
 }
 
 export function validateRetrievalChunk(chunk: unknown): asserts chunk is RetrievalChunk {
-  if (chunk === null || Array.isArray(chunk) || typeof chunk !== "object" ||
+  if (chunk === null || Array.isArray(chunk) || typeof chunk !== "object" || utilTypes.isProxy(chunk) ||
       (Object.getPrototypeOf(chunk) !== Object.prototype && Object.getPrototypeOf(chunk) !== null)) {
     throw new Error("RETRIEVAL_CHUNK_OBJECT_INVALID");
   }
@@ -360,7 +369,7 @@ export function validateRetrievalChunk(chunk: unknown): asserts chunk is Retriev
   for (const field of ["lineage_id", "valid_from", "valid_to"] as const) {
     if (record[field] !== null && typeof record[field] !== "string") throw new Error(`RETRIEVAL_CHUNK_${field.toUpperCase()}_INVALID`);
   }
-  validateChunkMetadata(record.metadata);
+  validateRetrievalChunkMetadata(record.metadata);
   const validated = record as unknown as RetrievalChunk;
   if (!isValidGkxAuthoredUid(validated.source_id)) throw new Error("RETRIEVAL_CHUNK_SOURCE_ID_INVALID");
   if (!isValidRetrievalSourcePath(validated.source_path)) throw new Error("RETRIEVAL_CHUNK_SOURCE_PATH_INVALID");
