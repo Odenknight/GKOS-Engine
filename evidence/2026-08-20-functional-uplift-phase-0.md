@@ -12,9 +12,11 @@ Final Phase 0 state: DONE
 
 | Coordinate | Value |
 | --- | --- |
-| Full base and current HEAD | 2fbd4ec68ec825b09e5194c9878a7ae90a281392 |
+| Full implementation base | 2fbd4ec68ec825b09e5194c9878a7ae90a281392 |
+| Phase 0 implementation commit | 0bce817052a2e9fdef069b75252ab34fe11b0d10 |
 | Full package | gkos-engine 2.1.2 |
 | Full branch | codex/phase-0-recon-adrs |
+| Draft pull request | Odenknight/GKOS-Engine#25 |
 | Standard study commit | a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6 |
 | Standard publication at that commit | GKOS-2026-08-16 v0.79 |
 | GrooveSeek study commit | 313514b793d12ea5c3b8eedc32fd213212e38d75 |
@@ -22,8 +24,9 @@ Final Phase 0 state: DONE
 | Kosmos-Oden identity study commit | a7113c0ca3be8dd230a9549940e2f387d4cb2a96 |
 | Inspected Lite baseline supplied by the build packet | 2ebbf77583af3e83032054f1256188dc56376907, package 1.1.3 |
 
-No commit was created for Phase 0. The final implementation SHA is therefore
-not yet defined; the working tree remains based on the Full baseline above.
+The DCO-signed Phase 0 implementation commit was pushed only to the focused
+branch above and is under review in draft pull request 25. It has not been
+merged.
 
 ## Untouched environment and baseline
 
@@ -73,6 +76,7 @@ compatibility safety net.
 | npm run check:nomenclature | PASS; zero unapproved legacy matches |
 | npm run check:license | PASS; Apache-2.0 metadata consistent |
 | npm run pack:check | PASS; 158 files, 405728 bytes |
+| GitHub Actions CI run 32439308245 | PASS; Node 22, 23, and 24 matrix jobs all completed successfully for draft PR 25 |
 
 The test-count increase from 245 to 249 is exactly the four compatibility tests.
 No required Full test was skipped, mocked, or substituted.
@@ -292,7 +296,8 @@ a Full repository protocol.
 Until the owner supplies a stronger Full-specific authority, the conservative
 merge convention is an observed type-prefixed imperative subject plus DCO
 sign-off. This is an operational convention, not a claim that a formal
-repository protocol was verified. No commit was created or staged in Phase 0.
+repository protocol was verified. Phase 0 uses the DCO-signed subject
+`chore: establish functional uplift phase 0`.
 
 ## Compatibility safety net
 
@@ -325,11 +330,12 @@ checkout platforms.
 - No PHI-adjacent or organization-confidential content was used.
 - No source-content write surface was added.
 - No service was provisioned.
-- No branch was committed, pushed, merged, tagged, released, deployed, or
-  published.
-- The originating request's eventual push/combine-to-main authority is not
-  exercised during Phase 0; it remains conditional on completion of the whole
-  cross-repository build and every required review and qualification gate.
+- The focused Phase 0 branch was committed and pushed, and draft pull request
+  25 was opened for CI and review. It remains unmerged.
+- No tag, release, deployment, production activation, or publication occurred.
+- The originating request's eventual combine-to-main authority remains
+  conditional on completion of the whole cross-repository build and every
+  required review and qualification gate.
 - Only Phase 0 documentation, evidence, tests, and compatibility fixtures were
   added.
 
