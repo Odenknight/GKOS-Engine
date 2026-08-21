@@ -1,4 +1,4 @@
-# GKOS-Engine functional uplift — Phase 1 local verification
+# GKOS-Engine functional uplift — Phase 1 qualification evidence
 
 Date: 2026-08-21
 
@@ -7,11 +7,11 @@ Repository: Odenknight/GKOS-Engine
 Phase scope: Full TypeScript reference retrieval implementation and the
 machine-readable contract consumed by GKOS-Engine-Lite
 
-Final Phase 1 terminal state: NOT ASSIGNED. Pull request #26 exposed an
-official-Node-23 SQLite capability gap. The feature-detected compatibility
-correction and local Node 22/23/24 matrices are green, but the corrective
-follow-up commit and CI have not yet run. This record does not claim DONE,
-BLOCKED, or NEEDS_HUMAN before that publication gate.
+Final Phase 1 terminal state: **DONE**. The Full and Lite implementation
+commits are published to their focused draft pull-request branches, reciprocal
+review is complete, and every required hosted Phase 1 qualification job is
+green. This state closes implementation qualification only; neither repository
+has been merged, tagged, released, deployed, or activated in production.
 
 ## Exact implementation coordinates
 
@@ -20,18 +20,21 @@ BLOCKED, or NEEDS_HUMAN before that publication gate.
 | Original inspected Full baseline | 2fbd4ec68ec825b09e5194c9878a7ae90a281392 |
 | Phase 1 branch | codex/phase-1-retrieval-core |
 | Phase 1 base | ba918e6617ece6bb1392f6768b69d4913818035d |
-| Published Phase 1 HEAD / PR #26 head during this record | e1ee21a548b690a8afe3776817b81d2cfc31e72a |
-| Worktree disposition | Node-23 compatibility corrections are uncommitted and unstaged on top of the exact published HEAD above |
+| Final Full implementation qualification commit / draft PR #26 head | bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3 |
+| Final Lite implementation qualification commit / draft PR #16 head | 08233ffa08822a4568f89082a0fae26bdf3b01d3 |
+| Evidence-only closeout head | Not yet assigned. This file is the sole uncommitted evidence delta on top of the qualified implementation commit; any later evidence-only commit records this outcome and is not an implementation prerequisite. |
+| Worktree disposition | Qualified implementation at bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3 plus this unstaged evidence-only closeout |
 | Full package | gkos-engine 2.1.2 |
 | Node / npm | v24.18.0 / 11.16.0 |
 | Local platform | win32 x64 |
 | Standard pin inherited from Phase 0 | a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6, current publication v0.79 |
 | GrooveSeek study pin inherited from Phase 0 | 313514b793d12ea5c3b8eedc32fd213212e38d75 |
 
-There is no final corrective Phase 1 commit SHA yet. PR #26 exists at the
-published HEAD above; it has not been merged. No force-push, amend, tag,
-release, deployment, or production publication occurred during this corrective
-pass.
+The implementation qualification coordinate is permanently the Full commit
+shown above, even after a later evidence-only commit advances the branch. This
+separation avoids making the evidence commit's own unknown SHA a prerequisite
+for the qualification it records. Draft PR #26 remains open and unmerged. No
+force-push, amend, tag, release, deployment, or production publication occurred.
 
 ## Frozen contract coordinates and hashes
 
@@ -210,14 +213,64 @@ all nine revised contract hashes, TypeScript no-emit, current-runtime CLI and
 compatibility suites, and Node 23.11.1 focused retrieval/CLI at 43 passed and 0
 failed, and again returned APPROVED with no blocking, high, or medium finding.
 
-The Full owner also completed a read-only reciprocal review of Lite's final
-Rust delta. That review confirmed exact contract bytes, strict TOML and trusted
-configuration behavior, live byte/line citation sealing, hidden-ID rejection,
-secret-safe Debug surfaces, coordinator-only store access, provider-neutral
-selection and deadlines, immutable action pins, MSRV/current CI jobs, and the
-mandatory hosted Windows alias fixture. The local Full review shell did not
-have Cargo or a Windows linker; Lite recorded green GNU Rust 1.98 and MSRV 1.85
-runs, while the focused Lite pull request must supply the hosted Windows result.
+The Full owner also completed read-only reciprocal reviews of Lite's final Rust
+delta and its exact Full-pin/Windows-path follow-up. Those reviews confirmed
+exact contract bytes, strict TOML and trusted configuration behavior, live
+byte/line citation sealing, hidden-ID rejection, secret-safe Debug surfaces,
+coordinator-only store access, provider-neutral selection and deadlines,
+immutable action pins, MSRV/current CI jobs, the exact Full implementation pin,
+8.3-safe path comparison after explicit reparse-point rejection, and the
+mandatory hosted Windows alias fixture. Independent Full-side replay passed
+Lite root tests on Node 22, 23, and 24 at 30 of 30 each and GNU Rust 1.98 and
+1.85 path-security tests at 3 of 3 plus Full conformance at 11 of 11 each. The
+Full owner returned APPROVED with no remaining blocking, high, or medium
+finding.
+
+After Lite's reciprocal approval, the Full Windows path-security correction
+was published as the final implementation qualification commit. The Lite owner
+independently replayed the focused config/store/path suite on Node 22, 23, and
+24 at 45 of 45 each, verified that all nine contract hashes were unchanged, and
+returned APPROVED with no blocking, high, or medium finding. The later Lite
+pin/path follow-up was then reviewed against the exact Full coordinate and also
+received APPROVED with no blocking, high, or medium finding.
+
+## Hosted qualification and cross-repository closure
+
+Full draft PR #26 remains open at implementation commit
+`bbc2ea874f4dde37e6376e46c080cb1c69ab1bb3`. Both workflow events completed
+successfully, for 12 green jobs total:
+
+- push run `32463385935`: Linux build jobs for Node 22/23/24
+  (`96714784504`, `96714784680`, `96714784586`) and mandatory Windows retrieval
+  path-security jobs for Node 22/23/24 (`96714784274`, `96714784560`,
+  `96714784536`);
+- draft-pull-request run `32463389721`: Linux build jobs for Node 22/23/24
+  (`96714795579`, `96714795577`, `96714795549`) and mandatory Windows retrieval
+  path-security jobs for Node 22/23/24 (`96714795317`, `96714795600`,
+  `96714795500`).
+
+The Windows jobs exercised the mandatory ordinary 8.3-versus-long-path fixture,
+junction rejection, retrieval typecheck/build, and focused config/store/path
+tests. The results qualify the fix on all three supported Node major versions;
+the test did not infer Windows behavior from the local runner.
+
+Lite draft PR #16 remains open at final implementation commit
+`08233ffa08822a4568f89082a0fae26bdf3b01d3`. Pull-request run `32464528711`
+completed 8 of 8 jobs successfully:
+
+- `desktop-native` (`96718219176`);
+- `retrieval-rust-windows-msvc` (`96718219325`);
+- `desktop` (`96718219377`);
+- Node 22/23/24 wrapper tests (`96718219395`, `96718219452`, `96718219492`);
+- current Rust retrieval (`96718219448`); and
+- MSRV Rust retrieval (`96718219477`).
+
+Lite pins the exact Full implementation qualification commit, and its copied
+nine-file contract pack still matches every SHA-256 value recorded above with
+one terminal LF per file. The hosted Windows MSVC job passed the bundled FTS5,
+sealed-API, 8.3-path, and junction fixtures. These hosted results resolve the
+prior local missing-linker limitation without claiming distribution, installer,
+CPU, release, deployment, or production qualification beyond Phase 1.
 
 ## Final local verification
 
@@ -285,7 +338,7 @@ trusted configuration, providers, clocks, and derived-store mutation remain in
 the host-side retrieval plane. The platform-neutral root bundle remains
 separate from the Node-only retrieval bundle.
 
-## Known limitations and remaining gate
+## Known limitations after qualification
 
 - Phase 1 does not implement `as_of`, durable ledger binding, MCP transport,
   watcher recovery, agent identity/activity, graph projection tools, or the
@@ -305,11 +358,11 @@ separate from the Node-only retrieval bundle.
   phase.
 - The Lite static distribution, Linux targets, Windows/macOS release status,
   and Sandy Bridge/Ivy Bridge/R720 CPU qualification remain Phase 9 work.
-- PR #26 exists and its first CI run identified the Node-23 FTS5 capability
-  gap. The local correction has not been committed or pushed and therefore has
-  no hosted follow-up result. The phase terminal state must be assigned only
-  after both focused repository PRs have coherent revised pins and all required
-  CI jobs pass.
+- Phase 1 qualification does not merge either focused draft pull request and
+  does not qualify a release artifact, installer, deployment, production
+  activation, or remote service. Those actions remain subject to their later
+  phase gates and separate owner authorization.
 
-Accordingly, this is a local verification draft, not a release, merge, or
-deployment record.
+Accordingly, Phase 1 is **DONE** for implementation and cross-repository
+qualification at the exact commits recorded above. This is not a merge, tag,
+release, deployment, or production-activation record.
