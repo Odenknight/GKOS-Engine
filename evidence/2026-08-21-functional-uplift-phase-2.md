@@ -1,4 +1,4 @@
-# GKOS-Engine functional uplift — Phase 2 evidence draft
+# GKOS-Engine functional uplift — Phase 2 evidence
 
 Date: 2026-08-21
 
@@ -7,14 +7,16 @@ Repository: Odenknight/GKOS-Engine
 Phase scope: canonical lineage-anchored retrieval provenance, live citations,
 and point-in-time selection stacked additively on the qualified Phase 1 head.
 
-Final Phase 2 terminal state: **UNASSIGNED**. Implementation and qualification
-are complete locally, but hosted qualification is not yet assigned or run. The
-owner has ratified Decision A for authorization-dependent cross-record
-identity, endpoint resolution, declaration reconciliation, and topology/order
-diagnostics. The exact draft.2 contract pack is now **FROZEN LOCALLY** at the
-eight hashes below and awaits Lite's exact-byte reciprocal review before any
-publication. No Phase 2 commit, push, pull request, hosted CI, merge, tag,
-release, deployment, or production activation is claimed.
+Final Phase 2 terminal state: **DONE**. The owner ratified Decision A for
+authorization-dependent cross-record identity, endpoint resolution,
+declaration reconciliation, and topology/order diagnostics. The exact draft.2
+contract pack is frozen at the eight hashes below. Full qualified the signed
+implementation commit `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce`
+through draft PR #27 and twelve hosted checks; Lite qualified the signed parity
+implementation commit `42df8b047797a725f8b7c31f2f02d123a798515e`
+through draft PR #17 and eight hosted checks. Reciprocal read-only reviews found
+no blocker, high, or medium issue. No merge, tag, release, deployment, package
+publication, or production activation is claimed.
 
 ## Coordinates
 
@@ -22,7 +24,11 @@ release, deployment, or production activation is claimed.
 | --- | --- |
 | Stacked base / Phase 1 evidence head | `0164f3d5b2c698cbf048c8e0e53323def80eb251` |
 | Working branch | `codex/phase-2-lineage-citations` |
-| Full implementation commit | Not assigned; worktree is intentionally uncommitted |
+| Qualified Full implementation commit | `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce` (signed ED25519 + DCO; package `2.1.2`) |
+| Full evidence-only branch head | Not yet assigned; the later one-file closeout head is not the implementation qualification coordinate |
+| Full draft PR | [#27](https://github.com/Odenknight/GKOS-Engine/pull/27), base `codex/phase-1-retrieval-core`, head `codex/phase-2-lineage-citations` |
+| Qualified Lite implementation commit | `42df8b047797a725f8b7c31f2f02d123a798515e` (signed ED25519 + DCO; package `2.1.2`) |
+| Lite draft PR | [#17](https://github.com/Odenknight/GKOS-Engine-Lite/pull/17), base `codex/phase-1-retrieval-core`, head `codex/phase-2-lineage-citations` |
 | Retrieval contract | `gkos-retrieval/1.0.0-draft.2` |
 | Result schema | `gkos-retrieval-result/1.0.0-draft.2` |
 | Provenance contract | `gkos-retrieval-provenance/1.0.0-draft.1` |
@@ -30,12 +36,14 @@ release, deployment, or production activation is claimed.
 | Standard study commit | `a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6` |
 | Projection profile | `gkx-2.3-validating-projection` |
 | Local pack state | Frozen at the eight SHA-256 values below |
-| Hosted CI state | Unassigned / not run |
+| Hosted CI state | Full 12/12 green; Lite 8/8 green |
 
 Schema 2 and the public Phase 1 builder remain unchanged. Schema 3 explicitly
 binds the Standard commit and projection profile in its manifest, physical
 projection digest, open verification, and authorization-scoped result
-coordinate.
+coordinate. This evidence-only closeout intentionally cannot name its own
+future commit SHA; qualification remains anchored to the immutable Full
+implementation commit above, avoiding a self-SHA paradox.
 
 ## Frozen contract coordinates and hashes
 
@@ -110,9 +118,9 @@ No vendor, domain, route, or model allowlist/preference was added. No source
 write, REST/MCP transport, watcher, durable ledger, or authored temporal alias
 was introduced.
 
-## Current local evidence
+## Qualified implementation-tree local evidence
 
-Final current-tree local qualification results:
+Final qualified implementation-tree local results:
 
 - exact Node `22.23.2`, `23.11.1`, and `24.18.0` TypeScript no-emit and
   deterministic bundle builds: PASS on each runtime;
@@ -130,7 +138,8 @@ Final current-tree local qualification results:
   **13/13**;
 - intelligence service contracts: **4/4**;
 - nomenclature and Apache-2.0 license gates: PASS;
-- sequential package gate: **231 files / 696048 bytes**, including the
+- sequential package gate at qualified implementation commit `6e2df27d...`:
+  **231 files / 696216 bytes packed / 2923970 bytes unpacked**, including the
   required host-only and path-security bundles; and
 - `git diff --check`: PASS, with only Git's normal Windows line-ending
   advisories; staged diff: empty.
@@ -144,8 +153,8 @@ exact physical candidate sources, parser-owned declaration receipts,
 candidate-key embedding eligibility, both lexical backend coordinates, and
 the full authorization-scoped result. Its ratified matrix freezes hidden/future
 equivalence to physical absence and one all-authorized generic conflict for all
-four classes. The eight pack files now match the local frozen hash table above;
-exact-byte reciprocal review is outstanding.
+four classes. The eight pack files match the frozen hash table above and were
+independently verified byte-for-byte by Lite.
 
 Focused scans continue to prohibit removed-provider references, vendor/model/
 route/domain allowlists, credential signatures, retrieval-to-Navigation
@@ -158,6 +167,26 @@ provider references, zero prohibited routing-config identifiers, zero
 retrieval-to-Navigation imports, and zero merge markers. The Phase-1 draft.1
 contract directory has an empty byte diff against qualified base
 `0164f3d5b2c698cbf048c8e0e53323def80eb251`.
+
+## Hosted qualification
+
+Full draft PR #27 remains open and draft. Both Full runs tested the exact
+qualified implementation SHA and completed successfully:
+
+- push run [`32518027278`](https://github.com/Odenknight/GKOS-Engine/actions/runs/32518027278): `build (22)` job `96883933030`, `build (23)` job `96883933079`, `build (24)` job `96883933039`, `windows-retrieval-path-security (22)` job `96883933168`, `windows-retrieval-path-security (23)` job `96883932749`, and `windows-retrieval-path-security (24)` job `96883933130`; all six succeeded; and
+- pull-request run [`32518043098`](https://github.com/Odenknight/GKOS-Engine/actions/runs/32518043098): `build (22)` job `96883981685`, `build (23)` job `96883981904`, `build (24)` job `96883981786`, `windows-retrieval-path-security (22)` job `96883981474`, `windows-retrieval-path-security (23)` job `96883981793`, and `windows-retrieval-path-security (24)` job `96883981725`; all six succeeded.
+
+Lite draft PR #17 remains open and draft. Its pull-request run tested the exact
+qualified implementation SHA. Run
+[`32520112318`](https://github.com/Odenknight/GKOS-Engine-Lite/actions/runs/32520112318)
+completed successfully: `test (22)` job `96890260101`, `test (23)` job
+`96890260007`, `test (24)` job `96890259890`, `retrieval-rust-msrv` job
+`96890259718`, `retrieval-rust-latest` job `96890259900`,
+`retrieval-rust-windows-msvc` job `96890259952`, `desktop` job `96890259855`,
+and `desktop-native` job `96890259986`; all eight succeeded.
+
+The later evidence-only pushes will advance the two draft-PR heads without
+changing or superseding either qualified implementation coordinate.
 
 ## Reciprocal checkpoint reviews
 
@@ -184,10 +213,12 @@ approval with no blocker, high, or medium finding:
 Lite independently replayed typecheck/build, the canonical candidate focus,
 the 41-test schema3/schema2 store focus, and a 146-test combined coordinator/
 candidate/store/public/Phase0/provenance/temporal/CLI focus for those approvals.
-The last review found no blocker, high, or medium issue and made no edits. The
-new local cross-runtime qualification and final eight-file hash table now await
-Lite's exact-byte implementation/pack review; no approval has authorized
-publication.
+Lite then approved Full's final local implementation/pack freeze and the narrow
+authorization-scoped declaration-read correction with no blocker, high, or
+medium issue. Full independently reviewed Lite's final 34-path integration
+freeze, exact Full pin, wrapper parity, Rust latest/MSRV suites, contract bytes,
+and public-boundary scans and likewise approved with no blocker, high, or
+medium issue. Neither reciprocal reviewer edited or staged the other tree.
 
 ## Ratified Decision A
 
@@ -214,8 +245,13 @@ self classification occurs after scoped canonical tier selection.
 
 ## Publication state
 
-No files are staged. No commit, push, PR, merge, tag, release, deploy, service
-restart, provider provisioning, or source-content mutation has occurred. Phase
-2 remains terminal `UNASSIGNED`: the exact contract is locally frozen and
-cross-runtime local qualification is complete, but Lite's final exact-byte
-review and required hosted qualification must complete before `DONE`.
+The qualified Full and Lite implementation commits were signed, pushed only to
+their Phase 2 branches, and opened as the draft PRs recorded above. This
+closeout is a one-file, unstaged evidence-only delta atop the qualified Full
+implementation commit; its later branch-head SHA must not replace or be confused
+with `6e2df27d33ede62ee0d2e3cb7610df478a7d66ce` as the implementation
+qualification coordinate. No PR was merged. No tag, release, deployment,
+package or artifact publication, service restart, provider provisioning, or
+source-content mutation occurred. With exact contract freeze, reciprocal
+implementation approval, and all twenty hosted jobs green, Phase 2 is terminal
+`DONE`.
