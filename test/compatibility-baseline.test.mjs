@@ -24,7 +24,7 @@ const FIXTURE_ROOT = resolve(
   "test/fixtures/compatibility/full-v2.1.2",
 );
 const FIXED_PROCESSING_TIME = "2026-08-20T00:00:00.000Z";
-const PHASE_1_ADDITIVE_SEARCH_HELP = `  gkx search <query> --kb-path <dir> [--limit <n>]    public-only FTS retrieval with exact citations
+const PHASE_1_ADDITIVE_SEARCH_HELP = `  gkx search <query> --kb-path <dir> [--limit <n>]    public-only lexical retrieval with exact citations
              [--config <trusted-gkos.toml>] [--trust-cwd-config]
 `;
 const SOURCE_A = `---

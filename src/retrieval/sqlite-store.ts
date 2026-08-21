@@ -11,9 +11,9 @@ import {
 import { validateRetrievalChunk } from "./chunker";
 import { retrievalCanonicalDigest, retrievalCodeUnitCompare, stableJson } from "./digest";
 import { cosineSimilarity } from "./fusion";
-import { lexicalSignal } from "./lexical";
+import { lexicalQueryClauses, lexicalScanMatches, lexicalSignal } from "./lexical";
 import type { RankedInput } from "./fusion";
-import type { RetrievalChunk, RetrievalProjectionManifest } from "./types";
+import type { RetrievalChunk, RetrievalProjectionManifest, SqliteLexicalBackend } from "./types";
 
 interface SqliteRow { [key: string]: unknown }
 export interface StoredVector { chunk_id: string; vector: readonly number[] }
@@ -28,6 +28,8 @@ export interface RetrievalGenerationInput {
   embedding_provider_id?: string | null;
   embedding_model_id?: string | null;
   embedding_dimensions?: number | null;
+  /** Auto is the production default; explicit values support qualification. */
+  lexical_backend?: "auto" | SqliteLexicalBackend;
 }
 
 export interface BuiltRetrievalGeneration {
@@ -36,15 +38,21 @@ export interface BuiltRetrievalGeneration {
   manifest: RetrievalProjectionManifest;
 }
 
-const MIGRATIONS = [
-  `
+export interface SqliteLexicalCapability {
+  sqlite_version: string;
+  fts5_available: boolean;
+  default_backend: SqliteLexicalBackend;
+}
+
+const BASE_SCHEMA = `
     CREATE TABLE projection_manifest (
       singleton INTEGER PRIMARY KEY CHECK (singleton = 1),
       manifest_json TEXT NOT NULL,
       contract_version TEXT NOT NULL,
       schema_version INTEGER NOT NULL,
       projection_id TEXT NOT NULL UNIQUE,
-      projection_digest TEXT NOT NULL UNIQUE
+      projection_digest TEXT NOT NULL UNIQUE,
+      lexical_backend TEXT NOT NULL
     );
     CREATE TABLE sources (
       source_id TEXT PRIMARY KEY,
@@ -77,16 +85,6 @@ const MIGRATIONS = [
       metadata_json TEXT NOT NULL,
       UNIQUE(source_id, ordinal_within_source)
     );
-    CREATE VIRTUAL TABLE chunk_fts USING fts5(
-      chunk_id UNINDEXED,
-      title,
-      heading_path,
-      tags,
-      topic,
-      category,
-      text,
-      tokenize = 'unicode61 remove_diacritics 2'
-    );
     CREATE TABLE chunk_vectors (
       chunk_id TEXT PRIMARY KEY REFERENCES chunks(chunk_id) ON DELETE CASCADE,
       provider_id TEXT NOT NULL,
@@ -98,8 +96,67 @@ const MIGRATIONS = [
     CREATE INDEX chunks_path_idx ON chunks(source_path);
     CREATE INDEX chunks_digest_idx ON chunks(source_digest);
     CREATE INDEX chunks_parent_idx ON chunks(parent_chunk_id);
-  `,
-] as const;
+  `;
+
+const FTS5_SCHEMA = `
+  CREATE VIRTUAL TABLE chunk_fts USING fts5(
+    chunk_id UNINDEXED,
+    title,
+    heading_path,
+    tags,
+    topic,
+    category,
+    text,
+    tokenize = 'unicode61 remove_diacritics 2'
+  );
+`;
+
+const LEXICAL_SCAN_SCHEMA = `
+  CREATE TABLE chunk_fts (
+    chunk_id TEXT PRIMARY KEY REFERENCES chunks(chunk_id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    heading_path TEXT NOT NULL,
+    tags TEXT NOT NULL,
+    topic TEXT NOT NULL,
+    category TEXT NOT NULL,
+    text TEXT NOT NULL
+  );
+`;
+
+function probeFts5(database: DatabaseSync): boolean {
+  try {
+    database.exec("CREATE VIRTUAL TABLE temp.gkos_fts5_probe USING fts5(value); DROP TABLE temp.gkos_fts5_probe;");
+    return true;
+  } catch (error) {
+    try { database.exec("DROP TABLE IF EXISTS temp.gkos_fts5_probe;"); } catch { /* probe cleanup only */ }
+    if (/no such module:\s*fts5/iu.test(String((error as Error).message))) return false;
+    throw error;
+  }
+}
+
+/** Probe the actual bundled SQLite module; no Node-version inference is used. */
+export function detectSqliteLexicalCapability(): SqliteLexicalCapability {
+  const database = new DatabaseSync(":memory:");
+  try {
+    const sqliteVersion = String((database.prepare("SELECT sqlite_version() AS version").get() as SqliteRow).version);
+    const fts5 = probeFts5(database);
+    return {
+      sqlite_version: sqliteVersion,
+      fts5_available: fts5,
+      default_backend: fts5 ? "sqlite_fts5" : "sqlite_lexical_scan",
+    };
+  } finally {
+    database.close();
+  }
+}
+
+function resolveLexicalBackend(requested: RetrievalGenerationInput["lexical_backend"]): SqliteLexicalBackend {
+  const capability = detectSqliteLexicalCapability();
+  if (requested === undefined || requested === "auto") return capability.default_backend;
+  if (requested !== "sqlite_fts5" && requested !== "sqlite_lexical_scan") throw new TypeError("RETRIEVAL_LEXICAL_BACKEND_INVALID");
+  if (requested === "sqlite_fts5" && !capability.fts5_available) throw new Error("SQLITE_FTS5_UNAVAILABLE");
+  return requested;
+}
 
 function validateStateDirectory(path: string): string {
   if (!path || path.includes("\0")) throw new TypeError("state_directory is invalid.");
@@ -177,14 +234,7 @@ function quarantineGenerationFiles(finalPath: string, directory: string): void {
 }
 
 function ftsExpression(query: string): string {
-  const terms: string[] = [];
-  const matcher = /"([^"]+)"|(\S+)/gu;
-  for (const match of query.trim().matchAll(matcher)) {
-    const value = (match[1] ?? match[2]).trim();
-    if (value) terms.push(`"${value.replace(/"/g, '""')}"`);
-  }
-  if (!terms.length) throw new TypeError("Search query must contain at least one term.");
-  return terms.join(" AND ");
+  return lexicalQueryClauses(query).map((clause) => `"${clause.value}"`).join(" AND ");
 }
 
 function lexicalScore(row: SqliteRow, query: string): number {
@@ -197,6 +247,34 @@ function lexicalScore(row: SqliteRow, query: string): number {
     text: String(row.text ?? ""),
     token_count: Number(row.token_count),
   }, query);
+}
+
+function lexicalFields(row: SqliteRow): Parameters<typeof lexicalScanMatches>[0] {
+  return {
+    title: String(row.fts_title ?? ""),
+    heading_path: String(row.fts_heading_path ?? ""),
+    tags: String(row.fts_tags ?? ""),
+    topic: String(row.fts_topic ?? ""),
+    category: String(row.fts_category ?? ""),
+    text: String(row.text ?? ""),
+    token_count: Number(row.token_count),
+  };
+}
+
+function declaredLexicalBackend(database: DatabaseSync): SqliteLexicalBackend {
+  const row = database.prepare("SELECT type, sql FROM sqlite_schema WHERE name = 'chunk_fts'").get() as SqliteRow | undefined;
+  if (!row || row.type !== "table" || typeof row.sql !== "string") throw new Error("RETRIEVAL_LEXICAL_PROJECTION_MISSING");
+  const sql = row.sql.trim();
+  return /^CREATE\s+VIRTUAL\s+TABLE\s+chunk_fts\s+USING\s+fts5\b/iu.test(sql)
+    ? "sqlite_fts5"
+    : /^CREATE\s+TABLE\s+chunk_fts\s*\(/iu.test(sql)
+      ? "sqlite_lexical_scan"
+      : (() => { throw new Error("RETRIEVAL_LEXICAL_SCHEMA_INVALID"); })();
+}
+
+function validateLexicalTableColumns(database: DatabaseSync): void {
+  const columns = (database.prepare("PRAGMA table_info(chunk_fts)").all() as SqliteRow[]).map((item) => String(item.name));
+  if (columns.join("\0") !== "chunk_id\0title\0heading_path\0tags\0topic\0category\0text") throw new Error("RETRIEVAL_LEXICAL_SCHEMA_INVALID");
 }
 
 function rowToChunk(row: SqliteRow): RetrievalChunk {
@@ -231,13 +309,14 @@ function assertManifest(value: RetrievalProjectionManifest): void {
   if (!value || typeof value !== "object") throw new Error("RETRIEVAL_MANIFEST_INVALID");
   const keys = [
     "chunk_count", "chunker_version", "configuration_digest", "contract_version", "embedding_dimensions",
-    "embedding_model_id", "embedding_provider_id", "engine_version", "policy_digest", "projection_digest",
+    "embedding_model_id", "embedding_provider_id", "engine_version", "lexical_backend", "policy_digest", "projection_digest",
     "projection_id", "projection_schema_version", "source_count", "source_snapshot_digest", "tokenizer_version", "vault_id",
   ];
   if (Object.keys(value).sort(retrievalCodeUnitCompare).join("\0") !== keys.sort(retrievalCodeUnitCompare).join("\0")) throw new Error("RETRIEVAL_MANIFEST_FIELDS_INVALID");
   if (value.contract_version !== RETRIEVAL_CONTRACT_VERSION) throw new Error("RETRIEVAL_CONTRACT_MISMATCH");
   if (value.projection_schema_version !== RETRIEVAL_PROJECTION_SCHEMA_VERSION) throw new Error("RETRIEVAL_SCHEMA_MISMATCH");
   if (value.chunker_version !== RETRIEVAL_CHUNKER_VERSION || value.tokenizer_version !== RETRIEVAL_TOKENIZER_VERSION) throw new Error("RETRIEVAL_CHUNKER_MISMATCH");
+  if (value.lexical_backend !== "sqlite_fts5" && value.lexical_backend !== "sqlite_lexical_scan") throw new Error("RETRIEVAL_LEXICAL_BACKEND_INVALID");
   if (value.engine_version !== ENGINE_VERSION || typeof value.vault_id !== "string" || !value.vault_id || value.vault_id.length > 512) throw new Error("RETRIEVAL_MANIFEST_IDENTITY_INVALID");
   for (const digest of [value.source_snapshot_digest, value.configuration_digest, value.policy_digest, value.projection_digest]) {
     if (!/^sha256:[0-9a-f]{64}$/u.test(digest)) throw new Error("RETRIEVAL_MANIFEST_DIGEST_INVALID");
@@ -261,6 +340,7 @@ function calculateProjectionDigest(manifest: Omit<RetrievalProjectionManifest, "
     policy_digest: manifest.policy_digest,
     chunker_version: manifest.chunker_version,
     tokenizer_version: manifest.tokenizer_version,
+    lexical_backend: manifest.lexical_backend,
     embedding_provider_id: manifest.embedding_provider_id,
     embedding_model_id: manifest.embedding_model_id,
     embedding_dimensions: manifest.embedding_dimensions,
@@ -271,7 +351,7 @@ function calculateProjectionDigest(manifest: Omit<RetrievalProjectionManifest, "
   });
 }
 
-function projectionManifest(input: RetrievalGenerationInput): RetrievalProjectionManifest {
+function projectionManifest(input: RetrievalGenerationInput, lexicalBackend: SqliteLexicalBackend): RetrievalProjectionManifest {
   const chunks = [...input.chunks].sort((a, b) => retrievalCodeUnitCompare(a.chunk_id, b.chunk_id));
   const vectors = [...(input.vectors ?? [])].sort((a, b) => retrievalCodeUnitCompare(a.chunk_id, b.chunk_id));
   const identityParts = [input.embedding_provider_id ?? null, input.embedding_model_id ?? null, input.embedding_dimensions ?? null];
@@ -289,6 +369,7 @@ function projectionManifest(input: RetrievalGenerationInput): RetrievalProjectio
     policy_digest: input.policy_digest,
     chunker_version: RETRIEVAL_CHUNKER_VERSION,
     tokenizer_version: RETRIEVAL_TOKENIZER_VERSION,
+    lexical_backend: lexicalBackend,
     embedding_provider_id: input.embedding_provider_id ?? null,
     embedding_model_id: input.embedding_model_id ?? null,
     embedding_dimensions: input.embedding_dimensions ?? null,
@@ -386,11 +467,13 @@ function insertGeneration(database: DatabaseSync, manifest: RetrievalProjectionM
   if (!manifest.embedding_provider_id && vectorIds.size !== 0) throw new Error("VECTOR_GENERATION_IDENTITY_MISSING");
   database.exec("PRAGMA foreign_keys = ON; PRAGMA journal_mode = WAL; BEGIN IMMEDIATE;");
   try {
-    for (let index = 0; index < MIGRATIONS.length; index++) {
-      database.exec(MIGRATIONS[index]);
-      database.exec(`PRAGMA user_version = ${index + 1}`);
-    }
-    database.prepare("INSERT INTO projection_manifest VALUES (1, ?, ?, ?, ?, ?)").run(stableJson(manifest), manifest.contract_version, manifest.projection_schema_version, manifest.projection_id, manifest.projection_digest);
+    database.exec(BASE_SCHEMA);
+    database.exec(manifest.lexical_backend === "sqlite_fts5" ? FTS5_SCHEMA : LEXICAL_SCAN_SCHEMA);
+    database.exec(`PRAGMA user_version = ${RETRIEVAL_PROJECTION_SCHEMA_VERSION}`);
+    database.prepare("INSERT INTO projection_manifest VALUES (1, ?, ?, ?, ?, ?, ?)").run(
+      stableJson(manifest), manifest.contract_version, manifest.projection_schema_version,
+      manifest.projection_id, manifest.projection_digest, manifest.lexical_backend,
+    );
     const insertSource = database.prepare("INSERT OR IGNORE INTO sources(source_id, source_path, source_digest) VALUES (?, ?, ?)");
     const insertChunk = database.prepare(`INSERT INTO chunks(
       chunk_id, source_id, source_path, source_digest, heading_path_json, heading_depth,
@@ -445,12 +528,13 @@ export function buildRetrievalGeneration(input: RetrievalGenerationInput): Built
   // malformed chunk rejects the whole source generation and cannot advance the
   // active pointer or leave a partial database behind.
   validateGenerationChunkBindings(input.chunks);
+  const lexicalBackend = resolveLexicalBackend(input.lexical_backend);
   const directory = validateStateDirectory(input.state_directory);
   assertExistingAncestorIsUnaliased(directory);
   mkdirSync(directory, { recursive: true, mode: 0o700 });
   assertRealStateDirectory(directory);
   hardenDirectoryPermissions(directory);
-  const manifest = projectionManifest(input);
+  const manifest = projectionManifest(input, lexicalBackend);
   assertManifest(manifest);
   const suffix = manifest.projection_digest.slice("sha256:".length);
   const finalPath = join(directory, `retrieval-${suffix}.sqlite`);
@@ -531,6 +615,7 @@ export function openActiveRetrievalStore(stateDirectory: string): SqliteRetrieva
 export class SqliteRetrievalStore {
   readonly #database: DatabaseSync;
   readonly manifest: RetrievalProjectionManifest;
+  readonly fts5_available: boolean;
   constructor(readonly database_path: string) {
     const databasePath = resolve(database_path);
     if (database_path.includes("\0") || !statSafe(databasePath)) throw new Error("RETRIEVAL_DATABASE_MISSING");
@@ -547,17 +632,29 @@ export class SqliteRetrievalStore {
       this.#database.exec("PRAGMA foreign_keys = ON; PRAGMA temp_store = MEMORY;");
       const version = Number((this.#database.prepare("PRAGMA user_version").get() as SqliteRow).user_version);
       if (version !== RETRIEVAL_PROJECTION_SCHEMA_VERSION) throw new Error("RETRIEVAL_SCHEMA_MISMATCH");
-      const integrity = this.#database.prepare("PRAGMA integrity_check").all() as SqliteRow[];
-      if (integrity.length !== 1 || integrity[0].integrity_check !== "ok") throw new Error("RETRIEVAL_SQLITE_INTEGRITY_FAILED");
-      if ((this.#database.prepare("PRAGMA foreign_key_check").all() as SqliteRow[]).length) throw new Error("RETRIEVAL_SQLITE_FOREIGN_KEY_FAILED");
       const row = this.#database.prepare("SELECT * FROM projection_manifest WHERE singleton = 1").get() as SqliteRow | undefined;
       if (!row) throw new Error("RETRIEVAL_MANIFEST_MISSING");
       this.manifest = JSON.parse(String(row.manifest_json));
       assertManifest(this.manifest);
-      if (row.contract_version !== this.manifest.contract_version || Number(row.schema_version) !== this.manifest.projection_schema_version || row.projection_id !== this.manifest.projection_id || row.projection_digest !== this.manifest.projection_digest) throw new Error("RETRIEVAL_MANIFEST_COLUMNS_MISMATCH");
+      const declaredBackend = declaredLexicalBackend(this.#database);
+      this.fts5_available = probeFts5(this.#database);
+      if (declaredBackend === "sqlite_fts5" && !this.fts5_available) throw new Error("SQLITE_FTS5_UNAVAILABLE");
+      if (row.contract_version !== this.manifest.contract_version || Number(row.schema_version) !== this.manifest.projection_schema_version || row.projection_id !== this.manifest.projection_id || row.projection_digest !== this.manifest.projection_digest || row.lexical_backend !== this.manifest.lexical_backend) throw new Error("RETRIEVAL_MANIFEST_COLUMNS_MISMATCH");
+      if (declaredBackend !== this.manifest.lexical_backend) throw new Error("RETRIEVAL_LEXICAL_BACKEND_MISMATCH");
+      validateLexicalTableColumns(this.#database);
+      const integrity = this.#database.prepare("PRAGMA integrity_check").all() as SqliteRow[];
+      if (integrity.length !== 1 || integrity[0].integrity_check !== "ok") throw new Error("RETRIEVAL_SQLITE_INTEGRITY_FAILED");
+      if ((this.#database.prepare("PRAGMA foreign_key_check").all() as SqliteRow[]).length) throw new Error("RETRIEVAL_SQLITE_FOREIGN_KEY_FAILED");
       this.verifyPersistedProjection();
     } catch (error) {
       try { this.#database.close(); } catch { /* retain the original verification error */ }
+      // Some SQLite operations (notably integrity_check) may resolve a virtual
+      // table before normal manifest verification. Normalize the bundled-
+      // module gap so cross-runtime active-state recovery sees one stable
+      // capability error rather than a raw SQLite implementation message.
+      if (/no such module:\s*fts5/iu.test(String((error as Error).message))) {
+        throw new Error("SQLITE_FTS5_UNAVAILABLE", { cause: error });
+      }
       throw error;
     }
   }
@@ -612,7 +709,7 @@ export class SqliteRetrievalStore {
         row.topic !== (typeof chunk.metadata.topic === "string" ? chunk.metadata.topic : "") ||
         row.category !== (typeof chunk.metadata.category === "string" ? chunk.metadata.category : "") ||
         row.text !== chunk.text;
-    })) throw new Error("RETRIEVAL_FTS_PROJECTION_MISMATCH");
+    })) throw new Error("RETRIEVAL_LEXICAL_PROJECTION_MISMATCH");
     const vectors = this.storedVectors();
     if (this.manifest.embedding_provider_id ? vectors.length !== chunks.length : vectors.length !== 0) throw new Error("VECTOR_GENERATION_PARTIAL");
     if (chunks.length !== this.manifest.chunk_count || sourceBindings.size !== this.manifest.source_count) throw new Error("RETRIEVAL_MANIFEST_COUNT_MISMATCH");
@@ -623,14 +720,20 @@ export class SqliteRetrievalStore {
     if (!Number.isSafeInteger(limit) || limit < 1) throw new RangeError("lexical limit must be positive.");
     if (!eligibleChunkIds.length) return [];
     this.setEligibleChunkIds(eligibleChunkIds);
-    const rows = this.#database.prepare(`
+    const select = `
       SELECT c.*, f.title AS fts_title, f.heading_path AS fts_heading_path, f.tags AS fts_tags,
              f.topic AS fts_topic, f.category AS fts_category
       FROM chunk_fts AS f
       JOIN retrieval_eligible AS e ON e.chunk_id = f.chunk_id
       JOIN chunks AS c ON c.chunk_id = f.chunk_id
-      WHERE chunk_fts MATCH ?
-    `).all(ftsExpression(query)) as SqliteRow[];
+    `;
+    // The compatibility scan receives only rows already joined to the
+    // policy-eligible temporary ID set. Denied rows never cross the SQLite
+    // boundary into JavaScript matching, scoring, counts, or result timing.
+    const rows = this.manifest.lexical_backend === "sqlite_fts5"
+      ? this.#database.prepare(`${select} WHERE chunk_fts MATCH ?`).all(ftsExpression(query)) as SqliteRow[]
+      : (this.#database.prepare(`${select} ORDER BY f.chunk_id`).all() as SqliteRow[])
+        .filter((row) => lexicalScanMatches(lexicalFields(row), query));
     return rows.map((row) => ({ chunk_id: String(row.chunk_id), source_id: String(row.source_id), score: lexicalScore(row, query) }))
       .sort((a, b) => b.score - a.score || retrievalCodeUnitCompare(a.chunk_id, b.chunk_id)).slice(0, limit);
   }

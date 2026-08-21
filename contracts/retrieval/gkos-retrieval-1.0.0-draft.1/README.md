@@ -13,6 +13,42 @@ RRF arithmetic, duplicate collapse, and MMR ordering against
 `conformance-fixture.json`. The same fixture freezes the accent-insensitive
 lexical signal and every indexed field weight, including topic and category.
 
+Projection schema 2 binds the actual lexical backend into the manifest,
+projection digest, and projection identity. Implementations probe the bundled
+SQLite module by creating and dropping a real temporary FTS5 virtual table;
+they never infer capability from a Node/runtime version. `sqlite_fts5` remains
+the preferred backend when that probe succeeds. When it does not,
+`sqlite_lexical_scan` uses an ordinary SQLite projection and joins only the
+policy-eligible temporary ID set before any row reaches deterministic
+in-process matching or scoring. The scan is reported as degraded with
+`SQLITE_LEXICAL_SCAN_ACTIVE`, `SQLITE_LEXICAL_SCAN_APPROXIMATION`, and, when
+applicable, `SQLITE_FTS5_UNAVAILABLE`; it is never reported as FTS5. The
+versioned `gkos-unicode61-subset-scan/1` grammar uses the host runtime's Unicode
+property tables for letters, numbers, and private-use scalars (underscore,
+hyphen, and other punctuation remain separators), folds diacritics only for
+Latin-base clusters, folds Greek final sigma to sigma, preserves non-Latin
+canonical-form distinctions, and treats punctuation as separators. Each
+normalized clause must occur as one consecutive token sequence within one indexed field;
+separate clauses may match separate fields. The conformance fixture pins the
+stage envelopes and the differential query set. C0/DEL controls (including
+NUL), unmatched or embedded quotes, empty phrases, and punctuation-only clauses are rejected before corpus or
+store access so FTS5 and scan parsing cannot diverge.
+
+The scan does not claim exhaustive unicode61/Unicode-6.1 equivalence. Runtime
+Unicode tables and SQLite's historical unicode61/remove-diacritics behavior can
+differ outside the frozen differential corpus; that broader parity remains
+unqualified and is why the compatibility stage remains degraded.
+
+Unquoted lexical scoring and citation terms use the same letter, number, and
+private-use token boundaries, with underscore, hyphen, and other punctuation
+as separators. Greek final sigma folds to ordinary sigma for candidate
+matching, scoring, and citation lookup. A quoted phrase returns the exact
+verified phrase span when those bytes exist; when punctuation tokenization made
+the candidate match but the raw phrase bytes do not exist, only exact
+component-token spans are returned. A rank-one candidate with no positive
+lexical, semantic, or reranker signal is low confidence with
+`WEAK_LEXICAL_MATCH`; rank alone never creates high confidence.
+
 Portable path and canonical JSON edge cases are pinned in
 `canonical-fixture.json`. Negative cosine similarity contributes zero to the
 MMR redundancy penalty. When reranking is active, MMR relevance is reciprocal
@@ -64,7 +100,7 @@ Every configured or injected provider call is bounded by the coordinator, not
 only by a concrete adapter: index embeddings, query embeddings, and reranking
 use the trusted effective timeout (`15000` ms by default; inclusive range
 `1..300000`) and receive an abort signal. An operational vector timeout degrades
-the request or generation to reported FTS-only behavior; an optional reranker
+the request or generation to reported lexical-only behavior; an optional reranker
 timeout skips only that reported stage. Provider/model/dimension mismatches are
 controlled-rebuild errors and never degrade into a mixed embedding space. These
 resource bounds do not restrict the operator's endpoint, vendor, route, model,

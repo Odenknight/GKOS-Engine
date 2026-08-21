@@ -3,17 +3,21 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
+  assessRetrievalConfidence,
   chunkMarkdown,
   createRerankProvider,
   createVectorProvider,
   isValidRetrievalSourcePath,
   lexicalQueryTerms,
+  lexicalQueryClauses,
   lexicalCitationSpans,
+  lexicalScanMatches,
   lexicalSignal,
   matchesRetrievalFilters,
   maximalMarginalRelevance,
   reciprocalRankFusion,
   RETRIEVAL_PARENT_EXPANSION_MAX_CHILD_TOKENS,
+  RETRIEVAL_PROJECTION_SCHEMA_VERSION,
   retrievalCanonicalDigest,
   retrievalSha256,
   stableJson,
@@ -36,6 +40,18 @@ test("cross-language chunk, RRF, duplicate-collapse, and MMR fixture is exact", 
   assert.deepEqual(reranked.map((item) => item.chunk_id), fixture.rerank_mmr.expected_chunk_ids);
   assert.deepEqual(reranked.map((item) => item.mmr_score), fixture.rerank_mmr.expected_mmr_scores);
   assert.equal(RETRIEVAL_PARENT_EXPANSION_MAX_CHILD_TOKENS, fixture.parent_expansion.default_max_child_tokens);
+  assert.equal(RETRIEVAL_PROJECTION_SCHEMA_VERSION, fixture.lexical_backends.projection_schema_version);
+  for (const item of fixture.lexical_backends.differential_queries) {
+    const actual = fixture.lexical_backends.differential_rows
+      .filter((row) => lexicalScanMatches(row, item.query))
+      .map((row) => ({ chunk_id: row.chunk_id, score: lexicalSignal(row, item.query) }))
+      .sort((left, right) => right.score - left.score || (left.chunk_id < right.chunk_id ? -1 : left.chunk_id > right.chunk_id ? 1 : 0));
+    assert.deepEqual(actual, item.expected, item.query);
+  }
+  for (const query of fixture.lexical_backends.rejected_queries) {
+    assert.throws(() => lexicalQueryClauses(query), /RETRIEVAL_QUERY_LEXICAL_INVALID/u, query);
+    assert.throws(() => lexicalScanMatches(fixture.lexical_backends.differential_rows[0], query), /RETRIEVAL_QUERY_LEXICAL_INVALID/u, query);
+  }
   assert.deepEqual(fixture.parent_expansion.examples.map((item) => item.child_token_count < RETRIEVAL_PARENT_EXPANSION_MAX_CHILD_TOKENS), fixture.parent_expansion.examples.map((item) => item.expand));
   for (const item of fixture.path_glob_filters) {
     const [chunk] = chunkMarkdown({
@@ -49,6 +65,14 @@ test("cross-language chunk, RRF, duplicate-collapse, and MMR fixture is exact", 
   for (const item of fixture.citation_normalization) {
     assert.deepEqual(lexicalCitationSpans(item.source_text, item.query), item.expected_spans, item.id);
   }
+  assert.deepEqual(
+    assessRetrievalConfidence(
+      fixture.confidence_zero_signal.scores,
+      fixture.confidence_zero_signal.stages,
+      fixture.confidence_zero_signal.eligible_count,
+    ),
+    fixture.confidence_zero_signal.expected,
+  );
   assert.deepEqual(lexicalQueryTerms(fixture.lexical.query), fixture.lexical.expected_terms);
   assert.equal(lexicalSignal(fixture.lexical.fields, fixture.lexical.query), fixture.lexical.expected_score);
 });

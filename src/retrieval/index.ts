@@ -17,10 +17,11 @@ export * from "./providers";
 // external retrieval must flow through RetrievalCoordinator so policy and live
 // citation verification precede all returned identifiers, content, and ranks.
 // Building a disposable generation remains a trusted host/operator API.
-export { buildRetrievalGeneration } from "./sqlite-store";
+export { buildRetrievalGeneration, detectSqliteLexicalCapability } from "./sqlite-store";
 export type {
   BuiltRetrievalGeneration,
   RetrievalGenerationInput,
+  SqliteLexicalCapability,
   StoredVector,
 } from "./sqlite-store";
 export * from "./coordinator";

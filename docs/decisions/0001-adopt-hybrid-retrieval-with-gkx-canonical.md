@@ -35,7 +35,9 @@ GKX authority.
 The retrieval plane will be additive and will:
 
 - derive stable heading-aware chunks from exact source bytes;
-- support FTS-only operation as the mandatory baseline;
+- support lexical-only operation as the mandatory baseline, preferring
+  feature-probed SQLite FTS5 and truthfully reporting the manifest-bound
+  deterministic SQLite scan on runtimes whose bundled SQLite lacks FTS5;
 - permit optional vector retrieval and reranking through config-selected,
   provider-neutral interfaces;
 - initially evaluate deterministic RRF with k equal to 60 and optional MMR with
@@ -54,7 +56,8 @@ The provider seams admit openai_compatible, local_onnx, and MCP embedding and
 rerank adapters. No provider is privileged, and GKOS-Engine will not embed a
 vendor, model, or routing allowlist. An adapter must still validate its declared
 model identity, dimensions, item count, finite values, and request correlation.
-An unavailable embedding provider degrades honestly to FTS-only. An unavailable
+An unavailable embedding provider degrades honestly to the active lexical-only
+backend. An unavailable
 optional reranker skips only the rerank stage and preserves healthy lexical and
 vector candidates. Both cases report the affected stage and never trigger a
 silent model substitution, cross-embedding-space fallback, or service
@@ -119,7 +122,7 @@ source-content writes, remote exposure, or self-provisioning.
 
 - Copy GrooveSeek implementation code. A clean-room TypeScript implementation
   preserves GKOS architecture and minimizes license and cross-language drift.
-- Make vector similarity the required or authoritative path. FTS-only operation
+- Make vector similarity the required or authoritative path. Lexical-only operation
   and deterministic authority must survive provider failure.
 - Let Lite define retrieval behavior independently. Its Rust implementation is
   a pin-bound conforming adapter to Full-owned contracts, not a semantic fork.
@@ -134,7 +137,7 @@ source-content writes, remote exposure, or self-provisioning.
 
 - Retrieval can evolve without duplicating Full/Lite semantics.
 - Optional vector and rerank deployments require explicit adapter
-  qualification. Missing embeddings leave FTS available; missing reranking
+  qualification. Missing embeddings leave lexical retrieval available; missing reranking
   leaves the otherwise healthy retrieval stages available.
 - Policy filtering may reduce apparent retrieval quality, but leak prevention
   is not a tunable metric tradeoff.

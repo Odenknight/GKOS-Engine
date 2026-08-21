@@ -1,7 +1,7 @@
 /** Canonical Phase 1 draft coordinates shared by Full and Lite. */
 export const RETRIEVAL_CONTRACT_VERSION = "gkos-retrieval/1.0.0-draft.1" as const;
 export const RETRIEVAL_RESULT_SCHEMA_ID = "gkos-retrieval-result/1.0.0-draft.1" as const;
-export const RETRIEVAL_PROJECTION_SCHEMA_VERSION = 1 as const;
+export const RETRIEVAL_PROJECTION_SCHEMA_VERSION = 2 as const;
 export const RETRIEVAL_CHUNKER_VERSION = "gkos-heading-chunker/1" as const;
 export const RETRIEVAL_TOKENIZER_VERSION = "gkos-ascii-whitespace/1" as const;
 export const RETRIEVAL_RRF_DEFAULT_K = 60 as const;

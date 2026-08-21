@@ -16,11 +16,15 @@ export function assessRetrievalConfidence(
   const lexical = first?.lexical_score ?? null;
   const semantic = first?.semantic_score ?? null;
   const reranker = first?.reranker_score ?? null;
+  const positiveLexical = lexical !== null && lexical > 0;
+  const positiveSemantic = semantic !== null && semantic > 0;
+  const positiveReranker = reranker !== null && reranker > 0;
+  if (first && first.lexical_rank !== null && !positiveLexical) reasons.push("WEAK_LEXICAL_MATCH");
   if (first && first.lexical_rank !== null && first.semantic_rank !== null && Math.abs(first.lexical_rank - first.semantic_rank) > 5) reasons.push("RANK_DISAGREEMENT");
   let level: RetrievalConfidence["level"];
   if (!first) level = "insufficient";
-  else if ((first.lexical_rank === 1 && lexical !== null) || (first.semantic_rank === 1 && semantic !== null) || reranker !== null) level = "high";
-  else if (first.lexical_rank !== null || first.semantic_rank !== null) level = "medium";
+  else if ((first.lexical_rank === 1 && positiveLexical) || (first.semantic_rank === 1 && positiveSemantic) || positiveReranker) level = "high";
+  else if (positiveLexical || positiveSemantic || positiveReranker) level = "medium";
   else level = "low";
   if (stale && level === "high") level = "medium";
   return {

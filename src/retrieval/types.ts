@@ -1,6 +1,7 @@
 import type { GkxSensitivity } from "../types";
 
 export type RetrievalProviderKind = "none" | "openai_compatible" | "local_onnx" | "mcp";
+export type SqliteLexicalBackend = "sqlite_fts5" | "sqlite_lexical_scan";
 export type RetrievalStageState = "active" | "disabled" | "skipped" | "degraded";
 export type DiscoverabilityDecision = "allow" | "deny" | "indeterminate" | "error";
 
@@ -140,7 +141,7 @@ export interface RetrievalHit {
 }
 
 export interface RetrievalProviderStageStatus {
-  kind: RetrievalProviderKind | "sqlite_fts5";
+  kind: RetrievalProviderKind | SqliteLexicalBackend;
   state: RetrievalStageState;
   provider_id?: string;
   model_id?: string;
@@ -188,6 +189,7 @@ export interface RetrievalProjectionManifest {
   policy_digest: string;
   chunker_version: string;
   tokenizer_version: string;
+  lexical_backend: SqliteLexicalBackend;
   embedding_provider_id: string | null;
   embedding_model_id: string | null;
   embedding_dimensions: number | null;

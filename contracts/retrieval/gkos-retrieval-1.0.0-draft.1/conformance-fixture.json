@@ -178,8 +178,225 @@
         "source_text": "İdea",
         "query": "idea",
         "expected_spans": [{ "start_byte": 0, "end_byte": 5, "text": "İdea" }]
+      },
+      {
+        "id": "greek-uppercase-sigma-fold",
+        "source_text": "ΟΣ",
+        "query": "οσ",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 4, "text": "ΟΣ" }]
+      },
+      {
+        "id": "greek-final-sigma-fold",
+        "source_text": "ος",
+        "query": "οσ",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 4, "text": "ος" }]
+      },
+      {
+        "id": "greek-ordinary-sigma",
+        "source_text": "οσ",
+        "query": "οσ",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 4, "text": "οσ" }]
+      },
+      {
+        "id": "private-use-code-point",
+        "source_text": "",
+        "query": "",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 3, "text": "" }]
+      },
+      {
+        "id": "unquoted-hyphen-separator",
+        "source_text": "co-op",
+        "query": "co-op",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 2, "text": "co" }, { "start_byte": 3, "end_byte": 5, "text": "op" }]
+      },
+      {
+        "id": "unquoted-underscore-separator",
+        "source_text": "under score",
+        "query": "under_score",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 5, "text": "under" }, { "start_byte": 6, "end_byte": 11, "text": "score" }]
+      },
+      {
+        "id": "quoted-separator-fallback",
+        "source_text": "under score",
+        "query": "\"under_score\"",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 5, "text": "under" }, { "start_byte": 6, "end_byte": 11, "text": "score" }]
+      },
+      {
+        "id": "quoted-separator-exact",
+        "source_text": "under_score",
+        "query": "\"under_score\"",
+        "expected_spans": [{ "start_byte": 0, "end_byte": 11, "text": "under_score" }]
       }
     ],
+    "lexical_backends": {
+      "projection_schema_version": 2,
+      "preferred": {
+        "manifest_value": "sqlite_fts5",
+        "stage": { "kind": "sqlite_fts5", "state": "active", "reason_codes": [] }
+      },
+      "compatibility": {
+        "manifest_value": "sqlite_lexical_scan",
+        "stage_without_fts5": {
+          "kind": "sqlite_lexical_scan",
+          "state": "degraded",
+          "reason_codes": ["SQLITE_FTS5_UNAVAILABLE", "SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"]
+        },
+        "stage_when_explicit_on_fts5_runtime": {
+          "kind": "sqlite_lexical_scan",
+          "state": "degraded",
+          "reason_codes": ["SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"]
+        }
+      },
+      "differential_rows": [
+        {
+          "chunk_id": "phrase",
+          "title": "Titleword",
+          "heading_path": "phrase",
+          "tags": "",
+          "topic": "topicword",
+          "category": "",
+          "text": "# phrase\nAlpha beta exact. Café co-op under_score.\n",
+          "token_count": 8
+        },
+        {
+          "chunk_id": "split",
+          "title": "Split",
+          "heading_path": "split",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "# split\nAlpha far apart from beta. Catalog only.\n",
+          "token_count": 9
+        },
+        {
+          "chunk_id": "decomposed",
+          "title": "Combining",
+          "heading_path": "decomposed",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "# decomposed\nCafé evidence.\n",
+          "token_count": 4
+        },
+        {
+          "chunk_id": "separators",
+          "title": "Separators",
+          "heading_path": "separators",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "# separators\nunder score only. Private-use  marker.\n",
+          "token_count": 8
+        },
+        {
+          "chunk_id": "greek-precomposed",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "ά",
+          "token_count": 1
+        },
+        {
+          "chunk_id": "hangul-precomposed",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "한",
+          "token_count": 1
+        },
+        {
+          "chunk_id": "sigma-upper",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "ΟΣ",
+          "token_count": 1
+        },
+        {
+          "chunk_id": "sigma-final",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "ος",
+          "token_count": 1
+        },
+        {
+          "chunk_id": "sigma-normal",
+          "title": "",
+          "heading_path": "",
+          "tags": "",
+          "topic": "",
+          "category": "",
+          "text": "οσ",
+          "token_count": 1
+        }
+      ],
+      "differential_queries": [
+        { "query": "\"alpha beta\"", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }] },
+        { "query": "alpha beta", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }, { "chunk_id": "split", "score": 0.6324555320336759 }] },
+        { "query": "titleword topicword", "expected": [{ "chunk_id": "phrase", "score": 1.6666666666666667 }] },
+        { "query": "co-op", "expected": [{ "chunk_id": "phrase", "score": 1.6666666666666667 }] },
+        { "query": "under_score", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }, { "chunk_id": "separators", "score": 0.6666666666666666 }] },
+        { "query": "\"under_score\"", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }, { "chunk_id": "separators", "score": 0.6666666666666666 }] },
+        { "query": "", "expected": [{ "chunk_id": "separators", "score": 0.3333333333333333 }] },
+        { "query": "ά", "expected": [{ "chunk_id": "greek-precomposed", "score": 0.7071067811865475 }] },
+        { "query": "α", "expected": [] },
+        { "query": "한", "expected": [{ "chunk_id": "hangul-precomposed", "score": 0.7071067811865475 }] },
+        { "query": "한", "expected": [] },
+        { "query": "οσ", "expected": [{ "chunk_id": "sigma-final", "score": 0.7071067811865475 }, { "chunk_id": "sigma-normal", "score": 0.7071067811865475 }, { "chunk_id": "sigma-upper", "score": 0.7071067811865475 }] },
+        { "query": "cafe", "expected": [{ "chunk_id": "decomposed", "score": 0.4472135954999579 }, { "chunk_id": "phrase", "score": 0.3333333333333333 }] },
+        { "query": "cat", "expected": [] },
+        { "query": "alpha.beta", "expected": [{ "chunk_id": "phrase", "score": 0.6666666666666666 }] },
+        { "query": "missing", "expected": [] }
+      ],
+      "rejected_queries": [
+        "\"alpha beta",
+        "\"\"",
+        "---",
+        "alpha\"beta",
+        "alpha\u0000beta",
+        "\talpha",
+        "alpha\n",
+        "alpha\u007fbeta"
+      ]
+    },
+    "confidence_zero_signal": {
+      "scores": [{
+        "chunk_id": "zero-signal",
+        "lexical_score": 0,
+        "semantic_score": null,
+        "fusion_score": 0.01639344262295082,
+        "reranker_score": null,
+        "mmr_score": null,
+        "lexical_rank": 1,
+        "semantic_rank": null,
+        "fused_rank": 1,
+        "reranker_rank": null,
+        "final_rank": 1
+      }],
+      "stages": {
+        "vector": { "kind": "none", "state": "disabled", "reason_codes": ["VECTOR_DISABLED"] },
+        "reranker": { "kind": "none", "state": "disabled", "reason_codes": ["RERANKER_DISABLED"] }
+      },
+      "eligible_count": 1,
+      "expected": {
+        "level": "low",
+        "low_confidence": true,
+        "reason_codes": ["WEAK_LEXICAL_MATCH"],
+        "lexical_signal": 0,
+        "semantic_signal": null,
+        "reranker_signal": null,
+        "coverage_signal": 1
+      }
+    },
     "lexical": {
     "query": "cafe policy",
     "fields": {

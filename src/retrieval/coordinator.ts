@@ -6,7 +6,7 @@ import { assessRetrievalConfidence } from "./confidence";
 import { retrievalCodeUnitCompare, retrievalSha256, stableJson } from "./digest";
 import { appliedFilterNames, matchesRetrievalFilters, validateRetrievalFilters } from "./filters";
 import { maximalMarginalRelevance, reciprocalRankFusion } from "./fusion";
-import { lexicalCitationSpans } from "./lexical";
+import { lexicalCitationSpans, lexicalQueryClauses } from "./lexical";
 import { buildRetrievalGeneration, type BuiltRetrievalGeneration, type RetrievalGenerationInput, openActiveRetrievalStore, SqliteRetrievalStore } from "./sqlite-store";
 import type {
   DiscoverabilityDecision,
@@ -210,9 +210,11 @@ async function invokeProviderWithDeadline<T>(
 }
 
 /**
- * Build a complete FTS generation. An explicitly selected vector provider is
- * one optional stage; any failure is reported and the coherent FTS generation
- * is still published without mixed or partial vectors.
+ * Build a complete lexical generation. FTS5 is preferred when the runtime
+ * actually exposes it; otherwise the manifest-bound compatibility scan keeps
+ * lexical retrieval functional and is reported as degraded. An explicitly
+ * selected vector provider is one optional stage; provider failure preserves
+ * the coherent lexical generation without mixed or partial vectors.
  */
 export async function indexRetrievalGeneration(
   input: Omit<RetrievalGenerationInput, "vectors" | "embedding_provider_id" | "embedding_model_id" | "embedding_dimensions">,
@@ -238,7 +240,7 @@ export async function indexRetrievalGeneration(
       }
     } catch {
       // A missing, corrupt, or differently-versioned prior cache is disposable.
-      // It cannot block a fresh provider attempt or coherent FTS publication.
+      // It cannot block a fresh provider attempt or coherent lexical publication.
       byDigest.clear();
     } finally {
       if (prior) try { prior.close(); } catch { byDigest.clear(); }
@@ -340,11 +342,14 @@ export class RetrievalCoordinator {
 
   async search(request: RetrievalSearchRequest): Promise<RetrievalSearchResult> {
     validateSearchRequest(request);
-    const query = request.query?.trim();
-    if (!query) throw new TypeError("query is required.");
-    const queryTerms = [...query.matchAll(/"([^"]+)"|(\S+)/gu)].map((match) => match[1] ?? match[2]);
-    if (queryTerms.length > 64) throw new RangeError("query exceeds 64 terms.");
-    if (queryTerms.some((term) => Buffer.byteLength(term, "utf8") > 256)) throw new RangeError("a query term exceeds 256 UTF-8 bytes.");
+    if (!request.query) throw new TypeError("query is required.");
+    // Validate the caller's exact bytes before deriving a trimmed ranking
+    // query. Otherwise leading/trailing controls could be erased before the
+    // shared lexical grammar has an opportunity to fail closed.
+    const queryClauses = lexicalQueryClauses(request.query);
+    const query = request.query.trim();
+    if (queryClauses.length > 64) throw new RangeError("query exceeds 64 terms.");
+    if (queryClauses.some((clause) => Buffer.byteLength(clause.value, "utf8") > 256)) throw new RangeError("a query term exceeds 256 UTF-8 bytes.");
     const limit = request.limit ?? 5;
     const lexicalTopK = request.lexical_top_k ?? Math.max(20, limit * 4);
     const semanticTopK = request.semantic_top_k ?? Math.max(20, limit * 4);
@@ -394,7 +399,13 @@ export class RetrievalCoordinator {
     }
     const eligibleIds = eligible.map((chunk) => chunk.chunk_id);
     const lexical = this.#store.lexicalSearch(query, eligibleIds, lexicalTopK);
-    const lexicalStage = stage("sqlite_fts5", "active", []);
+    const lexicalStage = this.#store.manifest.lexical_backend === "sqlite_fts5"
+      ? stage("sqlite_fts5", "active", [])
+      : stage("sqlite_lexical_scan", "degraded", [
+        ...(!this.#store.fts5_available ? ["SQLITE_FTS5_UNAVAILABLE"] : []),
+        "SQLITE_LEXICAL_SCAN_ACTIVE",
+        "SQLITE_LEXICAL_SCAN_APPROXIMATION",
+      ]);
     let vectorStage: RetrievalProviderStageStatus;
     let semantic: ReturnType<SqliteRetrievalStore["vectorSearch"]> = [];
     if (!this.#options.vector_provider) vectorStage = stage("none", "disabled", ["VECTOR_DISABLED"]);
@@ -415,7 +426,7 @@ export class RetrievalCoordinator {
         vectorStage = stage(provider.kind, "degraded", ["VECTOR_UNAVAILABLE"], provider);
       }
       if (queryVector) {
-        // Provider failures may degrade to FTS. Persisted-store read, space,
+        // Provider failures may degrade to lexical-only retrieval. Persisted-store read, space,
         // or corruption failures are projection-integrity failures and must
         // propagate rather than being mislabeled as provider unavailability.
         semantic = this.#store.vectorSearch([...queryVector], eligibleIds, semanticTopK, provider.provider_id, provider.model_id);

@@ -8,7 +8,7 @@
   "coordinates": {
     "chunker": "gkos-heading-chunker/1",
     "tokenizer": "gkos-ascii-whitespace/1",
-    "projection_schema_version": 1,
+    "projection_schema_version": 2,
     "result_schema": "gkos-retrieval-result/1.0.0-draft.1"
   },
   "identity": {
@@ -56,16 +56,27 @@
     "ordering": ["mmr_score descending", "fusion_score descending", "chunk_id UTF-16/code-unit ascending"]
   },
   "stage_scores": {
-    "lexical_score": "NFD/mark-stripped lowercase Unicode letter/number/underscore/hyphen query-term substring frequency divided by sqrt(token_count+1); weights title=3, heading_path=2, tags=1.5, topic=2, category=2, text=1",
+    "lexical_score": "NFD/mark-stripped lowercase Unicode letter/number/private-use query-token substring frequency divided by sqrt(token_count+1); Greek final sigma folds to ordinary sigma, punctuation including underscore/hyphen separates unquoted terms; weights title=3, heading_path=2, tags=1.5, topic=2, category=2, text=1",
     "semantic_score": "cosine similarity",
     "fusion_score": "RRF score",
     "reranker_score": "finite provider-native score",
     "mmr_score": "MMR selection utility",
     "probability_claim": false
   },
+  "confidence_zero_signal": "a rank-one candidate whose lexical, semantic, and reranker signals are all absent or non-positive is low confidence with WEAK_LEXICAL_MATCH; rank alone never creates high confidence",
+  "lexical_backends": {
+    "selection": "probe the actual bundled SQLite virtual-table capability; never infer from Node version",
+    "preferred": "sqlite_fts5 when a real FTS5 virtual-table create/drop probe succeeds",
+    "compatibility": "sqlite_lexical_scan when the runtime has no FTS5 module; ordinary SQLite joins the policy-eligible ID set before deterministic in-process clause matching and scoring",
+    "scan_candidate_rule": "gkos-unicode61-subset-scan/1 uses the host runtime Unicode property tables for letters, numbers, and private-use Co; applies diacritic folding only to Latin-base clusters; folds Greek final sigma to sigma; preserves non-Latin canonical-form distinctions; and treats underscore/hyphen and other punctuation as separators; each normalized clause must occur as one consecutive token sequence within one indexed field; distinct clauses may match distinct fields",
+    "query_grammar": "one or more space/Unicode-whitespace-delimited terms or complete double-quoted phrases; C0/DEL controls (including NUL), unmatched/embedded quotes, empty phrases, and clauses containing no compatibility-subset token are rejected before corpus or store access",
+    "manifest_binding": "lexical_backend is required in projection schema 2 and participates in projection_digest and projection_id",
+    "reporting": "sqlite_lexical_scan is state degraded with SQLITE_LEXICAL_SCAN_ACTIVE, SQLITE_LEXICAL_SCAN_APPROXIMATION, and, when applicable, SQLITE_FTS5_UNAVAILABLE; it is never advertised as FTS5",
+    "parity_scope": "fixed phrase, punctuation, hyphen, underscore, private-use, Latin diacritic/combining-mark, Greek/Hangul canonical-form distinction, Greek sigma folding, cross-field, substring, no-match, ordering, score, and citation fixtures; exhaustive Unicode-6.1 parity outside that frozen corpus is not claimed"
+  },
   "parent_expansion": "only when the winning child has fewer than the configured token threshold (default 80, valid 1..4096): nearest structural ancestor's first chunk; winning citation remains unchanged",
   "parent_authorization": "parent independently passes the same discoverability policy and typed filters; otherwise omitted",
-  "citations": "live source digest, exact indexed byte slice, and absolute one-based LF/CRLF line coordinates are recomputed and verified before ranking; stale/forged eligible chunks do not score; returned citations set verified=true and stale=false",
+  "citations": "live source digest, exact indexed byte slice, and absolute one-based LF/CRLF line coordinates are recomputed and verified before ranking; stale/forged eligible chunks do not score; returned citations set verified=true and stale=false; unquoted punctuation-separated terms cite exact component spans; a quoted phrase cites the exact phrase when present and otherwise exact component-token spans, never an invented phrase quotation",
   "overlap_result_dedup": "process final ranked candidates in order; hits with matched spans retain only unclaimed exact (source_id,start_byte,end_byte) spans and are skipped if none remain; hits with no matched spans are skipped when their half-open chunk interval overlaps any accepted interval from the same source; adjacent intervals do not overlap; only accepted hits claim spans/intervals",
   "eligible_result_count": "authorized, typed-filtered, live-verified chunks in the eligible corpus before matching and scoring",
   "resource_bounds": { "max_chunk_utf8_bytes": 16384, "max_result_text_utf8_bytes_default": 131072, "max_matched_spans": 8, "max_matched_span_utf8_bytes": 256, "max_total_matched_span_utf8_bytes": 1024 },
@@ -76,7 +87,7 @@
     "preference_order": null,
     "silent_embedding_space_fallback": false,
     "embedding_space_mismatch": "hard VECTOR_SPACE_MISMATCH_REBUILD_REQUIRED error before provider invocation",
-    "embedding_failure": "reported FTS-only degradation",
+    "embedding_failure": "reported lexical-only degradation using the manifest-bound active lexical backend",
     "missing_reranker": "reported skipped stage"
   },
   "embedding_cache": "reuse only from the verified active vault-local generation by exact (provider_id, model_id, dimensions, content_digest); missing, corrupt, or mismatched prior state is a cache miss; publication remains all-vectors-or-none",

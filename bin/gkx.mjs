@@ -213,6 +213,7 @@ export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
   const {
     chunkMarkdown, indexRetrievalGeneration, RetrievalCoordinator,
     retrievalCanonicalDigest, vaultSourceReader,
+    detectSqliteLexicalCapability,
     discoverTrustedGkosConfig, configuredProviderIdentityFromTrustedConfig,
     selectConfiguredVectorProvider, selectConfiguredRerankProvider,
   } = await loadRetrieval();
@@ -225,6 +226,7 @@ export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
   const retrievalConfig = trustedConfig?.document?.retrieval ?? {};
   const vectorIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "vectors") : undefined;
   const rerankerIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "reranker") : undefined;
+  const lexicalCapability = detectSqliteLexicalCapability();
   let vectorProvider;
   if (trustedConfig && vectorIdentity) {
     try { vectorProvider = selectConfiguredVectorProvider(trustedConfig); }
@@ -286,7 +288,11 @@ export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
   const effectiveConfiguration = {
     mode: vectorIdentity ? "hybrid" : "fts",
     chunker: { version: "gkos-heading-chunker/1", tokenizer: "gkos-ascii-whitespace/1", max_tokens: retrievalConfig.max_tokens ?? 400, overlap_tokens: retrievalConfig.overlap_tokens ?? 0 },
-    lexical: { provider: "sqlite_fts5", tokenizer: "unicode61 remove_diacritics 2", boosts: { title: 3, heading_path: 2, tags: 1.5, topic: 2, category: 2, text: 1 } },
+    lexical: {
+      provider: lexicalCapability.default_backend,
+      tokenizer: lexicalCapability.fts5_available ? "unicode61 remove_diacritics 2" : "gkos-unicode61-subset-scan/1",
+      boosts: { title: 3, heading_path: 2, tags: 1.5, topic: 2, category: 2, text: 1 },
+    },
     fusion: { rrf_k: retrievalConfig.rrf_k ?? 60 },
     diversity: { enabled: retrievalConfig.mmr === true, mmr_lambda: retrievalConfig.mmr_lambda ?? 0.7 },
     parent_expansion: retrievalConfig.parent_expansion !== false,
@@ -302,6 +308,7 @@ export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
     configuration_digest: configurationDigest,
     policy_digest: policyDigest,
     chunks,
+    lexical_backend: lexicalCapability.default_backend,
   }, vectorProvider);
   const coordinator = new RetrievalCoordinator(indexed.generation.database_path, {
     discoverability_policy: (chunk) => chunk.metadata.sensitivity === "public" ? "allow" : "deny",
@@ -464,7 +471,7 @@ const USAGE = `gkx (GKOS-Engine) v${ENGINE_VERSION}
 Usage:
   gkx validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
   gkx assess   <dir> [--json]                         per-note documentation-quality scores/labels
-  gkx search <query> --kb-path <dir> [--limit <n>]    public-only FTS retrieval with exact citations
+  gkx search <query> --kb-path <dir> [--limit <n>]    public-only lexical retrieval with exact citations
              [--config <trusted-gkos.toml>] [--trust-cwd-config]
   gkx graph    <dir> -o <graph.json> [--watch]        canonical Gkx graph (stable serialization)
   gkx export graphiti <dir> --episodes <out.json> [--group-id <ns>]

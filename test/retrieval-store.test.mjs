@@ -11,6 +11,7 @@ import {
   RetrievalCoordinator,
   buildRetrievalGeneration,
   chunkMarkdown,
+  detectSqliteLexicalCapability,
   indexRetrievalGeneration,
   retrievalCanonicalDigest,
   retrievalSha256,
@@ -41,7 +42,7 @@ const coordinatorOptions = (root, extra = {}) => ({
   ...extra,
 });
 
-test("SQLite FTS generation, active pointer replacement, accent scoring, and verification work", async () => {
+test("SQLite lexical generation feature-detects FTS5 or the reported compatibility scan", async () => {
   const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-store-"));
   const state = join(root, "state");
   const chunks = [
@@ -50,7 +51,15 @@ test("SQLite FTS generation, active pointer replacement, accent scoring, and ver
   ];
   const first = buildRetrievalGeneration(generationInput(state, chunks));
   const firstCoordinator = new RetrievalCoordinator(first.database_path, coordinatorOptions(root));
-  assert.equal((await firstCoordinator.search({ query: "cafe", limit: 5 })).hits[0].chunk.source_path, "cafe.md");
+  const capability = detectSqliteLexicalCapability();
+  assert.equal(first.manifest.lexical_backend, capability.default_backend);
+  const cafe = await firstCoordinator.search({ query: "cafe", limit: 5 });
+  assert.equal(cafe.hits[0].chunk.source_path, "cafe.md");
+  assert.equal(cafe.stages.lexical.kind, capability.default_backend);
+  assert.equal(cafe.stages.lexical.state, capability.fts5_available ? "active" : "degraded");
+  assert.deepEqual(cafe.stages.lexical.reason_codes, capability.fts5_available
+    ? []
+    : ["SQLITE_FTS5_UNAVAILABLE", "SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"]);
   assert.equal((await firstCoordinator.search({ query: "governance", limit: 5 })).hits[0].chunk.source_path, "policy.md");
   firstCoordinator.close();
 
@@ -59,6 +68,153 @@ test("SQLite FTS generation, active pointer replacement, accent scoring, and ver
   const active = RetrievalCoordinator.openActive(state, coordinatorOptions(root));
   assert.equal((await active.search({ query: "governance", limit: 5 })).projection_digest, second.manifest.projection_digest);
   active.close();
+});
+
+test("FTS5 and compatibility scan bind distinct manifests and agree on fixed candidate semantics", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-lexical-parity-"));
+  const chunks = [
+    ...await source(root, "phrase", "018f0000-0000-7000-8000-000000000233", "Alpha beta exact. Café co-op under_score.", { title: "Titleword", topic: "topicword" }),
+    ...await source(root, "split", "018f0000-0000-7000-8000-000000000234", "Alpha far apart from beta. Catalog only.", { title: "Split" }),
+    ...await source(root, "decomposed", "018f0000-0000-7000-8000-000000000235", "Café evidence.", { title: "Combining" }),
+    ...await source(root, "separators", "018f0000-0000-7000-8000-000000000236", "under score only. Private-use \uE000 marker.", { title: "Separators" }),
+    ...await source(root, "greek", "018f0000-0000-7000-8000-000000000241", "Greek ά only.", { title: "Greek" }),
+    ...await source(root, "hangul", "018f0000-0000-7000-8000-000000000242", "Hangul 한 only.", { title: "Hangul" }),
+    ...await source(root, "sigma-upper", "018f0000-0000-7000-8000-000000000243", "ΟΣ", { title: "Sigma upper" }),
+    ...await source(root, "sigma-final", "018f0000-0000-7000-8000-000000000244", "ος", { title: "Sigma final" }),
+    ...await source(root, "sigma-normal", "018f0000-0000-7000-8000-000000000245", "οσ", { title: "Sigma normal" }),
+  ];
+  const capability = detectSqliteLexicalCapability();
+  const scanInput = generationInput(join(root, "scan"), chunks, { lexical_backend: "sqlite_lexical_scan" });
+  const scan = buildRetrievalGeneration(scanInput);
+  const coherentPointer = await readFile(scan.pointer_path);
+  assert.throws(
+    () => buildRetrievalGeneration({ ...scanInput, lexical_backend: "invalid-backend" }),
+    /RETRIEVAL_LEXICAL_BACKEND_INVALID/u,
+  );
+  assert.deepEqual(await readFile(scan.pointer_path), coherentPointer, "failed backend selection preserves the prior coherent pointer bytes");
+  if (!capability.fts5_available) {
+    const unavailableState = join(root, "forced-fts5");
+    assert.throws(
+      () => buildRetrievalGeneration(generationInput(unavailableState, chunks, { lexical_backend: "sqlite_fts5" })),
+      /SQLITE_FTS5_UNAVAILABLE/u,
+    );
+    assert.equal(existsSync(unavailableState), false, "capability failure occurs before derived state creation");
+    assert.equal(scan.manifest.lexical_backend, "sqlite_lexical_scan");
+    return;
+  }
+
+  const fts = buildRetrievalGeneration(generationInput(join(root, "fts"), chunks, { lexical_backend: "sqlite_fts5" }));
+  assert.notEqual(fts.manifest.projection_digest, scan.manifest.projection_digest);
+  assert.notEqual(fts.database_path, scan.database_path);
+  assert.equal(fts.manifest.lexical_backend, "sqlite_fts5");
+  assert.equal(scan.manifest.lexical_backend, "sqlite_lexical_scan");
+  const ftsCoordinator = new RetrievalCoordinator(fts.database_path, coordinatorOptions(root));
+  const scanCoordinator = new RetrievalCoordinator(scan.database_path, coordinatorOptions(root));
+  const queries = [
+    "\"alpha beta\"",
+    "alpha beta",
+    "titleword topicword",
+    "co-op",
+    "under_score",
+    '"under_score"',
+    "\uE000",
+    "ά",
+    "α",
+    "한",
+    "한",
+    "οσ",
+    "cafe",
+    "cat",
+    "alpha.beta",
+    "missing",
+  ];
+  const expectedPaths = new Map([
+    ['"alpha beta"', ["phrase.md"]],
+    ["alpha beta", ["phrase.md", "split.md"]],
+    ["titleword topicword", ["phrase.md"]],
+    ["co-op", ["phrase.md"]],
+    ["under_score", ["phrase.md", "separators.md"]],
+    ['"under_score"', ["phrase.md", "separators.md"]],
+    ["\uE000", ["separators.md"]],
+    ["ά", ["greek.md"]],
+    ["α", []],
+    ["한", ["hangul.md"]],
+    ["한", []],
+    ["cafe", ["decomposed.md", "phrase.md"]],
+    ["cat", []],
+    ["alpha.beta", ["phrase.md"]],
+    ["missing", []],
+  ]);
+  for (const query of queries) {
+    const [ftsResult, scanResult] = await Promise.all([
+      ftsCoordinator.search({ query, limit: 10 }),
+      scanCoordinator.search({ query, limit: 10 }),
+    ]);
+    const comparable = (result) => result.hits.map((hit) => ({
+      chunk_id: hit.chunk.chunk_id,
+      citation: hit.citation,
+      stage_scores: hit.stage_scores,
+    }));
+    assert.deepEqual(comparable(scanResult), comparable(ftsResult), query);
+    if (query === "οσ") {
+      assert.deepEqual(ftsResult.hits.map((hit) => hit.chunk.source_path).sort(), ["sigma-final.md", "sigma-normal.md", "sigma-upper.md"]);
+      assert.ok(ftsResult.hits.every((hit) => hit.stage_scores.lexical_score > 0), "every sigma spelling has a nonzero lexical signal");
+      assert.deepEqual(
+        ftsResult.hits.flatMap((hit) => hit.citation.matched_spans.map((span) => span.text)).sort(),
+        ["ΟΣ", "ος", "οσ"].sort(),
+        "every sigma spelling cites its exact source bytes",
+      );
+    } else if (query === "\uE000") {
+      assert.ok(ftsResult.hits[0].stage_scores.lexical_score > 0, "private-use query has a nonzero lexical signal");
+      assert.deepEqual(ftsResult.hits[0].citation.matched_spans.map((span) => span.text), ["\uE000"]);
+    } else if (query === "co-op") {
+      assert.ok(ftsResult.hits[0].stage_scores.lexical_score > 0);
+      assert.deepEqual(ftsResult.hits[0].citation.matched_spans.map((span) => span.text), ["co", "op", "co"]);
+    } else if (query === "under_score" || query === '"under_score"') {
+      assert.ok(ftsResult.hits.every((hit) => hit.stage_scores.lexical_score > 0));
+      const byPath = new Map(ftsResult.hits.map((hit) => [hit.chunk.source_path, hit.citation.matched_spans.map((span) => span.text)]));
+      assert.deepEqual(byPath.get("phrase.md"), query.startsWith('"') ? ["under_score"] : ["under", "score"]);
+      assert.deepEqual(byPath.get("separators.md"), ["under", "score"]);
+    } else {
+      assert.deepEqual(ftsResult.hits.map((hit) => hit.chunk.source_path), expectedPaths.get(query), query);
+    }
+    assert.equal(ftsResult.stages.lexical.kind, "sqlite_fts5");
+    assert.equal(ftsResult.stages.lexical.state, "active");
+    assert.equal(scanResult.stages.lexical.kind, "sqlite_lexical_scan");
+    assert.equal(scanResult.stages.lexical.state, "degraded");
+    assert.deepEqual(scanResult.stages.lexical.reason_codes, ["SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"]);
+  }
+  for (const query of ['"alpha beta', '""', "---", 'alpha"beta', "alpha\0beta", "\talpha", "alpha\n", "alpha\u007fbeta"]) {
+    await assert.rejects(ftsCoordinator.search({ query, limit: 10 }), /RETRIEVAL_QUERY_LEXICAL_INVALID/u, `FTS5 ${query}`);
+    await assert.rejects(scanCoordinator.search({ query, limit: 10 }), /RETRIEVAL_QUERY_LEXICAL_INVALID/u, `scan ${query}`);
+  }
+  ftsCoordinator.close();
+  scanCoordinator.close();
+});
+
+test("compatibility scan restricts policy-eligible IDs in SQLite before JavaScript scoring", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-lexical-policy-"));
+  const chunks = [
+    ...await source(root, "public-lexical", "018f0000-0000-7000-8000-000000000237", "Needle public.", { sensitivity: "public" }),
+    ...await source(root, "hidden-lexical", "018f0000-0000-7000-8000-000000000238", "Needle hidden.", { sensitivity: "secret" }),
+  ];
+  const built = buildRetrievalGeneration(generationInput(join(root, "state"), chunks, { lexical_backend: "sqlite_lexical_scan" }));
+  const coordinator = new RetrievalCoordinator(built.database_path, {
+    discoverability_policy: (chunk) => chunk.metadata.sensitivity === "public" ? "allow" : "deny",
+    source_reader: vaultSourceReader(root),
+  });
+  const result = await coordinator.search({ query: "Needle", limit: 5 });
+  assert.deepEqual(result.hits.map((hit) => hit.chunk.source_path), ["public-lexical.md"]);
+  assert.equal(result.eligible_result_count, 1);
+  assert.equal(result.stages.lexical.kind, "sqlite_lexical_scan");
+  coordinator.close();
+
+  const implementation = await readFile(new URL("../src/retrieval/sqlite-store.ts", import.meta.url), "utf8");
+  assert.match(
+    implementation,
+    /FROM chunk_fts AS f\s+JOIN retrieval_eligible AS e ON e\.chunk_id = f\.chunk_id\s+JOIN chunks AS c/,
+    "scan rows are policy-pruned by SQLite before JS matching or scoring",
+  );
 });
 
 test("deferred parent FK accepts adversarial hash order and parent bindings remain verified", async () => {
@@ -225,18 +381,40 @@ test("chunkMarkdown rejects coercive source envelopes before derived publication
   assert.equal(getterCalls, 0, "source-envelope validation must not invoke accessors");
 });
 
-test("tampered FTS projection is rejected and same-digest rebuild quarantines it", async () => {
+test("tampered lexical projection is rejected and same-digest rebuild quarantines it", async () => {
   const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-corrupt-"));
   const chunks = await source(root, "one", "018f0000-0000-7000-8000-000000000205", "Needle.");
-  const input = generationInput(join(root, "state"), chunks);
+  const capability = detectSqliteLexicalCapability();
+  const backends = capability.fts5_available ? ["sqlite_fts5", "sqlite_lexical_scan"] : ["sqlite_lexical_scan"];
+  for (const backend of backends) {
+    const input = generationInput(join(root, backend), chunks, { lexical_backend: backend });
+    const built = buildRetrievalGeneration(input);
+    const database = new DatabaseSync(built.database_path);
+    database.exec("DELETE FROM chunk_fts");
+    database.close();
+    assert.throws(() => new RetrievalCoordinator(built.database_path, coordinatorOptions(root)), /LEXICAL_PROJECTION_MISMATCH/, backend);
+    const rebuilt = buildRetrievalGeneration(input);
+    const verified = new RetrievalCoordinator(rebuilt.database_path, coordinatorOptions(root));
+    verified.close();
+    assert.ok((await readdir(input.state_directory)).some((name) => name.includes(".corrupt-")), backend);
+  }
+});
+
+test("lexical backend manifest columns are verified and corrupt reuse is atomic", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-backend-manifest-"));
+  const chunks = await source(root, "one", "018f0000-0000-7000-8000-000000000239", "Needle.");
+  const input = generationInput(join(root, "state"), chunks, { lexical_backend: "sqlite_lexical_scan" });
   const built = buildRetrievalGeneration(input);
+  const pointerBefore = await readFile(built.pointer_path);
   const database = new DatabaseSync(built.database_path);
-  database.exec("DELETE FROM chunk_fts");
+  database.prepare("UPDATE projection_manifest SET lexical_backend = ?").run("sqlite_fts5");
   database.close();
-  assert.throws(() => new RetrievalCoordinator(built.database_path, coordinatorOptions(root)), /FTS_PROJECTION_MISMATCH/);
+  assert.throws(() => new RetrievalCoordinator(built.database_path, coordinatorOptions(root)), /MANIFEST_COLUMNS_MISMATCH/u);
+  assert.deepEqual(await readFile(built.pointer_path), pointerBefore, "failed verification does not rewrite the active pointer");
   const rebuilt = buildRetrievalGeneration(input);
-  const verified = new RetrievalCoordinator(rebuilt.database_path, coordinatorOptions(root));
-  verified.close();
+  const coordinator = new RetrievalCoordinator(rebuilt.database_path, coordinatorOptions(root));
+  assert.equal((await coordinator.search({ query: "Needle", limit: 1 })).hits.length, 1);
+  coordinator.close();
   assert.ok((await readdir(input.state_directory)).some((name) => name.includes(".corrupt-")));
 });
 
@@ -491,6 +669,14 @@ test("public search rejects unknown or malformed typed filters before policy, so
     },
   });
   const malformed = [
+    { query: '"Needle' },
+    { query: '""' },
+    { query: "---" },
+    { query: 'Needle"request' },
+    { query: "Needle\0request" },
+    { query: "\tNeedle" },
+    { query: "Needle\n" },
+    { query: "Needle\u007frequest" },
     { query: "Needle", unknown_request_key: true },
     { query: "Needle", limit: "5" },
     { query: "Needle", mmr: "true" },
@@ -507,13 +693,13 @@ test("public search rejects unknown or malformed typed filters before policy, so
     { query: "Needle", filters: { authored_from: "2026-08-20T12:00" } },
   ];
   for (const request of malformed) {
-    await assert.rejects(coordinator.search(request), (error) => /^RETRIEVAL_(?:REQUEST|FILTER)_/u.test(error.message));
+    await assert.rejects(coordinator.search(request), (error) => /^RETRIEVAL_(?:REQUEST|FILTER|QUERY)_/u.test(error.message));
   }
   assert.deepEqual(calls, { policy: 0, source: 0, vector: 0, rerank: 0 });
   coordinator.close();
 });
 
-test("fixed vector provider is validated, hybrid search works, and failures degrade to FTS", async () => {
+test("fixed vector provider is validated, hybrid search works, and failures degrade to lexical retrieval", async () => {
   const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-vector-"));
   const chunks = [
     ...await source(root, "alpha", "018f0000-0000-7000-8000-000000000208", "Alpha lexical."),

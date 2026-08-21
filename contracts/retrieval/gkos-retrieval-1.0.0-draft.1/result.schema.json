@@ -107,7 +107,7 @@
       "type": "object", "additionalProperties": false,
       "required": ["kind", "state", "reason_codes"],
       "properties": {
-        "kind": { "enum": ["none", "sqlite_fts5", "openai_compatible", "local_onnx", "mcp"] },
+        "kind": { "enum": ["none", "sqlite_fts5", "sqlite_lexical_scan", "openai_compatible", "local_onnx", "mcp"] },
         "state": { "enum": ["active", "disabled", "skipped", "degraded"] },
         "provider_id": { "type": "string", "minLength": 1 },
         "model_id": { "type": "string", "minLength": 1 },

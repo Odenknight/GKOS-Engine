@@ -8,6 +8,8 @@ export interface LexicalSignalFields {
   token_count: number;
 }
 
+const LEXICAL_FIELD_NAMES = ["title", "heading_path", "tags", "topic", "category", "text"] as const;
+
 export const RETRIEVAL_LEXICAL_FIELD_WEIGHTS = Object.freeze({
   title: 3,
   heading_path: 2,
@@ -18,13 +20,18 @@ export const RETRIEVAL_LEXICAL_FIELD_WEIGHTS = Object.freeze({
 } as const);
 
 export function normalizeLexical(value: string): string {
-  return value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+  return value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/ς/gu, "σ");
 }
 
 export interface LexicalCitationSpan {
   start_byte: number;
   end_byte: number;
   text: string;
+}
+
+export interface LexicalQueryClause {
+  value: string;
+  tokens: string[];
 }
 
 interface NormalizedOriginalMap {
@@ -74,14 +81,19 @@ function normalizedOriginalMap(value: string): NormalizedOriginalMap {
 
 /** Exact original UTF-8 slices for normalized lexical query terms/phrases. */
 export function lexicalCitationSpans(value: string, query: string): LexicalCitationSpan[] {
-  const terms = [...query.matchAll(/"([^"]+)"|([\p{L}\p{N}_-]+)/gu)]
-    .map((match) => normalizeLexical(match[1] ?? match[2]))
-    .filter(Boolean);
+  const groups = [...query.matchAll(/"([^"]+)"|([^"\s]+)/gu)].flatMap((match) => {
+    if (match[1] !== undefined) {
+      const phrase = normalizeLexical(match[1]);
+      return phrase ? [{ primary: phrase, fallback: lexicalQueryTerms(match[1]) }] : [];
+    }
+    return lexicalQueryTerms(match[2] ?? "").map((term) => ({ primary: term, fallback: [] }));
+  });
   const mapped = normalizedOriginalMap(value);
   const encodedValue = UTF8.encode(value);
   const candidates: LexicalCitationSpan[] = [];
   let returnedBytes = 0;
-  for (const needle of terms) {
+  const addNeedle = (needle: string): number => {
+    let added = 0;
     let offset = 0;
     while ((offset = mapped.normalized.indexOf(needle, offset)) >= 0) {
       if (candidates.length >= 16) break;
@@ -96,8 +108,15 @@ export function lexicalCitationSpans(value: string, query: string): LexicalCitat
           text: UTF8_DECODER.decode(encodedValue.subarray(startByte, endByte)),
         });
         returnedBytes += exactBytes;
+        added++;
       }
       offset += Math.max(1, needle.length);
+    }
+    return added;
+  };
+  for (const group of groups) {
+    if (addNeedle(group.primary) === 0) {
+      for (const fallback of group.fallback) addNeedle(fallback);
     }
   }
   const seen = new Set<string>();
@@ -109,9 +128,96 @@ export function lexicalCitationSpans(value: string, query: string): LexicalCitat
   }).slice(0, 8);
 }
 
-/** Terms and normalization intentionally mirror SQLite FTS5 unicode61 remove_diacritics=2. */
+/** Versioned scoring terms; exact exhaustive unicode61 parity is not claimed. */
 export function lexicalQueryTerms(query: string): string[] {
-  return [...normalizeLexical(query).matchAll(/[\p{L}\p{N}_-]+/gu)].map((match) => match[0]);
+  return [...normalizeLexical(query).matchAll(/[\p{L}\p{N}\p{Co}]+/gu)].map((match) => match[0]);
+}
+
+/** Strict shared query-clause grammar for FTS5 and compatibility scan. */
+export function lexicalQueryClauses(query: string): LexicalQueryClause[] {
+  if (/[\u0000-\u001f\u007f]/u.test(query)) throw new TypeError("RETRIEVAL_QUERY_LEXICAL_INVALID:control");
+  const clauses: LexicalQueryClause[] = [];
+  let offset = 0;
+  while (offset < query.length) {
+    while (offset < query.length && /\s/u.test(query[offset])) offset++;
+    if (offset >= query.length) break;
+    let value: string;
+    if (query[offset] === '"') {
+      const close = query.indexOf('"', offset + 1);
+      if (close < 0) throw new TypeError("RETRIEVAL_QUERY_LEXICAL_INVALID:unmatched_quote");
+      value = query.slice(offset + 1, close);
+      offset = close + 1;
+      if (offset < query.length && !/\s/u.test(query[offset])) throw new TypeError("RETRIEVAL_QUERY_LEXICAL_INVALID:quote_boundary");
+    } else {
+      const start = offset;
+      while (offset < query.length && !/\s/u.test(query[offset])) offset++;
+      value = query.slice(start, offset);
+      if (value.includes('"')) throw new TypeError("RETRIEVAL_QUERY_LEXICAL_INVALID:quote_boundary");
+    }
+    const tokens = unicode61SubsetTokens(value);
+    if (!value || !tokens.length) throw new TypeError("RETRIEVAL_QUERY_LEXICAL_INVALID:empty_clause");
+    clauses.push({ value, tokens });
+  }
+  if (!clauses.length) throw new TypeError("RETRIEVAL_QUERY_LEXICAL_INVALID:empty_query");
+  return clauses;
+}
+
+/**
+ * Candidate matching used only by the SQLite compatibility scan when the
+ * runtime has no FTS5 module. Each whitespace-delimited/quoted query clause is
+ * tokenized with the versioned GKOS Phase 1 compatibility subset; every clause must
+ * occur as one consecutive token sequence in one indexed field. Different
+ * clauses may match different fields, preserving the frozen unqualified-AND
+ * structure exercised by the differential FTS5 corpus.
+ */
+export function lexicalScanMatches(fields: Readonly<LexicalSignalFields>, query: string): boolean {
+  const clauses = lexicalQueryClauses(query).map((clause) => clause.tokens);
+  const indexedFields = LEXICAL_FIELD_NAMES.map((field) => unicode61SubsetTokens(String(fields[field] ?? "")));
+  return clauses.every((clause) => indexedFields.some((tokens) => containsTokenSequence(tokens, clause)));
+}
+
+function unicode61SubsetTokens(value: string): string[] {
+  // This deliberately degraded compatibility subset follows the host
+  // runtime's Unicode property tables; it does not claim a vendored Unicode
+  // 6.1 implementation. The frozen differential corpus covers the supported
+  // parity surface: letters, numbers, private-use scalars, punctuation
+  // separators, and the pinned normalization fixtures.
+  return [...normalizeScanCandidate(value).matchAll(/[\p{L}\p{N}\p{Co}]+/gu)].map((match) => match[0]);
+}
+
+function normalizeScanCandidate(value: string): string {
+  let normalized = "";
+  let offset = 0;
+  while (offset < value.length) {
+    const first = String.fromCodePoint(value.codePointAt(offset)!);
+    let end = offset + first.length;
+    while (end < value.length) {
+      const next = String.fromCodePoint(value.codePointAt(end)!);
+      if (!/^\p{M}$/u.test(next)) break;
+      end += next.length;
+    }
+    const cluster = value.slice(offset, end);
+    const decomposed = cluster.normalize("NFD");
+    const base = String.fromCodePoint(decomposed.codePointAt(0)!);
+    const folded = /^\p{Script=Latin}$/u.test(base)
+      ? decomposed.replace(/\p{M}/gu, "").toLowerCase()
+      : cluster.toLowerCase();
+    // unicode61 folds Greek final sigma into the ordinary sigma class.
+    normalized += folded.replace(/ς/gu, "σ");
+    offset = end;
+  }
+  return normalized;
+}
+
+function containsTokenSequence(haystack: readonly string[], needle: readonly string[]): boolean {
+  if (!needle.length || needle.length > haystack.length) return false;
+  outer: for (let start = 0; start <= haystack.length - needle.length; start++) {
+    for (let offset = 0; offset < needle.length; offset++) {
+      if (haystack[start + offset] !== needle[offset]) continue outer;
+    }
+    return true;
+  }
+  return false;
 }
 
 function occurrences(haystack: string, needle: string): number {

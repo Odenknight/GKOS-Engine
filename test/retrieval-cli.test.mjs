@@ -5,6 +5,7 @@ import { join } from "node:path";
 import test from "node:test";
 
 import { main, runSearch } from "../bin/gkx.mjs";
+import { detectSqliteLexicalCapability } from "../dist/retrieval.mjs";
 
 const VALID = `---
 gkx_version: "2.3"
@@ -55,12 +56,18 @@ test("additive gkx search indexes valid records, rejects malformed records whole
   assert.equal(result.hits[0].chunk.valid_from, null, "filesystem-derived validAt is not canonical retrieval validity");
   assert.equal(result.hits[0].chunk.valid_to, null, "graph-derived invalidAt is not canonical retrieval validity");
   assert.equal(result.hits[0].citation.verified, true);
+  const lexicalCapability = detectSqliteLexicalCapability();
+  assert.equal(result.stages.lexical.kind, lexicalCapability.default_backend);
+  assert.equal(result.stages.lexical.state, lexicalCapability.fts5_available ? "active" : "degraded");
+  assert.deepEqual(result.stages.lexical.reason_codes, lexicalCapability.fts5_available
+    ? []
+    : ["SQLITE_FTS5_UNAVAILABLE", "SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"]);
   assert.match(warning, /1 source\(s\) were ineligible/);
   const after = await Promise.all([readFile(validPath), readFile(invalidPath)]);
   assert.deepEqual(after, before);
 });
 
-test("CLI provider selection comes only from trusted config and unavailable local runtime degrades to FTS", async () => {
+test("CLI provider selection comes only from trusted config and unavailable local runtime degrades to lexical retrieval", async () => {
   const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-cli-provider-"));
   const configPath = join(root, "operator.toml");
   await writeFile(join(root, "valid.md"), VALID, "utf8");
