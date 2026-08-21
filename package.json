@@ -35,6 +35,11 @@
       "types": "./dist/governance/index.d.ts",
       "import": "./dist/governance.mjs",
       "default": "./dist/governance.mjs"
+    },
+    "./retrieval": {
+      "types": "./dist/retrieval/index.d.ts",
+      "import": "./dist/retrieval.mjs",
+      "default": "./dist/retrieval.mjs"
     }
   },
   "bin": {

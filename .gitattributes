@@ -3,3 +3,6 @@
 test/compatibility-baseline.test.mjs text eol=lf
 test/fixtures/compatibility/full-v2.1.2/*.json text eol=lf
 test/fixtures/compatibility/full-v2.1.2/*.txt text eol=lf
+contracts/retrieval/**/*.json text eol=lf
+contracts/retrieval/**/*.md text eol=lf
+test/fixtures/retrieval/**/*.json text eol=lf

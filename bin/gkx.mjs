@@ -17,7 +17,7 @@
  *
  * Requires `npm run build` once (dist/gkos-engine.mjs).
  */
-import { readFile, readdir, stat, writeFile } from "node:fs/promises";
+import { lstat, readFile, readdir, realpath, stat, writeFile } from "node:fs/promises";
 import { watch, realpathSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
@@ -53,6 +53,24 @@ const {
   isValidGkxAuthoredUid,
   NavigationContextRejectedError,
 } = core;
+
+// Retrieval-only scan evidence stays non-enumerable so the established corpus
+// scan/graph/REST value surface remains byte-compatible. The search host uses
+// it to reject aliased records before any source text reaches a derived store.
+const RETRIEVAL_FILE_EVIDENCE = Symbol("gkos.retrieval-file-evidence");
+
+function sameFilesystemPath(left, right) {
+  return process.platform === "win32" ? left.toLowerCase() === right.toLowerCase() : left === right;
+}
+
+let retrievalModule;
+async function loadRetrieval() {
+  if (!retrievalModule) {
+    try { retrievalModule = await import(new URL("../dist/retrieval.mjs", import.meta.url).href); }
+    catch { throw new Error("dist/retrieval.mjs not found — run `npm run build` first."); }
+  }
+  return retrievalModule;
+}
 
 const NAV_POLICY = Object.freeze({ id: "engine.cli.public-only-discoverability", version: "1.0.0" });
 const NAV_CONFIG_ID = "018f0000-0000-7000-8000-000000000001";
@@ -105,6 +123,9 @@ export async function scanCorpus(dir) {
   const files = [];
   const attachments = [];
   const folders = [];
+  const requestedRoot = resolve(dir);
+  const actualRoot = await realpath(requestedRoot);
+  const rootIsAliased = !sameFilesystemPath(requestedRoot, actualRoot);
   async function walk(abs, rel) {
     const entries = await readdir(abs, { withFileTypes: true });
     for (const e of entries) {
@@ -116,8 +137,10 @@ export async function scanCorpus(dir) {
         await walk(childAbs, childRel);
       } else if (e.isFile()) {
         if (isNotePath(childRel)) {
-          const [content, st] = await Promise.all([readFile(childAbs, "utf8"), stat(childAbs)]);
-          files.push({
+          const [content, linkState, st, actualPath] = await Promise.all([
+            readFile(childAbs, "utf8"), lstat(childAbs), stat(childAbs), realpath(childAbs),
+          ]);
+          const file = {
             relativePath: childRel,
             name: e.name,
             size: st.size,
@@ -125,7 +148,20 @@ export async function scanCorpus(dir) {
             createdTime: st.birthtimeMs || st.mtimeMs,
             content,
             kind: "note",
+          };
+          Object.defineProperty(file, RETRIEVAL_FILE_EVIDENCE, {
+            enumerable: false,
+            configurable: false,
+            writable: false,
+            value: Object.freeze({
+              plain_file: linkState.isFile() && !linkState.isSymbolicLink(),
+              link_count: st.nlink,
+              requested_path: resolve(childAbs),
+              real_path: actualPath,
+              aliased: rootIsAliased || !sameFilesystemPath(resolve(childAbs), actualPath),
+            }),
           });
+          files.push(file);
         } else if (isAttachmentPath(childRel)) {
           attachments.push(childRel);
         }
@@ -170,6 +206,129 @@ function projectionsFrom(files, folders) {
   }
   out.sort((a, b) => codeUnitCompare(a.path, b.path));
   return { graph, projections: out };
+}
+
+/* ---------------- gkx search (Phase 1 additive retrieval surface) ---------------- */
+export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
+  const {
+    chunkMarkdown, indexRetrievalGeneration, RetrievalCoordinator,
+    retrievalCanonicalDigest, vaultSourceReader,
+    discoverTrustedGkosConfig, configuredProviderIdentityFromTrustedConfig,
+    selectConfiguredVectorProvider, selectConfiguredRerankProvider,
+  } = await loadRetrieval();
+  const vaultDir = resolve(dir);
+  const trustedConfig = await discoverTrustedGkosConfig({
+    explicit_config: hostOptions.configPath,
+    trust_cwd: hostOptions.trustCwdConfig === true,
+    vault_root: vaultDir,
+  });
+  const retrievalConfig = trustedConfig?.document?.retrieval ?? {};
+  const vectorIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "vectors") : undefined;
+  const rerankerIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "reranker") : undefined;
+  let vectorProvider;
+  if (trustedConfig && vectorIdentity) {
+    try { vectorProvider = selectConfiguredVectorProvider(trustedConfig); }
+    catch {
+      vectorProvider = { ...vectorIdentity, async embed() { throw new Error("CONFIGURED_VECTOR_RUNTIME_UNAVAILABLE"); } };
+    }
+  }
+  let rerankProvider;
+  if (trustedConfig && rerankerIdentity) {
+    try { rerankProvider = selectConfiguredRerankProvider(trustedConfig); }
+    catch {
+      rerankProvider = { ...rerankerIdentity, async rerank() { throw new Error("CONFIGURED_RERANK_RUNTIME_UNAVAILABLE"); } };
+    }
+  }
+  const { files, folders } = await scanCorpus(vaultDir);
+  const graph = buildGraph(files, folders);
+  const nodesByPath = new Map(graph.nodes.filter((node) => node.kind === "file").map((node) => [node.path, node]));
+  const chunks = [];
+  let rejected = 0;
+  for (const file of files) {
+    const evidence = file[RETRIEVAL_FILE_EVIDENCE];
+    if (!evidence?.plain_file || evidence.link_count !== 1 || evidence.aliased) { rejected++; continue; }
+    const node = nodesByPath.get(file.relativePath);
+    const uid = node?.gkx?.uid;
+    const diagnostics = node?.gkx?.projection?.diagnostics ?? [];
+    if (!isValidGkxAuthoredUid(uid) || diagnostics.some((item) => item.severity === "error" || item.severity === "critical")) { rejected++; continue; }
+    try {
+      chunks.push(...chunkMarkdown({
+        source_id: uid,
+        source_path: file.relativePath,
+        text: file.content,
+        lineage_id: null,
+        // Phase 1 must not promote filesystem-derived validAt or graph-derived
+        // invalidAt into canonical retrieval validity. Phase 2 will bind these
+        // nullable envelope fields only after the current Standard mapping is
+        // ratified against canonical lineage/temporal authority.
+        valid_from: null,
+        valid_to: null,
+        supersedes: [],
+        superseded_by: [],
+        metadata: {
+          title: node.gkx?.title ?? node.label,
+          tags: node.tags,
+          sensitivity: node.gkx?.sensitivity ?? "secret",
+          gkx_type: node.gkx?.type,
+          epistemic_state: node.gkx?.epistemicState,
+          authoritative: true,
+        },
+      }, {
+        max_tokens: typeof retrievalConfig.max_tokens === "number" ? retrievalConfig.max_tokens : 400,
+        overlap_tokens: typeof retrievalConfig.overlap_tokens === "number" ? retrievalConfig.overlap_tokens : 0,
+      }));
+    } catch { rejected++; }
+  }
+  const sourceRows = new Map();
+  for (const chunk of chunks) sourceRows.set(chunk.source_id, { source_id: chunk.source_id, source_path: chunk.source_path, source_digest: chunk.source_digest });
+  const sourceSnapshotDigest = retrievalCanonicalDigest([...sourceRows.values()].sort((a, b) => codeUnitCompare(a.source_id, b.source_id) || codeUnitCompare(a.source_path, b.source_path)));
+  const policyDigest = retrievalCanonicalDigest({ id: "engine.cli.public-only-discoverability", version: "1.0.0" });
+  const effectiveConfiguration = {
+    mode: vectorIdentity ? "hybrid" : "fts",
+    chunker: { version: "gkos-heading-chunker/1", tokenizer: "gkos-ascii-whitespace/1", max_tokens: retrievalConfig.max_tokens ?? 400, overlap_tokens: retrievalConfig.overlap_tokens ?? 0 },
+    lexical: { provider: "sqlite_fts5", tokenizer: "unicode61 remove_diacritics 2", boosts: { title: 3, heading_path: 2, tags: 1.5, topic: 2, category: 2, text: 1 } },
+    fusion: { rrf_k: retrievalConfig.rrf_k ?? 60 },
+    diversity: { enabled: retrievalConfig.mmr === true, mmr_lambda: retrievalConfig.mmr_lambda ?? 0.7 },
+    parent_expansion: retrievalConfig.parent_expansion !== false,
+    parent_expansion_max_child_tokens: retrievalConfig.parent_expansion_max_child_tokens ?? 80,
+    configured_host: trustedConfig?.document ?? null,
+  };
+  const configurationDigest = retrievalCanonicalDigest(effectiveConfiguration);
+  const stateDirectory = join(vaultDir, ".gkx", "derived", "retrieval");
+  const indexed = await indexRetrievalGeneration({
+    state_directory: stateDirectory,
+    vault_id: `vault:${retrievalCanonicalDigest(vaultDir).slice("sha256:".length, "sha256:".length + 24)}`,
+    source_snapshot_digest: sourceSnapshotDigest,
+    configuration_digest: configurationDigest,
+    policy_digest: policyDigest,
+    chunks,
+  }, vectorProvider);
+  const coordinator = new RetrievalCoordinator(indexed.generation.database_path, {
+    discoverability_policy: (chunk) => chunk.metadata.sensitivity === "public" ? "allow" : "deny",
+    source_reader: vaultSourceReader(vaultDir),
+    ...(vectorProvider ? { vector_provider: vectorProvider } : {}),
+    ...(rerankProvider ? { rerank_provider: rerankProvider } : {}),
+  });
+  try {
+    const result = await coordinator.search({
+      query,
+      limit,
+      filters: {
+        sensitivity_ceiling: "public",
+        ...(Array.isArray(retrievalConfig.path_include) ? { path_include: retrievalConfig.path_include } : {}),
+        ...(Array.isArray(retrievalConfig.path_exclude) ? { path_exclude: retrievalConfig.path_exclude } : {}),
+      },
+      parent_expansion: effectiveConfiguration.parent_expansion,
+      parent_expansion_max_child_tokens: effectiveConfiguration.parent_expansion_max_child_tokens,
+      rrf_k: effectiveConfiguration.fusion.rrf_k,
+      mmr: effectiveConfiguration.diversity.enabled,
+      mmr_lambda: effectiveConfiguration.diversity.mmr_lambda,
+      ...(typeof retrievalConfig.lexical_top_k === "number" ? { lexical_top_k: retrievalConfig.lexical_top_k } : {}),
+      ...(typeof retrievalConfig.semantic_top_k === "number" ? { semantic_top_k: retrievalConfig.semantic_top_k } : {}),
+    });
+    if (rejected) console.error(`gkx search: ${rejected} source(s) were ineligible for this derived generation`);
+    return result;
+  } finally { coordinator.close(); }
 }
 
 const SEVERITIES = ["critical", "error", "warning", "info"];
@@ -305,6 +464,8 @@ const USAGE = `gkx (GKOS-Engine) v${ENGINE_VERSION}
 Usage:
   gkx validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
   gkx assess   <dir> [--json]                         per-note documentation-quality scores/labels
+  gkx search <query> --kb-path <dir> [--limit <n>]    public-only FTS retrieval with exact citations
+             [--config <trusted-gkos.toml>] [--trust-cwd-config]
   gkx graph    <dir> -o <graph.json> [--watch]        canonical Gkx graph (stable serialization)
   gkx export graphiti <dir> --episodes <out.json> [--group-id <ns>]
   gkx nav scan|audit <dir> [--json]
@@ -326,6 +487,8 @@ function parseFlags(args) {
     newSourceId: null, newSourceVersion: null, newSourcePath: null, acquiredAt: null,
     actor: null, name: null, proposedAt: null, recipient: null, recipientClass: null,
     purpose: null, itemBudget: "50", tokenBudget: "12000",
+    kbPath: null, limit: "5",
+    configPath: null,
   };
   const positional = [];
   const unknownFlags = [];
@@ -335,6 +498,7 @@ function parseFlags(args) {
     else if (a === "--json") flags.add("json");
     else if (a === "--stdout") flags.add("stdout");
     else if (a === "--help" || a === "-h") flags.add("help");
+    else if (a === "--trust-cwd-config") flags.add("trustCwdConfig");
     else if (a === "-o" || a === "--out") opts.o = args[++i];
     else if (a === "--episodes") opts.episodes = args[++i];
     else if (a === "--group-id") opts.groupId = args[++i];
@@ -357,6 +521,9 @@ function parseFlags(args) {
     else if (a === "--purpose") opts.purpose = args[++i];
     else if (a === "--item-budget") opts.itemBudget = args[++i];
     else if (a === "--token-budget") opts.tokenBudget = args[++i];
+    else if (a === "--kb-path") opts.kbPath = args[++i];
+    else if (a === "--limit") opts.limit = args[++i];
+    else if (a === "--config") opts.configPath = args[++i];
     else if (a.startsWith("-")) unknownFlags.push(a);
     else positional.push(a);
   }
@@ -364,7 +531,7 @@ function parseFlags(args) {
 }
 
 export async function main(argv = process.argv.slice(2)) {
-  const subcommands = new Set(["validate", "assess", "graph", "export", "nav"]);
+  const subcommands = new Set(["validate", "assess", "search", "graph", "export", "nav"]);
   const first = argv[0];
 
   if (!first || first === "--help" || first === "-h") {
@@ -382,6 +549,14 @@ export async function main(argv = process.argv.slice(2)) {
       const result = await runValidate(positional[0]);
       printValidate(result);
       return result.ok ? 0 : 1;
+    }
+    if (first === "search") {
+      if (!positional[0]) { console.error("gkx search: <query> required"); return 1; }
+      if (!opts.kbPath) { console.error("gkx search: --kb-path <dir> required"); return 1; }
+      const limit = opts.limit === null || opts.limit === undefined ? 5 : Number(opts.limit);
+      if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) { console.error("gkx search: --limit must be from 1 through 100"); return 2; }
+      console.log(JSON.stringify(await runSearch(positional[0], opts.kbPath, limit, { configPath: opts.configPath, trustCwdConfig: flags.has("trustCwdConfig") }), null, 2));
+      return 0;
     }
     if (first === "nav") {
       const action = positional.shift();
