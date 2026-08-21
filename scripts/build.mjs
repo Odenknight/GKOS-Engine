@@ -64,6 +64,11 @@ try {
     console.log(`built ${output}`);
   }
 
+  // Retrieval is a host-plane bundle. Keep node:sqlite and filesystem state
+  // outside the platform-neutral root and NavigationCore bundles.
+  writeFileSync(resolve(root, "dist/retrieval.mjs"), await bundle("src/retrieval/index.ts", { platform: "node" }));
+  console.log("built dist/retrieval.mjs");
+
   // Desktop-agent sidecar entry. Two node-platform bundles from the same
   // source: an ESM bundle for `node dist/...mjs` runs and the test suite, and
   // a CJS bundle that the Node SEA flow (scripts/build-sea.mjs) requires as its

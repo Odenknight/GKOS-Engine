@@ -24,6 +24,9 @@ const FIXTURE_ROOT = resolve(
   "test/fixtures/compatibility/full-v2.1.2",
 );
 const FIXED_PROCESSING_TIME = "2026-08-20T00:00:00.000Z";
+const PHASE_1_ADDITIVE_SEARCH_HELP = `  gkx search <query> --kb-path <dir> [--limit <n>]    public-only lexical retrieval with exact citations
+             [--config <trusted-gkos.toml>] [--trust-cwd-config]
+`;
 const SOURCE_A = `---
 gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaeca01"
@@ -60,6 +63,11 @@ const textFixture = (name) =>
 const bytesFixture = (name) => readFileSync(resolve(FIXTURE_ROOT, name));
 const jsonBytes = (value) =>
   Buffer.from(JSON.stringify(value, null, 2) + "\n", "utf8");
+
+function withoutPhase1SearchHelp(help) {
+  assert.equal(help.split(PHASE_1_ADDITIVE_SEARCH_HELP).length - 1, 1, "Phase 1 additive search help must occur exactly once");
+  return help.replace(PHASE_1_ADDITIVE_SEARCH_HELP, "");
+}
 
 function compatibilityCorpus() {
   return [
@@ -152,7 +160,7 @@ test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI beh
   const help = invoke("bin/gkx.mjs", ["--help"]);
   assert.equal(help.status, expectedCli.help_exit_code);
   assert.equal(help.stderr, "");
-  assert.equal(help.stdout.replace(/\r\n/g, "\n"), textFixture("cli-help.txt"));
+  assert.equal(withoutPhase1SearchHelp(help.stdout), textFixture("cli-help.txt"));
 
   const missing = invoke("bin/gkx.mjs", []);
   assert.equal(missing.status, expectedCli.missing_command_exit_code);
@@ -349,6 +357,13 @@ test("Phase 0 fixture comparison detects deliberate interface perturbations", ()
   const graph = index.setFiles(compatibilityCorpus(), ["Notes"]).graph;
   assert.throws(
     () => assert.deepEqual(stableGraphBytes(graph), perturbedGraph),
+    assert.AssertionError,
+  );
+
+  const currentHelp = invoke("bin/gkx.mjs", ["--help"]).stdout;
+  const perturbedLegacyHelp = currentHelp.replace("gkx validate <dir>", "gkx validate-broken <dir>");
+  assert.throws(
+    () => assert.equal(withoutPhase1SearchHelp(perturbedLegacyHelp), textFixture("cli-help.txt")),
     assert.AssertionError,
   );
 });

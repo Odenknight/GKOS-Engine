@@ -47,6 +47,7 @@ function assertNoMutationCalls(files) {
 test("NavigationCore cannot transitively reach filesystem mutation primitives", async () => {
   const reachable = await reachableFrom("src/navigation/index.ts");
   assert.ok(reachable.size > 10);
+  assert.equal([...reachable.keys()].some((file) => file.includes(`${join("src", "retrieval")}`)), false, "NavigationCore must not reach retrieval host modules");
   assertNoMutationCalls(reachable);
 });
 
@@ -115,12 +116,13 @@ test("pinned R15 traceability references only active allocated identifiers", asy
   for (const id of ["GKOS-RECEIPT-001", "GKOS-REENTRY-004", "GKOS-DELEGATION-006"]) assert.ok(referenced.includes(id), `missing R15 traceability ${id}`);
 });
 
-test("package exports and build products include Navigation, Governance, and contract pack", async () => {
+test("package exports and build products include Navigation, Governance, Retrieval, and contract packs", async () => {
   const pkg = JSON.parse(await readFile(resolve("package.json"), "utf8"));
   assert.equal(pkg.version, "2.1.2");
   assert.equal(pkg.exports["./navigation"].types, "./dist/navigation/index.d.ts");
   assert.equal(pkg.exports["./governance"].types, "./dist/governance/index.d.ts");
-  await Promise.all(["dist/navigation/index.d.ts", "dist/governance/index.d.ts", "dist/navigation.mjs", "dist/governance.mjs"].map((path) => readFile(resolve(path))));
+  assert.equal(pkg.exports["./retrieval"].types, "./dist/retrieval/index.d.ts");
+  await Promise.all(["dist/navigation/index.d.ts", "dist/governance/index.d.ts", "dist/retrieval/index.d.ts", "dist/navigation.mjs", "dist/governance.mjs", "dist/retrieval.mjs"].map((path) => readFile(resolve(path))));
 });
 
 test("2.1.2 release metadata and documentation claims are synchronized", async () => {
