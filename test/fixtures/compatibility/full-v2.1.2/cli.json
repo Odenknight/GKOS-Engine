@@ -1,0 +1,6 @@
+{
+  "help_exit_code": 0,
+  "missing_command_exit_code": 1,
+  "unknown_command_exit_code": 1,
+  "desktop_help_exit_code": 0
+}

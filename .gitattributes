@@ -1,0 +1,5 @@
+# Phase 0 compatibility fixtures are byte-locked and must not be rewritten on
+# Windows checkouts with core.autocrlf enabled.
+test/compatibility-baseline.test.mjs text eol=lf
+test/fixtures/compatibility/full-v2.1.2/*.json text eol=lf
+test/fixtures/compatibility/full-v2.1.2/*.txt text eol=lf

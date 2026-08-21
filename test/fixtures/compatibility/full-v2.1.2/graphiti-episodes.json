@@ -1,0 +1,46 @@
+[
+  {
+    "uuid": "019b2d14-4230-7db7-87d4-7d81cfaeca01",
+    "name": "A",
+    "episode_body": "{\"schema\":\"gkx-graphiti/2.3.0\",\"profile\":\"gkx-2.3-validating-projection\",\"adapter\":\"Gkx Governed Context Projection\",\"title\":\"A\",\"path\":\"Notes/A.md\",\"uid\":\"019b2d14-4230-7db7-87d4-7d81cfaeca01\",\"type\":\"note\",\"description\":null,\"tags\":[],\"labels\":{\"authored\":[],\"derived\":[\"assessment:weakly-supported\",\"epistemic:hypothesis\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"],\"proposed\":[],\"approved\":[],\"effective\":[\"assessment:weakly-supported\",\"epistemic:hypothesis\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"]},\"event_time\":\"2026-01-01T00:00:00.000Z\",\"processing_time\":\"2026-08-20T00:00:00.000Z\",\"reference_time_source\":\"gkx.created_at\",\"episode_metadata\":{\"vault_identity\":\"1imsthh:c\",\"source_path_hash\":\"kmce5h:a\",\"gkx_version\":\"2.3\",\"uid\":\"019b2d14-4230-7db7-87d4-7d81cfaeca01\",\"note_type\":\"note\",\"sensitivity\":\"internal\",\"policy_version\":\"1.0.0\",\"corpus_id\":\"gkx-compat-vault-26bdb787-assertions\",\"workspace_id\":\"gkx-compat-vault-26bdb787-assertions\",\"event_time\":\"2026-01-01T00:00:00.000Z\",\"processing_time\":\"2026-08-20T00:00:00.000Z\"},\"authority\":{\"class\":\"authored\",\"governance_status\":\"unadjudicated\",\"projection_status\":\"non_authoritative\",\"accepted_semantics\":false,\"origin_separation_preserved\":true},\"governance\":{\"effective\":{\"sensitivity\":\"internal\",\"labels\":[\"assessment:weakly-supported\",\"epistemic:hypothesis\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"],\"relationships\":{}},\"relationships\":{\"authored\":{},\"derived\":{},\"proposed\":{},\"approved\":{},\"effective\":{}},\"effective_sensitivity\":\"internal\",\"assessment\":{\"overall\":0.4333,\"label\":\"assessment:weakly-supported\",\"interpretation\":\"documentation-and-support-quality-not-truth\",\"policy_id\":\"policy:gkx23-default-v1\",\"policy_version\":\"1.0.0\",\"policy_hash\":\"sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b\"},\"diagnostics_count\":1},\"diagnostic_codes\":[\"GKX-PROVENANCE-001\"],\"evidence\":{\"authored\":{},\"derived\":{},\"proposed\":{},\"approved\":{},\"effective\":{\"supports\":[],\"contradicts\":[]}},\"integrity\":{\"content_hash\":\"xmaay5:7j\",\"hash_algorithm\":\"fnv1a32-with-length\",\"policy_id\":\"policy:gkx23-default-v1\",\"policy_version\":\"1.0.0\",\"policy_hash\":\"sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b\",\"schema_id\":\"gkx-graphiti\",\"schema_version\":\"2.3.0\",\"schema_hash\":\"fnv1a32-with-length:1xavycw:i\"},\"lineage\":{\"resolved_supersedes\":[],\"declared_supersedes\":[]},\"related_to\":[],\"saga\":null}",
+    "source": "json",
+    "source_description": "GKX origin-separated source projection (authored) · KGCP non-authoritative Graphiti adapter · workspace \"compat-vault\" · Notes/A.md",
+    "reference_time": "2026-01-01T00:00:00.000Z",
+    "group_id": "gkx-compat-vault-26bdb787-assertions",
+    "episode_metadata": {
+      "vault_identity": "1imsthh:c",
+      "source_path_hash": "kmce5h:a",
+      "gkx_version": "2.3",
+      "uid": "019b2d14-4230-7db7-87d4-7d81cfaeca01",
+      "note_type": "note",
+      "sensitivity": "internal",
+      "policy_version": "1.0.0",
+      "corpus_id": "gkx-compat-vault-26bdb787-assertions",
+      "workspace_id": "gkx-compat-vault-26bdb787-assertions",
+      "event_time": "2026-01-01T00:00:00.000Z",
+      "processing_time": "2026-08-20T00:00:00.000Z"
+    }
+  },
+  {
+    "uuid": "019b2d14-4230-7db7-87d4-7d81cfaeca02",
+    "name": "B",
+    "episode_body": "{\"schema\":\"gkx-graphiti/2.3.0\",\"profile\":\"gkx-2.3-validating-projection\",\"adapter\":\"Gkx Governed Context Projection\",\"title\":\"B\",\"path\":\"Notes/B.md\",\"uid\":\"019b2d14-4230-7db7-87d4-7d81cfaeca02\",\"type\":\"note\",\"description\":null,\"tags\":[],\"labels\":{\"authored\":[],\"derived\":[\"assessment:weakly-supported\",\"epistemic:hypothesis\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"],\"proposed\":[],\"approved\":[],\"effective\":[\"assessment:weakly-supported\",\"epistemic:hypothesis\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"]},\"event_time\":\"2026-01-02T00:00:00.000Z\",\"processing_time\":\"2026-08-20T00:00:00.000Z\",\"reference_time_source\":\"gkx.created_at\",\"episode_metadata\":{\"vault_identity\":\"1imsthh:c\",\"source_path_hash\":\"5lgpsy:a\",\"gkx_version\":\"2.3\",\"uid\":\"019b2d14-4230-7db7-87d4-7d81cfaeca02\",\"note_type\":\"note\",\"sensitivity\":\"internal\",\"policy_version\":\"1.0.0\",\"corpus_id\":\"gkx-compat-vault-26bdb787-assertions\",\"workspace_id\":\"gkx-compat-vault-26bdb787-assertions\",\"event_time\":\"2026-01-02T00:00:00.000Z\",\"processing_time\":\"2026-08-20T00:00:00.000Z\"},\"authority\":{\"class\":\"authored\",\"governance_status\":\"unadjudicated\",\"projection_status\":\"non_authoritative\",\"accepted_semantics\":false,\"origin_separation_preserved\":true},\"governance\":{\"effective\":{\"sensitivity\":\"internal\",\"labels\":[\"assessment:weakly-supported\",\"epistemic:hypothesis\",\"identity:stable\",\"provenance:missing\",\"sensitivity:internal\"],\"relationships\":{}},\"relationships\":{\"authored\":{},\"derived\":{},\"proposed\":{},\"approved\":{},\"effective\":{}},\"effective_sensitivity\":\"internal\",\"assessment\":{\"overall\":0.4333,\"label\":\"assessment:weakly-supported\",\"interpretation\":\"documentation-and-support-quality-not-truth\",\"policy_id\":\"policy:gkx23-default-v1\",\"policy_version\":\"1.0.0\",\"policy_hash\":\"sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b\"},\"diagnostics_count\":1},\"diagnostic_codes\":[\"GKX-PROVENANCE-001\"],\"evidence\":{\"authored\":{},\"derived\":{},\"proposed\":{},\"approved\":{},\"effective\":{\"supports\":[],\"contradicts\":[]}},\"integrity\":{\"content_hash\":\"hiturv:77\",\"hash_algorithm\":\"fnv1a32-with-length\",\"policy_id\":\"policy:gkx23-default-v1\",\"policy_version\":\"1.0.0\",\"policy_hash\":\"sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b\",\"schema_id\":\"gkx-graphiti\",\"schema_version\":\"2.3.0\",\"schema_hash\":\"fnv1a32-with-length:1xavycw:i\"},\"lineage\":{\"resolved_supersedes\":[],\"declared_supersedes\":[]},\"related_to\":[],\"saga\":null}",
+    "source": "json",
+    "source_description": "GKX origin-separated source projection (authored) · KGCP non-authoritative Graphiti adapter · workspace \"compat-vault\" · Notes/B.md",
+    "reference_time": "2026-01-02T00:00:00.000Z",
+    "group_id": "gkx-compat-vault-26bdb787-assertions",
+    "episode_metadata": {
+      "vault_identity": "1imsthh:c",
+      "source_path_hash": "5lgpsy:a",
+      "gkx_version": "2.3",
+      "uid": "019b2d14-4230-7db7-87d4-7d81cfaeca02",
+      "note_type": "note",
+      "sensitivity": "internal",
+      "policy_version": "1.0.0",
+      "corpus_id": "gkx-compat-vault-26bdb787-assertions",
+      "workspace_id": "gkx-compat-vault-26bdb787-assertions",
+      "event_time": "2026-01-02T00:00:00.000Z",
+      "processing_time": "2026-08-20T00:00:00.000Z"
+    }
+  }
+]

@@ -1,0 +1,16 @@
+gkx (GKOS-Engine) v2.1.2
+Usage:
+  gkx validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
+  gkx assess   <dir> [--json]                         per-note documentation-quality scores/labels
+  gkx graph    <dir> -o <graph.json> [--watch]        canonical Gkx graph (stable serialization)
+  gkx export graphiti <dir> --episodes <out.json> [--group-id <ns>]
+  gkx nav scan|audit <dir> [--json]
+  gkx nav render <dir> --stdout
+  gkx nav diff <before-dir> <after-dir>
+  gkx nav context <dir> --recipient <id> --purpose <purpose> --stdout
+  gkx nav reentry-plan --predecessor <id> --predecessor-version <v> --predecessor-digest <sha256> --input <file>
+                       --new-source-id <id> --new-source-version <v> --acquired-at <ISO-Z> --actor <id>
+  gkx nav promotion-plan --proposal-id <uuidv7> --operation-id <uuidv7> --vault-id <id>
+                         --name <name> --actor <id> --proposed-at <ISO-Z>
+
+Navigation is source-content read-only. nav write/apply/delete/record are rejected.
