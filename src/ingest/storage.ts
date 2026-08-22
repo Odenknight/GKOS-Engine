@@ -14,6 +14,7 @@ import {
   unlinkSync,
   writeFileSync,
 } from "node:fs";
+import type { Stats } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { basename, dirname, join, parse, resolve } from "node:path";
 import { TextDecoder } from "node:util";
@@ -138,6 +139,11 @@ export interface IngestVaultRootPreflight {
 export interface IngestAuthorityPreflightOptions {
   /** Qualification hook executed before the root-bound state creation check. */
   on_before_state_creation?: () => void;
+}
+
+export interface IngestOwnerOpenOptions {
+  /** Trusted qualification hook executed after the active DB snapshot and before its read-only open. */
+  on_after_database_snapshot?: (database_path: string) => void;
 }
 
 export interface StagedIngestGeneration {
@@ -401,19 +407,45 @@ function sameFileState(left: ReturnType<typeof lstatSync>, right: ReturnType<typ
     left.mtimeMs === right.mtimeMs && left.ctimeMs === right.ctimeMs;
 }
 
-function openSealedStateDatabase(path: string, directory: string, code: string): SqliteRetrievalStore {
+function missingPathError(error: unknown): boolean {
+  const code = (error as NodeJS.ErrnoException).code;
+  return code === "ENOENT" || code === "ENOTDIR";
+}
+
+function initialFileState(path: string, code: string): Stats {
+  try { return lstatSync(path); }
+  catch (error) {
+    if (missingPathError(error)) throw new Error(`${code}_MISSING`);
+    throw error;
+  }
+}
+
+function openSealedStateDatabase(
+  path: string,
+  directory: string,
+  code: string,
+  onAfterSnapshot?: (database_path: string) => void,
+): SqliteRetrievalStore {
   assertPlainContainedFile(path, directory);
-  const before = lstatSync(path);
+  const before = initialFileState(path, code);
   if (!before.isFile() || before.isSymbolicLink() || before.nlink !== 1 || !Number.isSafeInteger(before.size) ||
       before.size < 1 || before.size > MAX_STATE_ARTIFACT_BYTES ||
       (process.platform !== "win32" && (before.mode & 0o777) !== 0o600)) {
     throw new Error(`${code}_PERMISSION_OR_IDENTITY_INVALID`);
   }
+  onAfterSnapshot?.(path);
   let store: SqliteRetrievalStore | undefined;
   try {
     store = new SqliteRetrievalStore(path);
-    const after = lstatSync(path);
-    const canonicalAfter = canonicalPathSync(path, { alias_error: "GKX_INGEST_STATE_FILE_ALIAS_REJECTED" });
+    let after: Stats;
+    let canonicalAfter: string;
+    try {
+      after = lstatSync(path);
+      canonicalAfter = canonicalPathSync(path, { alias_error: "GKX_INGEST_STATE_FILE_ALIAS_REJECTED" });
+    } catch (error) {
+      if (missingPathError(error)) throw new Error(`${code}_CHANGED_DURING_OPEN`);
+      throw error;
+    }
     if (!sameCanonicalPath(canonicalAfter, path) || !sameCanonicalPath(dirname(canonicalAfter), directory) ||
         !sameCanonicalPath(store.database_path, path) || !sameFileState(before, after)) {
       throw new Error(`${code}_CHANGED_DURING_OPEN`);
@@ -421,6 +453,10 @@ function openSealedStateDatabase(path: string, directory: string, code: string):
     return store;
   } catch (error) {
     try { store?.close(); } catch { /* retain the original sealed-open error */ }
+    if (store === undefined && (missingPathError(error) ||
+        (error instanceof Error && error.message === "RETRIEVAL_DATABASE_MISSING"))) {
+      throw new Error(`${code}_CHANGED_DURING_OPEN`);
+    }
     throw error;
   }
 }
@@ -468,13 +504,18 @@ function writeCanonicalTemporary(finalPath: string, directory: string, value: un
 
 function readSealedBytes(path: string, directory: string, maximum: number, code: string): Buffer {
   assertPlainContainedFile(path, directory);
-  const before = lstatSync(path);
+  const before = initialFileState(path, code);
   if (!before.isFile() || before.isSymbolicLink() || before.nlink !== 1 || !Number.isSafeInteger(before.size) ||
       before.size < 1 || before.size > maximum) throw new Error(`${code}_SIZE_INVALID`);
   if (process.platform !== "win32" && (before.mode & 0o777) !== 0o600) {
     throw new Error(`${code}_PERMISSION_INVALID`);
   }
-  const descriptor = openSync(path, "r");
+  let descriptor: number;
+  try { descriptor = openSync(path, "r"); }
+  catch (error) {
+    if (missingPathError(error)) throw new Error(`${code}_CHANGED_DURING_READ`);
+    throw error;
+  }
   try {
     const opened = fstatSync(descriptor);
     if (!sameFileState(before, opened)) throw new Error(`${code}_IDENTITY_CHANGED`);
@@ -486,8 +527,15 @@ function readSealedBytes(path: string, directory: string, maximum: number, code:
       length += count;
     }
     const openedAfter = fstatSync(descriptor);
-    const pathAfter = lstatSync(path);
-    const canonicalAfter = canonicalPathSync(path, { alias_error: "GKX_INGEST_STATE_FILE_ALIAS_REJECTED" });
+    let pathAfter: Stats;
+    let canonicalAfter: string;
+    try {
+      pathAfter = lstatSync(path);
+      canonicalAfter = canonicalPathSync(path, { alias_error: "GKX_INGEST_STATE_FILE_ALIAS_REJECTED" });
+    } catch (error) {
+      if (missingPathError(error)) throw new Error(`${code}_CHANGED_DURING_READ`);
+      throw error;
+    }
     if (!sameCanonicalPath(canonicalAfter, path) || !sameCanonicalPath(dirname(canonicalAfter), directory) ||
         !sameFileState(before, openedAfter) || !sameFileState(before, pathAfter) || length !== before.size) {
       throw new Error(`${code}_CHANGED_DURING_READ`);
@@ -1472,7 +1520,11 @@ function verifyUnboundRejectionJournal(value: unknown, name: string): void {
   }
 }
 
-function verifyOwnerBundle(directory: string, manifest: IngestOwnerGenerationManifest): void {
+function verifyOwnerBundle(
+  directory: string,
+  manifest: IngestOwnerGenerationManifest,
+  onAfterDatabaseSnapshot?: (database_path: string) => void,
+): void {
   const journalPath = join(directory, manifest.rejection_journal.journal_file);
   const journalRead = readCanonicalJson<unknown>(journalPath, directory, MAX_OWNER_JSON_BYTES,
     "GKX_INGEST_REJECTION_JOURNAL");
@@ -1485,7 +1537,12 @@ function verifyOwnerBundle(directory: string, manifest: IngestOwnerGenerationMan
   }
   const databasePath = join(directory, manifest.inner.database_file);
   assertPlainContainedFile(databasePath, directory);
-  const store = openSealedStateDatabase(databasePath, directory, "GKX_INGEST_INNER_DATABASE");
+  const store = openSealedStateDatabase(
+    databasePath,
+    directory,
+    "GKX_INGEST_INNER_DATABASE",
+    onAfterDatabaseSnapshot,
+  );
   try {
     if (!sameJson(store.manifest, manifest.inner.manifest)) {
       throw new Error("GKX_INGEST_INNER_DATABASE_MANIFEST_MISMATCH");
@@ -1978,7 +2035,11 @@ function readLegacyActive(directory: string): {
   return { pointer, digest: read.digest, database_path: databasePath };
 }
 
-function readOwnerManifest(directory: string, pointer: IngestActivePointer): IngestOwnerGenerationManifest {
+function readOwnerManifest(
+  directory: string,
+  pointer: IngestActivePointer,
+  onAfterDatabaseSnapshot?: (database_path: string) => void,
+): IngestOwnerGenerationManifest {
   const path = join(directory, pointer.owner_generation_file);
   const read = readCanonicalJson<unknown>(path, directory, MAX_OWNER_JSON_BYTES, "GKX_INGEST_OWNER_MANIFEST");
   const manifest = sealIngestOwnerGenerationManifestEnvelope(read.value);
@@ -1986,15 +2047,18 @@ function readOwnerManifest(directory: string, pointer: IngestActivePointer): Ing
       !sameJson(activeProjectionFor(manifest), pointer.inner)) {
     throw new Error("GKX_INGEST_ACTIVE_POINTER_MANIFEST_MISMATCH");
   }
-  verifyOwnerBundle(directory, manifest);
+  verifyOwnerBundle(directory, manifest, onAfterDatabaseSnapshot);
   return manifest;
 }
 
-function readActivePointer(directory: string): { pointer: IngestActivePointer; digest: string; manifest: IngestOwnerGenerationManifest } {
+function readActivePointer(
+  directory: string,
+  onAfterDatabaseSnapshot?: (database_path: string) => void,
+): { pointer: IngestActivePointer; digest: string; manifest: IngestOwnerGenerationManifest } {
   const path = join(directory, ACTIVE_INGEST_FILE);
   const read = readCanonicalJson<unknown>(path, directory, MAX_POINTER_BYTES, "GKX_INGEST_ACTIVE_POINTER");
   const pointer = sealActivePointer(read.value);
-  return { pointer, digest: read.digest, manifest: readOwnerManifest(directory, pointer) };
+  return { pointer, digest: read.digest, manifest: readOwnerManifest(directory, pointer, onAfterDatabaseSnapshot) };
 }
 
 function openProjectionFromActivePointer(directory: string): SqliteRetrievalStore {
@@ -2391,7 +2455,11 @@ function readAttemptStatus(
   return deepFreeze({ status, applicable: sameJson(status.prior_active, active) });
 }
 
-function currentActive(directory: string, recoveryLock?: IngestAuthorityLock): IngestOpenedGeneration | null {
+function currentActive(
+  directory: string,
+  recoveryLock?: IngestAuthorityLock,
+  onAfterDatabaseSnapshot?: (database_path: string) => void,
+): IngestOpenedGeneration | null {
   assertCanonicalStateAuthorityNames(directory);
   const witnessPath = join(directory, AUTHORITY_WITNESS_FILE);
   const tombstonePath = join(directory, ACTIVE_RETRIEVAL_FILE);
@@ -2432,7 +2500,7 @@ function currentActive(directory: string, recoveryLock?: IngestAuthorityLock): I
   if (witness.state !== "active") throw new Error("GKX_INGEST_AUTHORITY_WITNESS_STATE_INVALID");
   verifyWitnessHistory(directory, witness);
   if (!pathExists(pointerPath)) throw new Error("GKX_INGEST_ACTIVE_POINTER_MISSING");
-  const opened = readActivePointer(directory);
+  const opened = readActivePointer(directory, onAfterDatabaseSnapshot);
   const active = deepFreeze({
     kind: "ingest" as const,
     owner_generation_id: opened.pointer.owner_generation_id,
@@ -2859,10 +2927,13 @@ export function openActiveIngestGeneration(stateDirectory: string): IngestOpened
   return owner.active_generation;
 }
 
-export function openIngestOwnerState(stateDirectory: string): IngestOwnerState {
+export function openIngestOwnerState(
+  stateDirectory: string,
+  options: IngestOwnerOpenOptions = {},
+): IngestOwnerState {
   const directory = existingStateDirectory(stateDirectory);
   if (!directory) return deepFreeze({ active_generation: null, blocked_attempt: null });
-  const active = currentActive(directory);
+  const active = currentActive(directory, undefined, options.on_after_database_snapshot);
   const blockedAttempt = active?.blocked_attempt ?? readAttemptStatus(directory, null);
   return deepFreeze({ active_generation: active, blocked_attempt: blockedAttempt });
 }

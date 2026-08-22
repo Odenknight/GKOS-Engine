@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { chmodSync, readFileSync, utimesSync, writeFileSync } from "node:fs";
+import { chmodSync, readFileSync, rmSync, utimesSync, writeFileSync } from "node:fs";
 import { copyFile, link, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, truncate, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
@@ -347,6 +347,20 @@ test("outer generation stages inner+journal+manifest and publishes one owner poi
   assert.equal((await readdir(state)).includes("ingest-authority.lock"), false);
 });
 
+test("owner DB disappearance after its sealed snapshot has one finite changed-during-open error", async (t) => {
+  const { state, staged } = await stagedFor(t, "db-disappears-during-open");
+  activateStagedGkxIngestGeneration(staged);
+  let hookCalls = 0;
+  assert.throws(() => openIngestOwnerState(state, {
+    on_after_database_snapshot(databasePath) {
+      hookCalls += 1;
+      assert.equal(basename(databasePath), staged.owner_manifest.inner.database_file);
+      rmSync(databasePath);
+    },
+  }), /^Error: GKX_INGEST_INNER_DATABASE_CHANGED_DURING_OPEN$/u);
+  assert.equal(hookCalls, 1);
+});
+
 test("strict intrinsic block writes only applicable unavailable owner status", async (t) => {
   const state = await temporaryState(t);
   const invalid = note("", "Invalid").replace('uid: ""\n', "");
@@ -578,7 +592,7 @@ test("legacy pointer database names are projection-derived before any target pat
   for (const [index, database_file] of variants.entries()) {
     await t.test(String(index), async (child) => {
       const state = await temporaryState(child);
-      await mkdir(state, { recursive: true });
+      await mkdir(state, { recursive: true, mode: 0o700 });
       await writeFile(join(state, "active-retrieval.json"),
         `${retrieval.stableJson({ ...pointer, database_file })}\n`, { mode: 0o600 });
       assert.throws(() => preflightIngestAuthority(state), /LEGACY_POINTER_BINDING_INVALID/);
@@ -886,7 +900,12 @@ test("owner open rejects case-renamed internal pointer, witness, tombstone, mani
       const name = target === "manifest" ? pointer.owner_generation_file :
         target === "database" ? manifest.inner.database_file : target;
       await forceCaseRename(join(state, name), join(state, name.toUpperCase()));
-      assert.throws(() => openIngestOwnerState(state), /ALIAS|ESCAPE|MISSING|INVALID|WITNESS|POINTER|MANIFEST|DATABASE/);
+      const expected = target === "manifest" ?
+        (process.platform === "win32" ? /GKX_INGEST_STATE_PATH_ESCAPE_REJECTED/ : /GKX_INGEST_OWNER_MANIFEST_MISSING/) :
+        target === "database" ?
+          (process.platform === "win32" ? /GKX_INGEST_STATE_PATH_ESCAPE_REJECTED/ : /GKX_INGEST_INNER_DATABASE_MISSING/) :
+          /ALIAS|ESCAPE|MISSING|INVALID|WITNESS|POINTER|MANIFEST|DATABASE/;
+      assert.throws(() => openIngestOwnerState(state), expected);
     });
   }
 });
@@ -1025,7 +1044,7 @@ test("owner reopen binds accepted validation observations to exact stored candid
   const bundleFiles = [databaseFile, sealed.rejection_journal.journal_file, ownerFile];
 
   const orphanState = await temporaryState(t);
-  await mkdir(orphanState, { recursive: true });
+  await mkdir(orphanState, { recursive: true, mode: 0o700 });
   for (const file of bundleFiles) await copyFile(join(state, file), join(orphanState, file));
   assert.throws(() => preflightIngestAuthority(orphanState), /SOURCE_BINDING_MISMATCH/);
 
@@ -1461,15 +1480,16 @@ test("deleting or corrupting a post-migration pointer never downgrades to plante
   await rm(join(state, "active-ingest.json"));
   assert.throws(() => openIngestOwnerState(state), /ACTIVE_POINTER_MISSING/);
   assert.throws(() => retrieval.RetrievalCoordinator.openActive(state, coordinatorOptions), /ACTIVE_POINTER_MISSING/);
-  await (await import("node:fs/promises")).writeFile(join(state, "active-ingest.json"), Buffer.concat([activePointer, Buffer.from(" ")]));
+  await (await import("node:fs/promises")).writeFile(join(state, "active-ingest.json"),
+    Buffer.concat([activePointer, Buffer.from(" ")]), { mode: 0o600 });
   assert.throws(() => openIngestOwnerState(state), /NONCANONICAL|JSON|POINTER/);
   assert.throws(() => retrieval.RetrievalCoordinator.openActive(state, coordinatorOptions), /NONCANONICAL|JSON|POINTER/);
 
-  await (await import("node:fs/promises")).writeFile(join(state, "active-ingest.json"), activePointer);
+  await (await import("node:fs/promises")).writeFile(join(state, "active-ingest.json"), activePointer, { mode: 0o600 });
   await rm(join(state, "ingest-authority.json"));
   await rm(join(state, "active-ingest.json"));
   await rm(join(state, "active-retrieval.json"));
-  await (await import("node:fs/promises")).writeFile(join(state, "active-retrieval.json"), validLegacyPointer);
+  await (await import("node:fs/promises")).writeFile(join(state, "active-retrieval.json"), validLegacyPointer, { mode: 0o600 });
   assert.throws(() => openIngestOwnerState(state), /AUTHORITY_WITNESS_MISSING/);
   assert.throws(() => retrieval.RetrievalCoordinator.openActive(state, coordinatorOptions), /AUTHORITY_WITNESS_MISSING/);
 });
