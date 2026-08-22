@@ -31,6 +31,34 @@ compatibility is governed by the standard's current compatibility matrix and
 the immutable release evidence cited by a specific claim; matching version
 numbers or passing this repository's tests do not establish GKOS conformance.
 
+## Phase 3 functional uplift by technology
+
+- **TypeScript / Node CLI** — adds one-pass ingest validation, strict and
+  non-strict indexing, bounded profile selection, and validate/index/search
+  orchestration with stable output and exit classifications.
+- **SQLite** — publishes content-addressed derived stores from accepted sources
+  and keeps owner-plane validation and rejection material outside ordinary
+  search results.
+- **JSON Schema and contracts** — ships the frozen 21-file
+  `gkos-ingest-validation/1.0.0-draft.1` contract, schemas, and executable
+  validation, storage, and CLI fixtures.
+- **Filesystem and atomicity** — adds a shared writer authority, atomic
+  no-replace publication, crash recovery, a sole active pointer, and sealed
+  owner-state verification.
+- **Retrieval and Decision-A** — prevents rejected source bytes from reaching
+  indexing, query, or rerank providers while preserving report-only
+  cross-record conflict handling.
+- **CI and testing** — covers the full suite and Windows path-authority lanes on
+  Node 22, 23, and 24, including forced alias and 8.3 short-path fixtures.
+
+Repository history and the Phase 3 source, header, and dependency audit found
+no copied source from another project or repository in this uplift. The
+recorded GrooveSeek input was a documentation-only clean-room study; external
+npm packages remain dependencies under their recorded licenses rather than
+vendored Phase 3 source. See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md),
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and the lockfile for the
+applicable provenance and dependency records.
+
 ## What Navigation 2.1 does
 
 Navigation 2.1 analyzes a snapshot supplied by your application. It can:
