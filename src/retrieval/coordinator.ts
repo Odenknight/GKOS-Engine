@@ -11,7 +11,14 @@ import { lexicalCitationSpans, lexicalQueryClauses } from "./lexical";
 import { canonicalPath, canonicalPathContains } from "./path-security";
 import { buildGkxRetrievalProvenance, normalizeRetrievalAsOf } from "./provenance";
 import { buildGkxRetrievalAuthorizedCandidateView } from "./authorized-view";
-import { buildGkxRetrievalGeneration, buildRetrievalGeneration, type BuiltRetrievalGeneration, type GkxRetrievalGenerationInput, type RetrievalGenerationInput, isGkxRetrievalProjectionManifest, openActiveRetrievalStore, preflightGkxRetrievalIndexInput, preflightRetrievalIndexInput, SqliteRetrievalStore } from "./sqlite-store";
+import { buildGkxRetrievalGenerationWithWriter, buildRetrievalGenerationWithWriter, type BuiltRetrievalGeneration, type GkxRetrievalGenerationInput, type RetrievalGenerationInput, isGkxRetrievalProjectionManifest, openActiveRetrievalStore, preflightGkxRetrievalIndexInput, preflightRetrievalIndexInput, SqliteRetrievalStore } from "./sqlite-store";
+import { openIngestAwareActiveRetrievalStore } from "../ingest/storage";
+import {
+  acquireLegacyRetrievalWriter,
+  legacyRetrievalWriterIsHeld,
+  releaseLegacyRetrievalWriter,
+  type LegacyRetrievalWriterCapability,
+} from "./state-writer-lock";
 import type { GkxRetrievalCandidateSource } from "./candidate-types";
 import type {
   DiscoverabilityDecision,
@@ -58,15 +65,35 @@ export interface IndexRetrievalResult {
 }
 
 const VERIFIED_STORE = Symbol("gkos.retrieval.verified-store");
+const ACTIVE_STORE_PREFLIGHTS = new WeakMap<object, SqliteRetrievalStore>();
+
+/** Opaque trusted-host capability holding one already verified active store. */
+export interface ActiveRetrievalStorePreflight {
+  readonly state_directory: string;
+}
 const SEARCH_REQUEST_FIELDS = new Set([
   "query", "limit", "lexical_top_k", "semantic_top_k", "filters", "rrf_k", "mmr", "mmr_lambda",
   "parent_expansion", "parent_expansion_max_child_tokens", "as_of",
 ]);
 
+function hasUnpairedSurrogate(value: string): boolean {
+  for (let index = 0; index < value.length; index += 1) {
+    const code = value.charCodeAt(index);
+    if (code >= 0xd800 && code <= 0xdbff) {
+      const next = value.charCodeAt(index + 1);
+      if (!(next >= 0xdc00 && next <= 0xdfff)) return true;
+      index += 1;
+    } else if (code >= 0xdc00 && code <= 0xdfff) return true;
+  }
+  return false;
+}
+
 function validateProviderIdentity(provider: VectorProvider | RerankProvider, family: "vector" | "rerank"): void {
   if (!provider || typeof provider !== "object" || !["openai_compatible", "local_onnx", "mcp"].includes(provider.kind) ||
-      typeof provider.provider_id !== "string" || !provider.provider_id || provider.provider_id.length > 512 || /[\u0000-\u001f\u007f]/u.test(provider.provider_id) ||
-      typeof provider.model_id !== "string" || !provider.model_id || provider.model_id.length > 512 || /[\u0000-\u001f\u007f]/u.test(provider.model_id)) {
+      typeof provider.provider_id !== "string" || !provider.provider_id || provider.provider_id.length > 512 ||
+      /[\u0000-\u001f\u007f]/u.test(provider.provider_id) || hasUnpairedSurrogate(provider.provider_id) ||
+      typeof provider.model_id !== "string" || !provider.model_id || provider.model_id.length > 512 ||
+      /[\u0000-\u001f\u007f]/u.test(provider.model_id) || hasUnpairedSurrogate(provider.model_id)) {
     throw new TypeError(`${family.toUpperCase()}_PROVIDER_IDENTITY_INVALID`);
   }
   effectiveProviderTimeout(provider);
@@ -455,7 +482,7 @@ async function invokeProviderWithDeadline<T>(
  */
 async function indexGeneration(
   input: Omit<RetrievalGenerationInput, "vectors" | "embedding_provider_id" | "embedding_model_id" | "embedding_dimensions">,
-  build: (value: RetrievalGenerationInput) => BuiltRetrievalGeneration,
+  build: (value: RetrievalGenerationInput, writer: LegacyRetrievalWriterCapability) => BuiltRetrievalGeneration,
   preflight: (value: unknown) => void,
   vectorProvider?: VectorProvider,
 ): Promise<IndexRetrievalResult> {
@@ -463,9 +490,11 @@ async function indexGeneration(
   // provider can observe source text. Publication revalidates independently.
   preflight(input);
   if (vectorProvider) validateProviderIdentity(vectorProvider, "vector");
+  const writer = acquireLegacyRetrievalWriter(input.state_directory);
+  try {
   if (!vectorProvider) {
     return {
-      generation: build(input),
+      generation: build(input, writer),
       vector_stage: stage("none", "disabled", ["VECTOR_DISABLED"]),
     };
   }
@@ -514,7 +543,7 @@ async function indexGeneration(
     }
   } catch {
     return {
-      generation: build(input),
+      generation: build(input, writer),
       vector_stage: stage(vectorProvider.kind, "degraded", ["VECTOR_UNAVAILABLE"], vectorProvider),
     };
   }
@@ -534,9 +563,24 @@ async function indexGeneration(
       embedding_provider_id: vectorProvider.provider_id,
       embedding_model_id: vectorProvider.model_id,
       embedding_dimensions: vectorProvider.dimensions,
-    }),
+    }, writer),
     vector_stage: stage(vectorProvider.kind, "active", [], vectorProvider),
   };
+  } finally {
+    if (legacyRetrievalWriterIsHeld(writer)) releaseLegacyRetrievalWriter(writer);
+  }
+}
+
+class GkxRetrievalWriterAuthorityError extends Error {
+  constructor(error: unknown) {
+    super(String((error as Error)?.message ?? "GKX_RETRIEVAL_WRITER_AUTHORITY_FAILURE"));
+    this.name = "GkxRetrievalWriterAuthorityError";
+  }
+}
+
+/** Trusted-host discriminator; underlying path/lock evidence stays private. */
+export function isGkxRetrievalWriterAuthorityError(error: unknown): boolean {
+  return error instanceof GkxRetrievalWriterAuthorityError;
 }
 
 async function indexCandidateGeneration(
@@ -545,8 +589,12 @@ async function indexCandidateGeneration(
 ): Promise<IndexRetrievalResult> {
   preflightGkxRetrievalIndexInput(input);
   if (vectorProvider) validateProviderIdentity(vectorProvider, "vector");
+  let writer: ReturnType<typeof acquireLegacyRetrievalWriter>;
+  try { writer = acquireLegacyRetrievalWriter(input.state_directory); }
+  catch (error) { throw new GkxRetrievalWriterAuthorityError(error); }
+  try {
   if (!vectorProvider) return {
-    generation: buildGkxRetrievalGeneration(input),
+    generation: buildGkxRetrievalGenerationWithWriter(input, writer),
     vector_stage: stage("none", "disabled", ["VECTOR_DISABLED"]),
   };
   const eligible = new Set(input.embedding_eligible_candidate_chunk_keys);
@@ -590,7 +638,7 @@ async function indexCandidateGeneration(
     }
   } catch {
     return {
-      generation: buildGkxRetrievalGeneration(input),
+      generation: buildGkxRetrievalGenerationWithWriter(input, writer),
       vector_stage: stage(vectorProvider.kind, "degraded", ["VECTOR_UNAVAILABLE"], vectorProvider),
     };
   }
@@ -601,22 +649,25 @@ async function indexCandidateGeneration(
     return { candidate_chunk_key: candidate.candidate_chunk_key, vector: [...vector] };
   });
   return {
-    generation: buildGkxRetrievalGeneration({
+    generation: buildGkxRetrievalGenerationWithWriter({
       ...input,
       vectors,
       embedding_provider_id: vectorProvider.provider_id,
       embedding_model_id: vectorProvider.model_id,
       embedding_dimensions: vectorProvider.dimensions,
-    }),
+    }, writer),
     vector_stage: stage(vectorProvider.kind, "active", [], vectorProvider),
   };
+  } finally {
+    if (legacyRetrievalWriterIsHeld(writer)) releaseLegacyRetrievalWriter(writer);
+  }
 }
 
 export async function indexRetrievalGeneration(
   input: Omit<RetrievalGenerationInput, "vectors" | "embedding_provider_id" | "embedding_model_id" | "embedding_dimensions">,
   vectorProvider?: VectorProvider,
 ): Promise<IndexRetrievalResult> {
-  return indexGeneration(input, buildRetrievalGeneration, preflightRetrievalIndexInput, vectorProvider);
+  return indexGeneration(input, buildRetrievalGenerationWithWriter, preflightRetrievalIndexInput, vectorProvider);
 }
 
 export async function indexGkxRetrievalGeneration(
@@ -673,7 +724,7 @@ export class RetrievalCoordinator {
   /** Open an active generation without exposing its raw store reader. */
   static openActive(stateDirectory: string, options: RetrievalCoordinatorOptions): RetrievalCoordinator {
     validateCoordinatorOptions(options);
-    const store = openActiveRetrievalStore(stateDirectory);
+    const store = openIngestAwareActiveRetrievalStore(stateDirectory);
     try { return new RetrievalCoordinator(store, options, VERIFIED_STORE); }
     catch (error) { try { store.close(); } catch { /* constructor may already have closed it */ } throw error; }
   }
@@ -1033,4 +1084,36 @@ export class RetrievalCoordinator {
     }
     return assembleResult(hits);
   }
+}
+
+/**
+ * Verify and hold the exact active legacy/Phase-3 store before config or
+ * provider discovery. The held SQLite handle is consumed without reopening
+ * the pointer or database by path.
+ */
+export function preflightActiveRetrievalStore(stateDirectory: string): ActiveRetrievalStorePreflight {
+  const store = openIngestAwareActiveRetrievalStore(stateDirectory);
+  const capability = Object.freeze({ state_directory: resolve(stateDirectory) });
+  ACTIVE_STORE_PREFLIGHTS.set(capability, store);
+  return capability;
+}
+
+/** Consume a verified active-store capability exactly once. */
+export function coordinatorFromActiveRetrievalStorePreflight(
+  capability: ActiveRetrievalStorePreflight,
+  options: RetrievalCoordinatorOptions,
+): RetrievalCoordinator {
+  const store = ACTIVE_STORE_PREFLIGHTS.get(capability);
+  if (!store) throw new TypeError("RETRIEVAL_ACTIVE_STORE_PREFLIGHT_CAPABILITY_INVALID");
+  ACTIVE_STORE_PREFLIGHTS.delete(capability);
+  try { return new RetrievalCoordinator(store, options, VERIFIED_STORE); }
+  catch (error) { try { store.close(); } catch { /* constructor may already have closed it */ } throw error; }
+}
+
+/** Release an unconsumed held store when later config preparation fails. */
+export function releaseActiveRetrievalStorePreflight(capability: ActiveRetrievalStorePreflight): void {
+  const store = ACTIVE_STORE_PREFLIGHTS.get(capability);
+  if (!store) throw new TypeError("RETRIEVAL_ACTIVE_STORE_PREFLIGHT_CAPABILITY_INVALID");
+  ACTIVE_STORE_PREFLIGHTS.delete(capability);
+  store.close();
 }

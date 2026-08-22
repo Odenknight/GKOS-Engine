@@ -34,6 +34,7 @@ import {
 import type { Gkx23ProjectionOptions } from "./gkx23";
 import { extensionFromPath, normalizeVaultRelative } from "./paths";
 import type { GraphDelta, GkxDiagnostics, GkxGraph, SourceFile } from "./types";
+import { copyGkxRecordValidationReceipt } from "./validation-receipts";
 
 export interface IndexChanges {
   changed?: SourceFile[];
@@ -339,6 +340,7 @@ export class GkxIndex {
               mtimeMs: file.modifiedTime,
               btimeMs: file.createdTime,
             };
+        if (reusable !== undefined) copyGkxRecordValidationReceipt(reusable, record);
         bindCanonicalCandidateRecord(record, keys[index], file);
         if (reusable === undefined) {
           this.parseCount++;

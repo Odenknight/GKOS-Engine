@@ -75,6 +75,10 @@ try {
   // Keep the small filesystem boundary in its own lazily imported bundle.
   writeFileSync(resolve(root, "dist/retrieval-path-security.mjs"), await bundle("src/retrieval/path-security.ts", { platform: "node" }));
   console.log("built dist/retrieval-path-security.mjs");
+  // Phase-3 validation/journal authority is a trusted CLI host plane. Keep
+  // parser receipts and rejection envelopes out of ordinary package exports.
+  writeFileSync(resolve(root, "dist/ingest-host.mjs"), await bundle("src/ingest/host.ts", { platform: "node" }));
+  console.log("built dist/ingest-host.mjs");
 
   // Desktop-agent sidecar entry. Two node-platform bundles from the same
   // source: an ESM bundle for `node dist/...mjs` runs and the test suite, and

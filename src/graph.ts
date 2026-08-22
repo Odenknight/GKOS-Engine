@@ -16,7 +16,8 @@
 import { colorForArea } from "./colors";
 import { parseMarkdownFile, type ParsedMarkdown } from "./markdown";
 import { parseGkx, parseGkxTimestamp } from "./gkx-parser";
-import { buildGkx23Projection, isValidGkxAuthoredUid, gkx23Inverse, gkx23RelationTargets, refreshGkx23Assessment, type Gkx23ProjectionOptions } from "./gkx23";
+import { buildGkx23ProjectionForCanonicalRecord, isValidGkxAuthoredUid, gkx23Inverse, gkx23RelationTargets, refreshGkx23Assessment, type Gkx23ProjectionOptions } from "./gkx23";
+import { bindGkxRecordValidationReceipt } from "./validation-receipts";
 import {
   areaFromFilePath,
   areaFromPath,
@@ -103,15 +104,25 @@ export interface NoteRecord {
 export function parseSourceFile(f: SourceFile, options: Gkx23ProjectionOptions = {}): NoteRecord {
   const ext = f.extension?.toLowerCase() ?? extensionFromPath(f.relativePath);
   const content = f.content ?? "";
-  const parseable = !!ext && PARSEABLE.has(ext);
+  const parseable = f.kind !== "attachment" && !!ext && PARSEABLE.has(ext);
   const parsed: ParsedMarkdown = parseable
     ? parseMarkdownFile(content)
     : { data: {}, content: "", links: [], tags: [], aliases: [] };
   const hash = contentHash(content);
   const gkx = parseable ? parseGkx(parsed.data, parsed.content) : null;
-  const projection = parseable ? buildGkx23Projection(content, normalizeVaultRelative(f.relativePath), hash, gkx, options) : undefined;
+  const built = parseable
+    ? buildGkx23ProjectionForCanonicalRecord(content, normalizeVaultRelative(f.relativePath), hash, gkx, options)
+    : { projection: undefined, receipt: {
+        applicable: false as const,
+        present: false,
+        field_lines: Object.create(null) as Record<string, number>,
+        negative_zero_fields: [],
+        issues: [],
+        invalid_declarations: [],
+      } };
+  const projection = built.projection;
   if (gkx && projection) gkx.projection = projection;
-  return {
+  const record: NoteRecord = {
     relativePath: normalizeVaultRelative(f.relativePath),
     ext,
     size: Number(f.size ?? content.length ?? 0),
@@ -122,6 +133,8 @@ export function parseSourceFile(f: SourceFile, options: Gkx23ProjectionOptions =
     parsed,
     gkx,
   };
+  bindGkxRecordValidationReceipt(record, built.receipt);
+  return record;
 }
 
 export interface AssembleOptions {
@@ -578,6 +591,8 @@ function buildCanonicalCandidateLedger(
         field: declaration.field,
         origin: declaration.origin,
         declaration_index: declaration.declaration_index,
+        source_line: declaration.source_line,
+        source_declaration_index: declaration.source_declaration_index,
         raw_reference: declaration.target,
         resolution_tiers: Object.freeze(tiers),
         global_status: globalStatus,

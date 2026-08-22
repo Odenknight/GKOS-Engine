@@ -3,6 +3,13 @@ import type { NoteRecord } from "./graph";
 import type { GkxData, ParsedLink, SourceFile } from "./types";
 import { canonicalSourceDeclarations, type CanonicalSourceDeclaration } from "./canonical-declarations";
 import { sha256HexSync } from "./sha256-sync";
+import {
+  bindGkxCandidateValidationReceipt,
+  copyGkxCandidateValidationReceipt,
+  copyGkxProjectionValidationReceipt,
+  copyGkxRecordValidationReceipt,
+  gkxRecordValidationReceipt,
+} from "./validation-receipts";
 
 /**
  * Package-private identity for one canonical parser input. It is deliberately
@@ -79,6 +86,7 @@ function inertClone<T>(value: T): T {
 
 function rebaseGkxProjectionSourcePath(gkx: GkxData | null, relativePath: string): GkxData | null {
   const clone = inertClone(gkx);
+  const sourceProjection = gkx?.projection;
   const projection = clone?.projection;
   if (!projection) return clone;
   projection.sourcePath = relativePath;
@@ -93,11 +101,12 @@ function rebaseGkxProjectionSourcePath(gkx: GkxData | null, relativePath: string
       ...(diagnostic.sourcePath === undefined ? {} : { sourcePath: relativePath }),
     })),
   };
+  if (sourceProjection) copyGkxProjectionValidationReceipt(sourceProjection, projection);
   return clone;
 }
 
 function snapshotOf(record: NoteRecord, material: CanonicalCandidateMaterial): CanonicalCandidateSourceSnapshot {
-  return deepFreeze({
+  const snapshot = deepFreeze({
     relative_path: record.relativePath,
     extension: record.ext ?? null,
     size: record.size,
@@ -111,6 +120,8 @@ function snapshotOf(record: NoteRecord, material: CanonicalCandidateMaterial): C
     declarations: inertClone(canonicalSourceDeclarations(record)),
     gkx: inertClone(record.gkx),
   });
+  bindGkxCandidateValidationReceipt(snapshot, gkxRecordValidationReceipt(record));
+  return snapshot;
 }
 
 function descriptorOf(material: CanonicalCandidateMaterial): string {
@@ -137,13 +148,13 @@ export function canonicalCandidateRecordDescriptor(record: NoteRecord): string {
 
 export function canonicalCandidateSourceParserSignature(source: SourceFile): string {
   const material = materialForSource(source);
-  return `${material.extension ?? ""}\u0001${material.content_fingerprint}`;
+  return `${material.kind ?? ""}\u0001${material.extension ?? ""}\u0001${material.content_fingerprint}`;
 }
 
 export function canonicalCandidateRecordParserSignature(record: NoteRecord): string {
   const material = RECORD_MATERIAL.get(record);
   if (!material) throw new Error("GKX_CANONICAL_RECORD_MATERIAL_MISSING");
-  return `${material.extension ?? ""}\u0001${material.content_fingerprint}`;
+  return `${material.kind ?? ""}\u0001${material.extension ?? ""}\u0001${material.content_fingerprint}`;
 }
 
 function baseKey(descriptor: string): string {
@@ -223,6 +234,7 @@ export function cloneCanonicalCandidateRecord(record: NoteRecord): NoteRecord {
   RECORD_KEYS.set(clone, key);
   RECORD_MATERIAL.set(clone, material);
   RECORD_SNAPSHOTS.set(clone, snapshot);
+  copyGkxRecordValidationReceipt(record, clone);
   return clone;
 }
 
@@ -285,10 +297,12 @@ export function rebindRenamedCanonicalCandidateRecords(
     if (!snapshot) throw new Error("GKX_CANONICAL_SOURCE_SNAPSHOT_MISSING");
     const rebasedGkx = rebaseGkxProjectionSourcePath(seed.record.gkx, seed.material.relative_path);
     seed.record.gkx = rebasedGkx;
-    RECORD_SNAPSHOTS.set(seed.record, deepFreeze({
+    const rebasedSnapshot = deepFreeze({
       ...snapshot,
       relative_path: seed.material.relative_path,
       gkx: inertClone(rebasedGkx),
-    }));
+    });
+    copyGkxCandidateValidationReceipt(snapshot, rebasedSnapshot);
+    RECORD_SNAPSHOTS.set(seed.record, rebasedSnapshot);
   }
 }

@@ -596,12 +596,16 @@ test("verified generations remain read-only and never create WAL/SHM sidecars", 
     assert.equal((await stat(built.database_path)).mode & 0o777, 0o600);
     assert.equal((await stat(built.pointer_path)).mode & 0o777, 0o600);
     await chmod(state, 0o777);
-    await chmod(built.database_path, 0o666);
+    assert.throws(() => buildRetrievalGeneration(input), /STATE_DIRECTORY_PERMISSION_REJECTED/);
+    await chmod(state, 0o700);
     await chmod(built.pointer_path, 0o666);
+    assert.throws(() => buildRetrievalGeneration(input), /STATE_WRITER_PERMISSION_REJECTED/);
+    await chmod(built.pointer_path, 0o600);
+    await chmod(built.database_path, 0o666);
     buildRetrievalGeneration(input);
-    assert.equal((await stat(state)).mode & 0o777, 0o700, "existing state mode is repaired");
+    assert.equal((await stat(state)).mode & 0o777, 0o700, "valid state mode is retained");
     assert.equal((await stat(built.database_path)).mode & 0o777, 0o600, "existing database mode is repaired");
-    assert.equal((await stat(built.pointer_path)).mode & 0o777, 0o600, "existing pointer mode is repaired");
+    assert.equal((await stat(built.pointer_path)).mode & 0o777, 0o600, "valid pointer mode is retained");
   }
   assert.equal(existsSync(`${built.database_path}-wal`), false);
   assert.equal(existsSync(`${built.database_path}-shm`), false);
@@ -1034,11 +1038,6 @@ test("verified active vectors are reused by provider/model/content digest across
   assert.deepEqual(calls.map((batch) => batch.length), [3, 1]);
   assert.match(calls[1][0], /Changed after/);
 
-  await writeFile(second.generation.pointer_path, "{corrupt active pointer", "utf8");
-  const recovered = await indexRetrievalGeneration(generationInput(state, chunksAfter, { fixture: 2 }), provider);
-  assert.equal(recovered.vector_stage.state, "active");
-  assert.deepEqual(calls.map((batch) => batch.length), [3, 1, 3], "corrupt prior state is a cache miss, not mixed or fatal");
-
   const mismatchCalls = [];
   const differentSpace = {
     ...provider, model_id: "different-cache-model",
@@ -1046,6 +1045,15 @@ test("verified active vectors are reused by provider/model/content digest across
   };
   await indexRetrievalGeneration(generationInput(state, chunksAfter, { fixture: 3 }), differentSpace);
   assert.deepEqual(mismatchCalls.map((batch) => batch.length), [3]);
+
+  await writeFile(second.generation.pointer_path, "{corrupt active pointer", "utf8");
+  await assert.rejects(
+    indexRetrievalGeneration(generationInput(state, chunksAfter, { fixture: 2 }), provider),
+    /RETRIEVAL_STATE_POINTER_JSON_INVALID/,
+  );
+  assert.deepEqual(calls.map((batch) => batch.length), [3, 1],
+    "a corrupt authority pointer fails closed before cache/provider work");
+  assert.equal(await readFile(second.generation.pointer_path, "utf8"), "{corrupt active pointer");
 });
 
 test("rerank order remains the relevance input when MMR is enabled", async () => {

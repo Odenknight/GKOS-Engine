@@ -463,3 +463,114 @@ Body.`;
   assert.ok(targetDerived.blocked_by, "inverse blocked_by edge present on target");
   assert.ok(targetDerived.documented_by, "inverse documented_by edge present on target");
 });
+
+test("canonical YAML parser bounds inline recursion and rejects prototype keys without pollution", () => {
+  const deeplyNested = `[`.repeat(10_000) + `"value"` + `]`.repeat(10_000);
+  const parsed = parseGkx23Frontmatter(`---\nvalue: ${deeplyNested}\n---\nBody`);
+  assert.ok(parsed.issues.some((issue) => /nesting exceeds 64 levels/u.test(issue.message)));
+
+  delete Object.prototype.phase3Polluted;
+  const unsafe = parseGkx23Frontmatter(`---\n__proto__:\n  phase3Polluted: true\nconstructor: nope\ntitle: Safe\n---\nBody`);
+  assert.equal(Object.prototype.phase3Polluted, undefined);
+  assert.equal(Object.hasOwn(unsafe.data, "__proto__"), false);
+  assert.equal(Object.hasOwn(unsafe.data, "constructor"), false);
+  assert.equal(unsafe.data.title, "Safe");
+  assert.equal(unsafe.issues.filter((issue) => /Unsafe YAML mapping key/u.test(issue.message)).length, 2);
+});
+
+test("canonical YAML parser rejects malformed flow, quotes, and numeric-looking unsupported scalars", () => {
+  for (const [value, message] of [
+    ["[a], [b]", /Malformed inline YAML sequence/u],
+    ["[a,,b]", /Malformed inline YAML sequence/u],
+    ["'a'b'", /Malformed single-quoted YAML scalar/u],
+    ["1e309", /Unsupported or non-finite YAML numeric scalar/u],
+  ]) {
+    const parsed = parseGkx23Frontmatter(`---\nvalue: ${value}\n---\nBody`);
+    assert.ok(parsed.issues.some((issue) => message.test(issue.message)), `${value} must fail safely: ${JSON.stringify(parsed.issues)}`);
+  }
+
+  const valid = parseGkx23Frontmatter(String.raw`---
+tags: ["a\\", "b"]
+---
+Body`);
+  assert.deepEqual(valid.issues, []);
+  assert.deepEqual(valid.data.tags, ["a\\", "b"]);
+});
+
+test("canonical YAML parser preserves spaced empty maps and trailing-comma sequence compatibility", () => {
+  const raw = `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec956"
+title: "Flow compatibility"
+type: "semantic"
+created_at: "2026-07-16T20:00:00Z"
+epistemic_state: "reported"
+sensitivity: "public"
+provenance: { }
+review: {   }
+assessment: {}
+tags: [one, two,]
+---
+Body`;
+  const parsed = parseGkx23Frontmatter(raw);
+  assert.deepEqual(parsed.issues, []);
+  assert.equal(parsed.data.provenance, "{ }");
+  assert.equal(parsed.data.review, "{   }");
+  assert.deepEqual(parsed.data.assessment, {});
+  assert.deepEqual(parsed.data.tags, ["one", "two"]);
+
+  const projection = buildGkx23Projection(raw, "Flow.md", "flow-hash", null);
+  assert.equal(projection.rawFrontmatter.provenance, "{ }");
+  assert.equal(projection.rawFrontmatter.review, "{   }");
+  assert.deepEqual(projection.authored.tags, ["one", "two"]);
+  assert.equal(projection.diagnostics.some((diagnostic) => diagnostic.code === "GKX-SCHEMA-001"), false);
+
+  assert.deepEqual(parseGkx23Frontmatter("---\ntags: [one,]\n---\nBody").data.tags, ["one"]);
+  for (const invalid of ["[,one]", "[one,,two]"]) {
+    assert.ok(parseGkx23Frontmatter(`---\ntags: ${invalid}\n---\nBody`).issues.some((issue) => /Malformed inline YAML sequence/u.test(issue.message)));
+  }
+});
+
+test("frontmatter delimiters, empty headers, physical line caps, BOM, and CRLF are exact", () => {
+  assert.deepEqual(parseGkx23Frontmatter("Body"), { data: {}, issues: [], present: false });
+  assert.deepEqual(parseGkx23Frontmatter("---\n---\nBody"), { data: {}, issues: [], present: true });
+  assert.equal(parseGkx23Frontmatter("---evil\ntitle: Nope\n---\nBody").present, false);
+  const suffixedClose = parseGkx23Frontmatter("---\ntitle: Nope\n---evil\nBody");
+  assert.equal(suffixedClose.present, false);
+  assert.ok(suffixedClose.issues.some((issue) => /unterminated/u.test(issue.message)));
+
+  const comments = `${Array.from({ length: 4_097 }, () => "# comment").join("\n")}`;
+  const tooMany = parseGkx23Frontmatter(`---\n${comments}\n---\nBody`);
+  assert.equal(tooMany.present, false);
+  assert.ok(tooMany.issues.some((issue) => /4096 physical lines/u.test(issue.message)));
+
+  const bomCrlf = parseGkx23Frontmatter("\ufeff---\r\ntitle: Exact\r\ntags:\r\n- one\r\n---\r\nBody");
+  assert.equal(bomCrlf.present, true);
+  assert.deepEqual(bomCrlf.issues, []);
+  assert.equal(bomCrlf.data.title, "Exact");
+  assert.deepEqual(bomCrlf.data.tags, ["one"]);
+});
+
+test("valid public parser and projection envelopes retain their exact compatibility shape", () => {
+  const raw = `---\r\ngkx_version: "2.3"\r\nuid: "019b2d14-4230-7db7-87d4-7d81cfaec955"\r\ntitle: "Byte shape"\r\ntype: "semantic"\r\ncreated_at: "2026-07-16T20:00:00Z"\r\nepistemic_state: "reported"\r\nsensitivity: "public"\r\ntags: [one, two]\r\n---\r\nBody`;
+  assert.deepEqual(parseGkx23Frontmatter(raw), {
+    data: {
+      gkx_version: "2.3",
+      uid: "019b2d14-4230-7db7-87d4-7d81cfaec955",
+      title: "Byte shape",
+      type: "semantic",
+      created_at: "2026-07-16T20:00:00Z",
+      epistemic_state: "reported",
+      sensitivity: "public",
+      tags: ["one", "two"],
+    },
+    issues: [],
+    present: true,
+  });
+  const projection = buildGkx23Projection(raw, "Byte shape.md", "shape-hash", null);
+  assert.deepEqual(Object.keys(projection).sort(), [
+    "approved", "assessment", "authored", "conformanceClaim", "contentHash", "derived", "diagnostics",
+    "effective", "extensions", "mode", "profile", "proposed", "rawFrontmatter", "sourcePath", "sourceVersion",
+  ]);
+  assert.equal(Object.getOwnPropertySymbols(projection).length, 0);
+});
