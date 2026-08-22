@@ -67,6 +67,20 @@ export interface IndexRetrievalResult {
 
 const VERIFIED_STORE = Symbol("gkos.retrieval.verified-store");
 const ACTIVE_STORE_PREFLIGHTS = new WeakMap<object, SqliteRetrievalStore>();
+const EVALUATION_STORE_OBSERVERS = new WeakMap<SqliteRetrievalStore, RetrievalEvaluationCoordinatorObserver>();
+
+/**
+ * Trusted-host-only attempt instrumentation.  This type and its factory are
+ * deliberately exported only by the package-private evaluation host bundle;
+ * the public retrieval entry point does not expose an observation or control
+ * surface on the coordinator.
+ */
+export interface RetrievalEvaluationCoordinatorObserver {
+  sql_stage(kind: "lexical" | "vector"): void;
+  ranking(): void;
+  confidence(): void;
+  citation(): void;
+}
 
 /** Opaque trusted-host capability holding one already verified active store. */
 export interface ActiveRetrievalStorePreflight {
@@ -718,6 +732,7 @@ export function vaultSourceReader(vaultRoot: string): (sourcePath: string) => Pr
 export class RetrievalCoordinator {
   readonly #store: SqliteRetrievalStore;
   readonly #options: RetrievalCoordinatorOptions;
+  readonly #evaluationObserver: RetrievalEvaluationCoordinatorObserver | undefined;
 
   constructor(databasePath: string, options: RetrievalCoordinatorOptions);
   constructor(databasePathOrStore: SqliteRetrievalStore, options: RetrievalCoordinatorOptions, capability: typeof VERIFIED_STORE);
@@ -735,6 +750,8 @@ export class RetrievalCoordinator {
       throw new Error("RETRIEVAL_RUNTIME_POLICY_DIGEST_MISMATCH");
     }
     this.#options = options;
+    this.#evaluationObserver = typeof databasePathOrStore === "string" ? undefined : EVALUATION_STORE_OBSERVERS.get(databasePathOrStore);
+    if (typeof databasePathOrStore !== "string") EVALUATION_STORE_OBSERVERS.delete(databasePathOrStore);
   }
 
   /** Open an active generation without exposing its raw store reader. */
@@ -832,9 +849,11 @@ export class RetrievalCoordinator {
       for (const source of temporalView.temporal_sources) temporalBySource.set(source.source_id, source);
       if (normalizedAsOf !== null) {
         if (temporalView.authorized_source_count === 0) {
+          this.#evaluationObserver?.confidence();
           return emptyLineageSearchResult(this.#store, this.#options, query, normalizedAsOf, request.filters, "NO_ELIGIBLE_RESULTS", "not_evaluated", resultCoordinate, lineageViewFreshness);
         }
         if (temporalView.answerable_source_count !== temporalView.authorized_source_count || temporalView.eligible_record_keys.length === 0) {
+          this.#evaluationObserver?.confidence();
           return emptyLineageSearchResult(this.#store, this.#options, query, normalizedAsOf, request.filters, "TEMPORAL_COVERAGE_INSUFFICIENT", "insufficient", resultCoordinate, lineageViewFreshness);
         }
         temporalCoverage = "sufficient";
@@ -895,6 +914,7 @@ export class RetrievalCoordinator {
       eligible.push(...group);
     }
     if (lineageProjection && eligible.length === 0) {
+      this.#evaluationObserver?.confidence();
       return emptyLineageSearchResult(
         this.#store,
         this.#options,
@@ -911,6 +931,7 @@ export class RetrievalCoordinator {
     const eligibleCandidateKeys = lineageProjection
       ? eligible.map((chunk) => lineageCandidateKeyByPublicId.get(chunk.chunk_id) ?? (() => { throw new Error("GKX_RETRIEVAL_CANDIDATE_CHUNK_BINDING_MISSING"); })())
       : [];
+    this.#evaluationObserver?.sql_stage("lexical");
     const lexical = lineageProjection
       ? this.#store.candidateLexicalSearch(query, eligibleCandidateKeys, lexicalTopK)
       : this.#store.lexicalSearch(query, eligibleIds, lexicalTopK);
@@ -940,6 +961,7 @@ export class RetrievalCoordinator {
         // Provider failures may degrade to lexical-only retrieval. Persisted-store read, space,
         // or corruption failures are projection-integrity failures and must
         // propagate rather than being mislabeled as provider unavailability.
+        this.#evaluationObserver?.sql_stage("vector");
         semantic = lineageProjection
           ? this.#store.candidateVectorSearch([...queryVector], eligibleCandidateKeys, semanticTopK, provider.provider_id, provider.model_id)
           : this.#store.vectorSearch([...queryVector], eligibleIds, semanticTopK, provider.provider_id, provider.model_id);
@@ -947,6 +969,7 @@ export class RetrievalCoordinator {
       }
     }
 
+    this.#evaluationObserver?.ranking();
     const fused = reciprocalRankFusion(lexical, semantic, rrfK);
     const fusedRanks = new Map(fused.map((candidate, index) => [candidate.chunk_id, index + 1]));
     let ordered = [...fused];
@@ -999,7 +1022,8 @@ export class RetrievalCoordinator {
       ? (staleCitation ? "stale" : lineageViewFreshness)
       : (staleCitation || this.#options.stale ? "stale" : "fresh");
     const stale = projectionFreshness === "stale";
-    const assembleResult = (resultHits: readonly InternalRetrievalHit[]): RetrievalSearchResult => {
+    const assembleResult = (resultHits: readonly InternalRetrievalHit[], final = false): RetrievalSearchResult => {
+      if (final) this.#evaluationObserver?.confidence();
       const confidence = assessRetrievalConfidence(resultHits.map((hit) => hit.stage_scores), { vector: vectorStage, reranker: rerankerStage }, eligible.length, stale);
       const common = {
         projection_id: resultCoordinate.projection_id,
@@ -1034,6 +1058,7 @@ export class RetrievalCoordinator {
     for (const candidate of selected) {
       if (hits.length >= limit) break;
       const chunk = byId.get(candidate.chunk_id)!;
+      this.#evaluationObserver?.citation();
       const evidence = gkxRetrievalDeduplicateOverlapEvidence(
         gkxRetrievalVerifiedCitation(chunk, query, sourceBytes.get(chunk.source_path)!),
         chunk,
@@ -1065,6 +1090,7 @@ export class RetrievalCoordinator {
       if (request.parent_expansion && chunk.token_count < parentExpansionMaxChildTokens && chunk.parent_chunk_id) {
         const parent = eligibleById.get(chunk.parent_chunk_id);
         if (parent && Buffer.byteLength(parent.text, "utf8") <= (this.#options.max_parent_bytes ?? 8192)) {
+          this.#evaluationObserver?.citation();
           const parentCitation = gkxRetrievalVerifiedCitation(parent, "", sourceBytes.get(parent.source_path)!);
           const parentTemporal = lineageProjection ? temporalBySource.get(parent.source_id) : undefined;
           const parentResultChunk = gkxRetrievalAuthorizedResultChunk(parent, eligibleById, parentTemporal);
@@ -1098,8 +1124,25 @@ export class RetrievalCoordinator {
       for (const key of evidence.span_keys) claimedMatchedSpans.add(key);
       acceptedIntervals.push({ source_id: chunk.source_id, start_byte: chunk.start_byte, end_byte: chunk.end_byte });
     }
-    return assembleResult(hits);
+    return assembleResult(hits, true);
   }
+}
+
+/** Open an exact, already-built generation for the private evaluation host. */
+export function coordinatorFromRetrievalEvaluationDatabase(
+  databasePath: string,
+  options: RetrievalCoordinatorOptions,
+  observer: RetrievalEvaluationCoordinatorObserver,
+): RetrievalCoordinator {
+  validateCoordinatorOptions(options);
+  if (!observer || typeof observer.sql_stage !== "function" || typeof observer.ranking !== "function" ||
+      typeof observer.confidence !== "function" || typeof observer.citation !== "function") {
+    throw new TypeError("RETRIEVAL_EVALUATION_OBSERVER_INVALID");
+  }
+  const store = new SqliteRetrievalStore(databasePath);
+  EVALUATION_STORE_OBSERVERS.set(store, observer);
+  try { return new RetrievalCoordinator(store, options, VERIFIED_STORE); }
+  catch (error) { try { store.close(); } catch { /* constructor may already have closed it */ } throw error; }
 }
 
 /**

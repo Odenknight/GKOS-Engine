@@ -267,6 +267,49 @@ atomicity/compensation mechanism.
 
 ## CLI
 
+Phase 4 adds two private-host retrieval-evaluation commands without widening the
+public package API:
+
+```text
+gkx retrieval eval --fixture <golden-toml> [--json]
+gkx retrieval tune --fixture <golden-toml> --output <candidate-config>
+```
+
+The CLI seals the golden parent as an owner-private capability, opens only exact
+fixed sibling companions, and revalidates every directory/file identity and
+namespace coordinate before presentation or publication. Its private 15-field
+ExecutionAuthority receipt binds raw golden/conformance hashes, normalized
+golden, environment, baseline, catalog, corpus, manifests, metric/tune/table
+coordinates, and nullable provider/reviewed coordinates. An object locator
+requires the exact sibling; a null locator requires sealed absence, with no
+fallback. Execution constructs one unactivated schema-3 SQLite generation per
+environment in a sealed 0700 temporary child; it never reads or publishes an
+active/legacy pointer. Embedding and reranker roles are independently active or
+disabled; active calls come only from the finite offline transcript, while a
+fully disabled environment uses no transcript, vectors, identities, or provider
+calls. The actual coordinator and evaluator emit the 11-counter attempt receipt.
+A present reviewed overlay must exact-match all 24 reviewed results, metrics,
+origins, and counters and independently rebuild/replay the physical-absence
+temporal pair; its absence enables the general 1..256-query eval surface and tune
+through 30 queries without weakening companion sealing.
+The executor independently derives the exact `phase4-fixed-offline-v1`
+non-tunable base coordinate; a baseline substitution returns `needs_human`
+before query/provider work instead of copying the baseline coordinate into the
+current side of comparison.
+
+Tune exhaustively evaluates the eligible 900-axis grid (21,600 reviewed query
+attempts for the shipped fixture). A selected config is rendered through the
+strict parser as minimal TOML. Publication uses a same-parent 0600 guard and
+temporary file. The guard is itself atomically published through its fixed 0600
+staging leaf, `fsync`, and hard-link no-replace before candidate creation.
+Recovery recognizes the exact staging-only, staging/guard-linked, guard-only,
+candidate-precommit, candidate/final-linked, and finalization states; every
+alias, widened mode, third link, or coordinate mismatch retains evidence and
+fails. Candidate cleanup removes the temporary link first and the guard last.
+Existing or ambiguous targets are never overwritten. These parser, execution,
+tuning, filesystem, and output surfaces exist only in the non-exported
+evaluation-host bundle.
+
 ```text
 gkx nav scan <dir>
 gkx nav audit <dir>

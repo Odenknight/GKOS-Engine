@@ -11,6 +11,8 @@
  *   gkx assess   <dir> [--json]
  *   gkx graph    <dir> -o graph.json [--watch]
  *   gkx export graphiti <dir> --episodes episodes.json [--group-id <ns>]
+ *   gkx retrieval eval --fixture golden-fixture.toml [--json]
+ *   gkx retrieval tune --fixture golden-fixture.toml --output candidate.toml
  *
  * Every command embeds a deterministic `build:` block
  * (engine_version, policy_hash, corpus_hash, generated_at).
@@ -194,6 +196,17 @@ async function loadRetrievalPathSecurity() {
     catch { throw new Error("dist/retrieval-path-security.mjs not found — run `npm run build` first."); }
   }
   return retrievalPathSecurityModule;
+}
+
+let retrievalEvaluationHostModule;
+async function loadRetrievalEvaluationHost() {
+  if (!retrievalEvaluationHostModule) {
+    try {
+      await prepareSqliteRuntime();
+      retrievalEvaluationHostModule = await import(new URL("../dist/retrieval-evaluation-host.mjs", import.meta.url).href);
+    } catch { throw new Error("dist/retrieval-evaluation-host.mjs not found — run `npm run build` first."); }
+  }
+  return retrievalEvaluationHostModule;
 }
 
 let ingestHostModule;
@@ -1140,6 +1153,180 @@ Usage:
 
 Navigation is source-content read-only. nav write/apply/delete/record are rejected.`;
 
+function parseRetrievalEvaluationArgs(args) {
+  const command = args[0];
+  if (command !== "eval" && command !== "tune") return null;
+  if (args.length === 2 && args[1] === "--help") return { help: true, command };
+  const seen = new Set();
+  let fixture = null;
+  let output = null;
+  let json = false;
+  for (let index = 1; index < args.length; index += 1) {
+    const item = args[index];
+    if (item === "--json" && command === "eval" && !seen.has(item)) {
+      seen.add(item);
+      json = true;
+      continue;
+    }
+    if ((item === "--fixture" || item === "--output") && !seen.has(item) &&
+        (item !== "--output" || command === "tune")) {
+      seen.add(item);
+      const value = args[++index];
+      if (typeof value !== "string" || value.length === 0 || value.startsWith("-")) return null;
+      if (item === "--fixture") fixture = value;
+      else output = value;
+      continue;
+    }
+    return null;
+  }
+  if (fixture === null || command === "tune" && output === null || command === "eval" && output !== null) return null;
+  return { help: false, command, fixture, output, json };
+}
+
+function evaluationStderr(command, message) {
+  process.stderr.write(`gkx retrieval ${command}: ${message}\n`);
+}
+
+async function assertEvaluationFixtureCurrent(capability) {
+  try { await capability.revalidate(); }
+  catch { throw new Error("GKX_EVAL_CLI_FIXTURE_CHANGED"); }
+}
+
+async function cleanupEvaluationTemporary(capability) {
+  if (!capability) return;
+  await capability.revalidate();
+  await capability.cleanup();
+}
+
+async function runRetrievalEvaluationCli(args) {
+  const parsed = parseRetrievalEvaluationArgs(args);
+  if (parsed?.help) {
+    try {
+      const host = await loadRetrievalEvaluationHost();
+      process.stdout.write(`${host.RETRIEVAL_EVALUATION_CLI_USAGE}\n`);
+      return 0;
+    } catch { evaluationStderr(parsed.command, "operational failure"); return 3; }
+  }
+  const command = parsed?.command ?? (args[0] === "tune" ? "tune" : "eval");
+  if (!parsed) { evaluationStderr(command, "invalid arguments"); return 2; }
+  const cwdSnapshot = resolve(process.cwd());
+  let evaluationHost;
+  try {
+    evaluationHost = await loadRetrievalEvaluationHost();
+  } catch {
+    evaluationStderr(parsed.command, "operational failure");
+    return 3;
+  }
+  try {
+    evaluationHost.retrievalEvaluationLocalPath(parsed.fixture, cwdSnapshot);
+    if (parsed.command === "tune") evaluationHost.retrievalEvaluationOutputPath(parsed.output, cwdSnapshot);
+  } catch {
+    evaluationStderr(parsed.command, "invalid arguments");
+    return 2;
+  }
+
+  let fixture;
+  try { fixture = await evaluationHost.openRetrievalEvaluationFixtureCapability(parsed.fixture, cwdSnapshot); }
+  catch { evaluationStderr(parsed.command, "invalid fixture"); return 2; }
+
+  if (parsed.command === "tune") {
+    try { evaluationHost.assertRetrievalEvaluationTuneBaselineForHost(fixture.input.baseline); }
+    catch (error) {
+      if (error?.message === "GKX_EVAL_TUNE_BASELINE_NEEDS_HUMAN") {
+        try { await assertEvaluationFixtureCurrent(fixture); }
+        catch { evaluationStderr("tune", "invalid fixture"); return 2; }
+        const presentation = evaluationHost.retrievalEvaluationTuneNeedsHumanPresentation();
+        process.stdout.write(presentation.stdout);
+        return presentation.exit_code;
+      }
+      evaluationStderr("tune", "invalid fixture");
+      return 2;
+    }
+  }
+
+  let temporary;
+  let outputCapability;
+  try {
+    temporary = await evaluationHost.createRetrievalEvaluationTemporaryCapability();
+    if (parsed.command === "tune") {
+      const packageRoot = fileURLToPath(new URL("..", import.meta.url));
+      outputCapability = await evaluationHost.openRetrievalEvaluationOutputCapability({
+        output_path: parsed.output,
+        current_directory: cwdSnapshot,
+        protected_paths: [fixture.fixture_root, ...fixture.input_paths, packageRoot, temporary.path],
+      });
+    }
+  } catch (error) {
+    try { await cleanupEvaluationTemporary(temporary); }
+    catch { evaluationStderr(parsed.command, "operational failure"); return 3; }
+    if (error?.message === "GKX_EVAL_OUTPUT_ALREADY_EXISTS") {
+      evaluationStderr(parsed.command, "output already exists");
+      return 2;
+    }
+    if (error?.message === "GKX_EVAL_CLI_PATH_INVALID") {
+      evaluationStderr(parsed.command, "invalid arguments");
+      return 2;
+    }
+    evaluationStderr(parsed.command, "operational failure");
+    return 3;
+  }
+
+  try {
+    if (parsed.command === "eval") {
+      const execution = await evaluationHost.executeRetrievalEvaluationEval(fixture.input, temporary.path);
+      await assertEvaluationFixtureCurrent(fixture);
+      await temporary.revalidate();
+      await cleanupEvaluationTemporary(temporary);
+      temporary = null;
+      await assertEvaluationFixtureCurrent(fixture);
+      const presentation = evaluationHost.retrievalEvaluationEvalPresentation(execution.comparison, parsed.json);
+      process.stdout.write(presentation.stdout);
+      return presentation.exit_code;
+    }
+
+    const execution = await evaluationHost.executeRetrievalEvaluationTune(fixture.input, temporary.path);
+    await assertEvaluationFixtureCurrent(fixture);
+    await temporary.revalidate();
+    await cleanupEvaluationTemporary(temporary);
+    temporary = null;
+    await assertEvaluationFixtureCurrent(fixture);
+    await outputCapability.revalidate();
+    if (execution.selection.selected_candidate === null) {
+      await outputCapability.assert_unpublished();
+      const presentation = evaluationHost.retrievalEvaluationTunePresentation(execution.selection);
+      process.stdout.write(presentation.stdout);
+      return presentation.exit_code;
+    }
+    await outputCapability.publish({
+      execution_authority_digest: fixture.input.execution_authority.execution_authority_digest,
+      selection: execution.selection,
+      candidate_config: execution.candidate_config,
+      revalidate_authority: async () => {
+        await assertEvaluationFixtureCurrent(fixture);
+        await outputCapability.revalidate();
+      },
+    });
+    const presentation = evaluationHost.retrievalEvaluationTunePresentation(execution.selection);
+    process.stdout.write(presentation.stdout);
+    return presentation.exit_code;
+  } catch (error) {
+    let cleanupFailed = false;
+    try { await cleanupEvaluationTemporary(temporary); }
+    catch { cleanupFailed = true; }
+    if (cleanupFailed) { evaluationStderr(parsed.command, "operational failure"); return 3; }
+    if (error?.message === "GKX_EVAL_CLI_FIXTURE_CHANGED") {
+      evaluationStderr(parsed.command, "invalid fixture");
+      return 2;
+    }
+    if (error?.message === "GKX_EVAL_OUTPUT_ALREADY_EXISTS") {
+      evaluationStderr(parsed.command, "output already exists");
+      return 2;
+    }
+    evaluationStderr(parsed.command, "operational failure");
+    return 3;
+  }
+}
+
 function isPhase3ValidateInvocation(args) {
   return args.some((arg) => arg === "--kb-path" || arg === "--schema" || arg === "--format" || arg === "--strict" ||
     arg.startsWith("--kb-path=") || arg.startsWith("--schema=") || arg.startsWith("--format="));
@@ -1232,6 +1419,8 @@ export async function main(argv = process.argv.slice(2)) {
     console.log(USAGE);
     return first ? 0 : 1;
   }
+
+  if (first === "retrieval") return runRetrievalEvaluationCli(argv.slice(1));
 
   if (first === "index" || (first === "validate" && isPhase3ValidateInvocation(argv.slice(1)))) {
     const parsed = parsePhase3CommandArgs(first, argv.slice(1));

@@ -3,6 +3,7 @@ import {
   RETRIEVAL_EVALUATION_SOURCE_CORPUS_VERSION,
   deriveRetrievalEvaluationProviderIndexReceipts,
   deriveRetrievalEvaluationExecutableEnvironmentBundle,
+  retrievalEvaluationSourceCorpusMaterialDigest,
   sealRetrievalEvaluationEnvironmentBundle,
   sealRetrievalEvaluationSourceCorpus,
   type RetrievalEvaluationEnvironmentBundle,
@@ -240,10 +241,13 @@ function validateReviewedAbsentCorpus(value: unknown): RetrievalEvaluationTempor
   const corpusEntry = {
     vault_fixture: item.vault_fixture,
     source_files: sourceFiles,
-    corpus_fixture_digest: retrievalCanonicalDigest(corpusDigestMaterial),
+    corpus_fixture_digest: retrievalEvaluationSourceCorpusMaterialDigest(corpusDigestMaterial),
   };
   const sourceCorpusMaterial = { contract_version: RETRIEVAL_EVALUATION_SOURCE_CORPUS_VERSION, corpora: [corpusEntry] };
-  sealRetrievalEvaluationSourceCorpus({ ...sourceCorpusMaterial, source_corpus_digest: retrievalCanonicalDigest(sourceCorpusMaterial) });
+  sealRetrievalEvaluationSourceCorpus({
+    ...sourceCorpusMaterial,
+    source_corpus_digest: retrievalEvaluationSourceCorpusMaterialDigest(sourceCorpusMaterial),
+  });
   if (sourceFiles.some((source) => source.source_id === item.removed_source_id || source.source_path === item.removed_source_path)) {
     failure("GKX_EVAL_REVIEWED_ABSENT_CORPUS_INVALID");
   }
@@ -298,6 +302,51 @@ function assertMetricFixture(fixture: RetrievalEvaluationMetricComputationFixtur
       failure("GKX_EVAL_REVIEWED_METRIC_CASE_DIGEST_INVALID");
     }
   }
+}
+
+/** Host-private complete semantic seal for the bounded metric companion. */
+export function sealRetrievalEvaluationMetricComputationFixture(
+  value: unknown,
+): RetrievalEvaluationMetricComputationFixture {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    failure("GKX_EVAL_REVIEWED_METRIC_FIXTURE_INVALID");
+  }
+  let fixture: RetrievalEvaluationMetricComputationFixture;
+  try { fixture = JSON.parse(stableJson(value)) as RetrievalEvaluationMetricComputationFixture; }
+  catch { return failure("GKX_EVAL_REVIEWED_METRIC_FIXTURE_INVALID"); }
+  assertMetricFixture(fixture);
+  const ids = fixture.cases.map((row) => row.case_id);
+  if (new Set(ids).size !== ids.length || stableJson(ids) !== stableJson([...ids].sort(retrievalCodeUnitCompare))) {
+    failure("GKX_EVAL_REVIEWED_METRIC_CASE_SET_INVALID");
+  }
+  for (const row of fixture.cases) {
+    if (!validReviewedId(row.case_id) || !Array.isArray(row.coverage) || row.coverage.length < 1 || row.coverage.length > 32 ||
+        row.coverage.some((item) => !validReviewedId(item)) || new Set(row.coverage).size !== row.coverage.length ||
+        stableJson(row.coverage) !== stableJson([...row.coverage].sort(retrievalCodeUnitCompare)) ||
+        row.parity_group !== null && !validReviewedId(row.parity_group) || typeof row.input_schema_valid !== "boolean") {
+      failure("GKX_EVAL_REVIEWED_METRIC_CASE_INVALID");
+    }
+    if (row.expected_status === "metrics") {
+      if (!row.input_schema_valid || row.expected_metrics === null || row.expected_code !== null) {
+        failure("GKX_EVAL_REVIEWED_METRIC_CASE_INVALID");
+      }
+      let observed: RetrievalEvaluationQueryMetrics;
+      try { observed = computeRetrievalEvaluationQueryMetrics(row.input); }
+      catch { return failure("GKX_EVAL_REVIEWED_METRIC_CASE_INVALID"); }
+      if (stableJson(observed) !== stableJson(row.expected_metrics)) {
+        failure("GKX_EVAL_REVIEWED_METRIC_CASE_INVALID");
+      }
+    } else if (row.expected_status === "error") {
+      if (row.expected_metrics !== null || typeof row.expected_code !== "string" || !/^[A-Z][A-Z0-9_]{0,127}$/u.test(row.expected_code)) {
+        failure("GKX_EVAL_REVIEWED_METRIC_CASE_INVALID");
+      }
+      let observedCode: string | null = null;
+      try { computeRetrievalEvaluationQueryMetrics(row.input); }
+      catch (error) { observedCode = error instanceof Error ? error.message : null; }
+      if (observedCode !== row.expected_code) failure("GKX_EVAL_REVIEWED_METRIC_CASE_INVALID");
+    } else failure("GKX_EVAL_REVIEWED_METRIC_CASE_INVALID");
+  }
+  return fixture;
 }
 
 function expectedTemporalFromAuditView(

@@ -260,7 +260,8 @@ may only raise effective sensitivity; it may never lower an authored value.
 The `gkx` binary runs the engine over a folder of Markdown records. Run
 `npm run build` first; the command imports `dist/gkos-engine.mjs`.
 
-Every command embeds a deterministic `build:` block in its output:
+The folder-oriented validation, assessment, graph, and export commands embed a
+deterministic `build:` block in their output:
 
 ```json
 { "engine_version": "2.1.1",
@@ -290,6 +291,47 @@ labels. `--json` emits stable-key-ordered JSON.
 node bin/gkx.mjs assess ./my-notes
 node bin/gkx.mjs assess ./my-notes --json > assessments.json
 ```
+
+### `gkx retrieval eval|tune`
+
+Phase 4 retrieval evaluation executes sealed offline fixtures through the actual
+public coordinator. The human golden TOML is the sole CLI fixture argument;
+every JSON/corpus/manifest companion is an exact sealed sibling, never a
+caller-directed path. Embedding and reranker roles are independent; any active
+role requires the exact fixed-offline transcript sibling and only that role's
+sealed calls execute. A fixture whose provider roles are all disabled requires
+that sibling to be absent and runs lexical retrieval with zero provider calls.
+The reviewed 24-query bundle is an optional strict overlay: when present its
+results, metrics, origins, and counters must all replay exactly, including the
+independently rebuilt physical-absence temporal pair; when absent the same
+sealed environment and baseline support the general 1..256-query eval surface
+(and tune through 30 queries).
+
+```sh
+node bin/gkx.mjs retrieval eval --fixture ./reviewed/golden-fixture.toml
+node bin/gkx.mjs retrieval eval --fixture ./reviewed/golden-fixture.toml --json
+node bin/gkx.mjs retrieval tune --fixture ./reviewed/golden-fixture.toml \
+  --output ./proposals/retrieval-candidate.toml
+```
+
+Evaluation builds an unactivated schema-3 generation inside a private temporary
+capability. It neither reads nor changes an active pointer, live configuration,
+or cache, and it never changes fixture or source bytes. A 15-field private
+execution-authority receipt binds the raw golden/conformance bytes and every
+semantic companion coordinate, including exact null/absence coordinates. Fixed
+embedding/reranking performs no network or credential lookup. `eval` writes
+nothing. `tune` can publish only the selected
+minimal candidate TOML to a new output outside every protected input/state root;
+it never overwrites an existing path and uses a guarded, durable no-replace
+protocol with exact crash recovery.
+
+Eval statuses are `pass`, `regression`, and `needs_human`; tune statuses are
+`proposed`, `no_candidate`, and `needs_human`. Exit codes are respectively
+`0`, `1`, and `4`; invalid arguments/fixtures or an ordinary existing target use
+`2`, and operational or recovery-authority failures use `3`. Presentation is
+path-free and deterministic. The raw fixture executor, provider transcript,
+tuner, filesystem capability, and output publisher are private CLI-host surfaces,
+not exports of `gkos-engine/retrieval`.
 
 ### `gkx graph <dir> -o <graph.json> [--watch]`
 

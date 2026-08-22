@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { types as utilTypes } from "node:util";
 import { isValidGkxAuthoredUid } from "../gkx23";
 import { extensionFromPath, isNotePath } from "../paths";
@@ -372,6 +373,44 @@ function sourceCorpusCanonicalBytes(value: unknown, key: string | null = null): 
       sourceCorpusCanonicalBytes(Object.getOwnPropertyDescriptor(record, field)!.value, field);
   }
   return total;
+}
+
+function updateSourceCorpusCanonicalHash(
+  hash: ReturnType<typeof createHash>,
+  value: unknown,
+  key: string | null = null,
+): void {
+  if (typeof value === "string") {
+    if (key === "source_bytes_base64") {
+      hash.update('"').update(value).update('"');
+    } else hash.update(JSON.stringify(value));
+    return;
+  }
+  if (Array.isArray(value)) {
+    hash.update("[");
+    for (let index = 0; index < value.length; index++) {
+      if (index > 0) hash.update(",");
+      updateSourceCorpusCanonicalHash(hash, value[index]);
+    }
+    hash.update("]");
+    return;
+  }
+  const record = value as Record<string, unknown>;
+  const keys = Object.keys(record).sort(retrievalCodeUnitCompare);
+  hash.update("{");
+  keys.forEach((field, index) => {
+    if (index > 0) hash.update(",");
+    hash.update(JSON.stringify(field)).update(":");
+    updateSourceCorpusCanonicalHash(hash, record[field], field);
+  });
+  hash.update("}");
+}
+
+/** Host-private streaming digest for the potentially 768 MiB source companion. */
+export function retrievalEvaluationSourceCorpusMaterialDigest(value: unknown): string {
+  const hash = createHash("sha256");
+  updateSourceCorpusCanonicalHash(hash, value);
+  return `sha256:${hash.digest("hex")}`;
 }
 
 function preflightSourceCorpus(value: unknown): number {
@@ -1017,14 +1056,10 @@ function sealSourceSnapshot(value: unknown): RetrievalEvaluationSourceSnapshot {
 
 export function sealRetrievalEvaluationSourceCorpus(value: unknown): RetrievalEvaluationSourceCorpus {
   const expectedCanonicalBytes = preflightSourceCorpus(value);
-  const canonical = stableJson(value);
-  if (Buffer.byteLength(canonical, "utf8") !== expectedCanonicalBytes) failure("GKX_EVAL_SOURCE_CORPUS_SERIALIZED_SIZE_INVALID");
-  const item = JSON.parse(canonical) as Record<string, unknown>;
-  exactKeys(item, ["contract_version", "corpora", "source_corpus_digest"], "GKX_EVAL_SOURCE_CORPUS_FIELDS_INVALID");
-  if (item.contract_version !== RETRIEVAL_EVALUATION_SOURCE_CORPUS_VERSION || !Array.isArray(item.corpora) ||
-      item.corpora.length < 1 || item.corpora.length > 256) failure("GKX_EVAL_SOURCE_CORPUS_COORDINATE_INVALID");
+  const rawItem = value as Record<string, unknown>;
+  const rawCorpora = rawItem.corpora as unknown[];
   let totalBytes = 0;
-  const corpora = (item.corpora as unknown[]).map((raw) => {
+  const corpora = rawCorpora.map((raw) => {
     const corpus = raw as Record<string, unknown>;
     exactKeys(corpus, ["vault_fixture", "source_files", "corpus_fixture_digest"], "GKX_EVAL_SOURCE_CORPUS_ENTRY_FIELDS_INVALID");
     if (!boundedId(corpus.vault_fixture) || !Array.isArray(corpus.source_files) || corpus.source_files.length < 1 || corpus.source_files.length > 4_096) {
@@ -1046,37 +1081,58 @@ export function sealRetrievalEvaluationSourceCorpus(value: unknown): RetrievalEv
       catch { failure("GKX_EVAL_SOURCE_CORPUS_FILE_UTF8_INVALID"); }
       totalBytes += bytes.length;
       if (totalBytes > 512 * 1024 * 1024) failure("GKX_EVAL_SOURCE_CORPUS_TOTAL_SIZE_INVALID");
-      return source as unknown as RetrievalEvaluationSourceCorpus["corpora"][number]["source_files"][number];
+      return {
+        source_id: source.source_id as string,
+        source_path: source.source_path as string,
+        source_digest: source.source_digest as string,
+        source_bytes_base64: source.source_bytes_base64,
+      } as RetrievalEvaluationSourceCorpus["corpora"][number]["source_files"][number];
     });
     const keys = sourceFiles.map((source) => `${source.source_id}\0${source.source_path}`);
     if (new Set(sourceFiles.map((source) => source.source_id)).size !== sourceFiles.length ||
         new Set(sourceFiles.map((source) => source.source_path)).size !== sourceFiles.length ||
-        stableJson(keys) !== stableJson([...keys].sort(retrievalCodeUnitCompare))) failure("GKX_EVAL_SOURCE_CORPUS_FILE_ORDER_INVALID");
+        keys.some((entry, index) => index > 0 && retrievalCodeUnitCompare(keys[index - 1], entry) >= 0)) {
+      failure("GKX_EVAL_SOURCE_CORPUS_FILE_ORDER_INVALID");
+    }
     digest(corpus.corpus_fixture_digest, "GKX_EVAL_SOURCE_CORPUS_ENTRY_DIGEST_INVALID");
-    const corpusDigest = retrievalCanonicalDigest({
+    const corpusDigest = retrievalEvaluationSourceCorpusMaterialDigest({
       contract_version: RETRIEVAL_EVALUATION_SOURCE_CORPUS_VERSION,
       vault_fixture: corpus.vault_fixture,
-      source_files: corpus.source_files,
+      source_files: sourceFiles,
     });
     if (corpusDigest !== corpus.corpus_fixture_digest) failure("GKX_EVAL_SOURCE_CORPUS_ENTRY_DIGEST_MISMATCH");
-    return corpus as unknown as RetrievalEvaluationSourceCorpus["corpora"][number];
+    return {
+      vault_fixture: corpus.vault_fixture as string,
+      source_files: sourceFiles,
+      corpus_fixture_digest: corpus.corpus_fixture_digest as string,
+    } as RetrievalEvaluationSourceCorpus["corpora"][number];
   });
   const vaults = corpora.map((corpus) => corpus.vault_fixture);
-  if (new Set(vaults).size !== vaults.length || stableJson(vaults) !== stableJson([...vaults].sort(retrievalCodeUnitCompare))) {
+  if (new Set(vaults).size !== vaults.length ||
+      vaults.some((entry, index) => index > 0 && retrievalCodeUnitCompare(vaults[index - 1], entry) >= 0)) {
     failure("GKX_EVAL_SOURCE_CORPUS_ORDER_INVALID");
   }
-  const globalSources = new Map<string, string>();
+  const globalSources = new Map<string, RetrievalEvaluationSourceCorpus["corpora"][number]["source_files"][number]>();
   for (const corpus of corpora) {
     for (const source of corpus.source_files) {
-      const binding = stableJson({ source_path: source.source_path, source_digest: source.source_digest, source_bytes_base64: source.source_bytes_base64 });
       const prior = globalSources.get(source.source_id);
-      if (prior !== undefined && prior !== binding) failure("GKX_EVAL_SOURCE_CORPUS_CROSS_SCOPE_BINDING_INVALID");
-      globalSources.set(source.source_id, binding);
+      if (prior !== undefined && (prior.source_path !== source.source_path || prior.source_digest !== source.source_digest ||
+          prior.source_bytes_base64 !== source.source_bytes_base64)) {
+        failure("GKX_EVAL_SOURCE_CORPUS_CROSS_SCOPE_BINDING_INVALID");
+      }
+      globalSources.set(source.source_id, source);
     }
   }
+  const item: RetrievalEvaluationSourceCorpus = {
+    contract_version: RETRIEVAL_EVALUATION_SOURCE_CORPUS_VERSION,
+    corpora,
+    source_corpus_digest: rawItem.source_corpus_digest as string,
+  };
+  if (sourceCorpusCanonicalBytes(item) !== expectedCanonicalBytes) failure("GKX_EVAL_SOURCE_CORPUS_SERIALIZED_SIZE_INVALID");
   digest(item.source_corpus_digest, "GKX_EVAL_SOURCE_CORPUS_DIGEST_INVALID");
-  if (metricDigest(item, "source_corpus_digest") !== item.source_corpus_digest) failure("GKX_EVAL_SOURCE_CORPUS_DIGEST_MISMATCH");
-  return item as unknown as RetrievalEvaluationSourceCorpus;
+  if (retrievalEvaluationSourceCorpusMaterialDigest({ contract_version: item.contract_version, corpora: item.corpora }) !==
+      item.source_corpus_digest) failure("GKX_EVAL_SOURCE_CORPUS_DIGEST_MISMATCH");
+  return item;
 }
 
 function sealCatalogAuditOracle(value: unknown): RetrievalEvaluationCatalogAuditOracle {

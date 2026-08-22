@@ -2,6 +2,13 @@
 
 ## 2.1.2
 
+- Added private Phase 4 `gkx retrieval eval` and `gkx retrieval tune` host
+  execution over sealed general offline fixtures and the optional strict
+  24-query reviewed overlay, including actual coordinator/counter replay,
+  disabled and degraded provider paths, deterministic presentation, unactivated
+  temporary state, and guarded no-clobber candidate-TOML publication. No raw
+  fixture, provider, tuner, filesystem, or output authority was added to the
+  public `gkos-engine/retrieval` surface.
 - Added a shared fail-closed validation-to-context gate. Discoverable sources
   with error/critical diagnostics or duplicate canonical identities now reject
   the whole pack with stable reason codes; CLI rejection exits with code 3 and

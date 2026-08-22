@@ -1651,7 +1651,10 @@ function policyMetrics(result: GkxRetrievalSearchResult, query: NormalizedRetrie
   };
 }
 
-export function computeRetrievalEvaluationQueryMetrics(input: RetrievalEvaluationQueryInput): RetrievalEvaluationQueryMetrics {
+function computeRetrievalEvaluationQueryMetricsInternal(
+  input: RetrievalEvaluationQueryInput,
+  onCitationVerification?: () => void,
+): RetrievalEvaluationQueryMetrics {
   preflightQueryInputBounds(input);
   const inputRecord = input as unknown as Record<string, unknown>;
   exactKeys(inputRecord, ["query", "result", "source_observations", "audit_oracle", "expected_temporal"], "GKX_EVAL_QUERY_INPUT_FIELDS_INVALID");
@@ -1752,6 +1755,7 @@ export function computeRetrievalEvaluationQueryMetrics(input: RetrievalEvaluatio
           acceptedIntervals,
         )
       : null;
+    onCitationVerification?.();
     const child = citationCheck(hit.citation, {
       source_id: hit.chunk.source_id,
       source_path: hit.chunk.source_path,
@@ -1771,6 +1775,7 @@ export function computeRetrievalEvaluationQueryMetrics(input: RetrievalEvaluatio
       acceptedIntervals.push({ source_id: hit.chunk.source_id, start_byte: hit.chunk.start_byte, end_byte: hit.chunk.end_byte });
     }
     if (hit.parent_context) {
+      onCitationVerification?.();
       const parent = citationCheck(hit.parent_context.citation, {
         source_id: hit.parent_context.provenance.source_id,
         source_path: hit.parent_context.citation.path,
@@ -1814,6 +1819,19 @@ export function computeRetrievalEvaluationQueryMetrics(input: RetrievalEvaluatio
     unverified_projection_query_count: result.projection_freshness === "unverified" ? 1 : 0,
   };
   return sealRetrievalEvaluationQueryMetrics({ ...material, query_metrics_digest: retrievalCanonicalDigest(material) });
+}
+
+export function computeRetrievalEvaluationQueryMetrics(input: RetrievalEvaluationQueryInput): RetrievalEvaluationQueryMetrics {
+  return computeRetrievalEvaluationQueryMetricsInternal(input);
+}
+
+/** Host-private metric replay with exact evaluator citation-operation evidence. */
+export function computeRetrievalEvaluationQueryMetricsForHost(
+  input: RetrievalEvaluationQueryInput,
+  onCitationVerification: () => void,
+): RetrievalEvaluationQueryMetrics {
+  if (typeof onCitationVerification !== "function") throw new TypeError("GKX_EVAL_HOST_CITATION_OBSERVER_INVALID");
+  return computeRetrievalEvaluationQueryMetricsInternal(input, onCitationVerification);
 }
 
 function sealCitationMetrics(value: unknown): RetrievalEvaluationCitationMetrics {
@@ -2715,6 +2733,61 @@ export function sealRetrievalEvaluationMetricsSet(
   return item as unknown as RetrievalEvaluationMetricsSet;
 }
 
+/**
+ * Trusted-host constructor for the one authoritative MetricsSet shape.  It is
+ * intentionally omitted from the public `/retrieval` allowlist; callers hand
+ * it actual sealed per-query metric rows in normalized-golden order.
+ */
+export function buildRetrievalEvaluationMetricsSetForHost(input: {
+  environment_set: unknown;
+  normalized_golden: unknown;
+  query_metrics: readonly unknown[];
+}): RetrievalEvaluationMetricsSet {
+  const golden = sealNormalizedRetrievalEvaluationGolden(input.normalized_golden);
+  const environmentSet = sealRetrievalEvaluationEnvironmentSet(input.environment_set, golden);
+  if (!Array.isArray(input.query_metrics) || input.query_metrics.length !== golden.queries.length) {
+    throw new TypeError("GKX_EVAL_HOST_QUERY_METRICS_COUNT_INVALID");
+  }
+  const environmentByQuery = new Map(environmentSet.members.flatMap((member) => member.query_partition
+    .map((query) => [query.query_id, member.environment.environment_digest] as const)));
+  const evaluations: RetrievalEvaluationMetricsSetQueryEvaluation[] = golden.queries.map((query, index) => {
+    const metrics = sealRetrievalEvaluationQueryMetrics(input.query_metrics[index]);
+    if (metrics.query_id !== query.id || metrics.expected_top_k !== query.expected_top_k) {
+      throw new TypeError("GKX_EVAL_HOST_QUERY_METRICS_BINDING_INVALID");
+    }
+    const environmentDigest = environmentByQuery.get(query.id);
+    if (!environmentDigest) throw new TypeError("GKX_EVAL_HOST_QUERY_ENVIRONMENT_MISSING");
+    return { environment_digest: environmentDigest, golden_query_digest: query.query_digest, query_metrics: metrics };
+  });
+  const environmentAggregates: RetrievalEvaluationEnvironmentAggregate[] = environmentSet.members.map((member) => {
+    const rows = evaluations.filter((row) => row.environment_digest === member.environment.environment_digest);
+    const aggregate = aggregateRetrievalEvaluationMetrics(rows.map((row) => row.query_metrics));
+    const material = {
+      environment_digest: member.environment.environment_digest,
+      query_count: rows.length,
+      query_metrics_set_digest: scopedQueryMetricsSetDigest(member.environment.environment_digest, rows),
+      aggregate_metrics: aggregate,
+    };
+    return { ...material, environment_aggregate_digest: retrievalCanonicalDigest(material) };
+  });
+  const aggregate = aggregateRetrievalEvaluationMetrics(evaluations.map((row) => row.query_metrics));
+  const material = {
+    contract_version: RETRIEVAL_EVALUATION_METRICS_SET_VERSION,
+    environment_set_digest: environmentSet.environment_set_digest,
+    normalized_golden_digest: golden.golden_digest,
+    query_count: evaluations.length,
+    query_evaluations: evaluations,
+    query_metrics_set_digest: globalQueryMetricsSetDigest(environmentSet.environment_set_digest, evaluations),
+    environment_aggregates: environmentAggregates,
+    aggregate_metrics: aggregate,
+  };
+  return sealRetrievalEvaluationMetricsSet(
+    { ...material, metrics_set_digest: retrievalCanonicalDigest(material) },
+    environmentSet,
+    golden,
+  );
+}
+
 export function sealRetrievalEvaluationBaseConfigurationCoordinate(value: unknown): RetrievalEvaluationBaseConfigurationCoordinate {
   preflightPlainEvaluationData(value, "GKX_EVAL_BASE_CONFIGURATION_INVALID");
   const item = inertClone(value) as unknown as Record<string, unknown>;
@@ -2724,6 +2797,20 @@ export function sealRetrievalEvaluationBaseConfigurationCoordinate(value: unknow
   assertDigest(item.base_configuration_digest, "GKX_EVAL_BASE_CONFIGURATION_DIGEST_INVALID");
   if (metricDigest(item, "base_configuration_digest") !== item.base_configuration_digest) throw new TypeError("GKX_EVAL_BASE_CONFIGURATION_DIGEST_MISMATCH");
   return item as unknown as RetrievalEvaluationBaseConfigurationCoordinate;
+}
+
+/** Exact non-tunable coordinate of the private offline Phase-4 executor. */
+export function retrievalEvaluationExecutionBaseConfigurationForHost(): RetrievalEvaluationBaseConfigurationCoordinate {
+  const material = {
+    contract_version: RETRIEVAL_EVALUATION_BASE_CONFIGURATION_VERSION,
+    effective_non_tunable_configuration_digest: retrievalCanonicalDigest({
+      effective_non_tunable_configuration: "phase4-fixed-offline-v1",
+    }),
+  };
+  return sealRetrievalEvaluationBaseConfigurationCoordinate({
+    ...material,
+    base_configuration_digest: retrievalCanonicalDigest(material),
+  });
 }
 
 function allTuningAxes(): RetrievalEvaluationTuningAxes[] {
@@ -2738,6 +2825,65 @@ function allTuningAxes(): RetrievalEvaluationTuningAxes[] {
     }
   }
   return axes;
+}
+
+/** Exact eligible grid coordinates for the trusted tuning executor. */
+export function retrievalEvaluationEligibleTuningAxesForHost(
+  baselineValue: unknown,
+): RetrievalEvaluationTuningAxesCoordinate[] {
+  const baseline = sealRetrievalEvaluationBaseline(baselineValue);
+  return allTuningAxes()
+    .filter((axes) => axes.semantic_top_k >= baseline.maximum_expected_top_k && axes.lexical_top_k >= baseline.maximum_expected_top_k)
+    .map((axes) => {
+      const material = { contract_version: RETRIEVAL_EVALUATION_TUNING_AXES_VERSION, ...axes };
+      return sealRetrievalEvaluationTuningAxesCoordinate({ ...material, tuning_axes_digest: retrievalCanonicalDigest(material) });
+    });
+}
+
+/** Fail before state/provider work when the immutable tuning baseline needs human review. */
+export function assertRetrievalEvaluationTuneBaselineForHost(baselineValue: unknown): RetrievalEvaluationBaseline {
+  const baseline = sealRetrievalEvaluationBaseline(baselineValue);
+  if (baseline.query_count > 30) throw new TypeError("GKX_EVAL_TUNE_QUERY_COUNT_INVALID");
+  if (baseline.base_configuration_digest !== retrievalEvaluationExecutionBaseConfigurationForHost().base_configuration_digest ||
+      !defaultRelativeNdcgBudget(baseline.relative_ndcg_budget) ||
+      metricsSetZeroGateFailures(baseline.metrics_set).length > 0) {
+    throw new TypeError("GKX_EVAL_TUNE_BASELINE_NEEDS_HUMAN");
+  }
+  return baseline;
+}
+
+/** Construct and independently seal one exhaustive trusted-host candidate. */
+export function buildRetrievalEvaluationTuneCandidateForHost(input: {
+  baseline: unknown;
+  axes: unknown;
+  metrics_set: unknown;
+}): RetrievalEvaluationTuneCandidate {
+  const baseline = sealRetrievalEvaluationBaseline(input.baseline);
+  const axes = sealRetrievalEvaluationTuningAxesCoordinate(input.axes);
+  const metricsSet = sealRetrievalEvaluationMetricsSet(input.metrics_set, baseline.environment_set, baseline.normalized_golden);
+  const candidateConfigDigest = retrievalCanonicalDigest({
+    base_configuration_digest: baseline.base_configuration_digest,
+    candidate_config: candidateConfigMaterial(axes),
+  });
+  return {
+    candidate_config_digest: candidateConfigDigest,
+    axes,
+    metrics_set: metricsSet,
+    candidate_evaluation_digest: evaluationCoordinateDigest({
+      environment_set_digest: baseline.environment_set_digest,
+      normalized_golden_digest: baseline.normalized_golden_digest,
+      base_configuration_digest: baseline.base_configuration_digest,
+      tuning_grid_digest: baseline.tuning_grid_digest,
+      tuning_axes_digest: axes.tuning_axes_digest,
+      candidate_config_digest: candidateConfigDigest,
+      query_metrics_set_digest: metricsSet.query_metrics_set_digest,
+      aggregate_metrics_digest: metricsSet.aggregate_metrics.aggregate_metrics_digest,
+      metrics_set_digest: metricsSet.metrics_set_digest,
+      relative_ndcg_budget: baseline.relative_ndcg_budget,
+      query_count: baseline.query_count,
+      maximum_expected_top_k: baseline.maximum_expected_top_k,
+    }),
+  };
 }
 
 function changedAxisCount(candidate: RetrievalEvaluationTuningAxes, baseline: RetrievalEvaluationTuningAxes): number {
