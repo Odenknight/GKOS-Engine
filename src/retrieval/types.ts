@@ -4,6 +4,91 @@ export type RetrievalProviderKind = "none" | "openai_compatible" | "local_onnx" 
 export type SqliteLexicalBackend = "sqlite_fts5" | "sqlite_lexical_scan";
 export type RetrievalStageState = "active" | "disabled" | "skipped" | "degraded";
 export type DiscoverabilityDecision = "allow" | "deny" | "indeterminate" | "error";
+/** Public/stored states allowed by the draft.2 schemas. */
+export type GkxRetrievalTemporalState = "current" | "historical" | "unknown";
+/** Internal authorized-view diagnostic adds future for not-yet-visible rows. */
+export type GkxRetrievalTemporalViewState = GkxRetrievalTemporalState | "future";
+export type GkxRetrievalValidityOrigin =
+  | "gkx_authored_timestamp"
+  | "source_created_time"
+  | "source_modified_time"
+  | "projection_reference_time"
+  | "unknown";
+export type GkxRetrievalAssertionOrigin = "gkx_created_at" | null;
+
+/**
+ * Source-level canonical projection persisted in the derived store. Raw
+ * authored references never cross the external result boundary.
+ */
+export interface GkxRetrievalStoredSourceProvenance {
+  contract_version: "gkos-retrieval-provenance/1.0.0-draft.1";
+  source_id: string;
+  source_path: string;
+  source_digest: string;
+  source_metadata: RetrievalChunkMetadata;
+  assertion_time: string | null;
+  assertion_origin: GkxRetrievalAssertionOrigin;
+  valid_from: string | null;
+  valid_to: string | null;
+  validity_origin: GkxRetrievalValidityOrigin;
+  lineage_id: null;
+  /** Exact authored references, retained only inside the derived projection. */
+  authored_supersedes: string[];
+  /** Exact authored inverse references, retained only inside the derived projection. */
+  authored_superseded_by: string[];
+  resolved_supersedes: string[];
+  resolved_superseded_by: string[];
+  lineage_neutral: boolean;
+  temporal_state: GkxRetrievalTemporalState;
+  ledger_binding_verified: false;
+  reason_codes: string[];
+  provenance_digest: string;
+}
+
+/** Authorized, request-specific provenance returned with every hit. */
+export interface GkxRetrievalProvenance {
+  contract_version: "gkos-retrieval-provenance/1.0.0-draft.1";
+  source_id: string;
+  source_path: string;
+  source_digest: string;
+  assertion_time: string | null;
+  assertion_origin: GkxRetrievalAssertionOrigin;
+  valid_from: string | null;
+  valid_to: string | null;
+  validity_origin: GkxRetrievalValidityOrigin;
+  lineage_id: null;
+  /** Authorized canonical UIDs that are not future at as_of; historical predecessors may appear. */
+  supersedes: string[];
+  /** Authorized canonical UIDs that are not future at as_of; historical predecessors may appear. */
+  superseded_by: string[];
+  temporal_state: GkxRetrievalTemporalState;
+  ledger_binding_verified: false;
+  lineage_neutral: boolean;
+  reason_codes: string[];
+  assertion: {
+    chunk_id: string;
+    content_digest: string;
+  };
+  interval_semantics: "[valid_from,valid_to)";
+  /** Digest of this redacted external envelope only; never the stored raw-ref projection. */
+  provenance_digest: string;
+}
+
+export interface GkxRetrievalAuthorizedTemporalSource {
+  source_id: string;
+  valid_from: string | null;
+  valid_to: string | null;
+  temporal_state: GkxRetrievalTemporalViewState;
+  supersedes: string[];
+  superseded_by: string[];
+}
+
+export interface GkxRetrievalAuthorizedTemporalView {
+  sources: GkxRetrievalAuthorizedTemporalSource[];
+  eligible_source_ids: string[];
+  authorized_source_count: number;
+  answerable_source_count: number;
+}
 
 export interface RetrievalChunk {
   chunk_id: string;
@@ -133,11 +218,23 @@ export interface RetrievalParentContext {
   citation: SourceCitation;
 }
 
+export type GkxRetrievalResultChunk = Omit<RetrievalChunk, "lineage_id"> & { lineage_id: null };
+
+export interface GkxRetrievalParentContext extends RetrievalParentContext {
+  provenance: GkxRetrievalProvenance;
+}
+
 export interface RetrievalHit {
   chunk: RetrievalChunk;
   citation: SourceCitation;
   stage_scores: RetrievalStageScores;
   parent_context?: RetrievalParentContext;
+}
+
+export interface GkxRetrievalHit extends Omit<RetrievalHit, "chunk" | "parent_context"> {
+  chunk: GkxRetrievalResultChunk;
+  provenance: GkxRetrievalProvenance;
+  parent_context?: GkxRetrievalParentContext;
 }
 
 export interface RetrievalProviderStageStatus {
@@ -150,6 +247,7 @@ export interface RetrievalProviderStageStatus {
 
 export interface RetrievalSearchRequest {
   query: string;
+  as_of?: string;
   limit?: number;
   lexical_top_k?: number;
   semantic_top_k?: number;
@@ -161,13 +259,10 @@ export interface RetrievalSearchRequest {
   parent_expansion_max_child_tokens?: number;
 }
 
-export interface RetrievalSearchResult {
-  contract_version: string;
+interface RetrievalSearchResultBase {
   query_digest: string;
   projection_id: string;
   projection_digest: string;
-  projection_freshness: "fresh" | "stale";
-  hits: RetrievalHit[];
   confidence: RetrievalConfidence;
   applied_filters: string[];
   eligible_result_count: number;
@@ -177,6 +272,28 @@ export interface RetrievalSearchResult {
     reranker: RetrievalProviderStageStatus;
   };
 }
+
+/** Frozen draft.1 result: no lineage temporal envelope is present. */
+export interface RetrievalDraft1SearchResult extends RetrievalSearchResultBase {
+  contract_version: "gkos-retrieval/1.0.0-draft.1";
+  projection_freshness: "fresh" | "stale";
+  hits: RetrievalHit[];
+  temporal?: never;
+}
+
+/** Additive draft.2 result with required provenance on every content envelope. */
+export interface GkxRetrievalSearchResult extends RetrievalSearchResultBase {
+  contract_version: "gkos-retrieval/1.0.0-draft.2";
+  projection_freshness: "fresh" | "stale" | "unverified";
+  hits: GkxRetrievalHit[];
+  temporal: {
+    as_of: string | null;
+    coverage: "not_requested" | "not_evaluated" | "sufficient" | "insufficient";
+    reason_codes: string[];
+  };
+}
+
+export type RetrievalSearchResult = RetrievalDraft1SearchResult | GkxRetrievalSearchResult;
 
 export interface RetrievalProjectionManifest {
   contract_version: string;
@@ -197,6 +314,27 @@ export interface RetrievalProjectionManifest {
   chunk_count: number;
   projection_digest: string;
 }
+
+export interface GkxRetrievalProjectionManifest extends Omit<RetrievalProjectionManifest,
+  "contract_version" | "projection_schema_version" | "source_count" | "chunk_count"> {
+  contract_version: "gkos-retrieval/1.0.0-draft.2";
+  projection_schema_version: 3;
+  provenance_contract_version: "gkos-retrieval-provenance/1.0.0-draft.1";
+  gkx_standard_commit: "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6";
+  gkx_projection_profile: "gkx-2.3-validating-projection";
+  /** Every intrinsically accepted physical parser candidate, including zero-chunk rows and duplicate public identities. */
+  candidate_source_count: number;
+  /** Parser-owned declaration receipts retained in the physical candidate projection. */
+  candidate_declaration_count: number;
+  /** Candidate sources represented by one or more physical chunks. */
+  represented_candidate_source_count: number;
+  /** Every physical candidate chunk. */
+  candidate_chunk_count: number;
+  /** Policy-digest-bound chunks that were eligible to cross the provider boundary. */
+  embedding_eligible_candidate_chunk_count: number;
+}
+
+export type AnyRetrievalProjectionManifest = RetrievalProjectionManifest | GkxRetrievalProjectionManifest;
 
 export interface VectorProvider {
   readonly kind: Exclude<RetrievalProviderKind, "none">;
@@ -226,6 +364,18 @@ export interface RerankProvider {
 }
 
 export type DiscoverabilityPolicy = (chunk: Readonly<RetrievalChunk>) => DiscoverabilityDecision;
+export interface RetrievalSourcePolicyRecord {
+  source_id: string;
+  source_path: string;
+  source_digest: string;
+  lineage_id: string | null;
+  valid_from: string | null;
+  valid_to: string | null;
+  supersedes: string[];
+  superseded_by: string[];
+  metadata: RetrievalChunkMetadata;
+}
+export type SourceDiscoverabilityPolicy = (source: Readonly<RetrievalSourcePolicyRecord>) => DiscoverabilityDecision;
 
 export interface RankedCandidate {
   chunk_id: string;

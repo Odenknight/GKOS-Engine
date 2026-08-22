@@ -16,6 +16,7 @@ import {
   matchesRetrievalFilters,
   maximalMarginalRelevance,
   reciprocalRankFusion,
+  RETRIEVAL_CONTRACT_COORDINATES,
   RETRIEVAL_PARENT_EXPANSION_MAX_CHILD_TOKENS,
   RETRIEVAL_PROJECTION_SCHEMA_VERSION,
   retrievalCanonicalDigest,
@@ -25,6 +26,20 @@ import {
 import { isValidGkxTimestamp } from "../dist/gkos-engine.mjs";
 
 const CONTRACT = new URL("../contracts/retrieval/gkos-retrieval-1.0.0-draft.1/", import.meta.url);
+
+test("Phase-1 retrieval contract coordinates retain the exact qualified public shape", async () => {
+  const contract = JSON.parse(await readFile(new URL("contract.json", CONTRACT), "utf8"));
+  const fixture = JSON.parse(await readFile(new URL("conformance-fixture.json", CONTRACT), "utf8"));
+  assert.deepEqual(RETRIEVAL_CONTRACT_COORDINATES, {
+    contract_version: contract.contract_version,
+    result_schema: contract.coordinates.result_schema,
+    projection_schema_version: contract.coordinates.projection_schema_version,
+    chunker_version: contract.coordinates.chunker,
+    tokenizer_version: contract.coordinates.tokenizer,
+    parent_expansion_max_child_tokens: fixture.parent_expansion.default_max_child_tokens,
+  });
+  assert.equal(Object.hasOwn(RETRIEVAL_CONTRACT_COORDINATES, "provenance_contract"), false);
+});
 
 test("cross-language chunk, RRF, duplicate-collapse, and MMR fixture is exact", async () => {
   const fixture = JSON.parse(await readFile(new URL("conformance-fixture.json", CONTRACT), "utf8"));

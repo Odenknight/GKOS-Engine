@@ -3,6 +3,7 @@ import { access, link, mkdir, mkdtemp, realpath, rm, symlink, writeFile } from "
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { scanCorpus } from "../bin/gkx.mjs";
 
 import {
   RetrievalCoordinator,
@@ -58,6 +59,8 @@ test("ordinary Windows temp spelling, including 8.3 expansion, is not an alias",
     const driveCaseRoot = `${root[0] === root[0].toLowerCase() ? root[0].toUpperCase() : root[0].toLowerCase()}${root.slice(1)}`;
     for (const spelling of [root, extendedRoot, driveCaseRoot]) {
       assert.equal(Buffer.from(await vaultSourceReader(spelling)("note.md")).toString("utf8"), text);
+      const scan = await scanCorpus(spelling);
+      assert.deepEqual(scan.files.map(({ relativePath, content }) => ({ relativePath, content })), [{ relativePath: "note.md", content: text }]);
     }
     const config = await discoverTrustedGkosConfig({
       explicit_config: join(extendedRoot, "gkos.toml"),
@@ -107,7 +110,9 @@ test("Windows junction components and source hard links remain fail-closed", {
 
   try {
     await assert.rejects(vaultSourceReader(alias)("note.md"), /SOURCE_ROOT_ALIAS_REJECTED/u);
+    await assert.rejects(scanCorpus(alias), /GKX_SCAN_ROOT_ALIAS_REJECTED/u);
     await assert.rejects(vaultSourceReader(actual)("hardlink.md"), /SOURCE_HARDLINK_REJECTED/u);
+    assert.deepEqual((await scanCorpus(actual)).files, [], "hard-linked source bytes never enter the scanner value surface");
     await assert.rejects(discoverTrustedGkosConfig({
       explicit_config: join(alias, "gkos.toml"),
       cwd: root,

@@ -17,9 +17,10 @@
  *
  * Requires `npm run build` once (dist/gkos-engine.mjs).
  */
-import { lstat, readFile, readdir, realpath, stat, writeFile } from "node:fs/promises";
+import { lstat, open, readFile, readdir, writeFile } from "node:fs/promises";
 import { watch, realpathSync } from "node:fs";
-import { basename, join, resolve } from "node:path";
+import { createHash } from "node:crypto";
+import { basename, join, parse, resolve } from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
 
 const coreUrl = new URL("../dist/gkos-engine.mjs", import.meta.url);
@@ -58,18 +59,153 @@ const {
 // scan/graph/REST value surface remains byte-compatible. The search host uses
 // it to reject aliased records before any source text reaches a derived store.
 const RETRIEVAL_FILE_EVIDENCE = Symbol("gkos.retrieval-file-evidence");
+const RETRIEVAL_SCAN_REJECTIONS = Symbol("gkos.retrieval-scan-rejections");
+const INGEST_SCAN_ROOT = Symbol("gkos.ingest-scan-root");
+const MAX_SCAN_NOTE_BYTES = 64 * 1024 * 1024;
+const FATAL_UTF8 = new TextDecoder("utf-8", { fatal: true });
+const FATAL_UTF8_EXACT = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
 
-function sameFilesystemPath(left, right) {
-  return process.platform === "win32" ? left.toLowerCase() === right.toLowerCase() : left === right;
+function hasUnpairedSurrogate(value) {
+  for (let index = 0; index < value.length; index++) {
+    const code = value.charCodeAt(index);
+    if (code >= 0xd800 && code <= 0xdbff) {
+      const next = value.charCodeAt(index + 1);
+      if (!(next >= 0xdc00 && next <= 0xdfff)) return true;
+      index++;
+    } else if (code >= 0xdc00 && code <= 0xdfff) return true;
+  }
+  return false;
+}
+
+function forbiddenLocalVaultNamespace(input) {
+  const value = input;
+  // UNC, extended Win32, device, and NT object-manager namespaces are never
+  // valid Phase-3 corpus roots, including an otherwise local \\?\C:\ form.
+  if (/^(?:[\\/]{2}|[\\/]\?\?[\\/])/u.test(value)) return true;
+  const portable = value.replace(/\\/gu, "/");
+  const drive = /^[A-Za-z]:/u.test(portable);
+  if (drive && (process.platform !== "win32" || !/^[A-Za-z]:\//u.test(portable))) return true;
+  const tail = drive ? portable.slice(2) : portable;
+  if (tail.includes(":")) return true;
+  for (const component of tail.split("/")) {
+    if (!component) continue;
+    if (component === "." || component === "..") continue;
+    const portableComponent = component.replace(/[ .]+$/u, "");
+    if (portableComponent !== component) return true;
+    const stem = portableComponent.split(".", 1)[0].toUpperCase();
+    if (/^(?:CON|PRN|AUX|NUL|CONIN\$|CONOUT\$|CLOCK\$|COM(?:[1-9]|[¹²³])|LPT(?:[1-9]|[¹²³]))$/u.test(stem)) return true;
+  }
+  return false;
+}
+
+/** Phase-3-only local vault grammar; performs no filesystem access. */
+export function validatePhase3KbPath(value, baseDirectory) {
+  if (typeof value !== "string" || value.length === 0 || value.length > 4096 || /[\u0000-\u001f\u007f]/u.test(value) ||
+      hasUnpairedSurrogate(value) || forbiddenLocalVaultNamespace(value)) {
+    throw new TypeError("GKX_CLI_KB_PATH_INVALID");
+  }
+  const absolute = baseDirectory === undefined ? resolve(value) : resolve(baseDirectory, value);
+  if (absolute.length > 4096 || /[\u0000-\u001f\u007f]/u.test(absolute) || hasUnpairedSurrogate(absolute) ||
+      forbiddenLocalVaultNamespace(absolute) || parse(absolute).root === absolute) {
+    throw new TypeError("GKX_CLI_KB_PATH_INVALID");
+  }
+  return absolute;
+}
+
+function scanRootEvidence(requestedPath, canonicalPath, state) {
+  return Object.freeze({
+    requested_path: requestedPath,
+    canonical_path: canonicalPath,
+    device: state.dev,
+    inode: state.ino,
+    mode: state.mode,
+  });
+}
+
+function sameDirectoryIdentity(evidence, state) {
+  const sameDevice = evidence.device === state.dev ||
+    (process.platform === "win32" && (evidence.device === 0 || state.dev === 0));
+  return state.isDirectory() && !state.isSymbolicLink() && sameDevice && evidence.inode === state.ino && evidence.mode === state.mode;
+}
+
+async function revalidatePhase3ScanRoot(scan) {
+  const evidence = scan?.[INGEST_SCAN_ROOT];
+  if (!evidence || typeof evidence !== "object" || typeof evidence.requested_path !== "string" ||
+      typeof evidence.canonical_path !== "string" || typeof evidence.device !== "number" ||
+      typeof evidence.inode !== "number" || typeof evidence.mode !== "number") {
+    throw new Error("GKX_CLI_SCAN_ROOT_EVIDENCE_MISSING");
+  }
+  const { canonicalPath, sameCanonicalPath } = await loadRetrievalPathSecurity();
+  let canonicalAfter;
+  let stateAfter;
+  try {
+    canonicalAfter = await canonicalPath(evidence.requested_path, { alias_error: "GKX_SCAN_ROOT_ALIAS_REJECTED" });
+    stateAfter = await lstat(evidence.canonical_path);
+  } catch { throw new Error("GKX_SCAN_ROOT_CHANGED_DURING_SCAN"); }
+  if (!sameCanonicalPath(evidence.canonical_path, canonicalAfter) || !sameDirectoryIdentity(evidence, stateAfter)) {
+    throw new Error("GKX_SCAN_ROOT_CHANGED_DURING_SCAN");
+  }
+  return evidence.canonical_path;
 }
 
 let retrievalModule;
+let sqliteRuntimeReady;
+async function prepareSqliteRuntime() {
+  if (!sqliteRuntimeReady) sqliteRuntimeReady = (async () => {
+    const emitWarning = process.emitWarning;
+    process.emitWarning = function filteredSqliteExperimentalWarning(warning, type, code, ctor) {
+      if (warning === "SQLite is an experimental feature and might change at any time"
+        && type === "ExperimentalWarning") return;
+      return Reflect.apply(emitWarning, this, [warning, type, code, ctor]);
+    };
+    try { await import("node:sqlite"); }
+    finally { process.emitWarning = emitWarning; }
+  })();
+  return sqliteRuntimeReady;
+}
+
 async function loadRetrieval() {
   if (!retrievalModule) {
-    try { retrievalModule = await import(new URL("../dist/retrieval.mjs", import.meta.url).href); }
+    try {
+      await prepareSqliteRuntime();
+      retrievalModule = await import(new URL("../dist/retrieval.mjs", import.meta.url).href);
+    }
     catch { throw new Error("dist/retrieval.mjs not found — run `npm run build` first."); }
   }
   return retrievalModule;
+}
+
+let retrievalHostModule;
+async function loadRetrievalHost() {
+  if (!retrievalHostModule) {
+    try {
+      await prepareSqliteRuntime();
+      retrievalHostModule = await import(new URL("../dist/retrieval-host.mjs", import.meta.url).href);
+    }
+    catch { throw new Error("dist/retrieval-host.mjs not found — run `npm run build` first."); }
+  }
+  return retrievalHostModule;
+}
+
+let retrievalPathSecurityModule;
+async function loadRetrievalPathSecurity() {
+  if (!retrievalPathSecurityModule) {
+    try { retrievalPathSecurityModule = await import(new URL("../dist/retrieval-path-security.mjs", import.meta.url).href); }
+    catch { throw new Error("dist/retrieval-path-security.mjs not found — run `npm run build` first."); }
+  }
+  return retrievalPathSecurityModule;
+}
+
+let ingestHostModule;
+async function loadIngestHost() {
+  if (!ingestHostModule) {
+    try {
+      await prepareSqliteRuntime();
+      ingestHostModule = await import(new URL("../dist/ingest-host.mjs", import.meta.url).href);
+    }
+    catch { throw new Error("dist/ingest-host.mjs not found — run `npm run build` first."); }
+  }
+  return ingestHostModule;
 }
 
 const NAV_POLICY = Object.freeze({ id: "engine.cli.public-only-discoverability", version: "1.0.0" });
@@ -119,27 +255,194 @@ async function navigationInputs(scan, vaultId) {
 }
 
 /* ---------------- read-only corpus scan (same ignore rules as every surface) ---------------- */
-export async function scanCorpus(dir) {
+export async function scanCorpus(dir, options = {}) {
   const files = [];
   const attachments = [];
   const folders = [];
+  const rejectedSources = [];
+  const { canonicalPath, canonicalPathContains, sameCanonicalPath } = await loadRetrievalPathSecurity();
   const requestedRoot = resolve(dir);
-  const actualRoot = await realpath(requestedRoot);
-  const rootIsAliased = !sameFilesystemPath(requestedRoot, actualRoot);
+  const actualRoot = await canonicalPath(requestedRoot, { alias_error: "GKX_SCAN_ROOT_ALIAS_REJECTED" });
+  const rootState = await lstat(actualRoot);
+  if (!rootState.isDirectory() || rootState.isSymbolicLink()) throw new Error("GKX_SCAN_ROOT_ALIAS_REJECTED");
+  const rootEvidence = scanRootEvidence(requestedRoot, actualRoot, rootState);
+
+  function rejection(childRel, state, reasons, sourceDigest = null) {
+    const reasonCodes = [...new Set(Array.isArray(reasons) ? reasons : [reasons])].sort(codeUnitCompare);
+    rejectedSources.push(Object.freeze({
+      source_path: childRel,
+      source_digest: sourceDigest,
+      size: Number.isSafeInteger(state?.size) && state.size >= 0 ? state.size : null,
+      created_time_ms: Number.isFinite(state?.birthtimeMs) ? (state.birthtimeMs || state.mtimeMs) : null,
+      modified_time_ms: Number.isFinite(state?.mtimeMs) ? state.mtimeMs : null,
+      classification: "rejected",
+      reason_codes: Object.freeze(reasonCodes),
+    }));
+  }
+
+  function sameFileState(left, right) {
+    // Node 23 on Windows reports dev=0 for path lstat but the volume serial
+    // for FileHandle.stat on the same file. The stable file index (`ino`),
+    // canonical contained path, link count, size, and timestamps still bind
+    // identity. Other runtimes/platforms must agree on the device as well.
+    const sameDevice = left.dev === right.dev || (process.platform === "win32" && (left.dev === 0 || right.dev === 0));
+    return left.isFile() && right.isFile() && !left.isSymbolicLink() && !right.isSymbolicLink() &&
+      left.nlink === 1 && right.nlink === 1 && sameDevice && left.ino === right.ino &&
+      left.size === right.size && left.mtimeMs === right.mtimeMs && left.ctimeMs === right.ctimeMs;
+  }
+
+  async function inspectPlainContainedFile(childAbs, childRel, readContent) {
+    let canonical;
+    let before;
+    try {
+      canonical = await canonicalPath(childAbs, { alias_error: "GKX_SCAN_SOURCE_ALIAS_REJECTED" });
+      if (!canonicalPathContains(actualRoot, canonical)) throw new Error("GKX_SCAN_SOURCE_PATH_ESCAPE");
+    } catch (error) {
+      const reason = options.ingest !== true
+        ? "SOURCE_FILESYSTEM_ALIAS_REJECTED"
+        : ["ENOENT", "ESTALE"].includes(error?.code)
+          ? "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN"
+          : ["GKX_SCAN_SOURCE_ALIAS_REJECTED", "GKX_SCAN_SOURCE_PATH_ESCAPE"].includes(error?.message)
+            ? "SOURCE_FILESYSTEM_ALIAS_REJECTED"
+            : "SOURCE_READ_FAILED";
+      rejection(childRel, before, reason);
+      return null;
+    }
+
+    try { before = await lstat(canonical); }
+    catch (error) {
+      rejection(childRel, null, options.ingest !== true
+        ? "SOURCE_FILESYSTEM_ALIAS_REJECTED"
+        : ["ENOENT", "ESTALE"].includes(error?.code)
+          ? "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN"
+          : "SOURCE_READ_FAILED");
+      return null;
+    }
+    const preflightReasons = [];
+    if (!before.isFile() || before.isSymbolicLink() || before.nlink !== 1) {
+      preflightReasons.push("SOURCE_FILESYSTEM_ALIAS_REJECTED");
+    }
+    if (!Number.isSafeInteger(before.size) || before.size < 0 || (readContent && before.size > MAX_SCAN_NOTE_BYTES)) {
+      preflightReasons.push("SOURCE_SIZE_LIMIT_EXCEEDED");
+    }
+    if (preflightReasons.length) {
+      rejection(childRel, before, options.ingest === true ? preflightReasons : preflightReasons[0]);
+      return null;
+    }
+
+    if (!readContent) return { canonical, state: before };
+
+    let handle;
+    try {
+      await options.on_before_file_open?.({ relative_path: childRel, absolute_path: canonical });
+      handle = await open(canonical, "r");
+      const opened = await handle.stat();
+      if (!sameFileState(before, opened)) throw new Error("GKX_SCAN_SOURCE_CHANGED");
+      // Allocate from the already bounded file size and read one extra byte so
+      // growth cannot be silently truncated into a coherent-looking snapshot.
+      const bytes = Buffer.alloc(before.size + 1);
+      let length = 0;
+      while (length < bytes.length) {
+        const { bytesRead } = await handle.read(bytes, length, bytes.length - length, length);
+        if (bytesRead === 0) break;
+        length += bytesRead;
+      }
+      let openedAfter;
+      let pathAfter;
+      let canonicalAfter;
+      try {
+        openedAfter = await handle.stat();
+        pathAfter = await lstat(canonical);
+        canonicalAfter = await canonicalPath(canonical, { alias_error: "GKX_SCAN_SOURCE_ALIAS_REJECTED" });
+      } catch { throw new Error("GKX_SCAN_SOURCE_CHANGED"); }
+      if (!canonicalPathContains(actualRoot, canonicalAfter) || !sameCanonicalPath(canonical, canonicalAfter) ||
+          !sameFileState(before, openedAfter) || !sameFileState(before, pathAfter) || length !== before.size) {
+        throw new Error("GKX_SCAN_SOURCE_CHANGED");
+      }
+      const sourceDigest = `sha256:${createHash("sha256").update(bytes.subarray(0, length)).digest("hex")}`;
+      let content;
+      try { content = (options.ingest === true ? FATAL_UTF8_EXACT : FATAL_UTF8).decode(bytes.subarray(0, length)); }
+      catch {
+        rejection(childRel, before, "SOURCE_UTF8_INVALID", sourceDigest);
+        return null;
+      }
+      return { canonical, state: before, content };
+    } catch (error) {
+      if (options.ingest !== true) {
+        rejection(childRel, before, "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN");
+        return null;
+      }
+      let changed = error?.message === "GKX_SCAN_SOURCE_CHANGED" || ["ENOENT", "ESTALE"].includes(error?.code);
+      let aliased = false;
+      if (!changed) {
+        try {
+          const pathNow = await lstat(canonical);
+          aliased = pathNow.isSymbolicLink() || pathNow.nlink !== 1;
+          changed = aliased || !sameFileState(before, pathNow);
+          if (!changed) {
+            const canonicalNow = await canonicalPath(canonical, { alias_error: "GKX_SCAN_SOURCE_ALIAS_REJECTED" });
+            changed = !canonicalPathContains(actualRoot, canonicalNow) || !sameCanonicalPath(canonical, canonicalNow);
+          }
+        } catch (probeError) {
+          changed = ["ENOENT", "ESTALE"].includes(probeError?.code) ||
+            ["GKX_SCAN_SOURCE_ALIAS_REJECTED", "GKX_SCAN_SOURCE_PATH_ESCAPE"].includes(probeError?.message);
+          aliased = probeError?.message === "GKX_SCAN_SOURCE_ALIAS_REJECTED";
+        }
+      }
+      rejection(childRel, before, changed
+        ? [...(aliased ? ["SOURCE_FILESYSTEM_ALIAS_REJECTED"] : []), "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN"]
+        : "SOURCE_READ_FAILED");
+      return null;
+    } finally {
+      if (handle) await handle.close();
+    }
+  }
+
   async function walk(abs, rel) {
     const entries = await readdir(abs, { withFileTypes: true });
     for (const e of entries) {
       const childRel = rel ? `${rel}/${e.name}` : e.name;
       if (shouldIgnoreVaultPath(childRel)) continue;
       const childAbs = join(abs, e.name);
-      if (e.isDirectory()) {
+      await options.on_before_child_lstat?.({ relative_path: childRel, absolute_path: childAbs });
+      let linkState;
+      try { linkState = await lstat(childAbs); }
+      catch (error) {
+        if (options.ingest === true && e.isFile() && (isNotePath(childRel) || isAttachmentPath(childRel))) {
+          rejection(childRel, null, ["ENOENT", "ESTALE"].includes(error?.code)
+            ? "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN"
+            : "SOURCE_READ_FAILED");
+          continue;
+        }
+        throw error;
+      }
+      if (options.ingest === true && ((e.isFile() && !linkState.isFile()) || (e.isDirectory() && !linkState.isDirectory()))) {
+        rejection(childRel, linkState, [
+          ...(linkState.isSymbolicLink() ? ["SOURCE_FILESYSTEM_ALIAS_REJECTED"] : []),
+          "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN",
+        ]);
+        continue;
+      }
+      if (linkState.isSymbolicLink()) {
+        rejection(childRel, linkState, "SOURCE_FILESYSTEM_ALIAS_REJECTED");
+        continue;
+      }
+      if (linkState.isDirectory()) {
+        let canonicalDirectory;
+        try {
+          canonicalDirectory = await canonicalPath(childAbs, { alias_error: "GKX_SCAN_SOURCE_ALIAS_REJECTED" });
+          if (!canonicalPathContains(actualRoot, canonicalDirectory)) throw new Error("GKX_SCAN_SOURCE_PATH_ESCAPE");
+        } catch {
+          rejection(childRel, linkState, "SOURCE_FILESYSTEM_ALIAS_REJECTED");
+          continue;
+        }
         folders.push(childRel);
-        await walk(childAbs, childRel);
-      } else if (e.isFile()) {
+        await walk(canonicalDirectory, childRel);
+      } else if (linkState.isFile()) {
         if (isNotePath(childRel)) {
-          const [content, linkState, st, actualPath] = await Promise.all([
-            readFile(childAbs, "utf8"), lstat(childAbs), stat(childAbs), realpath(childAbs),
-          ]);
+          const inspected = await inspectPlainContainedFile(childAbs, childRel, true);
+          if (!inspected) continue;
+          const { canonical, state: st, content } = inspected;
           const file = {
             relativePath: childRel,
             name: e.name,
@@ -157,22 +460,47 @@ export async function scanCorpus(dir) {
               plain_file: linkState.isFile() && !linkState.isSymbolicLink(),
               link_count: st.nlink,
               requested_path: resolve(childAbs),
-              real_path: actualPath,
-              aliased: rootIsAliased || !sameFilesystemPath(resolve(childAbs), actualPath),
+              real_path: canonical,
+              aliased: false,
             }),
           });
           files.push(file);
         } else if (isAttachmentPath(childRel)) {
-          attachments.push(childRel);
+          const inspected = await inspectPlainContainedFile(childAbs, childRel, false);
+          if (inspected) attachments.push(childRel);
         }
       }
     }
   }
-  await walk(dir, "");
+  await walk(actualRoot, "");
+  await options.on_before_root_recheck?.({ requested_path: requestedRoot, canonical_path: actualRoot });
+  let rootAfter;
+  let canonicalRootAfter;
+  try {
+    rootAfter = await lstat(actualRoot);
+    canonicalRootAfter = await canonicalPath(requestedRoot, { alias_error: "GKX_SCAN_ROOT_ALIAS_REJECTED" });
+  } catch { throw new Error("GKX_SCAN_ROOT_CHANGED_DURING_SCAN"); }
+  if (!sameDirectoryIdentity(rootEvidence, rootAfter) || !sameCanonicalPath(actualRoot, canonicalRootAfter)) {
+    throw new Error("GKX_SCAN_ROOT_CHANGED_DURING_SCAN");
+  }
   files.sort((a, b) => codeUnitCompare(a.relativePath, b.relativePath));
   attachments.sort(codeUnitCompare);
   folders.sort(codeUnitCompare);
-  return { files, attachments, folders };
+  rejectedSources.sort((a, b) => codeUnitCompare(a.source_path, b.source_path));
+  const result = { files, attachments, folders };
+  Object.defineProperty(result, RETRIEVAL_SCAN_REJECTIONS, {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: Object.freeze(rejectedSources),
+  });
+  Object.defineProperty(result, INGEST_SCAN_ROOT, {
+    enumerable: false,
+    configurable: false,
+    writable: false,
+    value: rootEvidence,
+  });
+  return result;
 }
 
 /* ---------------- deterministic build block ---------------- */
@@ -208,117 +536,11 @@ function projectionsFrom(files, folders) {
   return { graph, projections: out };
 }
 
-/* ---------------- gkx search (Phase 1 additive retrieval surface) ---------------- */
-export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
-  const {
-    chunkMarkdown, indexRetrievalGeneration, RetrievalCoordinator,
-    retrievalCanonicalDigest, vaultSourceReader,
-    detectSqliteLexicalCapability,
-    discoverTrustedGkosConfig, configuredProviderIdentityFromTrustedConfig,
-    selectConfiguredVectorProvider, selectConfiguredRerankProvider,
-  } = await loadRetrieval();
-  const vaultDir = resolve(dir);
-  const trustedConfig = await discoverTrustedGkosConfig({
-    explicit_config: hostOptions.configPath,
-    trust_cwd: hostOptions.trustCwdConfig === true,
-    vault_root: vaultDir,
-  });
-  const retrievalConfig = trustedConfig?.document?.retrieval ?? {};
-  const vectorIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "vectors") : undefined;
-  const rerankerIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "reranker") : undefined;
-  const lexicalCapability = detectSqliteLexicalCapability();
-  let vectorProvider;
-  if (trustedConfig && vectorIdentity) {
-    try { vectorProvider = selectConfiguredVectorProvider(trustedConfig); }
-    catch {
-      vectorProvider = { ...vectorIdentity, async embed() { throw new Error("CONFIGURED_VECTOR_RUNTIME_UNAVAILABLE"); } };
-    }
-  }
-  let rerankProvider;
-  if (trustedConfig && rerankerIdentity) {
-    try { rerankProvider = selectConfiguredRerankProvider(trustedConfig); }
-    catch {
-      rerankProvider = { ...rerankerIdentity, async rerank() { throw new Error("CONFIGURED_RERANK_RUNTIME_UNAVAILABLE"); } };
-    }
-  }
-  const { files, folders } = await scanCorpus(vaultDir);
-  const graph = buildGraph(files, folders);
-  const nodesByPath = new Map(graph.nodes.filter((node) => node.kind === "file").map((node) => [node.path, node]));
-  const chunks = [];
-  let rejected = 0;
-  for (const file of files) {
-    const evidence = file[RETRIEVAL_FILE_EVIDENCE];
-    if (!evidence?.plain_file || evidence.link_count !== 1 || evidence.aliased) { rejected++; continue; }
-    const node = nodesByPath.get(file.relativePath);
-    const uid = node?.gkx?.uid;
-    const diagnostics = node?.gkx?.projection?.diagnostics ?? [];
-    if (!isValidGkxAuthoredUid(uid) || diagnostics.some((item) => item.severity === "error" || item.severity === "critical")) { rejected++; continue; }
-    try {
-      chunks.push(...chunkMarkdown({
-        source_id: uid,
-        source_path: file.relativePath,
-        text: file.content,
-        lineage_id: null,
-        // Phase 1 must not promote filesystem-derived validAt or graph-derived
-        // invalidAt into canonical retrieval validity. Phase 2 will bind these
-        // nullable envelope fields only after the current Standard mapping is
-        // ratified against canonical lineage/temporal authority.
-        valid_from: null,
-        valid_to: null,
-        supersedes: [],
-        superseded_by: [],
-        metadata: {
-          title: node.gkx?.title ?? node.label,
-          tags: node.tags,
-          sensitivity: node.gkx?.sensitivity ?? "secret",
-          gkx_type: node.gkx?.type,
-          epistemic_state: node.gkx?.epistemicState,
-          authoritative: true,
-        },
-      }, {
-        max_tokens: typeof retrievalConfig.max_tokens === "number" ? retrievalConfig.max_tokens : 400,
-        overlap_tokens: typeof retrievalConfig.overlap_tokens === "number" ? retrievalConfig.overlap_tokens : 0,
-      }));
-    } catch { rejected++; }
-  }
-  const sourceRows = new Map();
-  for (const chunk of chunks) sourceRows.set(chunk.source_id, { source_id: chunk.source_id, source_path: chunk.source_path, source_digest: chunk.source_digest });
-  const sourceSnapshotDigest = retrievalCanonicalDigest([...sourceRows.values()].sort((a, b) => codeUnitCompare(a.source_id, b.source_id) || codeUnitCompare(a.source_path, b.source_path)));
-  const policyDigest = retrievalCanonicalDigest({ id: "engine.cli.public-only-discoverability", version: "1.0.0" });
-  const effectiveConfiguration = {
-    mode: vectorIdentity ? "hybrid" : "fts",
-    chunker: { version: "gkos-heading-chunker/1", tokenizer: "gkos-ascii-whitespace/1", max_tokens: retrievalConfig.max_tokens ?? 400, overlap_tokens: retrievalConfig.overlap_tokens ?? 0 },
-    lexical: {
-      provider: lexicalCapability.default_backend,
-      tokenizer: lexicalCapability.fts5_available ? "unicode61 remove_diacritics 2" : "gkos-unicode61-subset-scan/1",
-      boosts: { title: 3, heading_path: 2, tags: 1.5, topic: 2, category: 2, text: 1 },
-    },
-    fusion: { rrf_k: retrievalConfig.rrf_k ?? 60 },
-    diversity: { enabled: retrievalConfig.mmr === true, mmr_lambda: retrievalConfig.mmr_lambda ?? 0.7 },
-    parent_expansion: retrievalConfig.parent_expansion !== false,
-    parent_expansion_max_child_tokens: retrievalConfig.parent_expansion_max_child_tokens ?? 80,
-    configured_host: trustedConfig?.document ?? null,
-  };
-  const configurationDigest = retrievalCanonicalDigest(effectiveConfiguration);
-  const stateDirectory = join(vaultDir, ".gkx", "derived", "retrieval");
-  const indexed = await indexRetrievalGeneration({
-    state_directory: stateDirectory,
-    vault_id: `vault:${retrievalCanonicalDigest(vaultDir).slice("sha256:".length, "sha256:".length + 24)}`,
-    source_snapshot_digest: sourceSnapshotDigest,
-    configuration_digest: configurationDigest,
-    policy_digest: policyDigest,
-    chunks,
-    lexical_backend: lexicalCapability.default_backend,
-  }, vectorProvider);
-  const coordinator = new RetrievalCoordinator(indexed.generation.database_path, {
-    discoverability_policy: (chunk) => chunk.metadata.sensitivity === "public" ? "allow" : "deny",
-    source_reader: vaultSourceReader(vaultDir),
-    ...(vectorProvider ? { vector_provider: vectorProvider } : {}),
-    ...(rerankProvider ? { rerank_provider: rerankProvider } : {}),
-  });
+async function executeRetrievalSearch(coordinator, query, normalizedAsOf, limit, retrievalConfig, effectiveConfiguration) {
   try {
-    const result = await coordinator.search({
+    return await coordinator.search({
       query,
+      ...(normalizedAsOf !== undefined ? { as_of: normalizedAsOf } : {}),
       limit,
       filters: {
         sensitivity_ceiling: "public",
@@ -333,9 +555,225 @@ export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
       ...(typeof retrievalConfig.lexical_top_k === "number" ? { lexical_top_k: retrievalConfig.lexical_top_k } : {}),
       ...(typeof retrievalConfig.semantic_top_k === "number" ? { semantic_top_k: retrievalConfig.semantic_top_k } : {}),
     });
-    if (rejected) console.error(`gkx search: ${rejected} source(s) were ineligible for this derived generation`);
-    return result;
   } finally { coordinator.close(); }
+}
+
+/* ---------------- gkx search (additive retrieval + Phase 2 lineage) ---------------- */
+export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
+  const {
+    chunkMarkdown, RetrievalCoordinator, RETRIEVAL_GKX_PROJECTION_PROFILE, RETRIEVAL_GKX_STANDARD_COMMIT,
+    normalizeRetrievalAsOf, retrievalCanonicalDigest, retrievalSha256, vaultSourceReader,
+    detectSqliteLexicalCapability,
+    discoverTrustedGkosConfig, configuredProviderIdentityFromTrustedConfig,
+    selectConfiguredVectorProvider, selectConfiguredRerankProvider,
+  } = await loadRetrieval();
+  const {
+    bindGkxRetrievalCandidateChunks,
+    coordinatorFromActiveRetrievalStorePreflight,
+    indexGkxRetrievalGeneration,
+    isGkxRetrievalWriterAuthorityError,
+    preflightActiveRetrievalStore,
+    projectGkxRetrievalCorpus,
+    releaseActiveRetrievalStorePreflight,
+  } = await loadRetrievalHost();
+  // Client syntax is validated before config discovery, vault scan, provider
+  // selection, or derived-state creation.
+  const normalizedAsOf = hostOptions.asOf === undefined ? undefined : normalizeRetrievalAsOf(hostOptions.asOf);
+  const vaultDir = resolve(dir);
+  const stateDirectory = join(vaultDir, ".gkx", "derived", "retrieval");
+  const { shouldOpenExistingIngestRetrievalAuthority } = await loadIngestHost();
+  // Authority selection precedes config discovery and corpus scanning. Once
+  // Phase 3 owns the pointer, ordinary search can only open the verified inner
+  // generation; it must never attempt the legacy writer as control flow.
+  let ingestAuthorityActive;
+  try { ingestAuthorityActive = shouldOpenExistingIngestRetrievalAuthority(stateDirectory); }
+  catch { throw new Error("GKX_CLI_INGEST_SEARCH_AUTHORITY_FAILURE"); }
+  await hostOptions.onAuthorityRouteObserved?.(ingestAuthorityActive);
+  let activeStorePreflight = null;
+  if (ingestAuthorityActive) {
+    try { activeStorePreflight = preflightActiveRetrievalStore(stateDirectory); }
+    catch { throw new Error("GKX_CLI_INGEST_SEARCH_AUTHORITY_FAILURE"); }
+  }
+  try {
+    const trustedConfig = await discoverTrustedGkosConfig({
+      explicit_config: hostOptions.configPath,
+      trust_cwd: hostOptions.trustCwdConfig === true,
+      vault_root: vaultDir,
+    });
+  const retrievalConfig = trustedConfig?.document?.retrieval ?? {};
+  const vectorIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "vectors") : undefined;
+  const rerankerIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "reranker") : undefined;
+  const lexicalCapability = detectSqliteLexicalCapability();
+  let vectorProvider = hostOptions.vectorProvider;
+  if (!vectorProvider && trustedConfig && vectorIdentity) {
+    try { vectorProvider = selectConfiguredVectorProvider(trustedConfig); }
+    catch {
+      vectorProvider = { ...vectorIdentity, async embed() { throw new Error("CONFIGURED_VECTOR_RUNTIME_UNAVAILABLE"); } };
+    }
+  }
+  let rerankProvider;
+  if (trustedConfig && rerankerIdentity) {
+    try { rerankProvider = selectConfiguredRerankProvider(trustedConfig); }
+    catch {
+      rerankProvider = { ...rerankerIdentity, async rerank() { throw new Error("CONFIGURED_RERANK_RUNTIME_UNAVAILABLE"); } };
+    }
+  }
+  const policyDigest = retrievalCanonicalDigest({ id: "engine.cli.public-only-discoverability", version: "1.0.0" });
+  const effectiveConfiguration = {
+    canonical_authority: {
+      standard_commit: RETRIEVAL_GKX_STANDARD_COMMIT,
+      projection_profile: RETRIEVAL_GKX_PROJECTION_PROFILE,
+    },
+    mode: vectorIdentity ? "hybrid" : "fts",
+    chunker: { version: "gkos-heading-chunker/1", tokenizer: "gkos-ascii-whitespace/1", max_tokens: retrievalConfig.max_tokens ?? 400, overlap_tokens: retrievalConfig.overlap_tokens ?? 0 },
+    lexical: {
+      provider: lexicalCapability.default_backend,
+      tokenizer: lexicalCapability.fts5_available ? "unicode61 remove_diacritics 2" : "gkos-unicode61-subset-scan/1",
+      boosts: { title: 3, heading_path: 2, tags: 1.5, topic: 2, category: 2, text: 1 },
+    },
+    fusion: { rrf_k: retrievalConfig.rrf_k ?? 60 },
+    diversity: { enabled: retrievalConfig.mmr === true, mmr_lambda: retrievalConfig.mmr_lambda ?? 0.7 },
+    parent_expansion: retrievalConfig.parent_expansion !== false,
+    parent_expansion_max_child_tokens: retrievalConfig.parent_expansion_max_child_tokens ?? 80,
+    configured_host: trustedConfig?.document ?? null,
+  };
+  const configurationDigest = retrievalCanonicalDigest(effectiveConfiguration);
+  const coordinatorOptions = {
+    discoverability_policy: (chunk) => chunk.metadata.sensitivity === "public" ? "allow" : "deny",
+    source_discoverability_policy: (source) => source.metadata.sensitivity === "public" ? "allow" : "deny",
+    source_reader: vaultSourceReader(vaultDir),
+    lineage_view_freshness: "fresh",
+    runtime_policy_digest: policyDigest,
+    ...(vectorProvider ? { vector_provider: vectorProvider } : {}),
+    ...(rerankProvider ? { rerank_provider: rerankProvider } : {}),
+  };
+  if (ingestAuthorityActive) {
+    const heldStore = activeStorePreflight;
+    activeStorePreflight = null;
+    const coordinator = coordinatorFromActiveRetrievalStorePreflight(heldStore, coordinatorOptions);
+    return executeRetrievalSearch(coordinator, query, normalizedAsOf, limit, retrievalConfig, effectiveConfiguration);
+  }
+  const scan = await scanCorpus(vaultDir);
+  const { files, folders, attachments } = scan;
+  const plainFiles = [];
+  const observedSources = [...(scan[RETRIEVAL_SCAN_REJECTIONS] ?? [])].map((source) => ({
+    ...source,
+    reason_codes: [...source.reason_codes],
+  }));
+  for (const file of files) {
+    const evidence = file[RETRIEVAL_FILE_EVIDENCE];
+    const observed = {
+      source_path: file.relativePath,
+      source_digest: retrievalSha256(Buffer.from(file.content, "utf8")),
+      size: file.size,
+      created_time_ms: file.createdTime,
+      modified_time_ms: file.modifiedTime,
+      classification: "candidate",
+      reason_codes: [],
+    };
+    observedSources.push(observed);
+    if (!evidence?.plain_file || evidence.link_count !== 1 || evidence.aliased) {
+      observed.classification = "rejected";
+      observed.reason_codes = ["SOURCE_FILESYSTEM_ALIAS_REJECTED"];
+      continue;
+    }
+    // The scanner's private Symbol evidence is checked above, then deliberately
+    // stripped. Canonical projection receives only descriptor-safe plain data.
+    plainFiles.push({
+      relativePath: file.relativePath,
+      name: file.name,
+      size: file.size,
+      modifiedTime: file.modifiedTime,
+      createdTime: file.createdTime,
+      content: file.content,
+      kind: "note",
+    });
+  }
+  const projection = projectGkxRetrievalCorpus(plainFiles, folders, attachments);
+  const rejectionByPath = new Map(projection.rejections.map((item) => [item.source_path, item.reason_codes]));
+  for (const observed of observedSources) {
+    const reasons = rejectionByPath.get(observed.source_path);
+    if (reasons) {
+      observed.classification = "rejected";
+      observed.reason_codes = [...reasons].sort(codeUnitCompare);
+    } else if (observed.classification === "candidate") {
+      observed.classification = "accepted";
+    }
+  }
+  const candidateChunks = projection.sources.flatMap((source) => bindGkxRetrievalCandidateChunks(
+    source.record_key,
+    chunkMarkdown(source.chunk_input, {
+      max_tokens: typeof retrievalConfig.max_tokens === "number" ? retrievalConfig.max_tokens : 400,
+      overlap_tokens: typeof retrievalConfig.overlap_tokens === "number" ? retrievalConfig.overlap_tokens : 0,
+    }),
+  ));
+  const candidateSources = projection.sources.map((source) => source.candidate_source);
+  // The CLI's fixed, manifest-bound public-only policy is evaluated before
+  // any external embedding provider can observe source text. Canonical rows
+  // remain local so temporal integrity is preserved, while vector eligibility
+  // is an explicit set bound into the schema-3 projection digest.
+  const chunksByRecordKey = new Map();
+  for (const candidate of candidateChunks) {
+    const group = chunksByRecordKey.get(candidate.record_key) ?? [];
+    group.push(candidate);
+    chunksByRecordKey.set(candidate.record_key, group);
+  }
+  const publicRecordKeys = new Set(candidateSources
+    .filter((source) => source.source_metadata.sensitivity === "public")
+    .filter((source) => (chunksByRecordKey.get(source.record_key) ?? [])
+      .every((candidate) => candidate.chunk.metadata.sensitivity === "public"))
+    .map((source) => source.record_key));
+  const embeddingEligibleCandidateChunkKeys = candidateChunks
+    .filter((candidate) => publicRecordKeys.has(candidate.record_key))
+    .map((candidate) => candidate.candidate_chunk_key)
+    .sort(codeUnitCompare);
+  const sourceSnapshotDigest = retrievalCanonicalDigest({
+    topology: { folders: [...folders].sort(codeUnitCompare), attachments: [...attachments].sort(codeUnitCompare) },
+    observed_sources: observedSources.sort((a, b) => codeUnitCompare(a.source_path, b.source_path) || codeUnitCompare(a.source_digest ?? "", b.source_digest ?? "")),
+    projection_inputs: {
+      projection_reference_time: null,
+      projection_options: {},
+    },
+    canonical_candidates: candidateSources.map((source) => ({
+      record_key: source.record_key,
+      source_id: source.source_id,
+      source_path: source.source_path,
+      source_digest: source.source_digest,
+      parser_content_fingerprint: source.parser_content_fingerprint,
+      assertion_time: source.assertion_time,
+      valid_from: source.valid_from,
+      validity_origin: source.validity_origin,
+      candidate_digest: source.candidate_digest,
+    })).sort((a, b) => codeUnitCompare(a.record_key, b.record_key)),
+    candidate_declarations: projection.declarations,
+  });
+  let indexed;
+  try {
+    indexed = await indexGkxRetrievalGeneration({
+      state_directory: stateDirectory,
+      vault_id: `vault:${retrievalCanonicalDigest(vaultDir).slice("sha256:".length, "sha256:".length + 24)}`,
+      source_snapshot_digest: sourceSnapshotDigest,
+      configuration_digest: configurationDigest,
+      policy_digest: policyDigest,
+      candidate_sources: candidateSources,
+      candidate_declarations: projection.declarations,
+      candidate_chunks: candidateChunks,
+      embedding_eligible_candidate_chunk_keys: embeddingEligibleCandidateChunkKeys,
+      lexical_backend: lexicalCapability.default_backend,
+    }, vectorProvider);
+  } catch (error) {
+    if (isGkxRetrievalWriterAuthorityError(error)) {
+      throw new Error("GKX_CLI_INGEST_SEARCH_AUTHORITY_FAILURE");
+    }
+    throw error;
+  }
+  return executeRetrievalSearch(
+    new RetrievalCoordinator(indexed.generation.database_path, coordinatorOptions),
+    query, normalizedAsOf, limit, retrievalConfig, effectiveConfiguration,
+  );
+  } finally {
+    if (activeStorePreflight !== null) releaseActiveRetrievalStorePreflight(activeStorePreflight);
+  }
 }
 
 const SEVERITIES = ["critical", "error", "warning", "info"];
@@ -375,6 +813,220 @@ function printValidate(result) {
     }
   }
   console.log(result.ok ? "gkx validate: OK" : "gkx validate: FAILED — error/critical diagnostics present");
+}
+
+function ingestValidationInput(scan) {
+  return {
+    files: scan.files.map((file) => ({
+      relativePath: file.relativePath,
+      name: file.name,
+      extension: file.name?.includes(".") ? file.name.slice(file.name.lastIndexOf(".") + 1) : "",
+      size: file.size,
+      content: file.content,
+      kind: "note",
+    })),
+    folders: [...scan.folders],
+    attachments: [...scan.attachments],
+    scan_rejections: [...(scan[RETRIEVAL_SCAN_REJECTIONS] ?? [])].map((source) => ({
+      source_path: source.source_path,
+      source_digest: source.source_digest,
+      size: source.size,
+      classification: "rejected",
+      reason_codes: [...source.reason_codes],
+    })),
+  };
+}
+
+function printIngestValidationText(result) {
+  const summary = result.summary;
+  console.log(`gkx validate: ${result.corpus_valid ? "VALID" : "INVALID"}`);
+  console.log(`  sources: observed=${summary.observed_source_count} valid=${summary.valid_source_count} rejected=${summary.rejected_source_count}`);
+  console.log(`  findings: critical=${summary.findings.critical} error=${summary.findings.error} warning=${summary.findings.warning} info=${summary.findings.info}`);
+  for (const finding of result.findings) {
+    const coordinate = finding.source_path === null
+      ? "corpus"
+      : `${finding.source_path}${finding.line === null ? "" : `:${finding.line}`}`;
+    console.log(`  [${finding.severity}] ${finding.code} ${coordinate}${finding.field === null ? "" : ` (${finding.field})`}`);
+  }
+}
+
+function publicIngestEligibility(prepared) {
+  const chunksByRecordKey = new Map();
+  for (const candidate of prepared.candidate_chunks) {
+    const group = chunksByRecordKey.get(candidate.record_key) ?? [];
+    group.push(candidate);
+    chunksByRecordKey.set(candidate.record_key, group);
+  }
+  const publicRecordKeys = new Set(prepared.candidate_sources
+    .filter((source) => source.source_metadata.sensitivity === "public")
+    .filter((source) => (chunksByRecordKey.get(source.record_key) ?? [])
+      .every((candidate) => candidate.chunk.metadata.sensitivity === "public"))
+    .map((source) => source.record_key));
+  return prepared.candidate_chunks
+    .filter((candidate) => publicRecordKeys.has(candidate.record_key))
+    .map((candidate) => candidate.candidate_chunk_key)
+    .sort(codeUnitCompare);
+}
+
+function ingestIndexSummary(result) {
+  return {
+    observed_source_count: result.summary.observed_source_count,
+    valid_source_count: result.summary.valid_source_count,
+    rejected_source_count: result.summary.rejected_source_count,
+    findings: {
+      info: result.summary.findings.info,
+      warning: result.summary.findings.warning,
+      error: result.summary.findings.error,
+      critical: result.summary.findings.critical,
+    },
+  };
+}
+
+function operationalIndexResult(ingest, mode) {
+  return ingest.sealIngestIndexResultEnvelope({
+    contract_version: ingest.INGEST_INDEX_RESULT_CONTRACT_VERSION,
+    status: "operational_failure",
+    mode,
+    summary: null,
+    active: null,
+    blocked_attempt: null,
+  });
+}
+
+function printOperationalIndexFailure(ingest, mode) {
+  console.log(JSON.stringify(operationalIndexResult(ingest, mode), null, 2));
+  console.error("gkx index: operational failure");
+}
+
+async function loadCliIngestProfile(ingest, selector) {
+  try { return await ingest.loadIngestProfile(selector ?? null); }
+  catch (error) {
+    throw new Error(ingest.classifyIngestProfileLoadError(error) === "operational"
+      ? "GKX_CLI_PROFILE_AUTHORITY_FAILURE"
+      : "GKX_CLI_PROFILE_FAILURE");
+  }
+}
+
+export async function runIngestValidate(kbPath, options = {}) {
+  const requestedVault = validatePhase3KbPath(kbPath);
+  const ingest = await loadIngestHost();
+  const profile = await loadCliIngestProfile(ingest, options.schema);
+  const scan = await scanCorpus(requestedVault, { ...(options.scan_options ?? {}), ingest: true });
+  await revalidatePhase3ScanRoot(scan);
+  return ingest.buildIngestValidationPlan(ingestValidationInput(scan), profile).result;
+}
+
+export async function runIngestIndex(kbPath, options = {}) {
+  const mode = options.strict === true ? "strict" : "non_strict";
+  const requestedVault = validatePhase3KbPath(kbPath);
+  const ingest = await loadIngestHost();
+  const profile = await loadCliIngestProfile(ingest, options.schema);
+  // Bind the exact local directory identity before scanning. A replacement
+  // after this point may be observed by the scanner, but it can never become
+  // a freshly trusted authority baseline for the resulting validation plan.
+  const vaultAuthority = ingest.preflightIngestVaultRoot(requestedVault);
+  await options.on_after_vault_root_preflight?.();
+  const scan = await scanCorpus(vaultAuthority.vault_root, { ...(options.scan_options ?? {}), ingest: true });
+  const plan = ingest.buildIngestValidationPlan(ingestValidationInput(scan), profile);
+  await options.on_after_validation_plan?.();
+  const vaultDir = await revalidatePhase3ScanRoot(scan);
+  const stateDirectory = vaultAuthority.state_directory;
+  const authority = ingest.preflightIngestAuthority(stateDirectory, vaultAuthority, {
+    on_before_state_creation: options.on_before_authority_state_creation,
+  });
+  let transitionCompleted = false;
+  try {
+    if (await revalidatePhase3ScanRoot(scan) !== vaultDir) throw new Error("GKX_SCAN_ROOT_CHANGED_DURING_SCAN");
+    if (mode === "strict" && !plan.result.ingest_intrinsic_valid) {
+      const status = ingest.recordBlockedIngestAttempt(authority, plan);
+      transitionCompleted = true;
+      return ingest.sealIngestIndexResultEnvelope({
+        contract_version: ingest.INGEST_INDEX_RESULT_CONTRACT_VERSION,
+        status: "blocked_strict",
+        mode,
+        summary: ingestIndexSummary(plan.result),
+        active: status.prior_active,
+        blocked_attempt: { attempt_digest: status.attempt_digest, status_digest: status.status_digest },
+      }, status);
+    }
+
+    const {
+      RETRIEVAL_GKX_PROJECTION_PROFILE, RETRIEVAL_GKX_STANDARD_COMMIT,
+      retrievalCanonicalDigest, detectSqliteLexicalCapability,
+      discoverTrustedGkosConfig, configuredProviderIdentityFromTrustedConfig,
+      selectConfiguredVectorProvider,
+    } = await loadRetrieval();
+    const trustedConfig = await discoverTrustedGkosConfig({
+      explicit_config: options.configPath,
+      trust_cwd: options.trustCwdConfig === true,
+      vault_root: vaultDir,
+    });
+    if (await revalidatePhase3ScanRoot(scan) !== vaultDir) throw new Error("GKX_SCAN_ROOT_CHANGED_DURING_SCAN");
+    const retrievalConfig = trustedConfig?.document?.retrieval ?? {};
+    const vectorIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "vectors") : undefined;
+    let vectorProvider = options.vectorProvider;
+    if (!vectorProvider && trustedConfig && vectorIdentity) {
+      try { vectorProvider = selectConfiguredVectorProvider(trustedConfig); }
+      catch {
+        vectorProvider = { ...vectorIdentity, async embed() { throw new Error("CONFIGURED_VECTOR_RUNTIME_UNAVAILABLE"); } };
+      }
+    }
+    const lexicalCapability = detectSqliteLexicalCapability();
+    const policyDigest = retrievalCanonicalDigest({ id: "engine.cli.public-only-discoverability", version: "1.0.0" });
+    const chunking = {
+      max_tokens: retrievalConfig.max_tokens ?? 400,
+      overlap_tokens: retrievalConfig.overlap_tokens ?? 0,
+    };
+    const effectiveConfiguration = {
+      canonical_authority: {
+        standard_commit: RETRIEVAL_GKX_STANDARD_COMMIT,
+        projection_profile: RETRIEVAL_GKX_PROJECTION_PROFILE,
+      },
+      mode: vectorIdentity ? "hybrid" : "fts",
+      chunker: {
+        version: "gkos-heading-chunker/1",
+        tokenizer: "gkos-ascii-whitespace/1",
+        ...chunking,
+      },
+      lexical: {
+        provider: lexicalCapability.default_backend,
+        tokenizer: lexicalCapability.fts5_available ? "unicode61 remove_diacritics 2" : "gkos-unicode61-subset-scan/1",
+        boosts: { title: 3, heading_path: 2, tags: 1.5, topic: 2, category: 2, text: 1 },
+      },
+      fusion: { rrf_k: retrievalConfig.rrf_k ?? 60 },
+      diversity: { enabled: retrievalConfig.mmr === true, mmr_lambda: retrievalConfig.mmr_lambda ?? 0.7 },
+      parent_expansion: retrievalConfig.parent_expansion !== false,
+      parent_expansion_max_child_tokens: retrievalConfig.parent_expansion_max_child_tokens ?? 80,
+      configured_host: trustedConfig?.document ?? null,
+    };
+    const prepared = ingest.prepareValidatedGkxIngestGeneration(authority, mode, plan, chunking);
+    await options.on_before_provider_stage?.();
+    if (await revalidatePhase3ScanRoot(scan) !== vaultDir) throw new Error("GKX_SCAN_ROOT_CHANGED_DURING_SCAN");
+    const staged = await ingest.stageValidatedGkxIngestGeneration(authority, prepared, {
+      state_directory: stateDirectory,
+      vault_id: `vault:${retrievalCanonicalDigest(vaultDir).slice("sha256:".length, "sha256:".length + 24)}`,
+      configuration_digest: retrievalCanonicalDigest(effectiveConfiguration),
+      policy_digest: policyDigest,
+      embedding_eligible_candidate_chunk_keys: publicIngestEligibility(prepared),
+      lexical_backend: lexicalCapability.default_backend,
+    }, vectorProvider);
+    const opened = ingest.activateStagedGkxIngestGeneration(staged);
+    transitionCompleted = true;
+    return ingest.sealIngestIndexResultEnvelope({
+      contract_version: ingest.INGEST_INDEX_RESULT_CONTRACT_VERSION,
+      status: plan.result.summary.rejected_source_count === 0 ? "published" : "published_with_rejections",
+      mode,
+      summary: ingestIndexSummary(plan.result),
+      active: opened.active,
+      blocked_attempt: null,
+    });
+  } catch (error) {
+    if (!transitionCompleted) {
+      try { ingest.releaseIngestAuthorityPreflight(authority); }
+      catch { /* irreversible transitions retain their recovery intent */ }
+    }
+    throw error;
+  }
 }
 
 /* ---------------- gkx assess ---------------- */
@@ -470,9 +1122,11 @@ function watchGraph(config) {
 const USAGE = `gkx (GKOS-Engine) v${ENGINE_VERSION}
 Usage:
   gkx validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
+  gkx validate --kb-path <path> [--schema <path-or-id>] [--format text|json]
+  gkx index --kb-path <path> [--schema <path-or-id>] [--strict]
   gkx assess   <dir> [--json]                         per-note documentation-quality scores/labels
   gkx search <query> --kb-path <dir> [--limit <n>]    public-only lexical retrieval with exact citations
-             [--config <trusted-gkos.toml>] [--trust-cwd-config]
+             [--as-of <GKX-timestamp>] [--config <trusted-gkos.toml>] [--trust-cwd-config]
   gkx graph    <dir> -o <graph.json> [--watch]        canonical Gkx graph (stable serialization)
   gkx export graphiti <dir> --episodes <out.json> [--group-id <ns>]
   gkx nav scan|audit <dir> [--json]
@@ -486,6 +1140,38 @@ Usage:
 
 Navigation is source-content read-only. nav write/apply/delete/record are rejected.`;
 
+function isPhase3ValidateInvocation(args) {
+  return args.some((arg) => arg === "--kb-path" || arg === "--schema" || arg === "--format" || arg === "--strict" ||
+    arg.startsWith("--kb-path=") || arg.startsWith("--schema=") || arg.startsWith("--format="));
+}
+
+function parsePhase3CommandArgs(command, args) {
+  if (args.length === 1 && (args[0] === "--help" || args[0] === "-h")) return { help: true };
+  const seen = new Set();
+  const result = { help: false, kbPath: null, schema: null, format: "text", strict: false };
+  const valueFlags = command === "validate"
+    ? new Set(["--kb-path", "--schema", "--format"])
+    : new Set(["--kb-path", "--schema"]);
+  for (let index = 0; index < args.length; index++) {
+    const item = args[index];
+    if (command === "index" && item === "--strict") {
+      if (seen.has(item)) return null;
+      seen.add(item);
+      result.strict = true;
+      continue;
+    }
+    if (!valueFlags.has(item) || seen.has(item)) return null;
+    seen.add(item);
+    const value = args[++index];
+    if (typeof value !== "string" || value.length === 0 || value.startsWith("-")) return null;
+    if (item === "--kb-path") result.kbPath = value;
+    else if (item === "--schema") result.schema = value;
+    else result.format = value;
+  }
+  if (result.kbPath === null || (command === "validate" && result.format !== "text" && result.format !== "json")) return null;
+  return result;
+}
+
 function parseFlags(args) {
   const flags = new Set();
   const opts = {
@@ -495,7 +1181,7 @@ function parseFlags(args) {
     actor: null, name: null, proposedAt: null, recipient: null, recipientClass: null,
     purpose: null, itemBudget: "50", tokenBudget: "12000",
     kbPath: null, limit: "5",
-    configPath: null,
+    configPath: null, asOf: null,
   };
   const positional = [];
   const unknownFlags = [];
@@ -531,6 +1217,7 @@ function parseFlags(args) {
     else if (a === "--kb-path") opts.kbPath = args[++i];
     else if (a === "--limit") opts.limit = args[++i];
     else if (a === "--config") opts.configPath = args[++i];
+    else if (a === "--as-of") opts.asOf = args[++i];
     else if (a.startsWith("-")) unknownFlags.push(a);
     else positional.push(a);
   }
@@ -538,12 +1225,55 @@ function parseFlags(args) {
 }
 
 export async function main(argv = process.argv.slice(2)) {
-  const subcommands = new Set(["validate", "assess", "search", "graph", "export", "nav"]);
+  const subcommands = new Set(["validate", "index", "assess", "search", "graph", "export", "nav"]);
   const first = argv[0];
 
   if (!first || first === "--help" || first === "-h") {
     console.log(USAGE);
     return first ? 0 : 1;
+  }
+
+  if (first === "index" || (first === "validate" && isPhase3ValidateInvocation(argv.slice(1)))) {
+    const parsed = parsePhase3CommandArgs(first, argv.slice(1));
+    if (parsed?.help) { console.log(USAGE); return 0; }
+    if (!parsed) { console.error(`gkx ${first}: invalid arguments`); return 2; }
+    if (first === "validate") {
+      try {
+        const result = await runIngestValidate(parsed.kbPath, { schema: parsed.schema });
+        if (parsed.format === "json") console.log(JSON.stringify(result, null, 2));
+        else printIngestValidationText(result);
+        return result.corpus_valid ? 0 : 1;
+      } catch (error) {
+        if (error?.message === "GKX_CLI_KB_PATH_INVALID") {
+          console.error("gkx validate: invalid knowledge-base path");
+          return 2;
+        }
+        if (error?.message === "GKX_CLI_PROFILE_FAILURE") {
+          console.error("gkx validate: profile selection failed");
+          return 2;
+        }
+        console.error("gkx validate: operational failure");
+        return 3;
+      }
+    }
+    const mode = parsed.strict ? "strict" : "non_strict";
+    try {
+      const result = await runIngestIndex(parsed.kbPath, { schema: parsed.schema, strict: parsed.strict });
+      console.log(JSON.stringify(result, null, 2));
+      return result.status === "blocked_strict" ? 1 : 0;
+    } catch (error) {
+      if (error?.message === "GKX_CLI_KB_PATH_INVALID") {
+        console.error("gkx index: invalid knowledge-base path");
+        return 2;
+      }
+      if (error?.message === "GKX_CLI_PROFILE_FAILURE") {
+        console.error("gkx index: profile selection failed");
+        return 2;
+      }
+      try { printOperationalIndexFailure(await loadIngestHost(), mode); }
+      catch { console.error("gkx index: operational failure"); }
+      return 3;
+    }
   }
 
   if (subcommands.has(first)) {
@@ -560,10 +1290,23 @@ export async function main(argv = process.argv.slice(2)) {
     if (first === "search") {
       if (!positional[0]) { console.error("gkx search: <query> required"); return 1; }
       if (!opts.kbPath) { console.error("gkx search: --kb-path <dir> required"); return 1; }
+      if (opts.asOf === undefined) { console.error("gkx search: --as-of requires a GKX timestamp"); return 2; }
       const limit = opts.limit === null || opts.limit === undefined ? 5 : Number(opts.limit);
       if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100) { console.error("gkx search: --limit must be from 1 through 100"); return 2; }
-      console.log(JSON.stringify(await runSearch(positional[0], opts.kbPath, limit, { configPath: opts.configPath, trustCwdConfig: flags.has("trustCwdConfig") }), null, 2));
-      return 0;
+      try {
+        console.log(JSON.stringify(await runSearch(positional[0], opts.kbPath, limit, { configPath: opts.configPath, trustCwdConfig: flags.has("trustCwdConfig"), ...(opts.asOf !== null ? { asOf: opts.asOf } : {}) }), null, 2));
+        return 0;
+      } catch (error) {
+        if (String(error?.message).includes("RETRIEVAL_AS_OF_INVALID")) {
+          console.error("gkx search: --as-of must use the canonical GKX timestamp grammar");
+          return 2;
+        }
+        if (error?.message === "GKX_CLI_INGEST_SEARCH_AUTHORITY_FAILURE") {
+          console.error("gkx search: operational authority failure");
+          return 3;
+        }
+        throw error;
+      }
     }
     if (first === "nav") {
       const action = positional.shift();

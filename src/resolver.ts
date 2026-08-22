@@ -12,6 +12,14 @@ import {
   toPosixPath,
   withoutExtension,
 } from "./paths";
+import {
+  addCanonicalResolverCandidate,
+  canonicalLinkResolutionTiers,
+  canonicalTitleResolutionTiers,
+  createCanonicalResolverCandidateIndex,
+  firstCanonicalResolutionTier,
+  type CanonicalResolverCandidateIndex,
+} from "./resolver-internal";
 
 export interface Resolver {
   byPath: Map<string, string>;
@@ -22,14 +30,18 @@ export interface Resolver {
   ambiguous: Set<string>;
 }
 
+const CANDIDATE_INDEX = new WeakMap<Resolver, CanonicalResolverCandidateIndex>();
+
 export function createResolver(): Resolver {
-  return {
+  const resolver: Resolver = {
     byPath: new Map(),
     byPathNoExt: new Map(),
     byBasename: new Map(),
     byAlias: new Map(),
     ambiguous: new Set(),
   };
+  CANDIDATE_INDEX.set(resolver, createCanonicalResolverCandidateIndex());
+  return resolver;
 }
 
 function pushMulti(map: Map<string, string[]>, key: string, val: string): void {
@@ -44,6 +56,8 @@ export function addFileToResolver(idx: Resolver, relPath: string, nodeId: string
   idx.byPathNoExt.set(withoutExtension(n).toLowerCase(), nodeId);
   pushMulti(idx.byBasename, basenameWithoutExtension(n).toLowerCase(), nodeId);
   for (const a of aliases) pushMulti(idx.byAlias, a.trim().toLowerCase(), nodeId);
+  const candidates = CANDIDATE_INDEX.get(idx);
+  if (candidates) addCanonicalResolverCandidate(candidates, relPath, nodeId, aliases);
 }
 
 export function cleanTarget(t: string): string {
@@ -64,6 +78,13 @@ function pickCandidate(idx: Resolver, key: string, c: string[] | undefined): str
 
 /** Resolve a link target to a node id, or undefined when unresolved. */
 export function resolveLinkTarget(idx: Resolver, sourcePath: string, target: string): string | undefined {
+  const candidates = CANDIDATE_INDEX.get(idx);
+  if (candidates) {
+    const selected = firstCanonicalResolutionTier(canonicalLinkResolutionTiers(candidates, sourcePath, target));
+    if (!selected) return undefined;
+    if (selected.candidate_keys.length > 1) idx.ambiguous.add(cleanTarget(target).toLowerCase());
+    return selected.candidate_keys[0];
+  }
   const nt = cleanTarget(target);
   if (!nt) return undefined;
   const direct = nt.toLowerCase();
@@ -88,17 +109,29 @@ export function resolveTitleRef(
 ): { id?: string; ambiguous: boolean } {
   const k = String(ref || "").trim().toLowerCase();
   if (!k) return { ambiguous: false };
+  const candidates = CANDIDATE_INDEX.get(idx);
+  if (candidates) {
+    const selected = firstCanonicalResolutionTier(canonicalTitleResolutionTiers(candidates, ref));
+    if (!selected) return { ambiguous: false };
+    return {
+      id: selected.candidate_keys[0],
+      ambiguous: selected.candidate_keys.length > 1,
+    };
+  }
+  // Compatibility for callers that constructed the public Resolver shape
+  // directly rather than through createResolver(). This is the same frozen
+  // path -> path-no-ext -> basename/title -> alias precedence.
   const direct = idx.byPath.get(k) ?? idx.byPathNoExt.get(k);
   if (direct) return { id: direct, ambiguous: false };
   const byBase = idx.byBasename.get(k);
-  if (byBase && byBase.length) {
-    const uniq = [...new Set(byBase)];
-    return { id: uniq.sort()[0], ambiguous: uniq.length > 1 };
+  if (byBase?.length) {
+    const uniq = [...new Set(byBase)].sort();
+    return { id: uniq[0], ambiguous: uniq.length > 1 };
   }
   const byAlias = idx.byAlias.get(k);
-  if (byAlias && byAlias.length) {
-    const uniq = [...new Set(byAlias)];
-    return { id: uniq.sort()[0], ambiguous: uniq.length > 1 };
+  if (byAlias?.length) {
+    const uniq = [...new Set(byAlias)].sort();
+    return { id: uniq[0], ambiguous: uniq.length > 1 };
   }
   return { ambiguous: false };
 }

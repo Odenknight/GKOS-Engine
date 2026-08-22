@@ -20,15 +20,18 @@ import {
 import * as retrievalPublic from "../dist/retrieval.mjs";
 
 const digest = (value) => retrievalCanonicalDigest(value);
-const generationInput = (state, chunks, extra = {}) => ({
-  state_directory: state,
-  vault_id: "fixture-vault",
-  source_snapshot_digest: digest(chunks.map((chunk) => [chunk.source_id, chunk.source_path, chunk.source_digest])),
-  configuration_digest: digest({ mode: "fts", fixture: extra.fixture ?? 1 }),
-  policy_digest: digest({ policy: "public-only" }),
-  chunks,
-  ...extra,
-});
+const generationInput = (state, chunks, extra = {}) => {
+  const { fixture = 1, ...overrides } = extra;
+  return {
+    state_directory: state,
+    vault_id: "fixture-vault",
+    source_snapshot_digest: digest(chunks.map((chunk) => [chunk.source_id, chunk.source_path, chunk.source_digest])),
+    configuration_digest: digest({ mode: "fts", fixture }),
+    policy_digest: digest({ policy: "public-only" }),
+    chunks,
+    ...overrides,
+  };
+};
 
 async function source(root, name, uid, body, metadata = {}) {
   const text = `# ${name}\n${body}\n`;
@@ -192,6 +195,95 @@ test("FTS5 and compatibility scan bind distinct manifests and agree on fixed can
   scanCoordinator.close();
 });
 
+test("Phase-1 FTS5 reopen rejects duplicate-for-missing chunk keys", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-fts-bijection-"));
+  const chunks = [
+    ...await source(root, "first", "018f0000-0000-7000-8000-000000000246", "First evidence."),
+    ...await source(root, "second", "018f0000-0000-7000-8000-000000000247", "Second evidence."),
+  ];
+  const input = generationInput(join(root, "state"), chunks, { lexical_backend: "sqlite_fts5" });
+  if (!detectSqliteLexicalCapability().fts5_available) {
+    assert.throws(() => buildRetrievalGeneration(input), /SQLITE_FTS5_UNAVAILABLE/u);
+    assert.equal(existsSync(input.state_directory), false, "missing FTS5 fails before creating retrieval state");
+    return;
+  }
+  const built = buildRetrievalGeneration(input);
+  const database = new DatabaseSync(built.database_path);
+  try {
+    const rows = database.prepare("SELECT chunk_id,title,heading_path,tags,topic,category,text FROM chunk_fts ORDER BY chunk_id").all();
+    const [duplicate, missing] = rows;
+    database.prepare("DELETE FROM chunk_fts WHERE chunk_id=?").run(missing.chunk_id);
+    database.prepare("INSERT INTO chunk_fts(chunk_id,title,heading_path,tags,topic,category,text) VALUES (?,?,?,?,?,?,?)")
+      .run(duplicate.chunk_id, duplicate.title, duplicate.heading_path, duplicate.tags, duplicate.topic, duplicate.category, duplicate.text);
+  } finally {
+    database.close();
+  }
+  assert.throws(() => new RetrievalCoordinator(built.database_path, coordinatorOptions(root)), /LEXICAL_PROJECTION_MISMATCH/u);
+
+  const tokenizerBuilt = buildRetrievalGeneration({ ...input, state_directory: join(root, "tokenizer-state"), configuration_digest: digest({ tokenizer: "tamper" }) });
+  const tokenizerDatabase = new DatabaseSync(tokenizerBuilt.database_path);
+  try {
+    const rows = tokenizerDatabase.prepare("SELECT chunk_id,title,heading_path,tags,topic,category,text FROM chunk_fts").all();
+    tokenizerDatabase.exec("DROP TABLE chunk_fts; CREATE VIRTUAL TABLE chunk_fts USING fts5(chunk_id UNINDEXED,title,heading_path,tags,topic,category,text,tokenize='porter')");
+    const insert = tokenizerDatabase.prepare("INSERT INTO chunk_fts(chunk_id,title,heading_path,tags,topic,category,text) VALUES (?,?,?,?,?,?,?)");
+    for (const row of rows) insert.run(row.chunk_id, row.title, row.heading_path, row.tags, row.topic, row.category, row.text);
+  } finally {
+    tokenizerDatabase.close();
+  }
+  assert.throws(() => new RetrievalCoordinator(tokenizerBuilt.database_path, coordinatorOptions(root)), /LEXICAL_SCHEMA_INVALID/u);
+});
+
+test("Phase-1 duplicate-content chunks require one identical vector payload", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-vector-content-binding-"));
+  const text = "# Duplicate\nSame vector evidence.\n";
+  const chunks = [
+    ...chunkMarkdown({
+      source_id: "018f0000-0000-7000-8000-000000000248",
+      source_path: "first.md",
+      text,
+      metadata: { sensitivity: "public", title: "Duplicate" },
+    }),
+    ...chunkMarkdown({
+      source_id: "018f0000-0000-7000-8000-000000000249",
+      source_path: "second.md",
+      text,
+      metadata: { sensitivity: "public", title: "Duplicate" },
+    }),
+  ];
+  assert.equal(chunks.length, 2);
+  assert.equal(new Set(chunks.map((chunk) => chunk.content_digest)).size, 1);
+  const vectorIdentity = {
+    embedding_provider_id: "same-content-provider",
+    embedding_model_id: "same-content-model",
+    embedding_dimensions: 2,
+  };
+  const conflicting = generationInput(join(root, "rejected"), chunks, {
+    ...vectorIdentity,
+    vectors: [
+      { chunk_id: chunks[0].chunk_id, vector: [1, 0] },
+      { chunk_id: chunks[1].chunk_id, vector: [0, 1] },
+    ],
+  });
+  assert.throws(() => buildRetrievalGeneration(conflicting), /CONTENT_VECTOR_CACHE_CONFLICT/u);
+  assert.equal(existsSync(conflicting.state_directory), false, "conflicting cache identity publishes no state");
+
+  const accepted = generationInput(join(root, "accepted"), chunks, {
+    ...vectorIdentity,
+    vectors: chunks.map((chunk) => ({ chunk_id: chunk.chunk_id, vector: [1, 0] })),
+  });
+  const built = buildRetrievalGeneration(accepted);
+  const pristine = new RetrievalCoordinator(built.database_path, coordinatorOptions(root));
+  pristine.close();
+  if (process.platform !== "win32") await chmod(built.database_path, 0o600);
+  const db = new DatabaseSync(built.database_path);
+  try {
+    db.prepare("UPDATE chunk_vectors SET vector_json='[0,1]' WHERE chunk_id=?").run(chunks[1].chunk_id);
+  } finally {
+    db.close();
+  }
+  assert.throws(() => new RetrievalCoordinator(built.database_path, coordinatorOptions(root)), /CONTENT_VECTOR_CACHE_CONFLICT/u);
+});
+
 test("compatibility scan restricts policy-eligible IDs in SQLite before JavaScript scoring", async () => {
   const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-lexical-policy-"));
   const chunks = [
@@ -289,7 +381,7 @@ test("generation rejects source conflicts, partial/orphan vectors, and content t
     vectors: [], embedding_provider_id: "p", embedding_model_id: "m", embedding_dimensions: 2,
   })), /PARTIAL/);
   assert.throws(() => buildRetrievalGeneration(generationInput(join(root, "orphan"), chunks, {
-    vectors: [{ chunk_id: "missing", vector: [1, 0] }], embedding_provider_id: "p", embedding_model_id: "m", embedding_dimensions: 2,
+    vectors: [{ chunk_id: retrievalSha256("missing"), vector: [1, 0] }], embedding_provider_id: "p", embedding_model_id: "m", embedding_dimensions: 2,
   })), /PARTIAL|ORPHAN/);
   assert.throws(() => buildRetrievalGeneration(generationInput(join(root, "tampered"), [{ ...chunks[0], text: "Changed" }])), /CONTENT_BINDING/);
 });
@@ -330,6 +422,54 @@ test("strict chunk envelopes reject malformed nested values before any generatio
     assert.throws(() => buildRetrievalGeneration(generationInput(state, malformed)), /RETRIEVAL_CHUNK_/u, name);
     assert.equal(existsSync(state), false, `${name} must not create derived state or publish a pointer`);
   }
+});
+
+test("schema-2 index preflight rejects coercive inputs before cache, provider, or state", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-index-preflight-"));
+  const chunks = await source(root, "preflight", "018f0000-0000-7000-8000-000000000231", "Private provider boundary.");
+  let reads = 0;
+  let providerCalls = 0;
+  const provider = {
+    kind: "mcp", provider_id: "preflight", model_id: "preflight-1d", dimensions: 1, timeout_ms: 100,
+    async embed(texts) { providerCalls++; return texts.map(() => Float32Array.of(1)); },
+  };
+  const cases = [
+    (state) => ({ ...generationInput(state, chunks), unexpected: true }),
+    (state) => {
+      const value = generationInput(state, chunks);
+      delete value.chunks;
+      Object.defineProperty(value, "chunks", { enumerable: true, get() { reads++; return chunks; } });
+      return value;
+    },
+    (state) => ({ ...generationInput(state, chunks), chunks: [new Proxy(chunks[0], { get(target, key, receiver) { reads++; return Reflect.get(target, key, receiver); } })] }),
+    (state) => {
+      const metadata = { ...chunks[0].metadata };
+      Object.defineProperty(metadata, "secret", { enumerable: true, get() { reads++; return "never"; } });
+      return { ...generationInput(state, chunks), chunks: [{ ...chunks[0], metadata }] };
+    },
+  ];
+  for (const [index, create] of cases.entries()) {
+    const state = join(root, `state-${index}`);
+    await assert.rejects(indexRetrievalGeneration(create(state), provider));
+    assert.equal(existsSync(state), false);
+  }
+  assert.equal(providerCalls, 0);
+  assert.equal(reads, 0, "preflight executes no caller getter or proxy get trap");
+
+  const invalidProviders = [
+    { ...provider, kind: "unknown" },
+    { ...provider, provider_id: "" },
+    { ...provider, model_id: "\0secret" },
+    { ...provider, dimensions: 0 },
+    { ...provider, timeout_ms: 0 },
+    { ...provider, embed: null },
+  ];
+  for (const [index, invalidProvider] of invalidProviders.entries()) {
+    const state = join(root, `invalid-provider-${index}`);
+    await assert.rejects(indexRetrievalGeneration(generationInput(state, chunks), invalidProvider));
+    assert.equal(existsSync(state), false);
+  }
+  assert.equal(providerCalls, 0, "invalid provider identity/capability receives no source text");
 });
 
 test("chunkMarkdown rejects coercive source envelopes before derived publication", async () => {
@@ -456,12 +596,16 @@ test("verified generations remain read-only and never create WAL/SHM sidecars", 
     assert.equal((await stat(built.database_path)).mode & 0o777, 0o600);
     assert.equal((await stat(built.pointer_path)).mode & 0o777, 0o600);
     await chmod(state, 0o777);
-    await chmod(built.database_path, 0o666);
+    assert.throws(() => buildRetrievalGeneration(input), /STATE_DIRECTORY_PERMISSION_REJECTED/);
+    await chmod(state, 0o700);
     await chmod(built.pointer_path, 0o666);
+    assert.throws(() => buildRetrievalGeneration(input), /STATE_WRITER_PERMISSION_REJECTED/);
+    await chmod(built.pointer_path, 0o600);
+    await chmod(built.database_path, 0o666);
     buildRetrievalGeneration(input);
-    assert.equal((await stat(state)).mode & 0o777, 0o700, "existing state mode is repaired");
+    assert.equal((await stat(state)).mode & 0o777, 0o700, "valid state mode is retained");
     assert.equal((await stat(built.database_path)).mode & 0o777, 0o600, "existing database mode is repaired");
-    assert.equal((await stat(built.pointer_path)).mode & 0o777, 0o600, "existing pointer mode is repaired");
+    assert.equal((await stat(built.pointer_path)).mode & 0o777, 0o600, "valid pointer mode is retained");
   }
   assert.equal(existsSync(`${built.database_path}-wal`), false);
   assert.equal(existsSync(`${built.database_path}-shm`), false);
@@ -535,6 +679,39 @@ test("state path comparison is platform-sensitive and parent-directory aliases a
   assert.throws(() => new RetrievalCoordinator(join(aliasState, basename(built.database_path)), coordinatorOptions(root)), /DATABASE_ALIAS_REJECTED/);
   assert.throws(() => buildRetrievalGeneration(generationInput(join(aliasState, "must-not-be-created", "state"), chunks)), /STATE_ANCESTOR_ALIAS_REJECTED/);
   await assert.rejects(access(join(actualState, "must-not-be-created")));
+});
+
+test("index preflight rejects unsafe state aliases and pointer hardlinks before provider work", async (t) => {
+  const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-index-state-security-"));
+  const chunks = await source(root, "one", "018f0000-0000-7000-8000-000000000232", "Needle.");
+  let providerCalls = 0;
+  const provider = {
+    kind: "mcp", provider_id: "state-security", model_id: "state-security-1d", dimensions: 1, timeout_ms: 100,
+    async embed(texts) { providerCalls++; return texts.map(() => Float32Array.of(1)); },
+  };
+
+  const actualState = join(root, "actual-state");
+  const aliasState = join(root, "alias-state");
+  await mkdir(actualState);
+  try {
+    await symlink(actualState, aliasState, process.platform === "win32" ? "junction" : "dir");
+    await assert.rejects(indexRetrievalGeneration(generationInput(join(aliasState, "child"), chunks), provider), /STATE_ANCESTOR_ALIAS_REJECTED/);
+    assert.deepEqual(await readdir(actualState), [], "unsafe ancestor receives no created child");
+  } catch (error) {
+    if (["EACCES", "EINVAL", "ENOTSUP", "EPERM"].includes(error?.code)) t.diagnostic(`state alias fixture unavailable (${error.code})`);
+    else throw error;
+  }
+  assert.equal(providerCalls, 0);
+
+  const safeState = join(root, "safe-state");
+  const input = generationInput(safeState, chunks);
+  const built = buildRetrievalGeneration(input);
+  const externalPointer = join(root, "external-pointer.json");
+  await writeFile(externalPointer, await readFile(built.pointer_path));
+  await unlink(built.pointer_path);
+  await link(externalPointer, built.pointer_path);
+  await assert.rejects(indexRetrievalGeneration(input, provider), /STATE_HARDLINK_REJECTED/);
+  assert.equal(providerCalls, 0, "unsafe cache authority errors are not downgraded to cache misses");
 });
 
 test("source envelopes are uniform and mixed per-chunk policy decisions deny the whole record", async () => {
@@ -861,11 +1038,6 @@ test("verified active vectors are reused by provider/model/content digest across
   assert.deepEqual(calls.map((batch) => batch.length), [3, 1]);
   assert.match(calls[1][0], /Changed after/);
 
-  await writeFile(second.generation.pointer_path, "{corrupt active pointer", "utf8");
-  const recovered = await indexRetrievalGeneration(generationInput(state, chunksAfter, { fixture: 2 }), provider);
-  assert.equal(recovered.vector_stage.state, "active");
-  assert.deepEqual(calls.map((batch) => batch.length), [3, 1, 3], "corrupt prior state is a cache miss, not mixed or fatal");
-
   const mismatchCalls = [];
   const differentSpace = {
     ...provider, model_id: "different-cache-model",
@@ -873,6 +1045,15 @@ test("verified active vectors are reused by provider/model/content digest across
   };
   await indexRetrievalGeneration(generationInput(state, chunksAfter, { fixture: 3 }), differentSpace);
   assert.deepEqual(mismatchCalls.map((batch) => batch.length), [3]);
+
+  await writeFile(second.generation.pointer_path, "{corrupt active pointer", "utf8");
+  await assert.rejects(
+    indexRetrievalGeneration(generationInput(state, chunksAfter, { fixture: 2 }), provider),
+    /RETRIEVAL_STATE_POINTER_JSON_INVALID/,
+  );
+  assert.deepEqual(calls.map((batch) => batch.length), [3, 1],
+    "a corrupt authority pointer fails closed before cache/provider work");
+  assert.equal(await readFile(second.generation.pointer_path, "utf8"), "{corrupt active pointer");
 });
 
 test("rerank order remains the relevance input when MMR is enabled", async () => {
@@ -967,6 +1148,14 @@ test("public retrieval surface exposes only policy-gated search, never raw store
     "getChunk",
     "lexicalSearch",
     "vectorSearch",
+    "buildAuthorizedGkxRetrievalTemporalView",
+    "buildGkxRetrievalProvenance",
+    "projectGkxRetrievalCorpus",
+    "buildGkxRetrievalGeneration",
+    "indexGkxRetrievalGeneration",
+    "sealGkxRetrievalStoredSourceProvenance",
+    "validateGkxRetrievalCanonicalSourceSet",
+    "validateGkxRetrievalStoredSourceProvenance",
   ]) assert.equal(forbidden in retrievalPublic, false, `${forbidden} must not be exported`);
   assert.equal(typeof retrievalPublic.RetrievalCoordinator, "function");
   assert.equal(typeof retrievalPublic.buildRetrievalGeneration, "function");

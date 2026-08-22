@@ -5,6 +5,7 @@
  * Pure functions: runs identically in Node, the plugin iframe and the standalone page.
  */
 import type { ParsedLink } from "./types";
+import { bindParsedLinkDocumentLine, bindParsedLinkFrontmatterField } from "./markdown-receipts";
 
 export interface Frontmatter {
   [key: string]: string | string[] | undefined;
@@ -19,7 +20,6 @@ export interface ParsedMarkdown {
 }
 
 const unquote = (s: string): string => s.replace(/^['"]/, "").replace(/['"]$/, "");
-
 export function parseFrontmatter(raw: string): { data: Frontmatter; content: string } {
   // Windows editors commonly write a UTF-8 BOM; it must not break frontmatter.
   if (raw.charCodeAt(0) === 0xfeff) raw = raw.slice(1);
@@ -83,26 +83,35 @@ const looksLikeLocalRef = (v: string): boolean => {
   return Boolean(t) && !isExternal(t) && t.length < 180;
 };
 
-export function parseWikiLinks(md: string): ParsedLink[] {
+export function parseWikiLinks(md: string, baseLine = 1): ParsedLink[] {
   const out: ParsedLink[] = [];
   const re = /!?\[\[([^\]]+)\]\]/g;
   let m: RegExpExecArray | null;
+  let line = baseLine;
+  let lineCursor = 0;
   while ((m = re.exec(md))) {
+    for (; lineCursor < m.index; lineCursor++) if (md.charCodeAt(lineCursor) === 0x0a) line++;
     const inner = m[1].trim();
     const [targetPart, aliasPart] = inner.split("|");
     const [target, heading] = targetPart.split("#");
     const clean = target.trim();
     if (!clean) continue;
-    out.push({ kind: "wikilink", target: clean, raw: m[0], alias: aliasPart?.trim(), heading: heading?.trim() });
+    out.push(bindParsedLinkDocumentLine(
+      { kind: "wikilink", target: clean, raw: m[0], alias: aliasPart?.trim(), heading: heading?.trim() },
+      line,
+    ));
   }
   return out;
 }
 
-export function parseMarkdownLinks(md: string): ParsedLink[] {
+export function parseMarkdownLinks(md: string, baseLine = 1): ParsedLink[] {
   const out: ParsedLink[] = [];
   const re = /(?<!!)\[[^\]]+\]\(([^)]+)\)/g;
   let m: RegExpExecArray | null;
+  let line = baseLine;
+  let lineCursor = 0;
   while ((m = re.exec(md))) {
+    for (; lineCursor < m.index; lineCursor++) if (md.charCodeAt(lineCursor) === 0x0a) line++;
     const rawT = m[1].trim();
     if (!rawT || isExternal(rawT)) continue;
     const [target, heading] = rawT.split("#");
@@ -113,7 +122,10 @@ export function parseMarkdownLinks(md: string): ParsedLink[] {
       clean = target.trim().replace(/^<|>$/g, "");
     }
     if (!clean) continue;
-    out.push({ kind: "markdown", target: clean, raw: m[0], heading: heading?.trim() });
+    out.push(bindParsedLinkDocumentLine(
+      { kind: "markdown", target: clean, raw: m[0], heading: heading?.trim() },
+      line,
+    ));
   }
   return out;
 }
@@ -137,9 +149,15 @@ export function extractPropertyLinks(data: Frontmatter): ParsedLink[] {
   const out: ParsedLink[] = [];
   for (const key of RELATION_PROPERTIES) {
     for (const cand of collectStringValues(data[key])) {
-      const wiki = parseWikiLinks(cand).map((l) => ({ ...l, kind: "property" as const }));
+      const wiki = parseWikiLinks(cand).map((link) => {
+        const property = { ...link, kind: "property" as const };
+        return bindParsedLinkFrontmatterField(property, key);
+      });
       if (wiki.length) out.push(...wiki);
-      else if (looksLikeLocalRef(cand)) out.push({ kind: "property", target: cand, raw: cand });
+      else if (looksLikeLocalRef(cand)) {
+        const property: ParsedLink = { kind: "property", target: cand, raw: cand };
+        out.push(bindParsedLinkFrontmatterField(property, key));
+      }
     }
   }
   return out;
@@ -148,6 +166,9 @@ export function extractPropertyLinks(data: Frontmatter): ParsedLink[] {
 /** Full parse of one markdown note (frontmatter + all link kinds + tags/aliases). */
 export function parseMarkdownFile(raw: string): ParsedMarkdown {
   const { data, content } = parseFrontmatter(raw);
-  const links = [...parseWikiLinks(content), ...parseMarkdownLinks(content), ...extractPropertyLinks(data)];
+  const contentOffset = raw.length - content.length;
+  let contentLine = 1;
+  for (let index = 0; index < contentOffset; index++) if (raw.charCodeAt(index) === 0x0a) contentLine++;
+  const links = [...parseWikiLinks(content, contentLine), ...parseMarkdownLinks(content, contentLine), ...extractPropertyLinks(data)];
   return { data, content, links, tags: normalizeTags(data.tags), aliases: normalizeStringList(data.aliases) };
 }

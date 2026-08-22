@@ -1,7 +1,7 @@
 import type { GkxSensitivity } from "../types";
 import { isValidGkxTimestamp } from "../timestamps";
 import { retrievalCodeUnitCompare, stableJson } from "./digest";
-import type { RetrievalChunk, RetrievalFilters } from "./types";
+import type { RetrievalFilters, RetrievalSourcePolicyRecord } from "./types";
 
 const SENSITIVITY_ORDER: readonly GkxSensitivity[] = [
   "public", "internal", "restricted", "confidential", "regulated", "phi", "secret",
@@ -136,7 +136,7 @@ function validDate(value: string | undefined): number | null {
 
 /** Typed-only filters; no SQL fragments or executable predicates cross the contract. */
 export function matchesRetrievalFilters(
-  chunk: Readonly<RetrievalChunk>,
+  chunk: Readonly<RetrievalSourcePolicyRecord>,
   filters: Readonly<RetrievalFilters> = {},
   context?: { vault_id: string },
 ): boolean {

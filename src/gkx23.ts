@@ -10,6 +10,9 @@
 import { ENGINE_VERSION } from "./version";
 import { codeUnitCompare } from "./paths";
 import { isValidGkxTimestamp } from "./timestamps";
+import { GKX23_RELATION_TYPES } from "./gkx23-relationship-types";
+import { bindGkxProjectionValidationReceipt } from "./validation-receipts";
+import type { GkxAuthoredDeclarationIssueReceipt } from "./validation-receipts";
 import type {
   GkxAssessment,
   GkxAssessmentScores,
@@ -68,18 +71,7 @@ const LEGACY_FIELDS = new Set([
   "forked_from", "forked_to", "forked_by", "depends_on", "derives_from",
   "contradicts", "refines", "implements", "blocks", "documents", "cites", "related_to",
 ]);
-const RELATION_TYPES = [
-  "supports", "contradicts", "depends_on", "derived_from", "derives_from", "cites",
-  "quotes", "interprets", "tests", "replicates", "fails_to_replicate", "extends",
-  "narrows", "generalizes", "implements", "governed_by", "reviewed_by", "approved_by",
-  "supersedes", "superseded_by", "related_to", "part_of", "has_part",
-  // 2026-07-27 fix: these three are valid 2.3 relations (see src/gkx.ts RELATIONS
-  // and gkos-standard schemas/gkx-common.defs.json relationType enum) and were
-  // present in LEGACY_FIELDS but missing here, so splitRelations() and the flat
-  // editable-Property loop silently DROPPED any refines/blocks/documents edge
-  // projected from a 2.3 note.
-  "refines", "blocks", "documents",
-] as const;
+const RELATION_TYPES = GKX23_RELATION_TYPES;
 const INVERSES: Record<string, string> = {
   supports: "supported_by", contradicts: "contradicted_by", depends_on: "required_by",
   derived_from: "source_of", derives_from: "source_of", cites: "cited_by", quotes: "quoted_by",
@@ -151,6 +143,13 @@ export const isValidGkxTargetIdentifier = (value: unknown): value is string =>
 const SHA256 = /^sha256:[0-9a-f]{64}$/i;
 
 interface YamlLine { indent: number; text: string; line: number }
+interface ParserIssue { code: string; line: number; message: string }
+interface ParsedFrontmatterInternal {
+  data: Record<string, unknown>;
+  issues: ParserIssue[];
+  present: boolean;
+  field_lines: Record<string, number>;
+}
 
 function diagnostic(
   code: string,
@@ -163,56 +162,138 @@ function diagnostic(
   return { code, severity, field, message, deterministic: true, remediation, sourcePath };
 }
 
-function headerFromMarkdown(raw: string): { header: string | null; issue?: string } {
+function headerFromMarkdown(raw: string): { header: string | null; issue?: "unterminated" | "too-large" | "too-many-lines" } {
   const source = raw.charCodeAt(0) === 0xfeff ? raw.slice(1) : raw;
-  if (!source.startsWith("---")) return { header: null };
-  const end = source.indexOf("\n---", 3);
+  const physicalLines = source.split(/\r?\n/u);
+  if (physicalLines[0] !== "---") return { header: null };
+  const end = physicalLines.findIndex((line, index) => index > 0 && line === "---");
   if (end < 0) return { header: null, issue: "unterminated" };
-  const header = source.slice(3, end).replace(/^\r?\n/, "");
+  if (end - 1 > 4096) return { header: null, issue: "too-many-lines" };
+  const header = physicalLines.slice(1, end).join("\n");
   if (header.length > 262_144) return { header: null, issue: "too-large" };
   return { header };
+}
+
+function escapedAt(value: string, index: number): boolean {
+  let slashes = 0;
+  for (let cursor = index - 1; cursor >= 0 && value[cursor] === "\\"; cursor--) slashes++;
+  return slashes % 2 === 1;
 }
 
 function stripYamlComment(value: string): string {
   let single = false, double = false;
   for (let i = 0; i < value.length; i++) {
     const ch = value[i];
-    if (ch === "'" && !double) single = !single;
-    else if (ch === '"' && !single && value[i - 1] !== "\\") double = !double;
+    if (ch === "'" && !double) {
+      if (single && value[i + 1] === "'") i++;
+      else single = !single;
+    }
+    else if (ch === '"' && !single && !escapedAt(value, i)) double = !double;
     else if (ch === "#" && !single && !double && (i === 0 || /\s/.test(value[i - 1]))) return value.slice(0, i).trimEnd();
   }
   return value;
 }
 
-function splitInline(value: string): string[] {
+function splitInline(value: string): { values: string[]; valid: boolean } {
   const out: string[] = [];
-  let buf = "", single = false, double = false, depth = 0;
+  const stack: string[] = [];
+  let buf = "", single = false, double = false, valid = true, endedWithSeparator = false;
   for (let i = 0; i < value.length; i++) {
     const ch = value[i];
-    if (ch === "'" && !double) single = !single;
-    else if (ch === '"' && !single && value[i - 1] !== "\\") double = !double;
-    else if (!single && !double && (ch === "[" || ch === "{")) depth++;
-    else if (!single && !double && (ch === "]" || ch === "}")) depth--;
-    if (ch === "," && !single && !double && depth === 0) { out.push(buf.trim()); buf = ""; }
-    else buf += ch;
+    if (ch === "'" && !double) {
+      if (single && value[i + 1] === "'") { buf += "''"; i++; continue; }
+      single = !single;
+      buf += ch;
+      continue;
+    }
+    if (ch === '"' && !single && !escapedAt(value, i)) { double = !double; buf += ch; continue; }
+    if (!single && !double) {
+      if (ch === "[") stack.push("]");
+      else if (ch === "{") stack.push("}");
+      else if (ch === "]" || ch === "}") {
+        if (stack.pop() !== ch) valid = false;
+      }
+      if (ch === "," && stack.length === 0) {
+        const item = buf.trim();
+        if (!item) valid = false;
+        out.push(item);
+        buf = "";
+        endedWithSeparator = true;
+        continue;
+      }
+    }
+    buf += ch;
+    if (!/\s/u.test(ch)) endedWithSeparator = false;
   }
-  if (buf.trim()) out.push(buf.trim());
-  return out;
+  const tail = buf.trim();
+  if (tail) out.push(tail);
+  else if (value.trim() && !endedWithSeparator) valid = false;
+  return { values: out, valid: valid && !single && !double && stack.length === 0 };
 }
 
-function scalar(raw: string): unknown {
+function scalar(raw: string, line: number, issues: ParserIssue[], depth = 0): unknown {
+  if (depth > 64) {
+    issues.push({ code: "GKX_YAML_NESTING_LIMIT", line, message: "Inline YAML nesting exceeds 64 levels." });
+    return null;
+  }
   const value = stripYamlComment(raw).trim();
   if (!value || value === "null" || value === "~") return null;
   if (value === "true") return true;
   if (value === "false") return false;
-  if (/^-?(?:0|[1-9]\d*)(?:\.\d+)?$/.test(value)) return Number(value);
+  if (/^-?(?:0|[1-9]\d*)(?:\.\d+)?$/.test(value)) {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) return parsed;
+    issues.push({ code: "GKX_YAML_NUMBER_NONFINITE", line, message: "YAML numeric scalar is outside the finite number range." });
+    return null;
+  }
+  if (/^(?:[+-]?(?:(?:\d+(?:\.\d*)?|\.\d+)[eE][+-]?\d+|\.inf|\.nan|0[xob][0-9a-f_]+|\d[\d_]*(?:\.[\d_]*)?)|nan|inf)$/iu.test(value)) {
+    issues.push({ code: "GKX_YAML_NUMBER_UNSUPPORTED", line, message: "Unsupported or non-finite YAML numeric scalar." });
+    return null;
+  }
   if (value === "[]") return [];
   if (value === "{}") return {};
-  if (value.startsWith("[") && value.endsWith("]")) return splitInline(value.slice(1, -1)).map(scalar);
-  if (value.startsWith('"') && value.endsWith('"')) {
-    try { return JSON.parse(value); } catch { return value.slice(1, -1); }
+  // Preserve the historical raw-frontmatter shape for YAML-valid spaced
+  // empty mappings.  Existing projection consumers already treat that scalar
+  // as an empty record; normalizing it here would change Phase0-2 bytes.
+  if (/^\{\s+\}$/u.test(value)) return value;
+  if (value.startsWith("[") && value.endsWith("]")) {
+    const inline = splitInline(value.slice(1, -1));
+    if (!inline.valid) {
+      issues.push({ code: "GKX_YAML_FLOW_INVALID", line, message: "Malformed inline YAML sequence." });
+      return [];
+    }
+    return inline.values.map((item) => scalar(item, line, issues, depth + 1));
   }
-  if (value.startsWith("'") && value.endsWith("'")) return value.slice(1, -1).replace(/''/g, "'");
+  if (value.startsWith("[") || value.endsWith("]") || value.startsWith("{") || value.endsWith("}")) {
+    issues.push({ code: "GKX_YAML_FLOW_INVALID", line, message: "Malformed or unsupported YAML flow value." });
+    return null;
+  }
+  if (value.startsWith('"') && value.endsWith('"')) {
+    try { return JSON.parse(value); } catch {
+      issues.push({ code: "GKX_YAML_QUOTE_INVALID", line, message: "Malformed double-quoted YAML scalar." });
+      return null;
+    }
+  }
+  if (value.startsWith("'") && value.endsWith("'")) {
+    const inner = value.slice(1, -1);
+    for (let index = 0; index < inner.length; index++) {
+      if (inner[index] !== "'") continue;
+      if (inner[index + 1] !== "'") {
+        issues.push({ code: "GKX_YAML_QUOTE_INVALID", line, message: "Malformed single-quoted YAML scalar." });
+        return null;
+      }
+      index++;
+    }
+    return inner.replace(/''/g, "'");
+  }
+  if (value.startsWith("'") || value.endsWith("'") || value.startsWith('"') || value.endsWith('"')) {
+    issues.push({ code: "GKX_YAML_QUOTE_INVALID", line, message: "Malformed quoted YAML scalar." });
+    return null;
+  }
+  if (/^(?:&|\*|!|---$|\.\.\.$)/u.test(value)) {
+    issues.push({ code: "GKX_YAML_FEATURE_UNSUPPORTED", line, message: "Executable or multi-document YAML features are unsupported." });
+    return null;
+  }
   return value;
 }
 
@@ -221,35 +302,83 @@ function keyValue(text: string): { key: string; rest: string } | null {
   return m ? { key: m[1], rest: m[2] ?? "" } : null;
 }
 
-function parseBlock(lines: YamlLine[], start: number, indent: number, issues: Array<{ line: number; message: string }>): { value: unknown; next: number } {
+function isSafeYamlKey(key: string): boolean {
+  return key !== "__proto__" && key !== "prototype" && key !== "constructor";
+}
+
+function pointerFor(path: readonly string[]): string {
+  return path.length === 0 ? "" : `/${path.map((segment) => segment.replace(/~/g, "~0").replace(/\//g, "~1")).join("/")}`;
+}
+
+function recordLocation(locations: Map<string, number>, path: readonly string[], line: number): void {
+  locations.set(pointerFor(path), line);
+}
+
+function fieldLineRecord(locations: ReadonlyMap<string, number> = new Map()): Record<string, number> {
+  const out = Object.create(null) as Record<string, number>;
+  for (const [pointer, line] of locations) out[pointer] = line;
+  return out;
+}
+
+function setSafe(target: Record<string, unknown>, key: string, value: unknown, line: number, issues: ParserIssue[]): void {
+  if (!isSafeYamlKey(key)) {
+    issues.push({ code: "GKX_YAML_KEY_UNSAFE", line, message: "Unsafe YAML mapping key is not allowed." });
+    return;
+  }
+  Object.defineProperty(target, key, { configurable: true, enumerable: true, writable: true, value });
+}
+
+function parseBlock(
+  lines: YamlLine[],
+  start: number,
+  indent: number,
+  issues: ParserIssue[],
+  fieldLocations: Map<string, number>,
+  parentPath: readonly string[] = [],
+  depth = 0,
+): { value: unknown; next: number } {
+  if (depth > 64) {
+    issues.push({ code: "GKX_YAML_NESTING_LIMIT", line: lines[start]?.line ?? 1, message: "Frontmatter nesting exceeds 64 levels." });
+    return { value: null, next: lines.length };
+  }
   const arrayMode = lines[start]?.indent === indent && lines[start].text.startsWith("-");
   if (arrayMode) {
     const out: unknown[] = [];
     let i = start;
     while (i < lines.length && lines[i].indent === indent && lines[i].text.startsWith("-")) {
+      const itemIndex = out.length;
+      recordLocation(fieldLocations, [...parentPath, String(itemIndex)], lines[i].line);
       const itemText = lines[i].text.replace(/^-\s?/, "").trim();
       i++;
       const first = keyValue(itemText);
       if (!itemText) {
-        if (i < lines.length && lines[i].indent > indent) { const child = parseBlock(lines, i, lines[i].indent, issues); out.push(child.value); i = child.next; }
+        if (i < lines.length && lines[i].indent > indent) { const child = parseBlock(lines, i, lines[i].indent, issues, fieldLocations, [...parentPath, String(itemIndex)], depth + 1); out.push(child.value); i = child.next; }
         else out.push(null);
       } else if (first) {
         const obj: Record<string, unknown> = {};
-        if (first.rest) obj[first.key] = scalar(first.rest);
-        else if (i < lines.length && lines[i].indent > indent) { const child = parseBlock(lines, i, lines[i].indent, issues); obj[first.key] = child.value; i = child.next; }
-        else obj[first.key] = null;
+        const itemPath = [...parentPath, String(itemIndex), first.key];
+        if (isSafeYamlKey(first.key)) recordLocation(fieldLocations, itemPath, lines[i - 1].line);
+        if (first.rest) setSafe(obj, first.key, scalar(first.rest, lines[i - 1].line, issues), lines[i - 1].line, issues);
+        else if (i < lines.length && lines[i].indent > indent) {
+          const nestedLocations = isSafeYamlKey(first.key) ? fieldLocations : new Map<string, number>();
+          const child = parseBlock(lines, i, lines[i].indent, issues, nestedLocations, isSafeYamlKey(first.key) ? itemPath : [], depth + 1);
+          setSafe(obj, first.key, child.value, lines[i - 1].line, issues);
+          i = child.next;
+        }
+        else setSafe(obj, first.key, null, lines[i - 1].line, issues);
         if (i < lines.length && lines[i].indent > indent) {
-          const child = parseBlock(lines, i, lines[i].indent, issues);
-          if (child.value && typeof child.value === "object" && !Array.isArray(child.value)) Object.assign(obj, child.value);
-          else issues.push({ line: lines[i].line, message: "A mapping list item has a non-mapping continuation." });
+          const child = parseBlock(lines, i, lines[i].indent, issues, fieldLocations, [...parentPath, String(itemIndex)], depth + 1);
+          if (child.value && typeof child.value === "object" && !Array.isArray(child.value)) {
+            for (const [key, value] of Object.entries(child.value)) setSafe(obj, key, value, lines[i].line, issues);
+          } else issues.push({ code: "GKX_YAML_LIST_MAPPING_CONTINUATION", line: lines[i].line, message: "A mapping list item has a non-mapping continuation." });
           i = child.next;
         }
         out.push(obj);
       } else {
-        out.push(scalar(itemText));
+        out.push(scalar(itemText, lines[i - 1].line, issues));
         if (i < lines.length && lines[i].indent > indent) {
-          issues.push({ line: lines[i].line, message: "A scalar list item has an unexpected nested continuation." });
-          const child = parseBlock(lines, i, lines[i].indent, issues); i = child.next;
+          issues.push({ code: "GKX_YAML_LIST_SCALAR_CONTINUATION", line: lines[i].line, message: "A scalar list item has an unexpected nested continuation." });
+          const child = parseBlock(lines, i, lines[i].indent, issues, fieldLocations, [...parentPath, String(itemIndex)], depth + 1); i = child.next;
         }
       }
     }
@@ -260,43 +389,74 @@ function parseBlock(lines: YamlLine[], start: number, indent: number, issues: Ar
   let i = start;
   while (i < lines.length && lines[i].indent === indent && !lines[i].text.startsWith("-")) {
     const entry = keyValue(lines[i].text);
-    if (!entry) { issues.push({ line: lines[i].line, message: "Unsupported YAML mapping line." }); i++; continue; }
+    if (!entry) { issues.push({ code: "GKX_YAML_MAPPING_UNSUPPORTED", line: lines[i].line, message: "Unsupported YAML mapping line." }); i++; continue; }
+    const entryLine = lines[i].line;
+    const entryPath = [...parentPath, entry.key];
+    if (isSafeYamlKey(entry.key)) recordLocation(fieldLocations, entryPath, entryLine);
     i++;
-    if (Object.prototype.hasOwnProperty.call(out, entry.key)) issues.push({ line: lines[i - 1].line, message: `Duplicate key ${entry.key}.` });
-    if (entry.rest) out[entry.key] = scalar(entry.rest);
-    else if (i < lines.length && lines[i].indent > indent) { const child = parseBlock(lines, i, lines[i].indent, issues); out[entry.key] = child.value; i = child.next; }
+    if (Object.prototype.hasOwnProperty.call(out, entry.key)) issues.push({ code: "GKX_YAML_DUPLICATE_KEY", line: lines[i - 1].line, message: `Duplicate key ${entry.key}.` });
+    if (entry.rest) setSafe(out, entry.key, scalar(entry.rest, entryLine, issues), entryLine, issues);
+    else if (i < lines.length && lines[i].indent > indent) {
+      const nestedLocations = isSafeYamlKey(entry.key) ? fieldLocations : new Map<string, number>();
+      const child = parseBlock(lines, i, lines[i].indent, issues, nestedLocations, isSafeYamlKey(entry.key) ? entryPath : [], depth + 1);
+      setSafe(out, entry.key, child.value, entryLine, issues);
+      i = child.next;
+    }
     // Same-indent block sequence: a `- ` list whose items sit at the SAME
     // indent as the mapping key (standard YAML; Obsidian emits this). Only
     // valid when the key had no inline value and the next line at this indent
     // begins a sequence item. parseBlock's array loop terminates on the next
     // non-`-` line at this indent, so a following `key:` still ends the list.
-    else if (i < lines.length && lines[i].indent === indent && lines[i].text.startsWith("-")) { const child = parseBlock(lines, i, indent, issues); out[entry.key] = child.value; i = child.next; }
-    else out[entry.key] = null;
+    else if (i < lines.length && lines[i].indent === indent && lines[i].text.startsWith("-")) {
+      const nestedLocations = isSafeYamlKey(entry.key) ? fieldLocations : new Map<string, number>();
+      const child = parseBlock(lines, i, indent, issues, nestedLocations, isSafeYamlKey(entry.key) ? entryPath : [], depth + 1);
+      setSafe(out, entry.key, child.value, entryLine, issues);
+      i = child.next;
+    }
+    else setSafe(out, entry.key, null, entryLine, issues);
   }
   return { value: out, next: i };
 }
 
-/** Parse the non-executable YAML subset used by the GKX v2.3 profile. */
-export function parseGkx23Frontmatter(raw: string): { data: Record<string, unknown>; issues: Array<{ line: number; message: string }>; present: boolean } {
+function parseGkx23FrontmatterInternal(raw: string): ParsedFrontmatterInternal {
   const bounded = headerFromMarkdown(raw);
-  if (!bounded.header) return {
-    data: {}, present: false,
-    issues: bounded.issue ? [{ line: 1, message: bounded.issue === "too-large" ? "Frontmatter exceeds 256 KiB." : "Frontmatter is unterminated." }] : [],
+  if (bounded.header === null) return {
+    data: {}, present: false, field_lines: fieldLineRecord(),
+    issues: bounded.issue ? [{
+      code: bounded.issue === "too-large" ? "GKX_FRONTMATTER_SIZE_LIMIT" : bounded.issue === "too-many-lines" ? "GKX_FRONTMATTER_LINE_LIMIT" : "GKX_FRONTMATTER_UNTERMINATED",
+      line: 1,
+      message: bounded.issue === "too-large" ? "Frontmatter exceeds 256 KiB." : bounded.issue === "too-many-lines" ? "Frontmatter exceeds 4096 physical lines." : "Frontmatter is unterminated.",
+    }] : [],
   };
-  const issues: Array<{ line: number; message: string }> = [];
+  const issues: ParserIssue[] = [];
+  const fieldLocations = new Map<string, number>();
   const lines: YamlLine[] = [];
   for (const [index, rawLine] of bounded.header.split(/\r?\n/).entries()) {
     if (!rawLine.trim() || rawLine.trimStart().startsWith("#")) continue;
-    if (/\t/.test(rawLine.match(/^\s*/)?.[0] ?? "")) { issues.push({ line: index + 2, message: "Tabs are not allowed for YAML indentation." }); continue; }
+    if (/\t/.test(rawLine.match(/^\s*/)?.[0] ?? "")) { issues.push({ code: "GKX_YAML_INDENT_TAB", line: index + 2, message: "Tabs are not allowed for YAML indentation." }); continue; }
     const indent = rawLine.match(/^ */)?.[0].length ?? 0;
     lines.push({ indent, text: rawLine.trim(), line: index + 2 });
   }
-  if (lines.length > 4096) return { data: {}, present: true, issues: [{ line: 1, message: "Frontmatter exceeds 4096 logical lines." }] };
-  if (!lines.length) return { data: {}, present: true, issues };
-  if (lines[0].indent !== 0) issues.push({ line: lines[0].line, message: "Top-level frontmatter must start at indentation zero." });
-  const parsed = parseBlock(lines, 0, lines[0].indent, issues);
-  if (parsed.next < lines.length) issues.push({ line: lines[parsed.next].line, message: "Unparsed YAML content remains." });
-  return { data: parsed.value && typeof parsed.value === "object" && !Array.isArray(parsed.value) ? parsed.value as Record<string, unknown> : {}, present: true, issues };
+  if (!lines.length) return { data: {}, present: true, field_lines: fieldLineRecord(), issues };
+  if (lines[0].indent !== 0) issues.push({ code: "GKX_YAML_TOP_LEVEL_INDENT", line: lines[0].line, message: "Top-level frontmatter must start at indentation zero." });
+  const parsed = parseBlock(lines, 0, lines[0].indent, issues, fieldLocations);
+  if (parsed.next < lines.length) issues.push({ code: "GKX_YAML_UNPARSED_CONTENT", line: lines[parsed.next].line, message: "Unparsed YAML content remains." });
+  return {
+    data: parsed.value && typeof parsed.value === "object" && !Array.isArray(parsed.value) ? parsed.value as Record<string, unknown> : {},
+    present: true,
+    issues,
+    field_lines: fieldLineRecord(fieldLocations),
+  };
+}
+
+/** Parse the non-executable YAML subset used by the GKX v2.3 profile. */
+export function parseGkx23Frontmatter(raw: string): { data: Record<string, unknown>; issues: Array<{ line: number; message: string }>; present: boolean } {
+  const parsed = parseGkx23FrontmatterInternal(raw);
+  return {
+    data: parsed.data,
+    issues: parsed.issues.map(({ line, message }) => ({ line, message })),
+    present: parsed.present,
+  };
 }
 
 const record = (v: unknown): Record<string, unknown> => v && typeof v === "object" && !Array.isArray(v) ? v as Record<string, unknown> : {};
@@ -508,9 +668,149 @@ export function assessGkx23(projection: GkxProjection): GkxAssessment {
   };
 }
 
+export interface Gkx23CanonicalBuildResult {
+  projection: GkxProjection | undefined;
+  receipt: {
+    applicable: true;
+    present: boolean;
+    field_lines: Record<string, number>;
+    negative_zero_fields: string[];
+    issues: Array<{ code: string; line: number }>;
+    invalid_declarations: GkxAuthoredDeclarationIssueReceipt[];
+  };
+}
+
+function receiptPointerSegment(value: string): string {
+  return value.replace(/~/gu, "~0").replace(/\//gu, "~1");
+}
+
+function negativeZeroFieldPointers(value: unknown, path: readonly string[] = [], out: string[] = []): string[] {
+  if (typeof value === "number" && Object.is(value, -0)) {
+    out.push(`/${path.map(receiptPointerSegment).join("/")}`);
+  } else if (Array.isArray(value)) {
+    value.forEach((item, index) => negativeZeroFieldPointers(item, [...path, String(index)], out));
+  } else if (value !== null && typeof value === "object") {
+    for (const [key, item] of Object.entries(value as Record<string, unknown>)) {
+      negativeZeroFieldPointers(item, [...path, key], out);
+    }
+  }
+  return out.sort(codeUnitCompare);
+}
+
+function authoredDeclarationIssueReceipts(
+  data: Record<string, unknown>,
+  fieldLines: Readonly<Record<string, number>>,
+): GkxAuthoredDeclarationIssueReceipt[] {
+  const issues: GkxAuthoredDeclarationIssueReceipt[] = [];
+  const relationTypes = new Set<string>(RELATION_TYPES);
+  const lineAt = (base: string, index: number, array: boolean): number => {
+    const line = fieldLines[array ? `${base}/${index}` : base] ?? fieldLines[base];
+    if (!Number.isSafeInteger(line) || line <= 0) throw new Error("GKX_CANONICAL_DECLARATION_LOCATION_MISSING");
+    return line;
+  };
+  const slots = (value: unknown): Array<[number, unknown]> => Array.isArray(value)
+    ? value.length === 0 ? [] : [...value.entries()]
+    : [[0, value]];
+  const validTarget = (item: unknown): boolean => {
+    const target = relationTarget(item);
+    return target !== null && target.length <= 512 && !/[\u0000-\u001f\u007f]/u.test(target);
+  };
+  const validRelationshipItem = (item: unknown): boolean => {
+    if (typeof item === "string") return validTarget(item);
+    if (item === null || typeof item !== "object" || Array.isArray(item)) return false;
+    const object = item as Record<string, unknown>;
+    const keys = Object.keys(object);
+    if (keys.some((key) => !["target", "target_uid", "uid", "origin"].includes(key))) return false;
+    const targetKeys = ["target", "target_uid", "uid"].filter((key) => Object.hasOwn(object, key));
+    if (targetKeys.length !== 1 || typeof object[targetKeys[0]] !== "string") return false;
+    if (Object.hasOwn(object, "origin") && !["authored", "derived", "proposed", "approved"].includes(object.origin as string)) return false;
+    return validTarget(item);
+  };
+  const inspect = (category: "lineage" | "relationship", field: string, base: string, value: unknown, forceInvalid = false): void => {
+    const entries = slots(value);
+    if (entries.length === 0 && forceInvalid) {
+      issues.push({ category, field, declaration_index: 0, indexed: false, line: lineAt(base, 0, false) });
+      return;
+    }
+    for (const [declaration_index, item] of entries) {
+      if (!forceInvalid && validRelationshipItem(item)) continue;
+      issues.push({ category, field, declaration_index, indexed: Array.isArray(value),
+        line: lineAt(base, declaration_index, Array.isArray(value)) });
+    }
+  };
+  const inspectScalarLineage = (field: "supersedes" | "superseded_by", base: string, value: unknown): void => {
+    if (!Array.isArray(value) && typeof value === "string" && validTarget(value)) return;
+    const entries = Array.isArray(value) && value.length > 0 ? [...value.entries()] : [[0, value] as [number, unknown]];
+    for (const [declaration_index] of entries) {
+      issues.push({ category: "lineage", field, declaration_index, indexed: Array.isArray(value),
+        line: lineAt(base, declaration_index, Array.isArray(value)) });
+    }
+  };
+
+  for (const type of RELATION_TYPES) {
+    if (!Object.hasOwn(data, type)) continue;
+    inspect(type === "supersedes" || type === "superseded_by" ? "lineage" : "relationship",
+      type === "supersedes" || type === "superseded_by" ? type : `relationships.${type}`,
+      `/${receiptPointerSegment(type)}`, data[type]);
+  }
+  const relationships = record(data.relationships);
+  if (Object.hasOwn(data, "relationships") &&
+      (data.relationships === null || typeof data.relationships !== "object" || Array.isArray(data.relationships))) {
+    issues.push({ category: "relationship", field: "relationships", declaration_index: 0, indexed: false,
+      line: lineAt("/relationships", 0, false) });
+  } else if (data.relationships !== null && typeof data.relationships === "object" && !Array.isArray(data.relationships)) {
+    for (const [type, value] of Object.entries(relationships)) {
+      const known = relationTypes.has(type);
+      inspect(type === "supersedes" || type === "superseded_by" ? "lineage" : "relationship",
+        known && type !== "supersedes" && type !== "superseded_by" ? `relationships.${type}`
+          : known ? type : "relationships",
+        `/relationships/${receiptPointerSegment(type)}`, value, !known);
+    }
+  }
+  const lineage = record(data.lineage);
+  if (data.lineage !== null && typeof data.lineage === "object" && !Array.isArray(data.lineage)) {
+    for (const field of ["predecessor_uid", "successor_uid"] as const) {
+      if (!Object.hasOwn(lineage, field)) continue;
+      inspectScalarLineage(field === "predecessor_uid" ? "supersedes" : "superseded_by", `/lineage/${field}`, lineage[field]);
+    }
+  }
+  return issues.sort((left, right) => left.line - right.line || codeUnitCompare(left.category, right.category) ||
+    codeUnitCompare(left.field, right.field) || left.declaration_index - right.declaration_index);
+}
+
+/** Package-private canonical-record path. Entry-point exports keep it sealed. */
+export function buildGkx23ProjectionForCanonicalRecord(
+  raw: string,
+  sourcePath: string,
+  contentHash: string,
+  legacy: GkxData | null,
+  options: Gkx23ProjectionOptions = {},
+): Gkx23CanonicalBuildResult {
+  const parsed = parseGkx23FrontmatterInternal(raw);
+  const receipt = {
+    applicable: true as const,
+    present: parsed.present,
+    field_lines: fieldLineRecord(new Map(Object.entries(parsed.field_lines))),
+    negative_zero_fields: negativeZeroFieldPointers(parsed.data),
+    issues: parsed.issues.map(({ code, line }) => ({ code, line })),
+    invalid_declarations: authoredDeclarationIssueReceipts(parsed.data, parsed.field_lines),
+  };
+  return { projection: buildGkx23ProjectionFromParsed(parsed, raw, sourcePath, contentHash, legacy, options), receipt };
+}
+
 /** Build an origin-preserving projection for canonical v2.3 and legacy notes. */
 export function buildGkx23Projection(raw: string, sourcePath: string, contentHash: string, legacy: GkxData | null, options: Gkx23ProjectionOptions = {}): GkxProjection | undefined {
-  const parsed = parseGkx23Frontmatter(raw);
+  return buildGkx23ProjectionForCanonicalRecord(raw, sourcePath, contentHash, legacy, options).projection;
+}
+
+function buildGkx23ProjectionFromParsed(
+  parsed: ParsedFrontmatterInternal,
+  raw: string,
+  sourcePath: string,
+  contentHash: string,
+  legacy: GkxData | null,
+  options: Gkx23ProjectionOptions,
+): GkxProjection | undefined {
   const data = parsed.data;
   const version = text(data.gkx_version);
   if (!parsed.present && !legacy) return undefined;
@@ -699,6 +999,14 @@ export function buildGkx23Projection(raw: string, sourcePath: string, contentHas
     diagnostics, assessment: undefined as never,
   };
   projection.assessment = assessGkx23(projection);
+  bindGkxProjectionValidationReceipt(projection, {
+    applicable: true,
+    present: parsed.present,
+    field_lines: parsed.field_lines,
+    negative_zero_fields: negativeZeroFieldPointers(parsed.data),
+    issues: parsed.issues.map(({ code, line }) => ({ code, line })),
+    invalid_declarations: authoredDeclarationIssueReceipts(parsed.data, parsed.field_lines),
+  });
   return projection;
 }
 

@@ -17,7 +17,7 @@
  * degrades gracefully: offending edges are kept or dropped as documented
  * below, never by silently destroying the rest of the graph.
  */
-import type { LineageModel, LineageWarning } from "./types";
+import type { GkxOrigin, LineageModel, LineageWarning } from "./types";
 
 export interface LineageInput {
   /** Node id (e.g. "file:Ideas/Engine v2.md"). */
@@ -27,52 +27,77 @@ export interface LineageInput {
   /** Raw declared references, as authored. */
   declaredSupersedes: string[];
   declaredSupersededBy: string[];
+  /** Origin-parallel arrays used by canonical projection adapters. */
+  declaredSupersedesOrigins?: GkxOrigin[];
+  declaredSupersededByOrigins?: GkxOrigin[];
   /** valid_at in ms (already computed from GKX timestamp or fallback). */
   validAtMs: number | null;
 }
 
-export type LineageRefResolver = (ref: string) => { id?: string; ambiguous: boolean };
+export interface LineageResolutionContext {
+  sourceId: string;
+  field: "supersedes" | "superseded_by";
+  origin: GkxOrigin;
+  declarationIndex: number;
+}
+
+export interface LineageResolutionReceipt extends LineageResolutionContext {
+  rawReference: string;
+  resolvedId?: string;
+  status: "resolved" | "unresolved" | "ambiguous" | "self";
+  duplicate: boolean;
+}
+
+export type LineageRefResolver = (
+  ref: string,
+  context?: LineageResolutionContext,
+) => { id?: string; ambiguous: boolean };
 
 export function normalizeLineage(
   inputs: LineageInput[],
-  resolveRef: LineageRefResolver
+  resolveRef: LineageRefResolver,
+  onReceipt?: (receipt: LineageResolutionReceipt) => void,
 ): LineageModel {
   const warnings: LineageWarning[] = [];
   const edgeKeys = new Set<string>();
   const edges: Array<{ newer: string; older: string }> = [];
   const byId = new Map(inputs.map((n) => [n.id, n]));
 
-  const addEdge = (newer: string, older: string, declaredBy: LineageInput, field: string): void => {
+  const addEdge = (newer: string, older: string, declaredBy: LineageInput, field: string): boolean => {
     if (newer === older) {
       warnings.push({
         code: "self-supersession",
         nodeId: declaredBy.id,
         message: `"${declaredBy.label}" declares itself in ${field}; ignored`,
       });
-      return;
+      return false;
     }
     const key = `${newer}${older}`;
     if (edgeKeys.has(key)) {
       // The same canonical edge declared twice (e.g. both sides authored, or a
       // repeated list entry). That is valid authoring — only warn when the
       // duplicate came from the SAME note's same field twice.
-      return;
+      return true;
     }
     edgeKeys.add(key);
     edges.push({ newer, older });
+    return true;
   };
 
   for (const n of inputs) {
     // supersedes: this note is NEWER; each ref is an OLDER note.
     const seenHere = new Set<string>();
-    for (const ref of n.declaredSupersedes) {
-      const r = resolveRef(ref);
+    for (const [declarationIndex, ref] of n.declaredSupersedes.entries()) {
+      const origin = n.declaredSupersedesOrigins?.[declarationIndex] ?? "authored";
+      const context: LineageResolutionContext = { sourceId: n.id, field: "supersedes", origin, declarationIndex };
+      const r = resolveRef(ref, context);
       if (r.ambiguous) {
         warnings.push({
           code: "ambiguous-resolution",
           nodeId: n.id,
           message: `"${n.label}" supersedes "${ref}" which matches multiple notes; no lineage edge was projected`,
         });
+        onReceipt?.({ ...context, rawReference: ref, status: "ambiguous", duplicate: false });
         continue;
       }
       if (!r.id) {
@@ -81,10 +106,12 @@ export function normalizeLineage(
           nodeId: n.id,
           message: `"${n.label}" supersedes "${ref}" which does not resolve to a note`,
         });
+        onReceipt?.({ ...context, rawReference: ref, status: "unresolved", duplicate: false });
         continue;
       }
       const dupKey = `s${r.id}`;
-      if (seenHere.has(dupKey)) {
+      const duplicate = seenHere.has(dupKey);
+      if (duplicate) {
         warnings.push({
           code: "duplicate-declaration",
           nodeId: n.id,
@@ -92,17 +119,27 @@ export function normalizeLineage(
         });
       }
       seenHere.add(dupKey);
-      addEdge(n.id, r.id, n, "supersedes");
+      const edgePresent = addEdge(n.id, r.id, n, "supersedes");
+      onReceipt?.({
+        ...context,
+        rawReference: ref,
+        resolvedId: r.id,
+        status: edgePresent ? "resolved" : "self",
+        duplicate,
+      });
     }
     // superseded_by: this note is OLDER; each ref is a NEWER note.
-    for (const ref of n.declaredSupersededBy) {
-      const r = resolveRef(ref);
+    for (const [declarationIndex, ref] of n.declaredSupersededBy.entries()) {
+      const origin = n.declaredSupersededByOrigins?.[declarationIndex] ?? "authored";
+      const context: LineageResolutionContext = { sourceId: n.id, field: "superseded_by", origin, declarationIndex };
+      const r = resolveRef(ref, context);
       if (r.ambiguous) {
         warnings.push({
           code: "ambiguous-resolution",
           nodeId: n.id,
           message: `"${n.label}" superseded_by "${ref}" matches multiple notes; no lineage edge was projected`,
         });
+        onReceipt?.({ ...context, rawReference: ref, status: "ambiguous", duplicate: false });
         continue;
       }
       if (!r.id) {
@@ -111,10 +148,12 @@ export function normalizeLineage(
           nodeId: n.id,
           message: `"${n.label}" superseded_by "${ref}" does not resolve to a note`,
         });
+        onReceipt?.({ ...context, rawReference: ref, status: "unresolved", duplicate: false });
         continue;
       }
       const dupKey = `b${r.id}`;
-      if (seenHere.has(dupKey)) {
+      const duplicate = seenHere.has(dupKey);
+      if (duplicate) {
         warnings.push({
           code: "duplicate-declaration",
           nodeId: n.id,
@@ -122,7 +161,14 @@ export function normalizeLineage(
         });
       }
       seenHere.add(dupKey);
-      addEdge(r.id, n.id, n, "superseded_by");
+      const edgePresent = addEdge(r.id, n.id, n, "superseded_by");
+      onReceipt?.({
+        ...context,
+        rawReference: ref,
+        resolvedId: r.id,
+        status: edgePresent ? "resolved" : "self",
+        duplicate,
+      });
     }
   }
 
