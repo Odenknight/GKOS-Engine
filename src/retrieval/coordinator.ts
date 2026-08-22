@@ -27,6 +27,7 @@ import type {
   GkxRetrievalHit,
   GkxRetrievalProvenance,
   GkxRetrievalProjectionManifest,
+  GkxRetrievalResultChunk,
   GkxRetrievalStoredSourceProvenance,
   RerankProvider,
   RetrievalChunk,
@@ -304,12 +305,12 @@ function chunkPolicyRecord(chunk: RetrievalChunk): RetrievalChunk {
   return deeplyFreeze(JSON.parse(stableJson(record)) as RetrievalChunk);
 }
 
-function lineageResultCoordinate(
-  store: SqliteRetrievalStore,
+export function gkxRetrievalLineageResultCoordinate(
+  manifestValue: GkxRetrievalProjectionManifest,
   eligibleSources: readonly GkxRetrievalStoredSourceProvenance[],
   eligibleTemporalSources: readonly GkxRetrievalAuthorizedTemporalSource[],
 ): ResultProjectionCoordinate {
-  const manifest = store.manifest as GkxRetrievalProjectionManifest;
+  const manifest = manifestValue;
   const temporalById = new Map(eligibleTemporalSources.map((source) => [source.source_id, source]));
   const sources = eligibleSources
     .map((source) => {
@@ -358,11 +359,11 @@ function lineageResultCoordinate(
   };
 }
 
-function authorizedResultChunk(
+export function gkxRetrievalAuthorizedResultChunk(
   chunk: RetrievalChunk,
   eligibleById: ReadonlyMap<string, RetrievalChunk>,
   temporal?: Readonly<GkxRetrievalAuthorizedTemporalSource>,
-): RetrievalChunk {
+): GkxRetrievalResultChunk {
   // Phase 1 has no authorized endpoint resolver. Return only source-local,
   // non-relationship metadata; suppress all unknown keys, MOC/relationship
   // fields, and author-agent identifiers until their endpoints are separately
@@ -374,6 +375,7 @@ function authorizedResultChunk(
     ...(parentChunkId && eligibleById.has(parentChunkId) ? { parent_chunk_id: parentChunkId } : {}),
     valid_from: temporal ? temporal.valid_from : chunk.valid_from,
     valid_to: temporal ? temporal.valid_to : chunk.valid_to,
+    lineage_id: null,
     supersedes: temporal ? [...temporal.supersedes] : [],
     superseded_by: temporal ? [...temporal.superseded_by] : [],
     metadata,
@@ -381,10 +383,14 @@ function authorizedResultChunk(
 }
 
 function querySpans(query: string, chunk: RetrievalChunk, liveBytes: Uint8Array): SourceCitation["matched_spans"] {
+  // Preserve the frozen coordinator boundary: take one owned snapshot before
+  // extracting any spans so a caller-backed or shared view cannot change
+  // underneath synchronous citation construction.
+  const liveBuffer = Buffer.from(liveBytes);
   return lexicalCitationSpans(chunk.text, query).flatMap((span) => {
     const start = chunk.start_byte + span.start_byte;
     const end = chunk.start_byte + span.end_byte;
-    const exact = Buffer.from(liveBytes).subarray(start, end).toString("utf8");
+    const exact = liveBuffer.subarray(start, end).toString("utf8");
     // The live digest and persisted chunk digest have already been verified;
     // retain a final exact-slice guard so no purported quotation is emitted if
     // either boundary is ever inconsistent.
@@ -392,7 +398,7 @@ function querySpans(query: string, chunk: RetrievalChunk, liveBytes: Uint8Array)
   });
 }
 
-function verifiedCitation(chunk: RetrievalChunk, query: string, bytes: Uint8Array): SourceCitation {
+export function gkxRetrievalVerifiedCitation(chunk: RetrievalChunk, query: string, bytes: Uint8Array): SourceCitation {
   return {
     source_id: chunk.source_id,
     path: chunk.source_path,
@@ -408,13 +414,13 @@ function verifiedCitation(chunk: RetrievalChunk, query: string, bytes: Uint8Arra
   };
 }
 
-interface AcceptedInterval { source_id: string; start_byte: number; end_byte: number }
+export interface GkxRetrievalAcceptedCitationInterval { source_id: string; start_byte: number; end_byte: number }
 
-function deduplicateOverlapEvidence(
+export function gkxRetrievalDeduplicateOverlapEvidence(
   citation: SourceCitation,
   chunk: RetrievalChunk,
   claimedSpans: ReadonlySet<string>,
-  acceptedIntervals: readonly AcceptedInterval[],
+  acceptedIntervals: readonly GkxRetrievalAcceptedCitationInterval[],
 ): { citation: SourceCitation; span_keys: string[] } | null {
   if (citation.matched_spans.length) {
     const unique = citation.matched_spans.filter((span) => !claimedSpans.has(`${citation.source_id}\0${span.start_byte}\0${span.end_byte}`));
@@ -807,7 +813,11 @@ export class RetrievalCoordinator {
         authorizedChunks,
         normalizedAsOf,
       );
-      resultCoordinate = lineageResultCoordinate(this.#store, temporalView.sources, temporalView.temporal_sources);
+      resultCoordinate = gkxRetrievalLineageResultCoordinate(
+        this.#store.manifest as GkxRetrievalProjectionManifest,
+        temporalView.sources,
+        temporalView.temporal_sources,
+      );
       for (const source of temporalView.sources) provenanceBySource.set(source.source_id, source);
       for (const source of temporalView.temporal_sources) temporalBySource.set(source.source_id, source);
       if (normalizedAsOf !== null) {
@@ -1014,12 +1024,12 @@ export class RetrievalCoordinator {
       };
     };
     const claimedMatchedSpans = new Set<string>();
-    const acceptedIntervals: AcceptedInterval[] = [];
+    const acceptedIntervals: GkxRetrievalAcceptedCitationInterval[] = [];
     for (const candidate of selected) {
       if (hits.length >= limit) break;
       const chunk = byId.get(candidate.chunk_id)!;
-      const evidence = deduplicateOverlapEvidence(
-        verifiedCitation(chunk, query, sourceBytes.get(chunk.source_path)!),
+      const evidence = gkxRetrievalDeduplicateOverlapEvidence(
+        gkxRetrievalVerifiedCitation(chunk, query, sourceBytes.get(chunk.source_path)!),
         chunk,
         claimedMatchedSpans,
         acceptedIntervals,
@@ -1041,7 +1051,7 @@ export class RetrievalCoordinator {
       const temporal = lineageProjection ? temporalBySource.get(chunk.source_id) : undefined;
       const storedProvenance = lineageProjection ? provenanceBySource.get(chunk.source_id) : undefined;
       if (lineageProjection && (!temporal || !storedProvenance)) throw new Error("GKX_RETRIEVAL_RESULT_PROVENANCE_MISSING");
-      const resultChunk = authorizedResultChunk(chunk, eligibleById, temporal);
+      const resultChunk = gkxRetrievalAuthorizedResultChunk(chunk, eligibleById, temporal);
       const provenance = lineageProjection
         ? buildGkxRetrievalProvenance(storedProvenance!, resultChunk, temporal!, normalizedAsOf)
         : undefined;
@@ -1049,9 +1059,9 @@ export class RetrievalCoordinator {
       if (request.parent_expansion && chunk.token_count < parentExpansionMaxChildTokens && chunk.parent_chunk_id) {
         const parent = eligibleById.get(chunk.parent_chunk_id);
         if (parent && Buffer.byteLength(parent.text, "utf8") <= (this.#options.max_parent_bytes ?? 8192)) {
-          const parentCitation = verifiedCitation(parent, "", sourceBytes.get(parent.source_path)!);
+          const parentCitation = gkxRetrievalVerifiedCitation(parent, "", sourceBytes.get(parent.source_path)!);
           const parentTemporal = lineageProjection ? temporalBySource.get(parent.source_id) : undefined;
-          const parentResultChunk = authorizedResultChunk(parent, eligibleById, parentTemporal);
+          const parentResultChunk = gkxRetrievalAuthorizedResultChunk(parent, eligibleById, parentTemporal);
           const parentProvenance = lineageProjection
             ? buildGkxRetrievalProvenance(provenanceBySource.get(parent.source_id)!, parentResultChunk, parentTemporal!, normalizedAsOf)
             : undefined;

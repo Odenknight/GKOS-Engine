@@ -325,6 +325,35 @@ export function projectGkxRetrievalCorpus(
   attachments: readonly string[] = [],
   options: GkxRetrievalProjectionOptions = {},
 ): GkxRetrievalCorpusProjection {
+  return projectGkxRetrievalCorpusInternal(files, folders, attachments, options, false);
+}
+
+/**
+ * Trusted-host fixture projection for a sealed corpus whose validity authority
+ * must be the authored GKX `created_at`.  Unlike the ordinary filesystem
+ * adapter, this path neither requires nor fabricates a filesystem timestamp.
+ * It still performs exactly one canonical `GkxIndex.setFiles` parse pass and
+ * rejects every source that lacks a portable authored validity coordinate.
+ *
+ * This helper is intentionally not re-exported by the retrieval host/public
+ * surfaces; Phase-4's private companion verifier is its sole consumer.
+ */
+export function projectAuthoredGkxRetrievalCorpus(
+  files: readonly SourceFile[],
+  folders: readonly string[] = [],
+  attachments: readonly string[] = [],
+  options: GkxRetrievalProjectionOptions = {},
+): GkxRetrievalCorpusProjection {
+  return projectGkxRetrievalCorpusInternal(files, folders, attachments, options, true);
+}
+
+function projectGkxRetrievalCorpusInternal(
+  files: readonly SourceFile[],
+  folders: readonly string[],
+  attachments: readonly string[],
+  options: GkxRetrievalProjectionOptions,
+  authoredValidityRequired: boolean,
+): GkxRetrievalCorpusProjection {
   assertDensePlainArray(files, "GKX_RETRIEVAL_SOURCE_FILES_INVALID");
   const safeFolders = strictCanonicalPathList(folders, "GKX_RETRIEVAL_FOLDERS_INVALID");
   const safeAttachments = strictCanonicalPathList(attachments, "GKX_RETRIEVAL_ATTACHMENTS_INVALID");
@@ -349,6 +378,7 @@ export function projectGkxRetrievalCorpus(
     return [file];
   });
   const projectableCandidates = eligibleCandidates.filter((file) => {
+    if (authoredValidityRequired) return true;
     if (referenceTime !== null || finiteTime(file.createdTime) !== null || finiteTime(file.modifiedTime) !== null) return true;
     excluded.push({
       source_path: file.relativePath,
@@ -384,12 +414,15 @@ export function projectGkxRetrievalCorpus(
     if (record.intrinsic_diagnostics.some((item) => item.severity === "error" || item.severity === "critical")) {
       rejectionReasons.push("CANONICAL_PROJECTION_INVALID");
     }
-    if (typeof authoredCreatedAt === "string" && !isValidGkxTimestamp(authoredCreatedAt)) {
+    const authoredValidityAvailable = typeof authoredCreatedAt === "string" && isValidGkxTimestamp(authoredCreatedAt);
+    if (typeof authoredCreatedAt === "string" && !authoredValidityAvailable || authoredValidityRequired && !authoredValidityAvailable) {
       rejectionReasons.push("CANONICAL_VALIDITY_TIMESTAMP_NONPORTABLE");
     }
-    const validity = expectedValidityAuthority(original, authoredCreatedAt, referenceTime);
+    const validity = authoredValidityRequired && !authoredValidityAvailable
+      ? null
+      : expectedValidityAuthority(original, authoredCreatedAt, referenceTime);
     const canonicalValidFrom = record.valid_at === null ? null : isValidGkxTimestamp(record.valid_at) ? exactUtc(record.valid_at) : null;
-    if (canonicalValidFrom === null || canonicalValidFrom !== validity.expected_valid_from) {
+    if (validity === null || canonicalValidFrom === null || canonicalValidFrom !== validity.expected_valid_from) {
       rejectionReasons.push("CANONICAL_VALIDITY_BINDING_MISMATCH");
     }
     const sourceDeclarations = ledger.declarations.filter((item) => item.source_record_key === record.record_key);
@@ -441,6 +474,7 @@ export function projectGkxRetrievalCorpus(
       }, record.record_key, invalidDeclarationLocations));
       continue;
     }
+    if (validity === null) throw new Error("GKX_RETRIEVAL_AUTHORED_VALIDITY_BINDING_MISSING");
     acceptedRecordKeys.add(record.record_key);
     const assertionTime = typeof authoredCreatedAt === "string" && isValidGkxTimestamp(authoredCreatedAt)
       ? exactUtc(authoredCreatedAt)
