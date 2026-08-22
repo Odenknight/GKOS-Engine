@@ -54,7 +54,11 @@ import {
 import { bindGkxRetrievalCandidateChunks } from "./candidate-types";
 import { chunkMarkdown } from "./chunker";
 import { projectAuthoredGkxRetrievalCorpus } from "./gkx-provenance";
-import { buildGkxRetrievalGenerationUnactivated, deriveGkxRetrievalProjectionManifest } from "./sqlite-store";
+import {
+  buildGkxRetrievalGenerationUnactivated,
+  deriveGkxRetrievalProjectionManifest,
+  detectSqliteLexicalCapability,
+} from "./sqlite-store";
 import type {
   GkxRetrievalSearchResult,
   RerankProvider,
@@ -72,6 +76,9 @@ export interface RetrievalEvaluationExecutableInput {
 
 export const RETRIEVAL_EVALUATION_EXECUTION_AUTHORITY_VERSION =
   "gkx-retrieval-evaluation-execution-authority/1.0.0-draft.1" as const;
+export const RETRIEVAL_EVALUATION_SCAN_PRESENTATION_VERSION =
+  "gkos-retrieval-evaluation-scan-presentation/1.0.0-draft.1" as const;
+export const RETRIEVAL_EVALUATION_SCAN_PRESENTATION_FTS5_AVAILABLE = true as const;
 
 export interface RetrievalEvaluationExecutionAuthority {
   contract_version: typeof RETRIEVAL_EVALUATION_EXECUTION_AUTHORITY_VERSION;
@@ -88,6 +95,8 @@ export interface RetrievalEvaluationExecutionAuthority {
   ndcg_table_digest: string;
   projection_manifest_set_digest: string;
   reviewed_bundle_digest: string | null;
+  scan_presentation_contract_version: typeof RETRIEVAL_EVALUATION_SCAN_PRESENTATION_VERSION;
+  scan_presentation_fts5_available: typeof RETRIEVAL_EVALUATION_SCAN_PRESENTATION_FTS5_AVAILABLE;
   execution_authority_digest: string;
 }
 
@@ -164,7 +173,14 @@ const EXECUTION_AUTHORITY_KEYS = [
   "environment_set_digest", "baseline_digest", "fixture_catalog_digest", "source_corpus_digest",
   "fixed_provider_digest", "metric_computation_fixture_digest", "tune_priority_fixture_digest",
   "ndcg_table_digest", "projection_manifest_set_digest", "reviewed_bundle_digest",
+  "scan_presentation_contract_version", "scan_presentation_fts5_available",
   "execution_authority_digest",
+] as const;
+const EXECUTION_AUTHORITY_DIGEST_FIELDS = [
+  "golden_toml_digest", "normalized_golden_digest", "conformance_fixture_digest", "environment_set_digest",
+  "baseline_digest", "fixture_catalog_digest", "source_corpus_digest", "fixed_provider_digest",
+  "metric_computation_fixture_digest", "tune_priority_fixture_digest", "ndcg_table_digest",
+  "projection_manifest_set_digest", "reviewed_bundle_digest",
 ] as const;
 
 export function sealRetrievalEvaluationExecutionAuthority(value: unknown): RetrievalEvaluationExecutionAuthority {
@@ -174,10 +190,12 @@ export function sealRetrievalEvaluationExecutionAuthority(value: unknown): Retri
   catch { return failure("GKX_EVAL_EXECUTION_AUTHORITY_INVALID"); }
   const keys = Object.keys(item).sort();
   if (stableJson(keys) !== stableJson([...EXECUTION_AUTHORITY_KEYS].sort()) ||
-      item.contract_version !== RETRIEVAL_EVALUATION_EXECUTION_AUTHORITY_VERSION) {
+      item.contract_version !== RETRIEVAL_EVALUATION_EXECUTION_AUTHORITY_VERSION ||
+      item.scan_presentation_contract_version !== RETRIEVAL_EVALUATION_SCAN_PRESENTATION_VERSION ||
+      item.scan_presentation_fts5_available !== RETRIEVAL_EVALUATION_SCAN_PRESENTATION_FTS5_AVAILABLE) {
     failure("GKX_EVAL_EXECUTION_AUTHORITY_INVALID");
   }
-  for (const field of EXECUTION_AUTHORITY_KEYS.slice(1, -1)) {
+  for (const field of EXECUTION_AUTHORITY_DIGEST_FIELDS) {
     const coordinate = item[field];
     if ((field === "fixed_provider_digest" || field === "reviewed_bundle_digest") && coordinate === null) continue;
     if (typeof coordinate !== "string" || !EXECUTION_SHA256_RE.test(coordinate)) {
@@ -189,6 +207,53 @@ export function sealRetrievalEvaluationExecutionAuthority(value: unknown): Retri
     failure("GKX_EVAL_EXECUTION_AUTHORITY_DIGEST_INVALID");
   }
   return item;
+}
+
+function retrievalEvaluationExecutionRequiresPhysicalFts5(
+  input: RetrievalEvaluationExecutableInput,
+  operation: "eval" | "tune",
+): boolean {
+  const authority = sealRetrievalEvaluationExecutionAuthority(input.execution_authority);
+  const baseline = sealRetrievalEvaluationBaseline(input.baseline);
+  if (authority.baseline_digest !== baseline.baseline_digest ||
+      authority.environment_set_digest !== baseline.environment_set_digest ||
+      input.environment_bundle.environment_set.environment_set_digest !== baseline.environment_set_digest) {
+    failure("GKX_EVAL_EXECUTION_AUTHORITY_COORDINATE_INVALID");
+  }
+  if (operation === "eval" && baseline.base_configuration_digest !==
+      retrievalEvaluationExecutionBaseConfigurationForHost().base_configuration_digest) return false;
+  if (operation === "tune") {
+    try { assertRetrievalEvaluationTuneBaselineForHost(baseline); }
+    catch (error) {
+      if ((error as Error).message === "GKX_EVAL_TUNE_BASELINE_NEEDS_HUMAN") return false;
+      throw error;
+    }
+  }
+  return baseline.environment_set.members.some((member) => member.environment.lexical_backend === "sqlite_fts5");
+}
+
+/** Host-private deterministic test seam; the CLI never accepts a capability value. */
+export function preflightRetrievalEvaluationHostCapabilitiesWithPhysicalForTest(
+  input: RetrievalEvaluationExecutableInput,
+  operation: "eval" | "tune",
+  physicalFts5Available: boolean,
+): void {
+  if (typeof physicalFts5Available !== "boolean") failure("GKX_EVAL_EXECUTOR_FTS5_CAPABILITY_INVALID");
+  if (retrievalEvaluationExecutionRequiresPhysicalFts5(input, operation) && !physicalFts5Available) {
+    failure("GKX_EVAL_EXECUTOR_FTS5_UNAVAILABLE");
+  }
+}
+
+/** Probe all selected physical FTS requirements before any evaluation state or provider work. */
+export function preflightRetrievalEvaluationHostCapabilities(
+  input: RetrievalEvaluationExecutableInput,
+  operation: "eval" | "tune",
+): void {
+  if (!retrievalEvaluationExecutionRequiresPhysicalFts5(input, operation)) return;
+  let available = false;
+  try { available = detectSqliteLexicalCapability().fts5_available; }
+  catch { return failure("GKX_EVAL_EXECUTOR_FTS5_UNAVAILABLE"); }
+  if (!available) failure("GKX_EVAL_EXECUTOR_FTS5_UNAVAILABLE");
 }
 
 function firstDifference(left: unknown, right: unknown, path = "$ "): string {
@@ -553,6 +618,7 @@ async function createOperationStore(
   transcript: RetrievalEvaluationFixedProviderTranscript | null,
   operation: "eval" | "tune",
   stateRoot: string,
+  scanPresentationFts5Available: boolean,
 ): Promise<OperationStore> {
   const scenario = derivation.provider_scenario;
   const bothDisabled = derivation.environment_member.environment.embedding_role.state === "disabled" &&
@@ -619,7 +685,7 @@ async function createOperationStore(
     rerank_provider: replay.rerank_provider,
     lineage_view_freshness: "fresh",
     runtime_policy_digest: derivation.catalog_entry.runtime_policy_inputs.runtime_policy_inputs_digest,
-  }, observer);
+  }, observer, scanPresentationFts5Available);
   return {
     derivation,
     replay,
@@ -648,6 +714,7 @@ async function createReviewedAbsentOperationStore(input: {
   query: NormalizedRetrievalEvaluationQuery;
   axes: RetrievalEvaluationTuningAxesCoordinate;
   state_root: string;
+  scan_presentation_fts5_available: boolean;
 }): Promise<OperationStore> {
   const { derivation, transcript, query, axes } = input;
   const scenario = derivation.provider_scenario;
@@ -777,7 +844,7 @@ async function createReviewedAbsentOperationStore(input: {
     rerank_provider: replay.rerank_provider,
     lineage_view_freshness: "fresh",
     runtime_policy_digest: manifest.policy_digest,
-  }, observer);
+  }, observer, input.scan_presentation_fts5_available);
   return {
     derivation,
     replay,
@@ -825,6 +892,7 @@ async function executeReviewedAbsentPair(input: {
   present_attempts: readonly RetrievalEvaluationExecutedQueryAttempt[];
   present_metrics: ReadonlyMap<string, RetrievalEvaluationQueryMetrics>;
   state_root: string;
+  scan_presentation_fts5_available: boolean;
 }): Promise<RetrievalEvaluationExecutedQueryAttempt[]> {
   const pair = input.reviewed.temporal_noninterference_pairs[0];
   const absentCorpus = input.reviewed.temporal_absent_corpora[0];
@@ -850,6 +918,7 @@ async function executeReviewedAbsentPair(input: {
     query,
     axes: input.baseline.selected_axes,
     state_root: input.state_root,
+    scan_presentation_fts5_available: input.scan_presentation_fts5_available,
   });
   let observed: Awaited<ReturnType<typeof executeQuery>>;
   try {
@@ -892,6 +961,7 @@ async function prepareExecution(
   queries: Map<string, NormalizedRetrievalEvaluationQuery>;
   provider_transcript: RetrievalEvaluationFixedProviderTranscript | null;
   non_comparable: boolean;
+  scan_presentation_fts5_available: boolean;
 }> {
   const derived = deriveRetrievalEvaluationExecutableEnvironmentBundle(input.environment_bundle);
   const baseline = sealRetrievalEvaluationBaseline(input.baseline);
@@ -946,12 +1016,19 @@ async function prepareExecution(
       queries: new Map(baseline.normalized_golden.queries.map((query) => [query.id, query])),
       provider_transcript: transcript,
       non_comparable: true,
+      scan_presentation_fts5_available: authority.scan_presentation_fts5_available,
     };
   }
   const stores = new Map<string, OperationStore>();
   try {
     for (const derivation of derived.derivations) {
-      const store = await createOperationStore(derivation, transcript, operation, stateRoot);
+      const store = await createOperationStore(
+        derivation,
+        transcript,
+        operation,
+        stateRoot,
+        authority.scan_presentation_fts5_available,
+      );
       stores.set(derivation.vault_fixture, store);
     }
   } catch (error) {
@@ -965,6 +1042,7 @@ async function prepareExecution(
     queries: new Map(baseline.normalized_golden.queries.map((query) => [query.id, query])),
     provider_transcript: transcript,
     non_comparable: false,
+    scan_presentation_fts5_available: authority.scan_presentation_fts5_available,
   };
 }
 
@@ -978,6 +1056,7 @@ export async function executeRetrievalEvaluationEval(
   input: RetrievalEvaluationExecutableInput,
   stateRoot: string,
 ): Promise<RetrievalEvaluationEvalExecution> {
+  preflightRetrievalEvaluationHostCapabilities(input, "eval");
   const prepared = await prepareExecution(input, "eval", stateRoot);
   if (prepared.non_comparable) {
     const comparison = compareRetrievalEvaluationBaseline({
@@ -1028,6 +1107,7 @@ export async function executeRetrievalEvaluationEval(
       present_attempts: queryAttempts,
       present_metrics: metricsById,
       state_root: stateRoot,
+      scan_presentation_fts5_available: prepared.scan_presentation_fts5_available,
     });
     const metricsSet = buildRetrievalEvaluationMetricsSetForHost({
       environment_set: prepared.baseline.environment_set,
@@ -1062,6 +1142,7 @@ export async function executeRetrievalEvaluationTune(
   stateRoot: string,
 ): Promise<RetrievalEvaluationTuneExecution> {
   assertRetrievalEvaluationTuneBaselineForHost(input.baseline);
+  preflightRetrievalEvaluationHostCapabilities(input, "tune");
   const prepared = await prepareExecution(input, "tune", stateRoot);
   const axesRows = retrievalEvaluationEligibleTuningAxesForHost(prepared.baseline);
   const candidates = [];

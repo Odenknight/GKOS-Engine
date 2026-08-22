@@ -1244,6 +1244,9 @@ async function runRetrievalEvaluationCli(args) {
     }
   }
 
+  try { evaluationHost.preflightRetrievalEvaluationHostCapabilities(fixture.input, parsed.command); }
+  catch { evaluationStderr(parsed.command, "operational failure"); return 3; }
+
   let temporary;
   let outputCapability;
   try {

@@ -316,10 +316,14 @@ node bin/gkx.mjs retrieval tune --fixture ./reviewed/golden-fixture.toml \
 
 Evaluation builds an unactivated schema-3 generation inside a private temporary
 capability. It neither reads nor changes an active pointer, live configuration,
-or cache, and it never changes fixture or source bytes. A 15-field private
+or cache, and it never changes fixture or source bytes. A 17-field private
 execution-authority receipt binds the raw golden/conformance bytes and every
-semantic companion coordinate, including exact null/absence coordinates. Fixed
-embedding/reranking performs no network or credential lookup. `eval` writes
+semantic companion coordinate, including exact null/absence coordinates. Its
+versioned `scan_presentation_fts5_available = true` coordinate is deterministic
+presentation authority, not an observation of the host: lexical-scan SQL stays
+scan-only across runtimes, while a fixture that actually selects SQLite FTS5
+must pass the physical host probe before any temporary state or provider work.
+Fixed embedding/reranking performs no network or credential lookup. `eval` writes
 nothing. `tune` can publish only the selected
 minimal candidate TOML to a new output outside every protected input/state root;
 it never overwrites an existing path and uses a guarded, durable no-replace

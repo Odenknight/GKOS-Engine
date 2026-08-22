@@ -18,7 +18,11 @@ export {
   retrievalLexicalScanReasonCodes,
 } from "./coordinator";
 export { buildGkxRetrievalProvenance } from "./provenance";
-export { buildGkxRetrievalGenerationUnactivated } from "./sqlite-store";
+export {
+  buildGkxRetrievalGenerationUnactivated,
+  deriveGkxRetrievalProjectionManifest,
+  detectSqliteLexicalCapability,
+} from "./sqlite-store";
 export * from "./evaluation-fixtures";
 export * from "./evaluation-tune-priority";
 export * from "./evaluation-reviewed-result";

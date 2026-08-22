@@ -25,6 +25,8 @@ import {
 import { sealRetrievalEvaluationTunePriorityFixture } from "./evaluation-tune-priority";
 import {
   RETRIEVAL_EVALUATION_EXECUTION_AUTHORITY_VERSION,
+  RETRIEVAL_EVALUATION_SCAN_PRESENTATION_FTS5_AVAILABLE,
+  RETRIEVAL_EVALUATION_SCAN_PRESENTATION_VERSION,
   sealRetrievalEvaluationExecutionAuthority,
   type RetrievalEvaluationExecutableInput,
 } from "./evaluation-executor";
@@ -591,6 +593,8 @@ export async function openRetrievalEvaluationFixtureCapability(
     ndcg_table_digest: RETRIEVAL_EVALUATION_NDCG_TABLE.table_digest,
     projection_manifest_set_digest: projectionManifestSetDigest,
     reviewed_bundle_digest: reviewed?.reviewed_bundle_digest ?? null,
+    scan_presentation_contract_version: RETRIEVAL_EVALUATION_SCAN_PRESENTATION_VERSION,
+    scan_presentation_fts5_available: RETRIEVAL_EVALUATION_SCAN_PRESENTATION_FTS5_AVAILABLE,
   };
   const executionAuthority = sealRetrievalEvaluationExecutionAuthority({
     ...authorityMaterial,

@@ -277,10 +277,15 @@ gkx retrieval tune --fixture <golden-toml> --output <candidate-config>
 
 The CLI seals the golden parent as an owner-private capability, opens only exact
 fixed sibling companions, and revalidates every directory/file identity and
-namespace coordinate before presentation or publication. Its private 15-field
+namespace coordinate before presentation or publication. Its private 17-field
 ExecutionAuthority receipt binds raw golden/conformance hashes, normalized
 golden, environment, baseline, catalog, corpus, manifests, metric/tune/table
-coordinates, and nullable provider/reviewed coordinates. An object locator
+coordinates, nullable provider/reviewed coordinates, and the versioned literal
+scan-presentation coordinate. `scan_presentation_fts5_available = true` controls
+only deterministic lexical-scan reason bytes; it is not a host observation and
+does not change the scan manifest, schema, or SQL. A true `sqlite_fts5` fixture
+still requires the physical SQLite probe across the complete EnvironmentSet
+before temporary state, index, or provider work. An object locator
 requires the exact sibling; a null locator requires sealed absence, with no
 fallback. Execution constructs one unactivated schema-3 SQLite generation per
 environment in a sealed 0700 temporary child; it never reads or publishes an

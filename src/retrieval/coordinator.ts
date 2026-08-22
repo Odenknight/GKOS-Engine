@@ -67,7 +67,12 @@ export interface IndexRetrievalResult {
 
 const VERIFIED_STORE = Symbol("gkos.retrieval.verified-store");
 const ACTIVE_STORE_PREFLIGHTS = new WeakMap<object, SqliteRetrievalStore>();
-const EVALUATION_STORE_OBSERVERS = new WeakMap<SqliteRetrievalStore, RetrievalEvaluationCoordinatorObserver>();
+interface RetrievalEvaluationStoreContext {
+  observer: RetrievalEvaluationCoordinatorObserver;
+  scan_presentation_fts5_available: boolean;
+}
+
+const EVALUATION_STORE_CONTEXTS = new WeakMap<SqliteRetrievalStore, RetrievalEvaluationStoreContext>();
 
 /**
  * Trusted-host-only attempt instrumentation.  This type and its factory are
@@ -733,6 +738,7 @@ export class RetrievalCoordinator {
   readonly #store: SqliteRetrievalStore;
   readonly #options: RetrievalCoordinatorOptions;
   readonly #evaluationObserver: RetrievalEvaluationCoordinatorObserver | undefined;
+  readonly #evaluationScanPresentationFts5Available: boolean | undefined;
 
   constructor(databasePath: string, options: RetrievalCoordinatorOptions);
   constructor(databasePathOrStore: SqliteRetrievalStore, options: RetrievalCoordinatorOptions, capability: typeof VERIFIED_STORE);
@@ -750,8 +756,12 @@ export class RetrievalCoordinator {
       throw new Error("RETRIEVAL_RUNTIME_POLICY_DIGEST_MISMATCH");
     }
     this.#options = options;
-    this.#evaluationObserver = typeof databasePathOrStore === "string" ? undefined : EVALUATION_STORE_OBSERVERS.get(databasePathOrStore);
-    if (typeof databasePathOrStore !== "string") EVALUATION_STORE_OBSERVERS.delete(databasePathOrStore);
+    const evaluationContext = typeof databasePathOrStore === "string"
+      ? undefined
+      : EVALUATION_STORE_CONTEXTS.get(databasePathOrStore);
+    this.#evaluationObserver = evaluationContext?.observer;
+    this.#evaluationScanPresentationFts5Available = evaluationContext?.scan_presentation_fts5_available;
+    if (typeof databasePathOrStore !== "string") EVALUATION_STORE_CONTEXTS.delete(databasePathOrStore);
   }
 
   /** Open an active generation without exposing its raw store reader. */
@@ -937,7 +947,9 @@ export class RetrievalCoordinator {
       : this.#store.lexicalSearch(query, eligibleIds, lexicalTopK);
     const lexicalStage = this.#store.manifest.lexical_backend === "sqlite_fts5"
       ? stage("sqlite_fts5", "active", [])
-      : stage("sqlite_lexical_scan", "degraded", retrievalLexicalScanReasonCodes(this.#store.fts5_available));
+      : stage("sqlite_lexical_scan", "degraded", retrievalLexicalScanReasonCodes(
+        this.#evaluationScanPresentationFts5Available ?? this.#store.fts5_available,
+      ));
     let vectorStage: RetrievalProviderStageStatus;
     let semantic: RankedInput[] = [];
     if (!this.#options.vector_provider) vectorStage = stage("none", "disabled", ["VECTOR_DISABLED"]);
@@ -1133,14 +1145,19 @@ export function coordinatorFromRetrievalEvaluationDatabase(
   databasePath: string,
   options: RetrievalCoordinatorOptions,
   observer: RetrievalEvaluationCoordinatorObserver,
+  scanPresentationFts5Available: boolean,
 ): RetrievalCoordinator {
   validateCoordinatorOptions(options);
   if (!observer || typeof observer.sql_stage !== "function" || typeof observer.ranking !== "function" ||
-      typeof observer.confidence !== "function" || typeof observer.citation !== "function") {
+      typeof observer.confidence !== "function" || typeof observer.citation !== "function" ||
+      typeof scanPresentationFts5Available !== "boolean") {
     throw new TypeError("RETRIEVAL_EVALUATION_OBSERVER_INVALID");
   }
   const store = new SqliteRetrievalStore(databasePath);
-  EVALUATION_STORE_OBSERVERS.set(store, observer);
+  EVALUATION_STORE_CONTEXTS.set(store, {
+    observer,
+    scan_presentation_fts5_available: scanPresentationFts5Available,
+  });
   try { return new RetrievalCoordinator(store, options, VERIFIED_STORE); }
   catch (error) { try { store.close(); } catch { /* constructor may already have closed it */ } throw error; }
 }

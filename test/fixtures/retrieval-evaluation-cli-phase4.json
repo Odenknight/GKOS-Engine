@@ -77,6 +77,12 @@
       "authored_query_text": "authorization",
       "expected_status": "pass",
       "expected_exit_code": 0,
+      "requires_physical_fts5": true,
+      "unavailable_expected_code": "GKX_EVAL_EXECUTOR_FTS5_UNAVAILABLE",
+      "unavailable_expected_exit_code": 3,
+      "unavailable_expected_stdout": "",
+      "unavailable_expected_stderr": "gkx retrieval eval: operational failure\n",
+      "unavailable_expected_state_entry_count": 0,
       "expected_vector_stage": { "kind": "none", "state": "disabled", "reason_codes": ["VECTOR_DISABLED"] },
       "expected_reranker_stage": { "kind": "none", "state": "skipped", "reason_codes": ["RERANKER_NOT_CONFIGURED"] },
       "expected_counters": { "contract_version": "gkos-retrieval-evaluation-query-attempt-counters/1.0.0-draft.1", "authority_input_snapshot_count": 1, "source_read_count": 1, "retrieval_sql_stage_count": 1, "vector_provider_call_count": 0, "vector_provider_item_count": 0, "rerank_provider_call_count": 0, "rerank_provider_item_count": 0, "ranking_call_count": 1, "confidence_call_count": 1, "citation_verification_count": 2, "metric_computation_count": 1, "counter_digest": "sha256:3c1b6e25c7225a29c3ef4f9ad5992197fa02e6f3ab00843cd3d556324dd121d9" }
@@ -129,7 +135,25 @@
       "expected_reranker_stage": { "kind": "local_onnx", "state": "degraded", "provider_id": "fixed-offline", "model_id": "reranker-v1", "reason_codes": ["RERANKER_UNAVAILABLE"] },
       "expected_counters": { "contract_version": "gkos-retrieval-evaluation-query-attempt-counters/1.0.0-draft.1", "authority_input_snapshot_count": 1, "source_read_count": 1, "retrieval_sql_stage_count": 2, "vector_provider_call_count": 1, "vector_provider_item_count": 1, "rerank_provider_call_count": 1, "rerank_provider_item_count": 1, "ranking_call_count": 1, "confidence_call_count": 1, "citation_verification_count": 2, "metric_computation_count": 1, "counter_digest": "sha256:8d7f3b5575bc79396d4d13b3cd3ed161cfef2621adb430071181160e957f5759" }
     },
-    { "case_id": "general-disabled-tune", "authority": "general", "operation": "tune", "provider_state": "disabled", "query_count": 1, "expected_status": "proposed", "expected_exit_code": 0, "evaluated_candidate_count": 900, "query_evaluation_count": 900, "expected_provider_call_count": 0 },
+    {
+      "case_id": "general-disabled-tune",
+      "authority": "general",
+      "operation": "tune",
+      "provider_state": "disabled",
+      "query_count": 1,
+      "expected_status": "proposed",
+      "expected_exit_code": 0,
+      "evaluated_candidate_count": 900,
+      "query_evaluation_count": 900,
+      "expected_provider_call_count": 0,
+      "requires_physical_fts5": true,
+      "unavailable_expected_code": "GKX_EVAL_EXECUTOR_FTS5_UNAVAILABLE",
+      "unavailable_expected_exit_code": 3,
+      "unavailable_expected_stdout": "",
+      "unavailable_expected_stderr": "gkx retrieval tune: operational failure\n",
+      "unavailable_expected_state_entry_count": 0,
+      "unavailable_expected_output_entry_count": 0
+    },
     { "case_id": "general-reranker-only-tune", "authority": "general", "operation": "tune", "provider_state": "reranker_only", "query_count": 1, "expected_status": "proposed", "expected_exit_code": 0, "evaluated_candidate_count": 900, "query_evaluation_count": 900 }
   ],
   "optional_companion_matrix": [
@@ -197,5 +221,5 @@
     { "case_id": "lambda-point-seven", "mmr": true, "mmr_lambda_micros": 700000, "expected_toml": "config_version = 1\n\n[retrieval]\nrrf_k = 60\nmmr = true\nmmr_lambda = 0.7\nsemantic_top_k = 5\nlexical_top_k = 5\n" },
     { "case_id": "lambda-one", "mmr": true, "mmr_lambda_micros": 1000000, "expected_toml": "config_version = 1\n\n[retrieval]\nrrf_k = 60\nmmr = true\nmmr_lambda = 1.0\nsemantic_top_k = 5\nlexical_top_k = 5\n" }
   ],
-  "fixture_digest": "sha256:9776f7c962d82f9e60e9f772785e4ae647074d5b51fe4d4dd1bfd7d1c56746a7"
+  "fixture_digest": "sha256:958c06ed5b2d063e6b9530261ed74fd17bba5e599d6326aafe5bc7f1ac6c0ff6"
 }

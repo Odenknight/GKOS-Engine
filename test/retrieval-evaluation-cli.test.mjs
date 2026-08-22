@@ -6,6 +6,7 @@ import {
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, parse, resolve } from "node:path";
+import { DatabaseSync } from "node:sqlite";
 import { fileURLToPath } from "node:url";
 
 import * as retrieval from "../dist/retrieval.mjs";
@@ -23,6 +24,7 @@ const REVIEWED = JSON.parse(await readFile(join(PACK, "reviewed-bundle.json"), "
 const EXECUTION_AUTHORITY_DIGEST = REVIEWED.reviewed_bundle_digest;
 const BASELINE = CONFORMANCE.valid_envelopes.baseline;
 const TUNE_ROW = CONFORMANCE.tune_matrix.find((row) => row.case_id === "shipped-24-query-grid");
+const PHYSICAL_FTS5_AVAILABLE = host.detectSqliteLexicalCapability().fts5_available;
 const REQUIRED_SIBLINGS = [
   "golden-fixture.toml",
   "conformance-fixture.json",
@@ -60,6 +62,20 @@ async function privateDirectory(t, prefix) {
   if (process.platform !== "win32") await chmod(directory, 0o700);
   t.after(() => rm(directory, { recursive: true, force: true }));
   return directory;
+}
+
+async function assertLexicalScanDatabases(stateRoot) {
+  const relativePaths = (await readdir(stateRoot, { recursive: true }))
+    .filter((entry) => typeof entry === "string" && entry.endsWith(".sqlite"));
+  assert.ok(relativePaths.length > 0, "at least one unactivated SQLite generation is required");
+  for (const relativePath of relativePaths) {
+    const database = new DatabaseSync(join(stateRoot, relativePath), { readOnly: true });
+    try {
+      const row = database.prepare("SELECT type, sql FROM sqlite_master WHERE name = 'chunk_fts'").get();
+      assert.equal(row?.type, "table", relativePath);
+      assert.doesNotMatch(String(row?.sql ?? ""), /\bVIRTUAL\s+TABLE\b|\bfts5\b/iu, relativePath);
+    } finally { database.close(); }
+  }
 }
 
 async function fixtureDirectory(t) {
@@ -340,9 +356,7 @@ async function generalProviderScenarioFixture(t, kind) {
     const baseCapability = await host.openRetrievalEvaluationFixtureCapability(join(root, "golden-fixture.toml"), ROOT);
     const derivation = host.deriveRetrievalEvaluationExecutableEnvironmentBundle(baseCapability.input.environment_bundle)
       .derivations.find((item) => item.vault_fixture === query.vault_fixture);
-    const stateRoot = await privateDirectory(t, "gkx-evaluation-no-embedding-manifest-");
-    const built = host.buildGkxRetrievalGenerationUnactivated({
-      state_directory: join(stateRoot, query.vault_fixture),
+    manifest = host.deriveGkxRetrievalProjectionManifest({
       vault_id: derivation.corpus.vault_fixture,
       source_snapshot_digest: derivation.catalog_entry.source_snapshot.source_snapshot_digest,
       configuration_digest: derivation.manifest.configuration_digest,
@@ -356,9 +370,7 @@ async function generalProviderScenarioFixture(t, kind) {
       embedding_provider_id: null,
       embedding_model_id: null,
       embedding_dimensions: null,
-      lexical_backend: lexicalBackend,
-    });
-    manifest = built.manifest;
+    }, lexicalBackend);
   }
 
   if (!bothDisabled) {
@@ -489,7 +501,7 @@ async function generalProviderScenarioFixture(t, kind) {
   if (provider === null) await unlink(join(root, "fixed-provider.json"));
   else await writeJsonPrivate(join(root, "fixed-provider.json"), provider);
   if (process.platform !== "win32") await chmod(join(root, "golden-fixture.toml"), 0o600);
-  if (bothDisabled || kind === "reranker_only" || kind === "embedding_only") {
+  if ((bothDisabled && PHYSICAL_FTS5_AVAILABLE) || kind === "reranker_only" || kind === "embedding_only") {
     const preliminaryCapability = await host.openRetrievalEvaluationFixtureCapability(
       join(root, "golden-fixture.toml"), ROOT,
     );
@@ -1218,8 +1230,36 @@ test("actual coordinator eval replay emits exact text and pretty canonical JSON 
   const environment = isolatedTempEnvironment(tempParent);
 
   const capability = await host.openRetrievalEvaluationFixtureCapability(fixturePath, ROOT);
+  assert.equal(Object.keys(capability.input.execution_authority).length, 17);
+  assert.equal(capability.input.execution_authority.scan_presentation_contract_version,
+    host.RETRIEVAL_EVALUATION_SCAN_PRESENTATION_VERSION);
+  assert.equal(capability.input.execution_authority.scan_presentation_fts5_available, true);
+  for (const [field, value] of [
+    ["scan_presentation_contract_version", "gkos-retrieval-evaluation-scan-presentation/invalid"],
+    ["scan_presentation_fts5_available", false],
+  ]) {
+    const { execution_authority_digest: _digest, ...material } = capability.input.execution_authority;
+    material[field] = value;
+    assert.throws(() => host.sealRetrievalEvaluationExecutionAuthority({
+      ...material,
+      execution_authority_digest: retrieval.retrievalCanonicalDigest(material),
+    }), /GKX_EVAL_EXECUTION_AUTHORITY_INVALID/u);
+  }
+  assert.doesNotThrow(() => host.preflightRetrievalEvaluationHostCapabilitiesWithPhysicalForTest(
+    capability.input, "eval", false,
+  ));
+  assert.doesNotThrow(() => host.preflightRetrievalEvaluationHostCapabilitiesWithPhysicalForTest(
+    capability.input, "eval", true,
+  ));
   const replayState = await privateDirectory(t, "gkx-evaluation-reviewed-replay-");
   const replay = await host.executeRetrievalEvaluationEval(capability.input, replayState);
+  for (const attempt of replay.query_attempts) {
+    assert.equal(attempt.result.stages.lexical.kind, "sqlite_lexical_scan");
+    assert.deepEqual(attempt.result.stages.lexical.reason_codes, [
+      "SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION",
+    ]);
+  }
+  await assertLexicalScanDatabases(replayState);
   assert.equal(replay.reviewed_absent_query_attempts.length, reviewedRow.expected_absent_query_count);
   const absent = replay.reviewed_absent_query_attempts[0];
   assert.equal(absent.query_id, reviewedRow.expected_absent_query_id);
@@ -1262,6 +1302,34 @@ test("general provider-role combinations and failures execute actual coordinator
     const fixturePath = join(fixture.root, "golden-fixture.toml");
     const capability = await host.openRetrievalEvaluationFixtureCapability(fixturePath, ROOT);
     assert.equal(capability.input.reviewed_bundle, null, kind);
+    if (kind === "disabled" && !PHYSICAL_FTS5_AVAILABLE) {
+      assert.equal(expected.requires_physical_fts5, true);
+      assert.throws(
+        () => host.preflightRetrievalEvaluationHostCapabilitiesWithPhysicalForTest(capability.input, "eval", false),
+        (error) => error.message === expected.unavailable_expected_code,
+      );
+      assert.doesNotThrow(() => host.preflightRetrievalEvaluationHostCapabilitiesWithPhysicalForTest(
+        capability.input, "eval", true,
+      ));
+      const stateRoot = await privateDirectory(t, "gkx-evaluation-disabled-unavailable-state-");
+      await assert.rejects(
+        host.executeRetrievalEvaluationEval(capability.input, stateRoot),
+        (error) => error.message === expected.unavailable_expected_code,
+      );
+      assert.equal((await readdir(stateRoot)).length, expected.unavailable_expected_state_entry_count);
+      const tempParent = await privateDirectory(t, "gkx-evaluation-disabled-unavailable-temp-");
+      const cliResult = await cli(["retrieval", "eval", "--fixture", fixturePath], {
+        env: isolatedTempEnvironment(tempParent),
+      });
+      assert.deepEqual(cliResult, {
+        code: expected.unavailable_expected_exit_code,
+        signal: null,
+        stdout: expected.unavailable_expected_stdout,
+        stderr: expected.unavailable_expected_stderr,
+      });
+      assert.equal((await readdir(tempParent)).length, expected.unavailable_expected_state_entry_count);
+      continue;
+    }
     const stateRoot = await privateDirectory(t, `gkx-evaluation-${kind}-state-`);
     const execution = await host.executeRetrievalEvaluationEval(capability.input, stateRoot);
     assert.equal(execution.query_attempts.length, 1, kind);
@@ -1273,6 +1341,14 @@ test("general provider-role combinations and failures execute actual coordinator
     assert.deepEqual(attempt.result.stages.vector, expected.expected_vector_stage, `${kind}:vector`);
     assert.deepEqual(attempt.result.stages.reranker, expected.expected_reranker_stage, `${kind}:reranker`);
     assert.deepEqual(attempt.counters, expected.expected_counters, `${kind}:counters`);
+    if (capability.input.baseline.environment_set.members[0].environment.lexical_backend === "sqlite_lexical_scan") {
+      assert.deepEqual(attempt.result.stages.lexical, {
+        kind: "sqlite_lexical_scan",
+        state: "degraded",
+        reason_codes: ["SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"],
+      }, `${kind}:lexical scan presentation`);
+      await assertLexicalScanDatabases(stateRoot);
+    }
 
     const tempParent = await privateDirectory(t, `gkx-evaluation-${kind}-cli-`);
     const cliResult = await cli(["retrieval", "eval", "--fixture", fixturePath], {
@@ -1296,13 +1372,41 @@ test("general provider-role combinations and failures execute actual coordinator
   const tune = await cli(["retrieval", "tune", "--fixture", fixturePath, "--output", outputPath], {
     env: isolatedTempEnvironment(tempParent),
   });
-  assert.equal(tune.code, tuneRow.expected_exit_code);
-  assert.match(tune.stdout, new RegExp(`^gkx retrieval tune\\nstatus: ${tuneRow.expected_status}\\n`, "u"));
-  assert.match(tune.stdout, new RegExp(`evaluated_candidate_count: ${tuneRow.evaluated_candidate_count}\\n`, "u"));
-  assert.match(tune.stdout, new RegExp(`query_evaluation_count: ${tuneRow.query_evaluation_count}\\n`, "u"));
-  assert.equal(tune.stderr, "");
-  assert.deepEqual(await readdir(outputParent), ["candidate.toml"]);
-  assert.deepEqual(await readdir(tempParent), []);
+  if (!PHYSICAL_FTS5_AVAILABLE) {
+    assert.equal(tuneRow.requires_physical_fts5, true);
+    const capability = await host.openRetrievalEvaluationFixtureCapability(fixturePath, ROOT);
+    assert.throws(
+      () => host.preflightRetrievalEvaluationHostCapabilitiesWithPhysicalForTest(capability.input, "tune", false),
+      (error) => error.message === tuneRow.unavailable_expected_code,
+    );
+    assert.doesNotThrow(() => host.preflightRetrievalEvaluationHostCapabilitiesWithPhysicalForTest(
+      capability.input, "tune", true,
+    ));
+    const stateRoot = await privateDirectory(t, "gkx-evaluation-disabled-tune-unavailable-state-");
+    await assert.rejects(
+      host.executeRetrievalEvaluationTune(capability.input, stateRoot),
+      (error) => error.message === tuneRow.unavailable_expected_code,
+    );
+    assert.equal((await readdir(stateRoot)).length, tuneRow.unavailable_expected_state_entry_count);
+    assert.deepEqual(tune, {
+      code: tuneRow.unavailable_expected_exit_code,
+      signal: null,
+      stdout: tuneRow.unavailable_expected_stdout,
+      stderr: tuneRow.unavailable_expected_stderr,
+    });
+    assert.equal((await readdir(outputParent)).length, tuneRow.unavailable_expected_output_entry_count);
+    assert.equal((await readdir(tempParent)).length, tuneRow.unavailable_expected_state_entry_count);
+  } else {
+    assert.equal(tune.code, tuneRow.expected_exit_code);
+    assert.match(tune.stdout, new RegExp(`^gkx retrieval tune\\nstatus: ${tuneRow.expected_status}\\n`, "u"));
+    assert.match(tune.stdout,
+      new RegExp(`evaluated_candidate_count: ${tuneRow.evaluated_candidate_count}\\n`, "u"));
+    assert.match(tune.stdout,
+      new RegExp(`query_evaluation_count: ${tuneRow.query_evaluation_count}\\n`, "u"));
+    assert.equal(tune.stderr, "");
+    assert.deepEqual(await readdir(outputParent), ["candidate.toml"]);
+    assert.deepEqual(await readdir(tempParent), []);
+  }
 
   const mixedTuneRow = row("general_execution_matrix", "general-reranker-only-tune");
   const mixed = await generalProviderScenarioFixture(t, "reranker_only");
