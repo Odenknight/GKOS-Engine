@@ -7,7 +7,8 @@ import type {
 import type { GkxRetrievalCandidateChunk, GkxRetrievalCandidateDeclaration, GkxRetrievalCandidateSource } from "./candidate-types";
 import type { GkxRetrievalProjectionManifest, GkxRetrievalSearchResult } from "./types";
 import { buildGkxRetrievalAuthorizedCandidateView, type GkxRetrievalAuthorizedCandidateView } from "./authorized-view";
-import { gkxRetrievalAuthorizedResultChunk, gkxRetrievalLineageResultCoordinate, gkxRetrievalVerifiedCitation } from "./coordinator";
+import { gkxRetrievalAuthorizedResultChunk, gkxRetrievalLineageResultCoordinate, gkxRetrievalVerifiedCitation,
+  retrievalLexicalScanReasonCodes } from "./coordinator";
 import { buildGkxRetrievalProvenance } from "./provenance";
 import { assessRetrievalConfidence } from "./confidence";
 import { cosineSimilarity, maximalMarginalRelevance, reciprocalRankFusion } from "./fusion";
@@ -186,7 +187,11 @@ export function deriveRetrievalEvaluationReviewedResult(
     lexical: {
       kind: "sqlite_lexical_scan" as const,
       state: "degraded" as const,
-      reason_codes: ["SQLITE_FTS5_UNAVAILABLE", "SQLITE_LEXICAL_SCAN_ACTIVE", "SQLITE_LEXICAL_SCAN_APPROXIMATION"],
+      // The signed reviewed bundle targets the qualified Node SQLite runtime,
+      // where FTS5 is available even though the fixture deliberately selects
+      // the lexical-scan backend.  Production capability semantics therefore
+      // omit SQLITE_FTS5_UNAVAILABLE.
+      reason_codes: retrievalLexicalScanReasonCodes(true),
     },
     vector: {
       kind: environment.embedding_role.provider_kind,

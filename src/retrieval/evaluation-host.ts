@@ -14,6 +14,7 @@ export {
   gkxRetrievalAuthorizedResultChunk,
   gkxRetrievalVerifiedCitation,
   gkxRetrievalDeduplicateOverlapEvidence,
+  retrievalLexicalScanReasonCodes,
 } from "./coordinator";
 export { buildGkxRetrievalProvenance } from "./provenance";
 export * from "./evaluation-fixtures";

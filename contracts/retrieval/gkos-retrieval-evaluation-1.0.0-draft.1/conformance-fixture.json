@@ -4420,7 +4420,7 @@
     },
     "metric_computation": {
       "file": "metric-computation-fixture.json",
-      "digest": "sha256:9b771aa0fa0745977ac6a68b096b7417860514e3e0503d8e576320f8846764be"
+      "digest": "sha256:6ea3a6b44d50efe60c2215a6bb30db60a5c29133474ddb0458c5ac4517c35e36"
     },
     "tune_priority": {
       "file": "tune-priority-fixture.json",
@@ -4428,7 +4428,7 @@
     },
     "reviewed_bundle": {
       "file": "reviewed-bundle.json",
-      "digest": "sha256:69b44ce656da3a6be98122a8768adc72c345824fee02b17c6d2e694672aa6817"
+      "digest": "sha256:2a49075651e2a4b19e813e59a3d4546cc602f0e86c56d1e048f94d917cd6df2a"
     }
   }
 }

@@ -7670,7 +7670,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -7775,7 +7774,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:15e5904616229b717b105479d14e507941a1ebdabcd0f87bc1ffef8153b3012a"
+      "case_digest": "sha256:e1cdb7c9b522a08a7c225e4f821aaa732649605883561245a4b14cd74ec248c0"
     },
     {
       "case_id": "reviewed-agent-note-authority",
@@ -7956,7 +7955,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -8060,7 +8058,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:9d323c3e42a214a3a9ec1f44716287b90ada6af6ff681e72d34aa62f123e1ee6"
+      "case_digest": "sha256:2f703dc21a688ca3c8465ad3cec07f8b5b306cfb71dbbc19e8c873266459decb"
     },
     {
       "case_id": "reviewed-agent-note-citation-freshness",
@@ -8256,7 +8254,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -8360,7 +8357,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:96e4654ca6686d34a97ce98fb854bcec02a34402b311fe277f376aefd14f5326"
+      "case_digest": "sha256:63957cbb92f39f913790f4a5b6b85d6fd78de9880369123d3ea2b488897411c2"
     },
     {
       "case_id": "reviewed-agent-note-conflict-handling",
@@ -8531,7 +8528,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -8635,7 +8631,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:2dc91f531690b4bbba25c7546fb44f3078f94ea5383b40c4946a3cfc06a6bbcc"
+      "case_digest": "sha256:38732f8f94346edc5545a08eb4390ef3999072d7cd6e014bfbad942707f351fc"
     },
     {
       "case_id": "reviewed-agent-note-governance",
@@ -8811,7 +8807,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -8915,7 +8910,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:833dee06c5ddf5f94a21892f3ddda636fa28f8581053b862ccd94372cdcb0c01"
+      "case_digest": "sha256:576edb143ee23eb062362289e197a2d3ed4ca3cd46c00ca853089788f57dfb7c"
     },
     {
       "case_id": "reviewed-agent-note-hidden-material",
@@ -9111,7 +9106,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -9215,7 +9209,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:f1c82324e0302887fbc2ef9c9e16ad87873561e4d6795728b6e0ff27c0276bea"
+      "case_digest": "sha256:dae68216c123907c5f124729b4c5fd7b287fb3336dcbdbe994fb25ee7d8facf0"
     },
     {
       "case_id": "reviewed-agent-note-lineage-policy",
@@ -9411,7 +9405,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -9515,7 +9508,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:3f8a7dcc08e57787cd107957fa7183f6c765a11b2e0c1493d03e03eb960909a3"
+      "case_digest": "sha256:24b3c83e2794774ee86f41f8a0c6548d83147c489e864e19cc441cd56cf3d954"
     },
     {
       "case_id": "reviewed-agent-note-publication-boundary",
@@ -9696,7 +9689,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -9800,7 +9792,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:bace8310cbd8ef86784dc3d3948c58bb9610ad3473904117c90d7f77c901a626"
+      "case_digest": "sha256:31085eca08a95aff002824e7d9c8d7b85374e420e94fa71df2903f1c6720dc8d"
     },
     {
       "case_id": "reviewed-agent-note-review-requirement",
@@ -9996,7 +9988,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -10100,7 +10091,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:918120e71be74838222a886a9173690cb1413d755c54b64a6ae7610ad6d68d35"
+      "case_digest": "sha256:f8494f195e28bdf3ee648686ae7134eb353bfc9133ff73c099a727aa8b2cee82"
     },
     {
       "case_id": "reviewed-agent-note-source-integrity",
@@ -10291,7 +10282,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -10395,7 +10385,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:29d7290f56ad3fecdf1cc501503d7d16b78fa384d96f13dfc8076f030303418f"
+      "case_digest": "sha256:caab138bd14d4b9d2c2f8b98b7c6ed17c59e6509aa372593dfca0f54e488a66a"
     },
     {
       "case_id": "reviewed-historical-citation-validity",
@@ -10590,7 +10580,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -10695,7 +10684,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:4c15e6c0fbcad2e91901e552ecc04b3e85ea5d3324bd525509621f0838ed1401"
+      "case_digest": "sha256:d4c845542d577a4e1d24430a4d3d262395c788387e239a226f6f9125331f6cf1"
     },
     {
       "case_id": "reviewed-historical-policy",
@@ -10890,7 +10879,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -10995,7 +10983,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:ae74b5d68368aafe60d1d36218e44a4f522d07a6868d7c7004233546ef6de8ba"
+      "case_digest": "sha256:53ff1efb32410128ca0055da62d361eec9d9281283843c55ffa3b19c970d115d"
     },
     {
       "case_id": "reviewed-historical-predecessor",
@@ -11170,7 +11158,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -11275,7 +11262,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:9701491e2d2b0254ebf39597d7351cc29501f0892957a3731cf5def7ddbdedc1"
+      "case_digest": "sha256:440d11cc352ad4dab412e9c43b648e01e32d97adb8eb73091a1e46dabefafdae"
     },
     {
       "case_id": "reviewed-historical-successor-exclusion",
@@ -11470,7 +11457,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -11575,7 +11561,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:4d62acd68e0d5faacff4fc56754468a32fee510849901cf9498707a3ae3e710c"
+      "case_digest": "sha256:3cf87d1c4eb867036ffff0e81257d3edfac233251a37f58b31566f32e9ea821d"
     },
     {
       "case_id": "reviewed-multi-agent-writing-policy",
@@ -11756,7 +11742,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -11860,7 +11845,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:1f7c0beefff87ceba08fe096eabd9df9d0a1931477dbf98e865d14689bd4f362"
+      "case_digest": "sha256:936c4abd66b628ac3a7d51bd3311a4bac542ff085477119cacd1f2e076b1c399"
     },
     {
       "case_id": "reviewed-point-in-time-active-version",
@@ -12055,7 +12040,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -12160,7 +12144,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:947485793cf5dc480f493d581c6c5def70e38bf143c557767c206506cecde511"
+      "case_digest": "sha256:2f988f972e89cd9ada266675d2a58c67482ef11463b93fc77899d446e96b9086"
     },
     {
       "case_id": "reviewed-point-in-time-citation",
@@ -12355,7 +12339,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -12460,7 +12443,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:fd7dbd4b7c9527cdeed358995398aa8119b5dc760374b0efafdd181eba7853dd"
+      "case_digest": "sha256:e41aa109b8f43e62a906adfca6d73d9b5032f2b4eee05f71fcb1e9e5ec5a1556"
     },
     {
       "case_id": "reviewed-policy-citation-requirements",
@@ -12641,7 +12624,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -12745,7 +12727,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:de13c8970ab910e10b4d231d67c10cdcb946f4ceac1988a8bdb5f11e404721e5"
+      "case_digest": "sha256:653ed38004a44ccfbe74d0af6d992b18ab244e4a991c91fd34a7b14dab347256"
     },
     {
       "case_id": "reviewed-policy-source-authorization",
@@ -12926,7 +12908,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -13030,7 +13011,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:4ba12ce252121defe0e579be173866576b1bb9b44e2c0cbb8f52f7f8ed878e4d"
+      "case_digest": "sha256:cba1376554dfd40366df14b9f6ca315ae22b2546331ffcdf8846dd6293e4bd1a"
     },
     {
       "case_id": "reviewed-temporal-coverage",
@@ -13225,7 +13206,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -13330,7 +13310,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:bf737e3a895d88c8bbe7211d4eac3438d1e242cf9f0311f4f4d5b1124ca5a3ce"
+      "case_digest": "sha256:9406ffecf3069e130d873d16b5d5bac0e7e4766f7780f1983bebb70ed5079694"
     },
     {
       "case_id": "reviewed-temporal-current-boundary",
@@ -13529,7 +13509,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -13636,7 +13615,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:640e498c6cba5db8f5f2eed772ac06385710d42a24a28a68224c74f9f3d757af"
+      "case_digest": "sha256:a2a6b90e25ea3392639336a3f4d878ab8707a786571a22c559f0a61a5b61e0e3"
     },
     {
       "case_id": "reviewed-temporal-future-absent",
@@ -13831,7 +13810,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -13925,7 +13903,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:32f8eed7403654c5c0463b7b4ebe33300b3bf3e90747809aca639653133c0184"
+      "case_digest": "sha256:61667a84d1fa36acb9ef4aee2dc01b1976afdbbd03d4c824e779ce94ad108533"
     },
     {
       "case_id": "reviewed-temporal-future-exclusion",
@@ -14120,7 +14098,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -14225,7 +14202,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:7c91a8dbba2f7365658d1c91f8e8eca69b056681fe218e736240e20004414fcb"
+      "case_digest": "sha256:04999eefa492a1d7c7cf69b278a72c54a0489ef975ce12ca58d1adea50f819bc"
     },
     {
       "case_id": "reviewed-temporal-half-open-endpoint",
@@ -14414,7 +14391,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -14521,7 +14497,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:17601677aa71580613ccc16050204299149fdfd269d9d891dbec2448b499e02e"
+      "case_digest": "sha256:8665dfb71caba7e90c71d7a5686856cbc622ae264dd4c7712e6823f0d7a42c26"
     },
     {
       "case_id": "reviewed-temporal-unknown-exclusion",
@@ -14706,7 +14682,6 @@
               "kind": "sqlite_lexical_scan",
               "state": "degraded",
               "reason_codes": [
-                "SQLITE_FTS5_UNAVAILABLE",
                 "SQLITE_LEXICAL_SCAN_ACTIVE",
                 "SQLITE_LEXICAL_SCAN_APPROXIMATION"
               ]
@@ -14811,7 +14786,7 @@
         "unverified_projection_query_count": 0
       },
       "expected_code": null,
-      "case_digest": "sha256:53d44bc189def5a11ba59330dcb56a3c87e14539ee0c927152a03a99070f246f"
+      "case_digest": "sha256:423a99a33807017c12373298cb88946630af68b748ea41d3a0f004c0358c08ab"
     },
     {
       "case_id": "source-only-relevance",
@@ -16727,5 +16702,5 @@
       "case_digest": "sha256:f451052112f4abb73a080aeaaa47e7d7759687e95a8cc0d598defb9bdee4f7e8"
     }
   ],
-  "fixture_digest": "sha256:9b771aa0fa0745977ac6a68b096b7417860514e3e0503d8e576320f8846764be"
+  "fixture_digest": "sha256:6ea3a6b44d50efe60c2215a6bb30db60a5c29133474ddb0458c5ac4517c35e36"
 }

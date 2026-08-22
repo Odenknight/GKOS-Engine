@@ -71,6 +71,18 @@ function reseal(record, digestField) {
   return { ...material, [digestField]: retrieval.retrievalCanonicalDigest(material) };
 }
 
+test("reviewed lexical-scan capability reasons preserve the production FTS5 differential", () => {
+  assert.deepEqual(evaluationHost.retrievalLexicalScanReasonCodes(true), [
+    "SQLITE_LEXICAL_SCAN_ACTIVE",
+    "SQLITE_LEXICAL_SCAN_APPROXIMATION",
+  ]);
+  assert.deepEqual(evaluationHost.retrievalLexicalScanReasonCodes(false), [
+    "SQLITE_FTS5_UNAVAILABLE",
+    "SQLITE_LEXICAL_SCAN_ACTIVE",
+    "SQLITE_LEXICAL_SCAN_APPROXIMATION",
+  ]);
+});
+
 function resealEnvironmentBundleAuditMutation(baseBundle, vaultFixture, mutateOracle) {
   const bundle = clone(baseBundle);
   const targetEntry = bundle.fixture_catalog.entries.find((entry) => entry.vault_fixture === vaultFixture);

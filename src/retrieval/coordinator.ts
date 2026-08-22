@@ -155,6 +155,16 @@ function stage(kind: RetrievalProviderStageStatus["kind"], state: RetrievalProvi
   return { kind, state, ...(provider ? { provider_id: provider.provider_id, model_id: provider.model_id } : {}), reason_codes: [...reasonCodes].sort(retrievalCodeUnitCompare) };
 }
 
+/** Private parity seam for the exact production lexical-scan capability algebra. */
+export function retrievalLexicalScanReasonCodes(fts5Available: boolean): string[] {
+  if (typeof fts5Available !== "boolean") throw new TypeError("RETRIEVAL_FTS5_CAPABILITY_INVALID");
+  return [
+    ...(!fts5Available ? ["SQLITE_FTS5_UNAVAILABLE"] : []),
+    "SQLITE_LEXICAL_SCAN_ACTIVE",
+    "SQLITE_LEXICAL_SCAN_APPROXIMATION",
+  ];
+}
+
 interface ResultProjectionCoordinate {
   projection_id: string;
   projection_digest: string;
@@ -906,11 +916,7 @@ export class RetrievalCoordinator {
       : this.#store.lexicalSearch(query, eligibleIds, lexicalTopK);
     const lexicalStage = this.#store.manifest.lexical_backend === "sqlite_fts5"
       ? stage("sqlite_fts5", "active", [])
-      : stage("sqlite_lexical_scan", "degraded", [
-        ...(!this.#store.fts5_available ? ["SQLITE_FTS5_UNAVAILABLE"] : []),
-        "SQLITE_LEXICAL_SCAN_ACTIVE",
-        "SQLITE_LEXICAL_SCAN_APPROXIMATION",
-      ]);
+      : stage("sqlite_lexical_scan", "degraded", retrievalLexicalScanReasonCodes(this.#store.fts5_available));
     let vectorStage: RetrievalProviderStageStatus;
     let semantic: RankedInput[] = [];
     if (!this.#options.vector_provider) vectorStage = stage("none", "disabled", ["VECTOR_DISABLED"]);
