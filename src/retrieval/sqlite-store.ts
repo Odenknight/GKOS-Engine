@@ -632,6 +632,24 @@ function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBa
   return { ...base, projection_id: `retrieval:${digest.slice("sha256:".length, "sha256:".length + 24)}`, projection_digest: digest };
 }
 
+/**
+ * Trusted-host, no-I/O manifestation of Full's schema-3 projection authority.
+ * Phase-4 fixture qualification uses this exact production digest algebra
+ * instead of reimplementing or shallowly resealing manifest coordinates.
+ */
+export function deriveGkxRetrievalProjectionManifest(
+  value: Omit<GkxRetrievalGenerationInput, "state_directory" | "lexical_backend">,
+  lexicalBackend: SqliteLexicalBackend,
+): GkxRetrievalProjectionManifest {
+  if (lexicalBackend !== "sqlite_fts5" && lexicalBackend !== "sqlite_lexical_scan" ||
+      typeof value.vault_id !== "string" || value.vault_id.length < 1 || value.vault_id.length > 512 ||
+      [value.source_snapshot_digest, value.configuration_digest, value.policy_digest].some((entry) =>
+        typeof entry !== "string" || !GENERATION_DIGEST_RE.test(entry))) {
+    throw new TypeError("RETRIEVAL_MANIFEST_DERIVATION_INPUT_INVALID");
+  }
+  return lineageProjectionManifest({ ...value, state_directory: ".", lexical_backend: lexicalBackend }, lexicalBackend);
+}
+
 function sourceEnvelope(chunk: RetrievalChunk): string {
   return stableJson({
     source_path: chunk.source_path,
