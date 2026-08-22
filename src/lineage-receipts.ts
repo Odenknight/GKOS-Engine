@@ -49,6 +49,8 @@ export interface GkxCanonicalCandidateDeclarationReceipt {
   field: string;
   origin: GkxOrigin;
   declaration_index: number;
+  source_line: number | null;
+  source_declaration_index: number | null;
   raw_reference: string;
   resolution_tiers: readonly GkxCanonicalResolutionTierReceipt[];
   global_status: "resolved" | "unresolved" | "ambiguous" | "self";

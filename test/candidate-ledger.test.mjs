@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import {
   inspectCanonicalCandidateLedger,
+  inspectCandidateValidationReceipt,
   inspectScopedCandidateResolution,
   TrustedCanonicalCandidateIndex,
 } from "../dist/retrieval-host.mjs";
@@ -42,6 +43,126 @@ function stableLedger(value) {
     declarations: value.declarations,
   };
 }
+
+function onlyReceipt(value) {
+  assert.equal(value.ledger.records.length, 1);
+  return inspectCandidateValidationReceipt(value.ledger.records[0].snapshot);
+}
+
+test("parser receipts cover projectionless notes, structured locations, and attachment non-applicability", () => {
+  const absent = onlyReceipt(ledger([source("absent.md", "Body only")]));
+  assert.equal(absent.applicable, true);
+  assert.equal(absent.present, false);
+  assert.deepEqual(absent.issues, []);
+  assert.equal(Object.getPrototypeOf(absent.field_lines), null);
+  assert.equal(Object.isFrozen(absent.field_lines), true);
+
+  const empty = onlyReceipt(ledger([source("empty.md", "---\n---\nBody")]));
+  assert.equal(empty.applicable, true);
+  assert.equal(empty.present, true);
+  assert.deepEqual(empty.field_lines, Object.create(null));
+
+  const unterminated = onlyReceipt(ledger([source("unterminated.md", "---\ntitle: Not closed")]));
+  assert.deepEqual(unterminated.issues, [{ code: "GKX_FRONTMATTER_UNTERMINATED", line: 1 }]);
+
+  const oversize = onlyReceipt(ledger([source("oversize.md", `---\ntitle: ${"x".repeat(262_145)}\n---\nBody`)]));
+  assert.deepEqual(oversize.issues, [{ code: "GKX_FRONTMATTER_SIZE_LIMIT", line: 1 }]);
+
+  const located = onlyReceipt(ledger([source("located.md", `---
+authorship:
+  origin: authored
+authorship.origin: literal
+tags:
+- one
+- two
+---
+Body`)]));
+  assert.deepEqual({ ...located.field_lines }, {
+    "/authorship": 2,
+    "/authorship/origin": 3,
+    "/authorship.origin": 4,
+    "/tags": 5,
+    "/tags/0": 6,
+    "/tags/1": 7,
+  });
+
+  const attachment = onlyReceipt(ledger([source("asset.md", "---\ntitle: Must not parse\n---\nBody", { kind: "attachment" })]));
+  assert.deepEqual({
+    applicable: attachment.applicable,
+    present: attachment.present,
+    field_lines: { ...attachment.field_lines },
+    issues: attachment.issues,
+  }, { applicable: false, present: false, field_lines: {}, issues: [] });
+});
+
+test("parser receipts survive metadata-only reuse, rename reuse, and transactional rollback", () => {
+  const content = note(UID_A, "Receipt reuse");
+  const index = new TrustedCanonicalCandidateIndex();
+  index.setFiles([source("A.md", content, { modifiedTime: 1_700_000_000_001 })]);
+  const initialCount = index.parseCount;
+  const initial = inspectCandidateValidationReceipt(inspectCanonicalCandidateLedger(index.graph).records[0].snapshot);
+
+  index.applyChanges({ changed: [source("A.md", content, { modifiedTime: 1_700_000_000_002 })] });
+  assert.equal(index.parseCount, initialCount, "ordinary metadata-only reuse does not parse again");
+  assert.deepEqual(inspectCandidateValidationReceipt(inspectCanonicalCandidateLedger(index.graph).records[0].snapshot), initial);
+
+  index.applyChanges({ renames: [{ from: "A.md", to: "Renamed.md" }] });
+  index.applyChanges({ changed: [source("Renamed.md", content, { modifiedTime: 1_700_000_000_003 })] });
+  assert.equal(index.parseCount, initialCount, "rename followed by metadata-only reuse remains parse-free");
+  const incrementalLedger = inspectCanonicalCandidateLedger(index.graph);
+  const clean = ledger([source("Renamed.md", content, { modifiedTime: 1_700_000_000_003 })]);
+  assert.deepEqual(stableLedger(incrementalLedger), stableLedger(clean.ledger));
+  assert.deepEqual(
+    inspectCandidateValidationReceipt(incrementalLedger.records[0].snapshot),
+    inspectCandidateValidationReceipt(clean.ledger.records[0].snapshot),
+  );
+
+  const recordsReference = index.getRecords();
+  const beforeFailure = inspectCandidateValidationReceipt(incrementalLedger.records[0].snapshot);
+  assert.throws(() => index.applyChanges({ changed: [source("bad.md", content, { size: -1 })] }), /GKX_CANONICAL_SOURCE_SIZE_INVALID/u);
+  assert.strictEqual(index.getRecords(), recordsReference);
+  assert.deepEqual(inspectCandidateValidationReceipt(inspectCanonicalCandidateLedger(index.graph).records[0].snapshot), beforeFailure);
+  assert.throws(() => index.setFiles([source("bad.md", content, { size: -1 })]), /GKX_CANONICAL_SOURCE_SIZE_INVALID/u);
+  assert.strictEqual(index.getRecords(), recordsReference);
+  assert.deepEqual(inspectCandidateValidationReceipt(inspectCanonicalCandidateLedger(index.graph).records[0].snapshot), beforeFailure);
+});
+
+test("note and attachment kind transitions reparse and converge with clean authority", () => {
+  const content = note(UID_A, "Kind transition");
+  for (const [initialKind, nextKind, nextApplicable] of [
+    ["note", "attachment", false],
+    ["attachment", "note", true],
+  ]) {
+    const initial = source("Kind.md", content, { kind: initialKind });
+    const next = source("Kind.md", content, { kind: nextKind });
+    const index = new TrustedCanonicalCandidateIndex();
+    index.setFiles([initial]);
+    const beforeParseCount = index.parseCount;
+    index.applyChanges({ changed: [next] });
+    assert.equal(index.parseCount, beforeParseCount + 1, `${initialKind}->${nextKind} must reparse`);
+
+    const incremental = inspectCanonicalCandidateLedger(index.graph);
+    const clean = ledger([next]);
+    assert.deepEqual(stableLedger(incremental), stableLedger(clean.ledger));
+    const incrementalReceipt = inspectCandidateValidationReceipt(incremental.records[0].snapshot);
+    assert.deepEqual(incrementalReceipt, inspectCandidateValidationReceipt(clean.ledger.records[0].snapshot));
+    assert.equal(incrementalReceipt.applicable, nextApplicable);
+    assert.equal(index.getRecords().get("Kind.md").gkx === null, !nextApplicable);
+
+    const recordsReference = index.getRecords();
+    const stableGraph = structuredClone(index.graph);
+    const stableReceipt = incrementalReceipt;
+    const stableParseCount = index.parseCount;
+    assert.throws(
+      () => index.applyChanges({ changed: [{ ...initial, kind: initialKind, size: -1 }] }),
+      /GKX_CANONICAL_SOURCE_SIZE_INVALID/u,
+    );
+    assert.strictEqual(index.getRecords(), recordsReference);
+    assert.deepEqual(index.graph, stableGraph);
+    assert.deepEqual(inspectCandidateValidationReceipt(inspectCanonicalCandidateLedger(index.graph).records[0].snapshot), stableReceipt);
+    assert.equal(index.parseCount, stableParseCount);
+  }
+});
 
 test("candidate ledger captures path multiplicity before compatibility maps and is permutation-stable", () => {
   const first = source("same.md", note(UID_A, "First", "", "first bytes"));
@@ -329,12 +450,12 @@ test("full replacement rejection is transactional across every observable surfac
 
 test("candidate receipts and scoped resolver capability are absent from ordinary public subpaths", async () => {
   for (const api of [rootApi, gkxApi, retrievalApi]) {
-    for (const key of ["inspectCanonicalCandidateLedger", "inspectScopedCandidateResolution", "TrustedCanonicalCandidateIndex", "gkxCanonicalCandidateLedger", "resolveGkxScopedCandidateDeclaration"]) {
+    for (const key of ["inspectCanonicalCandidateLedger", "inspectCandidateValidationReceipt", "inspectScopedCandidateResolution", "TrustedCanonicalCandidateIndex", "gkxCanonicalCandidateLedger", "resolveGkxScopedCandidateDeclaration", "buildGkx23ProjectionForCanonicalRecord"]) {
       assert.equal(Object.hasOwn(api, key), false, `${key} must remain trusted-host-only`);
     }
   }
   for (const file of ["dist/index.d.ts", "dist/gkx.d.ts", "dist/retrieval/index.d.ts"]) {
     const declaration = await readFile(new URL(`../${file}`, import.meta.url), "utf8");
-    assert.doesNotMatch(declaration, /inspectCanonicalCandidateLedger|inspectScopedCandidateResolution|gkxCanonicalCandidateLedger|resolveGkxScopedCandidateDeclaration/u);
+    assert.doesNotMatch(declaration, /inspectCanonicalCandidateLedger|inspectCandidateValidationReceipt|inspectScopedCandidateResolution|gkxCanonicalCandidateLedger|resolveGkxScopedCandidateDeclaration|buildGkx23ProjectionForCanonicalRecord/u);
   }
 });

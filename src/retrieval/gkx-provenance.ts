@@ -10,6 +10,7 @@ import { types as utilTypes } from "node:util";
 import { isValidRetrievalSourcePath } from "./chunker";
 import { retrievalCodeUnitCompare, retrievalSha256 } from "./digest";
 import { sealGkxRetrievalCandidateSource, type GkxRetrievalCandidateDeclaration, type GkxRetrievalCandidateSource } from "./candidate-types";
+import { gkxCandidateValidationReceipt } from "../validation-receipts";
 import type {
   ChunkMarkdownInput,
   GkxRetrievalStoredSourceProvenance,
@@ -39,6 +40,46 @@ export interface GkxRetrievalProjectionRejection {
   source_path: string;
   source_id: string | null;
   reason_codes: string[];
+}
+
+// Phase-3 owner validation must associate a source-local rejection with the
+// exact physical candidate, including duplicate portable paths.  Keep that
+// authority package-private and non-enumerable so frozen Phase-2 projection
+// bytes and trusted-host return shapes remain unchanged.
+const PROJECTION_REJECTION_RECORD_KEYS = new WeakMap<GkxRetrievalProjectionRejection, string>();
+export interface GkxRetrievalInvalidDeclarationLocation {
+  category: "lineage" | "relationship" | "link";
+  field: string;
+  declaration_index: number;
+  indexed: boolean;
+  source_line: number | null;
+}
+const PROJECTION_REJECTION_DECLARATION_LOCATIONS = new WeakMap<
+  GkxRetrievalProjectionRejection,
+  readonly GkxRetrievalInvalidDeclarationLocation[]
+>();
+
+function bindProjectionRejectionRecordKey(
+  rejection: GkxRetrievalProjectionRejection,
+  recordKey: string,
+  invalidDeclarationLocations: readonly GkxRetrievalInvalidDeclarationLocation[] = [],
+): GkxRetrievalProjectionRejection {
+  PROJECTION_REJECTION_RECORD_KEYS.set(rejection, recordKey);
+  PROJECTION_REJECTION_DECLARATION_LOCATIONS.set(rejection, Object.freeze(invalidDeclarationLocations.map((item) => Object.freeze({ ...item }))));
+  return rejection;
+}
+
+export function gkxRetrievalProjectionRejectionRecordKey(
+  rejection: GkxRetrievalProjectionRejection,
+): string | null {
+  return PROJECTION_REJECTION_RECORD_KEYS.get(rejection) ?? null;
+}
+
+/** Phase-3 owner-only parser receipt coordinates; raw references remain sealed. */
+export function gkxRetrievalProjectionRejectionInvalidDeclarationLocations(
+  rejection: GkxRetrievalProjectionRejection,
+): readonly GkxRetrievalInvalidDeclarationLocation[] {
+  return PROJECTION_REJECTION_DECLARATION_LOCATIONS.get(rejection) ?? Object.freeze([]);
 }
 
 export interface GkxRetrievalCorpusProjection {
@@ -352,25 +393,52 @@ export function projectGkxRetrievalCorpus(
       rejectionReasons.push("CANONICAL_VALIDITY_BINDING_MISMATCH");
     }
     const sourceDeclarations = ledger.declarations.filter((item) => item.source_record_key === record.record_key);
-    let authoredSupersedes: string[] = [];
-    let authoredSupersededBy: string[] = [];
-    try {
-      authoredSupersedes = validatedAuthoredReferences(sourceDeclarations
-        .filter((item) => item.category === "lineage" && item.origin === "authored" && item.field === "supersedes")
-        .map((item) => item.raw_reference));
-      authoredSupersededBy = validatedAuthoredReferences(sourceDeclarations
-        .filter((item) => item.category === "lineage" && item.origin === "authored" && item.field === "superseded_by")
-        .map((item) => item.raw_reference));
-      for (const declaration of sourceDeclarations) validatedAuthoredReferences([declaration.raw_reference]);
-    } catch {
+    const authoredSupersedes: string[] = [];
+    const authoredSupersededBy: string[] = [];
+    const invalidDeclarationLocations: GkxRetrievalInvalidDeclarationLocation[] = [
+      ...(gkxCandidateValidationReceipt(record.snapshot)?.invalid_declarations ?? []).map((issue) => ({
+        category: issue.category,
+        field: issue.field,
+        declaration_index: issue.declaration_index,
+        indexed: issue.indexed,
+        source_line: issue.line,
+      })),
+    ];
+    for (const declaration of sourceDeclarations) {
+      try {
+        const [reference] = validatedAuthoredReferences([declaration.raw_reference]);
+        if (declaration.category === "lineage" && declaration.origin === "authored" && declaration.field === "supersedes") {
+          authoredSupersedes.push(reference);
+        } else if (declaration.category === "lineage" && declaration.origin === "authored" && declaration.field === "superseded_by") {
+          authoredSupersededBy.push(reference);
+        }
+      } catch {
+        const location = {
+          category: declaration.category,
+          field: declaration.field,
+          declaration_index: declaration.declaration_index,
+          indexed: declaration.source_declaration_index !== null,
+          source_line: declaration.source_line,
+        };
+        if (!invalidDeclarationLocations.some((item) => item.category === location.category && item.field === location.field &&
+          item.declaration_index === location.declaration_index && item.source_line === location.source_line)) {
+          invalidDeclarationLocations.push(location);
+        }
+      }
+    }
+    invalidDeclarationLocations.sort((left, right) =>
+      (left.source_line ?? Number.MAX_SAFE_INTEGER) - (right.source_line ?? Number.MAX_SAFE_INTEGER) ||
+      retrievalCodeUnitCompare(left.category, right.category) || retrievalCodeUnitCompare(left.field, right.field) ||
+      left.declaration_index - right.declaration_index || Number(left.indexed) - Number(right.indexed));
+    if (invalidDeclarationLocations.length > 0) {
       rejectionReasons.push("AUTHORED_RELATIONSHIP_REFERENCE_INVALID");
     }
     if (rejectionReasons.length > 0) {
-      rejections.push({
+      rejections.push(bindProjectionRejectionRecordKey({
         source_path: record.source_path,
         source_id: isValidGkxAuthoredUid(sourceId) ? sourceId : null,
         reason_codes: [...new Set(rejectionReasons)].sort(retrievalCodeUnitCompare),
-      });
+      }, record.record_key, invalidDeclarationLocations));
       continue;
     }
     acceptedRecordKeys.add(record.record_key);

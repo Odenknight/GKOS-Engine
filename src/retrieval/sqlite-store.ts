@@ -1,5 +1,5 @@
 import { DatabaseSync } from "node:sqlite";
-import { chmodSync, lstatSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, linkSync, lstatSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, parse, resolve } from "node:path";
 import { types as utilTypes } from "node:util";
 import { ENGINE_VERSION } from "../version";
@@ -32,6 +32,17 @@ import { retrievalCanonicalDigest, retrievalCodeUnitCompare, stableJson } from "
 import { cosineSimilarity } from "./fusion";
 import { lexicalQueryClauses, lexicalScanMatches, lexicalSignal } from "./lexical";
 import { canonicalPathSync, sameCanonicalPath } from "./path-security";
+import { assertRetrievalProjectionManifest, isGkxRetrievalProjectionManifest } from "./manifest";
+import {
+  acquireLegacyRetrievalWriter,
+  assertLegacyRetrievalWriterCapability,
+  assertLegacyRetrievalWriterCommit,
+  bindLegacyRetrievalWriterTarget,
+  legacyRetrievalWriterIsHeld,
+  releaseLegacyRetrievalWriter,
+  verifyLegacyRetrievalWriterTargetPublished,
+  type LegacyRetrievalWriterCapability,
+} from "./state-writer-lock";
 import type { RankedInput } from "./fusion";
 import type { AnyRetrievalProjectionManifest, GkxRetrievalProjectionManifest, GkxRetrievalStoredSourceProvenance, RetrievalChunk, RetrievalProjectionManifest, SqliteLexicalBackend } from "./types";
 
@@ -73,6 +84,12 @@ export interface GkxRetrievalGenerationInput extends Omit<RetrievalGenerationInp
 export interface BuiltRetrievalGeneration {
   database_path: string;
   pointer_path: string;
+  manifest: AnyRetrievalProjectionManifest;
+}
+
+/** Trusted-host artifact verified without advancing the Phase-1/2 pointer. */
+export interface BuiltUnactivatedRetrievalGeneration {
+  database_path: string;
   manifest: AnyRetrievalProjectionManifest;
 }
 
@@ -311,7 +328,7 @@ function hardenDirectoryPermissions(path: string): void {
 }
 
 function hardenFilePermissions(path: string): void {
-  if (process.platform !== "win32") chmodSync(path, 0o600);
+  if (process.platform !== "win32" && (statSync(path).mode & 0o777) !== 0o600) chmodSync(path, 0o600);
 }
 
 function quarantineGenerationFiles(finalPath: string, directory: string): void {
@@ -459,56 +476,7 @@ function rowToCandidateChunk(row: SqliteRow): GkxRetrievalCandidateChunk {
   return candidate;
 }
 
-export function isGkxRetrievalProjectionManifest(value: AnyRetrievalProjectionManifest): value is GkxRetrievalProjectionManifest {
-  return value.contract_version === RETRIEVAL_LINEAGE_CONTRACT_VERSION &&
-    value.projection_schema_version === RETRIEVAL_LINEAGE_PROJECTION_SCHEMA_VERSION;
-}
-
-function assertManifest(value: AnyRetrievalProjectionManifest): void {
-  if (!value || typeof value !== "object") throw new Error("RETRIEVAL_MANIFEST_INVALID");
-  const phase2 = isGkxRetrievalProjectionManifest(value);
-  const keys = phase2
-    ? [
-      "candidate_chunk_count", "candidate_declaration_count", "candidate_source_count", "chunker_version", "configuration_digest", "contract_version", "embedding_dimensions",
-      "embedding_eligible_candidate_chunk_count", "embedding_model_id", "embedding_provider_id", "engine_version", "gkx_projection_profile", "gkx_standard_commit", "lexical_backend", "policy_digest", "projection_digest",
-      "projection_id", "projection_schema_version", "provenance_contract_version", "represented_candidate_source_count", "source_snapshot_digest", "tokenizer_version", "vault_id",
-    ]
-    : [
-      "chunk_count", "chunker_version", "configuration_digest", "contract_version", "embedding_dimensions",
-      "embedding_model_id", "embedding_provider_id", "engine_version", "lexical_backend", "policy_digest", "projection_digest",
-      "projection_id", "projection_schema_version", "source_count", "source_snapshot_digest", "tokenizer_version", "vault_id",
-    ];
-  if (Object.keys(value).sort(retrievalCodeUnitCompare).join("\0") !== keys.sort(retrievalCodeUnitCompare).join("\0")) throw new Error("RETRIEVAL_MANIFEST_FIELDS_INVALID");
-  if (phase2) {
-    if (value.provenance_contract_version !== RETRIEVAL_PROVENANCE_CONTRACT_VERSION) throw new Error("RETRIEVAL_PROVENANCE_CONTRACT_MISMATCH");
-    if (value.gkx_standard_commit !== RETRIEVAL_GKX_STANDARD_COMMIT || value.gkx_projection_profile !== RETRIEVAL_GKX_PROJECTION_PROFILE) {
-      throw new Error("RETRIEVAL_GKX_AUTHORITY_COORDINATE_MISMATCH");
-    }
-  } else if (value.contract_version !== RETRIEVAL_CONTRACT_VERSION || value.projection_schema_version !== RETRIEVAL_PROJECTION_SCHEMA_VERSION) {
-    throw new Error("RETRIEVAL_CONTRACT_MISMATCH");
-  }
-  if (value.chunker_version !== RETRIEVAL_CHUNKER_VERSION || value.tokenizer_version !== RETRIEVAL_TOKENIZER_VERSION) throw new Error("RETRIEVAL_CHUNKER_MISMATCH");
-  if (value.lexical_backend !== "sqlite_fts5" && value.lexical_backend !== "sqlite_lexical_scan") throw new Error("RETRIEVAL_LEXICAL_BACKEND_INVALID");
-  if (value.engine_version !== ENGINE_VERSION || typeof value.vault_id !== "string" || !value.vault_id || value.vault_id.length > 512) throw new Error("RETRIEVAL_MANIFEST_IDENTITY_INVALID");
-  for (const digest of [value.source_snapshot_digest, value.configuration_digest, value.policy_digest, value.projection_digest]) {
-    if (!/^sha256:[0-9a-f]{64}$/u.test(digest)) throw new Error("RETRIEVAL_MANIFEST_DIGEST_INVALID");
-  }
-  if (phase2) {
-    if (!Number.isSafeInteger(value.candidate_source_count) || value.candidate_source_count < 0 ||
-        !Number.isSafeInteger(value.candidate_declaration_count) || value.candidate_declaration_count < 0 ||
-        !Number.isSafeInteger(value.represented_candidate_source_count) || value.represented_candidate_source_count < 0 ||
-        value.represented_candidate_source_count > value.candidate_source_count ||
-        !Number.isSafeInteger(value.candidate_chunk_count) || value.candidate_chunk_count < 0 ||
-        !Number.isSafeInteger(value.embedding_eligible_candidate_chunk_count) || value.embedding_eligible_candidate_chunk_count < 0 ||
-        value.embedding_eligible_candidate_chunk_count > value.candidate_chunk_count) throw new Error("RETRIEVAL_MANIFEST_COUNT_INVALID");
-  } else if (!Number.isSafeInteger(value.source_count) || value.source_count < 0 ||
-      !Number.isSafeInteger(value.chunk_count) || value.chunk_count < 0) throw new Error("RETRIEVAL_MANIFEST_COUNT_INVALID");
-  const hasVectorIdentity = value.embedding_provider_id !== null || value.embedding_model_id !== null || value.embedding_dimensions !== null;
-  if ((value.embedding_provider_id !== null && typeof value.embedding_provider_id !== "string") || (value.embedding_model_id !== null && typeof value.embedding_model_id !== "string")) throw new Error("VECTOR_MANIFEST_IDENTITY_INVALID");
-  if (hasVectorIdentity && (!value.embedding_provider_id || !value.embedding_model_id || !Number.isSafeInteger(value.embedding_dimensions) || value.embedding_dimensions! <= 0)) throw new Error("VECTOR_MANIFEST_IDENTITY_INVALID");
-  const expectedId = `retrieval:${value.projection_digest.slice("sha256:".length, "sha256:".length + 24)}`;
-  if (value.projection_id !== expectedId) throw new Error("RETRIEVAL_PROJECTION_ID_INVALID");
-}
+export { assertRetrievalProjectionManifest, isGkxRetrievalProjectionManifest } from "./manifest";
 
 function calculateProjectionDigest(
   manifest: Omit<RetrievalProjectionManifest, "projection_id" | "projection_digest">,
@@ -1151,10 +1119,11 @@ function insertCandidateGeneration(
   }
 }
 
-function buildGeneration(
+function buildGenerationArtifact(
   input: RetrievalGenerationInput | GkxRetrievalGenerationInput,
   lineage: boolean,
-): BuiltRetrievalGeneration {
+  immutableNoReplace = false,
+): BuiltUnactivatedRetrievalGeneration {
   // Validate every record before creating or touching derived state. A single
   // malformed chunk rejects the whole source generation and cannot advance the
   // active pointer or leave a partial database behind.
@@ -1165,7 +1134,7 @@ function buildGeneration(
   const manifest = lineage
     ? lineageProjectionManifest(input as GkxRetrievalGenerationInput, lexicalBackend)
     : projectionManifest(input as RetrievalGenerationInput, lexicalBackend);
-  assertManifest(manifest);
+  assertRetrievalProjectionManifest(manifest);
   const directory = canonicalPathSync(requestedDirectory, { allow_missing: true, alias_error: "RETRIEVAL_STATE_ANCESTOR_ALIAS_REJECTED" });
   mkdirSync(directory, { recursive: true, mode: 0o700 });
   assertRealStateDirectory(directory);
@@ -1175,6 +1144,7 @@ function buildGeneration(
   assertPlainContainedFile(finalPath, directory);
   let needsBuild = !pathExists(finalPath);
   if (!needsBuild && (pathExists(`${finalPath}-wal`) || pathExists(`${finalPath}-shm`))) {
+    if (immutableNoReplace) throw new Error("RETRIEVAL_IMMUTABLE_GENERATION_SIDECAR_CONFLICT");
     quarantineGenerationFiles(finalPath, directory);
     needsBuild = true;
   }
@@ -1184,6 +1154,7 @@ function buildGeneration(
       const existing = new SqliteRetrievalStore(finalPath);
       existing.close();
     } catch {
+      if (immutableNoReplace) throw new Error("RETRIEVAL_IMMUTABLE_GENERATION_CONFLICT");
       quarantineGenerationFiles(finalPath, directory);
       needsBuild = true;
     }
@@ -1191,10 +1162,17 @@ function buildGeneration(
   if (needsBuild) {
     // An interrupted prior replacement may leave WAL/SHM files without a main
     // database. Move them out of the active basename before creating it anew.
-    quarantineGenerationFiles(finalPath, directory);
+    if (immutableNoReplace) {
+      if (pathExists(`${finalPath}-wal`) || pathExists(`${finalPath}-shm`)) {
+        throw new Error("RETRIEVAL_IMMUTABLE_GENERATION_SIDECAR_CONFLICT");
+      }
+    } else quarantineGenerationFiles(finalPath, directory);
     const temporary = `${finalPath}.${process.pid}.tmp`;
     assertPlainContainedFile(temporary, directory);
-    if (pathExists(temporary)) unlinkSync(temporary);
+    if (pathExists(temporary)) {
+      if (immutableNoReplace) throw new Error("RETRIEVAL_IMMUTABLE_GENERATION_TEMP_CONFLICT");
+      unlinkSync(temporary);
+    }
     // Pre-create owner-only: DatabaseSync's default create mode would otherwise
     // inherit a permissive process umask before note text is inserted.
     writeFileSync(temporary, Buffer.alloc(0), { flag: "wx", mode: 0o600 });
@@ -1206,36 +1184,113 @@ function buildGeneration(
     }
     finally { database.close(); }
     hardenFilePermissions(temporary);
-    renameSync(temporary, finalPath);
+    if (immutableNoReplace) {
+      try { linkSync(temporary, finalPath); }
+      catch (error) {
+        unlinkSync(temporary);
+        if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
+        const winner = new SqliteRetrievalStore(finalPath);
+        try {
+          if (stableJson(winner.manifest) !== stableJson(manifest)) {
+            throw new Error("RETRIEVAL_IMMUTABLE_GENERATION_CONFLICT");
+          }
+        } finally { winner.close(); }
+      }
+      if (pathExists(temporary)) unlinkSync(temporary);
+    } else renameSync(temporary, finalPath);
     hardenFilePermissions(finalPath);
   }
   const verified = new SqliteRetrievalStore(finalPath);
   try {
     const expectedChunks = isGkxRetrievalProjectionManifest(manifest) ? manifest.candidate_chunk_count : manifest.chunk_count;
-    if (verified.manifest.projection_digest !== manifest.projection_digest || verified.countChunks() !== expectedChunks) throw new Error("RETRIEVAL_GENERATION_VERIFICATION_FAILED");
+    if (verified.manifest.projection_digest !== manifest.projection_digest || verified.countChunks() !== expectedChunks ||
+        (immutableNoReplace && stableJson(verified.manifest) !== stableJson(manifest))) {
+      throw new Error("RETRIEVAL_GENERATION_VERIFICATION_FAILED");
+    }
   } finally { verified.close(); }
+  return { database_path: finalPath, manifest };
+}
+
+function activateRetrievalGeneration(
+  artifact: BuiltUnactivatedRetrievalGeneration,
+  writer: LegacyRetrievalWriterCapability,
+): BuiltRetrievalGeneration {
+  const directory = dirname(artifact.database_path);
+  const { manifest } = artifact;
+  const finalPath = artifact.database_path;
   const pointerPath = join(directory, "active-retrieval.json");
   const pointerTemporary = `${pointerPath}.${process.pid}.tmp`;
   assertPlainContainedFile(pointerPath, directory);
   assertPlainContainedFile(pointerTemporary, directory);
+  const pointerBytes = Buffer.from(`${stableJson({ database_file: basename(finalPath), manifest })}\n`, "utf8");
+  bindLegacyRetrievalWriterTarget(writer, pointerBytes);
+  assertLegacyRetrievalWriterCommit(writer, pointerBytes);
   if (pathExists(pointerTemporary)) unlinkSync(pointerTemporary);
-  writeFileSync(pointerTemporary, `${stableJson({ database_file: basename(finalPath), manifest })}\n`, { encoding: "utf8", flag: "wx", mode: 0o600 });
+  writeFileSync(pointerTemporary, pointerBytes, { flag: "wx", mode: 0o600 });
   hardenFilePermissions(pointerTemporary);
+  // The exact guard is revalidated immediately before the only mutable commit.
+  assertLegacyRetrievalWriterCommit(writer, pointerBytes);
   renameSync(pointerTemporary, pointerPath);
   hardenFilePermissions(pointerPath);
+  verifyLegacyRetrievalWriterTargetPublished(writer, pointerBytes);
   return { database_path: finalPath, pointer_path: pointerPath, manifest };
+}
+
+function buildGeneration(
+  input: RetrievalGenerationInput | GkxRetrievalGenerationInput,
+  lineage: boolean,
+  writer: LegacyRetrievalWriterCapability,
+): BuiltRetrievalGeneration {
+  assertLegacyRetrievalWriterCapability(writer, input.state_directory);
+  return activateRetrievalGeneration(buildGenerationArtifact(input, lineage), writer);
+}
+
+function withLegacyWriter<T>(stateDirectory: string, invoke: (writer: LegacyRetrievalWriterCapability) => T): T {
+  const writer = acquireLegacyRetrievalWriter(stateDirectory);
+  try { return invoke(writer); }
+  finally { if (legacyRetrievalWriterIsHeld(writer)) releaseLegacyRetrievalWriter(writer); }
+}
+
+/** Trusted coordinator seam: caller already holds the pre-provider writer guard. */
+export function buildRetrievalGenerationWithWriter(
+  input: RetrievalGenerationInput,
+  writer: LegacyRetrievalWriterCapability,
+): BuiltRetrievalGeneration {
+  preflightGenerationInput(input, false, false);
+  return buildGeneration(input, false, writer);
+}
+
+/** Trusted coordinator seam: caller already holds the pre-provider writer guard. */
+export function buildGkxRetrievalGenerationWithWriter(
+  input: GkxRetrievalGenerationInput,
+  writer: LegacyRetrievalWriterCapability,
+): BuiltRetrievalGeneration {
+  preflightGenerationInput(input, true, false);
+  return buildGeneration(input, true, writer);
 }
 
 /** Frozen Phase-1/schema-2 generation builder. */
 export function buildRetrievalGeneration(input: RetrievalGenerationInput): BuiltRetrievalGeneration {
   preflightGenerationInput(input, false, false);
-  return buildGeneration(input, false);
+  return withLegacyWriter(input.state_directory, (writer) => buildGeneration(input, false, writer));
 }
 
 /** Additive Phase-2/schema-3 generation builder. */
 export function buildGkxRetrievalGeneration(input: GkxRetrievalGenerationInput): BuiltRetrievalGeneration {
   preflightGenerationInput(input, true, false);
-  return buildGeneration(input, true);
+  return withLegacyWriter(input.state_directory, (writer) => buildGeneration(input, true, writer));
+}
+
+/**
+ * Trusted Phase-3 seam: build and fully verify schema-3 bytes without
+ * publishing or changing active-retrieval.json. It is intentionally absent
+ * from every ordinary package entry point.
+ */
+export function buildGkxRetrievalGenerationUnactivated(
+  input: GkxRetrievalGenerationInput,
+): BuiltUnactivatedRetrievalGeneration {
+  preflightGenerationInput(input, true, false);
+  return buildGenerationArtifact(input, true, true);
 }
 
 function statSafe(path: string): boolean {
@@ -1251,7 +1306,7 @@ export function openActiveRetrievalStore(stateDirectory: string): SqliteRetrieva
   if (statSync(pointerPath).size > 1_048_576) throw new Error("RETRIEVAL_POINTER_SIZE_EXCEEDED");
   const pointer = JSON.parse(readFileSync(pointerPath, "utf8")) as { database_file: string; manifest: AnyRetrievalProjectionManifest };
   if (basename(pointer.database_file) !== pointer.database_file) throw new Error("RETRIEVAL_POINTER_PATH_INVALID");
-  assertManifest(pointer.manifest);
+  assertRetrievalProjectionManifest(pointer.manifest);
   const databasePath = join(directory, pointer.database_file);
   assertPlainContainedFile(databasePath, directory);
   hardenFilePermissions(databasePath);
@@ -1284,7 +1339,7 @@ export class SqliteRetrievalStore {
       const row = this.#database.prepare("SELECT * FROM projection_manifest WHERE singleton = 1").get() as SqliteRow | undefined;
       if (!row) throw new Error("RETRIEVAL_MANIFEST_MISSING");
       this.manifest = JSON.parse(String(row.manifest_json));
-      assertManifest(this.manifest);
+      assertRetrievalProjectionManifest(this.manifest);
       if (row.manifest_json !== stableJson(this.manifest)) throw new Error("RETRIEVAL_MANIFEST_JSON_NONCANONICAL");
       if (version !== this.manifest.projection_schema_version) throw new Error("RETRIEVAL_SCHEMA_MISMATCH");
       const declaredBackend = declaredLexicalBackend(this.#database);

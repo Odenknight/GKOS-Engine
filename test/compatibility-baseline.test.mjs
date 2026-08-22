@@ -27,6 +27,9 @@ const FIXED_PROCESSING_TIME = "2026-08-20T00:00:00.000Z";
 const ADDITIVE_RETRIEVAL_SEARCH_HELP = `  gkx search <query> --kb-path <dir> [--limit <n>]    public-only lexical retrieval with exact citations
              [--as-of <GKX-timestamp>] [--config <trusted-gkos.toml>] [--trust-cwd-config]
 `;
+const ADDITIVE_INGEST_HELP = `  gkx validate --kb-path <path> [--schema <path-or-id>] [--format text|json]
+  gkx index --kb-path <path> [--schema <path-or-id>] [--strict]
+`;
 const SOURCE_A = `---
 gkx_version: "2.3"
 uid: "019b2d14-4230-7db7-87d4-7d81cfaeca01"
@@ -66,7 +69,8 @@ const jsonBytes = (value) =>
 
 function withoutPhase1SearchHelp(help) {
   assert.equal(help.split(ADDITIVE_RETRIEVAL_SEARCH_HELP).length - 1, 1, "additive retrieval search help must occur exactly once");
-  return help.replace(ADDITIVE_RETRIEVAL_SEARCH_HELP, "");
+  assert.equal(help.split(ADDITIVE_INGEST_HELP).length - 1, 1, "additive ingest help must occur exactly once");
+  return help.replace(ADDITIVE_RETRIEVAL_SEARCH_HELP, "").replace(ADDITIVE_INGEST_HELP, "");
 }
 
 function compatibilityCorpus() {
