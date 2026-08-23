@@ -17,6 +17,8 @@ jobs:
         node: [22, 23, 24]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
@@ -64,7 +66,32 @@ jobs:
           node bin/gkx.mjs --help
           node bin/gkx.mjs assess . --json >/dev/null
 
+      - name: Bundle private Phase 4 qualification host
+        run: ./node_modules/.bin/esbuild scripts/run-retrieval-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$RUNNER_TEMP/phase4-retrieval-qualification.mjs"
+
+      - name: Create private Phase 4 qualification receipt root
+        run: mkdir -m 700 "$RUNNER_TEMP/phase4-retrieval-qualification-node-${{ matrix.node }}"
+
+      - name: Exact Phase 4 eval and exhaustive tune qualification
+        timeout-minutes: 15
+        env:
+          GKOS_PHASE4_SOURCE_HEAD_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: node "$RUNNER_TEMP/phase4-retrieval-qualification.mjs" --mode cli --artifact-root "$RUNNER_TEMP/phase4-retrieval-qualification-node-${{ matrix.node }}"
+
+      - name: Upload bounded Phase 4 qualification receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: phase4-retrieval-qualification-${{ runner.os }}-node-${{ matrix.node }}
+          path: ${{ runner.temp }}/phase4-retrieval-qualification-node-${{ matrix.node }}/gkos-phase4-retrieval-qualification.json
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+          overwrite: false
+          include-hidden-files: false
+
       - name: Clean tracked tree after release checks
+        if: always()
         run: git diff --exit-code
 
   windows-retrieval-path-security:
@@ -78,6 +105,8 @@ jobs:
       GKOS_REQUIRE_SHORT_PATH_FIXTURE: "1"
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
@@ -91,9 +120,38 @@ jobs:
         run: |
           npm run typecheck
           npm run build
+          .\node_modules\.bin\esbuild.cmd scripts/run-retrieval-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$env:RUNNER_TEMP/phase4-retrieval-qualification.mjs"
+
+      - name: Create private Windows receipt root
+        shell: pwsh
+        run: |
+          $receiptRoot = Join-Path $env:RUNNER_TEMP "phase4-retrieval-windows-node-${{ matrix.node }}"
+          New-Item -ItemType Directory -Path $receiptRoot | Out-Null
 
       - name: Mandatory Windows 8.3, junction, and retrieval regression
         run: node --test test/retrieval-windows-path-security.test.mjs test/retrieval-config.test.mjs test/retrieval-store.test.mjs
 
+      - name: Exact Windows Phase 4 security qualification
+        shell: pwsh
+        timeout-minutes: 15
+        env:
+          GKOS_PHASE4_SOURCE_HEAD_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          $receiptRoot = Join-Path $env:RUNNER_TEMP "phase4-retrieval-windows-node-${{ matrix.node }}"
+          node "$env:RUNNER_TEMP/phase4-retrieval-qualification.mjs" --mode windows-security --artifact-root $receiptRoot
+
+      - name: Upload bounded Windows security receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: phase4-retrieval-qualification-${{ runner.os }}-node-${{ matrix.node }}
+          path: ${{ runner.temp }}/phase4-retrieval-windows-node-${{ matrix.node }}/gkos-phase4-retrieval-qualification.json
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+          overwrite: false
+          include-hidden-files: false
+
       - name: Clean tracked tree after Windows retrieval checks
+        if: always()
         run: git diff --exit-code

@@ -9,6 +9,12 @@
   temporary state, and guarded no-clobber candidate-TOML publication. No raw
   fixture, provider, tuner, filesystem, or output authority was added to the
   public `gkos-engine/retrieval` surface.
+- Added the Phase 4 closeout qualification lanes: bounded Node 22/23/24 and
+  Windows CLI/security receipts plus a daily/manual offline Node 24 Observation
+  workflow over the deterministic 10,000-chunk real-FTS5 corpus. The lane
+  records exact index/update/rebuild and query-work ledgers, enforces a strict
+  500,000-microsecond p95 bound, and proves incremental/clean convergence without
+  adding a public API, network/provider authority, or mutable production state.
 - Added a shared fail-closed validation-to-context gate. Discoverable sources
   with error/critical diagnostics or duplicate canonical identities now reject
   the whole pack with stable reason codes; CLI rejection exits with code 3 and

@@ -315,6 +315,40 @@ Existing or ambiguous targets are never overwritten. These parser, execution,
 tuning, filesystem, and output surfaces exist only in the non-exported
 evaluation-host bundle.
 
+Phase-4 closeout qualification is likewise host-private. The push/PR CI lane
+executes the exact 23-case eval/tune fixture on Node 22/23/24 and records bounded
+canonical receipts; the Windows matrix executes the exact 49-case path/store
+security suite. The independent `Phase 4 Retrieval Observation` workflow runs
+manually or from `17 4 * * *` on Node 24. It installs fail-closed denials for
+fetch, HTTP/HTTPS/HTTP2, net/TLS/DNS/datagram/WebSocket, and child-process
+primitives before all measured work. It creates two capability-bound 0700 state
+roots, requires real SQLite FTS5, and runs production schema-2 indexing over the
+fixed 1,000-source/10,000-chunk corpus with the fixed local four-dimensional
+embedding provider. Exact provider ledgers are 313 calls/10,000 items for the
+initial index, 1/1 for the one-section equal-length update, and 313/10,000 for a
+clean updated rebuild. The query ledger is 60 incremental coordinator attempts
+(10 warmup and 50 measured) plus 10 clean-rebuild comparison attempts, with one
+embedding call/item and one real FTS stage per attempt, zero reranker calls, and
+zero cache hits.
+
+Measured durations use monotonic nanoseconds rounded up to integer microseconds;
+nearest-rank percentiles select indexes 24, 47, and 49 from the 50 ascending
+samples. The p95 gate is strict (`< 500000`). Incremental and clean manifests
+must be canonical-byte equal, all six incremental occurrences for each query
+must have the same result digest, and the final measured ten-result set must
+match the clean rebuild in query order. The existing normalized ObservationReport remains the only report
+schema: its fixed-sample-plan coordinate is
+`sha256:7852c24bc2eeb057f3ae9ccfaf4b03c72e75b6556609dac7673e5626f238a534`.
+The separate Observation receipt binds source/runner provenance, exact index
+and query ledgers, convergence, offline counters, and the report digest. It
+contains no corpus, database, provider input, result body, configuration path,
+environment variable, or secret. Only an exact-head, committed-clean,
+manual/scheduled hosted Linux/x64 run is publication-eligible; other platforms
+may exercise generator and negative gates but cannot emit a passing report.
+Temp cleanup revalidates every canonical
+identity and fails by retaining evidence on ambiguity. These measurements are
+observational and cannot select a backend, provider, policy, or public result.
+
 ```text
 gkx nav scan <dir>
 gkx nav audit <dir>
