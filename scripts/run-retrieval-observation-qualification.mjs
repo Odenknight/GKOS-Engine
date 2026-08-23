@@ -58,6 +58,10 @@ const PACK_MANIFEST_DIGEST = "sha256:6732519a4912714a432680c88219322c80413e4165b
 const SLICE_A_PACK_COMMIT = "cac029a5b570135b26f3585bc86f4c9beb00c36d";
 const PHASE3_BASE_COMMIT = "5396d46d";
 const SLICE_B_EVIDENCE_COMMIT = "ed3a7552b1d4a705c1b1a722b07255e89ec42186";
+const SLICE_B_PROTECTED_PATH_COUNT = 112;
+const SLICE_B_PROTECTED_PATH_INVENTORY_DIGEST = "sha256:f88846fdaf91e59f3e80780b787340b82e5a7177c474518aa901f63046c9478f";
+const SLICE_B_AUTHORIZED_ADDITION_PATHS = Object.freeze(["src/watcher/contracts.ts"]);
+const SLICE_B_AUTHORIZED_ADDITION_INVENTORY_DIGEST = "sha256:d24887eb649f993deda0de31059a879de629906769bc1f4387302e13a662fe1b";
 const SCAN_PRESENTATION_VERSION = "gkos-retrieval-evaluation-scan-presentation/1.0.0-draft.1";
 const QUERY_REQUEST_SEQUENCE_VERSION = "gkos-retrieval-evaluation-performance-query-request-sequence/1.0.0";
 const OBSERVATION_RUNNER_PATH = "scripts/run-retrieval-observation-qualification.mjs";
@@ -308,7 +312,7 @@ export function publicationEligibleForTest(source) {
 
 function gitDiffClean(repoRoot, commit, paths) {
   try {
-    execFileSync("git", ["diff", "--quiet", commit, "--", ...paths], { cwd: repoRoot, stdio: "ignore" });
+    execFileSync("git", ["diff", "--quiet", "--no-renames", commit, "--", ...paths], { cwd: repoRoot, stdio: "ignore" });
     return true;
   } catch { return false; }
 }
@@ -317,12 +321,59 @@ function splitLines(value) {
   return value === "" ? [] : value.split(/\r?\n/u).filter((row) => row !== "");
 }
 
-export async function verifyFrozenQualificationInputsForTest(repoRoot) {
-  const packRoot = "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1";
-  const protectedAtSliceB = [
-    "src", "bin", "package.json", "package-lock.json",
+function codeUnitSortedUniquePaths(paths) {
+  const sorted = [...paths].sort((left, right) => left < right ? -1 : left > right ? 1 : 0);
+  if (sorted.some((path, index) => path === "" || path.includes("\0") || (index > 0 && path === sorted[index - 1]))) {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  return sorted;
+}
+
+function gitNulPathInventory(repoRoot, args) {
+  let bytes;
+  try {
+    bytes = execFileSync("git", args, { cwd: repoRoot, stdio: ["ignore", "pipe", "ignore"] });
+  } catch {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  const text = bytes.toString("utf8");
+  if (!Buffer.from(text, "utf8").equals(bytes) || (text !== "" && !text.endsWith("\0"))) {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  return codeUnitSortedUniquePaths(text === "" ? [] : text.slice(0, -1).split("\0"));
+}
+
+function pathInventoryDigest(paths) {
+  return sha256Bytes(Buffer.from(`${paths.join("\n")}\n`, "utf8"));
+}
+
+export function verifySliceBProtectedInputsForTest(repoRoot) {
+  const protectedRoots = ["src", "bin"];
+  const explicitProtectedPaths = [
+    "package.json", "package-lock.json",
     "test/retrieval-evaluation-cli.test.mjs", "test/fixtures/retrieval-evaluation-cli-phase4.json",
   ];
+  const baselineRootPaths = gitNulPathInventory(repoRoot, [
+    "ls-tree", "-r", "--name-only", "-z", SLICE_B_EVIDENCE_COMMIT, "--", ...protectedRoots,
+  ]);
+  const baselineProtectedPaths = codeUnitSortedUniquePaths([...baselineRootPaths, ...explicitProtectedPaths]);
+  const currentRootPaths = gitNulPathInventory(repoRoot, ["ls-files", "-z", "--", ...protectedRoots]);
+  const baselineRootSet = new Set(baselineRootPaths);
+  const currentRootSet = new Set(currentRootPaths);
+  const authorizedAdditions = currentRootPaths.filter((path) => !baselineRootSet.has(path));
+  if (baselineProtectedPaths.length !== SLICE_B_PROTECTED_PATH_COUNT ||
+      pathInventoryDigest(baselineProtectedPaths) !== SLICE_B_PROTECTED_PATH_INVENTORY_DIGEST ||
+      baselineRootPaths.some((path) => !currentRootSet.has(path)) ||
+      authorizedAdditions.length !== SLICE_B_AUTHORIZED_ADDITION_PATHS.length ||
+      authorizedAdditions.some((path, index) => path !== SLICE_B_AUTHORIZED_ADDITION_PATHS[index]) ||
+      pathInventoryDigest(authorizedAdditions) !== SLICE_B_AUTHORIZED_ADDITION_INVENTORY_DIGEST ||
+      !gitDiffClean(repoRoot, SLICE_B_EVIDENCE_COMMIT, baselineProtectedPaths)) {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+}
+
+export async function verifyFrozenQualificationInputsForTest(repoRoot) {
+  const packRoot = "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1";
   const phase03 = [
     "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1",
     "contracts/retrieval/gkos-retrieval-1.0.0-draft.1",
@@ -332,8 +383,8 @@ export async function verifyFrozenQualificationInputsForTest(repoRoot) {
     "evidence/2026-08-21-functional-uplift-phase-2.md",
     "evidence/2026-08-21-functional-uplift-phase-3.md",
   ];
-  if (!gitDiffClean(repoRoot, SLICE_B_EVIDENCE_COMMIT, protectedAtSliceB) ||
-      !gitDiffClean(repoRoot, SLICE_A_PACK_COMMIT, [packRoot]) ||
+  verifySliceBProtectedInputsForTest(repoRoot);
+  if (!gitDiffClean(repoRoot, SLICE_A_PACK_COMMIT, [packRoot]) ||
       !gitDiffClean(repoRoot, PHASE3_BASE_COMMIT, phase03)) {
     fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
   }

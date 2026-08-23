@@ -8,13 +8,15 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve, sep } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
+import esbuild from "esbuild";
 import * as core from "../dist/gkos-engine.mjs";
 import * as watcher from "../dist/watcher-contracts.mjs";
 
 const PACK = new URL("../contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/", import.meta.url);
+const REPOSITORY_ROOT = fileURLToPath(new URL("..", import.meta.url));
 const SCHEMA_ROOT = "https://gkos.example/contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/";
 const EXPECTED_FILES = [
   "README.md",
@@ -57,6 +59,10 @@ function reseal(value, field, changes) {
   const material = { ...clone(value), ...changes };
   delete material[field];
   return { ...material, [field]: rawSha(Buffer.from(canonicalJson(material))) };
+}
+
+function expectPhase4ImmutabilityFailure(operation) {
+  assert.throws(operation, { message: "GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID" });
 }
 
 function phase5Ajv() {
@@ -413,6 +419,110 @@ test("Phase5 watcher pack is exact, self-bound, and generator-byte-reproducible"
     cwd: repositoryRoot, stdio: "pipe",
   });
   assert.deepEqual(new Map(EXPECTED_FILES.map((name) => [name, rawSha(readFileSync(new URL(name, PACK)))])), before);
+});
+
+test("Phase4 qualification protects the exact Slice-B inventory and admits only the ratified watcher leaf", async () => {
+  const container = mkdtempSync(join(tmpdir(), "gkos-phase4-sliceb-compatibility-"));
+  const target = resolve(container);
+  assert.equal(target.startsWith(`${resolve(tmpdir())}${sep}`), true);
+  const git = (cwd, args, options = {}) => execFileSync("git", args, {
+    cwd,
+    encoding: Object.hasOwn(options, "encoding") ? options.encoding : "utf8",
+    stdio: options.stdio ?? ["ignore", "pipe", "pipe"],
+  });
+  try {
+    const runnerFile = join(container, "phase4-qualification-runner.mjs");
+    esbuild.buildSync({
+      entryPoints: [join(REPOSITORY_ROOT, "scripts", "run-retrieval-observation-qualification.mjs")],
+      bundle: true,
+      write: true,
+      outfile: runnerFile,
+      format: "esm",
+      platform: "node",
+      target: "node22",
+      logLevel: "silent",
+    });
+    const runner = await import(pathToFileURL(runnerFile).href);
+    const head = git(REPOSITORY_ROOT, ["rev-parse", "HEAD"]).trim();
+    const createClone = (label) => {
+      const cloneRoot = join(container, label);
+      git(REPOSITORY_ROOT, ["clone", "--quiet", "--shared", REPOSITORY_ROOT, cloneRoot]);
+      git(cloneRoot, ["checkout", "--quiet", "--detach", head]);
+      return cloneRoot;
+    };
+    const main = createClone("baseline-mutations");
+    const immutable = await runner.verifyFrozenQualificationInputsForTest(main);
+    assert.equal(immutable.phase4_pack_file_count, 37);
+
+    const baselineRaw = git(main, [
+      "ls-tree", "-r", "--name-only", "-z", "ed3a7552b1d4a705c1b1a722b07255e89ec42186", "--", "src", "bin",
+    ], { encoding: null });
+    const baselineRoots = baselineRaw.toString("utf8").slice(0, -1).split("\0");
+    const baselinePaths = [...baselineRoots,
+      "package.json", "package-lock.json",
+      "test/retrieval-evaluation-cli.test.mjs", "test/fixtures/retrieval-evaluation-cli-phase4.json",
+    ].sort(codeUnitCompare);
+    assert.equal(baselinePaths.length, 112);
+    assert.equal(rawSha(Buffer.from(`${baselinePaths.join("\n")}\n`, "utf8")),
+      "sha256:f88846fdaf91e59f3e80780b787340b82e5a7177c474518aa901f63046c9478f");
+    const currentRaw = git(main, ["ls-files", "-z", "--", "src", "bin"], { encoding: null });
+    const currentRoots = currentRaw.toString("utf8").slice(0, -1).split("\0").sort(codeUnitCompare);
+    const baselineRootSet = new Set(baselineRoots);
+    const additions = currentRoots.filter((path) => !baselineRootSet.has(path));
+    assert.deepEqual(additions, ["src/watcher/contracts.ts"]);
+    assert.equal(rawSha(Buffer.from(`${additions.join("\n")}\n`, "utf8")),
+      "sha256:d24887eb649f993deda0de31059a879de629906769bc1f4387302e13a662fe1b");
+
+    const sourcePath = join(main, "src", "gkx23.ts");
+    const sourceBytes = readFileSync(sourcePath);
+    writeFileSync(sourcePath, Buffer.concat([sourceBytes, Buffer.from("\n", "utf8")]));
+    expectPhase4ImmutabilityFailure(() => runner.verifySliceBProtectedInputsForTest(main));
+    writeFileSync(sourcePath, sourceBytes);
+    assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main));
+
+    const binPath = join(main, "bin", "gkx.mjs");
+    const binBytes = readFileSync(binPath);
+    const binMode = statSync(binPath).mode & 0o777;
+    unlinkSync(binPath);
+    expectPhase4ImmutabilityFailure(() => runner.verifySliceBProtectedInputsForTest(main));
+    writeFileSync(binPath, binBytes, { mode: binMode });
+    chmodSync(binPath, binMode);
+    assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main));
+
+    const cliTestPath = join(main, "test", "retrieval-evaluation-cli.test.mjs");
+    const renamedCliTestPath = `${cliTestPath}.moved`;
+    renameSync(cliTestPath, renamedCliTestPath);
+    expectPhase4ImmutabilityFailure(() => runner.verifySliceBProtectedInputsForTest(main));
+    renameSync(renamedCliTestPath, cliTestPath);
+    assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main));
+
+    git(main, ["update-index", "--chmod=+x", "src/gkx23.ts"]);
+    expectPhase4ImmutabilityFailure(() => runner.verifySliceBProtectedInputsForTest(main));
+    git(main, ["update-index", "--chmod=-x", "src/gkx23.ts"]);
+    assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main));
+
+    const packagePath = join(main, "package.json");
+    const packageBytes = readFileSync(packagePath);
+    writeFileSync(packagePath, Buffer.concat([packageBytes, Buffer.from(" ", "utf8")]));
+    expectPhase4ImmutabilityFailure(() => runner.verifySliceBProtectedInputsForTest(main));
+    writeFileSync(packagePath, packageBytes);
+    assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main));
+
+    for (const [label, extraPath] of [
+      ["extra-watcher", "src/watcher/extra.ts"],
+      ["extra-nonwatcher", "src/unratified-phase5.ts"],
+    ]) {
+      const cloneRoot = createClone(label);
+      git(cloneRoot, ["config", "user.name", "GKOS qualification fixture"]);
+      git(cloneRoot, ["config", "user.email", "fixture@example.invalid"]);
+      writeFileSync(join(cloneRoot, extraPath), "export const unratified = true;\n", "utf8");
+      git(cloneRoot, ["add", "--", extraPath]);
+      git(cloneRoot, ["commit", "--quiet", "-m", `fixture: ${label}`]);
+      expectPhase4ImmutabilityFailure(() => runner.verifySliceBProtectedInputsForTest(cloneRoot));
+    }
+  } finally {
+    rmSync(target, { recursive: true, force: true });
+  }
 });
 
 test("the exact journal DDL is executable and all-and-only", async () => {
