@@ -52,6 +52,49 @@ function tapFixture(names, options = {}) {
   return rows.join("\n");
 }
 
+function workflowJobBody(workflow, jobName) {
+  const lines = workflow.replaceAll("\r\n", "\n").split("\n");
+  const marker = `  ${jobName}:`;
+  const start = lines.indexOf(marker);
+  assert.notEqual(start, -1, marker);
+  let end = lines.length;
+  for (let index = start + 1; index < lines.length; index += 1) {
+    if (/^  [A-Za-z0-9_-]+:$/u.test(lines[index])) {
+      end = index;
+      break;
+    }
+  }
+  return lines.slice(start + 1, end);
+}
+
+function bridgeObservationProjection(lines) {
+  const projected = [];
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (line === "    if: github.event_name == 'workflow_dispatch'") continue;
+    if (line === "    concurrency:") {
+      assert.deepEqual(lines.slice(index, index + 3), [
+        "    concurrency:",
+        "      group: phase4-retrieval-observation-${{ github.ref }}",
+        "      cancel-in-progress: false",
+      ]);
+      index += 2;
+      continue;
+    }
+    if (line === "      - name: Bind exact manual observation source") {
+      do { index += 1; } while (index < lines.length && !lines[index].startsWith("      - "));
+      index -= 1;
+      continue;
+    }
+    if (line === "        env:" && lines[index + 1] === "          GKOS_PHASE4_SOURCE_HEAD_COMMIT: ${{ inputs.phase4_observation_expected_head }}") {
+      index += 1;
+      continue;
+    }
+    projected.push(line);
+  }
+  return projected;
+}
+
 test.after(async () => {
   await rm(BUILD_ROOT, { recursive: true, force: true });
 });
@@ -350,9 +393,9 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
 
   assert.doesNotMatch(continuous, /phase4-retrieval-cli-qualification:/u);
   assert.match(continuous, /node: \[22, 23, 24\]/u);
-  assert.equal((continuous.match(/fetch-depth: 0/gu) ?? []).length, 2);
+  assert.equal((continuous.match(/fetch-depth: 0/gu) ?? []).length, 3);
   assert.equal((continuous.match(/timeout-minutes: 15/gu) ?? []).length, 2);
-  assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT:/gu) ?? []).length, 2);
+  assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT:/gu) ?? []).length, 3);
   assert.equal((continuous.match(/github\.event\.pull_request\.head\.sha \|\| github\.sha/gu) ?? []).length, 2);
   assert.doesNotMatch(continuous, /timeout 900s/u);
   assert.match(continuous, /--mode cli/u);
@@ -361,9 +404,28 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
   assert.match(continuous, /\.\\node_modules\\\.bin\\esbuild\.cmd scripts\/run-retrieval-observation-qualification\.mjs/u);
   assert.match(continuous, /gkos-phase4-retrieval-qualification\.json/u);
   assert.match(continuous, /phase4-retrieval-qualification-\$\{\{ runner\.os \}\}-node-\$\{\{ matrix\.node \}\}/u);
-  assert.equal((continuous.match(/actions\/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02/gu) ?? []).length, 2);
+  assert.equal((continuous.match(/actions\/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02/gu) ?? []).length, 3);
   assert.equal(JSON.stringify(packageJson.exports).includes("observation"), false);
   assert.equal(JSON.stringify(packageJson.exports).includes("qualification"), false);
+
+  assert.equal(retrievalSha256(observation), "sha256:d072360963e0b080bb03495971fc342f567f05b0bf17285830a7418ac3c3f5fa");
+  assert.equal((continuous.match(/^  phase4-retrieval-observation-manual:$/gmu) ?? []).length, 1);
+  assert.equal((continuous.match(/^    if: github\.event_name == 'workflow_dispatch'$/gmu) ?? []).length, 1);
+  assert.equal((continuous.match(/^      phase4_observation_expected_head:$/gmu) ?? []).length, 1);
+  assert.match(continuous, /phase4_observation_expected_head:\r?\n        description: Exact lowercase 40-hex Phase 4 Observation source head\r?\n        required: true\r?\n        type: string/u);
+  assert.equal((continuous.match(/Bind exact manual observation source/gu) ?? []).length, 1);
+  assert.equal((continuous.match(/\^\[0-9a-f\]\{40\}\$/gu) ?? []).length, 1);
+  assert.equal((continuous.match(/refs\/heads\/codex\/phase-4-retrieval-evaluation/gu) ?? []).length, 1);
+  assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT: \$\{\{ inputs\.phase4_observation_expected_head \}\}/gu) ?? []).length, 1);
+  assert.equal((continuous.match(/group: phase4-retrieval-observation-\$\{\{ github\.ref \}\}/gu) ?? []).length, 1);
+
+  const standaloneJob = workflowJobBody(observation, "observe");
+  const bridgeJob = workflowJobBody(continuous, "phase4-retrieval-observation-manual");
+  assert.deepEqual(bridgeObservationProjection(bridgeJob), standaloneJob);
+  const bindIndex = bridgeJob.indexOf("      - name: Bind exact manual observation source");
+  const setupIndex = bridgeJob.indexOf("      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4");
+  const artifactRootIndex = bridgeJob.indexOf("      - name: Create private observation artifact root");
+  assert.equal(bindIndex > 0 && bindIndex < setupIndex && setupIndex < artifactRootIndex, true);
 });
 
 test("Slice-C frozen pack and CLI fixture retain LF bytes on autocrlf checkouts", () => {
