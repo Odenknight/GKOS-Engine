@@ -26,6 +26,29 @@ const ingestContract = JSON.parse(readFileSync(new URL("contract.json", ingestPa
 if (ingestContract.status !== "frozen" || ingestContract.frozen !== true || ingestContract.hash_manifest_issued !== true) {
   throw new Error("ingest contract pack is not frozen and hash-manifest-issued");
 }
+
+const evaluationPackDirectory = new URL("../contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/", import.meta.url);
+const evaluationPackFiles = readdirSync(evaluationPackDirectory).sort();
+let evaluationPackBytes = 0;
+for (const name of evaluationPackFiles) {
+  const bytes = readFileSync(new URL(name, evaluationPackDirectory));
+  evaluationPackBytes += bytes.length;
+  if (bytes.length < 1 || bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf
+    || bytes.includes(0x0d) || bytes.at(-1) !== 0x0a || bytes.at(-2) === 0x0a) {
+    throw new Error(`evaluation pack text encoding mismatch: ${name}`);
+  }
+  if (name.endsWith(".json")) {
+    const parsed = JSON.parse(bytes.toString("utf8"));
+    assertWellFormedJsonStrings(parsed, name);
+  }
+}
+if (evaluationPackBytes > 128 * 1024 * 1024) throw new Error("evaluation pack exceeds 128 MiB aggregate cap");
+const evaluationProviderBytes = readFileSync(new URL("fixed-provider.json", evaluationPackDirectory));
+if (evaluationProviderBytes.length > 8 * 1024 * 1024) throw new Error("evaluation fixed provider exceeds 8 MiB file cap");
+const evaluationContract = JSON.parse(readFileSync(new URL("contract.json", evaluationPackDirectory), "utf8"));
+if (evaluationContract.status !== "provisional" || evaluationContract.frozen !== false || evaluationContract.hashes_frozen !== false) {
+  throw new Error("evaluation Slice-A pack must remain provisional and unhashed");
+}
 for (const fixtureName of ["conformance-fixture.json", "storage-conformance-fixture.json", "cli-conformance-fixture.json"]) {
   const fixture = JSON.parse(readFileSync(new URL(fixtureName, ingestPackDirectory), "utf8"));
   if (fixture.status !== "frozen" || fixture.frozen !== true) throw new Error(`${fixtureName} is not frozen`);
@@ -75,6 +98,10 @@ const forbidden = files.filter((file) =>
 );
 if (forbidden.length) {
   throw new Error(`npm package contains platform-specific SEA artifacts:\n${forbidden.join("\n")}`);
+}
+for (const name of evaluationPackFiles) {
+  const required = `contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/${name}`;
+  if (!files.includes(required)) throw new Error(`npm package is missing ${required}`);
 }
 for (const required of [
   "dist/gkos-engine.mjs",

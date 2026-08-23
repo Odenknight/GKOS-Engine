@@ -75,6 +75,11 @@ try {
   // Keep the small filesystem boundary in its own lazily imported bundle.
   writeFileSync(resolve(root, "dist/retrieval-path-security.mjs"), await bundle("src/retrieval/path-security.ts", { platform: "node" }));
   console.log("built dist/retrieval-path-security.mjs");
+  // Phase-4 raw fixture parsing, coordinator replay, tuning, and guarded output
+  // publication are repository-host-only. Keep them outside the package export
+  // map and ordinary retrieval bundle authority surface.
+  writeFileSync(resolve(root, "dist/retrieval-evaluation-host.mjs"), await bundle("src/retrieval/evaluation-host.ts", { platform: "node" }));
+  console.log("built dist/retrieval-evaluation-host.mjs");
   // Phase-3 validation/journal authority is a trusted CLI host plane. Keep
   // parser receipts and rejection envelopes out of ordinary package exports.
   writeFileSync(resolve(root, "dist/ingest-host.mjs"), await bundle("src/ingest/host.ts", { platform: "node" }));

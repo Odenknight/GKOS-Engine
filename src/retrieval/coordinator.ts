@@ -27,6 +27,7 @@ import type {
   GkxRetrievalHit,
   GkxRetrievalProvenance,
   GkxRetrievalProjectionManifest,
+  GkxRetrievalResultChunk,
   GkxRetrievalStoredSourceProvenance,
   RerankProvider,
   RetrievalChunk,
@@ -66,6 +67,25 @@ export interface IndexRetrievalResult {
 
 const VERIFIED_STORE = Symbol("gkos.retrieval.verified-store");
 const ACTIVE_STORE_PREFLIGHTS = new WeakMap<object, SqliteRetrievalStore>();
+interface RetrievalEvaluationStoreContext {
+  observer: RetrievalEvaluationCoordinatorObserver;
+  scan_presentation_fts5_available: boolean;
+}
+
+const EVALUATION_STORE_CONTEXTS = new WeakMap<SqliteRetrievalStore, RetrievalEvaluationStoreContext>();
+
+/**
+ * Trusted-host-only attempt instrumentation.  This type and its factory are
+ * deliberately exported only by the package-private evaluation host bundle;
+ * the public retrieval entry point does not expose an observation or control
+ * surface on the coordinator.
+ */
+export interface RetrievalEvaluationCoordinatorObserver {
+  sql_stage(kind: "lexical" | "vector"): void;
+  ranking(): void;
+  confidence(): void;
+  citation(): void;
+}
 
 /** Opaque trusted-host capability holding one already verified active store. */
 export interface ActiveRetrievalStorePreflight {
@@ -152,6 +172,16 @@ function validateSearchRequest(value: unknown): asserts value is RetrievalSearch
 
 function stage(kind: RetrievalProviderStageStatus["kind"], state: RetrievalProviderStageStatus["state"], reasonCodes: string[], provider?: { provider_id: string; model_id: string }): RetrievalProviderStageStatus {
   return { kind, state, ...(provider ? { provider_id: provider.provider_id, model_id: provider.model_id } : {}), reason_codes: [...reasonCodes].sort(retrievalCodeUnitCompare) };
+}
+
+/** Private parity seam for the exact production lexical-scan capability algebra. */
+export function retrievalLexicalScanReasonCodes(fts5Available: boolean): string[] {
+  if (typeof fts5Available !== "boolean") throw new TypeError("RETRIEVAL_FTS5_CAPABILITY_INVALID");
+  return [
+    ...(!fts5Available ? ["SQLITE_FTS5_UNAVAILABLE"] : []),
+    "SQLITE_LEXICAL_SCAN_ACTIVE",
+    "SQLITE_LEXICAL_SCAN_APPROXIMATION",
+  ];
 }
 
 interface ResultProjectionCoordinate {
@@ -304,12 +334,12 @@ function chunkPolicyRecord(chunk: RetrievalChunk): RetrievalChunk {
   return deeplyFreeze(JSON.parse(stableJson(record)) as RetrievalChunk);
 }
 
-function lineageResultCoordinate(
-  store: SqliteRetrievalStore,
+export function gkxRetrievalLineageResultCoordinate(
+  manifestValue: GkxRetrievalProjectionManifest,
   eligibleSources: readonly GkxRetrievalStoredSourceProvenance[],
   eligibleTemporalSources: readonly GkxRetrievalAuthorizedTemporalSource[],
 ): ResultProjectionCoordinate {
-  const manifest = store.manifest as GkxRetrievalProjectionManifest;
+  const manifest = manifestValue;
   const temporalById = new Map(eligibleTemporalSources.map((source) => [source.source_id, source]));
   const sources = eligibleSources
     .map((source) => {
@@ -358,11 +388,11 @@ function lineageResultCoordinate(
   };
 }
 
-function authorizedResultChunk(
+export function gkxRetrievalAuthorizedResultChunk(
   chunk: RetrievalChunk,
   eligibleById: ReadonlyMap<string, RetrievalChunk>,
   temporal?: Readonly<GkxRetrievalAuthorizedTemporalSource>,
-): RetrievalChunk {
+): GkxRetrievalResultChunk {
   // Phase 1 has no authorized endpoint resolver. Return only source-local,
   // non-relationship metadata; suppress all unknown keys, MOC/relationship
   // fields, and author-agent identifiers until their endpoints are separately
@@ -374,6 +404,7 @@ function authorizedResultChunk(
     ...(parentChunkId && eligibleById.has(parentChunkId) ? { parent_chunk_id: parentChunkId } : {}),
     valid_from: temporal ? temporal.valid_from : chunk.valid_from,
     valid_to: temporal ? temporal.valid_to : chunk.valid_to,
+    lineage_id: null,
     supersedes: temporal ? [...temporal.supersedes] : [],
     superseded_by: temporal ? [...temporal.superseded_by] : [],
     metadata,
@@ -381,10 +412,14 @@ function authorizedResultChunk(
 }
 
 function querySpans(query: string, chunk: RetrievalChunk, liveBytes: Uint8Array): SourceCitation["matched_spans"] {
+  // Preserve the frozen coordinator boundary: take one owned snapshot before
+  // extracting any spans so a caller-backed or shared view cannot change
+  // underneath synchronous citation construction.
+  const liveBuffer = Buffer.from(liveBytes);
   return lexicalCitationSpans(chunk.text, query).flatMap((span) => {
     const start = chunk.start_byte + span.start_byte;
     const end = chunk.start_byte + span.end_byte;
-    const exact = Buffer.from(liveBytes).subarray(start, end).toString("utf8");
+    const exact = liveBuffer.subarray(start, end).toString("utf8");
     // The live digest and persisted chunk digest have already been verified;
     // retain a final exact-slice guard so no purported quotation is emitted if
     // either boundary is ever inconsistent.
@@ -392,7 +427,7 @@ function querySpans(query: string, chunk: RetrievalChunk, liveBytes: Uint8Array)
   });
 }
 
-function verifiedCitation(chunk: RetrievalChunk, query: string, bytes: Uint8Array): SourceCitation {
+export function gkxRetrievalVerifiedCitation(chunk: RetrievalChunk, query: string, bytes: Uint8Array): SourceCitation {
   return {
     source_id: chunk.source_id,
     path: chunk.source_path,
@@ -408,13 +443,13 @@ function verifiedCitation(chunk: RetrievalChunk, query: string, bytes: Uint8Arra
   };
 }
 
-interface AcceptedInterval { source_id: string; start_byte: number; end_byte: number }
+export interface GkxRetrievalAcceptedCitationInterval { source_id: string; start_byte: number; end_byte: number }
 
-function deduplicateOverlapEvidence(
+export function gkxRetrievalDeduplicateOverlapEvidence(
   citation: SourceCitation,
   chunk: RetrievalChunk,
   claimedSpans: ReadonlySet<string>,
-  acceptedIntervals: readonly AcceptedInterval[],
+  acceptedIntervals: readonly GkxRetrievalAcceptedCitationInterval[],
 ): { citation: SourceCitation; span_keys: string[] } | null {
   if (citation.matched_spans.length) {
     const unique = citation.matched_spans.filter((span) => !claimedSpans.has(`${citation.source_id}\0${span.start_byte}\0${span.end_byte}`));
@@ -702,6 +737,8 @@ export function vaultSourceReader(vaultRoot: string): (sourcePath: string) => Pr
 export class RetrievalCoordinator {
   readonly #store: SqliteRetrievalStore;
   readonly #options: RetrievalCoordinatorOptions;
+  readonly #evaluationObserver: RetrievalEvaluationCoordinatorObserver | undefined;
+  readonly #evaluationScanPresentationFts5Available: boolean | undefined;
 
   constructor(databasePath: string, options: RetrievalCoordinatorOptions);
   constructor(databasePathOrStore: SqliteRetrievalStore, options: RetrievalCoordinatorOptions, capability: typeof VERIFIED_STORE);
@@ -719,6 +756,12 @@ export class RetrievalCoordinator {
       throw new Error("RETRIEVAL_RUNTIME_POLICY_DIGEST_MISMATCH");
     }
     this.#options = options;
+    const evaluationContext = typeof databasePathOrStore === "string"
+      ? undefined
+      : EVALUATION_STORE_CONTEXTS.get(databasePathOrStore);
+    this.#evaluationObserver = evaluationContext?.observer;
+    this.#evaluationScanPresentationFts5Available = evaluationContext?.scan_presentation_fts5_available;
+    if (typeof databasePathOrStore !== "string") EVALUATION_STORE_CONTEXTS.delete(databasePathOrStore);
   }
 
   /** Open an active generation without exposing its raw store reader. */
@@ -807,14 +850,20 @@ export class RetrievalCoordinator {
         authorizedChunks,
         normalizedAsOf,
       );
-      resultCoordinate = lineageResultCoordinate(this.#store, temporalView.sources, temporalView.temporal_sources);
+      resultCoordinate = gkxRetrievalLineageResultCoordinate(
+        this.#store.manifest as GkxRetrievalProjectionManifest,
+        temporalView.sources,
+        temporalView.temporal_sources,
+      );
       for (const source of temporalView.sources) provenanceBySource.set(source.source_id, source);
       for (const source of temporalView.temporal_sources) temporalBySource.set(source.source_id, source);
       if (normalizedAsOf !== null) {
         if (temporalView.authorized_source_count === 0) {
+          this.#evaluationObserver?.confidence();
           return emptyLineageSearchResult(this.#store, this.#options, query, normalizedAsOf, request.filters, "NO_ELIGIBLE_RESULTS", "not_evaluated", resultCoordinate, lineageViewFreshness);
         }
         if (temporalView.answerable_source_count !== temporalView.authorized_source_count || temporalView.eligible_record_keys.length === 0) {
+          this.#evaluationObserver?.confidence();
           return emptyLineageSearchResult(this.#store, this.#options, query, normalizedAsOf, request.filters, "TEMPORAL_COVERAGE_INSUFFICIENT", "insufficient", resultCoordinate, lineageViewFreshness);
         }
         temporalCoverage = "sufficient";
@@ -875,6 +924,7 @@ export class RetrievalCoordinator {
       eligible.push(...group);
     }
     if (lineageProjection && eligible.length === 0) {
+      this.#evaluationObserver?.confidence();
       return emptyLineageSearchResult(
         this.#store,
         this.#options,
@@ -891,16 +941,15 @@ export class RetrievalCoordinator {
     const eligibleCandidateKeys = lineageProjection
       ? eligible.map((chunk) => lineageCandidateKeyByPublicId.get(chunk.chunk_id) ?? (() => { throw new Error("GKX_RETRIEVAL_CANDIDATE_CHUNK_BINDING_MISSING"); })())
       : [];
+    this.#evaluationObserver?.sql_stage("lexical");
     const lexical = lineageProjection
       ? this.#store.candidateLexicalSearch(query, eligibleCandidateKeys, lexicalTopK)
       : this.#store.lexicalSearch(query, eligibleIds, lexicalTopK);
     const lexicalStage = this.#store.manifest.lexical_backend === "sqlite_fts5"
       ? stage("sqlite_fts5", "active", [])
-      : stage("sqlite_lexical_scan", "degraded", [
-        ...(!this.#store.fts5_available ? ["SQLITE_FTS5_UNAVAILABLE"] : []),
-        "SQLITE_LEXICAL_SCAN_ACTIVE",
-        "SQLITE_LEXICAL_SCAN_APPROXIMATION",
-      ]);
+      : stage("sqlite_lexical_scan", "degraded", retrievalLexicalScanReasonCodes(
+        this.#evaluationScanPresentationFts5Available ?? this.#store.fts5_available,
+      ));
     let vectorStage: RetrievalProviderStageStatus;
     let semantic: RankedInput[] = [];
     if (!this.#options.vector_provider) vectorStage = stage("none", "disabled", ["VECTOR_DISABLED"]);
@@ -924,6 +973,7 @@ export class RetrievalCoordinator {
         // Provider failures may degrade to lexical-only retrieval. Persisted-store read, space,
         // or corruption failures are projection-integrity failures and must
         // propagate rather than being mislabeled as provider unavailability.
+        this.#evaluationObserver?.sql_stage("vector");
         semantic = lineageProjection
           ? this.#store.candidateVectorSearch([...queryVector], eligibleCandidateKeys, semanticTopK, provider.provider_id, provider.model_id)
           : this.#store.vectorSearch([...queryVector], eligibleIds, semanticTopK, provider.provider_id, provider.model_id);
@@ -931,6 +981,7 @@ export class RetrievalCoordinator {
       }
     }
 
+    this.#evaluationObserver?.ranking();
     const fused = reciprocalRankFusion(lexical, semantic, rrfK);
     const fusedRanks = new Map(fused.map((candidate, index) => [candidate.chunk_id, index + 1]));
     let ordered = [...fused];
@@ -983,7 +1034,8 @@ export class RetrievalCoordinator {
       ? (staleCitation ? "stale" : lineageViewFreshness)
       : (staleCitation || this.#options.stale ? "stale" : "fresh");
     const stale = projectionFreshness === "stale";
-    const assembleResult = (resultHits: readonly InternalRetrievalHit[]): RetrievalSearchResult => {
+    const assembleResult = (resultHits: readonly InternalRetrievalHit[], final = false): RetrievalSearchResult => {
+      if (final) this.#evaluationObserver?.confidence();
       const confidence = assessRetrievalConfidence(resultHits.map((hit) => hit.stage_scores), { vector: vectorStage, reranker: rerankerStage }, eligible.length, stale);
       const common = {
         projection_id: resultCoordinate.projection_id,
@@ -1014,12 +1066,13 @@ export class RetrievalCoordinator {
       };
     };
     const claimedMatchedSpans = new Set<string>();
-    const acceptedIntervals: AcceptedInterval[] = [];
+    const acceptedIntervals: GkxRetrievalAcceptedCitationInterval[] = [];
     for (const candidate of selected) {
       if (hits.length >= limit) break;
       const chunk = byId.get(candidate.chunk_id)!;
-      const evidence = deduplicateOverlapEvidence(
-        verifiedCitation(chunk, query, sourceBytes.get(chunk.source_path)!),
+      this.#evaluationObserver?.citation();
+      const evidence = gkxRetrievalDeduplicateOverlapEvidence(
+        gkxRetrievalVerifiedCitation(chunk, query, sourceBytes.get(chunk.source_path)!),
         chunk,
         claimedMatchedSpans,
         acceptedIntervals,
@@ -1041,7 +1094,7 @@ export class RetrievalCoordinator {
       const temporal = lineageProjection ? temporalBySource.get(chunk.source_id) : undefined;
       const storedProvenance = lineageProjection ? provenanceBySource.get(chunk.source_id) : undefined;
       if (lineageProjection && (!temporal || !storedProvenance)) throw new Error("GKX_RETRIEVAL_RESULT_PROVENANCE_MISSING");
-      const resultChunk = authorizedResultChunk(chunk, eligibleById, temporal);
+      const resultChunk = gkxRetrievalAuthorizedResultChunk(chunk, eligibleById, temporal);
       const provenance = lineageProjection
         ? buildGkxRetrievalProvenance(storedProvenance!, resultChunk, temporal!, normalizedAsOf)
         : undefined;
@@ -1049,9 +1102,10 @@ export class RetrievalCoordinator {
       if (request.parent_expansion && chunk.token_count < parentExpansionMaxChildTokens && chunk.parent_chunk_id) {
         const parent = eligibleById.get(chunk.parent_chunk_id);
         if (parent && Buffer.byteLength(parent.text, "utf8") <= (this.#options.max_parent_bytes ?? 8192)) {
-          const parentCitation = verifiedCitation(parent, "", sourceBytes.get(parent.source_path)!);
+          this.#evaluationObserver?.citation();
+          const parentCitation = gkxRetrievalVerifiedCitation(parent, "", sourceBytes.get(parent.source_path)!);
           const parentTemporal = lineageProjection ? temporalBySource.get(parent.source_id) : undefined;
-          const parentResultChunk = authorizedResultChunk(parent, eligibleById, parentTemporal);
+          const parentResultChunk = gkxRetrievalAuthorizedResultChunk(parent, eligibleById, parentTemporal);
           const parentProvenance = lineageProjection
             ? buildGkxRetrievalProvenance(provenanceBySource.get(parent.source_id)!, parentResultChunk, parentTemporal!, normalizedAsOf)
             : undefined;
@@ -1082,8 +1136,30 @@ export class RetrievalCoordinator {
       for (const key of evidence.span_keys) claimedMatchedSpans.add(key);
       acceptedIntervals.push({ source_id: chunk.source_id, start_byte: chunk.start_byte, end_byte: chunk.end_byte });
     }
-    return assembleResult(hits);
+    return assembleResult(hits, true);
   }
+}
+
+/** Open an exact, already-built generation for the private evaluation host. */
+export function coordinatorFromRetrievalEvaluationDatabase(
+  databasePath: string,
+  options: RetrievalCoordinatorOptions,
+  observer: RetrievalEvaluationCoordinatorObserver,
+  scanPresentationFts5Available: boolean,
+): RetrievalCoordinator {
+  validateCoordinatorOptions(options);
+  if (!observer || typeof observer.sql_stage !== "function" || typeof observer.ranking !== "function" ||
+      typeof observer.confidence !== "function" || typeof observer.citation !== "function" ||
+      typeof scanPresentationFts5Available !== "boolean") {
+    throw new TypeError("RETRIEVAL_EVALUATION_OBSERVER_INVALID");
+  }
+  const store = new SqliteRetrievalStore(databasePath);
+  EVALUATION_STORE_CONTEXTS.set(store, {
+    observer,
+    scan_presentation_fts5_available: scanPresentationFts5Available,
+  });
+  try { return new RetrievalCoordinator(store, options, VERIFIED_STORE); }
+  catch (error) { try { store.close(); } catch { /* constructor may already have closed it */ } throw error; }
 }
 
 /**

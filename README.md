@@ -260,7 +260,8 @@ may only raise effective sensitivity; it may never lower an authored value.
 The `gkx` binary runs the engine over a folder of Markdown records. Run
 `npm run build` first; the command imports `dist/gkos-engine.mjs`.
 
-Every command embeds a deterministic `build:` block in its output:
+The folder-oriented validation, assessment, graph, and export commands embed a
+deterministic `build:` block in their output:
 
 ```json
 { "engine_version": "2.1.1",
@@ -290,6 +291,72 @@ labels. `--json` emits stable-key-ordered JSON.
 node bin/gkx.mjs assess ./my-notes
 node bin/gkx.mjs assess ./my-notes --json > assessments.json
 ```
+
+### `gkx retrieval eval|tune`
+
+Phase 4 retrieval evaluation executes sealed offline fixtures through the actual
+public coordinator. The human golden TOML is the sole CLI fixture argument;
+every JSON/corpus/manifest companion is an exact sealed sibling, never a
+caller-directed path. Embedding and reranker roles are independent; any active
+role requires the exact fixed-offline transcript sibling and only that role's
+sealed calls execute. A fixture whose provider roles are all disabled requires
+that sibling to be absent and runs lexical retrieval with zero provider calls.
+The reviewed 24-query bundle is an optional strict overlay: when present its
+results, metrics, origins, and counters must all replay exactly, including the
+independently rebuilt physical-absence temporal pair; when absent the same
+sealed environment and baseline support the general 1..256-query eval surface
+(and tune through 30 queries).
+
+```sh
+node bin/gkx.mjs retrieval eval --fixture ./reviewed/golden-fixture.toml
+node bin/gkx.mjs retrieval eval --fixture ./reviewed/golden-fixture.toml --json
+node bin/gkx.mjs retrieval tune --fixture ./reviewed/golden-fixture.toml \
+  --output ./proposals/retrieval-candidate.toml
+```
+
+Evaluation builds an unactivated schema-3 generation inside a private temporary
+capability. It neither reads nor changes an active pointer, live configuration,
+or cache, and it never changes fixture or source bytes. A 17-field private
+execution-authority receipt binds the raw golden/conformance bytes and every
+semantic companion coordinate, including exact null/absence coordinates. Its
+versioned `scan_presentation_fts5_available = true` coordinate is deterministic
+presentation authority, not an observation of the host: lexical-scan SQL stays
+scan-only across runtimes, while a fixture that actually selects SQLite FTS5
+must pass the physical host probe before any temporary state or provider work.
+Fixed embedding/reranking performs no network or credential lookup. `eval` writes
+nothing. `tune` can publish only the selected
+minimal candidate TOML to a new output outside every protected input/state root;
+it never overwrites an existing path and uses a guarded, durable no-replace
+protocol with exact crash recovery.
+
+Eval statuses are `pass`, `regression`, and `needs_human`; tune statuses are
+`proposed`, `no_candidate`, and `needs_human`. Exit codes are respectively
+`0`, `1`, and `4`; invalid arguments/fixtures or an ordinary existing target use
+`2`, and operational or recovery-authority failures use `3`. Presentation is
+path-free and deterministic. The raw fixture executor, provider transcript,
+tuner, filesystem capability, and output publisher are private CLI-host surfaces,
+not exports of `gkos-engine/retrieval`.
+
+Phase 4 also carries two qualification lanes without adding runtime authority.
+Every push and pull request runs the exact CLI fixture on Node 22, 23, and 24
+with separate 90-second eval, 300-second exhaustive-tune, and 600-second wall
+bounds; Windows runs the exact 49-case 8.3, junction, configuration, and store
+security suite. A separate offline Observation workflow is manual and scheduled
+daily at 04:17 UTC. On Node 24 with real SQLite FTS5 it deterministically builds
+1,000 sources and 10,000 production chunks, times one initial index and one
+single-content update, proves 9,999 embedding-cache reuses and one re-embed,
+executes 10 warmup plus 50 measured coordinator queries, and requires
+nearest-rank p95 latency below 500,000 microseconds. A clean updated rebuild must
+match the incremental manifest and all ten terminal result digests. The
+observation runner installs network/process denials before any fixture, temp,
+SQLite, provider, or query work and publishes only the fixed SamplePlan,
+Observation receipt, and existing normalized ObservationReport JSON. A passing
+Observation receipt/report is valid only on Linux/x64; Windows and other hosts
+may exercise the generator and negative gates but cannot publish a pass. The
+SamplePlan digest is
+`sha256:7852c24bc2eeb057f3ae9ccfaf4b03c72e75b6556609dac7673e5626f238a534`.
+Scheduled/manual measurements describe their exact host; they do not change
+retrieval semantics or the deterministic scan-presentation coordinate.
 
 ### `gkx graph <dir> -o <graph.json> [--watch]`
 

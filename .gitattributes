@@ -6,3 +6,6 @@ test/fixtures/compatibility/full-v2.1.2/*.txt text eol=lf
 contracts/retrieval/**/*.json text eol=lf
 contracts/retrieval/**/*.md text eol=lf
 test/fixtures/retrieval/**/*.json text eol=lf
+contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/generate-ndcg-discount.py text eol=lf
+contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/golden-fixture.toml text eol=lf
+test/fixtures/retrieval-evaluation-cli-phase4.json text eol=lf

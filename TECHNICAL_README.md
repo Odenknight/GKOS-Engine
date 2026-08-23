@@ -267,6 +267,88 @@ atomicity/compensation mechanism.
 
 ## CLI
 
+Phase 4 adds two private-host retrieval-evaluation commands without widening the
+public package API:
+
+```text
+gkx retrieval eval --fixture <golden-toml> [--json]
+gkx retrieval tune --fixture <golden-toml> --output <candidate-config>
+```
+
+The CLI seals the golden parent as an owner-private capability, opens only exact
+fixed sibling companions, and revalidates every directory/file identity and
+namespace coordinate before presentation or publication. Its private 17-field
+ExecutionAuthority receipt binds raw golden/conformance hashes, normalized
+golden, environment, baseline, catalog, corpus, manifests, metric/tune/table
+coordinates, nullable provider/reviewed coordinates, and the versioned literal
+scan-presentation coordinate. `scan_presentation_fts5_available = true` controls
+only deterministic lexical-scan reason bytes; it is not a host observation and
+does not change the scan manifest, schema, or SQL. A true `sqlite_fts5` fixture
+still requires the physical SQLite probe across the complete EnvironmentSet
+before temporary state, index, or provider work. An object locator
+requires the exact sibling; a null locator requires sealed absence, with no
+fallback. Execution constructs one unactivated schema-3 SQLite generation per
+environment in a sealed 0700 temporary child; it never reads or publishes an
+active/legacy pointer. Embedding and reranker roles are independently active or
+disabled; active calls come only from the finite offline transcript, while a
+fully disabled environment uses no transcript, vectors, identities, or provider
+calls. The actual coordinator and evaluator emit the 11-counter attempt receipt.
+A present reviewed overlay must exact-match all 24 reviewed results, metrics,
+origins, and counters and independently rebuild/replay the physical-absence
+temporal pair; its absence enables the general 1..256-query eval surface and tune
+through 30 queries without weakening companion sealing.
+The executor independently derives the exact `phase4-fixed-offline-v1`
+non-tunable base coordinate; a baseline substitution returns `needs_human`
+before query/provider work instead of copying the baseline coordinate into the
+current side of comparison.
+
+Tune exhaustively evaluates the eligible 900-axis grid (21,600 reviewed query
+attempts for the shipped fixture). A selected config is rendered through the
+strict parser as minimal TOML. Publication uses a same-parent 0600 guard and
+temporary file. The guard is itself atomically published through its fixed 0600
+staging leaf, `fsync`, and hard-link no-replace before candidate creation.
+Recovery recognizes the exact staging-only, staging/guard-linked, guard-only,
+candidate-precommit, candidate/final-linked, and finalization states; every
+alias, widened mode, third link, or coordinate mismatch retains evidence and
+fails. Candidate cleanup removes the temporary link first and the guard last.
+Existing or ambiguous targets are never overwritten. These parser, execution,
+tuning, filesystem, and output surfaces exist only in the non-exported
+evaluation-host bundle.
+
+Phase-4 closeout qualification is likewise host-private. The push/PR CI lane
+executes the exact 23-case eval/tune fixture on Node 22/23/24 and records bounded
+canonical receipts; the Windows matrix executes the exact 49-case path/store
+security suite. The independent `Phase 4 Retrieval Observation` workflow runs
+manually or from `17 4 * * *` on Node 24. It installs fail-closed denials for
+fetch, HTTP/HTTPS/HTTP2, net/TLS/DNS/datagram/WebSocket, and child-process
+primitives before all measured work. It creates two capability-bound 0700 state
+roots, requires real SQLite FTS5, and runs production schema-2 indexing over the
+fixed 1,000-source/10,000-chunk corpus with the fixed local four-dimensional
+embedding provider. Exact provider ledgers are 313 calls/10,000 items for the
+initial index, 1/1 for the one-section equal-length update, and 313/10,000 for a
+clean updated rebuild. The query ledger is 60 incremental coordinator attempts
+(10 warmup and 50 measured) plus 10 clean-rebuild comparison attempts, with one
+embedding call/item and one real FTS stage per attempt, zero reranker calls, and
+zero cache hits.
+
+Measured durations use monotonic nanoseconds rounded up to integer microseconds;
+nearest-rank percentiles select indexes 24, 47, and 49 from the 50 ascending
+samples. The p95 gate is strict (`< 500000`). Incremental and clean manifests
+must be canonical-byte equal, all six incremental occurrences for each query
+must have the same result digest, and the final measured ten-result set must
+match the clean rebuild in query order. The existing normalized ObservationReport remains the only report
+schema: its fixed-sample-plan coordinate is
+`sha256:7852c24bc2eeb057f3ae9ccfaf4b03c72e75b6556609dac7673e5626f238a534`.
+The separate Observation receipt binds source/runner provenance, exact index
+and query ledgers, convergence, offline counters, and the report digest. It
+contains no corpus, database, provider input, result body, configuration path,
+environment variable, or secret. Only an exact-head, committed-clean,
+manual/scheduled hosted Linux/x64 run is publication-eligible; other platforms
+may exercise generator and negative gates but cannot emit a passing report.
+Temp cleanup revalidates every canonical
+identity and fails by retaining evidence on ambiguity. These measurements are
+observational and cannot select a backend, provider, policy, or public result.
+
 ```text
 gkx nav scan <dir>
 gkx nav audit <dir>
