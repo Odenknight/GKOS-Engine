@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { chmod, lstat, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -363,4 +364,15 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
   assert.equal((continuous.match(/actions\/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02/gu) ?? []).length, 2);
   assert.equal(JSON.stringify(packageJson.exports).includes("observation"), false);
   assert.equal(JSON.stringify(packageJson.exports).includes("qualification"), false);
+});
+
+test("Slice-C frozen pack and CLI fixture retain LF bytes on autocrlf checkouts", () => {
+  const packRoot = "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1";
+  const packFiles = execFileSync("git", ["ls-files", packRoot], { cwd: ROOT, encoding: "utf8" })
+    .trim().split(/\r?\n/u).filter(Boolean);
+  assert.equal(packFiles.length, 37);
+  for (const path of [...packFiles, "test/fixtures/retrieval-evaluation-cli-phase4.json"]) {
+    const attribute = execFileSync("git", ["check-attr", "eol", "--", path], { cwd: ROOT, encoding: "utf8" }).trim();
+    assert.equal(attribute, `${path}: eol: lf`, path);
+  }
 });
