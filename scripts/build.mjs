@@ -84,6 +84,11 @@ try {
   // parser receipts and rejection envelopes out of ordinary package exports.
   writeFileSync(resolve(root, "dist/ingest-host.mjs"), await bundle("src/ingest/host.ts", { platform: "node" }));
   console.log("built dist/ingest-host.mjs");
+  // Phase-5 watcher/recovery contracts and pure sealers are a private host
+  // authority. Slice A intentionally exposes no watcher package subpath and
+  // performs no filesystem, SQLite, pointer, service, or adapter operation.
+  writeFileSync(resolve(root, "dist/watcher-contracts.mjs"), await bundle("src/watcher/contracts.ts", { platform: "node" }));
+  console.log("built dist/watcher-contracts.mjs");
 
   // Desktop-agent sidecar entry. Two node-platform bundles from the same
   // source: an ESM bundle for `node dist/...mjs` runs and the test suite, and

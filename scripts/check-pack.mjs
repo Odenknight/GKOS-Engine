@@ -21,6 +21,20 @@ function assertWellFormedJsonStrings(value, coordinate) {
   }
 }
 
+function codeUnitCompare(left, right) {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function canonicalJson(value) {
+  if (value === null || typeof value === "boolean" || typeof value === "string") return JSON.stringify(value);
+  if (typeof value === "number" && Number.isSafeInteger(value)) return String(value);
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value && Object.getPrototypeOf(value) === Object.prototype) {
+    return `{${Object.keys(value).sort(codeUnitCompare).map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(",")}}`;
+  }
+  throw new Error("watcher pack contains a non-canonical JSON value");
+}
+
 const ingestPackDirectory = new URL("../contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/", import.meta.url);
 const ingestContract = JSON.parse(readFileSync(new URL("contract.json", ingestPackDirectory), "utf8"));
 if (ingestContract.status !== "frozen" || ingestContract.frozen !== true || ingestContract.hash_manifest_issued !== true) {
@@ -48,6 +62,71 @@ if (evaluationProviderBytes.length > 8 * 1024 * 1024) throw new Error("evaluatio
 const evaluationContract = JSON.parse(readFileSync(new URL("contract.json", evaluationPackDirectory), "utf8"));
 if (evaluationContract.status !== "provisional" || evaluationContract.frozen !== false || evaluationContract.hashes_frozen !== false) {
   throw new Error("evaluation Slice-A pack must remain provisional and unhashed");
+}
+
+const watcherPackDirectory = new URL("../contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/", import.meta.url);
+const watcherPackFiles = readdirSync(watcherPackDirectory).sort(codeUnitCompare);
+const expectedWatcherPackFiles = [
+  "README.md",
+  "TECHNICAL_README.md",
+  "authority.schema.json",
+  "batch.schema.json",
+  "coherent-manifest.schema.json",
+  "conformance.schema.json",
+  "journal.schema.json",
+  "pack-manifest.json",
+  "sample-plan.schema.json",
+  "source-removal.schema.json",
+  "status.schema.json",
+  "topology.schema.json",
+  "transition.schema.json",
+  "watcher-cli-fixture.json",
+  "watcher-conformance-fixture.json",
+  "watcher-recovery-fixture.json",
+  "watcher-sample-plan.json",
+  "watcher-storage-fixture.json",
+];
+if (JSON.stringify(watcherPackFiles) !== JSON.stringify(expectedWatcherPackFiles)) {
+  throw new Error("watcher recovery pack all-and-only file set mismatch");
+}
+for (const name of watcherPackFiles) {
+  const bytes = readFileSync(new URL(name, watcherPackDirectory));
+  if (bytes.length < 1 || bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf || bytes.includes(0x0d)) {
+    throw new Error(`watcher recovery pack text encoding mismatch: ${name}`);
+  }
+  if (name === "watcher-sample-plan.json") {
+    if (bytes.at(-1) === 0x0a) throw new Error("watcher SamplePlan must not have a terminal LF");
+  } else if (bytes.at(-1) !== 0x0a || bytes.at(-2) === 0x0a) {
+    throw new Error(`watcher recovery pack terminal LF mismatch: ${name}`);
+  }
+  if (name.endsWith(".json")) assertWellFormedJsonStrings(JSON.parse(bytes.toString("utf8")), name);
+}
+const watcherManifest = JSON.parse(readFileSync(new URL("pack-manifest.json", watcherPackDirectory), "utf8"));
+const watcherManifestFiles = expectedWatcherPackFiles.filter((name) => name !== "pack-manifest.json");
+if (watcherManifest.contract_version !== "gkos-watcher-recovery-pack-manifest/1.0.0-draft.1"
+    || watcherManifest.pack_contract_version !== "gkos-watcher-recovery/1.0.0-draft.1"
+    || watcherManifest.file_count !== 17
+    || !Array.isArray(watcherManifest.files)
+    || JSON.stringify(watcherManifest.files.map((row) => row.file)) !== JSON.stringify(watcherManifestFiles)) {
+  throw new Error("watcher recovery pack manifest envelope mismatch");
+}
+let watcherPackBytes = 0;
+for (const row of watcherManifest.files) {
+  if (Object.keys(row).sort(codeUnitCompare).join(",") !== "byte_size,file,raw_sha256") {
+    throw new Error(`watcher recovery pack manifest row keys mismatch: ${String(row.file)}`);
+  }
+  const bytes = readFileSync(new URL(row.file, watcherPackDirectory));
+  const digest = `sha256:${createHash("sha256").update(bytes).digest("hex")}`;
+  if (row.byte_size !== bytes.length || row.raw_sha256 !== digest) {
+    throw new Error(`watcher recovery pack manifest row mismatch: ${row.file}`);
+  }
+  watcherPackBytes += bytes.length;
+}
+const watcherManifestMaterial = { ...watcherManifest };
+delete watcherManifestMaterial.pack_digest;
+const expectedWatcherPackDigest = `sha256:${createHash("sha256").update(canonicalJson(watcherManifestMaterial)).digest("hex")}`;
+if (watcherManifest.total_bytes !== watcherPackBytes || watcherManifest.pack_digest !== expectedWatcherPackDigest) {
+  throw new Error("watcher recovery pack aggregate/digest mismatch");
 }
 for (const fixtureName of ["conformance-fixture.json", "storage-conformance-fixture.json", "cli-conformance-fixture.json"]) {
   const fixture = JSON.parse(readFileSync(new URL(fixtureName, ingestPackDirectory), "utf8"));
@@ -103,6 +182,10 @@ for (const name of evaluationPackFiles) {
   const required = `contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/${name}`;
   if (!files.includes(required)) throw new Error(`npm package is missing ${required}`);
 }
+for (const name of watcherPackFiles) {
+  const required = `contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/${name}`;
+  if (!files.includes(required)) throw new Error(`npm package is missing ${required}`);
+}
 for (const required of [
   "dist/gkos-engine.mjs",
   "dist/adapter.mjs",
@@ -119,6 +202,7 @@ for (const required of [
   "dist/retrieval/index.d.ts",
   "dist/ingest-host.mjs",
   "dist/ingest/host.d.ts",
+  "dist/watcher-contracts.mjs",
   "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/contract.json",
   "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/chunk.schema.json",
   "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/result.schema.json",
