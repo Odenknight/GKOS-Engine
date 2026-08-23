@@ -313,6 +313,7 @@ export function publicationEligibleForTest(source) {
 function gitDiffClean(repoRoot, commit, paths) {
   try {
     execFileSync("git", ["diff", "--quiet", "--no-renames", commit, "--", ...paths], { cwd: repoRoot, stdio: "ignore" });
+    execFileSync("git", ["diff", "--cached", "--quiet", "--no-renames", commit, "--", ...paths], { cwd: repoRoot, stdio: "ignore" });
     return true;
   } catch { return false; }
 }
