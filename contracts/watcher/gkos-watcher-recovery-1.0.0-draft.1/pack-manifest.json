@@ -8,9 +8,9 @@
       "raw_sha256": "sha256:4e8ffe6cc79eee0e27a3986ffc9ad8fb85814beacd561c595f04f39c4b4d5eb0"
     },
     {
-      "byte_size": 8150,
+      "byte_size": 8438,
       "file": "TECHNICAL_README.md",
-      "raw_sha256": "sha256:33a48c076d3bfcaf5e9899fc0cff84d637adec09eefbdf315b2bbdf2b6f945e1"
+      "raw_sha256": "sha256:81b9d68b794087f9f663109a90a780971a7b0207a681802e5645faab7279b46d"
     },
     {
       "byte_size": 14987,
@@ -89,6 +89,6 @@
     }
   ],
   "pack_contract_version": "gkos-watcher-recovery/1.0.0-draft.1",
-  "pack_digest": "sha256:faa71240c64f64b4329d64a36ea774e8b95a738594a444f87b5f35ad3cb5e39b",
-  "total_bytes": 8906738
+  "pack_digest": "sha256:85ed985ab516851aaf8873cc6733761a8309443cf7009c3a33db4bbf8db5f225",
+  "total_bytes": 8907026
 }

@@ -872,6 +872,13 @@ async function buildGraphOnce({ vaultDir, graphOut, episodesOut, groupId }) {
 
 function watchGraph(config) {
   console.log("gkx: watching for changes (Ctrl+C to stop)…");
+  const poll = () => {
+    console.log("gkx: recursive watch unavailable, polling every 5 s");
+    setInterval(() => { buildGraphOnce(config).catch((e) => console.error("gkx:", e.message)); }, 5000);
+  };
+  // Affected Node releases can abort inside libuv on Windows before fs.watch
+  // can report an error, so select the existing polling path proactively.
+  if (process.platform === "win32") { poll(); return; }
   let timer = null;
   const trigger = (event, name) => {
     if (name && shouldIgnoreVaultPath(String(name).replace(/\\/g, "/"))) return;
@@ -883,8 +890,7 @@ function watchGraph(config) {
   try {
     watch(config.vaultDir, { recursive: true }, trigger);
   } catch {
-    console.log("gkx: recursive watch unavailable, polling every 5 s");
-    setInterval(() => { buildGraphOnce(config).catch((e) => console.error("gkx:", e.message)); }, 5000);
+    poll();
   }
 }
 

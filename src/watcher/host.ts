@@ -5,7 +5,7 @@
  * It is intentionally absent from package exports and from the platform-neutral
  * engine surface.
  */
-import { watch, type FSWatcher } from "node:fs";
+import { unwatchFile, watch, watchFile, type Stats } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
 import { GkxIndex } from "../incremental";
@@ -333,7 +333,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
   let hostLock: WatcherHostLockCapability;
   let journal: WatcherJournalHandle | null = null;
   let service: WatcherServiceHandle | null = null;
-  let fileWatchers: FSWatcher[] = [];
+  let fileWatchers: Array<{ close(): void }> = [];
   let periodicTimer: unknown | null = null;
   let periodicEnabled = false;
   let debounce: ReturnType<typeof setTimeout> | null = null;
@@ -1066,14 +1066,32 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
     const installFileWatchers = (): void => {
       for (const held of fileWatchers) held.close();
       fileWatchers = [];
-      if (process.platform !== "win32") {
-        try {
-          const recursive = watch(vault, { recursive: true }, (_event, name) => queueEvent(name));
-          recursive.on("error", watcherError);
-          fileWatchers.push(recursive);
-          return;
-        } catch { /* install one exact watcher per securely scanned directory */ }
+      // Node's Windows fs-event backend can terminate the process with a
+      // native assertion before an error event is observable. Poll the exact
+      // securely scanned leaves for scoped hints; the governed periodic
+      // reconciliation detects namespace additions and remains the safety net.
+      if (process.platform === "win32") {
+        const paths = new Map<string, string | null>();
+        for (const file of coverageScan?.files ?? []) paths.set(join(vault, file.relativePath), file.relativePath);
+        for (const relative of coverageScan?.attachments ?? []) paths.set(join(vault, relative), relative);
+        for (const [absolute, relative] of paths) {
+          const listener = (current: Stats, previous: Stats): void => {
+            if (current.dev === previous.dev && current.ino === previous.ino && current.mode === previous.mode
+                && current.nlink === previous.nlink && current.size === previous.size
+                && current.mtimeMs === previous.mtimeMs && current.ctimeMs === previous.ctimeMs) return;
+            queueEvent(relative);
+          };
+          watchFile(absolute, { interval: 250, persistent: false }, listener);
+          fileWatchers.push({ close: () => unwatchFile(absolute, listener) });
+        }
+        return;
       }
+      try {
+        const recursive = watch(vault, { recursive: true }, (_event, name) => queueEvent(name));
+        recursive.on("error", watcherError);
+        fileWatchers.push(recursive);
+        return;
+      } catch { /* install one exact watcher per securely scanned directory */ }
       const directories = ["", ...(coverageScan?.folders ?? [])];
       for (const relative of directories) {
         const held = watch(relative === "" ? vault : join(vault, relative), (_event, name) => queueEvent(name, relative));

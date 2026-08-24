@@ -1598,7 +1598,7 @@ export async function main(argv = process.argv.slice(2)) {
 }
 
 const invokedPath = process.argv[1] ? resolve(process.argv[1]) : null;
-if (invokedPath !== null && invokedPath === resolve(fileURLToPath(import.meta.url))) {
+if (invokedPath !== null && invokedPath === resolve(fileURLToPath(import.meta.url)) && process.argv[2] === "--mode") {
   main().catch((error) => {
     process.stderr.write(`phase4 retrieval qualification: ${error?.message ?? "operational failure"}\n`);
     process.exitCode = 2;
