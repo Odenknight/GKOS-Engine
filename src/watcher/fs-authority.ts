@@ -410,7 +410,7 @@ export function ensureWatcherStatusDirectory(statusFile: string): WatcherDirecto
     syncWatcherDirectory(dirname(canonical));
   }
   const capability = openWatcherDirectory(canonical);
-  if (!sameCanonicalPath(capability.path, requested)) fail("GKX_WATCHER_STATUS_DIRECTORY_ALIAS_INVALID");
+  if (!sameCanonicalPath(capability.path, canonical)) fail("GKX_WATCHER_STATUS_DIRECTORY_ALIAS_INVALID");
   return capability;
 }
 
