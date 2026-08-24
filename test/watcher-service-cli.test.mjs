@@ -31,6 +31,7 @@ import {
   watcherStatusRecord,
   watcherStatusText,
   watcherFailureRetryDelay,
+  watcherWindowsScopedPollingAdmittedForTest,
   watcherDigest,
 } from "../dist/watcher-host.mjs";
 import { runSearch } from "../bin/gkx.mjs";
@@ -46,6 +47,14 @@ import { main as runDesktopAgentMain } from "../dist/gkos-desktop-agent.mjs";
 const DIGEST = `sha256:${"a".repeat(64)}`;
 const SERVICE_ID = "019b2d14-4233-7db7-87d4-7d81cfaec932";
 const LEXICAL_CAPABILITY = detectSqliteLexicalCapability();
+
+test("Windows scoped polling admits only the governed bounded leaf set", () => {
+  assert.equal(watcherWindowsScopedPollingAdmittedForTest(0), true);
+  assert.equal(watcherWindowsScopedPollingAdmittedForTest(2_000), true);
+  assert.equal(watcherWindowsScopedPollingAdmittedForTest(2_001), false);
+  assert.equal(watcherWindowsScopedPollingAdmittedForTest(1_000_000), false);
+  assert.throws(() => watcherWindowsScopedPollingAdmittedForTest(-1), /GKX_WATCHER_POLL_ADMISSION_INVALID/u);
+});
 
 function physicalWatcherFts5Available() {
   if (LEXICAL_CAPABILITY.fts5_available) return true;
@@ -501,6 +510,7 @@ test("host startup publishes one coherent generation, serves it through status/s
   writeFileSync(join(vault, "accepted.md"), content, { mode: 0o600 });
 
   const searchAuthority = await defaultGkxSearchAuthorityCoordinates();
+  const hostExecutions = [];
   const host = await startWatcherHost({
     vault_root: vault,
     status_file: join(statusRoot, "desktop-agent-status.json"),
@@ -510,6 +520,7 @@ test("host startup publishes one coherent generation, serves it through status/s
     // Exercise the minimum governed interval: it must be re-armed only after
     // reconciliation completes and cannot invalidate this request mid-proof.
     periodic_reconciliation_ms: 500,
+    on_index_execution: (receipt) => hostExecutions.push(receipt),
     coordinator_options: {
       discoverability_policy: () => "allow",
       source_discoverability_policy: () => "allow",
@@ -546,7 +557,7 @@ test("host startup publishes one coherent generation, serves it through status/s
   const requestFreshResponse = await fetch(`${origin}/status`, { headers: { authorization: "Bearer host-token" } });
   assert.equal(requestFreshResponse.status, 200);
   const requestFresh = await requestFreshResponse.json();
-  assert.equal(requestFresh.freshness, "fresh");
+  assert.equal(requestFresh.freshness, "fresh", JSON.stringify({ requestFresh, hostExecutions }));
   assert.notEqual(requestFresh.source_snapshot_digest, status.source_snapshot_digest);
   assert.deepEqual(await runGkosCli(["status", "-h"]), {
     stdout: "", stderr: "gkos status: invalid arguments\n", exit_code: 2,
@@ -972,6 +983,7 @@ test("local_onnx watcher staging embeds only changed public content and reuses t
   };
   let host;
   const indexExecutions = [];
+  let injectedBeforeRefresh = false;
   t.after(async () => {
     try { if (host) await host.shutdown(); } catch { /* primary assertion owns failure */ }
     await new Promise((resolve) => setImmediate(resolve));
@@ -981,6 +993,14 @@ test("local_onnx watcher staging embeds only changed public content and reuses t
     vault_root: vault, status_file: join(statusRoot, "desktop-agent-status.json"), vault_id: "vault",
     configuration_digest: DIGEST, policy_digest: DIGEST, periodic_reconciliation_ms: 60_000,
     on_index_execution: (receipt) => indexExecutions.push(receipt),
+    on_before_watcher_refresh: () => {
+      if (process.platform === "win32" && indexExecutions.length === 2 && !injectedBeforeRefresh) {
+        injectedBeforeRefresh = true;
+        writeFileSync(join(vault, "alpha.md"), note(
+          "019b2d14-4230-7db7-87d4-7d81cfaec932", "Alpha", "second changed alpha body",
+        ));
+      }
+    },
     coordinator_options: {
       discoverability_policy: () => "allow", source_discoverability_policy: () => "allow",
       vector_provider: vectorProvider,
@@ -1007,9 +1027,19 @@ test("local_onnx watcher staging embeds only changed public content and reuses t
   assert.equal(calls[1].includes(stableText), false);
   assert.deepEqual(indexExecutions[1], { execution_kind: "apply_changes", reparsed_source_count: 1 });
 
+  if (process.platform === "win32") {
+    await waitFor(() => indexExecutions.length >= 3 ? true : null);
+    assert.equal(injectedBeforeRefresh, true);
+    assert.equal(calls.length, 3);
+    assert.match(calls[2][0], /second changed alpha body/u);
+    assert.deepEqual(indexExecutions[2], { execution_kind: "apply_changes", reparsed_source_count: 1 });
+  }
+
   await host.reconcile("event");
-  assert.equal(calls.length, 2, "an unchanged secure reconciliation must make zero provider calls");
-  assert.deepEqual(indexExecutions[2], { execution_kind: "set_files", reparsed_source_count: 2 });
+  assert.equal(calls.length, process.platform === "win32" ? 3 : 2,
+    "an unchanged secure reconciliation must make zero provider calls");
+  assert.deepEqual(indexExecutions[process.platform === "win32" ? 3 : 2],
+    { execution_kind: "set_files", reparsed_source_count: 2 });
   await host.shutdown();
   await host.closed;
   host = null;

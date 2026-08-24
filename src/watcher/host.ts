@@ -5,7 +5,7 @@
  * It is intentionally absent from package exports and from the platform-neutral
  * engine surface.
  */
-import { unwatchFile, watch, watchFile, type Stats } from "node:fs";
+import { lstatSync, watch, type Stats } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
 import { GkxIndex } from "../incremental";
@@ -117,6 +117,39 @@ export { buildIngestValidationPlan } from "../ingest/validation";
 export { GkxIndex } from "../incremental";
 
 type JsonRecord = Record<string, unknown>;
+const WINDOWS_SCOPED_POLL_LEAF_LIMIT = 2_000;
+const WINDOWS_SCOPED_POLL_BATCH_SIZE = 256;
+
+interface WindowsPollSnapshot {
+  readonly device: string;
+  readonly inode: string;
+  readonly mode: number;
+  readonly nlink: number;
+  readonly byte_size: number;
+  readonly modified_ms: number;
+  readonly changed_ms: number;
+}
+
+function sameWindowsPollSnapshot(left: WindowsPollSnapshot | null, right: WindowsPollSnapshot | null): boolean {
+  return left === null ? right === null : right !== null
+    && left.device === right.device && left.inode === right.inode && left.mode === right.mode
+    && left.nlink === right.nlink && left.byte_size === right.byte_size
+    && left.modified_ms === right.modified_ms && left.changed_ms === right.changed_ms;
+}
+
+function windowsPollSnapshot(path: string): WindowsPollSnapshot | null {
+  let value: Stats;
+  try { value = lstatSync(path); } catch { return null; }
+  return Object.freeze({
+    device: String(value.dev), inode: String(value.ino), mode: value.mode, nlink: value.nlink,
+    byte_size: value.size, modified_ms: value.mtimeMs, changed_ms: value.ctimeMs,
+  });
+}
+
+export function watcherWindowsScopedPollingAdmittedForTest(leafCount: number): boolean {
+  if (!Number.isSafeInteger(leafCount) || leafCount < 0) fail("GKX_WATCHER_POLL_ADMISSION_INVALID");
+  return leafCount <= WINDOWS_SCOPED_POLL_LEAF_LIMIT;
+}
 
 export interface WatcherHostOptions {
   readonly vault_root: string;
@@ -145,6 +178,7 @@ export interface WatcherHostOptions {
     readonly execution_kind: "set_files" | "apply_changes";
     readonly reparsed_source_count: number;
   }) => void;
+  readonly on_before_watcher_refresh?: () => void | Promise<void>;
   readonly on_status_change?: (status: Readonly<JsonRecord>) => void;
   readonly coordinator_options: Omit<RetrievalCoordinatorOptions, "source_reader" | "runtime_policy_digest" | "lineage_view_freshness">;
 }
@@ -334,6 +368,15 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
   let journal: WatcherJournalHandle | null = null;
   let service: WatcherServiceHandle | null = null;
   let fileWatchers: Array<{ close(): void }> = [];
+  const windowsPollers = new Map<string, { relative: string; previous: WindowsPollSnapshot | null }>();
+  let windowsPollTimer: ReturnType<typeof setInterval> | null = null;
+  let windowsPollCursor = 0;
+  const closeWindowsPollers = (): void => {
+    if (windowsPollTimer !== null) clearInterval(windowsPollTimer);
+    windowsPollTimer = null;
+    windowsPollCursor = 0;
+    windowsPollers.clear();
+  };
   let periodicTimer: unknown | null = null;
   let periodicEnabled = false;
   let debounce: ReturnType<typeof setTimeout> | null = null;
@@ -825,6 +868,14 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
     const reconcile = (requestedKind: typeof pendingKind = "event"): Promise<void> => {
       if (stopped || stopping && requestedKind !== "shutdown_flush") return Promise.reject(new Error("GKX_WATCHER_STOPPING"));
       let kind = requestedKind;
+      // A request-local/manual event reconciliation consumes an already
+      // queued hint immediately. Cancel its later debounce callback so it
+      // cannot manufacture a second stale pending batch after this one.
+      if (kind === "event" && debounce !== null) {
+        clearTimeout(debounce);
+        debounce = null;
+        firstHintAt = null;
+      }
       if (retryEpoch !== null && kind === "shutdown_flush") {
         // Shutdown bypasses only the in-process delay, never the durable F1
         // parent. The flush remains a fresh unscoped setFiles retry and either
@@ -858,9 +909,18 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       }
       activeReconciliation = (async () => {
         do {
+          // This loop consumes all hints accumulated before or during the
+          // prior batch. Their debounce callback must not survive consumption
+          // and enqueue a duplicate stale batch afterward.
+          if (debounce !== null) {
+            clearTimeout(debounce);
+            debounce = null;
+            firstHintAt = null;
+          }
           pendingReconciliation = false;
           const currentKind = pendingKind;
           await runOne(currentKind);
+          await options.on_before_watcher_refresh?.();
           refreshFileWatchers();
         } while (pendingReconciliation && !stopped);
       })().finally(() => {
@@ -1064,28 +1124,63 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       void reconcile("event").catch(() => undefined);
     };
     const installFileWatchers = (): void => {
-      for (const held of fileWatchers) held.close();
-      fileWatchers = [];
       // Node's Windows fs-event backend can terminate the process with a
-      // native assertion before an error event is observable. Poll the exact
-      // securely scanned leaves for scoped hints; the governed periodic
-      // reconciliation detects namespace additions and remains the safety net.
+      // native assertion before an error event is observable. One bounded
+      // scheduler polls admitted, securely scanned leaves for scoped hints;
+      // the governed periodic reconciliation owns overflow and additions.
       if (process.platform === "win32") {
-        const paths = new Map<string, string | null>();
-        for (const file of coverageScan?.files ?? []) paths.set(join(vault, file.relativePath), file.relativePath);
-        for (const relative of coverageScan?.attachments ?? []) paths.set(join(vault, relative), relative);
-        for (const [absolute, relative] of paths) {
-          const listener = (current: Stats, previous: Stats): void => {
-            if (current.dev === previous.dev && current.ino === previous.ino && current.mode === previous.mode
-                && current.nlink === previous.nlink && current.size === previous.size
-                && current.mtimeMs === previous.mtimeMs && current.ctimeMs === previous.ctimeMs) return;
-            queueEvent(relative);
+        const identities = coverageScan?.identities ?? [];
+        if (!watcherWindowsScopedPollingAdmittedForTest(identities.length)) {
+          closeWindowsPollers();
+          return;
+        }
+        const desired = new Map(identities.map((identity) => [join(vault, identity.source_path), identity] as const));
+        for (const absolute of windowsPollers.keys()) {
+          if (!desired.has(absolute)) windowsPollers.delete(absolute);
+        }
+        for (const [absolute, identity] of desired) {
+          const authoritative: WindowsPollSnapshot = {
+            device: identity.device, inode: identity.inode, mode: identity.mode, nlink: identity.nlink,
+            byte_size: identity.byte_size, modified_ms: identity.modified_ms, changed_ms: identity.changed_ms,
           };
-          watchFile(absolute, { interval: 250, persistent: false }, listener);
-          fileWatchers.push({ close: () => unwatchFile(absolute, listener) });
+          const live = windowsPollSnapshot(absolute);
+          const retained = windowsPollers.get(absolute);
+          if (retained !== undefined) {
+            retained.relative = identity.source_path;
+            retained.previous = live;
+            if (!sameWindowsPollSnapshot(live, authoritative)) queueEvent(identity.source_path);
+            continue;
+          }
+          windowsPollers.set(absolute, {
+            relative: identity.source_path,
+            previous: live,
+          });
+          // A mutation between the authoritative scan and refresh is queued
+          // immediately instead of being absorbed as a new live baseline.
+          if (!sameWindowsPollSnapshot(live, authoritative)) queueEvent(identity.source_path);
+        }
+        if (windowsPollers.size === 0) { closeWindowsPollers(); return; }
+        if (windowsPollTimer === null) {
+          windowsPollTimer = setInterval(() => {
+            const entries = [...windowsPollers.entries()];
+            if (entries.length === 0) return;
+            if (windowsPollCursor >= entries.length) windowsPollCursor = 0;
+            const count = Math.min(WINDOWS_SCOPED_POLL_BATCH_SIZE, entries.length);
+            for (let offset = 0; offset < count; offset += 1) {
+              const [absolute, state] = entries[(windowsPollCursor + offset) % entries.length]!;
+              const current = windowsPollSnapshot(absolute);
+              if (sameWindowsPollSnapshot(current, state.previous)) continue;
+              state.previous = current;
+              queueEvent(state.relative);
+            }
+            windowsPollCursor = (windowsPollCursor + count) % entries.length;
+          }, 250);
+          windowsPollTimer.unref();
         }
         return;
       }
+      for (const held of fileWatchers) held.close();
+      fileWatchers = [];
       try {
         const recursive = watch(vault, { recursive: true }, (_event, name) => queueEvent(name));
         recursive.on("error", watcherError);
@@ -1129,6 +1224,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
         options.on_status_change?.(getStatus());
         for (const held of fileWatchers) held.close();
         fileWatchers = [];
+        closeWindowsPollers();
         if (debounce !== null) { clearTimeout(debounce); debounce = null; }
         periodicEnabled = false;
         if (periodicTimer !== null) { periodicClock.clear_timeout(periodicTimer); periodicTimer = null; }
@@ -1197,6 +1293,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
     });
   } catch (error) {
     for (const held of fileWatchers) held.close();
+    closeWindowsPollers();
     if (debounce !== null) clearTimeout(debounce);
     periodicEnabled = false;
     if (periodicTimer !== null) periodicClock.clear_timeout(periodicTimer);
