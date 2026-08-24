@@ -340,7 +340,9 @@ jobs:
           test/watcher-coordinator.test.mjs
           test/watcher-service-cli.test.mjs
           test/watcher-recovery-contracts.test.mjs
-          test/watcher-observation-qualification.test.mjs
+
+      - name: Isolated watcher observation qualification test
+        run: node --test test/watcher-observation-qualification.test.mjs
 
       - name: Bundle private Phase 5 watcher qualification runner
         run: .\node_modules\.bin\esbuild.cmd scripts/run-watcher-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$env:RUNNER_TEMP/phase5-watcher-qualification.mjs"
