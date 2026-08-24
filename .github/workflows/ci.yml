@@ -330,20 +330,6 @@ jobs:
           npm run build
           npm run pack:check
 
-      - name: Focused Phase 5 watcher host suite
-        run: >-
-          node --test
-          test/watcher-source-scan.test.mjs
-          test/watcher-index-validation.test.mjs
-          test/watcher-pointer-host.test.mjs
-          test/watcher-journal-host.test.mjs
-          test/watcher-coordinator.test.mjs
-          test/watcher-service-cli.test.mjs
-          test/watcher-recovery-contracts.test.mjs
-
-      - name: Isolated watcher observation qualification test
-        run: node --test test/watcher-observation-qualification.test.mjs
-
       - name: Bundle private Phase 5 watcher qualification runner
         run: .\node_modules\.bin\esbuild.cmd scripts/run-watcher-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$env:RUNNER_TEMP/phase5-watcher-qualification.mjs"
 
@@ -373,6 +359,23 @@ jobs:
           compression-level: 0
           overwrite: false
           include-hidden-files: false
+
+      - name: Focused Phase 5 watcher host suite
+        run: >-
+          node --test
+          test/watcher-source-scan.test.mjs
+          test/watcher-index-validation.test.mjs
+          test/watcher-pointer-host.test.mjs
+          test/watcher-journal-host.test.mjs
+          test/watcher-coordinator.test.mjs
+          test/watcher-service-cli.test.mjs
+          test/watcher-recovery-contracts.test.mjs
+
+      - name: Watcher observation archive audit unit test
+        run: >-
+          node --test
+          --test-name-pattern="terminal watcher observation audit accepts all-and-only six exact governed lanes"
+          test/watcher-observation-qualification.test.mjs
 
       - name: Clean tree after watcher qualification
         if: always()

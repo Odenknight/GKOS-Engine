@@ -181,12 +181,36 @@ function durableReplace(path, bytes, ordinal) {
   syncWatcherDirectory(parent);
 }
 
-async function waitForPointer(directory, priorDigest, timeoutMs = 5_000) {
-  const started = Date.now();
-  while (Date.now() - started <= timeoutMs) {
+function generationSignal() {
+  let epoch = 0;
+  const waiters = new Set();
+  return Object.freeze({
+    snapshot: () => epoch,
+    notify() {
+      epoch += 1;
+      for (const wake of waiters) wake();
+      waiters.clear();
+    },
+    async waitAfter(priorEpoch, timeoutMs) {
+      if (epoch !== priorEpoch) return epoch;
+      await new Promise((resolve) => {
+        let timer = null;
+        const wake = () => { if (timer !== null) clearTimeout(timer); waiters.delete(wake); resolve(); };
+        waiters.add(wake);
+        timer = setTimeout(wake, timeoutMs);
+      });
+      return epoch;
+    },
+  });
+}
+
+async function waitForPointer(directory, priorDigest, signal, priorEpoch, timeoutMs = 5_000) {
+  const deadline = Date.now() + timeoutMs;
+  let observedEpoch = priorEpoch;
+  while (Date.now() <= deadline) {
+    observedEpoch = await signal.waitAfter(observedEpoch, Math.max(0, deadline - Date.now()));
     const pointer = readWatcherPointer(directory, "outer");
     if (pointer !== null && pointer.pointer_digest !== priorDigest) return pointer;
-    await sleep(5);
   }
   fail("GKX_WATCHER_QUALIFICATION_GENERATION_TIMEOUT");
 }
@@ -275,7 +299,7 @@ function convergenceRecord(incremental, clean) {
   return sealRecord(base, "convergence_digest");
 }
 
-function hostOptions(vault, statusFile, plan, onIndexExecution) {
+function hostOptions(vault, statusFile, plan, onIndexExecution, signal) {
   return {
     vault_root: vault,
     status_file: statusFile,
@@ -284,6 +308,7 @@ function hostOptions(vault, statusFile, plan, onIndexExecution) {
     policy_digest: plan.watcher.policy_digest,
     periodic_reconciliation_ms: 60_000,
     ...(onIndexExecution === undefined ? {} : { on_index_execution: onIndexExecution }),
+    ...(signal === undefined ? {} : { on_status_change: () => signal.notify() }),
     coordinator_options: {
       discoverability_policy: (chunk) => chunk.metadata.sensitivity === "public" ? "allow" : "deny",
       source_discoverability_policy: (source) => source.metadata.sensitivity === "public" ? "allow" : "deny",
@@ -327,8 +352,9 @@ async function qualifiedMeasurement(repoRoot, plan, environment) {
         || watcherRawDigest(omega) !== plan.fixture.omega.source_digest) fail("GKX_WATCHER_QUALIFICATION_PLAN_INVALID");
     const active = prepareVault(join(root, "incremental"), alpha);
     const indexExecutions = [];
+    const signal = generationSignal();
     host = await startWatcherHost(hostOptions(active.vault, join(active.status, "desktop-agent.status.json"), plan,
-      (receipt) => indexExecutions.push(receipt)));
+      (receipt) => indexExecutions.push(receipt), signal));
     const watcherDirectory = host.watcher_directory;
     const initialAuthority = searchAuthorityCoordinates(watcherDirectory);
     assertSearchAuthority(plan, initialAuthority, initialAuthority.pointer_digest);
@@ -341,9 +367,10 @@ async function qualifiedMeasurement(repoRoot, plan, environment) {
       const query = toOmega ? "phasefiveomega" : "phasefivealpha";
       const prior = readWatcherPointer(watcherDirectory, "outer");
       if (prior === null) fail("GKX_WATCHER_QUALIFICATION_GENERATION_INVALID");
+      const priorEpoch = signal.snapshot();
       durableReplace(active.source, target, ordinal);
       const started = process.hrtime.bigint();
-      const selected = await waitForPointer(watcherDirectory, prior.pointer_digest);
+      const selected = await waitForPointer(watcherDirectory, prior.pointer_digest, signal, priorEpoch);
       await externalSearch(repoRoot, active.vault, query, plan.fixture.source_id, plan, watcherDirectory, selected.pointer_digest);
       const micros = Number((process.hrtime.bigint() - started + 999n) / 1_000n);
       if (!Number.isSafeInteger(micros) || micros > MAX_LATENCY_MICROS) fail("GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED");
