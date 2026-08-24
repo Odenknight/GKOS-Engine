@@ -35,6 +35,7 @@ import type { Gkx23ProjectionOptions } from "./gkx23";
 import { extensionFromPath, normalizeVaultRelative } from "./paths";
 import type { GraphDelta, GkxDiagnostics, GkxGraph, SourceFile } from "./types";
 import { copyGkxRecordValidationReceipt } from "./validation-receipts";
+import { consumeGkxIndexCandidateValidation } from "./watcher/index-validation-hook";
 
 export interface IndexChanges {
   changed?: SourceFile[];
@@ -185,6 +186,15 @@ export class GkxIndex {
       this.rebuildDeterministicRepresentatives();
       this.folders = folders.slice();
       this.attachments = attachments.slice();
+      const candidateGraph = this.buildGraph();
+      const accepted = consumeGkxIndexCandidateValidation(this, candidateGraph, this.candidateRecords);
+      if (accepted !== null) {
+        for (const key of [...this.candidateRecords.keys()]) {
+          if (!accepted.has(key)) this.candidateRecords.delete(key);
+        }
+        this.validateActiveCandidateContentBindings();
+        this.rebuildDeterministicRepresentatives();
+      }
       const graph = this.assemble();
       graph.diagnostics.lastFullBuildMs = Date.now() - t0;
       this.prevSig = signatureOf(graph);
@@ -356,6 +366,15 @@ export class GkxIndex {
     if (changes.folders) this.folders = changes.folders.slice();
     if (changes.attachments) this.attachments = changes.attachments.slice();
 
+    const candidateGraph = this.buildGraph();
+    const accepted = consumeGkxIndexCandidateValidation(this, candidateGraph, this.candidateRecords);
+    if (accepted !== null) {
+      for (const key of [...this.candidateRecords.keys()]) {
+        if (!accepted.has(key)) this.candidateRecords.delete(key);
+      }
+      this.validateActiveCandidateContentBindings();
+      this.rebuildDeterministicRepresentatives();
+    }
     const graph = this.assemble();
     graph.diagnostics.lastIncrementalUpdateMs = Date.now() - t0;
 
@@ -420,12 +439,17 @@ export class GkxIndex {
     return meta;
   }
 
-  private assemble(): GkxGraph {
+  private buildGraph(): GkxGraph {
     const candidates = [...this.candidateRecords.entries()]
       .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
       .map(([, record]) => record);
     const graph = assembleGraphWithCanonicalCandidates([...this.records.values()], candidates, this.folders);
     graph.diagnostics.attachments = this.attachments.length;
+    return graph;
+  }
+
+  private assemble(): GkxGraph {
+    const graph = this.buildGraph();
     this.graph = graph;
     return graph;
   }

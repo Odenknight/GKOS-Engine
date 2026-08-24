@@ -21,14 +21,19 @@ const PACK_FILE_NAMES = Object.freeze([
   "topology.schema.json", "transition.schema.json", "watcher-cli-fixture.json", "watcher-conformance-fixture.json",
   "watcher-recovery-fixture.json", "watcher-sample-plan.json", "watcher-storage-fixture.json",
 ]);
-const SAMPLE_PLAN_DIGEST = "sha256:6ab764aad47cbb072469f19760b772df90b2138acaf6a9f022041d38094bb695";
+const SAMPLE_PLAN_DIGEST = "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b";
 const SAMPLE_PLAN_BASE64 = "eyJjb250cmFjdF92ZXJzaW9uIjoiZ2tvcy13YXRjaGVyLWNvbnZlcmdlbmNlLXNhbXBsZS1wbGFuLzEuMC4wLWRyYWZ0LjEiLCJleGVjdXRpb24iOnsiYXNfb2YiOiIyMDI2LTA4LTIwVDAwOjAwOjAwWiIsImV4dGVybmFsX3JlYWRlciI6ImdreF9zZWFyY2hfb3V0ZXJfY29oZXJlbnRfYXV0aG9yaXR5IiwibGltaXQiOjUsIm1lYXN1cmVkX2N5Y2xlX2NvdW50IjoxMCwibXV0YXRpb25fb3JkZXIiOlsiYWxwaGFfdG9fb21lZ2EiLCJvbWVnYV90b19hbHBoYSJdLCJzYW1wbGVfY291bnQiOjIwLCJzZWFyY2hlcyI6W3siZXhwZWN0ZWRfc291cmNlX2lkIjoiMDE5YjJkMTQtNDIzMC03ZGI3LTg3ZDQtN2Q4MWNmYWVjOTMyIiwibXV0YXRpb24iOiJhbHBoYV90b19vbWVnYSIsInF1ZXJ5IjoicGhhc2VmaXZlb21lZ2EifSx7ImV4cGVjdGVkX3NvdXJjZV9pZCI6IjAxOWIyZDE0LTQyMzAtN2RiNy04N2Q0LTdkODFjZmFlYzkzMiIsIm11dGF0aW9uIjoib21lZ2FfdG9fYWxwaGEiLCJxdWVyeSI6InBoYXNlZml2ZWFscGhhIn1dLCJ3YXJtdXBfY3ljbGVfY291bnQiOjEsIndhcm11cF9zYW1wbGVfY291bnQiOjIsIndyaXRlcl9vcGVyYXRpb24iOiJwaGFzZTNfc2FtZV9wYXJlbnRfMDYwMF90ZW1wX2ZzeW5jX2F0b21pY19yZXBsYWNlX3Bvc3RyZXBsYWNlX2ZpbGVfZnN5bmNfcGxhdGZvcm1fcGFyZW50X3N5bmMifSwiZml4dHVyZSI6eyJhbHBoYSI6eyJieXRlX3NpemUiOjQ5OSwic291cmNlX2J5dGVzX2Jhc2U2NCI6IkxTMHRDbWRyZUY5MlpYSnphVzl1T2lBaU1pNHpJZ3AxYVdRNklDSXdNVGxpTW1ReE5DMDBNak13TFRka1lqY3RPRGRrTkMwM1pEZ3hZMlpoWldNNU16SWlDblJwZEd4bE9pQWlRV2RsYm5RZ1YzSnBkR2x1WnlCUWIyeHBZM2tpQ25SNWNHVTZJQ0p3YjJ4cFkza2lDbU55WldGMFpXUmZZWFE2SUNJeU1ESTJMVEEzTFRBeFZEQXdPakF3T2pBd1dpSUtaWEJwYzNSbGJXbGpYM04wWVhSbE9pQWljbVZ3YjNKMFpXUWlDbk5sYm5OcGRHbDJhWFI1T2lBaWNIVmliR2xqSWdvdExTMEtJeUJCWjJWdWRDQlhjbWwwYVc1bklGQnZiR2xqZVFwQloyVnVkQzFqY21WaGRHVmtJRzV2ZEdWeklISmxjWFZwY21VZ1oyOTJaWEp1WldRZ1lYVjBhRzl5YVhwaGRHbHZiaXdnYUhWdFlXNGdjbVYyYVdWM0xDQmxlR0ZqZENCemIzVnlZMlVnYVc1MFpXZHlhWFI1TENCbWNtVnphQ0JqYVhSaGRHbHZibk1zSUdOdmJtWnNhV04wSUdoaGJtUnNhVzVuTENCc2FXNWxZV2RsSUdOb1pXTnJjeXdnWVc1a0lHRWdZbTkxYm1SbFpDQndhR0Z6WldacGRtVmhiSEJvWVNCa1pXTnBjMmx2Ymk0Z1NHbGtaR1Z1SUcxaGRHVnlhV0ZzSUcxMWMzUWdibVYyWlhJZ2FXNW1iSFZsYm1ObElHRnVJR0YxZEdodmNtbDZaV1FnY21WemRXeDBMZ29LSXlNZ1UzUmhZbXhsSUZObFkzUnBiMjRLY0doaGMyVm1hWFpsYzNSaFlteGxDZz09Iiwic291cmNlX2RpZ2VzdCI6InNoYTI1Njo0N2IwZDYyMjU4NDBmZjdjZDRkNjBmODYzOWQ4OWFhNzdlMzRmZjAyMzgyMDhmNWE2MzNiNDkyOGZmZTg4MzMwIn0sImNodW5rX2NvdW50IjoyLCJjb250cmFjdF92ZXJzaW9uIjoiZ2tvcy13YXRjaGVyLWNvbnZlcmdlbmNlLWZpeHR1cmUvMS4wLjAtZHJhZnQuMSIsIm9tZWdhIjp7ImJ5dGVfc2l6ZSI6NDk5LCJzb3VyY2VfYnl0ZXNfYmFzZTY0IjoiTFMwdENtZHJlRjkyWlhKemFXOXVPaUFpTWk0eklncDFhV1E2SUNJd01UbGlNbVF4TkMwME1qTXdMVGRrWWpjdE9EZGtOQzAzWkRneFkyWmhaV001TXpJaUNuUnBkR3hsT2lBaVFXZGxiblFnVjNKcGRHbHVaeUJRYjJ4cFkza2lDblI1Y0dVNklDSndiMnhwWTNraUNtTnlaV0YwWldSZllYUTZJQ0l5TURJMkxUQTNMVEF4VkRBd09qQXdPakF3V2lJS1pYQnBjM1JsYldsalgzTjBZWFJsT2lBaWNtVndiM0owWldRaUNuTmxibk5wZEdsMmFYUjVPaUFpY0hWaWJHbGpJZ290TFMwS0l5QkJaMlZ1ZENCWGNtbDBhVzVuSUZCdmJHbGplUXBCWjJWdWRDMWpjbVZoZEdWa0lHNXZkR1Z6SUhKbGNYVnBjbVVnWjI5MlpYSnVaV1FnWVhWMGFHOXlhWHBoZEdsdmJpd2dhSFZ0WVc0Z2NtVjJhV1YzTENCbGVHRmpkQ0J6YjNWeVkyVWdhVzUwWldkeWFYUjVMQ0JtY21WemFDQmphWFJoZEdsdmJuTXNJR052Ym1ac2FXTjBJR2hoYm1Sc2FXNW5MQ0JzYVc1bFlXZGxJR05vWldOcmN5d2dZVzVrSUdFZ1ltOTFibVJsWkNCd2FHRnpaV1pwZG1WdmJXVm5ZU0JrWldOcGMybHZiaTRnU0dsa1pHVnVJRzFoZEdWeWFXRnNJRzExYzNRZ2JtVjJaWElnYVc1bWJIVmxibU5sSUdGdUlHRjFkR2h2Y21sNlpXUWdjbVZ6ZFd4MExnb0tJeU1nVTNSaFlteGxJRk5sWTNScGIyNEtjR2hoYzJWbWFYWmxjM1JoWW14bENnPT0iLCJzb3VyY2VfZGlnZXN0Ijoic2hhMjU2OmZjZDFmYmYxYzc2Y2M0NWZkZWIxMzZmMzU3MzY1YzhjZjBiNWUzYTkwMGNkMzI4YWMxM2I5YmNiYmU0ZGY3YmYifSwic291cmNlX2NvdW50IjoxLCJzb3VyY2VfaWQiOiIwMTliMmQxNC00MjMwLTdkYjctODdkNC03ZDgxY2ZhZWM5MzIiLCJzb3VyY2VfcGF0aCI6InBvbGljeS9hZ2VudC13cml0aW5nLm1kIiwidmF1bHRfaWQiOiJwaGFzZTUtd2F0Y2hlci1jb252ZXJnZW5jZS12MSJ9LCJwZXJjZW50aWxlIjp7Im1ldGhvZCI6Im5lYXJlc3RfcmFuayIsInA1MCI6eyJpbmRleCI6OSwicmFuayI6MTB9LCJwOTUiOnsiaW5kZXgiOjE4LCJyYW5rIjoxOX0sInA5OSI6eyJpbmRleCI6MTksInJhbmsiOjIwfSwic29ydCI6ImFzY2VuZGluZ19pbnRlZ2VyX21pY3JvcyJ9LCJ0aHJlc2hvbGRzIjp7InA5NV9pbmNsdXNpdmVfdXBwZXJfYm91bmRfbWljcm9zIjo1MDAwMDAwLCJwZXJfc2FtcGxlX2luY2x1c2l2ZV91cHBlcl9ib3VuZF9taWNyb3MiOjUwMDAwMDB9LCJ0aW1pbmciOnsiZHVyYXRpb25fcm91bmRpbmciOiJjZWlsX25hbm9zZWNvbmRzX2RpdmlkZWRfYnlfMTAwMCIsImVuZF9ib3VuZGFyeSI6ImFmdGVyX2V4dGVybmFsX3NlYXJjaF9yZXNvbHZlc19hbmRfZXhwZWN0ZWRfY29oZXJlbnRfc291cmNlX3Jlc3VsdF9pc192ZXJpZmllZCIsImluY2x1ZGVzIjpbIm9zX2V2ZW50X2RlbGl2ZXJ5IiwiZGVib3VuY2UiLCJzZWN1cmVfc2NhbiIsInZhbGlkYXRpb24iLCJna3hfYXBwbHlfY2hhbmdlcyIsInJldHJpZXZhbF9idWlsZCIsImdyYXBoX3Byb2plY3Rpb24iLCJqb3VybmFsX2NvbW1pdHMiLCJvdXRlcl9wb2ludGVyX2FjdGl2YXRpb24iLCJleHRlcm5hbF9wcm9jZXNzX3N0YXJ0IiwiZXh0ZXJuYWxfc2VhcmNoIl0sInN0YXJ0X2JvdW5kYXJ5IjoiaW1tZWRpYXRlbHlfYWZ0ZXJfcGhhc2UzX2F0b21pY19yZXBsYWNlX2R1cmFiaWxpdHlfc2VxdWVuY2VfcmV0dXJucyJ9LCJ3YXRjaGVyIjp7ImNvbmZpZ3VyYXRpb25fZGlnZXN0Ijoic2hhMjU2OmUzODlmMzViOTEzMTRhY2JhOTNiYjZhMGQ5NTVhZjM0YTBkZjExYjUyNDcwMWI2ZDk0MDllMjQ1ZDhmNTVjMTEiLCJjb25maWd1cmF0aW9uX3ByZWltYWdlIjp7ImNvbnRyYWN0X3ZlcnNpb24iOiJna29zLXdhdGNoZXItY29udmVyZ2VuY2UtY29uZmlndXJhdGlvbi8xLjAuMC1kcmFmdC4xIiwiZGVib3VuY2VfbXMiOjUwMCwiZW1iZWRkaW5nX3JvbGUiOiJkaXNhYmxlZCIsImxleGljYWxfYmFja2VuZCI6InNxbGl0ZV9mdHM1IiwicmVyYW5rZXJfcm9sZSI6ImRpc2FibGVkIiwidmFsaWRhdGlvbl9tb2RlIjoibm9uX3N0cmljdCJ9LCJkZWJvdW5jZV9tcyI6NTAwLCJwb2xpY3lfZGlnZXN0Ijoic2hhMjU2OjJmYWYwMTNkZWQ3NTY2MzZhZGMyMmVkYWQ2MjMxMmMyMjVjODI1OGVmNjFiYTJlNDkyYTJkZTYzOWMxNTI3OTAiLCJwb2xpY3lfcHJlaW1hZ2UiOnsiY29udHJhY3RfdmVyc2lvbiI6Imdrb3Mtd2F0Y2hlci1jb252ZXJnZW5jZS1wb2xpY3kvMS4wLjAtZHJhZnQuMSIsImRpc2NvdmVyYWJpbGl0eSI6ImFsbG93Iiwic2Vuc2l0aXZpdHkiOiJwdWJsaWMiLCJ2YXVsdF9pZCI6InBoYXNlNS13YXRjaGVyLWNvbnZlcmdlbmNlLXYxIn0sInJldHJpZXZhbF9tb2RlIjoic3FsaXRlX2Z0czUiLCJ2YWxpZGF0aW9uX21vZGUiOiJub25fc3RyaWN0In19";
 
 function compare(a, b) { return a < b ? -1 : a > b ? 1 : 0; }
 
 function stable(value) {
   if (value === null || typeof value === "boolean" || typeof value === "string") return JSON.stringify(value);
-  if (typeof value === "number" && Number.isSafeInteger(value)) return String(value);
+  if (typeof value === "number") {
+    if (!Number.isFinite(value) || (Number.isInteger(value) && !Number.isSafeInteger(value))) {
+      throw new TypeError("watcher generator canonical JSON number is invalid");
+    }
+    return JSON.stringify(Object.is(value, -0) ? 0 : value);
+  }
   if (Array.isArray(value)) return `[${value.map(stable).join(",")}]`;
   if (value && Object.getPrototypeOf(value) === Object.prototype) {
     return `{${Object.keys(value).sort(compare).map((key) => `${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`;
@@ -95,9 +100,41 @@ function deriveGeneratorGraphiti(graph, vaultId) {
   return { contract_version: "gkos-watcher-graphiti-projection/1.0.0-draft.1", processing_time: "1970-01-01T00:00:00.000Z", episodes };
 }
 
-const samplePlanBytes = Buffer.from(SAMPLE_PLAN_BASE64, "base64");
-if (samplePlanBytes.length !== 3978 || sha(samplePlanBytes) !== SAMPLE_PLAN_DIGEST) throw new Error("ratified watcher sample-plan transport mismatch");
-const samplePlan = JSON.parse(samplePlanBytes.toString("utf8"));
+const samplePlanV1 = JSON.parse(Buffer.from(SAMPLE_PLAN_BASE64, "base64").toString("utf8"));
+const samplePlan = {
+  ...samplePlanV1,
+  contract_version: "gkos-watcher-convergence-sample-plan/1.0.0-draft.2",
+  watcher: {
+    configuration_digest: "sha256:082dffdb5390813e9d4e0b43097f730ccb98ac2f18ebd3549e03986a860fcdba",
+    configuration_preimage: {
+      canonical_authority: {
+        standard_commit: "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+        projection_profile: "gkx-2.3-validating-projection",
+      },
+      mode: "fts",
+      chunker: {
+        version: "gkos-heading-chunker/1", tokenizer: "gkos-ascii-whitespace/1", max_tokens: 400, overlap_tokens: 0,
+      },
+      lexical: {
+        provider: "sqlite_fts5", tokenizer: "unicode61 remove_diacritics 2",
+        boosts: { title: 3, heading_path: 2, tags: 1.5, topic: 2, category: 2, text: 1 },
+      },
+      fusion: { rrf_k: 60 },
+      diversity: { enabled: false, mmr_lambda: 0.7 },
+      parent_expansion: true,
+      parent_expansion_max_child_tokens: 80,
+      configured_host: null,
+    },
+    debounce_ms: 500,
+    effective_profile_digest: "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+    policy_digest: "sha256:2a24f03ee235def9d6de500b8144f3660814be9aa3c8bf3d104b3fb57e808317",
+    policy_preimage: { id: "engine.cli.public-only-discoverability", version: "1.0.0" },
+    retrieval_mode: "sqlite_fts5",
+    validation_mode: "non_strict",
+  },
+};
+const samplePlanBytes = Buffer.from(stable(samplePlan));
+if (samplePlanBytes.length !== 4363 || sha(samplePlanBytes) !== SAMPLE_PLAN_DIGEST) throw new Error("ratified watcher sample-plan transport mismatch");
 if (stable(samplePlan) !== samplePlanBytes.toString("utf8")) throw new Error("ratified watcher sample plan is not canonical JSON");
 
 function exactObject(properties, required = Object.keys(properties)) {
@@ -504,12 +541,209 @@ journalReset.allOf = [{
   then: { properties: { reset_carry_event_set_digest: { type: "null" }, reset_carry_activation_digest: { type: "null" } } },
   else: { properties: { reset_carry_event_set_digest: digestSchema, reset_carry_activation_digest: digestSchema } },
 }];
-const journalSchema = schema("journal.schema.json", { journalMeta, activationIntent, activationOutcome, activeCoherent, journalGeneration, journalPointer, journalFileIdentity, journalArchive, journalReset }, [
+const resetReconciliationAdoptionReceipt = exactObject({
+  contract_version: { const: "gkos-watcher-journal-reset-reconciliation-adoption/1.0.0-draft.1" },
+  batch_id: uuid7, batch_kind: { const: "startup_reconciliation" }, execution_kind: { const: "set_files" },
+  reset_digest: digestSchema, replacement_journal_generation_digest: digestSchema, source_journal_generation_digest: digestSchema,
+  native_activation_journal_generation_digest: digestSchema, current_pointer_digest: digestSchema,
+  current_coherent_manifest_digest: digestSchema, native_activation_intent_digest: digestSchema,
+  native_activation_outcome_digest: digestSchema, prior_active_digest: digestSchema, observation_digest: digestSchema,
+  observation_authority_digest: digestSchema, plan_digest: digestSchema, plan_authority_digest: digestSchema,
+  topology_snapshot_digest: digestSchema, source_observation_snapshot_digest: digestSchema, gkx_snapshot_digest: digestSchema,
+  retrieval_projection_digest: digestSchema, canonical_graph_digest: digestSchema, graphiti_projection_digest: digestSchema,
+  started_at: iso, receipt_digest: digestSchema,
+});
+const resetReconciliationAdoptionTransition = exactObject({
+  contract_version: { const: "gkos-watcher-journal-reset-reconciliation-transition/1.0.0-draft.1" },
+  batch_id: uuid7, transition_ordinal: { const: 0 }, state: { const: "reset_reconciliation_adopted" },
+  terminal_state: { const: "complete" }, receipt_digest: digestSchema, reset_digest: digestSchema,
+  replacement_journal_generation_digest: digestSchema, current_pointer_digest: digestSchema,
+  current_coherent_manifest_digest: digestSchema, topology_snapshot_digest: digestSchema, prior_active_digest: digestSchema,
+  adopted_active_digest: digestSchema, recorded_at: iso, completed_at: iso, transition_digest: digestSchema,
+});
+const failureRetryNoopReceipt = exactObject({
+  contract_version: { const: "gkos-watcher-failure-retry-noop-receipt/1.0.0-draft.1" },
+  failed_batch_id: uuid7, failed_terminal_transition_digest: digestSchema, retry_batch_id: uuid7,
+  retry_observation_digest: digestSchema, retry_observation_authority_digest: digestSchema,
+  retry_pre_scan_state_digest: digestSchema, failure_retry_bundle_digest: digestSchema, retry_plan_digest: digestSchema,
+  retry_plan_authority_digest: digestSchema, current_active_digest: digestSchema, current_pointer_digest: digestSchema,
+  current_coherent_manifest_digest: digestSchema, current_intent_digest: digestSchema, current_outcome_digest: digestSchema,
+  topology_snapshot_digest: digestSchema, source_observation_snapshot_digest: digestSchema, configuration_digest: digestSchema,
+  policy_digest: digestSchema, effective_profile_digest: digestSchema, gkx_snapshot_digest: digestSchema,
+  retrieval_projection_digest: digestSchema, canonical_graph_digest: digestSchema, graph_artifact_digest: digestSchema,
+  graphiti_projection_digest: digestSchema, set_files_call_count: { const: 1 }, apply_changes_call_count: { const: 0 },
+  provider_call_count: { const: 0 }, retrieval_write_count: { const: 0 }, outer_write_count: { const: 0 },
+  completed_at: iso, receipt_digest: digestSchema,
+});
+const failureRetryNoopTransition = exactObject({
+  contract_version: { const: "gkos-watcher-failure-retry-noop-transition/1.0.0-draft.1" },
+  batch_id: uuid7, transition_ordinal: { const: 0 }, state: { const: "failure_reconciliation_noop_complete" },
+  terminal_state: { const: "complete" }, prior_transition_digest: { type: "null" }, receipt: failureRetryNoopReceipt,
+  receipt_digest: digestSchema, recorded_at: iso, completed_at: iso, transition_digest: digestSchema,
+});
+const bootstrapHostLock = exactObject({
+  contract_version: { const: "gkos-watcher-host-lock/1.0.0-draft.1" }, lock_id: uuid7, process_id: { type: "integer", minimum: 1 },
+  operation: { const: "service" }, service_instance_id: uuid7, prior_pointer_digest: nullableDigest,
+  prior_coherent_manifest_digest: nullableDigest, prior_journal_pointer_digest: { type: "null" },
+  owner_nonce: { type: "string", pattern: "^[0-9a-f]{32}$" }, created_at: iso, lock_digest: digestSchema,
+});
+const bootstrapPlannedTarget = exactObject({
+  contract_version: { const: "gkos-watcher-journal-bootstrap-planned-target/1.0.0-draft.1" },
+  watcher_host_lock_digest: digestSchema, journal_meta: journalMeta, journal_generation: journalGeneration,
+  target_journal_pointer: journalPointer, planned_target_digest: digestSchema,
+});
+const bootstrapPlannedTargetRef = exactObject({
+  planned_target_file: { type: "string", pattern: "^watcher-journal-bootstrap-planned-target-[0-9a-f]{64}\\.json$" },
+  planned_target_digest: digestSchema, planned_target_raw_sha256: digestSchema,
+  planned_target_byte_size: { type: "integer", minimum: 1, maximum: 1048576 }, watcher_host_lock_digest: digestSchema,
+});
+const bootstrapHostLockWitness = exactObject({
+  contract_version: { const: "gkos-watcher-journal-bootstrap-host-lock-witness/1.0.0-draft.2" },
+  watcher_host_lock: bootstrapHostLock, watcher_host_lock_digest: digestSchema, planned_target: bootstrapPlannedTargetRef,
+  journal_instance_id: uuid7, journal_meta_digest: digestSchema, journal_generation_digest: digestSchema,
+  target_journal_pointer_digest: digestSchema, witness_digest: digestSchema,
+});
+const bootstrapHostLockWitnessRef = exactObject({
+  witness_file: { type: "string", pattern: "^watcher-journal-bootstrap-host-lock-[0-9a-f]{64}\\.json$" },
+  witness_digest: digestSchema,
+  witness_raw_sha256: digestSchema,
+  witness_byte_size: { type: "integer", minimum: 1, maximum: 1048576 },
+  watcher_host_lock_digest: digestSchema,
+});
+const journalBootstrapAuthority = exactObject({
+  contract_version: { const: "gkos-watcher-journal-bootstrap-authority/1.0.0-draft.2" },
+  host_lock_witness: bootstrapHostLockWitnessRef,
+  journal_meta_digest: digestSchema,
+  journal_generation_digest: digestSchema,
+  journal_generation_file: { type: "string", pattern: "^watcher-journal-generation-[0-9a-f]{64}\\.json$" },
+  target_journal_pointer_digest: digestSchema,
+  target_journal_pointer_file: { type: "string", pattern: "^watcher-journal-pointer-[0-9a-f]{64}\\.json$" },
+  committed_at: iso,
+  authority_digest: digestSchema,
+});
+const oldJournalResetAuthority = exactObject({
+  journal_bootstrap_authority: { anyOf: [journalBootstrapAuthority, { type: "null" }] },
+  outer_pointer: schemaRef("coherent-manifest.schema.json", "pointer"),
+  outer_coherent_manifest: schemaRef("coherent-manifest.schema.json", "coherentManifest"),
+  active_coherent: activeCoherent,
+  activated_event_set_bundles: {
+    type: "array", maxItems: 1_000_000,
+    items: schemaRef("source-removal.schema.json", "activatedEventSetBundle"),
+  },
+  responses: { type: "array", maxItems: 1_000_000, items: schemaRef("source-removal.schema.json", "adapterResponse") },
+  receipts: { type: "array", maxItems: 1_000_000, items: schemaRef("source-removal.schema.json", "removalReceipt") },
+});
+const journalResetBundle = exactObject({
+  old_meta: journalMeta,
+  old_generation: journalGeneration,
+  old_pointer: journalPointer,
+  archive: journalArchive,
+  reset: journalReset,
+  guard: schemaRef("authority.schema.json", "journalResetGuard"),
+  new_meta: journalMeta,
+  new_generation: journalGeneration,
+  target_pointer: journalPointer,
+  reset_carry_bundle: {
+    anyOf: [exactObject({
+      event_set_bundle: schemaRef("source-removal.schema.json", "eventSetBundle"),
+      activation: schemaRef("source-removal.schema.json", "removalActivation"),
+    }), { type: "null" }],
+  },
+});
+const resetHostLock = exactObject({
+  contract_version: { const: "gkos-watcher-host-lock/1.0.0-draft.1" }, lock_id: uuid7,
+  process_id: { type: "integer", minimum: 1 }, operation: { const: "journal_reset" }, service_instance_id: { type: "null" },
+  prior_pointer_digest: digestSchema, prior_coherent_manifest_digest: digestSchema,
+  prior_journal_pointer_digest: digestSchema, owner_nonce: { type: "string", pattern: "^[0-9a-f]{32}$" },
+  created_at: iso, lock_digest: digestSchema,
+});
+const journalResetRecoveryPlan = exactObject({
+  contract_version: { const: "gkos-watcher-journal-reset-recovery-plan/1.0.0-draft.1" },
+  watcher_host_lock: resetHostLock,
+  old_meta: journalMeta, old_generation: journalGeneration, old_pointer: journalPointer,
+  outer_pointer: schemaRef("coherent-manifest.schema.json", "pointer"),
+  outer_coherent_manifest: schemaRef("coherent-manifest.schema.json", "coherentManifest"),
+  old_journal_authority: oldJournalResetAuthority,
+  archive: journalArchive, reset: journalReset, reset_guard: schemaRef("authority.schema.json", "journalResetGuard"),
+  pointer_replace_guard: schemaRef("authority.schema.json", "pointerGuard"),
+  new_meta: journalMeta, new_generation: journalGeneration, target_pointer: journalPointer,
+  reset_carry_bundle: journalResetBundle.properties.reset_carry_bundle,
+  plan_digest: digestSchema,
+});
+const currentOwnerManifest = exactObject({
+  contract_version: { const: "gkos-ingest-generation/1.0.0-draft.1" },
+  owner_generation_id: { type: "string", pattern: "^ingest:[0-9a-f]{24}$" }, owner_manifest_digest: digestSchema,
+  mode: { enum: ["strict", "non_strict"] }, vault_id: label, observation_snapshot_digest: digestSchema,
+  profile: { type: "object" }, normalized_profile: { type: "object" }, configuration_digest: digestSchema, policy_digest: digestSchema,
+  chunking: { type: "object" }, validation_result: { type: "object" },
+  inner: exactObject({ database_file: { type: "string", pattern: "^retrieval-[0-9a-f]{64}\\.sqlite$" }, manifest: { type: "object" }, manifest_digest: digestSchema }),
+  rejection_journal: exactObject({ journal_file: { type: "string" }, rejection_journal_digest: digestSchema, rejection_count: sourceRowCount }),
+});
+const failureRetryBundle = exactObject({
+  failed_batch: batchRecord, failed_observation: observation, failed_observation_authority: observationAuthority,
+  failed_pre_scan_state: preScanState,
+  failed_transitions: { type: "array", minItems: 2, maxItems: 8, items: transition },
+  retry_batch: batchRecord, retry_observation: observation, retry_observation_authority: observationAuthority,
+  retry_pre_scan_state: preScanState,
+});
+const failureRetryNoopBundle = exactObject({
+  failure_retry_bundle: failureRetryBundle,
+  retry_plan: plan,
+  retry_plan_authority: planAuthority,
+  retry_topology: topologySnapshot,
+  retry_canonical_graph: canonicalGraph,
+  current_topology: topologySnapshot,
+  current_outer_pointer: pointer,
+  current_coherent_manifest: coherentManifest,
+  current_activation_intent: activationIntent,
+  current_activation_outcome: activationOutcome,
+  current_active: activeCoherent,
+  current_owner_manifest: currentOwnerManifest,
+  current_canonical_graph: canonicalGraph,
+  current_raw_graph: rawGraphArtifact,
+  current_graphiti_projection: graphitiProjection,
+  receipt: failureRetryNoopReceipt,
+  transition: failureRetryNoopTransition,
+});
+const journalResetReconciliationAdoptionBundle = exactObject({
+  replacement_meta: journalMeta, replacement_generation: journalGeneration, replacement_pointer: journalPointer, reset: journalReset,
+  source_meta: journalMeta, source_generation: journalGeneration, source_pointer: journalPointer,
+  native_meta: journalMeta, native_generation: journalGeneration, native_pointer: journalPointer,
+  current_outer_pointer: pointer, current_coherent_manifest: coherentManifest,
+  native_transitions: { type: "array", minItems: 7, maxItems: 7, items: transition },
+  native_activation_intent: activationIntent, native_activation_outcome: activationOutcome, native_active: activeCoherent,
+  source_adoption_receipt: { anyOf: [resetReconciliationAdoptionReceipt, { type: "null" }] },
+  source_adoption_transition: { anyOf: [resetReconciliationAdoptionTransition, { type: "null" }] },
+  source_active: activeCoherent, pre_scan_state: preScanState, observation, observation_authority: observationAuthority,
+  plan, plan_authority: planAuthority, topology: topologySnapshot, current_owner_manifest: currentOwnerManifest,
+  raw_graph: rawGraphArtifact, canonical_graph: canonicalGraph, graphiti_projection: graphitiProjection,
+  adoption_receipt: resetReconciliationAdoptionReceipt, adoption_transition: resetReconciliationAdoptionTransition,
+  adopted_active: activeCoherent,
+});
+const journalSchema = schema("journal.schema.json", {
+  journalMeta, activationIntent, activationOutcome, activeCoherent, journalGeneration, journalPointer, journalFileIdentity,
+  journalArchive, journalReset, resetReconciliationAdoptionReceipt, resetReconciliationAdoptionTransition,
+  failureRetryNoopReceipt, failureRetryNoopTransition,
+  bootstrapHostLock, bootstrapPlannedTarget, bootstrapPlannedTargetRef, bootstrapHostLockWitness,
+  bootstrapHostLockWitnessRef, journalBootstrapAuthority, oldJournalResetAuthority, journalResetBundle,
+  resetHostLock, journalResetRecoveryPlan,
+  currentOwnerManifest, failureRetryBundle, failureRetryNoopBundle, journalResetReconciliationAdoptionBundle,
+}, [
   schemaRef("journal.schema.json", "journalMeta"), schemaRef("journal.schema.json", "activationIntent"),
   schemaRef("journal.schema.json", "activationOutcome"), schemaRef("journal.schema.json", "activeCoherent"),
   schemaRef("journal.schema.json", "journalGeneration"), schemaRef("journal.schema.json", "journalPointer"),
   schemaRef("journal.schema.json", "journalFileIdentity"), schemaRef("journal.schema.json", "journalArchive"),
-  schemaRef("journal.schema.json", "journalReset"),
+  schemaRef("journal.schema.json", "journalReset"), schemaRef("journal.schema.json", "bootstrapPlannedTarget"),
+  schemaRef("journal.schema.json", "bootstrapHostLockWitness"), schemaRef("journal.schema.json", "journalBootstrapAuthority"),
+  schemaRef("journal.schema.json", "oldJournalResetAuthority"), schemaRef("journal.schema.json", "journalResetBundle"),
+  schemaRef("journal.schema.json", "journalResetRecoveryPlan"),
+  schemaRef("journal.schema.json", "resetReconciliationAdoptionReceipt"),
+  schemaRef("journal.schema.json", "resetReconciliationAdoptionTransition"),
+  schemaRef("journal.schema.json", "failureRetryNoopReceipt"),
+  schemaRef("journal.schema.json", "failureRetryNoopTransition"),
+  schemaRef("journal.schema.json", "failureRetryBundle"),
+  schemaRef("journal.schema.json", "failureRetryNoopBundle"),
+  schemaRef("journal.schema.json", "journalResetReconciliationAdoptionBundle"),
 ]);
 
 const watcherAuthority = exactObject({
@@ -645,10 +879,23 @@ const removalReceipt = exactObject({
   adapter_result_digest: digestSchema, adapter_event_id: label, status: { enum: ["accepted", "already_applied"] }, recorded_at: iso,
   receipt_digest: digestSchema,
 });
+const eventSetBundle = exactObject({
+  event_set: removalSet,
+  memberships: { type: "array", maxItems: 1_000_000, items: removalMembership },
+  prior_memberships: { type: "array", maxItems: 1_000_000, items: { anyOf: [removalMembership, { type: "null" }] } },
+  events: { type: "array", maxItems: 1_000_000, items: removalEvent },
+  prior_events: { type: "array", maxItems: 1_000_000, items: { anyOf: [removalEvent, { type: "null" }] } },
+  occurrences: { type: "array", maxItems: 1_000_000, items: removalOccurrence },
+  prior_occurrences: { type: "array", maxItems: 1_000_000, items: { anyOf: [removalOccurrence, { type: "null" }] } },
+});
+const activatedEventSetBundle = exactObject({
+  event_set_bundle: eventSetBundle,
+  activation: removalActivation,
+});
 const sourceRemovalSchema = schema("source-removal.schema.json", {
   adapterScope, adapterBinding, adapterChallenge, adapterProof, adapterVerification, removalOccurrence, removalEvent, removalMembership,
-  removalSet, removalActivation, adapterRequest, adapterResponse, removalReceipt,
-}, Object.keys({ adapterScope, adapterBinding, adapterChallenge, adapterProof, adapterVerification, removalOccurrence, removalEvent, removalMembership, removalSet, removalActivation, adapterRequest, adapterResponse, removalReceipt })
+  removalSet, removalActivation, adapterRequest, adapterResponse, removalReceipt, eventSetBundle, activatedEventSetBundle,
+}, Object.keys({ adapterScope, adapterBinding, adapterChallenge, adapterProof, adapterVerification, removalOccurrence, removalEvent, removalMembership, removalSet, removalActivation, adapterRequest, adapterResponse, removalReceipt, eventSetBundle, activatedEventSetBundle })
   .map((name) => schemaRef("source-removal.schema.json", name)));
 
 const serviceLocator = exactObject({
@@ -729,7 +976,7 @@ const conformanceFixtureSchema = exactObject({
   schema_cases: { type: "array", minItems: 1, maxItems: 512, items: exactObject({ case_id: label, schema_file: { type: "string" }, expected_valid: { type: "boolean" }, value: {} }) },
   semantic_cases: { type: "array", minItems: 1, maxItems: 512, items: exactObject({
     case_id: label,
-    operation: { enum: ["derive_graphiti_projection", "normalize_canonical_graph", "normalize_graph_delta", "seal_coherent_activation_bundle", "seal_failure_retry_bundle", "seal_journal_reset_bundle", "seal_measurement", "seal_pointer_recovery", "seal_record", "seal_source_removal_adapter_verification_bundle", "seal_source_removal_event_set_bundle", "seal_source_removal_receipt_bundle", "seal_status_bundle", "seal_transition_chain", "validate_cli_fixture", "validate_pack", "validate_path", "validate_sql_authority"] },
+    operation: { enum: ["derive_graphiti_projection", "normalize_canonical_graph", "normalize_graph_delta", "seal_coherent_activation_bundle", "seal_failure_retry_bundle", "seal_failure_retry_noop_bundle", "seal_journal_reset_bundle", "seal_journal_reset_reconciliation_adoption_bundle", "seal_measurement", "seal_pointer_recovery", "seal_record", "seal_source_removal_adapter_verification_bundle", "seal_source_removal_event_set_bundle", "seal_source_removal_receipt_bundle", "seal_status_bundle", "seal_transition_chain", "validate_cli_fixture", "validate_pack", "validate_path", "validate_sql_authority"] },
     input: exactObject({ arguments: { type: "array", maxItems: 3 } }),
     expectation: exactObject({
       accepted: { type: "boolean" }, output_digest: nullableDigest,
@@ -748,7 +995,7 @@ function queueText(name, value) { files.set(name, value.endsWith("\n") ? value :
 files.set("watcher-sample-plan.json", samplePlanBytes);
 
 const D = (letter) => `sha256:${letter.repeat(64)}`;
-const EFFECTIVE_PROFILE_DIGEST = "sha256:d1155515ce03a7449821e1e14eb80256b70eae0d5048d9f5d1978863b201560e";
+const EFFECTIVE_PROFILE_DIGEST = "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5";
 const started = "2026-08-20T00:00:00.000Z";
 const completed = "2026-08-20T00:00:01.000Z";
 const resetAt = "2026-08-20T00:00:02.000Z";
@@ -1059,12 +1306,12 @@ const wrongBindingReceiptValue = resealed(receiptValue, "receipt_digest", {
 const journalMetaValue = sealed({
   contract_version: "gkos-watcher-journal-meta/1.0.0-draft.1", journal_instance_id: journalId, vault_id: "phase5-watcher-convergence-v1",
   configuration_digest: samplePlan.watcher.configuration_digest, policy_digest: samplePlan.watcher.policy_digest,
-  effective_profile_digest: EFFECTIVE_PROFILE_DIGEST, anchor_coherent_manifest_digest: coherentManifestValue.coherent_manifest_digest, created_at: completed,
+  effective_profile_digest: EFFECTIVE_PROFILE_DIGEST, anchor_coherent_manifest_digest: null, created_at: completed,
 }, "meta_digest");
 const journalGenerationValue = sealed({
   contract_version: "gkos-watcher-journal-generation/1.0.0-draft.1", journal_instance_id: journalId,
   directory_leaf: `journal-${journalId}`, database_file: "watcher-journal.sqlite", meta_digest: journalMetaValue.meta_digest,
-  anchor_coherent_manifest_digest: coherentManifestValue.coherent_manifest_digest, created_at: completed,
+  anchor_coherent_manifest_digest: null, created_at: completed,
 }, "journal_generation_digest");
 const journalPointerValue = sealed({
   contract_version: "gkos-watcher-journal-active-pointer/1.0.0-draft.1", kind: "watcher_journal",
@@ -1379,7 +1626,8 @@ for (const [case_id, schema_file, value] of [
 const semanticOperationMap = Object.freeze({
   seal_sample_plan: "seal_record", seal_transition_chain: "seal_transition_chain", seal_coherent_activation: "seal_coherent_activation_bundle",
   seal_failure_retry: "seal_failure_retry_bundle", seal_source_removal_event_set: "seal_source_removal_event_set_bundle",
-  seal_journal_reset: "seal_journal_reset_bundle", seal_source_removal_receipt: "seal_source_removal_receipt_bundle",
+  seal_journal_reset: "seal_journal_reset_bundle", seal_journal_reset_reconciliation_adoption: "seal_journal_reset_reconciliation_adoption_bundle",
+  seal_source_removal_receipt: "seal_source_removal_receipt_bundle",
   seal_adapter_verification: "seal_source_removal_adapter_verification_bundle", seal_status_bundle: "seal_status_bundle", seal_record: "seal_record",
 });
 function semanticCase(case_id, requestedOperation, input, expectedError = null) {
@@ -1669,7 +1917,54 @@ const eventSetBundleValue = {
   event_set: eventSetValue, memberships: [membershipValue], prior_memberships: [null],
   events: [eventValue], prior_events: [null], occurrences: [occurrenceValue], prior_occurrences: [null],
 };
+const bootstrapHostLockValue = sealed({
+  contract_version: "gkos-watcher-host-lock/1.0.0-draft.1", lock_id: "019b2d14-422f-7db7-87d4-7d81cfaec932",
+  process_id: 4242, operation: "service", service_instance_id: "019b2d14-4233-7db7-87d4-7d81cfaec932",
+  prior_pointer_digest: null, prior_coherent_manifest_digest: null, prior_journal_pointer_digest: null,
+  owner_nonce: "0123456789abcdef0123456789abcdef", created_at: started,
+}, "lock_digest");
+const bootstrapPlannedTargetValue = sealed({
+  contract_version: "gkos-watcher-journal-bootstrap-planned-target/1.0.0-draft.1",
+  watcher_host_lock_digest: bootstrapHostLockValue.lock_digest, journal_meta: journalMetaValue,
+  journal_generation: journalGenerationValue, target_journal_pointer: journalPointerValue,
+}, "planned_target_digest");
+const bootstrapPlannedTargetBytes = Buffer.from(pretty(bootstrapPlannedTargetValue));
+const bootstrapPlannedTargetRefValue = {
+  planned_target_file: `watcher-journal-bootstrap-planned-target-${bootstrapPlannedTargetValue.planned_target_digest.slice(7)}.json`,
+  planned_target_digest: bootstrapPlannedTargetValue.planned_target_digest,
+  planned_target_raw_sha256: sha(bootstrapPlannedTargetBytes), planned_target_byte_size: bootstrapPlannedTargetBytes.length,
+  watcher_host_lock_digest: bootstrapHostLockValue.lock_digest,
+};
+const bootstrapHostLockWitnessValue = sealed({
+  contract_version: "gkos-watcher-journal-bootstrap-host-lock-witness/1.0.0-draft.2",
+  watcher_host_lock: bootstrapHostLockValue, watcher_host_lock_digest: bootstrapHostLockValue.lock_digest,
+  planned_target: bootstrapPlannedTargetRefValue, journal_instance_id: journalMetaValue.journal_instance_id,
+  journal_meta_digest: journalMetaValue.meta_digest, journal_generation_digest: journalGenerationValue.journal_generation_digest,
+  target_journal_pointer_digest: journalPointerValue.pointer_digest,
+}, "witness_digest");
+const bootstrapWitnessBytes = Buffer.from(pretty(bootstrapHostLockWitnessValue));
+const bootstrapHostLockWitnessRefValue = {
+  witness_file: `watcher-journal-bootstrap-host-lock-${bootstrapHostLockWitnessValue.witness_digest.slice(7)}.json`,
+  witness_digest: bootstrapHostLockWitnessValue.witness_digest,
+  witness_raw_sha256: sha(bootstrapWitnessBytes),
+  witness_byte_size: bootstrapWitnessBytes.length,
+  watcher_host_lock_digest: bootstrapHostLockValue.lock_digest,
+};
+const journalBootstrapAuthorityValue = sealed({
+  contract_version: "gkos-watcher-journal-bootstrap-authority/1.0.0-draft.2",
+  host_lock_witness: bootstrapHostLockWitnessRefValue,
+  journal_meta_digest: journalMetaValue.meta_digest,
+  journal_generation_digest: journalGenerationValue.journal_generation_digest,
+  journal_generation_file: journalPointerValue.journal_generation_file,
+  target_journal_pointer_digest: journalPointerValue.pointer_digest,
+  target_journal_pointer_file: `watcher-journal-pointer-${journalPointerValue.pointer_digest.slice(7)}.json`,
+  committed_at: completed,
+}, "authority_digest");
 const oldJournalReadyAuthorityValue = {
+  journal_bootstrap_authority: journalBootstrapAuthorityValue,
+  outer_pointer: pointerValue,
+  outer_coherent_manifest: coherentManifestValue,
+  active_coherent: activeValue,
   activated_event_set_bundles: [{
     event_set_bundle: { event_set: eventSetValue, memberships: [membershipValue], prior_memberships: [null], events: [eventValue], prior_events: [null], occurrences: [occurrenceValue], prior_occurrences: [null] },
     activation: activationValue,
@@ -1683,6 +1978,505 @@ const journalResetBundleValue = {
   reset: resetValue, guard: resetGuardValue, new_meta: newJournalMetaValue, new_generation: newJournalGenerationValue,
   target_pointer: targetJournalPointerValue, reset_carry_bundle: resetCarryBundleValue,
 };
+const resetHostLockValue = sealed({
+  contract_version: "gkos-watcher-host-lock/1.0.0-draft.1", lock_id: "019b2d14-423a-7db7-87d4-7d81cfaec932",
+  process_id: 4242, operation: "journal_reset", service_instance_id: null,
+  prior_pointer_digest: pointerValue.pointer_digest,
+  prior_coherent_manifest_digest: coherentManifestValue.coherent_manifest_digest,
+  prior_journal_pointer_digest: journalPointerValue.pointer_digest,
+  owner_nonce: "fedcba9876543210fedcba9876543210", created_at: started,
+}, "lock_digest");
+const journalResetRecoveryPlanValue = sealed({
+  contract_version: "gkos-watcher-journal-reset-recovery-plan/1.0.0-draft.1",
+  watcher_host_lock: resetHostLockValue,
+  old_meta: journalMetaValue, old_generation: journalGenerationValue, old_pointer: journalPointerValue,
+  outer_pointer: pointerValue, outer_coherent_manifest: coherentManifestValue,
+  old_journal_authority: oldJournalReadyAuthorityValue,
+  archive: archiveValue, reset: resetValue, reset_guard: resetGuardValue, pointer_replace_guard: journalPointerGuardValue,
+  new_meta: newJournalMetaValue, new_generation: newJournalGenerationValue, target_pointer: targetJournalPointerValue,
+  reset_carry_bundle: resetCarryBundleValue,
+}, "plan_digest");
+schemaCases.push({ case_id: "journal-reset-recovery-plan-valid", schema_file: "journal.schema.json", expected_valid: true,
+  value: journalResetRecoveryPlanValue });
+const historicalAnchorDigest = D("7");
+const anchoredOldMetaValue = resealed(journalMetaValue, "meta_digest", {
+  anchor_coherent_manifest_digest: historicalAnchorDigest,
+});
+const anchoredOldGenerationValue = resealed(journalGenerationValue, "journal_generation_digest", {
+  meta_digest: anchoredOldMetaValue.meta_digest,
+  anchor_coherent_manifest_digest: historicalAnchorDigest,
+});
+const anchoredOldPointerValue = resealed(journalPointerValue, "pointer_digest", {
+  journal_generation_file: `watcher-journal-generation-${anchoredOldGenerationValue.journal_generation_digest.slice(7)}.json`,
+  journal_generation_digest: anchoredOldGenerationValue.journal_generation_digest,
+  prior_pointer_digest: D("6"),
+});
+const anchoredTargetPointerValue = resealed(targetJournalPointerValue, "pointer_digest", {
+  prior_pointer_digest: anchoredOldPointerValue.pointer_digest,
+});
+const anchoredResetValue = resealed(resetValue, "reset_digest", {
+  prior_journal_generation_digest: anchoredOldGenerationValue.journal_generation_digest,
+  target_journal_pointer_digest: anchoredTargetPointerValue.pointer_digest,
+});
+const anchoredResetGuardValue = resealed(resetGuardValue, "guard_digest", {
+  old_journal_pointer_digest: anchoredOldPointerValue.pointer_digest,
+  old_journal_generation_digest: anchoredOldGenerationValue.journal_generation_digest,
+  reset_digest: anchoredResetValue.reset_digest,
+  target_journal_pointer_digest: anchoredTargetPointerValue.pointer_digest,
+});
+const anchoredOldPointerBytes = Buffer.from(pretty(anchoredOldPointerValue));
+const anchoredTargetPointerBytes = Buffer.from(pretty(anchoredTargetPointerValue));
+const anchoredJournalPointerGuardValue = resealed(journalPointerGuardValue, "guard_digest", {
+  old_pointer_file: `watcher-journal-pointer-${anchoredOldPointerValue.pointer_digest.slice(7)}.json`,
+  old_pointer_digest: anchoredOldPointerValue.pointer_digest,
+  old_pointer_raw_sha256: sha(anchoredOldPointerBytes),
+  old_pointer_byte_size: anchoredOldPointerBytes.length,
+  new_pointer_file: `watcher-journal-pointer-${anchoredTargetPointerValue.pointer_digest.slice(7)}.json`,
+  new_pointer_digest: anchoredTargetPointerValue.pointer_digest,
+  new_pointer_raw_sha256: sha(anchoredTargetPointerBytes),
+  new_pointer_byte_size: anchoredTargetPointerBytes.length,
+  operation_intent_digest: anchoredResetGuardValue.guard_digest,
+  target_commit_digest: anchoredResetValue.reset_digest,
+});
+const anchoredJournalResetBundleValue = {
+  ...journalResetBundleValue,
+  old_meta: anchoredOldMetaValue,
+  old_generation: anchoredOldGenerationValue,
+  old_pointer: anchoredOldPointerValue,
+  reset: anchoredResetValue,
+  guard: anchoredResetGuardValue,
+  target_pointer: anchoredTargetPointerValue,
+};
+const anchoredOldJournalAuthorityValue = {
+  ...oldJournalReadyAuthorityValue,
+  journal_bootstrap_authority: null,
+};
+
+// Exact unchanged-reset adoption authority. This is deliberately separate
+// from the ordinary semantic batch fixture, whose no-op rejection remains
+// frozen.
+const adoptionBatchId = "019b2d14-4239-7db7-87d4-7d81cfaec932";
+const adoptionValidationResult = { status: "accepted" };
+const adoptionTopology = sealed({
+  ...Object.fromEntries(Object.entries(topology).filter(([key]) => key !== "topology_snapshot_digest")),
+  validation_result_digest: digest(adoptionValidationResult),
+}, "topology_snapshot_digest");
+const adoptionRetrievalManifestBase = {
+  contract_version: "gkos-retrieval/1.0.0-draft.2", projection_schema_version: 3,
+  provenance_contract_version: "gkos-retrieval-provenance/1.0.0-draft.1",
+  gkx_standard_commit: "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
+  gkx_projection_profile: "gkx-2.3-validating-projection", engine_version: "2.1.2",
+  vault_id: adoptionTopology.vault_id, source_snapshot_digest: adoptionTopology.source_observation_snapshot_digest,
+  configuration_digest: samplePlan.watcher.configuration_digest, policy_digest: samplePlan.watcher.policy_digest,
+  chunker_version: "gkos-heading-chunker/1", tokenizer_version: "gkos-ascii-whitespace/1", lexical_backend: "sqlite_fts5",
+  embedding_provider_id: null, embedding_model_id: null, embedding_dimensions: null,
+  candidate_source_count: 0, candidate_declaration_count: 0, represented_candidate_source_count: 0,
+  candidate_chunk_count: 0, embedding_eligible_candidate_chunk_count: 0,
+};
+const adoptionRetrievalProjectionDigest = digest({
+  ...adoptionRetrievalManifestBase, candidate_sources: [], candidate_declarations: [],
+  embedding_eligible_candidate_chunk_keys: [], candidate_chunks: [], vectors: [],
+});
+const adoptionRetrievalManifest = {
+  ...adoptionRetrievalManifestBase,
+  projection_id: `retrieval:${adoptionRetrievalProjectionDigest.slice(7, 31)}`,
+  projection_digest: adoptionRetrievalProjectionDigest,
+};
+const adoptionInnerManifestDigest = digest(adoptionRetrievalManifest);
+const adoptionOwnerMaterial = {
+  contract_version: "gkos-ingest-generation/1.0.0-draft.1", mode: "non_strict", vault_id: adoptionTopology.vault_id,
+  observation_snapshot_digest: adoptionTopology.source_observation_snapshot_digest,
+  profile: { effective_profile_digest: EFFECTIVE_PROFILE_DIGEST }, normalized_profile: {},
+  configuration_digest: samplePlan.watcher.configuration_digest, policy_digest: samplePlan.watcher.policy_digest,
+  chunking: {}, validation_result: adoptionValidationResult,
+  inner: { database_file: `retrieval-${adoptionRetrievalProjectionDigest.slice(7)}.sqlite`, manifest: adoptionRetrievalManifest, manifest_digest: adoptionInnerManifestDigest },
+  rejection_journal: { journal_file: `ingest-rejections-${adoptionTopology.rejection_journal_digest.slice(7)}.json`, rejection_journal_digest: adoptionTopology.rejection_journal_digest, rejection_count: 0 },
+};
+const adoptionOwnerDigest = digest(adoptionOwnerMaterial);
+const currentOwnerManifestValue = {
+  ...adoptionOwnerMaterial, owner_generation_id: `ingest:${adoptionOwnerDigest.slice(7, 31)}`, owner_manifest_digest: adoptionOwnerDigest,
+};
+const adoptionRetrievalState = {
+  state: "ready", owner_generation_id: currentOwnerManifestValue.owner_generation_id, owner_manifest_digest: adoptionOwnerDigest,
+  database_file: currentOwnerManifestValue.inner.database_file, manifest_digest: adoptionInnerManifestDigest,
+  projection_id: adoptionRetrievalManifest.projection_id, projection_digest: adoptionRetrievalProjectionDigest,
+  lexical_backend: "sqlite_fts5", vector_stage_state: "disabled", provider_kind: null, provider_id: null, model_id: null,
+  dimensions: null, reason_codes: [],
+};
+const adoptionRawGraphValue = sealed({
+  contract_version: "gkos-watcher-raw-graph-artifact/1.0.0-draft.1", service_generation_id: generationId,
+  topology_snapshot_digest: adoptionTopology.topology_snapshot_digest, graph: emptyRawGraph,
+}, "graph_artifact_digest");
+const adoptionCanonicalGraphValue = normalizeGeneratorGraph(emptyRawGraph);
+const adoptionGraphitiValue = deriveGeneratorGraphiti(emptyRawGraph, adoptionTopology.vault_id);
+const adoptionCanonicalDigest = digest(adoptionCanonicalGraphValue);
+const adoptionGraphState = {
+  state: "ready", graph_contract_version: "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1",
+  graph_artifact_file: `watcher-graph-${adoptionRawGraphValue.graph_artifact_digest.slice(7)}.json`,
+  graph_artifact_digest: adoptionRawGraphValue.graph_artifact_digest, canonical_graph_digest: adoptionCanonicalDigest,
+  gkx_delta_digest: normalizedDeltaDigest, graphiti_projection_digest: digest(adoptionGraphitiValue),
+  sink_state: "not_applicable", sink_receipts: [], reason_codes: [],
+};
+const adoptionNativeTransitions = [];
+for (let index = 0; index < normalStates.length; index++) {
+  adoptionNativeTransitions.push(sealed({
+    ...Object.fromEntries(Object.entries(transitions[index]).filter(([key]) => key !== "transition_digest")),
+    prior_transition_digest: index === 0 ? null : adoptionNativeTransitions[index - 1].transition_digest,
+    gkx_snapshot_digest: index < 2 ? null : adoptionCanonicalDigest,
+    retrieval_projection_state: index < 3 ? notStartedRetrievalState : adoptionRetrievalState,
+    graph_projection_state: index < 4 ? notStartedGraphState : adoptionGraphState,
+  }, "transition_digest"));
+}
+const adoptionTopologyBytes = Buffer.from(pretty(adoptionTopology));
+const adoptionManifestValue = sealed({
+  ...Object.fromEntries(Object.entries(coherentManifestValue).filter(([key]) => key !== "coherent_manifest_digest")),
+  completed_transition_digest: adoptionNativeTransitions[6].transition_digest,
+  topology_snapshot_digest: adoptionTopology.topology_snapshot_digest,
+  topology_artifact_file: `watcher-topology-${adoptionTopology.topology_snapshot_digest.slice(7)}.json`,
+  topology_artifact_raw_sha256: sha(adoptionTopologyBytes),
+  source_observation_snapshot_digest: adoptionTopology.source_observation_snapshot_digest,
+  validation_result_digest: adoptionTopology.validation_result_digest,
+  rejection_journal_digest: adoptionTopology.rejection_journal_digest,
+  gkx_snapshot_digest: adoptionCanonicalDigest, retrieval_projection_state: adoptionRetrievalState,
+  graph_projection_state: adoptionGraphState,
+}, "coherent_manifest_digest");
+const adoptionOuterPointerValue = sealed({
+  ...Object.fromEntries(Object.entries(pointerValue).filter(([key]) => key !== "pointer_digest")),
+  coherent_manifest_file: `watcher-coherent-${adoptionManifestValue.coherent_manifest_digest.slice(7)}.json`,
+  coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+}, "pointer_digest");
+const adoptionNativeIntentValue = sealed({
+  ...Object.fromEntries(Object.entries(intentValue).filter(([key]) => key !== "intent_digest")),
+  prepared_transition_digest: adoptionNativeTransitions[5].transition_digest,
+  coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+  target_pointer: adoptionOuterPointerValue, target_complete_transition: adoptionNativeTransitions[6],
+}, "intent_digest");
+const adoptionNativeOutcomeValue = sealed({
+  ...Object.fromEntries(Object.entries(outcomeValue).filter(([key]) => key !== "outcome_digest")),
+  intent_digest: adoptionNativeIntentValue.intent_digest, coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+  pointer_digest: adoptionOuterPointerValue.pointer_digest,
+}, "outcome_digest");
+const adoptionNativeActiveValue = sealed({
+  ...Object.fromEntries(Object.entries(activeValue).filter(([key]) => key !== "active_digest")),
+  coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest, pointer_digest: adoptionOuterPointerValue.pointer_digest,
+  intent_digest: adoptionNativeIntentValue.intent_digest,
+}, "active_digest");
+const adoptionPreScanValue = {
+  ...preScan, active_pointer_digest: adoptionOuterPointerValue.pointer_digest,
+  active_coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+  topology_snapshot_digest: adoptionTopology.topology_snapshot_digest,
+};
+const adoptionPreScanDigest = digest(adoptionPreScanValue);
+const adoptionObservationValue = sealed({
+  contract_version: "gkos-watcher-observation/1.0.0-draft.1", batch_id: adoptionBatchId,
+  batch_kind: "startup_reconciliation", observed_paths: [], unscoped: true, overflow: false, started_at: resetAt,
+}, "observation_digest");
+const adoptionObservationBytes = Buffer.from(pretty(adoptionObservationValue));
+const adoptionObservationAuthorityValue = sealed({
+  contract_version: "gkos-watcher-observation-authority/1.0.0-draft.1", batch_id: adoptionBatchId,
+  observation_digest: adoptionObservationValue.observation_digest,
+  observation_artifact_file: `watcher-observation-${adoptionObservationValue.observation_digest.slice(7)}.json`,
+  observation_raw_sha256: sha(adoptionObservationBytes), observation_byte_size: adoptionObservationBytes.length,
+  pre_scan_state_digest: adoptionPreScanDigest, started_at: resetAt,
+}, "authority_digest");
+const adoptionPlanValue = sealed({
+  contract_version: "gkos-watcher-batch-plan/1.0.0-draft.1", batch_id: adoptionBatchId,
+  observation_digest: adoptionObservationValue.observation_digest, topology_snapshot_digest: adoptionTopology.topology_snapshot_digest,
+  effective_profile_digest: EFFECTIVE_PROFILE_DIGEST, validation_result_digest: adoptionTopology.validation_result_digest,
+  rejection_journal_digest: adoptionTopology.rejection_journal_digest, intended_source_mutations: [],
+  folder_set_changed: false, attachment_set_changed: false,
+  mutation_set_digest: digest({ contract_version: "gkos-watcher-mutation-set/1.0.0-draft.1",
+    pre_scan_state_digest: adoptionPreScanDigest, topology_snapshot_digest: adoptionTopology.topology_snapshot_digest,
+    intended_source_mutations: [], folder_set_changed: false, attachment_set_changed: false }),
+}, "plan_digest");
+const adoptionPlanBytes = Buffer.from(pretty(adoptionPlanValue));
+const adoptionPlanAuthorityValue = sealed({
+  contract_version: "gkos-watcher-plan-authority/1.0.0-draft.1", batch_id: adoptionBatchId,
+  observation_digest: adoptionObservationValue.observation_digest, plan_digest: adoptionPlanValue.plan_digest,
+  plan_artifact_file: `watcher-plan-${adoptionPlanValue.plan_digest.slice(7)}.json`, plan_raw_sha256: sha(adoptionPlanBytes),
+  plan_byte_size: adoptionPlanBytes.length, target_topology_snapshot_digest: adoptionTopology.topology_snapshot_digest,
+  source_removal_event_count: 0, source_removal_event_set_digest: null,
+}, "authority_digest");
+const adoptionReplacementMetaValue = resealed(newJournalMetaValue, "meta_digest", {
+  anchor_coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+});
+const adoptionReplacementGenerationValue = resealed(newJournalGenerationValue, "journal_generation_digest", {
+  meta_digest: adoptionReplacementMetaValue.meta_digest,
+  anchor_coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+});
+const adoptionReplacementPointerValue = resealed(targetJournalPointerValue, "pointer_digest", {
+  journal_generation_file: `watcher-journal-generation-${adoptionReplacementGenerationValue.journal_generation_digest.slice(7)}.json`,
+  journal_generation_digest: adoptionReplacementGenerationValue.journal_generation_digest,
+  prior_pointer_digest: journalPointerValue.pointer_digest,
+});
+const adoptionResetValue = resealed(resetValue, "reset_digest", {
+  new_journal_meta_digest: adoptionReplacementMetaValue.meta_digest,
+  new_journal_generation_digest: adoptionReplacementGenerationValue.journal_generation_digest,
+  target_journal_pointer_digest: adoptionReplacementPointerValue.pointer_digest,
+  outer_coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+});
+const adoptionReceiptValue = sealed({
+  contract_version: "gkos-watcher-journal-reset-reconciliation-adoption/1.0.0-draft.1", batch_id: adoptionBatchId,
+  batch_kind: "startup_reconciliation", execution_kind: "set_files", reset_digest: adoptionResetValue.reset_digest,
+  replacement_journal_generation_digest: adoptionReplacementGenerationValue.journal_generation_digest,
+  source_journal_generation_digest: journalGenerationValue.journal_generation_digest,
+  native_activation_journal_generation_digest: journalGenerationValue.journal_generation_digest,
+  current_pointer_digest: adoptionOuterPointerValue.pointer_digest,
+  current_coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+  native_activation_intent_digest: adoptionNativeIntentValue.intent_digest,
+  native_activation_outcome_digest: adoptionNativeOutcomeValue.outcome_digest,
+  prior_active_digest: adoptionNativeActiveValue.active_digest, observation_digest: adoptionObservationValue.observation_digest,
+  observation_authority_digest: adoptionObservationAuthorityValue.authority_digest, plan_digest: adoptionPlanValue.plan_digest,
+  plan_authority_digest: adoptionPlanAuthorityValue.authority_digest, topology_snapshot_digest: adoptionTopology.topology_snapshot_digest,
+  source_observation_snapshot_digest: adoptionTopology.source_observation_snapshot_digest, gkx_snapshot_digest: adoptionCanonicalDigest,
+  retrieval_projection_digest: adoptionRetrievalProjectionDigest, canonical_graph_digest: adoptionCanonicalDigest,
+  graphiti_projection_digest: adoptionGraphState.graphiti_projection_digest, started_at: resetAt,
+}, "receipt_digest");
+const adoptionTransitionValue = sealed({
+  contract_version: "gkos-watcher-journal-reset-reconciliation-transition/1.0.0-draft.1", batch_id: adoptionBatchId,
+  transition_ordinal: 0, state: "reset_reconciliation_adopted", terminal_state: "complete",
+  receipt_digest: adoptionReceiptValue.receipt_digest, reset_digest: adoptionResetValue.reset_digest,
+  replacement_journal_generation_digest: adoptionReplacementGenerationValue.journal_generation_digest,
+  current_pointer_digest: adoptionOuterPointerValue.pointer_digest,
+  current_coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+  topology_snapshot_digest: adoptionTopology.topology_snapshot_digest, prior_active_digest: adoptionNativeActiveValue.active_digest,
+  adopted_active_digest: adoptionNativeActiveValue.active_digest, recorded_at: resetAt, completed_at: resetAt,
+}, "transition_digest");
+const journalResetReconciliationAdoptionBundleValue = {
+  replacement_meta: adoptionReplacementMetaValue, replacement_generation: adoptionReplacementGenerationValue,
+  replacement_pointer: adoptionReplacementPointerValue, reset: adoptionResetValue,
+  source_meta: journalMetaValue, source_generation: journalGenerationValue, source_pointer: journalPointerValue,
+  native_meta: journalMetaValue, native_generation: journalGenerationValue, native_pointer: journalPointerValue,
+  current_outer_pointer: adoptionOuterPointerValue, current_coherent_manifest: adoptionManifestValue,
+  native_transitions: adoptionNativeTransitions, native_activation_intent: adoptionNativeIntentValue,
+  native_activation_outcome: adoptionNativeOutcomeValue, native_active: adoptionNativeActiveValue,
+  source_adoption_receipt: null, source_adoption_transition: null, source_active: adoptionNativeActiveValue,
+  pre_scan_state: adoptionPreScanValue, observation: adoptionObservationValue,
+  observation_authority: adoptionObservationAuthorityValue, plan: adoptionPlanValue, plan_authority: adoptionPlanAuthorityValue,
+  topology: adoptionTopology, current_owner_manifest: currentOwnerManifestValue, raw_graph: adoptionRawGraphValue,
+  canonical_graph: adoptionCanonicalGraphValue, graphiti_projection: adoptionGraphitiValue,
+  adoption_receipt: adoptionReceiptValue, adoption_transition: adoptionTransitionValue, adopted_active: adoptionNativeActiveValue,
+};
+
+// A successful full failure-reconciliation scan may be semantically identical
+// to the current coherent generation. It commits only the retry observation,
+// Plan authority and terminal no-op receipt/transition; the current outer and
+// retrieval/graph authorities remain byte-identical.
+const noopFailedAt = "2026-08-20T00:00:04.000Z";
+const noopRetryAt = "2026-08-20T00:00:05.000Z";
+const noopCompletedAt = "2026-08-20T00:00:06.000Z";
+const noopFailedBatchId = "019b2d14-423d-7db7-87d4-7d81cfaec932";
+const noopRetryBatchId = "019b2d14-423e-7db7-87d4-7d81cfaec932";
+const noopFailedObservationValue = sealed({
+  contract_version: "gkos-watcher-observation/1.0.0-draft.1", batch_id: noopFailedBatchId, batch_kind: "event",
+  observed_paths: ["policy/agent-writing.md"], unscoped: false, overflow: false, started_at: noopFailedAt,
+}, "observation_digest");
+const noopFailedObservationBytes = Buffer.from(pretty(noopFailedObservationValue));
+const noopFailedObservationAuthorityValue = sealed({
+  contract_version: "gkos-watcher-observation-authority/1.0.0-draft.1", batch_id: noopFailedBatchId,
+  observation_digest: noopFailedObservationValue.observation_digest,
+  observation_artifact_file: `watcher-observation-${noopFailedObservationValue.observation_digest.slice(7)}.json`,
+  observation_raw_sha256: sha(noopFailedObservationBytes), observation_byte_size: noopFailedObservationBytes.length,
+  pre_scan_state_digest: adoptionPreScanDigest, started_at: noopFailedAt,
+}, "authority_digest");
+const noopFailedBatchValue = sealed({
+  contract_version: "gkos-watcher-batch-record/1.0.0-draft.1", batch_id: noopFailedBatchId, batch_kind: "event",
+  observation_authority_digest: noopFailedObservationAuthorityValue.authority_digest, started_at: noopFailedAt,
+  execution_kind: "apply_changes", retry_of_batch_id: null,
+}, "batch_record_digest");
+const noopFailedObservedTransitionValue = sealed({
+  contract_version: "gkos-watcher-transition/1.0.0-draft.1", batch_id: noopFailedBatchId, transition_ordinal: 0,
+  state: "observed", last_reached_state: "observed", terminal_state: "open",
+  observation_digest: noopFailedObservationValue.observation_digest, plan_digest: null, prior_transition_digest: null,
+  gkx_delta_digest: null, gkx_snapshot_digest: null, retrieval_projection_state: notStartedRetrievalState,
+  graph_projection_state: notStartedGraphState, reason_codes: [], recorded_at: noopFailedAt, completed_at: null,
+}, "transition_digest");
+const noopFailedTerminalTransitionValue = sealed({
+  ...Object.fromEntries(Object.entries(noopFailedObservedTransitionValue).filter(([key]) => key !== "transition_digest")),
+  transition_ordinal: 1, state: "failed", last_reached_state: "observed", terminal_state: "failed",
+  prior_transition_digest: noopFailedObservedTransitionValue.transition_digest,
+  reason_codes: ["WATCHER_SOURCE_UNSTABLE"], recorded_at: noopRetryAt, completed_at: noopRetryAt,
+}, "transition_digest");
+const noopRetryObservationValue = sealed({
+  contract_version: "gkos-watcher-observation/1.0.0-draft.1", batch_id: noopRetryBatchId,
+  batch_kind: "failure_reconciliation", observed_paths: [], unscoped: true, overflow: false, started_at: noopRetryAt,
+}, "observation_digest");
+const noopRetryObservationBytes = Buffer.from(pretty(noopRetryObservationValue));
+const noopRetryObservationAuthorityValue = sealed({
+  contract_version: "gkos-watcher-observation-authority/1.0.0-draft.1", batch_id: noopRetryBatchId,
+  observation_digest: noopRetryObservationValue.observation_digest,
+  observation_artifact_file: `watcher-observation-${noopRetryObservationValue.observation_digest.slice(7)}.json`,
+  observation_raw_sha256: sha(noopRetryObservationBytes), observation_byte_size: noopRetryObservationBytes.length,
+  pre_scan_state_digest: adoptionPreScanDigest, started_at: noopRetryAt,
+}, "authority_digest");
+const noopRetryBatchValue = sealed({
+  contract_version: "gkos-watcher-batch-record/1.0.0-draft.1", batch_id: noopRetryBatchId,
+  batch_kind: "failure_reconciliation", observation_authority_digest: noopRetryObservationAuthorityValue.authority_digest,
+  started_at: noopRetryAt, execution_kind: "set_files", retry_of_batch_id: noopFailedBatchId,
+}, "batch_record_digest");
+const noopFailureRetryValue = {
+  failed_batch: noopFailedBatchValue, failed_observation: noopFailedObservationValue,
+  failed_observation_authority: noopFailedObservationAuthorityValue, failed_pre_scan_state: adoptionPreScanValue,
+  failed_transitions: [noopFailedObservedTransitionValue, noopFailedTerminalTransitionValue],
+  retry_batch: noopRetryBatchValue, retry_observation: noopRetryObservationValue,
+  retry_observation_authority: noopRetryObservationAuthorityValue, retry_pre_scan_state: adoptionPreScanValue,
+};
+const noopRetryPlanValue = sealed({
+  contract_version: "gkos-watcher-batch-plan/1.0.0-draft.1", batch_id: noopRetryBatchId,
+  observation_digest: noopRetryObservationValue.observation_digest,
+  topology_snapshot_digest: adoptionTopology.topology_snapshot_digest, effective_profile_digest: EFFECTIVE_PROFILE_DIGEST,
+  validation_result_digest: adoptionTopology.validation_result_digest,
+  rejection_journal_digest: adoptionTopology.rejection_journal_digest, intended_source_mutations: [],
+  folder_set_changed: false, attachment_set_changed: false,
+  mutation_set_digest: digest({
+    contract_version: "gkos-watcher-mutation-set/1.0.0-draft.1", pre_scan_state_digest: adoptionPreScanDigest,
+    topology_snapshot_digest: adoptionTopology.topology_snapshot_digest, intended_source_mutations: [],
+    folder_set_changed: false, attachment_set_changed: false,
+  }),
+}, "plan_digest");
+const noopRetryPlanBytes = Buffer.from(pretty(noopRetryPlanValue));
+const noopRetryPlanAuthorityValue = sealed({
+  contract_version: "gkos-watcher-plan-authority/1.0.0-draft.1", batch_id: noopRetryBatchId,
+  observation_digest: noopRetryObservationValue.observation_digest, plan_digest: noopRetryPlanValue.plan_digest,
+  plan_artifact_file: `watcher-plan-${noopRetryPlanValue.plan_digest.slice(7)}.json`,
+  plan_raw_sha256: sha(noopRetryPlanBytes), plan_byte_size: noopRetryPlanBytes.length,
+  target_topology_snapshot_digest: adoptionTopology.topology_snapshot_digest,
+  source_removal_event_count: 0, source_removal_event_set_digest: null,
+}, "authority_digest");
+const noopReceiptValue = sealed({
+  contract_version: "gkos-watcher-failure-retry-noop-receipt/1.0.0-draft.1",
+  failed_batch_id: noopFailedBatchId,
+  failed_terminal_transition_digest: noopFailedTerminalTransitionValue.transition_digest,
+  retry_batch_id: noopRetryBatchId, retry_observation_digest: noopRetryObservationValue.observation_digest,
+  retry_observation_authority_digest: noopRetryObservationAuthorityValue.authority_digest,
+  retry_pre_scan_state_digest: adoptionPreScanDigest,
+  failure_retry_bundle_digest: digest(noopFailureRetryValue), retry_plan_digest: noopRetryPlanValue.plan_digest,
+  retry_plan_authority_digest: noopRetryPlanAuthorityValue.authority_digest,
+  current_active_digest: adoptionNativeActiveValue.active_digest,
+  current_pointer_digest: adoptionOuterPointerValue.pointer_digest,
+  current_coherent_manifest_digest: adoptionManifestValue.coherent_manifest_digest,
+  current_intent_digest: adoptionNativeIntentValue.intent_digest,
+  current_outcome_digest: adoptionNativeOutcomeValue.outcome_digest,
+  topology_snapshot_digest: adoptionTopology.topology_snapshot_digest,
+  source_observation_snapshot_digest: adoptionTopology.source_observation_snapshot_digest,
+  configuration_digest: samplePlan.watcher.configuration_digest, policy_digest: samplePlan.watcher.policy_digest,
+  effective_profile_digest: EFFECTIVE_PROFILE_DIGEST, gkx_snapshot_digest: adoptionCanonicalDigest,
+  retrieval_projection_digest: adoptionRetrievalProjectionDigest, canonical_graph_digest: adoptionCanonicalDigest,
+  graph_artifact_digest: adoptionRawGraphValue.graph_artifact_digest,
+  graphiti_projection_digest: adoptionGraphState.graphiti_projection_digest,
+  set_files_call_count: 1, apply_changes_call_count: 0, provider_call_count: 0,
+  retrieval_write_count: 0, outer_write_count: 0, completed_at: noopCompletedAt,
+}, "receipt_digest");
+const noopTransitionValue = sealed({
+  contract_version: "gkos-watcher-failure-retry-noop-transition/1.0.0-draft.1", batch_id: noopRetryBatchId,
+  transition_ordinal: 0, state: "failure_reconciliation_noop_complete", terminal_state: "complete",
+  prior_transition_digest: null, receipt: noopReceiptValue, receipt_digest: noopReceiptValue.receipt_digest,
+  recorded_at: noopCompletedAt, completed_at: noopCompletedAt,
+}, "transition_digest");
+const failureRetryNoopBundleValue = {
+  failure_retry_bundle: noopFailureRetryValue, retry_plan: noopRetryPlanValue,
+  retry_plan_authority: noopRetryPlanAuthorityValue, retry_topology: adoptionTopology,
+  retry_canonical_graph: adoptionCanonicalGraphValue, current_topology: adoptionTopology,
+  current_outer_pointer: adoptionOuterPointerValue, current_coherent_manifest: adoptionManifestValue,
+  current_activation_intent: adoptionNativeIntentValue, current_activation_outcome: adoptionNativeOutcomeValue,
+  current_active: adoptionNativeActiveValue, current_owner_manifest: currentOwnerManifestValue,
+  current_canonical_graph: adoptionCanonicalGraphValue, current_raw_graph: adoptionRawGraphValue,
+  current_graphiti_projection: adoptionGraphitiValue, receipt: noopReceiptValue, transition: noopTransitionValue,
+};
+const repeatedAdoptionAt = "2026-08-20T00:00:03.000Z";
+const repeatedAdoptionBatchId = "019b2d14-423a-7db7-87d4-7d81cfaec932";
+const repeatedJournalId = "019b2d14-423b-7db7-87d4-7d81cfaec932";
+const repeatedMetaValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionReplacementMetaValue).filter(([key]) => key !== "meta_digest")),
+  journal_instance_id: repeatedJournalId, created_at: repeatedAdoptionAt,
+}, "meta_digest");
+const repeatedGenerationValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionReplacementGenerationValue).filter(([key]) => key !== "journal_generation_digest")),
+  journal_instance_id: repeatedJournalId, directory_leaf: `journal-${repeatedJournalId}`,
+  meta_digest: repeatedMetaValue.meta_digest, created_at: repeatedAdoptionAt,
+}, "journal_generation_digest");
+const repeatedPointerValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionReplacementPointerValue).filter(([key]) => key !== "pointer_digest")),
+  journal_generation_file: `watcher-journal-generation-${repeatedGenerationValue.journal_generation_digest.slice(7)}.json`,
+  journal_generation_digest: repeatedGenerationValue.journal_generation_digest,
+  prior_pointer_digest: adoptionReplacementPointerValue.pointer_digest,
+}, "pointer_digest");
+const repeatedResetValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionResetValue).filter(([key]) => key !== "reset_digest")),
+  reset_id: "019b2d14-423c-7db7-87d4-7d81cfaec932",
+  prior_journal_generation_digest: adoptionReplacementGenerationValue.journal_generation_digest,
+  new_journal_meta_digest: repeatedMetaValue.meta_digest,
+  new_journal_generation_digest: repeatedGenerationValue.journal_generation_digest,
+  target_journal_pointer_digest: repeatedPointerValue.pointer_digest,
+  reset_at: repeatedAdoptionAt,
+}, "reset_digest");
+const repeatedObservationValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionObservationValue).filter(([key]) => key !== "observation_digest")),
+  batch_id: repeatedAdoptionBatchId, started_at: repeatedAdoptionAt,
+}, "observation_digest");
+const repeatedObservationBytes = Buffer.from(pretty(repeatedObservationValue));
+const repeatedObservationAuthorityValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionObservationAuthorityValue).filter(([key]) => key !== "authority_digest")),
+  batch_id: repeatedAdoptionBatchId, observation_digest: repeatedObservationValue.observation_digest,
+  observation_artifact_file: `watcher-observation-${repeatedObservationValue.observation_digest.slice(7)}.json`,
+  observation_raw_sha256: sha(repeatedObservationBytes), observation_byte_size: repeatedObservationBytes.length,
+  started_at: repeatedAdoptionAt,
+}, "authority_digest");
+const repeatedPlanValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionPlanValue).filter(([key]) => key !== "plan_digest")),
+  batch_id: repeatedAdoptionBatchId, observation_digest: repeatedObservationValue.observation_digest,
+}, "plan_digest");
+const repeatedPlanBytes = Buffer.from(pretty(repeatedPlanValue));
+const repeatedPlanAuthorityValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionPlanAuthorityValue).filter(([key]) => key !== "authority_digest")),
+  batch_id: repeatedAdoptionBatchId, observation_digest: repeatedObservationValue.observation_digest,
+  plan_digest: repeatedPlanValue.plan_digest,
+  plan_artifact_file: `watcher-plan-${repeatedPlanValue.plan_digest.slice(7)}.json`,
+  plan_raw_sha256: sha(repeatedPlanBytes), plan_byte_size: repeatedPlanBytes.length,
+}, "authority_digest");
+const repeatedReceiptValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionReceiptValue).filter(([key]) => key !== "receipt_digest")),
+  batch_id: repeatedAdoptionBatchId, reset_digest: repeatedResetValue.reset_digest,
+  replacement_journal_generation_digest: repeatedGenerationValue.journal_generation_digest,
+  source_journal_generation_digest: adoptionReplacementGenerationValue.journal_generation_digest,
+  observation_digest: repeatedObservationValue.observation_digest,
+  observation_authority_digest: repeatedObservationAuthorityValue.authority_digest,
+  plan_digest: repeatedPlanValue.plan_digest, plan_authority_digest: repeatedPlanAuthorityValue.authority_digest,
+  started_at: repeatedAdoptionAt,
+}, "receipt_digest");
+const repeatedTransitionValue = sealed({
+  ...Object.fromEntries(Object.entries(adoptionTransitionValue).filter(([key]) => key !== "transition_digest")),
+  batch_id: repeatedAdoptionBatchId, receipt_digest: repeatedReceiptValue.receipt_digest,
+  reset_digest: repeatedResetValue.reset_digest,
+  replacement_journal_generation_digest: repeatedGenerationValue.journal_generation_digest,
+  recorded_at: repeatedAdoptionAt, completed_at: repeatedAdoptionAt,
+}, "transition_digest");
+const repeatedJournalResetReconciliationAdoptionBundleValue = {
+  ...journalResetReconciliationAdoptionBundleValue,
+  replacement_meta: repeatedMetaValue, replacement_generation: repeatedGenerationValue,
+  replacement_pointer: repeatedPointerValue, reset: repeatedResetValue,
+  source_meta: adoptionReplacementMetaValue, source_generation: adoptionReplacementGenerationValue,
+  source_pointer: adoptionReplacementPointerValue,
+  source_adoption_receipt: adoptionReceiptValue, source_adoption_transition: adoptionTransitionValue,
+  observation: repeatedObservationValue, observation_authority: repeatedObservationAuthorityValue,
+  plan: repeatedPlanValue, plan_authority: repeatedPlanAuthorityValue,
+  adoption_receipt: repeatedReceiptValue, adoption_transition: repeatedTransitionValue,
+};
+for (const [case_id, schema_file, value] of [
+  ["journal-bootstrap-planned-target-valid", "journal.schema.json", bootstrapPlannedTargetValue],
+  ["journal-bootstrap-host-lock-witness-valid", "journal.schema.json", bootstrapHostLockWitnessValue],
+  ["journal-bootstrap-authority-valid", "journal.schema.json", journalBootstrapAuthorityValue],
+  ["old-journal-reset-authority-valid", "journal.schema.json", oldJournalReadyAuthorityValue],
+  ["journal-reset-bundle-valid", "journal.schema.json", journalResetBundleValue],
+  ["journal-reset-reconciliation-adoption-receipt-valid", "journal.schema.json", adoptionReceiptValue],
+  ["journal-reset-reconciliation-adoption-transition-valid", "journal.schema.json", adoptionTransitionValue],
+  ["journal-reset-reconciliation-adoption-bundle-valid", "journal.schema.json", journalResetReconciliationAdoptionBundleValue],
+  ["failure-retry-noop-receipt-valid", "journal.schema.json", noopReceiptValue],
+  ["failure-retry-noop-transition-valid", "journal.schema.json", noopTransitionValue],
+  ["failure-retry-noop-bundle-valid", "journal.schema.json", failureRetryNoopBundleValue],
+  ["event-set-bundle-valid", "source-removal.schema.json", eventSetBundleValue],
+  ["activated-event-set-bundle-valid", "source-removal.schema.json", oldJournalReadyAuthorityValue.activated_event_set_bundles[0]],
+]) schemaCases.push({ case_id, schema_file, expected_valid: true, value });
 const oversizedAccepted = { ...accepted, source_size_bytes: 67_108_865 };
 const oversizedTopology = resealed(priorTopology, "topology_snapshot_digest", {
   accepted_sources: [oversizedAccepted],
@@ -1709,6 +2503,10 @@ const secondAccepted = {
   source_digest: D("3"), source_size_bytes: 400, parser_descriptor_digest: D("4"),
 };
 const twoAcceptedTopology = rebuildTopology(priorTopology, { accepted_sources: [accepted, secondAccepted] });
+const secondAcceptedOrdinalZero = { ...secondAccepted, source_observation_ordinal: 0 };
+const twoAcceptedOrdinalZeroTopology = rebuildTopology(priorTopology, {
+  accepted_sources: [accepted, secondAcceptedOrdinalZero],
+});
 const validationRejectionMutation = { ...planValue.intended_source_mutations[0], cause: "validation_rejection" };
 const validationRejectionPlan = resealed(planValue, "plan_digest", {
   intended_source_mutations: [validationRejectionMutation],
@@ -1801,6 +2599,32 @@ const receiptBundleValue = {
   receipt: receiptValue,
 };
 const semanticCases = [
+  semanticCaseWithResult("journal-reset-recovery-plan-seals", "seal_record", [journalResetRecoveryPlanValue], journalResetRecoveryPlanValue),
+  rejectingSemanticCase("journal-reset-recovery-plan-host-lock-coordinate-substitution", "seal_record", [
+    resealed(journalResetRecoveryPlanValue, "plan_digest", {
+      watcher_host_lock: resealed(resetHostLockValue, "lock_digest", { prior_journal_pointer_digest: D("f") }),
+    }),
+  ], "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  rejectingSemanticCase("journal-reset-recovery-plan-pointer-guard-substitution", "seal_record", [
+    resealed(journalResetRecoveryPlanValue, "plan_digest", {
+      pointer_replace_guard: resealed(journalPointerGuardValue, "guard_digest", { target_commit_digest: D("f") }),
+    }),
+  ], "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  rejectingSemanticCase("journal-reset-recovery-plan-extra-key", "seal_record", [{
+    ...journalResetRecoveryPlanValue, unexpected: true,
+  }], "GKX_WATCHER_CONTRACT_KEYS_INVALID"),
+  semanticCaseWithResult("journal-bootstrap-planned-target-seals", "seal_record", [bootstrapPlannedTargetValue], bootstrapPlannedTargetValue),
+  semanticCaseWithResult("journal-bootstrap-host-lock-witness-seals", "seal_record", [bootstrapHostLockWitnessValue], bootstrapHostLockWitnessValue),
+  rejectingSemanticCase("journal-bootstrap-planned-target-pointer-prior-substitution", "seal_record", [
+    resealed(bootstrapPlannedTargetValue, "planned_target_digest", {
+      target_journal_pointer: resealed(journalPointerValue, "pointer_digest", { prior_pointer_digest: D("f") }),
+    }),
+  ], "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  rejectingSemanticCase("journal-bootstrap-host-lock-witness-planned-reference-substitution", "seal_record", [
+    resealed(bootstrapHostLockWitnessValue, "witness_digest", {
+      planned_target: { ...bootstrapPlannedTargetRefValue, watcher_host_lock_digest: D("f") },
+    }),
+  ], "GKX_WATCHER_CONTRACT_RESET_INVALID"),
   semanticCaseWithResult("canonical-graph-production-normalization", "normalize_canonical_graph", [emptyRawGraph], canonicalGraphValue),
   semanticCaseWithResult("graph-delta-production-normalization", "normalize_graph_delta", [normalizedDeltaValue.delta], normalizedDeltaValue),
   semanticCaseWithResult("graphiti-production-projection", "derive_graphiti_projection", [emptyRawGraph, "phase5-watcher-convergence-v1"], graphitiValue),
@@ -1844,6 +2668,50 @@ const semanticCases = [
   semanticCase("source-removal-reset-carry-root-shortcut", "seal_source_removal_event_set", shortcutCarryBundleValue,
     "GKX_WATCHER_CONTRACT_SOURCE_REMOVAL_INVALID"),
   semanticCase("journal-reset-all-and-only", "seal_journal_reset", { bundle: journalResetBundleValue, old_journal_authority: oldJournalReadyAuthorityValue, pointer_guard: journalPointerGuardValue }),
+  semanticCase("journal-reset-anchored-historical-authority", "seal_journal_reset", {
+    bundle: anchoredJournalResetBundleValue,
+    old_journal_authority: anchoredOldJournalAuthorityValue,
+    pointer_guard: anchoredJournalPointerGuardValue,
+  }),
+  semanticCase("journal-reset-reconciliation-adoption-valid", "seal_journal_reset_reconciliation_adoption",
+    journalResetReconciliationAdoptionBundleValue),
+  semanticCase("journal-reset-reconciliation-adoption-flattened-repeat", "seal_journal_reset_reconciliation_adoption",
+    repeatedJournalResetReconciliationAdoptionBundleValue),
+  semanticCase("journal-reset-reconciliation-adoption-extra-key", "seal_journal_reset_reconciliation_adoption", {
+    ...journalResetReconciliationAdoptionBundleValue, unexpected: true,
+  }, "GKX_WATCHER_CONTRACT_KEYS_INVALID"),
+  semanticCase("journal-reset-reconciliation-adoption-missing-key", "seal_journal_reset_reconciliation_adoption",
+    Object.fromEntries(Object.entries(journalResetReconciliationAdoptionBundleValue).filter(([key]) => key !== "adopted_active")),
+    "GKX_WATCHER_CONTRACT_KEYS_INVALID"),
+  semanticCase("journal-reset-reconciliation-adoption-source-branch-partial", "seal_journal_reset_reconciliation_adoption", {
+    ...journalResetReconciliationAdoptionBundleValue, source_adoption_receipt: adoptionReceiptValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-reconciliation-adoption-reset-splice", "seal_journal_reset_reconciliation_adoption", {
+    ...journalResetReconciliationAdoptionBundleValue,
+    reset: resealed(adoptionResetValue, "reset_digest", { outer_coherent_manifest_digest: D("f") }),
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-reconciliation-adoption-nonempty-plan", "seal_journal_reset_reconciliation_adoption", {
+    ...journalResetReconciliationAdoptionBundleValue,
+    plan: resealed(adoptionPlanValue, "plan_digest", { folder_set_changed: true }),
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-reconciliation-adoption-retrieval-coordinate-splice", "seal_journal_reset_reconciliation_adoption", {
+    ...journalResetReconciliationAdoptionBundleValue,
+    adoption_receipt: resealed(adoptionReceiptValue, "receipt_digest", { retrieval_projection_digest: D("f") }),
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-reconciliation-adoption-transition-splice", "seal_journal_reset_reconciliation_adoption", {
+    ...journalResetReconciliationAdoptionBundleValue,
+    adoption_transition: resealed(adoptionTransitionValue, "transition_digest", { receipt_digest: D("f") }),
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-reconciliation-adoption-raw-graph-splice", "seal_journal_reset_reconciliation_adoption", {
+    ...journalResetReconciliationAdoptionBundleValue,
+    raw_graph: resealed(adoptionRawGraphValue, "graph_artifact_digest", { topology_snapshot_digest: D("f") }),
+  }, "GKX_WATCHER_CONTRACT_GRAPH_INVALID"),
+  semanticCase("journal-reset-reconciliation-adoption-gkx-raw-domain-substitution", "seal_journal_reset_reconciliation_adoption", {
+    ...journalResetReconciliationAdoptionBundleValue,
+    adoption_receipt: resealed(adoptionReceiptValue, "receipt_digest", {
+      gkx_snapshot_digest: adoptionRawGraphValue.graph_artifact_digest,
+    }),
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
   semanticCase("source-removal-receipt", "seal_source_removal_receipt", receiptBundleValue),
   semanticCase("adapter-verification", "seal_adapter_verification", { scope: adapterScopeValue, binding: adapterBindingValue, challenge: challengeValue, proof: proofValue, verification: verificationValue }),
   semanticCase("status-coherent-locator", "seal_status_bundle", { locator: locatorValue, status: statusValue, active: activeValue, manifest: coherentManifestValue }),
@@ -1951,8 +2819,12 @@ const semanticCases = [
   semanticCase("topology-accepted-order-substitution", "seal_record", rebuildTopology(twoAcceptedTopology, {
     accepted_sources: [...twoAcceptedTopology.accepted_sources].reverse(),
   }), "GKX_WATCHER_CONTRACT_RELATION_INVALID"),
-  semanticCase("topology-source-ordinal-duplicate", "seal_record", rebuildTopology(twoAcceptedTopology, {
-    accepted_sources: [accepted, { ...secondAccepted, source_observation_ordinal: accepted.source_observation_ordinal }],
+  semanticCase("topology-accepted-rejected-coordinate-splice", "seal_record", rebuildTopology(priorTopology, {
+    rejected_sources: [{ ...eventRejected(accepted.source_path), source_observation_ordinal: accepted.source_observation_ordinal }],
+  }), "GKX_WATCHER_CONTRACT_RELATION_INVALID"),
+  semanticCase("topology-distinct-path-ordinal-zero-accepted", "seal_record", twoAcceptedOrdinalZeroTopology),
+  semanticCase("topology-same-path-ordinal-duplicate", "seal_record", rebuildTopology(twoAcceptedTopology, {
+    accepted_sources: [accepted, { ...secondAccepted, source_path: accepted.source_path, source_observation_ordinal: accepted.source_observation_ordinal }],
   }), "GKX_WATCHER_CONTRACT_RELATION_INVALID"),
   semanticCase("topology-accepted-rejected-overlap", "seal_record", rebuildTopology(priorTopology, {
     rejected_sources: [{ ...eventRejected(accepted.source_path), source_observation_ordinal: 1 }],
@@ -2043,6 +2915,73 @@ const semanticCases = [
     },
     pointer_guard: journalPointerGuardValue,
   }, "GKX_WATCHER_CONTRACT_SOURCE_REMOVAL_INVALID"),
+  semanticCase("journal-reset-genesis-bootstrap-authority-missing", "seal_journal_reset", {
+    bundle: journalResetBundleValue,
+    old_journal_authority: { ...oldJournalReadyAuthorityValue, journal_bootstrap_authority: null },
+    pointer_guard: journalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-genesis-meta-anchor-nonnull", "seal_journal_reset", {
+    bundle: { ...journalResetBundleValue, old_meta: resealed(journalMetaValue, "meta_digest", { anchor_coherent_manifest_digest: D("f") }) },
+    old_journal_authority: oldJournalReadyAuthorityValue,
+    pointer_guard: journalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-genesis-generation-anchor-nonnull", "seal_journal_reset", {
+    bundle: { ...journalResetBundleValue, old_generation: resealed(journalGenerationValue, "journal_generation_digest", { anchor_coherent_manifest_digest: D("f") }) },
+    old_journal_authority: oldJournalReadyAuthorityValue,
+    pointer_guard: journalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-anchored-anchor-mismatch", "seal_journal_reset", {
+    bundle: { ...anchoredJournalResetBundleValue, old_generation: resealed(anchoredOldGenerationValue, "journal_generation_digest", { anchor_coherent_manifest_digest: D("f") }) },
+    old_journal_authority: anchoredOldJournalAuthorityValue,
+    pointer_guard: anchoredJournalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-anchored-bootstrap-authority-forbidden", "seal_journal_reset", {
+    bundle: anchoredJournalResetBundleValue,
+    old_journal_authority: { ...anchoredOldJournalAuthorityValue, journal_bootstrap_authority: journalBootstrapAuthorityValue },
+    pointer_guard: anchoredJournalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-bootstrap-target-substitution", "seal_journal_reset", {
+    bundle: journalResetBundleValue,
+    old_journal_authority: {
+      ...oldJournalReadyAuthorityValue,
+      journal_bootstrap_authority: resealed(journalBootstrapAuthorityValue, "authority_digest", {
+        target_journal_pointer_digest: D("f"),
+        target_journal_pointer_file: `watcher-journal-pointer-${"f".repeat(64)}.json`,
+      }),
+    },
+    pointer_guard: journalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-current-outer-manifest-substitution", "seal_journal_reset", {
+    bundle: journalResetBundleValue,
+    old_journal_authority: {
+      ...oldJournalReadyAuthorityValue,
+      outer_coherent_manifest: resealed(coherentManifestValue, "coherent_manifest_digest", { configuration_digest: D("f") }),
+    },
+    pointer_guard: journalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-current-active-substitution", "seal_journal_reset", {
+    bundle: journalResetBundleValue,
+    old_journal_authority: {
+      ...oldJournalReadyAuthorityValue,
+      active_coherent: resealed(activeValue, "active_digest", { pointer_digest: D("f") }),
+    },
+    pointer_guard: journalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-new-meta-null-anchor", "seal_journal_reset", {
+    bundle: { ...journalResetBundleValue, new_meta: resealed(newJournalMetaValue, "meta_digest", { anchor_coherent_manifest_digest: null }) },
+    old_journal_authority: oldJournalReadyAuthorityValue,
+    pointer_guard: journalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-new-generation-historical-anchor", "seal_journal_reset", {
+    bundle: { ...journalResetBundleValue, new_generation: resealed(newJournalGenerationValue, "journal_generation_digest", { anchor_coherent_manifest_digest: historicalAnchorDigest }) },
+    old_journal_authority: oldJournalReadyAuthorityValue,
+    pointer_guard: journalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
+  semanticCase("journal-reset-current-outer-reset-substitution", "seal_journal_reset", {
+    bundle: { ...journalResetBundleValue, reset: resealed(resetValue, "reset_digest", { outer_coherent_manifest_digest: D("f") }) },
+    old_journal_authority: oldJournalReadyAuthorityValue,
+    pointer_guard: journalPointerGuardValue,
+  }, "GKX_WATCHER_CONTRACT_RESET_INVALID"),
   semanticCase("journal-reset-pointer-target-mismatch", "seal_journal_reset", {
     bundle: journalResetBundleValue,
     old_journal_authority: oldJournalReadyAuthorityValue,
@@ -2564,6 +3503,45 @@ semanticCases.push(semanticCase("failure-retry-configuration-splice", "seal_fail
   retry_pre_scan_state: { ...preScan, configuration_digest: D("f") },
 }, "GKX_WATCHER_CONTRACT_RETRY_INVALID"));
 
+const noopFailedStartedAtSplice = {
+  ...noopFailureRetryValue,
+  failed_batch: resealed(noopFailedBatchValue, "batch_record_digest", { started_at: "2026-08-20T00:00:03.999Z" }),
+};
+const noopRetryStartedAtSplice = {
+  ...noopFailureRetryValue,
+  retry_batch: resealed(noopRetryBatchValue, "batch_record_digest", { started_at: "2026-08-20T00:00:04.999Z" }),
+};
+const noopFailedExecutionSplice = {
+  ...noopFailureRetryValue,
+  failed_batch: resealed(noopFailedBatchValue, "batch_record_digest", { execution_kind: "set_files" }),
+};
+semanticCases.push(
+  semanticCaseWithResult("failure-retry-noop-complete", "seal_failure_retry_noop_bundle", [failureRetryNoopBundleValue], failureRetryNoopBundleValue),
+  rejectingSemanticCase("failure-retry-noop-envelope-extra-key", "seal_failure_retry_noop_bundle", [{
+    ...failureRetryNoopBundleValue, unratified: null,
+  }], "GKX_WATCHER_CONTRACT_KEYS_INVALID"),
+  rejectingSemanticCase("failure-retry-noop-failed-batch-started-at-splice", "seal_failure_retry_noop_bundle", [{
+    ...failureRetryNoopBundleValue, failure_retry_bundle: noopFailedStartedAtSplice,
+  }], "GKX_WATCHER_CONTRACT_RETRY_INVALID"),
+  rejectingSemanticCase("failure-retry-noop-retry-batch-started-at-splice", "seal_failure_retry_noop_bundle", [{
+    ...failureRetryNoopBundleValue, failure_retry_bundle: noopRetryStartedAtSplice,
+  }], "GKX_WATCHER_CONTRACT_RETRY_INVALID"),
+  rejectingSemanticCase("failure-retry-noop-failed-batch-execution-splice", "seal_failure_retry_noop_bundle", [{
+    ...failureRetryNoopBundleValue, failure_retry_bundle: noopFailedExecutionSplice,
+  }], "GKX_WATCHER_CONTRACT_RETRY_INVALID"),
+  rejectingSemanticCase("failure-retry-noop-plan-mutation-splice", "seal_failure_retry_noop_bundle", [{
+    ...failureRetryNoopBundleValue,
+    retry_plan: resealed(noopRetryPlanValue, "plan_digest", { folder_set_changed: true }),
+  }], "GKX_WATCHER_CONTRACT_RETRY_INVALID"),
+  rejectingSemanticCase("failure-retry-noop-receipt-bundle-digest-splice", "seal_failure_retry_noop_bundle", [{
+    ...failureRetryNoopBundleValue,
+    receipt: resealed(noopReceiptValue, "receipt_digest", { failure_retry_bundle_digest: D("f") }),
+  }], "GKX_WATCHER_CONTRACT_RETRY_INVALID"),
+  rejectingSemanticCase("failure-retry-noop-current-topology-splice", "seal_failure_retry_noop_bundle", [{
+    ...failureRetryNoopBundleValue, current_topology: topology,
+  }], "GKX_WATCHER_CONTRACT_RETRY_INVALID"),
+);
+
 const storageTables = ["watcher_meta", "batches", "observations", "normalized_plans", "transitions", "activation_intents", "activation_outcomes", "active_coherent", "source_removal_occurrences", "source_removal_events", "source_removal_event_sets", "source_removal_event_set_members", "activated_source_removal_event_sets", "source_removal_adapter_responses", "source_removal_receipts", "journal_resets"];
 const storageDdl = [
   "CREATE TABLE watcher_meta (singleton INTEGER PRIMARY KEY CHECK (singleton = 1), journal_instance_id TEXT NOT NULL UNIQUE, meta_digest TEXT NOT NULL UNIQUE, body BLOB NOT NULL CHECK (length(body) BETWEEN 1 AND 33554432)) STRICT;",
@@ -2637,14 +3615,48 @@ const sqliteAuthorityCases = [
   ].map(([case_id, recipe_kind, mutation, reason]) => ({ case_id, recipe: { recipe_kind, target: "canonical_authority", mutation }, expectation: storageExpectation(false, reason) })),
 ];
 const journalResetRecovery = {
-  guard_publication_protocol: "exact_reserved_reset_s_to_g_then_three_reset_states",
+  plan: {
+    contract_version: "gkos-watcher-journal-reset-recovery-plan/1.0.0-draft.1",
+    field_count: 17, fixed_file: "watcher-journal-reset-recovery-plan.json",
+    stage_file: ".watcher-journal-reset-recovery-plan.json.gkos-watcher.stage",
+    maximum_byte_size: 536870912, publication: "stage_hardlink_no_replace_final_unlink_stage",
+  },
+  bridge: {
+    contract_version: "gkos-watcher-journal-reset-recovery-bridge/1.0.0-draft.1",
+    field_count: 14, maximum_byte_size: 1073741824, executor_attempt_limit: 4096,
+    kinds: ["journal_reset_live_cleanup", "journal_reset_recovery"],
+    publication: "content_addressed_stage_hardlink_no_replace_final_unlink_stage_permanent",
+  },
+  executor: {
+    contract_version: "gkos-watcher-journal-reset-recovery-executor/1.0.0-draft.1",
+    field_count: 10, stage_file: ".watcher-journal-reset-recovery-executor.json.gkos-watcher.stage",
+    selected_file: "watcher-journal-reset-recovery-executor.json", maximum_ordinal: 4095,
+    handoff: "linear_stage_to_immutable_to_selected_no_authority_gap",
+  },
+  authority_predicates: ["dead_owner_recovered", "live_original", "stable_cleanup"],
+  guard_publication_protocol: "plan_before_exact_reserved_reset_s_to_g_then_nested_pointer_f4",
   old_sqlite_files: "immutable_never_moved_deleted_or_recursively_cleaned",
-  recoverable_states: [
-    { ordinal: 1, reset_guard: "exact", journal_pointer: "old_exact", new_generation: "absent_or_partial_or_exact_guard_bound", pointer_guard: "absent", action: "verify_every_present_item_then_resume_guarded_creation_or_finalization" },
-    { ordinal: 2, reset_guard: "exact", journal_pointer: "old_exact", new_generation: "complete_exact", pointer_guard: "absent_or_any_exact_recoverable_nested_old_pointer_branch", action: "start_or_resume_exact_nested_pointer_replacement" },
-    { ordinal: 3, reset_guard: "exact", journal_pointer: "new_exact", new_generation: "complete_exact", pointer_guard: "absent_or_exact_nested_new_pointer_branch", action: "verify_new_pointer_and_database_finalize_nested_pointer_guard_then_remove_reset_guard_last" },
+  sqlite_states: [
+    { state: "C0", authority: "child_absent", action: "create_secure_child" },
+    { state: "C1", authority: "exact_empty_child", action: "create_database_wx" },
+    { state: "C2a", authority: "database_0_through_99_bytes_no_sidecars", action: "secure_remove_child_and_restart" },
+    { state: "C2b", authority: "database_100_through_4095_exact_sqlite_header_prefix_eof_only", action: "secure_remove_child_and_restart" },
+    { state: "C3", authority: "parseable_zero_application_object_database", action: "secure_remove_child_and_restart" },
+    { state: "C4", authority: "ddl19_plus_exact_meta_all_other_tables_empty", action: "atomic_reset_and_optional_carry_seed" },
+    { state: "C5", authority: "ddl19_meta_and_exact_reset_optional_carry", action: "continue_pointer_publication" },
   ],
-  mismatch_action: "retain_everything_and_exit3", removal_order: ["nested_pointer_guard", "reset_guard"],
+  recoverable_states: [
+    { ordinal: 1, reset_guard: "absent", journal_pointer: "old_exact", new_generation: "absent", pointer_guard: "absent", action: "publish_exact_embedded_reset_guard" },
+    { ordinal: 2, reset_guard: "exact", journal_pointer: "old_exact", new_generation: "absent_or_finite_incomplete_or_exact", pointer_guard: "absent", action: "verify_every_present_item_then_resume_guarded_creation" },
+    { ordinal: 3, reset_guard: "exact", journal_pointer: "old_exact", new_generation: "complete_exact", pointer_guard: "absent", action: "publish_exact_prepared_pointer_guard" },
+    { ordinal: 4, reset_guard: "exact", journal_pointer: "old_exact", new_generation: "complete_exact", pointer_guard: "any_exact_recoverable_old_branch", action: "resume_nested_pointer_f4" },
+    { ordinal: 5, reset_guard: "exact", journal_pointer: "new_exact", new_generation: "complete_exact", pointer_guard: "any_exact_recoverable_new_branch", action: "finalize_nested_pointer_guard" },
+    { ordinal: 6, reset_guard: "exact", journal_pointer: "new_exact", new_generation: "complete_exact", pointer_guard: "absent", action: "remove_reset_guard" },
+    { ordinal: 7, reset_guard: "absent", journal_pointer: "new_exact", new_generation: "complete_exact", pointer_guard: "absent", action: "selected_terminal_lock_handoff_and_cleanup" },
+    { ordinal: 8, reset_guard: "absent", journal_pointer: "new_exact", new_generation: "complete_exact", pointer_guard: "absent", action: "terminal" },
+  ],
+  mismatch_action: "retain_everything_and_exit3",
+  removal_order: ["nested_pointer_guard", "reset_guard", "terminal_host_lock_transition", "root_claim_if_any", "recovery_plan", "executor_selector", "current_host_lock"],
   anchored_new_database: "meta_present_no_active_coherent_no_batches_only_until_mandatory_startup_reconciliation",
 };
 const storageMaterial = {
@@ -2810,7 +3822,7 @@ const recoveryCategories = {
   transition_cases: semanticCases.filter((row) => /^(?:transition-|coherent-activation|coherent-manifest|batch-id|execution-kind)/u.test(row.case_id)).map((row) => row.case_id).sort(compare),
   topology_cases: semanticCases.filter((row) => /^(?:canonical-graph|graph-delta|graphiti|normalized-delta|raw-graph|topology-|plan-validation)/u.test(row.case_id)).map((row) => row.case_id).sort(compare),
   pointer_cases: semanticCases.filter((row) => /^(?:pointer-|journal-pointer)/u.test(row.case_id)).map((row) => row.case_id).sort(compare),
-  crash_cases: semanticCases.filter((row) => /^(?:failure-retry|journal-reset-(?:all-and-only|guard-digest|pointer-target)|sql-)/u.test(row.case_id)).map((row) => row.case_id).sort(compare),
+  crash_cases: semanticCases.filter((row) => /^(?:failure-retry|journal-bootstrap-|journal-reset-(?:all-and-only|anchored-|genesis-|bootstrap-|current-|new-|guard-digest|pointer-target|reconciliation-adoption|recovery-plan)|sql-)/u.test(row.case_id)).map((row) => row.case_id).sort(compare),
   source_removal_cases: semanticCases.filter((row) => /^(?:source-removal|event-|reset-carry|receipt-|adapter-|journal-reset-(?:delivered|ready|response|lost-response|carry|unactivated|prior-membership))/u.test(row.case_id)).map((row) => row.case_id).sort(compare),
   status_control_cases: semanticCases.filter((row) => /^(?:status-|cli-)/u.test(row.case_id)).map((row) => row.case_id).sort(compare),
   provider_cases: semanticCases.filter((row) => /^(?:measurement-|pack-)/u.test(row.case_id)).map((row) => row.case_id).sort(compare),
@@ -2942,7 +3954,9 @@ conformanceSchema.oneOf.push(schemaRef("conformance.schema.json", "recoveryFixtu
 const semanticCaseSchema = conformanceFixtureSchema.properties.semantic_cases.items;
 const semanticArities = {
   derive_graphiti_projection: 2, normalize_canonical_graph: 1, normalize_graph_delta: 1, seal_coherent_activation_bundle: 2,
-  seal_failure_retry_bundle: 1, seal_journal_reset_bundle: 3, seal_measurement: 1, seal_pointer_recovery: 2,
+  seal_failure_retry_bundle: 1, seal_failure_retry_noop_bundle: 1, seal_journal_reset_bundle: 3,
+  seal_journal_reset_reconciliation_adoption_bundle: 1,
+  seal_measurement: 1, seal_pointer_recovery: 2,
   seal_record: 1, seal_source_removal_adapter_verification_bundle: 1, seal_source_removal_event_set_bundle: 1,
   seal_source_removal_receipt_bundle: 1, seal_status_bundle: 1, seal_transition_chain: 1, validate_cli_fixture: 1,
   validate_pack: 1, validate_path: 1, validate_sql_authority: 1,
@@ -2960,10 +3974,18 @@ for (const [name, value] of [
 ]) queueJson(name, value);
 
 queueText("README.md", `# GKOS watcher recovery contract pack\n\nStatus: frozen Phase 5 Slice A contract/reference authority.\n\nThis pack freezes watcher delta coordination, durable observation/plan/topology authority, journal transitions, coherent activation, verified source-removal projection, status, crash recovery, and the fixed convergence sample plan. It is a contract/reference pack only; it does not activate a watcher, service, journal, provider, pointer writer, or source-removal adapter.\n\nPhase 5 extends the engine without changing Phase 0–4 contracts or public exports. Source notes remain read-only. A physical disappearance can create an idempotent local projection-removal event, but it never asserts authored supersession, predecessor disposition, or a canonical valid_to. Phase 7 graph storage/tools are explicitly not applicable here.\n`);
-queueText("TECHNICAL_README.md", `# Watcher recovery technical contract\n\nAll governed digests use compact recursively UTF-16-code-unit-key-sorted canonical JSON and lowercase SHA-256. A record digest excludes only its own digest field. JSON Schema is structural; the private semantic sealer is mandatory for UTF-8 byte caps, ordering, transition, cross-artifact, idempotency, percentile, and digest relations.\n\nThe normal journal progression is observed(0), normalized(1), gkx_applied(2), retrieval_applied(3), graph_applied(4), activation_prepared(5), complete(6). Failed and superseded are terminal rows at prior ordinal plus one, retain the last reached payload, and never invent the next stage. Observation, Plan, topology, and raw graph artifacts are immutable and content addressed. The fixed outer pointer is replaced only by the guarded host protocol defined by the recovery fixture; readers never combine generations. A guard is removed last, and a reader requires two exact guard-absent namespace observations. The watcher and legacy Phase 3 index writer share one outer writer authority and cache ancestry coordinate.\n\nA 500 ms debounce coalesces at most 2,000 path hints, with a separate 2,000 ms maximum coalesce age. Overflow, empty-name, uncertain rename, and out-of-order evidence force an unscoped secure reconciliation through production setFiles. Scoped batches call production applyChanges once. fs.watch data is only a hint; rename additionally requires stable source ID, content digest, and parser descriptor evidence.\n\nThe fixed effective validation mode is non_strict. A deterministic invalid changed note publishes the N-1 valid target plus its sealed rejection and removes prior local projections without emitting source_removed. Only a physical disappearance creates a source-removal occurrence. Capability/read/TOCTOU instability leaves the prior coherent generation active and stale. The exact ignored set is .gkx, .obsidian, .git, node_modules, .trash, .DS_Store, the existing _archive/moc-runs/ navigation prefix, and trusted configured exclusions; ordinary archive and archives components remain authored inputs.\n\nFolders and attachments are part of the topology snapshot, and either set changing forces graph work even if production GraphDelta is otherwise empty. Canonical graph and deterministic Graphiti projections are clean-versus-incremental convergence authorities; the raw graph remains a generation-bound startup artifact and retains timing. The Graphiti processing coordinate is the fixed Unix epoch sentinel. Phase 7 graph sink storage and tools remain not_applicable.\n\nThe journal hard admission cap is 4 GiB aggregate, with projected database <=2,048,000,000 bytes, 32 MiB per BLOB, and 10,000 mutated rows per transaction. Oversized observation/plan/topology/graph artifacts fail closed. A million-row source-removal outbox is prepared in bounded preactivation transactions; activation is forbidden until the PlanAuthority or reset guard binds the complete all-and-only occurrence/event/membership set, exact count, and membership-sequence digest. Reset never deletes evidence automatically and requires an exhaustively resealable outbox; corrupt or ambiguous outbox evidence is retained and exits operationally.\n\nSource removal has stable occurrence/event identity, per-batch or immediate reset-carry membership, activation gating, stable authorized adapter binding, per-process verification capability, exact request/response/receipt persistence, and first-binding reuse. A null binding is terminal local_only and is not degraded solely by adapter absence. Configured unavailable or unauthorized prior bindings remain pending/degraded and are never silently rebound. No vendor, domain, route, or private-LAN preference exists; selected providers remain trusted-configuration, provider-neutral coordinates, and FTS-only operation requires none.\n\nGraceful shutdown stops new batches, flushes debounce, drains or checkpoints only at safe boundaries within 10,000 ms, commits the last coherent manifest, and closes stores/transports before exit. Lite supervision waits 12,000 ms before its distinct hard-kill recovery path. Slice A does not activate either path; the current Lite delegates the final signed Full behavior, while a standalone Rust watcher remains an explicit Phase 9 blocked gate.\n\nThe convergence plan is exactly 3,978 canonical UTF-8 bytes without a terminal LF and has digest ${SAMPLE_PLAN_DIGEST}. Twenty measured edit-to-external-search samples include durable writer close/atomic replacement, OS event delivery, debounce, secure scan, validation, GKX/retrieval/graph work, journal commits, outer activation, and real external search. Nearest-rank indexes are 9/18/19; each sample plus p95 must be <=5,000,000 microseconds. The reference real-FTS lane records 23 generations, 22 queries, and zero provider calls; physically unavailable matrix lanes execute the finite zero-work outcome rather than skip.\n`);
+queueText("TECHNICAL_README.md", `# Watcher recovery technical contract\n\nAll governed digests use compact recursively UTF-16-code-unit-key-sorted canonical JSON and lowercase SHA-256. A record digest excludes only its own digest field. JSON Schema is structural; the private semantic sealer is mandatory for UTF-8 byte caps, ordering, transition, cross-artifact, idempotency, percentile, and digest relations.\n\nThe normal journal progression is observed(0), normalized(1), gkx_applied(2), retrieval_applied(3), graph_applied(4), activation_prepared(5), complete(6). Failed and superseded are terminal rows at prior ordinal plus one, retain the last reached payload, and never invent the next stage. Observation, Plan, topology, and raw graph artifacts are immutable and content addressed. The fixed outer pointer is replaced only by the guarded host protocol defined by the recovery fixture; readers never combine generations. A guard is removed last, and a reader requires two exact guard-absent namespace observations. The watcher and legacy Phase 3 index writer share one outer writer authority and cache ancestry coordinate.\n\nA 500 ms debounce coalesces at most 2,000 path hints, with a separate 2,000 ms maximum coalesce age. Overflow, empty-name, uncertain rename, and out-of-order evidence force an unscoped secure reconciliation through production setFiles. Scoped batches call production applyChanges once. fs.watch data is only a hint; rename additionally requires stable source ID, content digest, and parser descriptor evidence.\n\nThe fixed effective validation mode is non_strict. A deterministic invalid changed note publishes the N-1 valid target plus its sealed rejection and removes prior local projections without emitting source_removed. Only a physical disappearance creates a source-removal occurrence. Capability/read/TOCTOU instability leaves the prior coherent generation active and stale. Topology source observations retain the Phase 3 composite coordinate (source_path, source_observation_ordinal); ordinals are path-local, so distinct paths may each use zero, while a repeated composite or accepted/rejected path splice fails closed. The exact ignored set is .gkx, .obsidian, .git, node_modules, .trash, .DS_Store, the existing _archive/moc-runs/ navigation prefix, and trusted configured exclusions; ordinary archive and archives components remain authored inputs.\n\nFolders and attachments are part of the topology snapshot, and either set changing forces graph work even if production GraphDelta is otherwise empty. Canonical graph and deterministic Graphiti projections are clean-versus-incremental convergence authorities; the raw graph remains a generation-bound startup artifact and retains timing. The Graphiti processing coordinate is the fixed Unix epoch sentinel. Phase 7 graph sink storage and tools remain not_applicable.\n\nThe journal hard admission cap is 4 GiB aggregate, with projected database <=2,048,000,000 bytes, 32 MiB per BLOB, and 10,000 mutated rows per transaction. Oversized observation/plan/topology/graph artifacts fail closed. A million-row source-removal outbox is prepared in bounded preactivation transactions; activation is forbidden until the PlanAuthority or reset guard binds the complete all-and-only occurrence/event/membership set, exact count, and membership-sequence digest. Reset never deletes evidence automatically and requires an exhaustively resealable outbox; corrupt or ambiguous outbox evidence is retained and exits operationally.\n\nSource removal has stable occurrence/event identity, per-batch or immediate reset-carry membership, activation gating, stable authorized adapter binding, per-process verification capability, exact request/response/receipt persistence, and first-binding reuse. A null binding is terminal local_only and is not degraded solely by adapter absence. Configured unavailable or unauthorized prior bindings remain pending/degraded and are never silently rebound. No vendor, domain, route, or private-LAN preference exists; selected providers remain trusted-configuration, provider-neutral coordinates, and FTS-only operation requires none.\n\nGraceful shutdown stops new batches, flushes debounce, drains or checkpoints only at safe boundaries within 10,000 ms, commits the last coherent manifest, and closes stores/transports before exit. Lite supervision waits 12,000 ms before its distinct hard-kill recovery path. Slice A does not activate either path; the current Lite delegates the final signed Full behavior, while a standalone Rust watcher remains an explicit Phase 9 blocked gate.\n\nThe convergence plan is exactly 3,978 canonical UTF-8 bytes without a terminal LF and has digest ${SAMPLE_PLAN_DIGEST}. Twenty measured edit-to-external-search samples include durable writer close/atomic replacement, OS event delivery, debounce, secure scan, validation, GKX/retrieval/graph work, journal commits, outer activation, and real external search. Nearest-rank indexes are 9/18/19; each sample plus p95 must be <=5,000,000 microseconds. The reference real-FTS lane records 23 generations, 22 queries, and zero provider calls; physically unavailable matrix lanes execute the finite zero-work outcome rather than skip.\n`);
+files.set("TECHNICAL_README.md", files.get("TECHNICAL_README.md").replace(
+  "exactly 3,978 canonical UTF-8 bytes",
+  "exactly 4,363 canonical UTF-8 bytes",
+));
 files.set("TECHNICAL_README.md", files.get("TECHNICAL_README.md").replace(
   "\n\nGraceful shutdown stops new batches",
-  "\n\nJournal reset retains the exact journal-<UUIDv7>/watcher-journal.sqlite generation literals. It seals the closed database and optional WAL/SHM identities without moving or deleting them, publishes the fixed .gkos-watcher-journal-reset.guard through its exact staging hard-link protocol, and creates the guard-bound anchored replacement generation. The reset carry is all-and-only the exhaustively resealed activated adapter events that remain without an exact response/receipt; delivered, local_only, unactivated, missing, extra, and duplicate rows reject. Recovery admits only reset guard plus old pointer with absent/partial/exact child, old pointer with complete child and any exact nested old-pointer S/G/T/F state, or new pointer with complete child and the exact nested new-pointer state. Every alias, extra, mode, identity, body, or digest ambiguity retains all evidence. The nested pointer guard is removed and fsynced first; the reset guard is removed and fsynced last. An anchored new database may lack active_coherent and batches only until mandatory startup reconciliation.\n\nGraceful shutdown stops new batches",
+  "\n\nJournal reset retains the exact journal-<UUIDv7>/watcher-journal.sqlite generation literals. It seals the closed database and optional WAL/SHM identities without moving or deleting them, publishes the fixed .gkos-watcher-journal-reset.guard through its exact staging hard-link protocol, and creates the guard-bound anchored replacement generation. The reset carry is all-and-only the exhaustively resealed activated adapter events that remain without an exact response/receipt; delivered, local_only, unactivated, missing, extra, and duplicate rows reject. Recovery admits only reset guard plus old pointer with absent/partial/exact child, old pointer with complete child and any exact nested old-pointer S/G/T/F state, or new pointer with complete child and the exact nested new-pointer state. Every alias, extra, mode, identity, body, or digest ambiguity retains all evidence. The nested pointer guard is removed and fsynced first; the reset guard is removed and fsynced last. An anchored new database may lack active_coherent and batches only until mandatory startup reconciliation.\n\nIf that mandatory startup setFiles proves the source/configuration/policy/profile/topology/retrieval/canonical-graph/Graphiti coordinates byte-identical, the replacement journal may atomically adopt the exact native Active through one ResetReconciliationAdoption receipt and one ordinal-zero adoption transition. The adoption transaction inserts only the receipt-backed batch row, transition row, and byte-identical Active row; it writes no observation/Plan table row, activation intent/outcome, retrieval generation, provider work, or outer pointer. Its Active intent resolves through the securely reopened immutable native journal. Repeated resets flatten to that same native activation rather than chaining adoption authority. Any semantic change uses ordinary reconciliation; partial, duplicate, spliced, or locally invented adoption authority rejects.\n\nGraceful shutdown stops new batches",
+));
+files.set("TECHNICAL_README.md", files.get("TECHNICAL_README.md").replace(
+  "\n\nGraceful shutdown stops new batches",
+  "\n\nA capability/read/TOCTOU failure durably commits one failed batch before arming exactly one retry timer. Consecutive failure index n starts at zero, survives restart, and uses delay min(500 * 2^min(n,4), 5000) ms: 500, 1000, 2000, 4000, then 5000 forever, with no jitter or attempt cap. Every retry is one fresh unscoped failure_reconciliation setFiles batch bound to its immediate failed parent by FailureRetryBundle. All reconciliation ingress joins the same active-plus-one-pending coordinator while backoff is armed; request-local freshness waits for that authority rather than serving a stale generation. An unchanged successful retry commits exactly the retry Batch, ObservationAuthority, PlanAuthority, and FailureRetryNoopTransition rows, leaves Active/retrieval/graph/outer bytes unchanged, and terminates the durable epoch. A changed complete activation also terminates it. Shutdown cancels only the in-process timer and never resets the durable failure index.\n\nGraceful shutdown stops new batches",
 ));
 
 mkdirSync(pack, { recursive: true });

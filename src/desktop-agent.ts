@@ -24,7 +24,6 @@
  */
 import * as http from "node:http";
 import * as fs from "node:fs";
-import * as fsp from "node:fs/promises";
 import * as path from "node:path";
 import * as crypto from "node:crypto";
 import type { AddressInfo } from "node:net";
@@ -38,9 +37,12 @@ import {
   extensionFromPath,
   ENGINE_VERSION,
   type GkxSensitivity,
+  type GkxGraph,
   type SourceFile,
-  type IndexChanges,
 } from "./index";
+import { retrievalCanonicalDigest } from "./retrieval/digest";
+import { startWatcherHost } from "./watcher/host";
+import { ensureWatcherStatusDirectory, revalidateWatcherDirectory } from "./watcher/fs-authority";
 
 /** The seven-level sensitivity vocabulary (GKOS §11), fail-closed to secret. */
 export const SENSITIVITY_LEVELS: readonly GkxSensitivity[] = [
@@ -284,10 +286,13 @@ export function loadOrCreateToken(tokenPath: string): string {
     /* first run */
   }
   const token = crypto.randomBytes(32).toString("hex");
-  fs.mkdirSync(path.dirname(tokenPath), { recursive: true });
+  const directory = path.dirname(tokenPath);
+  const directoryExisted = fs.existsSync(directory);
+  fs.mkdirSync(directory, { recursive: true, mode: 0o700 });
+  if (!directoryExisted && process.platform !== "win32") fs.chmodSync(directory, 0o700);
   // 0600 intent: readable only by the owner. On Windows the mode is largely
   // advisory; we still pass it so POSIX CI runners get real permissions.
-  fs.writeFileSync(tokenPath, token, { mode: 0o600 });
+  fs.writeFileSync(tokenPath, token, { flag: "wx", mode: 0o600 });
   try {
     fs.chmodSync(tokenPath, 0o600);
   } catch {
@@ -309,17 +314,17 @@ export interface AgentServerHandle {
   close(): Promise<void>;
 }
 
-/**
- * Create the loopback-only read-only agent API. The `index` is the live
- * GkxIndex; endpoints project its current graph. Every request requires the
- * bearer token (401 otherwise). The server binds 127.0.0.1 and nothing else.
- */
-export function createAgentServer(opts: {
-  index: GkxIndex;
+interface AgentGraphView {
+  readonly graph: GkxGraph | null;
+}
+
+function createAgentRequestHandler(opts: {
+  index: AgentGraphView;
   token: string;
   getStatus: () => StatusDoc;
   vaultName?: string;
-}): http.Server {
+  reservedWatcherRoutes?: ReadonlySet<string>;
+}): (request: http.IncomingMessage, response: http.ServerResponse) => boolean {
   const { index, token, getStatus } = opts;
   const vault = opts.vaultName ?? "vault";
 
@@ -364,7 +369,8 @@ export function createAgentServer(opts: {
     return constantTimeEqual(m[1].trim(), token);
   };
 
-  return http.createServer((req, res) => {
+  return (req, res) => {
+    if (opts.reservedWatcherRoutes?.has(req.url ?? "") === true) return false;
     const origin = allowedOrigin(req);
 
     // CORS preflight: the browser sends OPTIONS with no credentials to learn
@@ -377,14 +383,14 @@ export function createAgentServer(opts: {
       if (origin) applyCorsHeaders(res, origin);
       res.writeHead(204);
       res.end();
-      return;
+      return true;
     }
 
     // Token required on EVERY non-preflight request, no exceptions (spec). CORS
     // headers are still reflected on the 401 so a browser can read the status.
     if (!authorized(req)) {
       send(res, 401, { error: "unauthorized", detail: "Bearer token required." }, origin);
-      return;
+      return true;
     }
 
     const url = new URL(req.url ?? "/", `http://${LOOPBACK_HOST}`);
@@ -397,14 +403,14 @@ export function createAgentServer(opts: {
         { error: "method_not_allowed", detail: "Read-only agent API; GET only." },
         origin,
       );
-      return;
+      return true;
     }
 
     switch (route) {
       case "/":
       case "/health": {
         send(res, 200, getStatus(), origin);
-        return;
+        return true;
       }
       case "/notes": {
         const graph = index.graph;
@@ -418,25 +424,60 @@ export function createAgentServer(opts: {
             sensitivity: n.gkx?.projection?.effective.sensitivity ?? null,
           }));
         send(res, 200, { notes, count: notes.length }, origin);
-        return;
+        return true;
       }
       case "/graph": {
         send(res, 200, index.graph ?? { nodes: [], links: [] }, origin);
-        return;
+        return true;
       }
       case "/graphiti/episodes": {
         const graph = index.graph;
         const episodes = graph ? buildGraphitiEpisodes(graph, { vault }) : [];
         send(res, 200, { episodes, count: episodes.length }, origin);
-        return;
+        return true;
       }
       default:
         send(res, 404, { error: "not_found", detail: route }, origin);
+        return true;
     }
-  });
+  };
 }
 
-/** Entry point: scan → index → watch → serve. */
+/**
+ * Create the loopback-only read-only agent API. The `index` is the live
+ * GkxIndex; endpoints project its current graph. Every request requires the
+ * bearer token (401 otherwise). The server binds 127.0.0.1 and nothing else.
+ */
+export function createAgentServer(opts: {
+  index: GkxIndex;
+  token: string;
+  getStatus: () => StatusDoc;
+  vaultName?: string;
+}): http.Server {
+  const handle = createAgentRequestHandler(opts);
+  return http.createServer((request, response) => { handle(request, response); });
+}
+
+function legacyStatusFromWatcher(
+  status: Readonly<Record<string, unknown>>,
+  args: DesktopAgentArgs,
+  tokenPath: string,
+): StatusDoc {
+  const watcherState = String(status.watcher_state);
+  return {
+    pid: process.pid,
+    port: args.port,
+    url: `http://${LOOPBACK_HOST}:${args.port}/`,
+    token_path: tokenPath,
+    notes_dir: args.notesDir,
+    default_sensitivity: args.defaultSensitivity,
+    notes_indexed: Number.isSafeInteger(status.document_count) ? Number(status.document_count) : 0,
+    state: watcherState === "error" ? "error" : watcherState === "serving" ? "serving" : "indexing",
+    last_scan_iso: typeof status.last_sync === "string" ? status.last_sync : null,
+  };
+}
+
+/** Entry point: one governed watcher/index generation → one loopback service. */
 export async function main(argv = process.argv.slice(2)): Promise<void> {
   if (argv.includes("--help") || argv.includes("-h")) {
     console.log(DESKTOP_AGENT_USAGE);
@@ -444,110 +485,105 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   }
   const args = parseArgs(argv);
   const tokenPath = path.join(path.dirname(args.statusFile), "desktop-agent.token");
+  // S is a security capability, not a side effect of token/status creation.
+  // Existing unsafe custom roots fail before either legacy file is touched.
+  const statusCapability = ensureWatcherStatusDirectory(args.statusFile);
   const vaultName = path.basename(args.notesDir) || "vault";
-
-  let state: StatusDoc["state"] = "indexing";
-  let lastScanIso: string | null = null;
-  const index = new GkxIndex({ defaultSensitivity: args.defaultSensitivity });
-
-  const token = loadOrCreateToken(tokenPath);
-
-  const getStatus = (): StatusDoc => ({
+  const initialStatus: StatusDoc = {
     pid: process.pid,
     port: args.port,
     url: `http://${LOOPBACK_HOST}:${args.port}/`,
     token_path: tokenPath,
     notes_dir: args.notesDir,
     default_sensitivity: args.defaultSensitivity,
-    notes_indexed: index.noteCount,
-    state,
-    last_scan_iso: lastScanIso,
-  });
-
-  const writeStatus = (): void => {
+    notes_indexed: 0,
+    state: "indexing",
+    last_scan_iso: null,
+  };
+  const token = loadOrCreateToken(tokenPath);
+  let latestStatus = initialStatus;
+  const writeStatus = (status: StatusDoc): void => {
+    latestStatus = status;
     try {
-      fs.mkdirSync(path.dirname(args.statusFile), { recursive: true });
-      fs.writeFileSync(args.statusFile, JSON.stringify(getStatus(), null, 2));
+      revalidateWatcherDirectory(statusCapability);
+      fs.writeFileSync(args.statusFile, JSON.stringify(status, null, 2), { mode: 0o600 });
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error("failed to write status file:", (e as Error).message);
     }
   };
+  writeStatus(initialStatus);
 
-  writeStatus();
+  const configurationDigest = retrievalCanonicalDigest({
+    contract_version: "gkos-watcher-desktop-configuration/1.0.0-draft.1",
+    default_sensitivity: args.defaultSensitivity,
+    lexical_backend: "sqlite_fts5",
+  });
+  const policyDigest = retrievalCanonicalDigest({
+    contract_version: "gkos-watcher-desktop-policy/1.0.0-draft.1",
+    discoverability: "allow",
+    default_sensitivity: args.defaultSensitivity,
+  });
+  const vaultId = `vault:${retrievalCanonicalDigest({
+    contract_version: "gkos-watcher-desktop-vault-coordinate/1.0.0-draft.1",
+    vault_root: args.notesDir,
+  }).slice("sha256:".length, "sha256:".length + 24)}`;
 
-  // ---- initial scan ----
+  let host;
   try {
-    const scan = scanNotesDir(args.notesDir);
-    index.setFiles(scan.files, scan.folders, scan.attachments);
-    lastScanIso = new Date().toISOString();
-    state = "serving";
+    host = await startWatcherHost({
+      vault_root: args.notesDir,
+      status_file: args.statusFile,
+      vault_id: vaultId,
+      configuration_digest: configurationDigest,
+      policy_digest: policyDigest,
+      projection_options: { defaultSensitivity: args.defaultSensitivity },
+      port: args.port,
+      coordinator_options: {
+        discoverability_policy: () => "allow",
+        source_discoverability_policy: () => "allow",
+      },
+      on_status_change(status) { writeStatus(legacyStatusFromWatcher(status, args, tokenPath)); },
+      create_compatibility_request_handler(context) {
+        const coherentView: AgentGraphView = {
+          get graph(): GkxGraph | null { return context.get_graph(); },
+        };
+        return createAgentRequestHandler({
+          index: coherentView,
+          token,
+          getStatus: () => legacyStatusFromWatcher(context.get_status(), args, tokenPath),
+          vaultName,
+          reservedWatcherRoutes: new Set(["/status", "/control/shutdown"]),
+        });
+      },
+    });
+    writeStatus(legacyStatusFromWatcher(host.status(), args, tokenPath));
   } catch (e) {
-    state = "error";
-    writeStatus();
+    writeStatus({ ...latestStatus, state: "error" });
     // eslint-disable-next-line no-console
     console.error("initial scan failed:", (e as Error).message);
     process.exitCode = 1;
     return;
   }
 
-  // ---- watch with coalescing debounce ----
-  const rescanAndApply = (): void => {
-    const scan = scanNotesDir(args.notesDir);
-    const changes: IndexChanges = {
-      changed: scan.files,
-      folders: scan.folders,
-      attachments: scan.attachments,
-    };
-    // Removals: any indexed record no longer present on disk.
-    const present = new Set(scan.files.map((f) => normalizeVaultRelative(f.relativePath)));
-    const removed: string[] = [];
-    for (const rel of index.getRecords().keys()) {
-      if (!present.has(rel)) removed.push(rel);
-    }
-    if (removed.length) changes.removed = removed;
-    index.applyChanges(changes);
-    lastScanIso = new Date().toISOString();
-    writeStatus();
-  };
+  // eslint-disable-next-line no-console
+  console.log(
+    `gkos-agent v${ENGINE_VERSION} serving ${String(host.status().document_count)} notes on http://${LOOPBACK_HOST}:${args.port}/ (loopback only)`,
+  );
+  // eslint-disable-next-line no-console
+  console.log(`token: ${tokenPath}  status: ${args.statusFile}`);
 
-  const debouncer = new Debouncer(DEBOUNCE_MS, () => {
-    try {
-      rescanAndApply();
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error("applyChanges failed:", (e as Error).message);
-    }
-  });
-
-  try {
-    fs.watch(args.notesDir, { recursive: true }, (_evt, filename) => {
-      debouncer.schedule(filename ? String(filename) : "");
-    });
-  } catch (e) {
+  const shutdown = (): void => { void host.shutdown().catch((error: unknown) => {
+    process.exitCode = 1;
     // eslint-disable-next-line no-console
-    console.error("fs.watch failed (continuing without live updates):", (e as Error).message);
-  }
-
-  // ---- serve (loopback only) ----
-  const server = createAgentServer({ index, token, getStatus, vaultName });
-  server.listen(args.port, LOOPBACK_HOST, () => {
-    writeStatus();
-    // eslint-disable-next-line no-console
-    console.log(
-      `gkos-agent v${ENGINE_VERSION} serving ${index.noteCount} notes on http://${LOOPBACK_HOST}:${args.port}/ (loopback only)`,
-    );
-    // eslint-disable-next-line no-console
-    console.log(`token: ${tokenPath}  status: ${args.statusFile}`);
-  });
-
-  const shutdown = (): void => {
-    debouncer.dispose();
-    server.close();
-    process.exit(0);
-  };
+    console.error("watcher shutdown failed:", (error as Error).message);
+  }); };
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
+  void host.closed.finally(() => {
+    process.off("SIGINT", shutdown);
+    process.off("SIGTERM", shutdown);
+  });
 }
 
 // Auto-run only for a real CLI/SEA invocation, never when imported by tests.

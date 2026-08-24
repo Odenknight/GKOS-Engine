@@ -8,11 +8,17 @@ import { isValidRetrievalSourcePath } from "../retrieval/chunker";
 import { retrievalCanonicalDigest, retrievalCodeUnitCompare, stableJson } from "../retrieval/digest";
 import {
   gkxRetrievalProjectionRejectionInvalidDeclarationLocations,
+  gkxRetrievalProjectionParserDescriptor,
   gkxRetrievalProjectionRejectionRecordKey,
+  gkxRetrievalProjectionValidationGraph,
   projectGkxRetrievalCorpus,
+  projectWatcherGkxRetrievalCorpus,
   type GkxRetrievalInvalidDeclarationLocation,
+  type WatcherGkxCandidateValidationInput,
+  type WatcherGkxProjectionExecution,
 } from "../retrieval/gkx-provenance";
 import type { GkxDiagnostic, SourceFile } from "../types";
+import type { Gkx23ProjectionOptions } from "../gkx23";
 import {
   INGEST_CANONICAL_FIELDS,
   INGEST_FINDING_CODES,
@@ -38,6 +44,7 @@ import type {
   IngestValidationInput,
   IngestValidationPlan,
 } from "./types";
+import { bindWatcherIndexValidationOutcome } from "../watcher/index-validation-hook";
 
 const findingCodes = new Set<string>(INGEST_FINDING_CODES);
 const canonicalFields = new Set<string>(INGEST_CANONICAL_FIELDS);
@@ -565,6 +572,58 @@ function observationOrdinals(
   return result;
 }
 
+function acceptedWatcherCandidateRecordKeys(
+  input: WatcherGkxCandidateValidationInput,
+  scanRejections: readonly IngestScanRejectionInput[],
+  profile: LoadedIngestProfile,
+): readonly string[] {
+  const records = input.records.map((item) => item.record);
+  const ordinals = observationOrdinals(records, scanRejections);
+  const accepted: string[] = [];
+  for (const item of input.records) {
+    const record = item.record;
+    const observationOrdinal = ordinals.get(record.record_key);
+    if (observationOrdinal === undefined) throw new Error("GKX_INGEST_OBSERVATION_ORDINAL_MISSING");
+    const receipt = gkxCandidateValidationReceipt(record.snapshot);
+    const projection = record.snapshot.gkx?.projection;
+    const raw = rawRecord(projection?.rawFrontmatter);
+    const findings: IngestFinding[] = [
+      ...parserFindings(record.source_path, observationOrdinal, receipt),
+      ...(projection?.diagnostics ?? [])
+        .filter((diagnostic) => diagnostic.code !== "GKX-SCHEMA-001")
+        .map((diagnostic) => diagnosticFinding(diagnostic, record.source_path, observationOrdinal, receipt, profile, raw)),
+      ...profileFindings(record.source_path, observationOrdinal, raw, receipt, profile),
+    ];
+    if (!projection) {
+      findings.push(finding({ code: "GKX_FRONTMATTER_REQUIRED", severity: "error", scope: "frontmatter", coordinate_basis: "missing_field", source_path: record.source_path, source_observation_ordinal: observationOrdinal, line: null, field: null }));
+    } else if (projection.mode !== "strict-v2.3") {
+      findings.push(finding({ code: "GKX_INGEST_PROFILE_VERSION_REQUIRED", severity: "error", scope: "field", coordinate_basis: fieldLine(receipt, "gkx_version") === null ? "missing_field" : "frontmatter_field", source_path: record.source_path, source_observation_ordinal: observationOrdinal, line: fieldLine(receipt, "gkx_version"), field: "gkx_version" }));
+    }
+    if (!record.source_uid) {
+      findings.push(finding({ code: "GKX_INGEST_UID_REQUIRED", severity: "error", scope: "field", coordinate_basis: fieldLine(receipt, "uid") === null ? "missing_field" : "frontmatter_field", source_path: record.source_path, source_observation_ordinal: observationOrdinal, line: fieldLine(receipt, "uid"), field: "uid" }));
+    }
+    for (const reason of item.projection_reason_codes) {
+      if (reason === "AUTHORED_RELATIONSHIP_REFERENCE_INVALID") {
+        if (item.invalid_declaration_locations.length === 0) throw new Error("GKX_INGEST_INVALID_DECLARATION_RECEIPT_MISSING");
+        for (const location of item.invalid_declaration_locations) {
+          const code = location.category === "link" ? "AUTHORED_LINK_REFERENCE_INVALID" : reason;
+          const mapped = reasonFinding(code, record.source_path, observationOrdinal, receipt, raw, location);
+          if (mapped) findings.push(mapped);
+        }
+      } else {
+        const mapped = reasonFinding(reason, record.source_path, observationOrdinal, receipt, raw);
+        if (mapped) findings.push(mapped);
+      }
+    }
+    const blocked = sortFindings(findings).some((findingItem) =>
+      findingItem.classification === "intrinsic" && BLOCKING.has(findingItem.severity));
+    if (!blocked && item.projection_reason_codes.length > 0) throw new Error("GKX_INGEST_VALID_SOURCE_BINDING_MISSING");
+    if (!blocked) accepted.push(record.record_key);
+  }
+  accepted.sort(retrievalCodeUnitCompare);
+  return Object.freeze(accepted);
+}
+
 function deepFreeze<T>(value: T): T {
   if (value === null || typeof value !== "object" || Object.isFrozen(value)) return value;
   for (const item of Object.values(value as Record<string, unknown>)) deepFreeze(item);
@@ -584,17 +643,31 @@ export function assertIngestValidationPlan(value: unknown): asserts value is Ing
 export function buildIngestValidationPlan(
   input: unknown,
   profile: LoadedIngestProfile,
+  projectionOptions: Gkx23ProjectionOptions = {},
+  watcherExecution?: Omit<WatcherGkxProjectionExecution, "validate_candidates">,
 ): IngestValidationPlan {
   assertLoadedIngestProfile(profile);
   const safeInput = validationInput(input);
   const files = safeInput.files as SourceFile[];
-  const projected = projectGkxRetrievalCorpus(files, safeInput.folders ?? [], safeInput.attachments ?? [], {
+  const projectionInput = {
     projection_reference_time: INGEST_CANONICAL_PARSE_REFERENCE_TIME,
-  });
-  const ledger = gkxCanonicalCandidateLedger(projected.graph);
+    projection_options: projectionOptions,
+  };
+  let precommitAcceptedRecordKeys: readonly string[] | null = null;
+  const projected = watcherExecution === undefined
+    ? projectGkxRetrievalCorpus(files, safeInput.folders ?? [], safeInput.attachments ?? [], projectionInput)
+    : projectWatcherGkxRetrievalCorpus(files, safeInput.folders ?? [], safeInput.attachments ?? [], projectionInput, {
+        ...watcherExecution,
+        validate_candidates(candidate) {
+          precommitAcceptedRecordKeys = acceptedWatcherCandidateRecordKeys(candidate, safeInput.scan_rejections ?? [], profile);
+          return precommitAcceptedRecordKeys;
+        },
+      });
+  const ledger = gkxCanonicalCandidateLedger(gkxRetrievalProjectionValidationGraph(projected));
   if (ledger.records.length !== files.length) throw new Error("GKX_INGEST_CANDIDATE_LEDGER_INCOMPLETE");
   const sourceByRecordKey = new Map(projected.sources.map((source) => [source.record_key, source]));
   const reasonsByRecordKey = new Map<string, readonly string[]>();
+  const projectionRejectionByRecordKey = new Map<string, typeof projected.rejections[number]>();
   const invalidDeclarationLocationsByRecordKey = new Map<string, readonly GkxRetrievalInvalidDeclarationLocation[]>();
   for (const item of projected.rejections) {
     const recordKey = gkxRetrievalProjectionRejectionRecordKey(item);
@@ -602,6 +675,7 @@ export function buildIngestValidationPlan(
       throw new Error("GKX_INGEST_PROJECTION_REJECTION_BINDING_INVALID");
     }
     reasonsByRecordKey.set(recordKey, item.reason_codes);
+    projectionRejectionByRecordKey.set(recordKey, item);
     invalidDeclarationLocationsByRecordKey.set(recordKey, gkxRetrievalProjectionRejectionInvalidDeclarationLocations(item));
   }
   const ordinalByRecordKey = observationOrdinals(ledger.records, safeInput.scan_rejections ?? []);
@@ -671,6 +745,14 @@ export function buildIngestValidationPlan(
         .map((item) => item.finding_id).sort(retrievalCodeUnitCompare),
     });
     if (blocked) rejections.push(rejection(observationOrdinal, record.source_path, record.source_digest, record.snapshot.size, assertionTime, validFrom, sorted, profile));
+  }
+
+  if (precommitAcceptedRecordKeys !== null) {
+    const committed = [...acceptedRecordKeys].sort(retrievalCodeUnitCompare);
+    if (committed.length !== precommitAcceptedRecordKeys.length ||
+        committed.some((key, index) => key !== precommitAcceptedRecordKeys![index])) {
+      throw new Error("GKX_INGEST_PRECOMMIT_VALIDATION_MISMATCH");
+    }
   }
 
   const scanFindings: IngestFinding[] = [];
@@ -745,12 +827,51 @@ export function buildIngestValidationPlan(
     observations: Object.freeze(sourceObservations.map(sealedClone)),
     rejections: Object.freeze(rejections),
   });
-  const plan = Object.freeze({
+  const plan = {
     result: result as IngestValidationPlan["result"],
     accepted_sources: Object.freeze(acceptedSources.map(sealedClone)),
     accepted_declarations: Object.freeze(acceptedDeclarations.map(sealedClone)),
     observation_snapshot_digest: observationSnapshotDigest,
+  } as IngestValidationPlan;
+  const recordByObservation = new Map<string, typeof ledger.records[number]>();
+  for (const record of ledger.records) {
+    const ordinal = ordinalByRecordKey.get(record.record_key);
+    if (ordinal === undefined) throw new Error("GKX_INGEST_OBSERVATION_ORDINAL_MISSING");
+    recordByObservation.set(`${record.source_path}\0${ordinal}`, record);
+  }
+  const acceptedByRecordKey = new Map(projected.sources.map((source) => [source.record_key, source]));
+  const rejectionByObservation = new Map(rejections.map((item) => [`${item.source_path}\0${item.source_observation_ordinal}`, item]));
+  bindWatcherIndexValidationOutcome(plan, {
+    graph: projected.graph,
+    delta: projected.delta,
+    parse_count: projected.parse_count,
+    sources: sourceObservations.map((observation) => {
+      const key = `${observation.source_path}\0${observation.source_observation_ordinal}`;
+      const record = recordByObservation.get(key) ?? null;
+      const accepted = record === null ? undefined : acceptedByRecordKey.get(record.record_key);
+      const projectedRejection = record === null ? undefined : projectionRejectionByRecordKey.get(record.record_key);
+      const governedRejection = rejectionByObservation.get(key);
+      const parserDescriptor = record === null ? null : gkxRetrievalProjectionParserDescriptor(projected, record.record_key);
+      if (record !== null && parserDescriptor === null) throw new Error("GKX_INGEST_PARSER_DESCRIPTOR_RECEIPT_MISSING");
+      const parserDescriptorDigest = record === null ? null : retrievalCanonicalDigest({
+        contract_version: "gkos-watcher-parser-descriptor/1.0.0-draft.1",
+        canonical_candidate_source_descriptor: parserDescriptor,
+      });
+      return {
+        source_path: observation.source_path,
+        source_observation_ordinal: observation.source_observation_ordinal,
+        disposition: observation.classification === "accepted" ? "accepted" as const : "deterministic_rejection" as const,
+        record_key: record?.record_key ?? null,
+        source_id: accepted?.candidate_source.source_id ?? projectedRejection?.source_id ?? null,
+        source_digest: observation.source_digest,
+        source_size_bytes: observation.source_size_bytes,
+        parser_descriptor_digest: parserDescriptorDigest,
+        rejection_digest: governedRejection?.rejection_digest ?? null,
+        rejection_class: governedRejection === undefined ? null : record === null ? "scan_rejection" as const : "validation" as const,
+      };
+    }),
   });
+  Object.freeze(plan);
   VALIDATION_PLANS.add(plan);
   return plan;
 }

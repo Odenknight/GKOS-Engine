@@ -45,7 +45,11 @@ const clone = (value) => structuredClone(value);
 const codeUnitCompare = (left, right) => left < right ? -1 : left > right ? 1 : 0;
 function canonicalJson(value) {
   if (value === null || typeof value === "boolean" || typeof value === "string") return JSON.stringify(value);
-  if (typeof value === "number" && Number.isSafeInteger(value)) return String(value);
+  if (typeof value === "number") {
+    assert.equal(Number.isFinite(value), true);
+    if (Number.isInteger(value)) assert.equal(Number.isSafeInteger(value), true);
+    return JSON.stringify(Object.is(value, -0) ? 0 : value);
+  }
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   return `{${Object.keys(value).sort(codeUnitCompare).map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(",")}}`;
 }
@@ -80,8 +84,10 @@ function executeSemanticCase(row) {
   if (row.operation === "seal_transition_chain") return watcher.sealWatcherTransitionChain(...args);
   if (row.operation === "seal_coherent_activation_bundle") return watcher.sealWatcherCoherentActivationBundle(...args);
   if (row.operation === "seal_failure_retry_bundle") return watcher.sealWatcherFailureRetryBundle(...args);
+  if (row.operation === "seal_failure_retry_noop_bundle") return watcher.sealWatcherFailureRetryNoopBundle(...args);
   if (row.operation === "seal_source_removal_event_set_bundle") return watcher.sealSourceRemovalEventSetBundle(...args);
   if (row.operation === "seal_journal_reset_bundle") return watcher.sealWatcherJournalResetBundle(...args);
+  if (row.operation === "seal_journal_reset_reconciliation_adoption_bundle") return watcher.sealWatcherJournalResetReconciliationAdoptionBundle(...args);
   if (row.operation === "seal_source_removal_receipt_bundle") return watcher.sealWatcherAdapterReceiptBundle(...args);
   if (row.operation === "seal_source_removal_adapter_verification_bundle") return watcher.sealWatcherAdapterVerificationBundle(...args);
   if (row.operation === "seal_status_bundle") return watcher.sealWatcherStatusBundle(...args);
@@ -421,7 +427,7 @@ test("Phase5 watcher pack is exact, self-bound, and generator-byte-reproducible"
   assert.deepEqual(new Map(EXPECTED_FILES.map((name) => [name, rawSha(readFileSync(new URL(name, PACK)))])), before);
 });
 
-test("Phase4 qualification protects the exact Slice-B inventory and admits only the ratified watcher leaf", async () => {
+test("Phase4 qualification protects the exact reviewed Slice-B status and path inventories", async () => {
   const container = mkdtempSync(join(tmpdir(), "gkos-phase4-sliceb-compatibility-"));
   const target = resolve(container);
   assert.equal(target.startsWith(`${resolve(tmpdir())}${sep}`), true);
@@ -444,13 +450,25 @@ test("Phase4 qualification protects the exact Slice-B inventory and admits only 
     });
     const runner = await import(pathToFileURL(runnerFile).href);
     const head = git(REPOSITORY_ROOT, ["rev-parse", "HEAD"]).trim();
-    const createClone = (label) => {
-      const cloneRoot = join(container, label);
-      git(REPOSITORY_ROOT, ["clone", "--quiet", "--shared", REPOSITORY_ROOT, cloneRoot]);
-      git(cloneRoot, ["checkout", "--quiet", "--detach", head]);
-      return cloneRoot;
-    };
-    const main = createClone("baseline-mutations");
+    const main = join(container, "reviewed-slice-b");
+    git(REPOSITORY_ROOT, ["clone", "--quiet", "--shared", REPOSITORY_ROOT, main]);
+    git(main, ["checkout", "--quiet", "--detach", head]);
+    const changedRaw = git(REPOSITORY_ROOT, ["diff", "--name-only", "-z", "HEAD"], { encoding: null });
+    const untrackedRaw = git(REPOSITORY_ROOT, ["ls-files", "--others", "--exclude-standard", "-z"], { encoding: null });
+    const changed = [...new Set([
+      ...changedRaw.toString("utf8").split("\0").filter(Boolean),
+      ...untrackedRaw.toString("utf8").split("\0").filter(Boolean),
+    ])].sort(codeUnitCompare);
+    for (const path of changed) {
+      const destination = join(main, ...path.split("/"));
+      mkdirSync(dirname(destination), { recursive: true });
+      copyFileSync(join(REPOSITORY_ROOT, ...path.split("/")), destination);
+    }
+    git(main, ["config", "user.name", "GKOS qualification fixture"]);
+    git(main, ["config", "user.email", "fixture@example.invalid"]);
+    git(main, ["config", "commit.gpgsign", "false"]);
+    git(main, ["add", "-A"]);
+    git(main, ["commit", "--quiet", "-m", "fixture: reviewed Phase 5 Slice B"]);
     const immutable = await runner.verifyFrozenQualificationInputsForTest(main);
     assert.equal(immutable.phase4_pack_file_count, 37);
 
@@ -469,9 +487,22 @@ test("Phase4 qualification protects the exact Slice-B inventory and admits only 
     const currentRoots = currentRaw.toString("utf8").slice(0, -1).split("\0").sort(codeUnitCompare);
     const baselineRootSet = new Set(baselineRoots);
     const additions = currentRoots.filter((path) => !baselineRootSet.has(path));
-    assert.deepEqual(additions, ["src/watcher/contracts.ts"]);
+    assert.deepEqual(additions, [
+      "bin/gkos.mjs",
+      "src/ingest/source-scan.ts",
+      "src/watcher/cli.ts",
+      "src/watcher/contracts.ts",
+      "src/watcher/coordinator.ts",
+      "src/watcher/fs-authority.ts",
+      "src/watcher/host.ts",
+      "src/watcher/index-validation-hook.ts",
+      "src/watcher/journal.ts",
+      "src/watcher/pointer.ts",
+      "src/watcher/removal-adapter.ts",
+      "src/watcher/service.ts",
+    ]);
     assert.equal(rawSha(Buffer.from(`${additions.join("\n")}\n`, "utf8")),
-      "sha256:d24887eb649f993deda0de31059a879de629906769bc1f4387302e13a662fe1b");
+      "sha256:a812a6378310da741ed009d3123498050794c4d7ff5f1e1d305ed10b0175fa54");
 
     const sourcePath = join(main, "src", "gkx23.ts");
     const sourceBytes = readFileSync(sourcePath);
@@ -508,18 +539,39 @@ test("Phase4 qualification protects the exact Slice-B inventory and admits only 
     writeFileSync(packagePath, packageBytes);
     assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main));
 
+    for (const authorized of ["src/watcher/host.ts", "scripts/run-retrieval-observation-qualification.mjs"]) {
+      const path = join(main, ...authorized.split("/"));
+      const bytes = readFileSync(path);
+      writeFileSync(path, Buffer.concat([bytes, Buffer.from("\n", "utf8")]));
+      expectPhase4ImmutabilityFailure(() => runner.verifySliceBProtectedInputsForTest(main));
+      writeFileSync(path, bytes);
+      assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main));
+    }
+
+    const createClone = (label) => {
+      const cloneRoot = join(container, label);
+      git(main, ["clone", "--quiet", "--shared", main, cloneRoot]);
+      git(cloneRoot, ["config", "user.name", "GKOS qualification fixture"]);
+      git(cloneRoot, ["config", "user.email", "fixture@example.invalid"]);
+      git(cloneRoot, ["config", "commit.gpgsign", "false"]);
+      return cloneRoot;
+    };
+
     for (const [label, extraPath] of [
       ["extra-watcher", "src/watcher/extra.ts"],
       ["extra-nonwatcher", "src/unratified-phase5.ts"],
     ]) {
       const cloneRoot = createClone(label);
-      git(cloneRoot, ["config", "user.name", "GKOS qualification fixture"]);
-      git(cloneRoot, ["config", "user.email", "fixture@example.invalid"]);
       writeFileSync(join(cloneRoot, extraPath), "export const unratified = true;\n", "utf8");
       git(cloneRoot, ["add", "--", extraPath]);
       git(cloneRoot, ["commit", "--quiet", "-m", `fixture: ${label}`]);
       expectPhase4ImmutabilityFailure(() => runner.verifySliceBProtectedInputsForTest(cloneRoot));
     }
+
+    const missing = createClone("missing-authorized-addition");
+    git(missing, ["rm", "--quiet", "src/watcher/host.ts"]);
+    git(missing, ["commit", "--quiet", "-m", "fixture: missing authorized addition"]);
+    expectPhase4ImmutabilityFailure(() => runner.verifySliceBProtectedInputsForTest(missing));
   } finally {
     rmSync(target, { recursive: true, force: true });
   }
@@ -598,8 +650,15 @@ test("recovery, status CLI, storage limits, and reset matrices are exact", () =>
     raw_graph_artifact_bytes_max: 536870912, shm_reservation_bytes: 67108864, source_rows_max: 1000000,
     topology_artifact_bytes_max: 536870912, wal_frame_bytes: 4120, wal_header_bytes: 32, wal_upper_formula: "32+dirty_page_upper*4120",
   });
-  assert.deepEqual(storage.journal_reset_recovery.removal_order, ["nested_pointer_guard", "reset_guard"]);
-  assert.equal(storage.journal_reset_recovery.recoverable_states.length, 3);
+  assert.deepEqual(storage.journal_reset_recovery.removal_order, [
+    "nested_pointer_guard", "reset_guard", "terminal_host_lock_transition", "root_claim_if_any",
+    "recovery_plan", "executor_selector", "current_host_lock",
+  ]);
+  assert.deepEqual(storage.journal_reset_recovery.authority_predicates,
+    ["dead_owner_recovered", "live_original", "stable_cleanup"]);
+  assert.equal(storage.journal_reset_recovery.recoverable_states.length, 8);
+  assert.deepEqual(storage.journal_reset_recovery.sqlite_states.map((row) => row.state),
+    ["C0", "C1", "C2a", "C2b", "C3", "C4", "C5"]);
   for (const row of [...storage.admission_boundary_cases, ...storage.sqlite_authority_cases]) {
     let code = null;
     try { watcher.validateWatcherSqlAuthority(row.recipe); } catch (error) { code = error.code; }
@@ -778,7 +837,9 @@ test("pure semantic cases accept exact bytes and reject self-resealed relational
     "normalize_graph_delta",
     "seal_coherent_activation_bundle",
     "seal_failure_retry_bundle",
+    "seal_failure_retry_noop_bundle",
     "seal_journal_reset_bundle",
+    "seal_journal_reset_reconciliation_adoption_bundle",
     "seal_measurement",
     "seal_pointer_recovery",
     "seal_record",
@@ -794,9 +855,9 @@ test("pure semantic cases accept exact bytes and reject self-resealed relational
   ]);
 });
 
-test("the fixed convergence SamplePlan is the approved 3978-byte canonical preimage", () => {
+test("the fixed convergence SamplePlan is the approved draft.2 canonical preimage", () => {
   const bytes = readFileSync(new URL("watcher-sample-plan.json", PACK));
-  assert.equal(bytes.length, 3_978);
+  assert.equal(bytes.length, 4_363);
   assert.equal(rawSha(bytes), watcher.WATCHER_CONVERGENCE_SAMPLE_PLAN_DIGEST);
   assert.equal(bytes.at(-1), 0x7d);
   const value = JSON.parse(bytes.toString("utf8"));
@@ -810,6 +871,11 @@ test("the fixed convergence SamplePlan is the approved 3978-byte canonical preim
   assert.equal(value.fixture.omega.byte_size, 499);
   assert.equal(value.fixture.chunk_count, 2);
   assert.equal(value.execution.sample_count, 20);
+  assert.equal(value.execution.as_of, "2026-08-20T00:00:00Z");
+  assert.equal(value.execution.external_reader, "gkx_search_outer_coherent_authority");
+  assert.equal(value.watcher.configuration_digest, "sha256:082dffdb5390813e9d4e0b43097f730ccb98ac2f18ebd3549e03986a860fcdba");
+  assert.equal(value.watcher.policy_digest, "sha256:2a24f03ee235def9d6de500b8144f3660814be9aa3c8bf3d104b3fb57e808317");
+  assert.equal(value.watcher.effective_profile_digest, "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5");
   assert.deepEqual(value.percentile, {
     method: "nearest_rank",
     p50: { index: 9, rank: 10 },

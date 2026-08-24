@@ -1,7 +1,17 @@
 import { isValidGkxAuthoredUid, type Gkx23ProjectionOptions } from "../gkx23";
 import { GkxIndex } from "../incremental";
-import { canonicalCandidateKeys } from "../canonical-candidates";
-import { gkxCanonicalCandidateLedger, gkxLineageDeclarationReceipts, type GkxLineageDeclarationReceipt } from "../lineage-receipts";
+import {
+  cancelGkxIndexCandidateValidation,
+  installGkxIndexCandidateValidation,
+} from "../watcher/index-validation-hook";
+import { canonicalCandidateKeys, canonicalCandidateSourceDescriptor } from "../canonical-candidates";
+import {
+  gkxCanonicalCandidateLedger,
+  gkxLineageDeclarationReceipts,
+  type GkxCanonicalCandidateDeclarationReceipt,
+  type GkxCanonicalCandidateRecordReceipt,
+  type GkxLineageDeclarationReceipt,
+} from "../lineage-receipts";
 import { basenameWithoutExtension, normalizeVaultRelative } from "../paths";
 import { isValidGkxTimestamp } from "../timestamps";
 import { computeTemporalState } from "../temporal";
@@ -89,6 +99,22 @@ export interface GkxRetrievalCorpusProjection {
   declarations: GkxRetrievalCandidateDeclaration[];
   rejections: GkxRetrievalProjectionRejection[];
   parse_count: number;
+}
+
+const PROJECTION_PARSER_DESCRIPTORS = new WeakMap<GkxRetrievalCorpusProjection, ReadonlyMap<string, string>>();
+const PROJECTION_VALIDATION_GRAPHS = new WeakMap<GkxRetrievalCorpusProjection, GkxGraph>();
+
+/** Phase-5 private receipt: exact parser descriptor used by the one parse. */
+export function gkxRetrievalProjectionParserDescriptor(
+  projection: GkxRetrievalCorpusProjection,
+  recordKey: string,
+): string | null {
+  return PROJECTION_PARSER_DESCRIPTORS.get(projection)?.get(recordKey) ?? null;
+}
+
+/** Private pre-commit candidate graph; ordinary projections return graph. */
+export function gkxRetrievalProjectionValidationGraph(projection: GkxRetrievalCorpusProjection): GkxGraph {
+  return PROJECTION_VALIDATION_GRAPHS.get(projection) ?? projection.graph;
 }
 
 interface SourceAuthority {
@@ -325,7 +351,37 @@ export function projectGkxRetrievalCorpus(
   attachments: readonly string[] = [],
   options: GkxRetrievalProjectionOptions = {},
 ): GkxRetrievalCorpusProjection {
-  return projectGkxRetrievalCorpusInternal(files, folders, attachments, options, false);
+  return projectGkxRetrievalCorpusInternal(files, folders, attachments, options, false, null);
+}
+
+export interface WatcherGkxProjectionExecution {
+  readonly index: GkxIndex;
+  readonly execution_kind: "set_files" | "apply_changes";
+  readonly changed_paths: readonly string[];
+  readonly removed_paths: readonly string[];
+  readonly renames: readonly { readonly from: string; readonly to: string }[];
+  readonly validate_candidates: (input: WatcherGkxCandidateValidationInput) => readonly string[];
+}
+
+export interface WatcherGkxCandidateValidationRecord {
+  readonly record: GkxCanonicalCandidateRecordReceipt;
+  readonly projection_reason_codes: readonly string[];
+  readonly invalid_declaration_locations: readonly GkxRetrievalInvalidDeclarationLocation[];
+}
+
+export interface WatcherGkxCandidateValidationInput {
+  readonly records: readonly WatcherGkxCandidateValidationRecord[];
+}
+
+/** Repository-private watcher execution on one long-lived production GkxIndex. */
+export function projectWatcherGkxRetrievalCorpus(
+  files: readonly SourceFile[],
+  folders: readonly string[],
+  attachments: readonly string[],
+  options: GkxRetrievalProjectionOptions,
+  execution: WatcherGkxProjectionExecution,
+): GkxRetrievalCorpusProjection {
+  return projectGkxRetrievalCorpusInternal(files, folders, attachments, options, false, execution);
 }
 
 /**
@@ -344,7 +400,79 @@ export function projectAuthoredGkxRetrievalCorpus(
   attachments: readonly string[] = [],
   options: GkxRetrievalProjectionOptions = {},
 ): GkxRetrievalCorpusProjection {
-  return projectGkxRetrievalCorpusInternal(files, folders, attachments, options, true);
+  return projectGkxRetrievalCorpusInternal(files, folders, attachments, options, true, null);
+}
+
+interface ProjectionRecordAssessment {
+  readonly authored_created_at: unknown;
+  readonly validity: ReturnType<typeof expectedValidityAuthority> | null;
+  readonly canonical_valid_from: string | null;
+  readonly rejection_reason_codes: readonly string[];
+  readonly invalid_declaration_locations: readonly GkxRetrievalInvalidDeclarationLocation[];
+}
+
+function assessProjectionRecord(
+  record: GkxCanonicalCandidateRecordReceipt,
+  original: SourceFile,
+  declarations: readonly GkxCanonicalCandidateDeclarationReceipt[],
+  authoredValidityRequired: boolean,
+  referenceTime: string | null,
+): ProjectionRecordAssessment {
+  const sourceId = record.source_uid;
+  const authoredCreatedAt = record.snapshot.gkx?.projection?.authored.createdAt;
+  const rejectionReasons: string[] = [];
+  if (!isValidGkxAuthoredUid(sourceId)) rejectionReasons.push("CANONICAL_SOURCE_UID_UNAVAILABLE");
+  if (record.intrinsic_diagnostics.some((item) => item.severity === "error" || item.severity === "critical")) {
+    rejectionReasons.push("CANONICAL_PROJECTION_INVALID");
+  }
+  const authoredValidityAvailable = typeof authoredCreatedAt === "string" && isValidGkxTimestamp(authoredCreatedAt);
+  if ((typeof authoredCreatedAt === "string" && !authoredValidityAvailable) || (authoredValidityRequired && !authoredValidityAvailable)) {
+    rejectionReasons.push("CANONICAL_VALIDITY_TIMESTAMP_NONPORTABLE");
+  }
+  const validity = authoredValidityRequired && !authoredValidityAvailable
+    ? null
+    : expectedValidityAuthority(original, authoredCreatedAt, referenceTime);
+  const canonicalValidFrom = record.valid_at === null ? null : isValidGkxTimestamp(record.valid_at) ? exactUtc(record.valid_at) : null;
+  if (validity === null || canonicalValidFrom === null || canonicalValidFrom !== validity.expected_valid_from) {
+    rejectionReasons.push("CANONICAL_VALIDITY_BINDING_MISMATCH");
+  }
+  const invalidDeclarationLocations: GkxRetrievalInvalidDeclarationLocation[] = [
+    ...(gkxCandidateValidationReceipt(record.snapshot)?.invalid_declarations ?? []).map((issue) => ({
+      category: issue.category,
+      field: issue.field,
+      declaration_index: issue.declaration_index,
+      indexed: issue.indexed,
+      source_line: issue.line,
+    })),
+  ];
+  for (const declaration of declarations.filter((item) => item.source_record_key === record.record_key)) {
+    try { validatedAuthoredReferences([declaration.raw_reference]); }
+    catch {
+      const location = {
+        category: declaration.category,
+        field: declaration.field,
+        declaration_index: declaration.declaration_index,
+        indexed: declaration.source_declaration_index !== null,
+        source_line: declaration.source_line,
+      };
+      if (!invalidDeclarationLocations.some((item) => item.category === location.category && item.field === location.field &&
+          item.declaration_index === location.declaration_index && item.source_line === location.source_line)) {
+        invalidDeclarationLocations.push(location);
+      }
+    }
+  }
+  invalidDeclarationLocations.sort((left, right) =>
+    (left.source_line ?? Number.MAX_SAFE_INTEGER) - (right.source_line ?? Number.MAX_SAFE_INTEGER) ||
+    retrievalCodeUnitCompare(left.category, right.category) || retrievalCodeUnitCompare(left.field, right.field) ||
+    left.declaration_index - right.declaration_index || Number(left.indexed) - Number(right.indexed));
+  if (invalidDeclarationLocations.length > 0) rejectionReasons.push("AUTHORED_RELATIONSHIP_REFERENCE_INVALID");
+  return Object.freeze({
+    authored_created_at: authoredCreatedAt,
+    validity,
+    canonical_valid_from: canonicalValidFrom,
+    rejection_reason_codes: Object.freeze([...new Set(rejectionReasons)].sort(retrievalCodeUnitCompare)),
+    invalid_declaration_locations: Object.freeze(invalidDeclarationLocations),
+  });
 }
 
 function projectGkxRetrievalCorpusInternal(
@@ -353,6 +481,7 @@ function projectGkxRetrievalCorpusInternal(
   attachments: readonly string[],
   options: GkxRetrievalProjectionOptions,
   authoredValidityRequired: boolean,
+  watcherExecution: WatcherGkxProjectionExecution | null,
 ): GkxRetrievalCorpusProjection {
   assertDensePlainArray(files, "GKX_RETRIEVAL_SOURCE_FILES_INVALID");
   const safeFolders = strictCanonicalPathList(folders, "GKX_RETRIEVAL_FOLDERS_INVALID");
@@ -391,15 +520,65 @@ function projectGkxRetrievalCorpusInternal(
     if (finiteTime(file.createdTime) !== null || finiteTime(file.modifiedTime) !== null || referenceTime === null) return { ...file };
     return { ...file, createdTime: Date.parse(referenceTime) };
   });
-  const index = new GkxIndex(options.projection_options);
-  const update = index.setFiles(preparedFiles, safeFolders, safeAttachments);
-  const graph = update.graph;
-  const ledger = gkxCanonicalCandidateLedger(graph);
   const keys = canonicalCandidateKeys(preparedFiles);
   const fileByRecordKey = new Map(keys.map((key, index) => [key, {
-    original: projectableCandidates[index],
-    prepared: preparedFiles[index],
+    original: projectableCandidates[index]!,
+    prepared: preparedFiles[index]!,
   }]));
+  const index = watcherExecution?.index ?? new GkxIndex(options.projection_options);
+  let validationGraph: GkxGraph | null = null;
+  let validationCapability: ReturnType<typeof installGkxIndexCandidateValidation> | null = null;
+  if (watcherExecution !== null) {
+    validationCapability = installGkxIndexCandidateValidation(index, (candidate) => {
+      validationGraph = candidate.graph;
+      const ledger = gkxCanonicalCandidateLedger(candidate.graph);
+      if (ledger.records.length !== preparedFiles.length) throw new Error("GKX_RETRIEVAL_CANDIDATE_LEDGER_INCOMPLETE");
+      return watcherExecution.validate_candidates(Object.freeze({
+        records: Object.freeze(ledger.records.map((record) => {
+          const filesForRecord = fileByRecordKey.get(record.record_key);
+          if (!filesForRecord) throw new Error("GKX_RETRIEVAL_CANONICAL_SOURCE_BINDING_MISSING");
+          const assessment = assessProjectionRecord(
+            record,
+            filesForRecord.original,
+            ledger.declarations,
+            authoredValidityRequired,
+            referenceTime,
+          );
+          return Object.freeze({
+            record,
+            projection_reason_codes: assessment.rejection_reason_codes,
+            invalid_declaration_locations: assessment.invalid_declaration_locations,
+          });
+        })),
+      }));
+    });
+  }
+  let update;
+  try {
+    if (watcherExecution === null || watcherExecution.execution_kind === "set_files") {
+      update = index.setFiles(preparedFiles, safeFolders, safeAttachments);
+    } else {
+      const changedPaths = strictCanonicalPathList(watcherExecution.changed_paths, "GKX_RETRIEVAL_CHANGED_PATHS_INVALID");
+      const removedPaths = strictCanonicalPathList(watcherExecution.removed_paths, "GKX_RETRIEVAL_REMOVED_PATHS_INVALID");
+      if (new Set(changedPaths).size !== changedPaths.length || new Set(removedPaths).size !== removedPaths.length ||
+          changedPaths.some((path) => removedPaths.includes(path))) {
+        throw new TypeError("GKX_RETRIEVAL_INCREMENTAL_CHANGE_SET_INVALID");
+      }
+      const preparedByPath = new Map(preparedFiles.map((file) => [file.relativePath, file]));
+      if (changedPaths.some((path) => !preparedByPath.has(path))) throw new TypeError("GKX_RETRIEVAL_CHANGED_PATHS_INVALID");
+      update = index.applyChanges({
+        changed: changedPaths.map((path) => preparedByPath.get(path)!),
+        removed: removedPaths,
+        renames: watcherExecution.renames.map((rename) => ({ from: rename.from, to: rename.to })),
+        folders: safeFolders,
+        attachments: safeAttachments,
+      });
+    }
+  } finally {
+    if (validationCapability !== null) cancelGkxIndexCandidateValidation(validationCapability);
+  }
+  const graph = update.graph;
+  const ledger = gkxCanonicalCandidateLedger(validationGraph ?? graph);
   const acceptedRecordKeys = new Set<string>();
   const sources: GkxRetrievalProjectedSource[] = [];
   const rejections: GkxRetrievalProjectionRejection[] = [...excluded];
@@ -408,64 +587,12 @@ function projectGkxRetrievalCorpusInternal(
     if (!filesForRecord) throw new Error("GKX_RETRIEVAL_CANONICAL_SOURCE_BINDING_MISSING");
     const { original } = filesForRecord;
     const sourceId = record.source_uid;
-    const authoredCreatedAt = record.snapshot.gkx?.projection?.authored.createdAt;
-    const rejectionReasons: string[] = [];
-    if (!isValidGkxAuthoredUid(sourceId)) rejectionReasons.push("CANONICAL_SOURCE_UID_UNAVAILABLE");
-    if (record.intrinsic_diagnostics.some((item) => item.severity === "error" || item.severity === "critical")) {
-      rejectionReasons.push("CANONICAL_PROJECTION_INVALID");
-    }
-    const authoredValidityAvailable = typeof authoredCreatedAt === "string" && isValidGkxTimestamp(authoredCreatedAt);
-    if (typeof authoredCreatedAt === "string" && !authoredValidityAvailable || authoredValidityRequired && !authoredValidityAvailable) {
-      rejectionReasons.push("CANONICAL_VALIDITY_TIMESTAMP_NONPORTABLE");
-    }
-    const validity = authoredValidityRequired && !authoredValidityAvailable
-      ? null
-      : expectedValidityAuthority(original, authoredCreatedAt, referenceTime);
-    const canonicalValidFrom = record.valid_at === null ? null : isValidGkxTimestamp(record.valid_at) ? exactUtc(record.valid_at) : null;
-    if (validity === null || canonicalValidFrom === null || canonicalValidFrom !== validity.expected_valid_from) {
-      rejectionReasons.push("CANONICAL_VALIDITY_BINDING_MISMATCH");
-    }
-    const sourceDeclarations = ledger.declarations.filter((item) => item.source_record_key === record.record_key);
-    const authoredSupersedes: string[] = [];
-    const authoredSupersededBy: string[] = [];
-    const invalidDeclarationLocations: GkxRetrievalInvalidDeclarationLocation[] = [
-      ...(gkxCandidateValidationReceipt(record.snapshot)?.invalid_declarations ?? []).map((issue) => ({
-        category: issue.category,
-        field: issue.field,
-        declaration_index: issue.declaration_index,
-        indexed: issue.indexed,
-        source_line: issue.line,
-      })),
-    ];
-    for (const declaration of sourceDeclarations) {
-      try {
-        const [reference] = validatedAuthoredReferences([declaration.raw_reference]);
-        if (declaration.category === "lineage" && declaration.origin === "authored" && declaration.field === "supersedes") {
-          authoredSupersedes.push(reference);
-        } else if (declaration.category === "lineage" && declaration.origin === "authored" && declaration.field === "superseded_by") {
-          authoredSupersededBy.push(reference);
-        }
-      } catch {
-        const location = {
-          category: declaration.category,
-          field: declaration.field,
-          declaration_index: declaration.declaration_index,
-          indexed: declaration.source_declaration_index !== null,
-          source_line: declaration.source_line,
-        };
-        if (!invalidDeclarationLocations.some((item) => item.category === location.category && item.field === location.field &&
-          item.declaration_index === location.declaration_index && item.source_line === location.source_line)) {
-          invalidDeclarationLocations.push(location);
-        }
-      }
-    }
-    invalidDeclarationLocations.sort((left, right) =>
-      (left.source_line ?? Number.MAX_SAFE_INTEGER) - (right.source_line ?? Number.MAX_SAFE_INTEGER) ||
-      retrievalCodeUnitCompare(left.category, right.category) || retrievalCodeUnitCompare(left.field, right.field) ||
-      left.declaration_index - right.declaration_index || Number(left.indexed) - Number(right.indexed));
-    if (invalidDeclarationLocations.length > 0) {
-      rejectionReasons.push("AUTHORED_RELATIONSHIP_REFERENCE_INVALID");
-    }
+    const assessment = assessProjectionRecord(record, original, ledger.declarations, authoredValidityRequired, referenceTime);
+    const authoredCreatedAt = assessment.authored_created_at;
+    const validity = assessment.validity;
+    const canonicalValidFrom = assessment.canonical_valid_from;
+    const rejectionReasons = assessment.rejection_reason_codes;
+    const invalidDeclarationLocations = assessment.invalid_declaration_locations;
     if (rejectionReasons.length > 0) {
       rejections.push(bindProjectionRejectionRecordKey({
         source_path: record.source_path,
@@ -538,5 +665,11 @@ function projectGkxRetrievalCorpusInternal(
     retrievalCodeUnitCompare(left.category, right.category) || retrievalCodeUnitCompare(left.field, right.field) ||
     left.declaration_index - right.declaration_index);
   rejections.sort((left, right) => retrievalCodeUnitCompare(left.source_path, right.source_path));
-  return { graph, delta: update.delta, sources, declarations, rejections, parse_count: index.parseCount };
+  const result = { graph, delta: update.delta, sources, declarations, rejections, parse_count: update.delta.reparsed };
+  if (validationGraph !== null) PROJECTION_VALIDATION_GRAPHS.set(result, validationGraph);
+  PROJECTION_PARSER_DESCRIPTORS.set(result, new Map(keys.map((key, index) => [
+    key,
+    canonicalCandidateSourceDescriptor(preparedFiles[index]),
+  ])));
+  return result;
 }

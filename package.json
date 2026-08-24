@@ -43,7 +43,8 @@
     }
   },
   "bin": {
-    "gkx": "bin/gkx.mjs"
+    "gkx": "bin/gkx.mjs",
+    "gkos": "bin/gkos.mjs"
   },
   "files": [
     "dist/",
