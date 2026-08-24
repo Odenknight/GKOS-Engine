@@ -332,7 +332,7 @@ jobs:
 
       - name: Focused Phase 5 watcher host suite
         run: >-
-          node --test --test-concurrency=1
+          node --test
           test/watcher-source-scan.test.mjs
           test/watcher-index-validation.test.mjs
           test/watcher-pointer-host.test.mjs

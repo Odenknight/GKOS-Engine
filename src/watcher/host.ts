@@ -1066,12 +1066,14 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
     const installFileWatchers = (): void => {
       for (const held of fileWatchers) held.close();
       fileWatchers = [];
-      try {
-        const recursive = watch(vault, { recursive: true }, (_event, name) => queueEvent(name));
-        recursive.on("error", watcherError);
-        fileWatchers.push(recursive);
-        return;
-      } catch { /* install one exact watcher per securely scanned directory */ }
+      if (process.platform !== "win32") {
+        try {
+          const recursive = watch(vault, { recursive: true }, (_event, name) => queueEvent(name));
+          recursive.on("error", watcherError);
+          fileWatchers.push(recursive);
+          return;
+        } catch { /* install one exact watcher per securely scanned directory */ }
+      }
       const directories = ["", ...(coverageScan?.folders ?? [])];
       for (const relative of directories) {
         const held = watch(relative === "" ? vault : join(vault, relative), (_event, name) => queueEvent(name, relative));
