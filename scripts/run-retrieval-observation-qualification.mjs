@@ -77,6 +77,7 @@ const SLICE_B_AUTHORIZED_ADDITION_PATHS = Object.freeze([
 const SLICE_B_AUTHORIZED_ADDITION_INVENTORY_DIGEST = "sha256:a812a6378310da741ed009d3123498050794c4d7ff5f1e1d305ed10b0175fa54";
 const PHASE5_SLICE_B_BASE_COMMIT = "6e9346c7e749b5288ff3680766b34a038e816d18";
 const PHASE5_SLICE_B_EXPECTED_CHANGE_ROWS = Object.freeze([
+  ["M", ".gitattributes"],
   ["M", ".github/workflows/ci.yml"],
   ["A", "bin/gkos.mjs"],
   ["M", "bin/gkx.mjs"],

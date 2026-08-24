@@ -1,7 +1,8 @@
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import {
   chmodSync,
   closeSync,
+  constants,
   fstatSync,
   fsyncSync,
   linkSync,
@@ -15,6 +16,7 @@ import {
   statSync,
   unlinkSync,
   writeSync,
+  type BigIntStats,
 } from "node:fs";
 import { basename, dirname, join, parse, resolve } from "node:path";
 
@@ -24,6 +26,9 @@ import { retrievalCanonicalDigest, retrievalSha256, stableJson } from "../retrie
 export const WATCHER_DIRECTORY_MODE = 0o700;
 export const WATCHER_FILE_MODE = 0o600;
 export const WATCHER_MAX_AUTHORITY_BYTES = 1_048_576;
+const WATCHER_MAX_TRANSITION_ENTRIES = 100_000;
+const WATCHER_MAX_TRANSITION_LEAF_BYTES = 1_073_741_824;
+const WATCHER_MAX_TRANSITION_SNAPSHOT_BYTES = 4_294_967_296;
 
 const CONTROL_RE = /[\u0000-\u001f\u007f]/u;
 const DECIMAL_RE = /^(?:0|[1-9][0-9]*)$/u;
@@ -43,6 +48,32 @@ export interface WatcherDirectoryCapability {
   readonly path: string;
   readonly identity: WatcherIdentity;
 }
+
+interface WatcherDirectorySeal {
+  readonly canonical_path: string;
+  readonly identity: WatcherIdentity;
+  readonly uid: number | null;
+}
+
+interface WatcherDirectChildSnapshot {
+  readonly basename: string;
+  readonly kind: "directory" | "file";
+  readonly lstat_coordinate: readonly string[];
+  readonly stat_coordinate: readonly string[];
+  readonly raw_sha256: string | null;
+}
+
+interface WatcherOpenedDirectory {
+  readonly descriptor: number | null;
+  readonly seal: WatcherDirectorySeal;
+}
+
+interface WatcherDirectoryMutationOptions {
+  readonly on_authorized_mutation?: () => void;
+  readonly on_before_seal_refresh?: () => void;
+}
+
+const watcherDirectorySeals = new WeakMap<object, WatcherDirectorySeal>();
 
 export interface WatcherSealedFile {
   readonly path: string;
@@ -95,17 +126,255 @@ function assertSafeAbsolutePath(input: string): string {
   return absolute;
 }
 
-function assertDirectoryState(path: string): WatcherIdentity {
+function effectiveOwnerUid(): number | null {
+  if (process.platform === "win32") return null;
+  const uid = process.geteuid?.();
+  if (!Number.isSafeInteger(uid) || (uid as number) < 0) fail("GKX_WATCHER_FS_DIRECTORY_OWNER_INVALID");
+  return uid as number;
+}
+
+function assertDirectoryState(path: string): WatcherDirectorySeal {
   const link = lstatSync(path);
   const state = statSync(path);
   if (!link.isDirectory() || link.isSymbolicLink() || !state.isDirectory() || !sameDevice(link.dev, state.dev) ||
-      link.ino !== state.ino || link.mode !== state.mode || link.nlink !== state.nlink) {
+      link.ino !== state.ino || link.mode !== state.mode || link.nlink !== state.nlink || link.uid !== state.uid) {
     fail("GKX_WATCHER_FS_DIRECTORY_ALIAS_INVALID");
   }
   if (process.platform !== "win32" && (state.mode & 0o777) !== WATCHER_DIRECTORY_MODE) {
     fail("GKX_WATCHER_FS_DIRECTORY_MODE_INVALID");
   }
-  return identityOf(state);
+  const uid = effectiveOwnerUid();
+  if (uid !== null && (!Number.isSafeInteger(state.uid) || state.uid !== uid)) {
+    fail("GKX_WATCHER_FS_DIRECTORY_OWNER_INVALID");
+  }
+  return Object.freeze({ canonical_path: path, identity: identityOf(state), uid });
+}
+
+function requireDirectorySeal(capability: WatcherDirectoryCapability): WatcherDirectorySeal {
+  if (capability === null || typeof capability !== "object") {
+    throw new TypeError("GKX_WATCHER_FS_DIRECTORY_CAPABILITY_INVALID");
+  }
+  const seal = watcherDirectorySeals.get(capability as object);
+  if (seal === undefined) throw new TypeError("GKX_WATCHER_FS_DIRECTORY_CAPABILITY_INVALID");
+  return seal;
+}
+
+function createDirectoryCapability(path: string, knownSeal?: WatcherDirectorySeal): WatcherDirectoryCapability {
+  const capability = {
+    path,
+    get identity(): WatcherIdentity {
+      return requireDirectorySeal(this).identity;
+    },
+  } as WatcherDirectoryCapability;
+  const seal = knownSeal ?? assertDirectoryState(path);
+  if (seal.canonical_path !== path) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  watcherDirectorySeals.set(capability as object, seal);
+  return Object.freeze(capability);
+}
+
+function refreshDirectorySeal(capability: WatcherDirectoryCapability, seal: WatcherDirectorySeal): void {
+  requireDirectorySeal(capability);
+  watcherDirectorySeals.set(capability as object, seal);
+}
+
+function bigintDeviceEqual(left: bigint, right: bigint): boolean {
+  return left === right || (process.platform === "win32" && (left === 0n || right === 0n));
+}
+
+function bigintStatCoordinate(state: BigIntStats): readonly string[] {
+  return Object.freeze([
+    state.isDirectory() ? "directory" : state.isFile() ? "file" : "other",
+    String(state.dev), String(state.ino), String(state.mode), String(state.nlink), String(state.size),
+    String(state.mtimeNs), String(state.ctimeNs), String(state.uid), String(state.gid),
+  ]);
+}
+
+function openBoundDirectory(path: string): WatcherOpenedDirectory {
+  const seal = assertDirectoryState(path);
+  if (process.platform === "win32") return Object.freeze({ descriptor: null, seal });
+  const descriptor = openSync(path, constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW);
+  try {
+    const state = fstatSync(descriptor);
+    if (!state.isDirectory() || stableJson(identityOf(state)) !== stableJson(seal.identity) || state.uid !== seal.uid) {
+      fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+    }
+    return Object.freeze({ descriptor, seal });
+  } catch (error) {
+    closeSync(descriptor);
+    throw error;
+  }
+}
+
+function revalidateOpenedDirectory(path: string, opened: WatcherOpenedDirectory, pathMustExist: boolean): void {
+  if (opened.descriptor !== null) {
+    const state = fstatSync(opened.descriptor);
+    const liveIdentityMatches = pathMustExist && stableJson(identityOf(state)) === stableJson(opened.seal.identity);
+    const removedIdentityMatches = !pathMustExist && state.isDirectory() && String(state.dev) === opened.seal.identity.device &&
+      String(state.ino) === opened.seal.identity.inode && (state.mode & 0o777) === opened.seal.identity.mode &&
+      state.uid === opened.seal.uid && state.nlink === 0;
+    if (!state.isDirectory() || (!liveIdentityMatches && !removedIdentityMatches)) {
+      fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+    }
+  }
+  if (pathMustExist) {
+    if (stableJson(assertDirectoryState(path)) !== stableJson(opened.seal)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  } else if (exists(path)) {
+    fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  }
+}
+
+function closeOpenedDirectory(opened: WatcherOpenedDirectory): void {
+  if (opened.descriptor !== null) closeSync(opened.descriptor);
+}
+
+function streamDescriptorDigest(descriptor: number, expectedSize: bigint): string {
+  if (expectedSize < 0n || expectedSize > BigInt(Number.MAX_SAFE_INTEGER)) {
+    fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  }
+  const hash = createHash("sha256");
+  const buffer = Buffer.allocUnsafe(64 * 1024);
+  let offset = 0n;
+  while (offset < expectedSize) {
+    const remaining = expectedSize - offset;
+    const length = Number(remaining > BigInt(buffer.length) ? BigInt(buffer.length) : remaining);
+    const count = readSync(descriptor, buffer, 0, length, Number(offset));
+    if (count < 1) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+    hash.update(buffer.subarray(0, count));
+    offset += BigInt(count);
+  }
+  if (readSync(descriptor, buffer, 0, 1, Number(offset)) !== 0) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  return `sha256:${hash.digest("hex")}`;
+}
+
+function snapshotDirectChild(
+  parent: WatcherDirectoryCapability,
+  leaf: string,
+  maximumFileBytes = WATCHER_MAX_TRANSITION_LEAF_BYTES,
+): WatcherDirectChildSnapshot {
+  const path = join(parent.path, leaf);
+  const canonicalParent = canonicalPathSync(dirname(path), { alias_error: "GKX_WATCHER_FS_DIRECTORY_ALIAS_INVALID" });
+  if (!sameCanonicalPath(canonicalParent, parent.path) || basename(path) !== leaf) {
+    fail("GKX_WATCHER_FS_DIRECTORY_CONTAINMENT_INVALID");
+  }
+  const link = lstatSync(path, { bigint: true });
+  const state = statSync(path, { bigint: true });
+  const linkCoordinate = bigintStatCoordinate(link);
+  const stateCoordinate = bigintStatCoordinate(state);
+  if (link.isSymbolicLink() || (!link.isDirectory() && !link.isFile()) ||
+      link.isDirectory() !== state.isDirectory() || link.isFile() !== state.isFile() ||
+      !bigintDeviceEqual(link.dev, state.dev) || link.ino !== state.ino || link.mode !== state.mode ||
+      link.nlink !== state.nlink || link.size !== state.size || link.mtimeNs !== state.mtimeNs || link.ctimeNs !== state.ctimeNs) {
+    fail("GKX_WATCHER_FS_DIRECTORY_ALIAS_INVALID");
+  }
+  const canonical = canonicalPathSync(path, { alias_error: "GKX_WATCHER_FS_DIRECTORY_ALIAS_INVALID" });
+  if (!sameCanonicalPath(canonical, path) || !sameCanonicalPath(dirname(canonical), parent.path)) {
+    fail("GKX_WATCHER_FS_DIRECTORY_CONTAINMENT_INVALID");
+  }
+  let rawSha256: string | null = null;
+  if (state.isFile()) {
+    if (state.size > BigInt(Math.min(maximumFileBytes, WATCHER_MAX_TRANSITION_LEAF_BYTES))) {
+      fail("GKX_WATCHER_FS_ENTRY_LIMIT_EXCEEDED");
+    }
+    const descriptor = openSync(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+    try {
+      const openedBefore = fstatSync(descriptor, { bigint: true });
+      if (!openedBefore.isFile() || !bigintDeviceEqual(state.dev, openedBefore.dev) || state.ino !== openedBefore.ino ||
+          state.mode !== openedBefore.mode || state.nlink !== openedBefore.nlink || state.size !== openedBefore.size ||
+          state.mtimeNs !== openedBefore.mtimeNs || state.ctimeNs !== openedBefore.ctimeNs) {
+        fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+      }
+      rawSha256 = streamDescriptorDigest(descriptor, openedBefore.size);
+      const openedAfter = fstatSync(descriptor, { bigint: true });
+      const beforeTuple = [openedBefore.dev, openedBefore.ino, openedBefore.mode, openedBefore.nlink,
+        openedBefore.size, openedBefore.mtimeNs, openedBefore.ctimeNs].map(String);
+      const afterTuple = [openedAfter.dev, openedAfter.ino, openedAfter.mode, openedAfter.nlink,
+        openedAfter.size, openedAfter.mtimeNs, openedAfter.ctimeNs].map(String);
+      if (stableJson(beforeTuple) !== stableJson(afterTuple)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+    } finally {
+      closeSync(descriptor);
+    }
+  }
+  const linkAfter = lstatSync(path, { bigint: true });
+  const stateAfter = statSync(path, { bigint: true });
+  if (stableJson(bigintStatCoordinate(linkAfter)) !== stableJson(linkCoordinate) ||
+      stableJson(bigintStatCoordinate(stateAfter)) !== stableJson(stateCoordinate)) {
+    fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  }
+  return Object.freeze({
+    basename: leaf,
+    kind: state.isDirectory() ? "directory" : "file",
+    lstat_coordinate: linkCoordinate,
+    stat_coordinate: stateCoordinate,
+    raw_sha256: rawSha256,
+  });
+}
+
+function snapshotRetainedChildren(parent: WatcherDirectoryCapability, target: string): readonly WatcherDirectChildSnapshot[] {
+  const leaves = readdirSync(parent.path).filter((leaf) => leaf !== target).sort();
+  if (leaves.length > WATCHER_MAX_TRANSITION_ENTRIES) fail("GKX_WATCHER_FS_ENTRY_LIMIT_EXCEEDED");
+  let admittedBytes = 0;
+  for (const leaf of leaves) {
+    const state = lstatSync(join(parent.path, leaf), { bigint: true });
+    if (state.isFile()) admittedBytes += Number(state.size);
+    if (!Number.isSafeInteger(admittedBytes) || state.size > BigInt(WATCHER_MAX_TRANSITION_LEAF_BYTES) ||
+        admittedBytes > WATCHER_MAX_TRANSITION_SNAPSHOT_BYTES) {
+      fail("GKX_WATCHER_FS_ENTRY_LIMIT_EXCEEDED");
+    }
+  }
+  const rows: WatcherDirectChildSnapshot[] = [];
+  let snapshottedBytes = 0;
+  for (const leaf of leaves) {
+    const row = snapshotDirectChild(parent, leaf, WATCHER_MAX_TRANSITION_SNAPSHOT_BYTES - snapshottedBytes);
+    if (row.kind === "file") snapshottedBytes += Number(row.stat_coordinate[5]);
+    if (!Number.isSafeInteger(snapshottedBytes) || snapshottedBytes > WATCHER_MAX_TRANSITION_SNAPSHOT_BYTES) {
+      fail("GKX_WATCHER_FS_ENTRY_LIMIT_EXCEEDED");
+    }
+    rows.push(row);
+  }
+  if (snapshottedBytes !== admittedBytes) {
+    fail("GKX_WATCHER_FS_ENTRY_LIMIT_EXCEEDED");
+  }
+  return Object.freeze(rows);
+}
+
+function assertAuthorizedParentTransition(
+  parent: WatcherDirectoryCapability,
+  beforeSeal: WatcherDirectorySeal,
+  retainedBefore: readonly WatcherDirectChildSnapshot[],
+  target: string,
+  operation: "create" | "remove",
+  targetBefore: WatcherDirectChildSnapshot | null,
+  openedTarget: WatcherOpenedDirectory,
+  onBeforeSealRefresh?: () => void,
+): WatcherDirectorySeal {
+  const validate = (): { readonly parent: WatcherDirectorySeal; readonly target: WatcherDirectChildSnapshot | null } => {
+    const parentState = assertDirectoryState(parent.path);
+    const expectedLeaves = [...retainedBefore.map((row) => row.basename), ...(operation === "create" ? [target] : [])].sort();
+    if (stableJson(readdirSync(parent.path).sort()) !== stableJson(expectedLeaves)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+    if (stableJson(snapshotRetainedChildren(parent, target)) !== stableJson(retainedBefore)) {
+      fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+    }
+    const targetState = operation === "create" ? snapshotDirectChild(parent, target) : null;
+    if (operation === "create" && (targetState?.kind !== "directory" || stableJson(targetState) !== stableJson(targetBefore))) {
+      fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+    }
+    revalidateOpenedDirectory(join(parent.path, target), openedTarget, operation === "create");
+    return Object.freeze({ parent: parentState, target: targetState });
+  };
+  const after = validate();
+  const afterSeal = after.parent;
+  if (afterSeal.canonical_path !== beforeSeal.canonical_path || afterSeal.uid !== beforeSeal.uid ||
+      afterSeal.identity.device !== beforeSeal.identity.device || afterSeal.identity.inode !== beforeSeal.identity.inode ||
+      afterSeal.identity.mode !== beforeSeal.identity.mode) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  const expectedNlink = process.platform === "win32" ? beforeSeal.identity.nlink
+    : beforeSeal.identity.nlink + (operation === "create" ? 1 : -1);
+  if (afterSeal.identity.nlink !== expectedNlink) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  onBeforeSealRefresh?.();
+  const final = validate();
+  if (stableJson(final.parent) !== stableJson(afterSeal) || stableJson(final.target) !== stableJson(after.target)) {
+    fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  }
+  return final.parent;
 }
 
 export function syncWatcherDirectory(directory: string): void {
@@ -121,7 +390,7 @@ export function syncWatcherDirectory(directory: string): void {
 export function openWatcherDirectory(input: string): WatcherDirectoryCapability {
   const absolute = assertSafeAbsolutePath(input);
   const canonical = canonicalPathSync(absolute, { alias_error: "GKX_WATCHER_FS_DIRECTORY_ALIAS_INVALID" });
-  return Object.freeze({ path: canonical, identity: assertDirectoryState(canonical) });
+  return createDirectoryCapability(canonical);
 }
 
 /** Validate/create the caller-selected desktop status capability before use. */
@@ -145,7 +414,11 @@ export function ensureWatcherStatusDirectory(statusFile: string): WatcherDirecto
   return capability;
 }
 
-export function ensureWatcherDirectory(input: string, parent?: WatcherDirectoryCapability): WatcherDirectoryCapability {
+export function ensureWatcherDirectory(
+  input: string,
+  parent?: WatcherDirectoryCapability,
+  options: WatcherDirectoryMutationOptions = {},
+): WatcherDirectoryCapability {
   const absolute = assertSafeAbsolutePath(input);
   const prospective = canonicalPathSync(absolute, {
     allow_missing: true,
@@ -159,9 +432,27 @@ export function ensureWatcherDirectory(input: string, parent?: WatcherDirectoryC
     }
   }
   if (!exists(prospective)) {
+    const parentSeal = parent === undefined ? null : requireDirectorySeal(parent);
+    const retained = parent === undefined ? null : snapshotRetainedChildren(parent, basename(prospective));
     mkdirSync(prospective, { recursive: false, mode: WATCHER_DIRECTORY_MODE });
     if (process.platform !== "win32") chmodSync(prospective, WATCHER_DIRECTORY_MODE);
-    if (parent !== undefined) syncWatcherDirectory(parent.path);
+    const createdSnapshot = parent === undefined ? null : snapshotDirectChild(parent, basename(prospective));
+    const opened = openBoundDirectory(prospective);
+    try {
+      if (parent !== undefined) syncWatcherDirectory(parent.path);
+      options.on_authorized_mutation?.();
+      if (parent !== undefined && parentSeal !== null && retained !== null) {
+        const refreshed = assertAuthorizedParentTransition(parent, parentSeal, retained, basename(prospective), "create",
+          createdSnapshot, opened, options.on_before_seal_refresh);
+        refreshDirectorySeal(parent, refreshed);
+        const result = createDirectoryCapability(prospective, opened.seal);
+        revalidateWatcherDirectory(parent);
+        revalidateWatcherDirectory(result);
+        return result;
+      }
+    } finally {
+      closeOpenedDirectory(opened);
+    }
   }
   const result = openWatcherDirectory(prospective);
   if (parent !== undefined) {
@@ -175,28 +466,43 @@ export function ensureWatcherDirectory(input: string, parent?: WatcherDirectoryC
 export function removeEmptyWatcherDirectory(
   directory: WatcherDirectoryCapability,
   parent: WatcherDirectoryCapability,
+  options: WatcherDirectoryMutationOptions = {},
 ): void {
   revalidateWatcherDirectory(parent);
   revalidateWatcherDirectory(directory);
   if (!sameCanonicalPath(dirname(directory.path), parent.path) || readdirSync(directory.path).length !== 0) {
     fail("GKX_WATCHER_FS_DIRECTORY_NOT_EMPTY");
   }
-  const before = assertDirectoryState(directory.path);
-  if (stableJson(before) !== stableJson(directory.identity)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
-  rmdirSync(directory.path);
-  syncWatcherDirectory(parent.path);
-  revalidateWatcherDirectory(parent);
-  if (exists(directory.path)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  const opened = openBoundDirectory(directory.path);
+  if (stableJson(opened.seal) !== stableJson(requireDirectorySeal(directory))) {
+    closeOpenedDirectory(opened);
+    fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  }
+  const parentSeal = requireDirectorySeal(parent);
+  const target = basename(directory.path);
+  const retained = snapshotRetainedChildren(parent, target);
+  try {
+    revalidateOpenedDirectory(directory.path, opened, true);
+    rmdirSync(directory.path);
+    syncWatcherDirectory(parent.path);
+    options.on_authorized_mutation?.();
+    refreshDirectorySeal(parent, assertAuthorizedParentTransition(parent, parentSeal, retained, target, "remove",
+      null, opened, options.on_before_seal_refresh));
+    if (exists(directory.path)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  } finally {
+    closeOpenedDirectory(opened);
+  }
 }
 
 export function revalidateWatcherDirectory(capability: WatcherDirectoryCapability): void {
-  if (capability === null || typeof capability !== "object" || typeof capability.path !== "string") {
-    throw new TypeError("GKX_WATCHER_FS_DIRECTORY_CAPABILITY_INVALID");
-  }
+  const seal = requireDirectorySeal(capability);
+  if (typeof capability.path !== "string") throw new TypeError("GKX_WATCHER_FS_DIRECTORY_CAPABILITY_INVALID");
   const canonical = canonicalPathSync(capability.path, { alias_error: "GKX_WATCHER_FS_DIRECTORY_ALIAS_INVALID" });
-  if (!sameCanonicalPath(canonical, capability.path)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  if (!sameCanonicalPath(canonical, capability.path) || !sameCanonicalPath(canonical, seal.canonical_path)) {
+    fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  }
   const current = assertDirectoryState(canonical);
-  if (stableJson(current) !== stableJson(capability.identity)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+  if (stableJson(current) !== stableJson(seal)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
 }
 
 export function watcherCanonicalBytes(value: unknown): Buffer {

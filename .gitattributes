@@ -9,5 +9,7 @@ test/fixtures/retrieval/**/*.json text eol=lf
 contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/generate-ndcg-discount.py text eol=lf
 contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/golden-fixture.toml text eol=lf
 test/fixtures/retrieval-evaluation-cli-phase4.json text eol=lf
+contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/*.json text eol=lf
+contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/*.md text eol=lf
 contracts/watcher/**/*.json text eol=lf
 contracts/watcher/**/*.md text eol=lf

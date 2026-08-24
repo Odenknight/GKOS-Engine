@@ -427,6 +427,28 @@ test("Phase5 watcher pack is exact, self-bound, and generator-byte-reproducible"
   assert.deepEqual(new Map(EXPECTED_FILES.map((name) => [name, rawSha(readFileSync(new URL(name, PACK)))])), before);
 });
 
+test("frozen Phase3 ingest pack is raw-byte stable on every checkout", () => {
+  const root = new URL("../contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/", import.meta.url);
+  const names = readdirSync(root).sort(codeUnitCompare);
+  assert.equal(names.length, 21);
+  const rows = names.map((name) => {
+    const bytes = readFileSync(new URL(name, root));
+    return `${name}|${bytes.length}|${rawSha(bytes)}`;
+  });
+  assert.equal(rows.reduce((total, row) => total + Number(row.split("|")[1]), 0), 248079);
+  assert.equal(rawSha(Buffer.from(`${rows.join("\n")}\n`, "utf8")),
+    "sha256:dd19bcc71ffb7b77f08603c37df352eb24a0381f3d233d718f1019ecf4f1e323");
+  const paths = names.map((name) => `contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/${name}`);
+  const attributes = execFileSync("git", ["check-attr", "text", "eol", "--", ...paths], {
+    cwd: REPOSITORY_ROOT, encoding: "utf8",
+  }).trim().split(/\r?\n/u);
+  assert.equal(attributes.length, names.length * 2);
+  for (let index = 0; index < attributes.length; index += 2) {
+    assert.equal(attributes[index].endsWith(": text: set"), true);
+    assert.equal(attributes[index + 1].endsWith(": eol: lf"), true);
+  }
+});
+
 test("Phase4 qualification protects the exact reviewed Slice-B status and path inventories", async () => {
   const container = mkdtempSync(join(tmpdir(), "gkos-phase4-sliceb-compatibility-"));
   const target = resolve(container);
@@ -468,7 +490,19 @@ test("Phase4 qualification protects the exact reviewed Slice-B status and path i
     git(main, ["config", "user.email", "fixture@example.invalid"]);
     git(main, ["config", "commit.gpgsign", "false"]);
     git(main, ["add", "-A"]);
-    git(main, ["commit", "--quiet", "-m", "fixture: reviewed Phase 5 Slice B"]);
+    let stagedChanges = true;
+    try { git(main, ["diff", "--cached", "--quiet"]); stagedChanges = false; }
+    catch (error) {
+      assert.equal(error.status, 1, "only a non-empty staged diff may select the synthetic commit path");
+    }
+    if (stagedChanges) {
+      git(main, ["commit", "--quiet", "-m", "fixture: reviewed Phase 5 Slice B"]);
+    } else {
+      assert.equal(git(REPOSITORY_ROOT, ["status", "--porcelain=v1"]), "");
+      assert.equal(git(main, ["status", "--porcelain=v1"]), "");
+      assert.equal(git(main, ["rev-parse", "HEAD"]).trim(), head);
+      assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main, head));
+    }
     const immutable = await runner.verifyFrozenQualificationInputsForTest(main);
     assert.equal(immutable.phase4_pack_file_count, 37);
 
