@@ -5,7 +5,7 @@
  * It is intentionally absent from package exports and from the platform-neutral
  * engine surface.
  */
-import { lstatSync, watch, type Stats } from "node:fs";
+import { lstatSync, watch, type BigIntStats } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 
 import { GkxIndex } from "../incremental";
@@ -123,26 +123,31 @@ const WINDOWS_SCOPED_POLL_BATCH_SIZE = 256;
 interface WindowsPollSnapshot {
   readonly device: string;
   readonly inode: string;
-  readonly mode: number;
-  readonly nlink: number;
-  readonly byte_size: number;
-  readonly modified_ms: number;
-  readonly changed_ms: number;
+  readonly mode: string;
+  readonly nlink: string;
+  readonly byte_size: string;
+  readonly modified_ns: string;
+  readonly changed_ns: string;
+  readonly created_ns: string;
 }
 
 function sameWindowsPollSnapshot(left: WindowsPollSnapshot | null, right: WindowsPollSnapshot | null): boolean {
+  const sameDevice = left !== null && right !== null && (left.device === right.device
+    || process.platform === "win32" && (left.device === "0" || right.device === "0"));
   return left === null ? right === null : right !== null
-    && left.device === right.device && left.inode === right.inode && left.mode === right.mode
+    && sameDevice && left.inode === right.inode && left.mode === right.mode
     && left.nlink === right.nlink && left.byte_size === right.byte_size
-    && left.modified_ms === right.modified_ms && left.changed_ms === right.changed_ms;
+    && left.modified_ns === right.modified_ns && left.changed_ns === right.changed_ns
+    && left.created_ns === right.created_ns;
 }
 
 function windowsPollSnapshot(path: string): WindowsPollSnapshot | null {
-  let value: Stats;
-  try { value = lstatSync(path); } catch { return null; }
+  let value: BigIntStats;
+  try { value = lstatSync(path, { bigint: true }); } catch { return null; }
   return Object.freeze({
-    device: String(value.dev), inode: String(value.ino), mode: value.mode, nlink: value.nlink,
-    byte_size: value.size, modified_ms: value.mtimeMs, changed_ms: value.ctimeMs,
+    device: String(value.dev), inode: String(value.ino), mode: String(value.mode), nlink: String(value.nlink),
+    byte_size: String(value.size), modified_ns: String(value.mtimeNs), changed_ns: String(value.ctimeNs),
+    created_ns: String(value.birthtimeNs),
   });
 }
 
@@ -1140,8 +1145,9 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
         }
         for (const [absolute, identity] of desired) {
           const authoritative: WindowsPollSnapshot = {
-            device: identity.device, inode: identity.inode, mode: identity.mode, nlink: identity.nlink,
-            byte_size: identity.byte_size, modified_ms: identity.modified_ms, changed_ms: identity.changed_ms,
+            device: identity.poll_device, inode: identity.poll_inode, mode: identity.poll_mode, nlink: identity.poll_nlink,
+            byte_size: identity.poll_byte_size, modified_ns: identity.modified_ns, changed_ns: identity.changed_ns,
+            created_ns: identity.created_ns,
           };
           const live = windowsPollSnapshot(absolute);
           const retained = windowsPollers.get(absolute);

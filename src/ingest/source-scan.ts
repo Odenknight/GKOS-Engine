@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import type { BigIntStats } from "node:fs";
 import { lstat, open, readdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
@@ -121,6 +122,14 @@ export interface WatcherSourceIdentity {
   readonly modified_ms: number;
   readonly changed_ms: number;
   readonly created_ms: number;
+  readonly poll_device: string;
+  readonly poll_inode: string;
+  readonly poll_mode: string;
+  readonly poll_nlink: string;
+  readonly poll_byte_size: string;
+  readonly modified_ns: string;
+  readonly changed_ns: string;
+  readonly created_ns: string;
   readonly source_digest: string | null;
   readonly kind: "note" | "attachment";
 }
@@ -138,6 +147,39 @@ interface Phase3NamespaceRow {
   readonly created_ms: number;
 }
 
+interface Phase3LosslessNamespaceRow {
+  readonly source_path: string;
+  readonly device: string;
+  readonly inode: string;
+  readonly mode: string;
+  readonly nlink: string;
+  readonly byte_size: string;
+  readonly modified_ns: string;
+  readonly changed_ns: string;
+  readonly created_ns: string;
+}
+
+const PHASE3_LOSSLESS_NAMESPACE_EVIDENCE = Symbol("gkos.phase3.lossless-namespace-evidence");
+
+function losslessNamespaceRow(childRel: string, legacy: FileState, precise: BigIntStats): Phase3LosslessNamespaceRow {
+  const sameKind = legacy.isFile() === precise.isFile() && legacy.isDirectory() === precise.isDirectory()
+    && legacy.isSymbolicLink() === precise.isSymbolicLink();
+  const sameCoarseIdentity = Number(precise.dev) === Number(legacy.dev)
+    && Number(precise.ino) === Number(legacy.ino)
+    && Number(precise.mode) === legacy.mode && Number(precise.nlink) === legacy.nlink
+    && Number(precise.size) === legacy.size
+    && Math.abs(Number(precise.mtimeNs) / 1_000_000 - legacy.mtimeMs) < 0.001
+    && Math.abs(Number(precise.ctimeNs) / 1_000_000 - legacy.ctimeMs) < 0.001
+    && Math.abs(Number(precise.birthtimeNs) / 1_000_000 - legacy.birthtimeMs) < 0.001;
+  if (!sameKind || !sameCoarseIdentity) fail("WATCHER_SOURCE_CAPABILITY_UNSTABLE");
+  return Object.freeze({
+    source_path: childRel,
+    device: String(precise.dev), inode: String(precise.ino), mode: String(precise.mode),
+    nlink: String(precise.nlink), byte_size: String(precise.size),
+    modified_ns: String(precise.mtimeNs), changed_ns: String(precise.ctimeNs), created_ns: String(precise.birthtimeNs),
+  });
+}
+
 export interface Phase3CorpusScan {
   readonly files: readonly SourceFile[];
   readonly folders: readonly string[];
@@ -145,11 +187,13 @@ export interface Phase3CorpusScan {
   readonly [PHASE3_SCAN_REJECTIONS]?: readonly Phase3ScanRejection[];
   readonly [PHASE3_SCAN_ROOT]?: Phase3ScanRootEvidence;
   readonly [PHASE3_NAMESPACE_EVIDENCE]?: readonly Phase3NamespaceRow[];
+  readonly [PHASE3_LOSSLESS_NAMESPACE_EVIDENCE]?: readonly Phase3LosslessNamespaceRow[];
 }
 
 export interface Phase3CorpusScanOptions {
   readonly ingest?: boolean;
   readonly extra_exclusions?: readonly string[];
+  readonly capture_lossless_namespace_evidence?: boolean;
   readonly on_before_child_lstat?: (item: { readonly relative_path: string; readonly absolute_path: string }) => void | Promise<void>;
   readonly on_before_file_open?: (item: { readonly relative_path: string; readonly absolute_path: string }) => void | Promise<void>;
   readonly on_before_root_recheck?: (item: { readonly requested_path: string; readonly canonical_path: string }) => void | Promise<void>;
@@ -239,6 +283,7 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
   const folders: string[] = [];
   const rejectedSources: Phase3ScanRejection[] = [];
   const namespaceRows: Phase3NamespaceRow[] = [];
+  const losslessNamespaceRows: Phase3LosslessNamespaceRow[] = [];
   const extra = new Set((options.extra_exclusions ?? []).map(portablePath));
   const requestedRoot = resolve(dir);
   const actualRoot = await canonicalPath(requestedRoot, { alias_error: "GKX_SCAN_ROOT_ALIAS_REJECTED" });
@@ -405,6 +450,13 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
         }
         throw error;
       }
+      let preciseRow: Phase3LosslessNamespaceRow | null = null;
+      if (options.capture_lossless_namespace_evidence === true) {
+        let preciseLinkState: BigIntStats;
+        try { preciseLinkState = await lstat(childAbs, { bigint: true }); }
+        catch { fail("WATCHER_SOURCE_CAPABILITY_UNSTABLE"); }
+        preciseRow = losslessNamespaceRow(childRel, linkState, preciseLinkState);
+      }
       if (options.ingest === true && ((entry.isFile() && !linkState.isFile()) || (entry.isDirectory() && !linkState.isDirectory()))) {
         rejection(childRel, linkState, [
           ...(linkState.isSymbolicLink() ? ["SOURCE_FILESYSTEM_ALIAS_REJECTED"] : []),
@@ -429,6 +481,7 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
         namespaceRow(childRel, "folder", linkState);
         await walk(canonicalDirectory, childRel);
       } else if (linkState.isFile() && isNotePath(childRel)) {
+        if (preciseRow !== null) losslessNamespaceRows.push(preciseRow);
         namespaceRow(childRel, "note", linkState);
         const inspected = await inspectPlainContainedFile(childAbs, childRel, true);
         if (!inspected) continue;
@@ -455,6 +508,7 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
         }));
         files.push(Object.freeze(file));
       } else if (linkState.isFile() && isAttachmentPath(childRel)) {
+        if (preciseRow !== null) losslessNamespaceRows.push(preciseRow);
         namespaceRow(childRel, "attachment", linkState);
         const inspected = await inspectPlainContainedFile(childAbs, childRel, false);
         if (inspected) attachments.push(childRel);
@@ -479,6 +533,7 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
   folders.sort(codeUnitCompare);
   rejectedSources.sort((left, right) => codeUnitCompare(left.source_path, right.source_path));
   namespaceRows.sort((left, right) => codeUnitCompare(left.source_path, right.source_path));
+  losslessNamespaceRows.sort((left, right) => codeUnitCompare(left.source_path, right.source_path));
   const result: { files: readonly SourceFile[]; attachments: readonly string[]; folders: readonly string[] } = {
     files: Object.freeze(files), attachments: Object.freeze(attachments), folders: Object.freeze(folders),
   };
@@ -490,6 +545,9 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
   });
   Object.defineProperty(result, PHASE3_NAMESPACE_EVIDENCE, {
     enumerable: false, configurable: false, writable: false, value: Object.freeze(namespaceRows),
+  });
+  Object.defineProperty(result, PHASE3_LOSSLESS_NAMESPACE_EVIDENCE, {
+    enumerable: false, configurable: false, writable: false, value: Object.freeze(losslessNamespaceRows),
   });
   return result as Phase3CorpusScan;
 }
@@ -513,7 +571,12 @@ export async function revalidatePhase3ScanRoot(scan: Phase3CorpusScan): Promise<
   return evidence.canonical_path;
 }
 
-function watcherIdentity(row: Phase3NamespaceRow, sourceDigest: string | null): WatcherSourceIdentity {
+function watcherIdentity(
+  row: Phase3NamespaceRow,
+  lossless: Phase3LosslessNamespaceRow,
+  sourceDigest: string | null,
+): WatcherSourceIdentity {
+  if (lossless.source_path !== row.source_path) fail("WATCHER_SOURCE_CAPABILITY_UNSTABLE");
   return Object.freeze({
     source_path: row.source_path,
     device: row.device,
@@ -524,6 +587,14 @@ function watcherIdentity(row: Phase3NamespaceRow, sourceDigest: string | null): 
     modified_ms: row.modified_ms,
     changed_ms: row.changed_ms,
     created_ms: row.created_ms,
+    poll_device: lossless.device,
+    poll_inode: lossless.inode,
+    poll_mode: lossless.mode,
+    poll_nlink: lossless.nlink,
+    poll_byte_size: lossless.byte_size,
+    modified_ns: lossless.modified_ns,
+    changed_ns: lossless.changed_ns,
+    created_ns: lossless.created_ns,
     source_digest: sourceDigest,
     kind: row.kind === "note" ? "note" : "attachment",
   });
@@ -534,6 +605,7 @@ export async function secureWatcherSourceScan(vaultRoot: string, options: Watche
   const first = await scanPhase3Corpus(vaultRoot, {
     ingest: true,
     extra_exclusions: exclusions,
+    capture_lossless_namespace_evidence: true,
     on_before_file_open: options.on_after_file_open === undefined
       ? undefined
       : async ({ relative_path }) => options.on_after_file_open?.(relative_path),
@@ -546,21 +618,29 @@ export async function secureWatcherSourceScan(vaultRoot: string, options: Watche
   if (rejections.some((row) => row.reason_codes.some((reason) => reason !== "SOURCE_SIZE_LIMIT_EXCEEDED"))) {
     fail("WATCHER_SOURCE_CAPABILITY_UNSTABLE");
   }
-  const second = await scanPhase3Corpus(vaultRoot, { ingest: true, extra_exclusions: exclusions });
+  const second = await scanPhase3Corpus(vaultRoot, {
+    ingest: true, extra_exclusions: exclusions, capture_lossless_namespace_evidence: true,
+  });
   const firstRows = first[PHASE3_NAMESPACE_EVIDENCE] ?? [];
   const secondRows = second[PHASE3_NAMESPACE_EVIDENCE] ?? [];
+  const firstLosslessRows = first[PHASE3_LOSSLESS_NAMESPACE_EVIDENCE] ?? [];
+  const secondLosslessRows = second[PHASE3_LOSSLESS_NAMESPACE_EVIDENCE] ?? [];
   const firstRoot = first[PHASE3_SCAN_ROOT];
   const secondRoot = second[PHASE3_SCAN_ROOT];
   if (!firstRoot || !secondRoot || firstRoot.canonical_path !== secondRoot.canonical_path ||
       retrievalCanonicalDigest(firstRows) !== retrievalCanonicalDigest(secondRows) ||
+      retrievalCanonicalDigest(firstLosslessRows) !== retrievalCanonicalDigest(secondLosslessRows) ||
       retrievalCanonicalDigest(rejections) !== retrievalCanonicalDigest(second[PHASE3_SCAN_REJECTIONS] ?? [])) {
     fail("WATCHER_SOURCE_CAPABILITY_UNSTABLE");
   }
   const filesByPath = new Map(first.files.map((file) => [file.relativePath, file]));
+  const losslessByPath = new Map(firstLosslessRows.map((row) => [row.source_path, row]));
   const identities = firstRows.filter((row) => row.kind !== "folder").map((row) => {
     const sourceFile = filesByPath.get(row.source_path);
     const evidence = sourceFile === undefined ? null : phase3FileEvidence(sourceFile);
-    return watcherIdentity(row, evidence?.source_digest ?? null);
+    const lossless = losslessByPath.get(row.source_path);
+    if (lossless === undefined) fail("WATCHER_SOURCE_CAPABILITY_UNSTABLE");
+    return watcherIdentity(row, lossless, evidence?.source_digest ?? null);
   });
   return Object.freeze({
     vault_root: firstRoot.canonical_path,
