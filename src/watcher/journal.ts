@@ -46,6 +46,7 @@ import {
   watcherRawDigest,
   watcherTimestamp,
   watcherUuid7,
+  withAuthorizedWatcherLeafTransition,
   writeNewWatcherFile,
   writeReservedWatcherFile,
   type WatcherDirectoryCapability,
@@ -239,18 +240,90 @@ function secureDatabaseMode(path: string): void {
   }
 }
 
-function createWatcherJournalDatabase(
+const WATCHER_JOURNAL_SQLITE_LEAVES = Object.freeze([
+  WATCHER_JOURNAL_DATABASE_FILE,
+  `${WATCHER_JOURNAL_DATABASE_FILE}-shm`,
+  `${WATCHER_JOURNAL_DATABASE_FILE}-wal`,
+]);
+
+function withWatcherJournalNamespaceTransition<T>(
+  directory: WatcherDirectoryCapability,
+  mutate: () => T,
+): T {
+  const present = (): readonly string[] => WATCHER_JOURNAL_SQLITE_LEAVES.filter((leaf) => existsSync(join(directory.path, leaf)));
+  return withAuthorizedWatcherLeafTransition(directory, WATCHER_JOURNAL_SQLITE_LEAVES, mutate, present, ({ after }) => {
+    const names = present();
+    if (!names.includes(WATCHER_JOURNAL_DATABASE_FILE)) fail("WATCHER_JOURNAL_IDENTITY_INVALID");
+    for (const leaf of WATCHER_JOURNAL_SQLITE_LEAVES) {
+      const row = after.get(leaf);
+      if (!names.includes(leaf)) {
+        if (row !== null) fail("WATCHER_JOURNAL_IDENTITY_INVALID");
+        continue;
+      }
+      if (row?.kind !== "file" || Number(row.stat_coordinate[4]) !== 1 ||
+          (process.platform !== "win32" && (Number(row.stat_coordinate[3]) & 0o777) !== 0o600) ||
+          (process.platform !== "win32" && Number(row.stat_coordinate[8]) !== process.geteuid?.())) {
+        fail("WATCHER_JOURNAL_IDENTITY_INVALID");
+      }
+    }
+  }, { include_affected_file_digests: false });
+}
+
+function openLiveWatcherJournalDatabase(
+  directory: WatcherDirectoryCapability,
   path: string,
+): DatabaseSync {
+  const opened = withWatcherJournalNamespaceTransition(directory, ():
+    | Readonly<{ ok: true; database: DatabaseSync }>
+    | Readonly<{ ok: false; error: unknown }> => {
+    let database: DatabaseSync | null = null;
+    try {
+      database = new DatabaseSync(path);
+      applyPragmas(database);
+      return Object.freeze({ ok: true, database });
+    } catch (error) {
+      // Opening or applying WAL pragmas can mutate the DB/WAL/SHM namespace.
+      // Close any constructed handle inside the authorized transition, then
+      // let its final snapshot account for the complete resulting namespace
+      // before propagating the original failure.
+      if (database !== null) {
+        try { database.close(); } catch { /* preserve the initiating error */ }
+      }
+      return Object.freeze({ ok: false, error });
+    }
+  });
+  if (opened.ok === false) throw opened.error;
+  return opened.database;
+}
+
+function closeLiveWatcherJournalDatabase(
+  directory: WatcherDirectoryCapability,
+  database: DatabaseSync,
+  validate = true,
+): void {
+  withWatcherJournalNamespaceTransition(directory, () => {
+    if (validate) {
+      database.exec("PRAGMA wal_checkpoint(TRUNCATE);");
+      validateWatcherJournalAuthority(database);
+    }
+    database.close();
+  });
+}
+
+function createWatcherJournalDatabase(
+  directory: WatcherDirectoryCapability,
   meta: Readonly<JsonRecord>,
   onBoundary?: (boundary: "database_file" | "database_schema_commit" | "database_schema_checkpoint") => void,
 ): DatabaseSync {
-  const descriptor = openSync(path, "wx", 0o600);
-  try { fsyncSync(descriptor); } finally { closeSync(descriptor); }
-  secureDatabaseMode(path);
-  onBoundary?.("database_file");
-  const database = new DatabaseSync(path);
-  try {
-    applyPragmas(database);
+  const path = join(directory.path, WATCHER_JOURNAL_DATABASE_FILE);
+  return withWatcherJournalNamespaceTransition(directory, () => {
+    const descriptor = openSync(path, "wx", 0o600);
+    try { fsyncSync(descriptor); } finally { closeSync(descriptor); }
+    secureDatabaseMode(path);
+    onBoundary?.("database_file");
+    const database = new DatabaseSync(path);
+    try {
+      applyPragmas(database);
     database.exec("BEGIN IMMEDIATE;");
     try {
       for (const statement of WATCHER_JOURNAL_DDL) database.exec(statement);
@@ -266,11 +339,12 @@ function createWatcherJournalDatabase(
     database.exec("PRAGMA wal_checkpoint(TRUNCATE);");
     onBoundary?.("database_schema_checkpoint");
     validateWatcherJournalAuthority(database);
-    return database;
-  } catch (error) {
-    database.close();
-    throw error;
-  }
+      return database;
+    } catch (error) {
+      database.close();
+      throw error;
+    }
+  });
 }
 
 function stableBody(value: unknown): string {
@@ -963,7 +1037,10 @@ function ensureContentAddressedArtifact(
   invalidCode: string,
   onStage?: () => void,
   maximumBytes = 1_048_576,
-  onStageWriteBoundary?: (boundary: "created" | "partial_write" | "written" | "file_fsynced" | "parent_fsynced") => void,
+  onStageWriteBoundary?: (
+    boundary: "created" | "partial_write" | "written" | "file_fsynced" | "parent_fsynced",
+    transitionDirectory: WatcherDirectoryCapability,
+  ) => void,
 ): ReturnType<typeof readWatcherFile> {
   const expectedRaw = watcherRawDigest(bytes);
   let stageExists = watcherLeafExists(root, stage);
@@ -1252,11 +1329,13 @@ function ensureSelectedTarget(
     if (candidateSelector === null) {
       const ownerNonce = randomBytes(16).toString("hex");
       candidateLeaf = selectorCandidateLeaf(process.pid, ownerNonce);
+      const plannedBeforeReservation = existingPlannedTarget(root, lock);
       let created: Readonly<JsonRecord> | null = null;
-      writeReservedWatcherFile(root, candidateLeaf, () => {
-        revalidateWatcherDirectory(root);
-        if (watcherLeafExists(root, WATCHER_BOOTSTRAP_TARGET_SELECTOR_FILE)) fail("GKX_WATCHER_BOOTSTRAP_TARGET_SELECTOR_EXISTS");
-        const planned = existingPlannedTarget(root, lock);
+      writeReservedWatcherFile(root, candidateLeaf, (reservedRoot) => {
+        revalidateWatcherDirectory(reservedRoot);
+        if (watcherLeafExists(reservedRoot, WATCHER_BOOTSTRAP_TARGET_SELECTOR_FILE)) fail("GKX_WATCHER_BOOTSTRAP_TARGET_SELECTOR_EXISTS");
+        const planned = existingPlannedTarget(reservedRoot, lock);
+        if (stableJson(planned) !== stableJson(plannedBeforeReservation)) fail("GKX_WATCHER_BOOTSTRAP_PLANNED_TARGET_INVALID");
         created = planned === null
           ? selectorRecord(lock, claim, buildJournalRecords(coordinates), ownerNonce)
           : selectorFromPlannedTarget(lock, claim, planned, ownerNonce);
@@ -1723,11 +1802,10 @@ function openOrCreateBootstrapDatabase(
   meta: Readonly<JsonRecord>,
 ): { readonly database: DatabaseSync; readonly path: string; readonly created: boolean } {
   const path = join(child.path, WATCHER_JOURNAL_DATABASE_FILE);
-  if (!watcherLeafSize(path)) return Object.freeze({ database: createWatcherJournalDatabase(path, meta), path, created: true });
+  if (!watcherLeafSize(path)) return Object.freeze({ database: createWatcherJournalDatabase(child, meta), path, created: true });
   secureDatabaseMode(path);
-  const database = new DatabaseSync(path);
+  const database = openLiveWatcherJournalDatabase(child, path);
   try {
-    applyPragmas(database);
     validateWatcherJournalAuthority(database);
     const rows = database.prepare("SELECT journal_instance_id,meta_digest,body FROM watcher_meta;").all() as Array<Record<string, unknown>>;
     if (rows.length !== 1 || rows[0].journal_instance_id !== meta.journal_instance_id || rows[0].meta_digest !== meta.meta_digest
@@ -1736,7 +1814,7 @@ function openOrCreateBootstrapDatabase(
     }
     return Object.freeze({ database, path, created: false });
   } catch (error) {
-    database.close();
+    closeLiveWatcherJournalDatabase(child, database, false);
     throw error;
   }
 }
@@ -2130,10 +2208,9 @@ export function openWatcherJournal(root: WatcherDirectoryCapability): WatcherJou
   const child = openWatcherDirectory(join(root.path, String(generation.directory_leaf)));
   const databasePath = join(child.path, String(generation.database_file));
   secureDatabaseMode(databasePath);
-  const database = new DatabaseSync(databasePath);
-  try {
-    applyPragmas(database);
-    validateWatcherJournalAuthority(database);
+    const database = openLiveWatcherJournalDatabase(child, databasePath);
+    try {
+      validateWatcherJournalAuthority(database);
     const rows = database.prepare("SELECT journal_instance_id,meta_digest,body FROM watcher_meta;").all() as Array<Record<string, unknown>>;
     if (rows.length !== 1 || rows[0].journal_instance_id !== generation.journal_instance_id || rows[0].meta_digest !== generation.meta_digest ||
         !(rows[0].body instanceof Uint8Array)) fail("WATCHER_JOURNAL_VALUE_INVALID");
@@ -2146,7 +2223,7 @@ export function openWatcherJournal(root: WatcherDirectoryCapability): WatcherJou
     validateWatcherJournalAdoptionProjection(handle);
     return handle;
   } catch (error) {
-    database.close();
+      closeLiveWatcherJournalDatabase(child, database, false);
     throw error;
   }
 }
@@ -2206,9 +2283,7 @@ function closeHistoricalWatcherJournal(handle: WatcherJournalHandle): void {
 }
 
 export function closeWatcherJournal(handle: WatcherJournalHandle): void {
-  handle.database.exec("PRAGMA wal_checkpoint(TRUNCATE);");
-  validateWatcherJournalAuthority(handle.database);
-  handle.database.close();
+  closeLiveWatcherJournalDatabase(handle.generation_directory, handle.database);
   secureDatabaseMode(handle.database_path);
 }
 
@@ -3475,7 +3550,7 @@ function resetRecoveryPlanRecord(input: {
 function persistResetRecoveryPlan(
   root: WatcherDirectoryCapability,
   plan: Readonly<JsonRecord>,
-  onBoundary?: (boundary: WatcherJournalResetBoundary) => void,
+  onBoundary?: (boundary: WatcherJournalResetBoundary, transitionDirectory?: WatcherDirectoryCapability) => void,
 ): ReturnType<typeof readWatcherFile> {
   const bytes = watcherCanonicalBytes(sealResetRecoveryPlan(plan));
   const file = ensureContentAddressedArtifact(
@@ -3486,7 +3561,10 @@ function persistResetRecoveryPlan(
     "GKX_WATCHER_RESET_RECOVERY_PLAN_INVALID",
     () => onBoundary?.("plan_stage"),
     536_870_912,
-    (boundary) => onBoundary?.(`plan_stage_${boundary}` as WatcherJournalResetBoundary),
+    (boundary, transitionDirectory) => onBoundary?.(
+      `plan_stage_${boundary}` as WatcherJournalResetBoundary,
+      transitionDirectory,
+    ),
   );
   if (!file.bytes.equals(bytes)) fail("GKX_WATCHER_RESET_RECOVERY_PLAN_INVALID");
   onBoundary?.("plan");
@@ -4137,7 +4215,7 @@ function openOrCreateResetTarget(
   const databasePath = join(child.path, WATCHER_JOURNAL_DATABASE_FILE);
   if (!watcherLeafExists(child, WATCHER_JOURNAL_DATABASE_FILE)) {
     if (leaves.length !== 0 || resetTargetLaterEvidence(root, plan)) fail("WATCHER_JOURNAL_IDENTITY_INVALID");
-    const database = createWatcherJournalDatabase(databasePath, meta, (boundary) => {
+    const database = createWatcherJournalDatabase(child, meta, (boundary) => {
       onBoundary?.(boundary);
       assertAuthority?.();
     });
@@ -4195,9 +4273,8 @@ function openOrCreateResetTarget(
     return openOrCreateResetTarget(root, plan, onBoundary, assertAuthority);
   }
   secureDatabaseMode(databasePath);
-  const database = new DatabaseSync(databasePath);
+  const database = openLiveWatcherJournalDatabase(child, databasePath);
   try {
-    applyPragmas(database);
     const handle = Object.freeze({ root, generation_directory: child, database_path: databasePath, database, meta, generation, pointer });
     const stateKind = validateResetTargetRows(handle, plan);
     if (stateKind === "unseeded") seedResetDatabase(handle, plan.reset as JsonRecord, plan.reset_carry_bundle as JsonRecord | null, (boundary) => {
@@ -4207,7 +4284,7 @@ function openOrCreateResetTarget(
     if (validateResetTargetRows(handle, plan) !== "seeded") fail("WATCHER_JOURNAL_VALUE_INVALID");
     return handle;
   } catch (error) {
-    database.close();
+    closeLiveWatcherJournalDatabase(child, database, false);
     throw error;
   }
 }
@@ -5065,9 +5142,7 @@ export function resetWatcherJournal(options: {
       || options.expected_journal_generation_digest !== options.journal.generation.journal_generation_digest
       || options.expected_coherent_manifest_digest !== outerManifest.coherent_manifest_digest) fail("GKX_WATCHER_EXPECTED_COORDINATE_MISMATCH");
   const audit = auditResetOutbox(options.journal, outerPointer, outerManifest);
-  options.journal.database.exec("PRAGMA wal_checkpoint(TRUNCATE);");
-  validateWatcherJournalAuthority(options.journal.database);
-  options.journal.database.close();
+  closeWatcherJournal(options.journal);
   secureDatabaseMode(options.journal.database_path);
   const databaseIdentity = stableJournalFileIdentity(options.journal.generation_directory, WATCHER_JOURNAL_DATABASE_FILE, "database");
   const walIdentity = optionalJournalFileIdentity(options.journal.generation_directory, "watcher-journal.sqlite-wal", "wal");
@@ -5154,17 +5229,20 @@ export function resetWatcherJournal(options: {
     archive, reset, reset_guard: guard, pointer_guard: pointerGuard, new_meta: records.meta,
     new_generation: records.generation, target_pointer: records.pointer, reset_carry_bundle: carry,
   });
-  const assertLiveOriginalInterlock = (): void => {
-    assertResetControlledNamespace(options.watcher_directory, options.journal.root);
+  const assertLiveOriginalInterlock = (journalRoot = options.journal.root): void => {
+    assertResetControlledNamespace(options.watcher_directory, journalRoot);
     assertLiveOriginalResetRecoveryNamespaceAbsent(options.watcher_directory, plan);
     const current = assertWatcherHostLock(options.host_lock);
     if (current.lock_digest !== lock.lock_digest) fail("GKX_WATCHER_HOST_LOCK_CHANGED");
   };
-  const liveBoundary = (boundary: WatcherJournalResetBoundary): void => {
+  const liveBoundary = (
+    boundary: WatcherJournalResetBoundary,
+    transitionDirectory?: WatcherDirectoryCapability,
+  ): void => {
     options.on_boundary?.(boundary);
     // Recovery evidence appearing at any durable cut immediately retires the
     // live-original branch before it can perform the next mutation.
-    assertLiveOriginalInterlock();
+    assertLiveOriginalInterlock(transitionDirectory);
   };
   assertLiveOriginalInterlock();
   persistResetRecoveryPlan(options.journal.root, plan, liveBoundary);

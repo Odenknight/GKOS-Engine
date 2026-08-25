@@ -33,6 +33,7 @@ import {
   watcherFailureRetryDelay,
   watcherWindowsScopedPollingAdmittedForTest,
   watcherDigest,
+  writeNewWatcherFile,
 } from "../dist/watcher-host.mjs";
 import { runSearch } from "../bin/gkx.mjs";
 import {
@@ -54,6 +55,93 @@ test("Windows scoped polling admits only the governed bounded leaf set", () => {
   assert.equal(watcherWindowsScopedPollingAdmittedForTest(2_001), false);
   assert.equal(watcherWindowsScopedPollingAdmittedForTest(1_000_000), false);
   assert.throws(() => watcherWindowsScopedPollingAdmittedForTest(-1), /GKX_WATCHER_POLL_ADMISSION_INVALID/u);
+});
+
+test("Linux shutdown cannot reopen a native watcher after a refresh hook has yielded", {
+  skip: process.platform === "linux" ? false : "Linux native-watcher regression",
+}, async () => {
+  const watcherModule = new URL("../dist/watcher-host.mjs", import.meta.url).href;
+  const childScript = `
+    import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+    import { tmpdir } from "node:os";
+    import { join } from "node:path";
+    import { startWatcherHost } from ${JSON.stringify(watcherModule)};
+
+    const digest = \`sha256:\${"a".repeat(64)}\`;
+    const sandbox = mkdtempSync(join(tmpdir(), "gkos-watcher-shutdown-refresh-"));
+    chmodSync(sandbox, 0o700);
+    const vault = join(sandbox, "vault");
+    const status = join(sandbox, "status");
+    mkdirSync(vault, { mode: 0o700 });
+    mkdirSync(status, { mode: 0o700 });
+    writeFileSync(join(status, "desktop-agent.token"), "shutdown-refresh-token\\n", { mode: 0o600 });
+    writeFileSync(join(vault, "accepted.md"), \`---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec932"
+title: "Accepted"
+type: "policy"
+created_at: "2026-08-20T00:00:00Z"
+epistemic_state: "reported"
+sensitivity: "public"
+---
+# Accepted
+Shutdown refresh body.
+\`, { mode: 0o600 });
+
+    let armed = false;
+    let entered = false;
+    let releaseRefresh;
+    const refreshReleased = new Promise((resolve) => { releaseRefresh = resolve; });
+    let markEntered;
+    const refreshEntered = new Promise((resolve) => { markEntered = resolve; });
+    const host = await startWatcherHost({
+      vault_root: vault,
+      status_file: join(status, "desktop-agent-status.json"),
+      vault_id: "vault",
+      configuration_digest: digest,
+      policy_digest: digest,
+      periodic_reconciliation_ms: 60_000,
+      on_before_watcher_refresh: async () => {
+        if (!armed || entered) return;
+        entered = true;
+        markEntered();
+        await refreshReleased;
+      },
+      coordinator_options: {
+        discoverability_policy: () => "allow",
+        source_discoverability_policy: () => "allow",
+      },
+    });
+    armed = true;
+    const reconciliation = host.reconcile("event");
+    await refreshEntered;
+    const shutdown = host.shutdown();
+    releaseRefresh();
+    await reconciliation;
+    await shutdown;
+    await host.closed;
+    rmSync(sandbox, { recursive: true, force: true });
+    console.log("closed");
+  `;
+  const child = spawn(process.execPath, ["--input-type=module", "--eval", childScript], {
+    cwd: fileURLToPath(new URL("..", import.meta.url)),
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  const stdout = [];
+  const stderr = [];
+  child.stdout.on("data", (part) => stdout.push(part));
+  child.stderr.on("data", (part) => stderr.push(part));
+  const result = await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      child.kill("SIGKILL");
+      reject(new Error("Linux watcher shutdown child did not exit naturally within 45 seconds"));
+    }, 45_000);
+    child.once("error", (error) => { clearTimeout(timeout); reject(error); });
+    child.once("close", (status, signal) => { clearTimeout(timeout); resolve({ status, signal }); });
+  });
+  assert.deepEqual(result, { status: 0, signal: null }, Buffer.concat(stderr).toString("utf8"));
+  assert.equal(Buffer.concat(stderr).toString("utf8"), "");
+  assert.equal(Buffer.concat(stdout).toString("utf8"), "closed\n");
 });
 
 function physicalWatcherFts5Available() {
@@ -105,8 +193,7 @@ function statusDirectory(t) {
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const parent = openWatcherDirectory(root);
   const directory = ensureWatcherDirectory(join(root, "status"), parent);
-  writeFileSync(join(directory.path, "desktop-agent.token"), "watcher-test-token\n", { flag: "wx", mode: 0o600 });
-  if (process.platform !== "win32") chmodSync(join(directory.path, "desktop-agent.token"), 0o600);
+  writeNewWatcherFile(directory, "desktop-agent.token", Buffer.from("watcher-test-token\n", "utf8"));
   return directory;
 }
 

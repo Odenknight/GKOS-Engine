@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  chmodSync, chownSync, closeSync, ftruncateSync, mkdirSync, mkdtempSync, openSync, renameSync, rmSync, statSync,
+  chmodSync, chownSync, closeSync, ftruncateSync, linkSync, mkdirSync, mkdtempSync, openSync, readFileSync, renameSync, rmSync, statSync,
   symlinkSync, unlinkSync, utimesSync, writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -9,14 +9,23 @@ import { join } from "node:path";
 
 import {
   ensureWatcherDirectory,
+  discardIncompleteWatcherLeaf,
+  hardlinkWatcherLeafNoReplace,
   openWatcherDirectory,
+  readWatcherFile,
   removeEmptyWatcherDirectory,
+  replaceWatcherLeaf,
   revalidateWatcherDirectory,
   publishWatcherPointer,
   readWatcherPointer,
   recoverWatcherPointer,
   watcherDigest,
   watcherLeafExists,
+  unlinkWatcherLeaf,
+  withAuthorizedWatcherLeafTransition,
+  writeExistingWatcherFile,
+  writeNewWatcherFile,
+  writeReservedWatcherFile,
 } from "../dist/watcher-host.mjs";
 import {
   acquireLegacyRetrievalWriter,
@@ -153,19 +162,162 @@ function sparseFile(path, size) {
 test("transition snapshots admit the frozen Plan maximum and preflight ratified size caps", (t) => {
   const admitted = mutationAuthority(t, "gkos-watcher-authority-large-plan-", false);
   sparseFile(join(admitted.root, "watcher-journal-reset-recovery-plan.json"), 536_870_912);
-  const child = ensureWatcherDirectory(join(admitted.root, "child"), admitted.parent);
+  const child = ensureWatcherDirectory(join(admitted.root, "child"), openWatcherDirectory(admitted.root));
   assert.doesNotThrow(() => revalidateWatcherDirectory(child));
 
   const leafOver = mutationAuthority(t, "gkos-watcher-authority-leaf-over-", false);
   sparseFile(join(leafOver.root, "oversized.bin"), 1_073_741_825);
-  assert.throws(() => ensureWatcherDirectory(join(leafOver.root, "child"), leafOver.parent),
+  assert.throws(() => ensureWatcherDirectory(join(leafOver.root, "child"), openWatcherDirectory(leafOver.root)),
     { message: "GKX_WATCHER_FS_ENTRY_LIMIT_EXCEEDED" });
 
   const aggregateOver = mutationAuthority(t, "gkos-watcher-authority-aggregate-over-", false);
   for (let index = 0; index < 4; index += 1) sparseFile(join(aggregateOver.root, `part-${index}.bin`), 1_073_741_824);
   sparseFile(join(aggregateOver.root, "part-4.bin"), 1);
-  assert.throws(() => ensureWatcherDirectory(join(aggregateOver.root, "child"), aggregateOver.parent),
+  assert.throws(() => ensureWatcherDirectory(join(aggregateOver.root, "child"), openWatcherDirectory(aggregateOver.root)),
     { message: "GKX_WATCHER_FS_ENTRY_LIMIT_EXCEEDED" });
+
+  const affectedCount = mutationAuthority(t, "gkos-watcher-authority-affected-count-", false);
+  assert.throws(() => withAuthorizedWatcherLeafTransition(
+    affectedCount.parent,
+    Array.from({ length: 100_001 }, (_, index) => `leaf-${index}.bin`),
+    () => undefined,
+    [],
+    () => undefined,
+  ), { message: "GKX_WATCHER_FS_ENTRY_LIMIT_EXCEEDED" });
+
+  const affectedAggregate = mutationAuthority(t, "gkos-watcher-authority-affected-aggregate-", false);
+  const affectedLeaves = Array.from({ length: 5 }, (_, index) => `part-${index}.bin`);
+  for (let index = 0; index < 4; index += 1) sparseFile(join(affectedAggregate.root, affectedLeaves[index]), 1_073_741_824);
+  sparseFile(join(affectedAggregate.root, affectedLeaves[4]), 1);
+  assert.throws(() => withAuthorizedWatcherLeafTransition(
+    openWatcherDirectory(affectedAggregate.root), affectedLeaves, () => undefined, affectedLeaves, () => undefined,
+  ), { message: "GKX_WATCHER_FS_ENTRY_LIMIT_EXCEEDED" });
+});
+
+test("authorized file transitions refresh the authentic parent across every leaf operation", (t) => {
+  const authority = mutationAuthority(t, "gkos-watcher-file-transition-", false);
+  const beforeNlink = statSync(authority.root).nlink;
+  writeNewWatcherFile(authority.parent, "first.json", Buffer.from("first\n"));
+  writeExistingWatcherFile(authority.parent, "first.json", Buffer.from("first-updated\n"));
+  assert.equal(readWatcherFile(authority.parent, "first.json").bytes.toString(), "first-updated\n");
+  assert.doesNotThrow(() => revalidateWatcherDirectory(authority.parent));
+  writeReservedWatcherFile(authority.parent, "reserved.json", () => Buffer.from("reserved\n"));
+  assert.doesNotThrow(() => revalidateWatcherDirectory(authority.parent));
+  hardlinkWatcherLeafNoReplace(authority.parent, "first.json", "first-link.json");
+  assert.equal(readWatcherFile(authority.parent, "first-link.json", { allowed_links: 2 }).bytes.toString(), "first-updated\n");
+  unlinkWatcherLeaf(authority.parent, "first-link.json", { allowed_links: 2 });
+  assert.equal(readWatcherFile(authority.parent, "first.json").bytes.toString(), "first-updated\n");
+  replaceWatcherLeaf(authority.parent, "reserved.json", "final.json", readWatcherFile(authority.parent, "reserved.json").raw_sha256);
+  assert.equal(readWatcherFile(authority.parent, "final.json").bytes.toString(), "reserved\n");
+  writeNewWatcherFile(authority.parent, "incomplete.tmp", Buffer.from("partial"));
+  discardIncompleteWatcherLeaf(authority.parent, "incomplete.tmp");
+  unlinkWatcherLeaf(authority.parent, "first.json");
+  unlinkWatcherLeaf(authority.parent, "final.json");
+  assert.doesNotThrow(() => revalidateWatcherDirectory(authority.parent));
+  assert.equal(statSync(authority.root).nlink, beforeNlink);
+});
+
+test("full-coordinate alias discovery admits a genuine hardlink and rejects an existing extra alias", (t) => {
+  const positive = mutationAuthority(t, "gkos-watcher-file-full-alias-positive-", false);
+  writeNewWatcherFile(positive.parent, "source.json", Buffer.from("source\n"));
+  hardlinkWatcherLeafNoReplace(positive.parent, "source.json", "target.json");
+  assert.equal(readWatcherFile(positive.parent, "source.json", { allowed_links: 2 }).bytes.toString(), "source\n");
+  assert.equal(readWatcherFile(positive.parent, "target.json", { allowed_links: 2 }).bytes.toString(), "source\n");
+
+  const negative = mutationAuthority(t, "gkos-watcher-file-full-alias-negative-", false);
+  writeNewWatcherFile(negative.parent, "source.json", Buffer.from("source\n"));
+  linkSync(join(negative.root, "source.json"), join(negative.root, "existing-alias.json"));
+  const reopened = openWatcherDirectory(negative.root);
+  assert.throws(() => hardlinkWatcherLeafNoReplace(reopened, "source.json", "target.json"),
+    /GKX_WATCHER_FS_LINK_IDENTITY_INVALID/u);
+  assert.throws(() => readFileSync(join(negative.root, "target.json")), /ENOENT/u);
+});
+
+test("ordinary reads, cleanup, links, unlinks, and replacements reject non-private files", {
+  skip: process.platform === "win32",
+}, async (t) => {
+  async function exercise(label, mutate) {
+    await t.test(label, (child) => {
+      const authority = mutationAuthority(child, `gkos-watcher-file-${label.replaceAll(" ", "-")}-`, false);
+      const source = join(authority.root, "source.json");
+      writeFileSync(source, "source\n", { mode: 0o600 });
+      mutate(source);
+      const parent = openWatcherDirectory(authority.root);
+      assert.throws(() => readWatcherFile(parent, "source.json"), /GKX_WATCHER_FS_FILE_IDENTITY_INVALID/u);
+      assert.throws(() => discardIncompleteWatcherLeaf(parent, "source.json"),
+        /GKX_WATCHER_FS_INCOMPLETE_FILE_IDENTITY_INVALID/u);
+      assert.throws(() => hardlinkWatcherLeafNoReplace(parent, "source.json", "target.json"),
+        /GKX_WATCHER_FS_LINK_IDENTITY_INVALID/u);
+      assert.throws(() => unlinkWatcherLeaf(parent, "source.json"), /GKX_WATCHER_FS_FILE_IDENTITY_INVALID/u);
+      assert.throws(() => replaceWatcherLeaf(parent, "source.json", "final.json", D1),
+        /GKX_WATCHER_FS_FILE_IDENTITY_INVALID/u);
+      assert.equal(readFileSync(source, "utf8"), "source\n");
+      assert.throws(() => readFileSync(join(authority.root, "target.json")), /ENOENT/u);
+      assert.throws(() => readFileSync(join(authority.root, "final.json")), /ENOENT/u);
+    });
+  }
+
+  await exercise("wrong mode", (source) => chmodSync(source, 0o644));
+  if (process.geteuid?.() === 0) await exercise("wrong owner", (source) => chownSync(source, 1, 1));
+});
+
+test("existing-leaf rewrite rejects hardlink and symlink substitution", (t) => {
+  const linked = mutationAuthority(t, "gkos-watcher-existing-link-", false);
+  writeNewWatcherFile(linked.parent, "status.json", Buffer.from("old\n"));
+  linkSync(join(linked.root, "status.json"), join(linked.root, "alias.json"));
+  assert.throws(() => writeExistingWatcherFile(
+    openWatcherDirectory(linked.root), "status.json", Buffer.from("new\n"),
+  ), /GKX_WATCHER_FS_(?:FILE_CHANGED|FILE_LINK_INVALID)/u);
+  assert.equal(readFileSync(join(linked.root, "status.json"), "utf8"), "old\n");
+
+  if (process.platform !== "win32") {
+    const symlinked = mutationAuthority(t, "gkos-watcher-existing-symlink-", false);
+    writeFileSync(join(symlinked.container, "outside.json"), "outside\n", { mode: 0o600 });
+    symlinkSync(join(symlinked.container, "outside.json"), join(symlinked.root, "status.json"));
+    assert.throws(() => writeExistingWatcherFile(
+      openWatcherDirectory(symlinked.root), "status.json", Buffer.from("new\n"),
+    ), /GKX_WATCHER_FS_(?:(?:FILE|DIRECTORY)_ALIAS_INVALID|DIRECTORY_CHANGED)/u);
+    assert.equal(readFileSync(join(symlinked.container, "outside.json"), "utf8"), "outside\n");
+  }
+});
+
+test("reserved derivation rejects retained authority swap-and-restore", (t) => {
+  const authority = mutationAuthority(t, "gkos-watcher-reserved-derive-", true);
+  assert.throws(() => writeReservedWatcherFile(authority.parent, "selector.json", () => {
+    const held = `${authority.sibling}.held`;
+    renameSync(authority.sibling, held);
+    writeFileSync(authority.sibling, "sealed\n", { mode: 0o600 });
+    unlinkSync(authority.sibling);
+    renameSync(held, authority.sibling);
+    return Buffer.from("selector\n");
+  }), { message: "GKX_WATCHER_FS_DIRECTORY_CHANGED" });
+});
+
+test("file-transition second boundary rejects sibling, target, link, and parent races", { skip: process.platform === "win32" }, (t) => {
+  const sibling = mutationAuthority(t, "gkos-watcher-file-sibling-");
+  assert.throws(() => writeNewWatcherFile(sibling.parent, "new.json", Buffer.from("new\n"), undefined, {
+    on_before_seal_refresh() { writeFileSync(sibling.sibling, "changed\n"); },
+  }), { message: "GKX_WATCHER_FS_DIRECTORY_CHANGED" });
+
+  const resurrected = mutationAuthority(t, "gkos-watcher-file-resurrect-", false);
+  writeNewWatcherFile(resurrected.parent, "gone.json", Buffer.from("gone\n"));
+  assert.throws(() => unlinkWatcherLeaf(resurrected.parent, "gone.json", {
+    on_before_seal_refresh() { writeFileSync(join(resurrected.root, "gone.json"), "replacement\n", { mode: 0o600 }); },
+  }), { message: "GKX_WATCHER_FS_DIRECTORY_CHANGED" });
+
+  const linked = mutationAuthority(t, "gkos-watcher-file-third-link-", false);
+  writeNewWatcherFile(linked.parent, "source.json", Buffer.from("source\n"));
+  assert.throws(() => hardlinkWatcherLeafNoReplace(linked.parent, "source.json", "target.json", {
+    on_before_seal_refresh() { linkSync(join(linked.root, "source.json"), join(linked.root, "third.json")); },
+  }), { message: "GKX_WATCHER_FS_DIRECTORY_CHANGED" });
+
+  const swapped = mutationAuthority(t, "gkos-watcher-file-parent-swap-", false);
+  assert.throws(() => writeNewWatcherFile(swapped.parent, "new.json", Buffer.from("new\n"), undefined, {
+    on_before_seal_refresh() {
+      renameSync(swapped.root, `${swapped.root}.old`);
+      mkdirSync(swapped.root, { mode: 0o700 });
+    },
+  }), /GKX_WATCHER_FS_DIRECTORY_(?:ALIAS_INVALID|CHANGED)/u);
 });
 
 function tempAuthority(t) {

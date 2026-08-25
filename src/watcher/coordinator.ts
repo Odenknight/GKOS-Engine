@@ -13,17 +13,26 @@ import {
   watcherArtifactCoordinate,
 } from "./contracts";
 import {
+  createWatcherPublicationFile,
+  ensureWatcherPublicationFile,
+  hardlinkWatcherPublicationFile,
   hardlinkWatcherLeafNoReplace,
   parseCanonicalWatcherJson,
   readWatcherFile,
+  readWatcherPublicationEntryFile,
+  replaceWatcherPublicationFile,
   syncWatcherDirectory,
+  unlinkWatcherPublicationFile,
   unlinkWatcherLeaf,
+  watcherPublicationEntryLeaves,
   watcherCanonicalBytes,
   watcherDigest,
   watcherLeafExists,
   watcherRawDigest,
+  withAuthorizedWatcherPublication,
   writeNewWatcherFile,
   type WatcherDirectoryCapability,
+  type WatcherPublicationOperation,
 } from "./fs-authority";
 import {
   finalizeWatcherJournalActivation,
@@ -39,6 +48,9 @@ import {
   publishWatcherPointer,
   readWatcherPointer,
   recoverWatcherPointer,
+  watcherPointerArtifact,
+  WATCHER_JOURNAL_POINTER_NAMES,
+  WATCHER_OUTER_POINTER_NAMES,
   type WatcherPointerArtifact,
 } from "./pointer";
 import { retrievalCodeUnitCompare, stableJson } from "../retrieval/digest";
@@ -1222,19 +1234,6 @@ function persistCoordinateArtifact(
   persistExact(directory, String(coordinate.file), value, maximum);
 }
 
-function persistActivationArtifacts(directory: WatcherDirectoryCapability, bundle: Readonly<JsonRecord>): void {
-  persistCoordinateArtifact(directory, "observation", record(bundle.observation, "GKX_WATCHER_OBSERVATION_INVALID"));
-  persistCoordinateArtifact(directory, "plan", record(bundle.plan, "GKX_WATCHER_PLAN_INVALID"));
-  persistCoordinateArtifact(directory, "topology", record(bundle.topology, "GKX_WATCHER_TOPOLOGY_INVALID"));
-  persistCoordinateArtifact(directory, "graph", record(bundle.raw_graph, "GKX_WATCHER_GRAPH_INVALID"));
-  const manifest = sealWatcherRecoveryRecord(bundle.manifest);
-  persistExact(
-    directory,
-    `watcher-coherent-${String(manifest.coherent_manifest_digest).slice("sha256:".length)}.json`,
-    manifest,
-  );
-}
-
 function watcherAuthorityFor(bundle: Readonly<JsonRecord>): Readonly<JsonRecord> {
   const manifest = record(bundle.manifest, "GKX_WATCHER_MANIFEST_INVALID");
   const pointer = record(bundle.pointer, "GKX_WATCHER_POINTER_INVALID");
@@ -1259,41 +1258,6 @@ function watcherAuthorityFromManifest(
   return watcherAuthorityFor({ manifest, pointer });
 }
 
-function persistFirstWatcherAuthority(
-  directory: WatcherDirectoryCapability,
-  bundle: Readonly<JsonRecord>,
-  genesis: boolean,
-): void {
-  const expected = watcherAuthorityFor(bundle);
-  const expectedBytes = watcherCanonicalBytes(expected);
-  if (watcherLeafExists(directory, WATCHER_AUTHORITY_FILE)) {
-    const file = readWatcherFile(directory, WATCHER_AUTHORITY_FILE, { maximum_bytes: 1_048_576 });
-    const actual = sealWatcherRecoveryRecord(parseCanonicalWatcherJson(file));
-    if (!file.bytes.equals(expectedBytes) || actual.authority_digest !== expected.authority_digest) {
-      if (genesis) fail("GKX_WATCHER_AUTHORITY_MISMATCH");
-      const manifest = record(bundle.manifest, "GKX_WATCHER_MANIFEST_INVALID");
-      const preScan = record(bundle.pre_scan_state, "GKX_WATCHER_PRE_SCAN_STATE_INVALID");
-      if (actual.vault_id !== preScan.vault_id || actual.configuration_digest !== manifest.configuration_digest ||
-          actual.policy_digest !== manifest.policy_digest || actual.effective_profile_digest !== manifest.effective_profile_digest) {
-        fail("GKX_WATCHER_AUTHORITY_MISMATCH");
-      }
-    }
-    return;
-  }
-  if (!genesis || watcherLeafExists(directory, WATCHER_AUTHORITY_TEMP_FILE)) {
-    fail("GKX_WATCHER_AUTHORITY_RECOVERY_REQUIRED");
-  }
-  writeNewWatcherFile(directory, WATCHER_AUTHORITY_TEMP_FILE, expectedBytes, 1_048_576);
-  hardlinkWatcherLeafNoReplace(directory, WATCHER_AUTHORITY_TEMP_FILE, WATCHER_AUTHORITY_FILE);
-  syncWatcherDirectory(directory.path);
-  unlinkWatcherLeaf(directory, WATCHER_AUTHORITY_TEMP_FILE, {
-    allowed_links: 2,
-    expected_raw_sha256: watcherRawDigest(expectedBytes),
-  });
-  const reopened = readWatcherFile(directory, WATCHER_AUTHORITY_FILE, { maximum_bytes: 1_048_576 });
-  if (!reopened.bytes.equals(expectedBytes)) fail("GKX_WATCHER_AUTHORITY_MISMATCH");
-}
-
 export function readWatcherAuthority(directory: WatcherDirectoryCapability): Readonly<JsonRecord> | null {
   if (!watcherLeafExists(directory, WATCHER_AUTHORITY_FILE)) return null;
   if (watcherLeafExists(directory, WATCHER_AUTHORITY_TEMP_FILE)) fail("GKX_WATCHER_AUTHORITY_RECOVERY_REQUIRED");
@@ -1301,6 +1265,72 @@ export function readWatcherAuthority(directory: WatcherDirectoryCapability): Rea
   const authority = sealWatcherRecoveryRecord(parseCanonicalWatcherJson(file));
   if (!file.bytes.equals(watcherCanonicalBytes(authority))) fail("GKX_WATCHER_AUTHORITY_MISMATCH");
   return authority;
+}
+
+interface WatcherPublicationFileSpec {
+  readonly step_id: string;
+  readonly leaf: string;
+  readonly bytes: Buffer;
+  readonly maximum_bytes: number;
+}
+
+function watcherCoherentPublicationFiles(bundle: Readonly<JsonRecord>): readonly WatcherPublicationFileSpec[] {
+  const coordinate = (
+    stepId: string,
+    kind: "observation" | "plan" | "topology" | "graph",
+    value: Readonly<JsonRecord>,
+  ): WatcherPublicationFileSpec => {
+    const artifact = watcherArtifactCoordinate(kind, value as JsonRecord);
+    const bytes = watcherCanonicalBytes(value);
+    if (artifact.byte_size !== bytes.byteLength || artifact.raw_sha256 !== watcherRawDigest(bytes)) {
+      fail("GKX_WATCHER_ARTIFACT_COORDINATE_INVALID");
+    }
+    return Object.freeze({
+      step_id: stepId,
+      leaf: String(artifact.file),
+      bytes,
+      maximum_bytes: kind === "observation" ? 4_194_304 : 536_870_912,
+    });
+  };
+  const manifest = sealWatcherRecoveryRecord(bundle.manifest);
+  return Object.freeze([
+    coordinate("artifact:observation", "observation", record(bundle.observation, "GKX_WATCHER_OBSERVATION_INVALID")),
+    coordinate("artifact:plan", "plan", record(bundle.plan, "GKX_WATCHER_PLAN_INVALID")),
+    coordinate("artifact:topology", "topology", record(bundle.topology, "GKX_WATCHER_TOPOLOGY_INVALID")),
+    coordinate("artifact:graph", "graph", record(bundle.raw_graph, "GKX_WATCHER_GRAPH_INVALID")),
+    Object.freeze({
+      step_id: "artifact:manifest",
+      leaf: `watcher-coherent-${String(manifest.coherent_manifest_digest).slice("sha256:".length)}.json`,
+      bytes: watcherCanonicalBytes(manifest),
+      maximum_bytes: 536_870_912,
+    }),
+  ]);
+}
+
+function sameWatcherPublicationDevice(left: string, right: string): boolean {
+  return left === right || (process.platform === "win32" && (left === "0" || right === "0"));
+}
+
+function assertWatcherPublicationEntryNamespace(
+  leaves: readonly string[],
+  oldPointer: Readonly<JsonRecord> | null,
+): void {
+  const names = WATCHER_OUTER_POINTER_NAMES;
+  const allowedOuter = new Set([names.final, names.guard, names.guard_stage, names.temporary]);
+  const controlled = new Set([
+    ...allowedOuter,
+    WATCHER_JOURNAL_POINTER_NAMES.final,
+    WATCHER_JOURNAL_POINTER_NAMES.guard,
+    WATCHER_JOURNAL_POINTER_NAMES.guard_stage,
+    WATCHER_JOURNAL_POINTER_NAMES.temporary,
+  ]);
+  for (const leaf of leaves) {
+    if ((leaf.startsWith(`.${names.final}.gkos-watcher.`) || controlled.has(leaf)) && !allowedOuter.has(leaf)) {
+      fail("GKX_WATCHER_POINTER_RESERVED_LEAF_INVALID");
+    }
+  }
+  if (leaves.includes(names.guard) || leaves.includes(names.guard_stage) || leaves.includes(names.temporary) ||
+      leaves.includes(names.final) !== (oldPointer !== null)) fail("GKX_WATCHER_POINTER_RECOVERY_REQUIRED");
 }
 
 /**
@@ -1314,6 +1344,7 @@ export function publishWatcherCoherentActivation(options: {
   readonly journal: WatcherJournalHandle;
   readonly bundle: unknown;
   readonly on_boundary?: (boundary: string) => void;
+  readonly on_before_seal_refresh?: () => void;
 }): WatcherCoherentActivationResult {
   const input = record(options.bundle, "GKX_WATCHER_COHERENT_BUNDLE_INVALID");
   const pointer = sealWatcherRecoveryRecord(input.pointer);
@@ -1340,50 +1371,162 @@ export function publishWatcherCoherentActivation(options: {
   if ((oldPointer === null ? null : oldPointer.pointer_digest) !== preScan.active_pointer_digest) {
     fail("GKX_WATCHER_PRIOR_POINTER_CHANGED");
   }
-
-  persistActivationArtifacts(options.directory, bundle);
-  options.on_boundary?.("artifacts");
-  prepareWatcherJournalActivation(options.journal, {
-    batch: bundle.batch,
-    observation_authority: bundle.observation_authority,
-    plan_authority: bundle.plan_authority,
-    transitions: (bundle.transitions as readonly unknown[]).slice(0, 6),
-    intent: bundle.intent,
-    source_removal_event_set_bundle: bundle.source_removal_event_set_bundle,
-  });
-  options.on_boundary?.("prepared_journal");
-
-  const artifact = publishWatcherPointer({
-    namespace: "outer",
-    directory: options.directory,
-    new_pointer: bundle.pointer,
-    old_pointer: oldPointer,
-    operation_intent_digest: String(intent.intent_digest),
-    target_commit_digest: String(complete.transition_digest),
-    prepared_guard: preparedGuard,
-    validate_guard: (guard) => { sealWatcherCoherentActivationBundle(bundle, guard); },
-    prepare_target: (targetCommitDigest) => {
-      if (targetCommitDigest !== complete.transition_digest) fail("GKX_WATCHER_ACTIVATION_RECOVERY_INVALID");
-      persistFirstWatcherAuthority(options.directory, bundle, oldPointer === null);
-      options.on_boundary?.("authority");
-    },
-    finalize_target: () => {
-      finalizeWatcherJournalActivation(options.journal, {
-        complete_transition: complete,
-        outcome: bundle.outcome,
-        active: bundle.active,
-        source_removal_activation: bundle.source_removal_activation,
-      });
-      options.on_boundary?.("complete_journal");
-    },
-    on_boundary: (boundary) => options.on_boundary?.(`pointer:${boundary}`),
-  });
-  return Object.freeze({
-    active: sealWatcherRecoveryRecord(bundle.active),
-    manifest: sealWatcherRecoveryRecord(bundle.manifest),
-    pointer,
-    pointer_artifact: artifact,
-  });
+  const files = watcherCoherentPublicationFiles(bundle);
+  const pointerArtifact = watcherPointerArtifact("outer", bundle.pointer);
+  const pointerBytes = pointerArtifact.bytes;
+  const guardBytes = watcherCanonicalBytes(preparedGuard);
+  const guardRawSha256 = watcherRawDigest(guardBytes);
+  const authority = watcherAuthorityFor(bundle);
+  const authorityBytes = watcherCanonicalBytes(authority);
+  const existingAuthority = readWatcherAuthority(options.directory);
+  if (watcherLeafExists(options.directory, WATCHER_AUTHORITY_TEMP_FILE)) {
+    fail("GKX_WATCHER_AUTHORITY_RECOVERY_REQUIRED");
+  }
+  if (existingAuthority === null) {
+    if (oldPointer !== null) fail("GKX_WATCHER_AUTHORITY_RECOVERY_REQUIRED");
+  } else if (oldPointer === null) {
+    if (!watcherCanonicalBytes(existingAuthority).equals(authorityBytes)) fail("GKX_WATCHER_AUTHORITY_MISMATCH");
+  } else if (existingAuthority.vault_id !== preScan.vault_id ||
+      existingAuthority.configuration_digest !== record(bundle.manifest, "GKX_WATCHER_MANIFEST_INVALID").configuration_digest ||
+      existingAuthority.policy_digest !== record(bundle.manifest, "GKX_WATCHER_MANIFEST_INVALID").policy_digest ||
+      existingAuthority.effective_profile_digest !== record(bundle.manifest, "GKX_WATCHER_MANIFEST_INVALID").effective_profile_digest) {
+    fail("GKX_WATCHER_AUTHORITY_MISMATCH");
+  }
+  const authorityNeedsCreation = existingAuthority === null;
+  const operations: WatcherPublicationOperation[] = files.map((file) => Object.freeze({
+    step_id: file.step_id,
+    operation: "ensure_file" as const,
+    leaf: file.leaf,
+    raw_sha256: watcherRawDigest(file.bytes),
+    byte_size: file.bytes.byteLength,
+    maximum_bytes: file.maximum_bytes,
+  }));
+  operations.push(
+    Object.freeze({
+      step_id: "pointer:immutable", operation: "ensure_file", leaf: pointerArtifact.file,
+      raw_sha256: pointerArtifact.raw_sha256, byte_size: pointerArtifact.byte_size, maximum_bytes: 1_048_576,
+    }),
+    Object.freeze({
+      step_id: "pointer:guard_stage:create", operation: "create_file", leaf: WATCHER_OUTER_POINTER_NAMES.guard_stage,
+      raw_sha256: guardRawSha256, byte_size: guardBytes.byteLength, maximum_bytes: 1_048_576,
+    }),
+    Object.freeze({
+      step_id: "pointer:guard:link", operation: "hardlink", source_leaf: WATCHER_OUTER_POINTER_NAMES.guard_stage,
+      target_leaf: WATCHER_OUTER_POINTER_NAMES.guard, resulting_links: 2,
+    }),
+    Object.freeze({
+      step_id: "pointer:guard_stage:unlink", operation: "unlink", leaf: WATCHER_OUTER_POINTER_NAMES.guard_stage,
+      expected_raw_sha256: guardRawSha256, allowed_links: 2,
+      survivor_leaves: Object.freeze([WATCHER_OUTER_POINTER_NAMES.guard]),
+    }),
+    Object.freeze({
+      step_id: "pointer:temporary", operation: "create_file", leaf: WATCHER_OUTER_POINTER_NAMES.temporary,
+      raw_sha256: pointerArtifact.raw_sha256, byte_size: pointerArtifact.byte_size, maximum_bytes: 1_048_576,
+    }),
+  );
+  if (authorityNeedsCreation) {
+    operations.push(
+      Object.freeze({
+        step_id: "authority:temporary", operation: "create_file", leaf: WATCHER_AUTHORITY_TEMP_FILE,
+        raw_sha256: watcherRawDigest(authorityBytes), byte_size: authorityBytes.byteLength, maximum_bytes: 1_048_576,
+      }),
+      Object.freeze({
+        step_id: "authority:link", operation: "hardlink", source_leaf: WATCHER_AUTHORITY_TEMP_FILE,
+        target_leaf: WATCHER_AUTHORITY_FILE, resulting_links: 2,
+      }),
+      Object.freeze({
+        step_id: "authority:temporary:unlink", operation: "unlink", leaf: WATCHER_AUTHORITY_TEMP_FILE,
+        expected_raw_sha256: watcherRawDigest(authorityBytes), allowed_links: 2,
+        survivor_leaves: Object.freeze([WATCHER_AUTHORITY_FILE]),
+      }),
+    );
+  }
+  operations.push(
+    Object.freeze({
+      step_id: "pointer:fixed", operation: "replace", source_leaf: WATCHER_OUTER_POINTER_NAMES.temporary,
+      target_leaf: WATCHER_OUTER_POINTER_NAMES.final, expected_raw_sha256: pointerArtifact.raw_sha256,
+    }),
+    Object.freeze({
+      step_id: "pointer:guard:unlink", operation: "unlink", leaf: WATCHER_OUTER_POINTER_NAMES.guard,
+      expected_raw_sha256: guardRawSha256, allowed_links: 1, survivor_leaves: Object.freeze([]),
+    }),
+  );
+  const sealedInputLeaves = [
+    ...(existingAuthority === null ? [] : [{ leaf: WATCHER_AUTHORITY_FILE, maximum_bytes: 1_048_576 }]),
+    ...(oldPointer === null ? [] : [
+      { leaf: watcherPointerArtifact("outer", oldPointer).file, maximum_bytes: 1_048_576 },
+      { leaf: WATCHER_OUTER_POINTER_NAMES.final, maximum_bytes: 1_048_576 },
+    ]),
+  ];
+  return withAuthorizedWatcherPublication(options.directory, {
+    operations: Object.freeze(operations),
+    sealed_input_leaves: Object.freeze(sealedInputLeaves),
+  }, (publication) => {
+    const entryLeaves = watcherPublicationEntryLeaves(publication);
+    assertWatcherPublicationEntryNamespace(entryLeaves, oldPointer);
+    if (existingAuthority !== null) {
+      const sealedAuthority = readWatcherPublicationEntryFile(publication, WATCHER_AUTHORITY_FILE);
+      if (!sealedAuthority.bytes.equals(watcherCanonicalBytes(existingAuthority))) fail("GKX_WATCHER_AUTHORITY_MISMATCH");
+    }
+    if (oldPointer !== null) {
+      const oldArtifact = watcherPointerArtifact("outer", oldPointer);
+      const immutableOld = readWatcherPublicationEntryFile(publication, oldArtifact.file);
+      const fixedOld = readWatcherPublicationEntryFile(publication, WATCHER_OUTER_POINTER_NAMES.final);
+      if (!immutableOld.bytes.equals(oldArtifact.bytes) || !fixedOld.bytes.equals(oldArtifact.bytes) ||
+          !sameWatcherPublicationDevice(fixedOld.identity.device, String(preparedGuard.old_final_device)) ||
+          fixedOld.identity.inode !== preparedGuard.old_final_inode) fail("GKX_WATCHER_POINTER_GUARD_MISMATCH");
+    }
+    for (const file of files) ensureWatcherPublicationFile(publication, file.step_id, file.leaf, file.bytes);
+    options.on_boundary?.("artifacts");
+    prepareWatcherJournalActivation(options.journal, {
+      batch: bundle.batch,
+      observation_authority: bundle.observation_authority,
+      plan_authority: bundle.plan_authority,
+      transitions: (bundle.transitions as readonly unknown[]).slice(0, 6),
+      intent: bundle.intent,
+      source_removal_event_set_bundle: bundle.source_removal_event_set_bundle,
+    });
+    options.on_boundary?.("prepared_journal");
+    ensureWatcherPublicationFile(publication, "pointer:immutable", pointerArtifact.file, pointerBytes);
+    options.on_boundary?.("pointer:immutable_pointer");
+    createWatcherPublicationFile(publication, "pointer:guard_stage:create", WATCHER_OUTER_POINTER_NAMES.guard_stage, guardBytes);
+    options.on_boundary?.("pointer:guard_stage");
+    hardlinkWatcherPublicationFile(
+      publication, "pointer:guard:link", WATCHER_OUTER_POINTER_NAMES.guard_stage, WATCHER_OUTER_POINTER_NAMES.guard,
+    );
+    options.on_boundary?.("pointer:guard_linked");
+    unlinkWatcherPublicationFile(publication, "pointer:guard_stage:unlink", WATCHER_OUTER_POINTER_NAMES.guard_stage);
+    options.on_boundary?.("pointer:guard_stage_removed");
+    createWatcherPublicationFile(publication, "pointer:temporary", WATCHER_OUTER_POINTER_NAMES.temporary, pointerBytes);
+    options.on_boundary?.("pointer:temporary_pointer");
+    if (authorityNeedsCreation) {
+      createWatcherPublicationFile(publication, "authority:temporary", WATCHER_AUTHORITY_TEMP_FILE, authorityBytes);
+      hardlinkWatcherPublicationFile(publication, "authority:link", WATCHER_AUTHORITY_TEMP_FILE, WATCHER_AUTHORITY_FILE);
+      unlinkWatcherPublicationFile(publication, "authority:temporary:unlink", WATCHER_AUTHORITY_TEMP_FILE);
+    }
+    options.on_boundary?.("authority");
+    options.on_boundary?.("pointer:target_prepared");
+    replaceWatcherPublicationFile(
+      publication, "pointer:fixed", WATCHER_OUTER_POINTER_NAMES.temporary, WATCHER_OUTER_POINTER_NAMES.final,
+    );
+    options.on_boundary?.("pointer:fixed_pointer");
+    finalizeWatcherJournalActivation(options.journal, {
+      complete_transition: complete,
+      outcome: bundle.outcome,
+      active: bundle.active,
+      source_removal_activation: bundle.source_removal_activation,
+    });
+    options.on_boundary?.("complete_journal");
+    options.on_boundary?.("pointer:target_finalized");
+    unlinkWatcherPublicationFile(publication, "pointer:guard:unlink", WATCHER_OUTER_POINTER_NAMES.guard);
+    options.on_boundary?.("pointer:guard_removed");
+    return Object.freeze({
+      active: sealWatcherRecoveryRecord(bundle.active),
+      manifest: sealWatcherRecoveryRecord(bundle.manifest),
+      pointer,
+      pointer_artifact: pointerArtifact,
+    });
+  }, { on_before_seal_refresh: options.on_before_seal_refresh });
 }
 
 

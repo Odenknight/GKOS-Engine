@@ -254,6 +254,24 @@ function ownerManifestForStatus(
   return owner;
 }
 
+function reopenAuthorizedStagedRetrievalDirectory(
+  retrievalPath: string,
+  staged: Readonly<{ state_directory: string; owner_manifest_path: string; owner_manifest: unknown }>,
+): WatcherDirectoryCapability {
+  const directory = openWatcherDirectory(retrievalPath);
+  const owner = sealIngestOwnerGenerationManifestEnvelope(staged.owner_manifest);
+  const leaf = `ingest-generation-${owner.owner_manifest_digest.slice("sha256:".length)}.json`;
+  if (staged.state_directory !== directory.path || staged.owner_manifest_path !== join(directory.path, leaf)) {
+    fail("GKX_WATCHER_RETRIEVAL_STATE_INVALID");
+  }
+  const file = readWatcherFile(directory, leaf, { maximum_bytes: 536_870_912 });
+  let parsed: unknown;
+  try { parsed = JSON.parse(file.bytes.toString("utf8")); } catch { fail("GKX_WATCHER_RETRIEVAL_STATE_INVALID"); }
+  const reopened = sealIngestOwnerGenerationManifestEnvelope(parsed);
+  if (stableJson(reopened) !== stableJson(owner)) fail("GKX_WATCHER_RETRIEVAL_STATE_INVALID");
+  return directory;
+}
+
 /**
  * Search-route discriminator. Absence is returned only when the watcher root
  * itself is absent. Once any watcher namespace exists, a missing/corrupt
@@ -359,7 +377,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
   const derived = openWatcherDirectory(join(vault, ".gkx", "derived"));
   const watcherDirectory = ensureWatcherDirectory(join(derived.path, "watcher"), derived);
   const journalDirectory = ensureWatcherDirectory(join(watcherDirectory.path, "journals"), watcherDirectory);
-  const retrievalDirectory = openWatcherDirectory(retrievalPath);
+  let retrievalDirectory = openWatcherDirectory(retrievalPath);
   const statusDirectory = openWatcherDirectory(dirname(resolve(options.status_file)));
   const profile = await loadIngestProfile(options.profile_selector);
   const projectionIndex = new GkxIndex(options.projection_options);
@@ -506,15 +524,26 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
     } else {
       validateWatcherBootstrapTerminalEvidence(watcherDirectory, journalDirectory);
       const staleRecoveryNamespace = Object.freeze({
-        watcher: watcherNamespaceCoordinate(watcherDirectory, ["watcher-authority.lock", "watcher-authority.recovery"]),
+        watcher: watcherNamespaceCoordinate(
+          watcherDirectory,
+          ["watcher-authority.lock", "watcher-authority.recovery"],
+          { exclude_parent_byte_size: true },
+        ),
         journal: watcherNamespaceCoordinate(journalDirectory),
         status: watcherNamespaceCoordinate(statusDirectory),
       });
       const revalidateStaleRecoveryNamespace = (): void => {
         assertNoLegacyOrPhase3WriterForWatcher(retrievalDirectory.path);
-        if (watcherNamespaceCoordinate(watcherDirectory, ["watcher-authority.lock", "watcher-authority.recovery"]) !== staleRecoveryNamespace.watcher
-            || watcherNamespaceCoordinate(journalDirectory) !== staleRecoveryNamespace.journal
-            || watcherNamespaceCoordinate(statusDirectory) !== staleRecoveryNamespace.status) {
+        const currentWatcher = watcherNamespaceCoordinate(
+          watcherDirectory,
+          ["watcher-authority.lock", "watcher-authority.recovery"],
+          { exclude_parent_byte_size: true },
+        );
+        const currentJournal = watcherNamespaceCoordinate(journalDirectory);
+        const currentStatus = watcherNamespaceCoordinate(statusDirectory);
+        if (currentWatcher !== staleRecoveryNamespace.watcher
+            || currentJournal !== staleRecoveryNamespace.journal
+            || currentStatus !== staleRecoveryNamespace.status) {
           fail("GKX_WATCHER_HOST_LOCK_RECOVERY_NAMESPACE_CHANGED");
         }
       };
@@ -771,6 +800,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
           embedding_eligible_candidate_chunk_keys: eligibleChunkKeys,
           lexical_backend: "sqlite_fts5",
         }, undefined, vectorProvider, priorDatabasePath);
+        retrievalDirectory = reopenAuthorizedStagedRetrievalDirectory(retrievalPath, staged);
         providerDegraded = staged.embedding_work.provider_failed;
       } finally {
         releaseWatcherIngestWriterCapability(writer);
@@ -925,8 +955,10 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
           pendingReconciliation = false;
           const currentKind = pendingKind;
           await runOne(currentKind);
-          await options.on_before_watcher_refresh?.();
-          refreshFileWatchers();
+          if (!stopping && !stopped) {
+            await options.on_before_watcher_refresh?.();
+            if (!stopping && !stopped) refreshFileWatchers();
+          }
         } while (pendingReconciliation && !stopped);
       })().finally(() => {
         activeReconciliation = null;
@@ -1120,6 +1152,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
     };
 
     const watcherError = (): void => {
+      if (stopping || stopped) return;
       hintEpoch += 1;
       coverageScan = null;
       pendingPaths.clear();
@@ -1129,6 +1162,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       void reconcile("event").catch(() => undefined);
     };
     const installFileWatchers = (): void => {
+      if (stopping || stopped) return;
       // Node's Windows fs-event backend can terminate the process with a
       // native assertion before an error event is observable. One bounded
       // scheduler polls admitted, securely scanned leaves for scoped hints;

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, chownSync, linkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -10,10 +10,12 @@ import {
   bootstrapWatcherJournal,
   buildIngestValidationPlan,
   closeWatcherJournal,
+  createWatcherPublicationFile,
   createWatcherIngestWriterCapability,
   deriveWatcherCoherentActivation,
   ensureWatcherDirectory,
   openWatcherDirectory,
+  hardlinkWatcherPublicationFile,
   loadIngestProfile,
   publishWatcherCoherentActivation,
   recoverWatcherCoherentActivation,
@@ -21,11 +23,16 @@ import {
   readWatcherAuthority,
   readWatcherJournalActive,
   readWatcherPointer,
+  replaceWatcherPublicationFile,
+  revalidateWatcherDirectory,
   releaseWatcherHostLock,
   stageWatcherValidatedGkxIngestGeneration,
   searchWatcherCoherentGeneration,
   takeWatcherIndexValidationOutcome,
   watcherDigest,
+  watcherRawDigest,
+  unlinkWatcherPublicationFile,
+  withAuthorizedWatcherPublication,
 } from "../dist/watcher-host.mjs";
 import { watcherArtifactCoordinate } from "../dist/watcher-contracts.mjs";
 import { detectSqliteLexicalCapability } from "../dist/retrieval.mjs";
@@ -242,6 +249,260 @@ test("startup recovery finalizes fixed-new prepared5 without rerunning derivatio
   releaseWatcherHostLock(lock);
 });
 
+test("coherent publication capability is unforgeable and enforces its exact declared sequence", (t) => {
+  const { watcher } = roots(t);
+  const first = Buffer.from("first\n");
+  const second = Buffer.from("second\n");
+  assert.throws(() => createWatcherPublicationFile(
+    Object.freeze({ directory: watcher }), "one", "one.json", first,
+  ), /GKX_WATCHER_FS_PUBLICATION_CAPABILITY_INVALID/u);
+  const declaration = {
+    operations: [
+      {
+        step_id: "one", operation: "create_file", leaf: "one.json",
+        raw_sha256: watcherRawDigest(first), byte_size: first.byteLength, maximum_bytes: 1024,
+      },
+      {
+        step_id: "two", operation: "create_file", leaf: "two.json",
+        raw_sha256: watcherRawDigest(second), byte_size: second.byteLength, maximum_bytes: 1024,
+      },
+    ],
+  };
+  assert.throws(() => withAuthorizedWatcherPublication(watcher, declaration, (publication) => {
+    createWatcherPublicationFile(publication, "two", "two.json", second);
+  }), /GKX_WATCHER_FS_PUBLICATION_SEQUENCE_INVALID/u);
+  assert.equal(readWatcherAuthority(watcher), null, "failed sequence cannot forge an authority side effect");
+  assert.throws(() => withAuthorizedWatcherPublication(watcher, declaration, (publication) => {
+    createWatcherPublicationFile(publication, "one", "one.json", second);
+  }), /GKX_WATCHER_FS_PUBLICATION_DECLARATION_INVALID/u);
+});
+
+test("coherent publication rejects non-private entry files and post-syscall owner or mode drift", {
+  skip: process.platform === "win32",
+}, async (t) => {
+  await t.test("preexisting mode", (child) => {
+    const { watcher } = roots(child);
+    const source = join(watcher.path, "source.json");
+    writeFileSync(source, "source\n", { mode: 0o600 });
+    chmodSync(source, 0o644);
+    const authority = openWatcherDirectory(watcher.path);
+    assert.throws(() => withAuthorizedWatcherPublication(authority, {
+      operations: [{
+        step_id: "link", operation: "hardlink", source_leaf: "source.json",
+        target_leaf: "target.json", resulting_links: 2,
+      }],
+    }, (publication) => {
+      hardlinkWatcherPublicationFile(publication, "link", "source.json", "target.json");
+    }), { message: "GKX_WATCHER_FS_PUBLICATION_TARGET_INVALID" });
+    assert.throws(() => readFileSync(join(watcher.path, "target.json")), /ENOENT/u);
+  });
+
+  await t.test("post-syscall mode drift", (child) => {
+    const { watcher } = roots(child);
+    const bytes = Buffer.from("created\n");
+    const authority = openWatcherDirectory(watcher.path);
+    assert.throws(() => withAuthorizedWatcherPublication(authority, {
+      operations: [{
+        step_id: "create", operation: "create_file", leaf: "created.json",
+        raw_sha256: watcherRawDigest(bytes), byte_size: bytes.byteLength, maximum_bytes: 1024,
+      }],
+    }, (publication) => {
+      createWatcherPublicationFile(publication, "create", "created.json", bytes);
+    }, {
+      on_after_operation_syscall(stepId) {
+        assert.equal(stepId, "create");
+        chmodSync(join(watcher.path, "created.json"), 0o644);
+      },
+    }), /GKX_WATCHER_FS_(?:DIRECTORY_CHANGED|PUBLICATION_PREFIX_INVALID|PUBLICATION_TARGET_INVALID)/u);
+    assert.throws(() => revalidateWatcherDirectory(authority), /GKX_WATCHER_FS_DIRECTORY_CHANGED/u,
+      "a mutated post-syscall snapshot must not refresh the directory seal");
+  });
+
+  async function exerciseTransitionSeams(label, mutate) {
+    for (const operation of ["hardlink", "unlink", "replace"]) {
+      await t.test(`${operation} post-syscall ${label}`, (child) => {
+        const { watcher } = roots(child);
+        const source = join(watcher.path, "source.json");
+        const target = join(watcher.path, "target.json");
+        writeFileSync(source, "source\n", { mode: 0o600 });
+        if (operation === "unlink") linkSync(source, target);
+        const authority = openWatcherDirectory(watcher.path);
+        const digest = watcherRawDigest(Buffer.from("source\n"));
+        const declaration = operation === "hardlink" ? {
+          operations: [{
+            step_id: "transition", operation: "hardlink", source_leaf: "source.json",
+            target_leaf: "target.json", resulting_links: 2,
+          }],
+        } : operation === "unlink" ? {
+          operations: [{
+            step_id: "transition", operation: "unlink", leaf: "source.json",
+            expected_raw_sha256: digest, allowed_links: 2, survivor_leaves: ["target.json"],
+          }],
+        } : {
+          operations: [{
+            step_id: "transition", operation: "replace", source_leaf: "source.json",
+            target_leaf: "target.json", expected_raw_sha256: digest,
+          }],
+        };
+        let terminalRefreshBoundary = false;
+        let failure;
+        assert.throws(() => withAuthorizedWatcherPublication(authority, declaration, (publication) => {
+          if (operation === "hardlink") {
+            hardlinkWatcherPublicationFile(publication, "transition", "source.json", "target.json");
+          } else if (operation === "unlink") {
+            unlinkWatcherPublicationFile(publication, "transition", "source.json");
+          } else {
+            replaceWatcherPublicationFile(publication, "transition", "source.json", "target.json");
+          }
+        }, {
+          on_after_operation_syscall(stepId) {
+            assert.equal(stepId, "transition");
+            mutate(target);
+          },
+          on_before_seal_refresh() { terminalRefreshBoundary = true; },
+        }), (error) => {
+          failure = error;
+          return /GKX_WATCHER_FS_(?:DIRECTORY_CHANGED|PUBLICATION_PREFIX_INVALID|PUBLICATION_TARGET_INVALID)/u.test(
+            String(error?.message),
+          );
+        });
+        assert.equal(terminalRefreshBoundary, false, "a mutated result cannot reach terminal seal refresh");
+        assert.match(String(failure?.cause?.message ?? failure?.message), /GKX_WATCHER_FS_PUBLICATION_TARGET_INVALID/u,
+          "the rejected post snapshot remains the primary operation failure behind crash-prefix authentication");
+      });
+    }
+  }
+
+  await exerciseTransitionSeams("mode drift", (path) => chmodSync(path, 0o644));
+
+  if (process.geteuid?.() === 0) {
+    await t.test("preexisting foreign owner", (child) => {
+      const { watcher } = roots(child);
+      const source = join(watcher.path, "source.json");
+      writeFileSync(source, "source\n", { mode: 0o600 });
+      chownSync(source, 1, 1);
+      const authority = openWatcherDirectory(watcher.path);
+      assert.throws(() => withAuthorizedWatcherPublication(authority, {
+        operations: [{
+          step_id: "link", operation: "hardlink", source_leaf: "source.json",
+          target_leaf: "target.json", resulting_links: 2,
+        }],
+      }, (publication) => {
+        hardlinkWatcherPublicationFile(publication, "link", "source.json", "target.json");
+      }), { message: "GKX_WATCHER_FS_PUBLICATION_TARGET_INVALID" });
+      assert.throws(() => readFileSync(join(watcher.path, "target.json")), /ENOENT/u);
+    });
+
+    await t.test("post-syscall owner drift", (child) => {
+      const { watcher } = roots(child);
+      const bytes = Buffer.from("created\n");
+      const authority = openWatcherDirectory(watcher.path);
+      assert.throws(() => withAuthorizedWatcherPublication(authority, {
+        operations: [{
+          step_id: "create", operation: "create_file", leaf: "created.json",
+          raw_sha256: watcherRawDigest(bytes), byte_size: bytes.byteLength, maximum_bytes: 1024,
+        }],
+      }, (publication) => {
+        createWatcherPublicationFile(publication, "create", "created.json", bytes);
+      }, {
+        on_after_operation_syscall(stepId) {
+          assert.equal(stepId, "create");
+          chownSync(join(watcher.path, "created.json"), 1, 1);
+        },
+      }), /GKX_WATCHER_FS_(?:DIRECTORY_CHANGED|PUBLICATION_PREFIX_INVALID|PUBLICATION_TARGET_INVALID)/u);
+      assert.throws(() => revalidateWatcherDirectory(authority), /GKX_WATCHER_FS_DIRECTORY_CHANGED/u,
+        "a foreign-owned post-syscall snapshot must not refresh the directory seal");
+    });
+    await exerciseTransitionSeams("owner drift", (path) => chownSync(path, 1, 1));
+  }
+});
+
+test("coherent publication rejects undeclared siblings, retained-byte mutation, and affected target swaps", async (t) => {
+  for (const attack of ["extra_sibling", "retained_content", "target_swap"]) {
+    await t.test(attack, (child) => {
+      const { watcher, journals } = roots(child);
+      const lock = acquireWatcherHostLock(watcher, {
+        operation: "service",
+        service_instance_id: "019b2d14-4233-7db7-87d4-7d81cfaec932",
+        prior_pointer_digest: null,
+        prior_coherent_manifest_digest: null,
+        prior_journal_pointer_digest: null,
+      });
+      const journal = bootstrapWatcherJournal({
+        root: journals,
+        host_lock: lock,
+        coordinates: {
+          vault_id: "vault",
+          configuration_digest: D,
+          policy_digest: D,
+          effective_profile_digest: D,
+          anchor_coherent_manifest_digest: null,
+        },
+      });
+      const bundle = genesisBundle();
+      assert.throws(() => publishWatcherCoherentActivation({
+        directory: watcher,
+        journal,
+        bundle,
+        on_boundary(boundary) {
+          if (attack === "extra_sibling" && boundary === "pointer:guard_stage") {
+            writeFileSync(join(watcher.path, "undeclared.json"), "undeclared\n", { mode: 0o600 });
+          }
+          if (attack === "target_swap" && boundary === "pointer:immutable_pointer") {
+            const pointerLeaf = String(bundle.pointer.pointer_digest).slice("sha256:".length);
+            const path = join(watcher.path, `watcher-pointer-${pointerLeaf}.json`);
+            rmSync(path);
+            writeFileSync(path, "swapped\n", { mode: 0o600 });
+          }
+        },
+        on_before_seal_refresh() {
+          if (attack === "retained_content") {
+            writeFileSync(join(watcher.path, "watcher-host.lock"), "tampered\n", { mode: 0o600 });
+          }
+        },
+      }), /GKX_WATCHER_FS_(?:DIRECTORY_CHANGED|PUBLICATION_PREFIX_INVALID)/u);
+      closeWatcherJournal(journal);
+    });
+  }
+});
+
+test("coherent publication authenticates an exact guard-linked crash prefix before recovery", (t) => {
+  const { watcher, journals } = roots(t);
+  const lock = acquireWatcherHostLock(watcher, {
+    operation: "service",
+    service_instance_id: "019b2d14-4233-7db7-87d4-7d81cfaec932",
+    prior_pointer_digest: null,
+    prior_coherent_manifest_digest: null,
+    prior_journal_pointer_digest: null,
+  });
+  const journal = bootstrapWatcherJournal({
+    root: journals,
+    host_lock: lock,
+    coordinates: {
+      vault_id: "vault",
+      configuration_digest: D,
+      policy_digest: D,
+      effective_profile_digest: D,
+      anchor_coherent_manifest_digest: null,
+    },
+  });
+  const bundle = genesisBundle();
+  assert.throws(() => publishWatcherCoherentActivation({
+    directory: watcher,
+    journal,
+    bundle,
+    on_boundary(boundary) {
+      if (boundary === "pointer:guard_linked") throw new Error("SIMULATED_GUARD_LINKED_CRASH");
+    },
+  }), /SIMULATED_GUARD_LINKED_CRASH/u);
+  assert.equal(readWatcherPointer(watcher, "outer"), null, "authenticated guard prefix continues to route genesis");
+  const active = recoverWatcherCoherentActivation({ directory: watcher, journal });
+  assert.deepEqual(active, bundle.active);
+  assert.deepEqual(readWatcherPointer(watcher, "outer"), bundle.pointer);
+  closeWatcherJournal(journal);
+  releaseWatcherHostLock(lock);
+});
+
 test("one-pass Phase3 outcome derives and publishes a real genesis ServiceGeneration", async (t) => {
   const { watcher, journals, retrieval, vaultPath } = roots(t);
   const lock = acquireWatcherHostLock(watcher, {
@@ -336,7 +597,7 @@ test("one-pass Phase3 outcome derives and publishes a real genesis ServiceGenera
   assert.equal(readWatcherJournalActive(journal).pointer_digest, published.pointer.pointer_digest);
   const searched = await searchWatcherCoherentGeneration({
     watcher_directory: watcher,
-    retrieval_directory: retrieval,
+    retrieval_directory: openWatcherDirectory(retrieval.path),
     vault_root: vaultPath,
     configuration_digest: configurationDigest,
     policy_digest: policyDigest,
@@ -353,7 +614,7 @@ test("one-pass Phase3 outcome derives and publishes a real genesis ServiceGenera
   assert.equal(searched.result.hits[0].chunk.source_path, "accepted.md");
   await assert.rejects(() => searchWatcherCoherentGeneration({
     watcher_directory: watcher,
-    retrieval_directory: retrieval,
+    retrieval_directory: openWatcherDirectory(retrieval.path),
     vault_root: vaultPath,
     configuration_digest: `sha256:${"f".repeat(64)}`,
     policy_digest: policyDigest,

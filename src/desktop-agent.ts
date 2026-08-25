@@ -42,7 +42,15 @@ import {
 } from "./index";
 import { retrievalCanonicalDigest } from "./retrieval/digest";
 import { startWatcherHost } from "./watcher/host";
-import { ensureWatcherStatusDirectory, revalidateWatcherDirectory } from "./watcher/fs-authority";
+import {
+  ensureWatcherStatusDirectory,
+  openWatcherDirectory,
+  readWatcherFile,
+  revalidateWatcherDirectory,
+  watcherLeafExists,
+  writeExistingWatcherFile,
+  writeNewWatcherFile,
+} from "./watcher/fs-authority";
 
 /** The seven-level sensitivity vocabulary (GKOS §11), fail-closed to secret. */
 export const SENSITIVITY_LEVELS: readonly GkxSensitivity[] = [
@@ -487,7 +495,7 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   const tokenPath = path.join(path.dirname(args.statusFile), "desktop-agent.token");
   // S is a security capability, not a side effect of token/status creation.
   // Existing unsafe custom roots fail before either legacy file is touched.
-  const statusCapability = ensureWatcherStatusDirectory(args.statusFile);
+  let statusCapability = ensureWatcherStatusDirectory(args.statusFile);
   const vaultName = path.basename(args.notesDir) || "vault";
   const initialStatus: StatusDoc = {
     pid: process.pid,
@@ -501,12 +509,25 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
     last_scan_iso: null,
   };
   const token = loadOrCreateToken(tokenPath);
+  // Token creation is the one protected legacy mutation that precedes the
+  // watcher service. On POSIX an initial create changes the S directory seal;
+  // rebind only after securely reopening the exact token that was just loaded.
+  const tokenDirectory = openWatcherDirectory(path.dirname(args.statusFile));
+  const reopenedToken = readWatcherFile(tokenDirectory, "desktop-agent.token", { maximum_bytes: 4_096 });
+  if (reopenedToken.bytes.toString("utf8").trim() !== token) throw new Error("GKX_WATCHER_SERVICE_TOKEN_INVALID");
+  statusCapability = tokenDirectory;
   let latestStatus = initialStatus;
   const writeStatus = (status: StatusDoc): void => {
     latestStatus = status;
     try {
       revalidateWatcherDirectory(statusCapability);
-      fs.writeFileSync(args.statusFile, JSON.stringify(status, null, 2), { mode: 0o600 });
+      const bytes = Buffer.from(JSON.stringify(status, null, 2), "utf8");
+      const statusLeaf = path.basename(args.statusFile);
+      if (watcherLeafExists(statusCapability, statusLeaf)) {
+        writeExistingWatcherFile(statusCapability, statusLeaf, bytes);
+      } else {
+        writeNewWatcherFile(statusCapability, statusLeaf, bytes);
+      }
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error("failed to write status file:", (e as Error).message);

@@ -402,23 +402,35 @@ export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
     ...(rerankProvider ? { rerank_provider: rerankProvider } : {}),
   };
   if (watcherAuthorityActive) {
+    const authorityStarted = performance.now();
     try {
-      const opened = await watcherHost.searchWatcherCoherentGeneration({
-        watcher_directory: watcherHost.openWatcherDirectory(join(vaultDir, ".gkx", "derived", "watcher")),
-        retrieval_directory: watcherHost.openWatcherDirectory(stateDirectory),
-        vault_root: vaultDir,
-        configuration_digest: configurationDigest,
-        policy_digest: policyDigest,
-        effective_profile_digest: effectiveProfile.coordinate.effective_profile_digest,
-        request: retrievalSearchRequest(query, normalizedAsOf, limit, retrievalConfig, effectiveConfiguration),
-        coordinator_options: {
-          discoverability_policy: coordinatorOptions.discoverability_policy,
-          source_discoverability_policy: coordinatorOptions.source_discoverability_policy,
-          ...(vectorProvider ? { vector_provider: vectorProvider } : {}),
-          ...(rerankProvider ? { rerank_provider: rerankProvider } : {}),
-        },
-      });
-      return opened.result;
+      for (;;) {
+        try {
+          const opened = await watcherHost.searchWatcherCoherentGeneration({
+            // A concurrent watcher commit legitimately retires a previously
+            // opened POSIX directory seal. Reopen both capabilities for each
+            // bounded selection attempt; never refresh a stale capability.
+            watcher_directory: watcherHost.openWatcherDirectory(join(vaultDir, ".gkx", "derived", "watcher")),
+            retrieval_directory: watcherHost.openWatcherDirectory(stateDirectory),
+            vault_root: vaultDir,
+            configuration_digest: configurationDigest,
+            policy_digest: policyDigest,
+            effective_profile_digest: effectiveProfile.coordinate.effective_profile_digest,
+            request: retrievalSearchRequest(query, normalizedAsOf, limit, retrievalConfig, effectiveConfiguration),
+            coordinator_options: {
+              discoverability_policy: coordinatorOptions.discoverability_policy,
+              source_discoverability_policy: coordinatorOptions.source_discoverability_policy,
+              ...(vectorProvider ? { vector_provider: vectorProvider } : {}),
+              ...(rerankProvider ? { rerank_provider: rerankProvider } : {}),
+            },
+          });
+          return opened.result;
+        } catch (error) {
+          if (String(error?.message ?? error) !== "GKX_WATCHER_FS_DIRECTORY_CHANGED" ||
+              performance.now() - authorityStarted >= 10_000) throw error;
+          await new Promise((resolveWait) => setTimeout(resolveWait, 25));
+        }
+      }
     } catch { throw new Error("GKX_CLI_WATCHER_SEARCH_AUTHORITY_FAILURE"); }
   }
   if (ingestAuthorityActive) {

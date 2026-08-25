@@ -24,6 +24,7 @@ import {
   recordWatcherJournalFailure,
   readWatcherJournalActive,
   readWatcherFailureRetryEpoch,
+  revalidateWatcherDirectory,
   releaseWatcherHostLock,
   recoverWatcherJournalBootstrap,
   recoverWatcherJournalReset,
@@ -37,6 +38,7 @@ import {
   persistWatcherFailureAuthorityArtifacts,
   watcherDigest,
   watcherCanonicalBytes,
+  writeNewWatcherFile,
   validateWatcherBootstrapTerminalEvidence,
   watcherJournalResetRecoveryActive,
 } from "../dist/watcher-host.mjs";
@@ -104,9 +106,7 @@ function prepareResetFixture(watcher, journals) {
     ["watcher-active.json", bundle.pointer],
     [bundle.pointer.coherent_manifest_file, bundle.manifest],
   ]) {
-    const file = join(watcher.path, leaf);
-    writeFileSync(file, watcherCanonicalBytes(value), { flag: "wx", mode: 0o600 });
-    if (process.platform !== "win32") chmodSync(file, 0o600);
+    writeNewWatcherFile(watcher, leaf, watcherCanonicalBytes(value));
   }
   releaseWatcherHostLock(serviceLock);
   const resetLock = acquireWatcherHostLock(watcher, {
@@ -129,12 +129,11 @@ function resetCrashProgram(watcherPath, journalRootPath, boundary, exitCode, pau
     ? 'process.stdout.write("READY\\n"); Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0);'
     : `process.exit(${exitCode});`;
   return `
-    import { chmodSync, readFileSync, writeFileSync } from "node:fs";
-    import { join } from "node:path";
+    import { readFileSync } from "node:fs";
     import {
       acquireWatcherHostLock, bootstrapWatcherJournal, finalizeWatcherJournalActivation,
       openWatcherDirectory, prepareWatcherJournalActivation, releaseWatcherHostLock,
-      resetWatcherJournal, watcherCanonicalBytes,
+      resetWatcherJournal, watcherCanonicalBytes, writeNewWatcherFile,
     } from ${JSON.stringify(moduleUrl)};
     const fixture = JSON.parse(readFileSync(new URL(${JSON.stringify(fixtureUrl)}), "utf8"));
     const row = fixture.semantic_cases.find((item) => item.case_id === "coherent-activation-complete");
@@ -159,9 +158,7 @@ function resetCrashProgram(watcherPath, journalRootPath, boundary, exitCode, pau
       [\`watcher-pointer-\${bundle.pointer.pointer_digest.slice(7)}.json\`, bundle.pointer],
       ["watcher-active.json", bundle.pointer], [bundle.pointer.coherent_manifest_file, bundle.manifest],
     ]) {
-      const file = join(watcher.path, leaf);
-      writeFileSync(file, watcherCanonicalBytes(value), { flag: "wx", mode: 0o600 });
-      if (process.platform !== "win32") chmodSync(file, 0o600);
+      writeNewWatcherFile(watcher, leaf, watcherCanonicalBytes(value));
     }
     releaseWatcherHostLock(serviceLock);
     const resetLock = acquireWatcherHostLock(watcher, { operation: "journal_reset", service_instance_id: null,
@@ -242,12 +239,14 @@ test("journal bootstrap publishes exact schema and reopens the committed generat
   assert.equal(handle.meta.anchor_coherent_manifest_digest, null);
   assert.equal(handle.generation.database_file, "watcher-journal.sqlite");
   closeWatcherJournal(handle);
+  assert.doesNotThrow(() => revalidateWatcherDirectory(handle.generation_directory));
   releaseWatcherHostLock(lock);
   const reopened = openWatcherJournal(journals);
   assert.ok(reopened);
   assert.equal(reopened.pointer.journal_generation_digest, reopened.generation.journal_generation_digest);
   validateWatcherJournalAuthority(reopened.database);
   closeWatcherJournal(reopened);
+  assert.doesNotThrow(() => revalidateWatcherDirectory(reopened.generation_directory));
   assert.deepEqual(boundaries, [
     "planned_target_stage", "planned_target", "witness_stage", "witness", "guard_stage", "guard", "child", "database", "generation_descriptor",
     "pointer_artifact", "bootstrap_temp", "fixed_pointer", "bootstrap_authority", "guard_removed",
@@ -271,25 +270,27 @@ test("dead-owner recovery selects the exact staged PlannedTarget and reaches a n
     }, on_boundary(boundary) { if (boundary === "planned_target_stage") process.exit(91); } });
   `], { encoding: "utf8" });
   assert.equal(child.status, 91, child.stderr);
+  const recoveredWatcher = openWatcherDirectory(watcher.path);
+  const recoveredJournals = openWatcherDirectory(journals.path);
   const recovered = recoverWatcherJournalBootstrap({
-    watcher_root: watcher, journal_root: journals, service_instance_id: "019b2d14-4234-7db7-87d4-7d81cfaec932",
+    watcher_root: recoveredWatcher, journal_root: recoveredJournals, service_instance_id: "019b2d14-4234-7db7-87d4-7d81cfaec932",
     prior_pointer_digest: null, prior_coherent_manifest_digest: null,
     coordinates: { vault_id: "vault", configuration_digest: D, policy_digest: D, effective_profile_digest: D, anchor_coherent_manifest_digest: null },
     revalidate_namespace() {},
   });
   assert.equal(recovered.journal.pointer.prior_pointer_digest, null);
   assert.equal(recovered.journal.generation.journal_instance_id, recovered.journal.meta.journal_instance_id);
-  const leaves = listWatcherLeaves(watcher);
+  const leaves = listWatcherLeaves(recoveredWatcher);
   assert.ok(leaves.includes("watcher-journal-bootstrap-recovery-bridge.json"));
   assert.ok(!leaves.includes("watcher-authority.recovery"));
   assert.ok(!leaves.includes("watcher-journal-bootstrap-recovery-executor.json"));
-  assert.equal(listWatcherLeaves(journals).filter((leaf) => leaf === "watcher-journal-bootstrap-target-selector.json").length, 1);
+  assert.equal(listWatcherLeaves(recoveredJournals).filter((leaf) => leaf === "watcher-journal-bootstrap-target-selector.json").length, 1);
   closeWatcherJournal(recovered.journal);
   releaseWatcherHostLock(recovered.host_lock);
   const lateIncomplete = `.watcher-journal-bootstrap-target-selector.${process.pid}.${"f".repeat(32)}.json.gkos-watcher.candidate`;
   writeFileSync(join(journals.path, lateIncomplete), "{", { flag: "wx", mode: 0o600 });
   if (process.platform !== "win32") chmodSync(join(journals.path, lateIncomplete), 0o600);
-  validateWatcherBootstrapTerminalEvidence(watcher, journals);
+  validateWatcherBootstrapTerminalEvidence(openWatcherDirectory(watcher.path), openWatcherDirectory(journals.path));
   assert.equal(existsSync(join(journals.path, lateIncomplete)), false);
   const selected = JSON.parse(readFileSync(join(journals.path, "watcher-journal-bootstrap-target-selector.json"), "utf8"));
   const wrongMaterial = { ...selected, root_recovery_claim_digest: D };
@@ -298,7 +299,8 @@ test("dead-owner recovery selects the exact staged PlannedTarget and reaches a n
   const wrongLeaf = `.watcher-journal-bootstrap-target-selector.${wrong.selector_process_id}.${wrong.owner_nonce}.json.gkos-watcher.candidate`;
   writeFileSync(join(journals.path, wrongLeaf), watcherCanonicalBytes(wrong), { flag: "wx", mode: 0o600 });
   if (process.platform !== "win32") chmodSync(join(journals.path, wrongLeaf), 0o600);
-  assert.throws(() => validateWatcherBootstrapTerminalEvidence(watcher, journals), /GKX_WATCHER_BOOTSTRAP_TARGET_SELECTOR_INVALID/u);
+  assert.throws(() => validateWatcherBootstrapTerminalEvidence(openWatcherDirectory(watcher.path), openWatcherDirectory(journals.path)),
+    /GKX_WATCHER_BOOTSTRAP_TARGET_SELECTOR_INVALID/u);
   assert.equal(existsSync(join(journals.path, wrongLeaf)), true);
 });
 
@@ -325,15 +327,17 @@ test("dead-owner bootstrap recovery converges at every durable happy-path bounda
         }, on_boundary(value) { if (value === ${JSON.stringify(boundary)}) process.exit(92); } });
       `], { encoding: "utf8" });
       assert.equal(child.status, 92, `${boundary}: ${child.stderr}`);
+      const recoveredWatcher = openWatcherDirectory(watcher.path);
+      const recoveredJournals = openWatcherDirectory(journals.path);
       const recovered = recoverWatcherJournalBootstrap({
-        watcher_root: watcher, journal_root: journals, service_instance_id: "019b2d14-4234-7db7-87d4-7d81cfaec932",
+        watcher_root: recoveredWatcher, journal_root: recoveredJournals, service_instance_id: "019b2d14-4234-7db7-87d4-7d81cfaec932",
         prior_pointer_digest: null, prior_coherent_manifest_digest: null,
         coordinates: { vault_id: "vault", configuration_digest: D, policy_digest: D, effective_profile_digest: D, anchor_coherent_manifest_digest: null },
         revalidate_namespace() {},
       });
       assert.equal(recovered.journal.pointer.journal_generation_digest, recovered.journal.generation.journal_generation_digest);
-      assert.ok(listWatcherLeaves(watcher).includes("watcher-journal-bootstrap-recovery-bridge.json"));
-      assert.ok(listWatcherLeaves(journals).includes("watcher-journal-bootstrap-target-selector.json"));
+      assert.ok(listWatcherLeaves(recoveredWatcher).includes("watcher-journal-bootstrap-recovery-bridge.json"));
+      assert.ok(listWatcherLeaves(recoveredJournals).includes("watcher-journal-bootstrap-target-selector.json"));
       closeWatcherJournal(recovered.journal);
       releaseWatcherHostLock(recovered.host_lock);
     });
@@ -372,17 +376,19 @@ test("recovery-of-recovery hands off linearly at every claimant boundary", async
           revalidate_namespace() {}, on_boundary(value) { if (value === ${JSON.stringify(boundary)}) process.exit(94); } });
       `], { encoding: "utf8" });
       assert.equal(second.status, 94, `${boundary}: ${second.stderr}`);
+      const recoveredWatcher = openWatcherDirectory(watcher.path);
+      const recoveredJournals = openWatcherDirectory(journals.path);
       const recovered = recoverWatcherJournalBootstrap({
-        watcher_root: watcher, journal_root: journals, service_instance_id: "019b2d14-4235-7db7-87d4-7d81cfaec932",
+        watcher_root: recoveredWatcher, journal_root: recoveredJournals, service_instance_id: "019b2d14-4235-7db7-87d4-7d81cfaec932",
         prior_pointer_digest: null, prior_coherent_manifest_digest: null,
         coordinates: { vault_id: "vault", configuration_digest: D, policy_digest: D, effective_profile_digest: D, anchor_coherent_manifest_digest: null },
         revalidate_namespace() {},
       });
-      const executorArtifacts = listWatcherLeaves(watcher).filter((leaf) => /^watcher-journal-bootstrap-recovery-executor-[0-9a-f]{64}\.json$/u.test(leaf));
+      const executorArtifacts = listWatcherLeaves(recoveredWatcher).filter((leaf) => /^watcher-journal-bootstrap-recovery-executor-[0-9a-f]{64}\.json$/u.test(leaf));
       assert.ok(executorArtifacts.length >= (recoveryBoundaries.indexOf(boundary) >= recoveryBoundaries.indexOf("executor") ? 2 : 1));
       closeWatcherJournal(recovered.journal);
       releaseWatcherHostLock(recovered.host_lock);
-      validateWatcherBootstrapTerminalEvidence(watcher, journals);
+      validateWatcherBootstrapTerminalEvidence(recoveredWatcher, recoveredJournals);
     });
   }
 });
@@ -499,17 +505,19 @@ test("journal reset recovery converges from every exposed durable Plan, SQLite, 
       const child = spawnSync(process.execPath, ["--input-type=module", "-e",
         resetCrashProgram(watcher.path, journals.path, boundary, exitCode)], { encoding: "utf8" });
       assert.equal(child.status, exitCode, `${boundary}: ${child.stderr}`);
-      const recovered = recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals });
+      const recoveredWatcher = openWatcherDirectory(watcher.path);
+      const recoveredJournals = openWatcherDirectory(journals.path);
+      const recovered = recoverWatcherJournalReset({ watcher_root: recoveredWatcher, journal_root: recoveredJournals });
       if (boundary === "current_lock_released") assert.equal(recovered, null);
       else assert.equal(recovered?.status, "reset", boundary);
-      assert.equal(watcherJournalResetRecoveryActive(watcher, journals), false, boundary);
-      const reopened = openWatcherJournal(journals);
+      assert.equal(watcherJournalResetRecoveryActive(recoveredWatcher, recoveredJournals), false, boundary);
+      const reopened = openWatcherJournal(recoveredJournals);
       assert.ok(reopened, boundary);
       assert.notEqual(reopened.pointer.prior_pointer_digest, null, boundary);
       assert.notEqual(reopened.meta.anchor_coherent_manifest_digest, null, boundary);
       assert.equal(readWatcherJournalActive(reopened), null, boundary);
       closeWatcherJournal(reopened);
-      const watcherLeaves = listWatcherLeaves(watcher);
+      const watcherLeaves = listWatcherLeaves(recoveredWatcher);
       assert.equal(watcherLeaves.includes("watcher-authority.lock"), false, boundary);
       assert.equal(watcherLeaves.includes("watcher-authority.recovery"), false, boundary);
       assert.equal(watcherLeaves.includes("watcher-journal-reset-recovery-executor.json"), false, boundary);
@@ -528,17 +536,19 @@ test("journal reset recovers exact sub-write cuts without adopting ambiguous aut
         const child = spawnSync(process.execPath, ["--input-type=module", "-e",
           resetCrashProgram(watcher.path, journals.path, boundary, exitCode)], { encoding: "utf8" });
         assert.equal(child.status, exitCode, `${boundary}: ${child.stderr}`);
-        const result = recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals });
+        const recoveredWatcher = openWatcherDirectory(watcher.path);
+        const recoveredJournals = openWatcherDirectory(journals.path);
+        const result = recoverWatcherJournalReset({ watcher_root: recoveredWatcher, journal_root: recoveredJournals });
         if (prefix === "plan_stage" && ["created", "partial_write"].includes(cut)) {
           assert.equal(result, null, boundary);
-          assert.equal(watcherJournalResetRecoveryActive(watcher, journals), false, boundary);
-          const old = openWatcherJournal(journals);
+          assert.equal(watcherJournalResetRecoveryActive(recoveredWatcher, recoveredJournals), false, boundary);
+          const old = openWatcherJournal(recoveredJournals);
           assert.ok(old, boundary);
           assert.equal(old.pointer.prior_pointer_digest, null, boundary);
           closeWatcherJournal(old);
         } else {
           assert.equal(result?.status, "reset", boundary);
-          assert.equal(watcherJournalResetRecoveryActive(watcher, journals), false, boundary);
+          assert.equal(watcherJournalResetRecoveryActive(recoveredWatcher, recoveredJournals), false, boundary);
         }
       });
     }
@@ -554,9 +564,11 @@ test("journal reset recovers exact sub-write cuts without adopting ambiguous aut
       const recovery = spawnSync(process.execPath, ["--input-type=module", "-e",
         resetRecoveryCrashProgram(watcher.path, journals.path, boundary, 120 + index)], { encoding: "utf8" });
       assert.equal(recovery.status, 120 + index, `${boundary}: ${recovery.stderr}`);
-      const result = recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals });
+      const recoveredWatcher = openWatcherDirectory(watcher.path);
+      const recoveredJournals = openWatcherDirectory(journals.path);
+      const result = recoverWatcherJournalReset({ watcher_root: recoveredWatcher, journal_root: recoveredJournals });
       assert.equal(result?.status, "reset", boundary);
-      assert.equal(watcherJournalResetRecoveryActive(watcher, journals), false, boundary);
+      assert.equal(watcherJournalResetRecoveryActive(recoveredWatcher, recoveredJournals), false, boundary);
     });
   }
 });
@@ -584,29 +596,31 @@ test("live reset owner prevents contender cleanup of created or partial Plan and
         child.once("error", rejectReady);
         child.once("exit", (code) => rejectReady(new Error(`paused reset owner exited ${code}: ${stderr}`)));
       });
+      const liveWatcher = openWatcherDirectory(watcher.path);
+      const liveJournals = openWatcherDirectory(journals.path);
       const isPlan = boundary.startsWith("plan_");
       const leaf = isPlan
         ? ".watcher-journal-reset-recovery-plan.json.gkos-watcher.stage"
-        : listWatcherLeaves(watcher)
+        : listWatcherLeaves(liveWatcher)
           .find((item) => /^\.watcher-journal-reset-recovery-bridge-[0-9a-f]{64}\.json\.gkos-watcher\.stage$/u.test(item));
       assert.equal(typeof leaf, "string");
       const path = join(isPlan ? journals.path : watcher.path, leaf);
       const before = readFileSync(path);
       assert.throws(
-        () => recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals }),
+        () => recoverWatcherJournalReset({ watcher_root: liveWatcher, journal_root: liveJournals }),
         /GKX_WATCHER_HOST_LOCKED/u,
       );
       assert.deepEqual(readFileSync(path), before, `${boundary}: live-owner evidence changed`);
       const exited = once(child, "exit");
       assert.equal(child.kill(), true);
       await exited;
-      const result = recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals });
+      const result = recoverWatcherJournalReset({ watcher_root: liveWatcher, journal_root: liveJournals });
       if (isPlan) {
         assert.equal(result, null);
         assert.equal(existsSync(path), false);
       } else {
         assert.equal(result?.status, "reset");
-        assert.equal(watcherJournalResetRecoveryActive(watcher, journals), false);
+        assert.equal(watcherJournalResetRecoveryActive(liveWatcher, liveJournals), false);
       }
     });
   }
@@ -635,8 +649,7 @@ test("live-original reset stops before further mutation when recovery authority 
         created_at: "2026-08-20T00:00:00.000Z",
       };
       const claim = { ...claimBase, claim_digest: watcherDigest(claimBase) };
-      writeFileSync(join(watcher.path, "watcher-authority.recovery"), watcherCanonicalBytes(claim), { flag: "wx", mode: 0o600 });
-      if (process.platform !== "win32") chmodSync(join(watcher.path, "watcher-authority.recovery"), 0o600);
+      writeNewWatcherFile(watcher, "watcher-authority.recovery", watcherCanonicalBytes(claim));
     },
   }), /GKX_WATCHER_RESET_RECOVERY_AUTHORITY_CONFLICT/u);
   assert.equal(injected, true);
@@ -665,16 +678,18 @@ test("journal reset recovery-of-recovery hands off dead executors through target
       const recovery = spawnSync(process.execPath, ["--input-type=module", "-e",
         resetRecoveryCrashProgram(watcher.path, journals.path, boundary, recoveryExit)], { encoding: "utf8" });
       assert.equal(recovery.status, recoveryExit, `${boundary}/recovery: ${recovery.stderr}`);
-      const result = recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals });
+      const recoveredWatcher = openWatcherDirectory(watcher.path);
+      const recoveredJournals = openWatcherDirectory(journals.path);
+      const result = recoverWatcherJournalReset({ watcher_root: recoveredWatcher, journal_root: recoveredJournals });
       if (boundary === "current_lock_released") assert.equal(result, null);
       else assert.equal(result?.status, "reset", boundary);
-      assert.equal(watcherJournalResetRecoveryActive(watcher, journals), false, boundary);
-      const reopened = openWatcherJournal(journals);
+      assert.equal(watcherJournalResetRecoveryActive(recoveredWatcher, recoveredJournals), false, boundary);
+      const reopened = openWatcherJournal(recoveredJournals);
       assert.ok(reopened, boundary);
       assert.notEqual(reopened.pointer.prior_pointer_digest, null, boundary);
       assert.notEqual(reopened.meta.anchor_coherent_manifest_digest, null, boundary);
       closeWatcherJournal(reopened);
-      const watcherLeaves = listWatcherLeaves(watcher);
+      const watcherLeaves = listWatcherLeaves(recoveredWatcher);
       assert.equal(watcherLeaves.includes("watcher-authority.lock"), false, boundary);
       assert.equal(watcherLeaves.includes("watcher-authority.recovery"), false, boundary);
       assert.equal(watcherLeaves.includes("watcher-journal-reset-recovery-executor.json"), false, boundary);
@@ -705,9 +720,11 @@ test("journal reset finite SQLite states remove only exact incomplete authority 
       const state = resetDatabaseCrashState(watcher, journals);
       mutate(state);
       if (process.platform !== "win32") chmodSync(state.databasePath, 0o600);
-      const result = recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals });
+      const recoveredWatcher = openWatcherDirectory(watcher.path);
+      const recoveredJournals = openWatcherDirectory(journals.path);
+      const result = recoverWatcherJournalReset({ watcher_root: recoveredWatcher, journal_root: recoveredJournals });
       assert.equal(result?.status, "reset");
-      const reopened = openWatcherJournal(journals);
+      const reopened = openWatcherJournal(recoveredJournals);
       assert.ok(reopened);
       assert.equal(reopened.generation.journal_generation_digest, result.new_journal_generation_digest);
       closeWatcherJournal(reopened);
@@ -735,7 +752,9 @@ test("journal reset finite SQLite states remove only exact incomplete authority 
       const { watcher, journals } = roots(childTest);
       const state = resetDatabaseCrashState(watcher, journals);
       mutate(state);
-      assert.throws(() => recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals }), expected);
+      assert.throws(() => recoverWatcherJournalReset({
+        watcher_root: openWatcherDirectory(watcher.path), journal_root: openWatcherDirectory(journals.path),
+      }), expected);
       assert.equal(existsSync(join(journals.path, "watcher-journal-reset-recovery-plan.json")), true);
     });
   }
@@ -754,10 +773,14 @@ test("journal reset recovery retains Plan, Bridge, Executor, outer, and namespac
       const child = spawnSync(process.execPath, ["--input-type=module", "-e",
         resetCrashProgram(watcher.path, journals.path, boundary, 121)], { encoding: "utf8" });
       assert.equal(child.status, 121, child.stderr);
-      const primary = locate(watcher, journals);
+      const recoveredWatcher = openWatcherDirectory(watcher.path);
+      const recoveredJournals = openWatcherDirectory(journals.path);
+      const primary = locate(recoveredWatcher, recoveredJournals);
       assert.equal(typeof primary, "string");
       linkSync(primary, `${primary}.outside-link`);
-      assert.throws(() => recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals }), /GKX_WATCHER_/u);
+      assert.throws(() => recoverWatcherJournalReset({
+        watcher_root: openWatcherDirectory(watcher.path), journal_root: openWatcherDirectory(journals.path),
+      }), /GKX_WATCHER_/u);
       assert.equal(existsSync(primary), true);
     });
   }
@@ -770,7 +793,9 @@ test("journal reset recovery retains Plan, Bridge, Executor, outer, and namespac
     assert.equal(child.status, exitCode, child.stderr);
     const planFile = join(journals.path, "watcher-journal-reset-recovery-plan.json");
     linkSync(planFile, join(journals.path, "watcher-journal-reset-recovery-plan.alias"));
-    assert.throws(() => recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals }));
+    assert.throws(() => recoverWatcherJournalReset({
+      watcher_root: openWatcherDirectory(watcher.path), journal_root: openWatcherDirectory(journals.path),
+    }));
     assert.equal(existsSync(planFile), true);
   });
 
@@ -782,14 +807,16 @@ test("journal reset recovery retains Plan, Bridge, Executor, outer, and namespac
     const recovery = spawnSync(process.execPath, ["--input-type=module", "-e",
       resetRecoveryCrashProgram(watcher.path, journals.path, "bridge_stage", 87)], { encoding: "utf8" });
     assert.equal(recovery.status, 87, recovery.stderr);
-    const stageLeaf = listWatcherLeaves(watcher)
+    const stageLeaf = listWatcherLeaves(openWatcherDirectory(watcher.path))
       .find((leaf) => /^\.watcher-journal-reset-recovery-bridge-[0-9a-f]{64}\.json\.gkos-watcher\.stage$/u.test(leaf));
     assert.ok(stageLeaf);
     const bytes = readFileSync(join(watcher.path, stageLeaf));
     const bridge = JSON.parse(bytes.toString("utf8"));
     writeFileSync(join(watcher.path, `watcher-journal-reset-recovery-bridge-${bridge.bridge_digest.slice(7)}.json`), bytes,
       { flag: "wx", mode: 0o600 });
-    assert.throws(() => recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals }), /GKX_WATCHER_/u);
+    assert.throws(() => recoverWatcherJournalReset({
+      watcher_root: openWatcherDirectory(watcher.path), journal_root: openWatcherDirectory(journals.path),
+    }), /GKX_WATCHER_/u);
     assert.equal(existsSync(join(watcher.path, stageLeaf)), true);
   });
 
@@ -803,7 +830,9 @@ test("journal reset recovery retains Plan, Bridge, Executor, outer, and namespac
     assert.equal(recovery.status, 85, recovery.stderr);
     linkSync(join(watcher.path, "watcher-journal-reset-recovery-executor.json"),
       join(watcher.path, "watcher-journal-reset-recovery-executor.extra"));
-    assert.throws(() => recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals }), /GKX_WATCHER_/u);
+    assert.throws(() => recoverWatcherJournalReset({
+      watcher_root: openWatcherDirectory(watcher.path), journal_root: openWatcherDirectory(journals.path),
+    }), /GKX_WATCHER_/u);
     assert.equal(existsSync(join(watcher.path, "watcher-journal-reset-recovery-executor.json")), true);
   });
 
@@ -813,7 +842,9 @@ test("journal reset recovery retains Plan, Bridge, Executor, outer, and namespac
       resetCrashProgram(watcher.path, journals.path, "plan", 83)], { encoding: "utf8" });
     assert.equal(child.status, 83, child.stderr);
     writeFileSync(join(watcher.path, "watcher-active.json"), "{}\n");
-    assert.throws(() => recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals }));
+    assert.throws(() => recoverWatcherJournalReset({
+      watcher_root: openWatcherDirectory(watcher.path), journal_root: openWatcherDirectory(journals.path),
+    }));
     assert.equal(existsSync(join(journals.path, "watcher-journal-reset-recovery-plan.json")), true);
   });
 
@@ -823,7 +854,9 @@ test("journal reset recovery retains Plan, Bridge, Executor, outer, and namespac
       resetCrashProgram(watcher.path, journals.path, "plan", 82)], { encoding: "utf8" });
     assert.equal(child.status, 82, child.stderr);
     writeFileSync(join(journals.path, ".gkos-watcher-journal-reset.unratified"), "x", { mode: 0o600 });
-    assert.throws(() => recoverWatcherJournalReset({ watcher_root: watcher, journal_root: journals }),
+    assert.throws(() => recoverWatcherJournalReset({
+      watcher_root: openWatcherDirectory(watcher.path), journal_root: openWatcherDirectory(journals.path),
+    }),
       /GKX_WATCHER_RESET_RECOVERY_NAMESPACE_INVALID/u);
     assert.equal(existsSync(join(journals.path, "watcher-journal-reset-recovery-plan.json")), true);
   });
@@ -841,9 +874,7 @@ test("failure-retry unchanged success commits exactly four rows and preserves Ac
   const pointer = bundle.current_outer_pointer;
   const retry = bundle.failure_retry_bundle;
   const put = (directory, leaf, value) => {
-    const path = join(directory.path, leaf);
-    writeFileSync(path, watcherCanonicalBytes(value), { flag: "wx", mode: 0o600 });
-    if (process.platform !== "win32") chmodSync(path, 0o600);
+    writeNewWatcherFile(directory, leaf, watcherCanonicalBytes(value));
   };
 
   const lock = acquireWatcherHostLock(watcher, {
@@ -864,8 +895,8 @@ test("failure-retry unchanged success commits exactly four rows and preserves Ac
   put(watcher, manifest.topology_artifact_file, bundle.current_topology);
   put(watcher, manifest.graph_projection_state.graph_artifact_file, bundle.current_raw_graph);
   const ownerPath = join(retrieval.path, `ingest-generation-${bundle.current_owner_manifest.owner_manifest_digest.slice(7)}.json`);
-  writeFileSync(ownerPath, `${stableJson(bundle.current_owner_manifest)}\n`, { flag: "wx", mode: 0o600 });
-  if (process.platform !== "win32") chmodSync(ownerPath, 0o600);
+  writeNewWatcherFile(retrieval, `ingest-generation-${bundle.current_owner_manifest.owner_manifest_digest.slice(7)}.json`,
+    Buffer.from(`${stableJson(bundle.current_owner_manifest)}\n`, "utf8"));
   put(watcher, retry.failed_observation_authority.observation_artifact_file, retry.failed_observation);
   put(watcher, retry.retry_observation_authority.observation_artifact_file, retry.retry_observation);
   put(watcher, bundle.retry_plan_authority.plan_artifact_file, bundle.retry_plan);
@@ -955,17 +986,18 @@ test("failure-retry unchanged success commits exactly four rows and preserves Ac
   const ownerBytes = readFileSync(ownerPath);
   writeFileSync(ownerPath, '{"unratified":true}\n');
   assert.throws(() => validateWatcherFailureRetryNoopPhysicalAuthority({
-    watcher_directory: watcher, retrieval_directory: retrieval, journal: handle, bundle,
+    watcher_directory: watcher, retrieval_directory: openWatcherDirectory(retrieval.path), journal: handle, bundle,
   }), /GKX_|WATCHER_/u);
   writeFileSync(ownerPath, ownerBytes);
+  const restoredRetrieval = openWatcherDirectory(retrieval.path);
   const activeBefore = readWatcherJournalActive(handle);
   const physical = validateWatcherFailureRetryNoopPhysicalAuthority({
-    watcher_directory: watcher, retrieval_directory: retrieval, journal: handle, bundle,
+    watcher_directory: watcher, retrieval_directory: restoredRetrieval, journal: handle, bundle,
   });
   assert.equal(physical.activation.source_kind, "local_native");
   const boundaries = [];
   const committed = commitWatcherFailureRetryNoop({
-    watcher_directory: watcher, retrieval_directory: retrieval, journal: handle, bundle, revalidate_before_commit() {},
+    watcher_directory: watcher, retrieval_directory: restoredRetrieval, journal: handle, bundle, revalidate_before_commit() {},
     on_boundary(value) { boundaries.push(value); },
   });
   assert.equal(committed.state, "failure_reconciliation_noop_complete");
