@@ -139,8 +139,13 @@ Shutdown refresh body.
     child.once("error", (error) => { clearTimeout(timeout); reject(error); });
     child.once("close", (status, signal) => { clearTimeout(timeout); resolve({ status, signal }); });
   });
-  assert.deepEqual(result, { status: 0, signal: null }, Buffer.concat(stderr).toString("utf8"));
-  assert.equal(Buffer.concat(stderr).toString("utf8"), "");
+  const stderrText = Buffer.concat(stderr).toString("utf8");
+  assert.deepEqual(result, { status: 0, signal: null }, stderrText);
+  if (stderrText !== "") {
+    assert.match(stderrText,
+      /^\(node:\d+\) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n\(Use `node --trace-warnings \.\.\.` to show where the warning was created\)\n$/u,
+      "the shutdown child may emit only Node 22's exact known SQLite experimental warning");
+  }
   assert.equal(Buffer.concat(stdout).toString("utf8"), "closed\n");
 });
 

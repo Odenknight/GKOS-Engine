@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { chmodSync, chownSync, linkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, chownSync, linkSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -24,7 +24,6 @@ import {
   readWatcherJournalActive,
   readWatcherPointer,
   replaceWatcherPublicationFile,
-  revalidateWatcherDirectory,
   releaseWatcherHostLock,
   stageWatcherValidatedGkxIngestGeneration,
   searchWatcherCoherentGeneration,
@@ -301,6 +300,8 @@ test("coherent publication rejects non-private entry files and post-syscall owne
     const { watcher } = roots(child);
     const bytes = Buffer.from("created\n");
     const authority = openWatcherDirectory(watcher.path);
+    let terminalRefreshBoundary = false;
+    let failure;
     assert.throws(() => withAuthorizedWatcherPublication(authority, {
       operations: [{
         step_id: "create", operation: "create_file", leaf: "created.json",
@@ -312,10 +313,19 @@ test("coherent publication rejects non-private entry files and post-syscall owne
       on_after_operation_syscall(stepId) {
         assert.equal(stepId, "create");
         chmodSync(join(watcher.path, "created.json"), 0o644);
+        assert.equal(statSync(join(watcher.path, "created.json")).mode & 0o777, 0o644,
+          "the adversarial seam must actually widen the created file mode");
       },
-    }), /GKX_WATCHER_FS_(?:DIRECTORY_CHANGED|PUBLICATION_PREFIX_INVALID|PUBLICATION_TARGET_INVALID)/u);
-    assert.throws(() => revalidateWatcherDirectory(authority), /GKX_WATCHER_FS_DIRECTORY_CHANGED/u,
-      "a mutated post-syscall snapshot must not refresh the directory seal");
+      on_before_seal_refresh() { terminalRefreshBoundary = true; },
+    }), (error) => {
+      failure = error;
+      return /GKX_WATCHER_FS_(?:DIRECTORY_CHANGED|PUBLICATION_PREFIX_INVALID|PUBLICATION_TARGET_INVALID)/u.test(
+        String(error?.message),
+      );
+    });
+    assert.equal(terminalRefreshBoundary, false, "a widened created file cannot reach terminal seal refresh");
+    assert.match(String(failure?.cause?.message ?? failure?.message), /GKX_WATCHER_FS_PUBLICATION_TARGET_INVALID/u,
+      "the widened post snapshot remains the primary operation failure behind crash-prefix authentication");
   });
 
   async function exerciseTransitionSeams(label, mutate) {
@@ -397,6 +407,8 @@ test("coherent publication rejects non-private entry files and post-syscall owne
       const { watcher } = roots(child);
       const bytes = Buffer.from("created\n");
       const authority = openWatcherDirectory(watcher.path);
+      let terminalRefreshBoundary = false;
+      let failure;
       assert.throws(() => withAuthorizedWatcherPublication(authority, {
         operations: [{
           step_id: "create", operation: "create_file", leaf: "created.json",
@@ -408,10 +420,20 @@ test("coherent publication rejects non-private entry files and post-syscall owne
         on_after_operation_syscall(stepId) {
           assert.equal(stepId, "create");
           chownSync(join(watcher.path, "created.json"), 1, 1);
+          const changed = statSync(join(watcher.path, "created.json"));
+          assert.equal(changed.uid, 1, "the adversarial seam must actually replace the created file owner");
+          assert.equal(changed.gid, 1, "the adversarial seam must actually replace the created file group");
         },
-      }), /GKX_WATCHER_FS_(?:DIRECTORY_CHANGED|PUBLICATION_PREFIX_INVALID|PUBLICATION_TARGET_INVALID)/u);
-      assert.throws(() => revalidateWatcherDirectory(authority), /GKX_WATCHER_FS_DIRECTORY_CHANGED/u,
-        "a foreign-owned post-syscall snapshot must not refresh the directory seal");
+        on_before_seal_refresh() { terminalRefreshBoundary = true; },
+      }), (error) => {
+        failure = error;
+        return /GKX_WATCHER_FS_(?:DIRECTORY_CHANGED|PUBLICATION_PREFIX_INVALID|PUBLICATION_TARGET_INVALID)/u.test(
+          String(error?.message),
+        );
+      });
+      assert.equal(terminalRefreshBoundary, false, "a foreign-owned created file cannot reach terminal seal refresh");
+      assert.match(String(failure?.cause?.message ?? failure?.message), /GKX_WATCHER_FS_PUBLICATION_TARGET_INVALID/u,
+        "the foreign-owned post snapshot remains the primary failure behind crash-prefix authentication");
     });
     await exerciseTransitionSeams("owner drift", (path) => chownSync(path, 1, 1));
   }
