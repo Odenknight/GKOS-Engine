@@ -280,13 +280,17 @@ jobs:
           test/watcher-recovery-contracts.test.mjs
           test/watcher-observation-qualification.test.mjs
 
-      - name: Bundle private Phase 5 watcher qualification runner
-        run: ./node_modules/.bin/esbuild scripts/run-watcher-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$RUNNER_TEMP/phase5-watcher-qualification.mjs"
+      - name: Prepare frozen terminal-Phase-5 watcher qualification host
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/phase5-frozen" 7b5262baee9fcda23d50b0cee0c4977d6e4305e7
+          npm ci --prefix "$RUNNER_TEMP/phase5-frozen"
+          "$RUNNER_TEMP/phase5-frozen/node_modules/.bin/esbuild" "$RUNNER_TEMP/phase5-frozen/scripts/run-watcher-observation-qualification.mjs" --bundle --platform=node --format=esm --target=node22 --outfile="$RUNNER_TEMP/phase5-watcher-qualification.mjs"
 
       - name: Create private watcher observation root
         run: mkdir -m 700 "$RUNNER_TEMP/phase5-watcher-observation-node-${{ matrix.node }}"
 
       - name: Exact watcher observation qualification
+        working-directory: ${{ runner.temp }}/phase5-frozen
         run: node "$RUNNER_TEMP/phase5-watcher-qualification.mjs" --artifact-root "$RUNNER_TEMP/phase5-watcher-observation-node-${{ matrix.node }}"
 
       - name: Reopen exact one-leaf observation artifact
@@ -342,8 +346,13 @@ jobs:
           npm run build
           npm run pack:check
 
-      - name: Bundle private Phase 5 watcher qualification runner
-        run: .\node_modules\.bin\esbuild.cmd scripts/run-watcher-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$env:RUNNER_TEMP/phase5-watcher-qualification.mjs"
+      - name: Prepare frozen terminal-Phase-5 watcher qualification host
+        shell: pwsh
+        run: |
+          $frozen = Join-Path $env:RUNNER_TEMP "phase5-frozen"
+          git worktree add --detach $frozen 7b5262baee9fcda23d50b0cee0c4977d6e4305e7
+          npm ci --prefix $frozen
+          & (Join-Path $frozen "node_modules/.bin/esbuild.cmd") (Join-Path $frozen "scripts/run-watcher-observation-qualification.mjs") --bundle --platform=node --format=esm --target=node22 --outfile="$env:RUNNER_TEMP/phase5-watcher-qualification.mjs"
 
       - name: Create private watcher observation root
         shell: pwsh
@@ -351,6 +360,7 @@ jobs:
 
       - name: Exact watcher observation qualification
         shell: pwsh
+        working-directory: ${{ runner.temp }}/phase5-frozen
         run: node "$env:RUNNER_TEMP/phase5-watcher-qualification.mjs" --artifact-root (Join-Path $env:RUNNER_TEMP "phase5-watcher-observation-node-${{ matrix.node }}")
 
       - name: Reopen exact one-leaf observation artifact

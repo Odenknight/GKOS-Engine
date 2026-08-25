@@ -398,8 +398,11 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
   assert.equal((continuous.match(/timeout-minutes: 15/gu) ?? []).length, 2);
   assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT:/gu) ?? []).length, 3);
   assert.equal((continuous.match(/github\.event\.pull_request\.head\.sha \|\| github\.sha/gu) ?? []).length, 0);
-  assert.equal((continuous.match(/git worktree add --detach/gu) ?? []).length, 2);
+  assert.equal((continuous.match(/git worktree add --detach/gu) ?? []).length, 4);
   assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT: 7b5262baee9fcda23d50b0cee0c4977d6e4305e7/gu) ?? []).length, 2);
+  assert.equal((continuous.match(/Prepare frozen terminal-Phase-5 watcher qualification host/gu) ?? []).length, 2);
+  assert.equal((continuous.match(/working-directory: \$\{\{ runner\.temp \}\}\/phase5-frozen/gu) ?? []).length, 2);
+  assert.equal((continuous.match(/git worktree add --detach [^\r\n]* 7b5262baee9fcda23d50b0cee0c4977d6e4305e7/gu) ?? []).length, 4);
   assert.doesNotMatch(continuous, /timeout 900s/u);
   assert.match(continuous, /--mode cli/u);
   assert.match(continuous, /--mode windows-security/u);
@@ -411,6 +414,7 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
   assert.equal((continuous.match(/actions\/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02/gu) ?? []).length, 3);
   assert.equal(JSON.stringify(packageJson.exports).includes("observation"), false);
   assert.equal(JSON.stringify(packageJson.exports).includes("qualification"), false);
+  assert.equal(packageJson.scripts.test, 'node --test --test-concurrency=1 "test/*.test.mjs"');
 
   assert.equal(retrievalSha256(observation), "sha256:d072360963e0b080bb03495971fc342f567f05b0bf17285830a7418ac3c3f5fa");
   assert.equal((continuous.match(/^  phase4-retrieval-observation-manual:$/gmu) ?? []).length, 1);

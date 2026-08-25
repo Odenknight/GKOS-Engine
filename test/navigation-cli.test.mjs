@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
-import { mkdtemp, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, readdir, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, relative, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import test from "node:test";
 import { promisify } from "node:util";
 
@@ -10,8 +10,12 @@ const exec = promisify(execFile);
 const cli = resolve("bin/gkx.mjs");
 const core = await import("../dist/gkos-engine.mjs");
 
+async function physicalTemporaryRoot(prefix) {
+  return realpath(await mkdtemp(join(tmpdir(), prefix)));
+}
+
 async function fixture() {
-  const root = await mkdtemp(join(tmpdir(), "gkx-nav-cli-"));
+  const root = await physicalTemporaryRoot("gkx-nav-cli-");
   await mkdir(join(root, "topic"));
   await mkdir(join(root, "_archive", "moc-runs", "demo"), { recursive: true });
   await writeFile(join(root, "topic", "Public.md"), "---\nuid: 123e4567-e89b-42d3-a456-426614174000\nsensitivity: public\ntitle: Public\n---\nPUBLIC-BODY\n");
@@ -48,7 +52,7 @@ test("all nav analysis commands emit stdout and leave source bytes untouched", a
 });
 
 test("nav context never treats body or fenced-code keys as frontmatter", async () => {
-  const root = await mkdtemp(join(tmpdir(), "gkx-nav-body-frontmatter-"));
+  const root = await physicalTemporaryRoot("gkx-nav-body-frontmatter-");
   await writeFile(join(root, "Quoted-Fixture.md"), [
     "# Quoted fixture",
     "```yaml",
@@ -66,7 +70,7 @@ test("nav context never treats body or fenced-code keys as frontmatter", async (
 });
 
 test("nav context rejects duplicate public identities with stable code and no source metadata", async () => {
-  const root = await mkdtemp(join(tmpdir(), "gkx-nav-duplicate-"));
+  const root = await physicalTemporaryRoot("gkx-nav-duplicate-");
   const uid = "123e4567-e89b-42d3-a456-426614174777";
   await writeFile(join(root, "ONE-SECRET-NAME.md"), `---\nuid: ${uid}\nsensitivity: public\n---\nONE-SECRET-BODY\n`);
   await writeFile(join(root, "TWO-SECRET-NAME.md"), `---\nuid: ${uid}\nsensitivity: public\n---\nTWO-SECRET-BODY\n`);
@@ -90,7 +94,7 @@ test("nav context rejects duplicate public identities with stable code and no so
 });
 
 test("nav context rejects an invalid authored UID before successful projection", async () => {
-  const root = await mkdtemp(join(tmpdir(), "gkx-nav-invalid-uid-"));
+  const root = await physicalTemporaryRoot("gkx-nav-invalid-uid-");
   await writeFile(join(root, "invalid.md"), "---\nuid: not-a-uuid\nsensitivity: public\n---\nbody\n");
   await assert.rejects(
     exec(process.execPath, [cli, "nav", "context", root, "--recipient", "human:reader", "--purpose", "review", "--stdout"]),
@@ -108,6 +112,26 @@ test("recipient value alone never changes built-in public-only context eligibili
   }
   assert.deepEqual(outputs[0], outputs[1]);
 });
+
+test("nav CLI admits a physical temporary root and rejects its filesystem alias", {
+  skip: process.platform === "win32" ? "symbolic-link alias coverage is exercised by the Windows path-security lane" : false,
+}, async (t) => {
+  const root = await physicalTemporaryRoot("gkx-nav-physical-root-");
+  await writeFile(join(root, "Public.md"), "---\nuid: 123e4567-e89b-42d3-a456-426614174099\nsensitivity: public\n---\nbody\n");
+  const alias = join(dirname(root), `${root.slice(root.lastIndexOf("/") + 1)}-alias`);
+  await symlink(root, alias, "dir");
+  t.after(async () => {
+    await rm(alias, { force: true });
+    await rm(root, { recursive: true, force: true });
+  });
+  const physical = await exec(process.execPath, [cli, "nav", "scan", root]);
+  assert.match(physical.stdout, /"navigationContract": "1\.0\.0"/);
+  await assert.rejects(
+    exec(process.execPath, [cli, "nav", "scan", alias]),
+    (error) => /GKX_SCAN_ROOT_ALIAS_REJECTED/.test(error.stderr),
+  );
+});
+
 test("nav mutation verbs and output/write flags are rejected", async () => {
   const root = await fixture();
   for (const verb of ["write", "apply", "delete", "record", "archive-delete", "rollback", "moc-apply"]) {

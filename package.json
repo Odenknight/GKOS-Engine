@@ -88,7 +88,7 @@
     "build": "node scripts/build.mjs",
     "prepare": "node scripts/build.mjs",
     "pretest": "node scripts/build.mjs",
-    "test": "node --test \"test/*.test.mjs\"",
+    "test": "node --test --test-concurrency=1 \"test/*.test.mjs\"",
     "pretest:navigation": "node scripts/build.mjs",
     "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-effects-contract.test.mjs test/navigation-effects-planner.test.mjs test/navigation-effects-node.test.mjs test/navigation-effects-performance.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
     "test:intelligence": "node scripts/test-intelligence.mjs",
