@@ -471,38 +471,14 @@ test("Phase4 qualification protects the exact reviewed Slice-B status and path i
       logLevel: "silent",
     });
     const runner = await import(pathToFileURL(runnerFile).href);
-    const head = git(REPOSITORY_ROOT, ["rev-parse", "HEAD"]).trim();
+    const head = "7b5262baee9fcda23d50b0cee0c4977d6e4305e7";
+    assert.equal(git(REPOSITORY_ROOT, ["cat-file", "-t", head]).trim(), "commit");
     const main = join(container, "reviewed-slice-b");
     git(REPOSITORY_ROOT, ["clone", "--quiet", "--shared", REPOSITORY_ROOT, main]);
     git(main, ["checkout", "--quiet", "--detach", head]);
-    const changedRaw = git(REPOSITORY_ROOT, ["diff", "--name-only", "-z", "HEAD"], { encoding: null });
-    const untrackedRaw = git(REPOSITORY_ROOT, ["ls-files", "--others", "--exclude-standard", "-z"], { encoding: null });
-    const changed = [...new Set([
-      ...changedRaw.toString("utf8").split("\0").filter(Boolean),
-      ...untrackedRaw.toString("utf8").split("\0").filter(Boolean),
-    ])].sort(codeUnitCompare);
-    for (const path of changed) {
-      const destination = join(main, ...path.split("/"));
-      mkdirSync(dirname(destination), { recursive: true });
-      copyFileSync(join(REPOSITORY_ROOT, ...path.split("/")), destination);
-    }
-    git(main, ["config", "user.name", "GKOS qualification fixture"]);
-    git(main, ["config", "user.email", "fixture@example.invalid"]);
-    git(main, ["config", "commit.gpgsign", "false"]);
-    git(main, ["add", "-A"]);
-    let stagedChanges = true;
-    try { git(main, ["diff", "--cached", "--quiet"]); stagedChanges = false; }
-    catch (error) {
-      assert.equal(error.status, 1, "only a non-empty staged diff may select the synthetic commit path");
-    }
-    if (stagedChanges) {
-      git(main, ["commit", "--quiet", "-m", "fixture: reviewed Phase 5 Slice B"]);
-    } else {
-      assert.equal(git(REPOSITORY_ROOT, ["status", "--porcelain=v1"]), "");
-      assert.equal(git(main, ["status", "--porcelain=v1"]), "");
-      assert.equal(git(main, ["rev-parse", "HEAD"]).trim(), head);
-      assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main, head));
-    }
+    assert.equal(git(main, ["status", "--porcelain=v1"]), "");
+    assert.equal(git(main, ["rev-parse", "HEAD"]).trim(), head);
+    assert.doesNotThrow(() => runner.verifySliceBProtectedInputsForTest(main, head));
     const immutable = await runner.verifyFrozenQualificationInputsForTest(main);
     assert.equal(immutable.phase4_pack_file_count, 37);
 

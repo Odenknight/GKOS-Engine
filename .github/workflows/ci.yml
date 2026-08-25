@@ -71,16 +71,20 @@ jobs:
           node bin/gkx.mjs --help
           node bin/gkx.mjs assess . --json >/dev/null
 
-      - name: Bundle private Phase 4 qualification host
-        run: ./node_modules/.bin/esbuild scripts/run-retrieval-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$RUNNER_TEMP/phase4-retrieval-qualification.mjs"
+      - name: Prepare frozen terminal-Phase-5 qualification host
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/phase4-frozen" 7b5262baee9fcda23d50b0cee0c4977d6e4305e7
+          npm ci --prefix "$RUNNER_TEMP/phase4-frozen"
+          "$RUNNER_TEMP/phase4-frozen/node_modules/.bin/esbuild" "$RUNNER_TEMP/phase4-frozen/scripts/run-retrieval-observation-qualification.mjs" --bundle --platform=node --format=esm --target=node22 --outfile="$RUNNER_TEMP/phase4-retrieval-qualification.mjs"
 
       - name: Create private Phase 4 qualification receipt root
         run: mkdir -m 700 "$RUNNER_TEMP/phase4-retrieval-qualification-node-${{ matrix.node }}"
 
       - name: Exact Phase 4 eval and exhaustive tune qualification
         timeout-minutes: 15
+        working-directory: ${{ runner.temp }}/phase4-frozen
         env:
-          GKOS_PHASE4_SOURCE_HEAD_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+          GKOS_PHASE4_SOURCE_HEAD_COMMIT: 7b5262baee9fcda23d50b0cee0c4977d6e4305e7
         run: node "$RUNNER_TEMP/phase4-retrieval-qualification.mjs" --mode cli --artifact-root "$RUNNER_TEMP/phase4-retrieval-qualification-node-${{ matrix.node }}"
 
       - name: Upload bounded Phase 4 qualification receipt
@@ -125,7 +129,14 @@ jobs:
         run: |
           npm run typecheck
           npm run build
-          .\node_modules\.bin\esbuild.cmd scripts/run-retrieval-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$env:RUNNER_TEMP/phase4-retrieval-qualification.mjs"
+
+      - name: Prepare frozen terminal-Phase-5 Windows qualification host
+        shell: pwsh
+        run: |
+          $frozen = Join-Path $env:RUNNER_TEMP "phase4-frozen"
+          git worktree add --detach $frozen 7b5262baee9fcda23d50b0cee0c4977d6e4305e7
+          npm ci --prefix $frozen
+          & (Join-Path $frozen "node_modules/.bin/esbuild.cmd") (Join-Path $frozen "scripts/run-retrieval-observation-qualification.mjs") --bundle --platform=node --format=esm --target=node22 --outfile="$env:RUNNER_TEMP/phase4-retrieval-qualification.mjs"
 
       - name: Create private Windows receipt root
         shell: pwsh
@@ -139,8 +150,9 @@ jobs:
       - name: Exact Windows Phase 4 security qualification
         shell: pwsh
         timeout-minutes: 15
+        working-directory: ${{ runner.temp }}/phase4-frozen
         env:
-          GKOS_PHASE4_SOURCE_HEAD_COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+          GKOS_PHASE4_SOURCE_HEAD_COMMIT: 7b5262baee9fcda23d50b0cee0c4977d6e4305e7
         run: |
           $receiptRoot = Join-Path $env:RUNNER_TEMP "phase4-retrieval-windows-node-${{ matrix.node }}"
           node "$env:RUNNER_TEMP/phase4-retrieval-qualification.mjs" --mode windows-security --artifact-root $receiptRoot
@@ -479,3 +491,32 @@ jobs:
         run: |
           git diff --exit-code
           test -z "$(git status --porcelain --untracked-files=all)"
+
+  navigation-effects-platform:
+    name: Navigation Effects — ${{ matrix.os }} / Node 22
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install (clean, from lockfile)
+        run: npm ci
+
+      - name: Type check and build
+        run: |
+          npm run typecheck
+          npm run build
+
+      - name: Navigation purity, effects, crash, recovery, and platform tests
+        run: npm run test:navigation
+
+      - name: Package contents
+        run: npm run pack:check

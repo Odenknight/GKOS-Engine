@@ -397,12 +397,15 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
   assert.equal((continuous.match(/fetch-depth: 0/gu) ?? []).length, 3);
   assert.equal((continuous.match(/timeout-minutes: 15/gu) ?? []).length, 2);
   assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT:/gu) ?? []).length, 3);
-  assert.equal((continuous.match(/github\.event\.pull_request\.head\.sha \|\| github\.sha/gu) ?? []).length, 2);
+  assert.equal((continuous.match(/github\.event\.pull_request\.head\.sha \|\| github\.sha/gu) ?? []).length, 0);
+  assert.equal((continuous.match(/git worktree add --detach/gu) ?? []).length, 2);
+  assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT: 7b5262baee9fcda23d50b0cee0c4977d6e4305e7/gu) ?? []).length, 2);
   assert.doesNotMatch(continuous, /timeout 900s/u);
   assert.match(continuous, /--mode cli/u);
   assert.match(continuous, /--mode windows-security/u);
-  assert.match(continuous, /\.\/node_modules\/\.bin\/esbuild scripts\/run-retrieval-observation-qualification\.mjs/u);
-  assert.match(continuous, /\.\\node_modules\\\.bin\\esbuild\.cmd scripts\/run-retrieval-observation-qualification\.mjs/u);
+  assert.match(continuous, /phase4-frozen\/node_modules\/\.bin\/esbuild/u);
+  assert.match(continuous, /Join-Path \$env:RUNNER_TEMP "phase4-frozen"/u);
+  assert.match(continuous, /node_modules\/\.bin\/esbuild\.cmd/u);
   assert.match(continuous, /gkos-phase4-retrieval-qualification\.json/u);
   assert.match(continuous, /phase4-retrieval-qualification-\$\{\{ runner\.os \}\}-node-\$\{\{ matrix\.node \}\}/u);
   assert.equal((continuous.match(/actions\/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02/gu) ?? []).length, 3);
