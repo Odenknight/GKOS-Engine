@@ -116,6 +116,7 @@ const PHASE5_SLICE_B_EXPECTED_CHANGE_ROWS = Object.freeze([
   ["A", "src/watcher/pointer.ts"],
   ["A", "src/watcher/removal-adapter.ts"],
   ["A", "src/watcher/service.ts"],
+  ["M", "test/retrieval-observation-qualification.test.mjs"],
   ["A", "test/watcher-coordinator.test.mjs"],
   ["A", "test/watcher-index-validation.test.mjs"],
   ["A", "test/watcher-journal-host.test.mjs"],
