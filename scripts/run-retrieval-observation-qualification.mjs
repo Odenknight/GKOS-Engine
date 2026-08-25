@@ -58,6 +58,74 @@ const PACK_MANIFEST_DIGEST = "sha256:6732519a4912714a432680c88219322c80413e4165b
 const SLICE_A_PACK_COMMIT = "cac029a5b570135b26f3585bc86f4c9beb00c36d";
 const PHASE3_BASE_COMMIT = "5396d46d";
 const SLICE_B_EVIDENCE_COMMIT = "ed3a7552b1d4a705c1b1a722b07255e89ec42186";
+const SLICE_B_PROTECTED_PATH_COUNT = 112;
+const SLICE_B_PROTECTED_PATH_INVENTORY_DIGEST = "sha256:f88846fdaf91e59f3e80780b787340b82e5a7177c474518aa901f63046c9478f";
+const SLICE_B_AUTHORIZED_ADDITION_PATHS = Object.freeze([
+  "bin/gkos.mjs",
+  "src/ingest/source-scan.ts",
+  "src/watcher/cli.ts",
+  "src/watcher/contracts.ts",
+  "src/watcher/coordinator.ts",
+  "src/watcher/fs-authority.ts",
+  "src/watcher/host.ts",
+  "src/watcher/index-validation-hook.ts",
+  "src/watcher/journal.ts",
+  "src/watcher/pointer.ts",
+  "src/watcher/removal-adapter.ts",
+  "src/watcher/service.ts",
+]);
+const SLICE_B_AUTHORIZED_ADDITION_INVENTORY_DIGEST = "sha256:a812a6378310da741ed009d3123498050794c4d7ff5f1e1d305ed10b0175fa54";
+const PHASE5_SLICE_B_BASE_COMMIT = "6e9346c7e749b5288ff3680766b34a038e816d18";
+const PHASE5_SLICE_B_EXPECTED_CHANGE_ROWS = Object.freeze([
+  ["M", ".gitattributes"],
+  ["M", ".github/workflows/ci.yml"],
+  ["A", "bin/gkos.mjs"],
+  ["M", "bin/gkx.mjs"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/TECHNICAL_README.md"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/conformance.schema.json"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/pack-manifest.json"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/sample-plan.schema.json"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/source-removal.schema.json"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-cli-fixture.json"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-conformance-fixture.json"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-recovery-fixture.json"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-sample-plan.json"],
+  ["M", "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-storage-fixture.json"],
+  ["A", "docs/phase5-watcher-host.md"],
+  ["M", "package-lock.json"],
+  ["M", "package.json"],
+  ["M", "scripts/build.mjs"],
+  ["M", "scripts/generate-watcher-recovery-source-bundle.mjs"],
+  ["M", "scripts/run-retrieval-observation-qualification.mjs"],
+  ["A", "scripts/run-watcher-observation-qualification.mjs"],
+  ["M", "src/desktop-agent.ts"],
+  ["M", "src/incremental.ts"],
+  ["A", "src/ingest/source-scan.ts"],
+  ["M", "src/ingest/storage.ts"],
+  ["M", "src/ingest/validation.ts"],
+  ["M", "src/retrieval/gkx-provenance.ts"],
+  ["M", "src/retrieval/state-writer-lock.ts"],
+  ["A", "src/watcher/cli.ts"],
+  ["M", "src/watcher/contracts.ts"],
+  ["A", "src/watcher/coordinator.ts"],
+  ["A", "src/watcher/fs-authority.ts"],
+  ["A", "src/watcher/host.ts"],
+  ["A", "src/watcher/index-validation-hook.ts"],
+  ["A", "src/watcher/journal.ts"],
+  ["A", "src/watcher/pointer.ts"],
+  ["A", "src/watcher/removal-adapter.ts"],
+  ["A", "src/watcher/service.ts"],
+  ["M", "test/retrieval-observation-qualification.test.mjs"],
+  ["A", "test/watcher-coordinator.test.mjs"],
+  ["A", "test/watcher-index-validation.test.mjs"],
+  ["A", "test/watcher-journal-host.test.mjs"],
+  ["A", "test/watcher-observation-qualification.test.mjs"],
+  ["A", "test/watcher-pointer-host.test.mjs"],
+  ["M", "test/watcher-recovery-contracts.test.mjs"],
+  ["A", "test/watcher-service-cli.test.mjs"],
+  ["A", "test/watcher-source-scan.test.mjs"],
+]);
 const SCAN_PRESENTATION_VERSION = "gkos-retrieval-evaluation-scan-presentation/1.0.0-draft.1";
 const QUERY_REQUEST_SEQUENCE_VERSION = "gkos-retrieval-evaluation-performance-query-request-sequence/1.0.0";
 const OBSERVATION_RUNNER_PATH = "scripts/run-retrieval-observation-qualification.mjs";
@@ -308,7 +376,8 @@ export function publicationEligibleForTest(source) {
 
 function gitDiffClean(repoRoot, commit, paths) {
   try {
-    execFileSync("git", ["diff", "--quiet", commit, "--", ...paths], { cwd: repoRoot, stdio: "ignore" });
+    execFileSync("git", ["diff", "--quiet", "--no-renames", commit, "--", ...paths], { cwd: repoRoot, stdio: "ignore" });
+    execFileSync("git", ["diff", "--cached", "--quiet", "--no-renames", commit, "--", ...paths], { cwd: repoRoot, stdio: "ignore" });
     return true;
   } catch { return false; }
 }
@@ -317,12 +386,121 @@ function splitLines(value) {
   return value === "" ? [] : value.split(/\r?\n/u).filter((row) => row !== "");
 }
 
-export async function verifyFrozenQualificationInputsForTest(repoRoot) {
-  const packRoot = "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1";
-  const protectedAtSliceB = [
-    "src", "bin", "package.json", "package-lock.json",
+function codeUnitSortedUniquePaths(paths) {
+  const sorted = [...paths].sort((left, right) => left < right ? -1 : left > right ? 1 : 0);
+  if (sorted.some((path, index) => path === "" || path.includes("\0") || (index > 0 && path === sorted[index - 1]))) {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  return sorted;
+}
+
+function gitNulPathInventory(repoRoot, args) {
+  let bytes;
+  try {
+    bytes = execFileSync("git", args, { cwd: repoRoot, stdio: ["ignore", "pipe", "ignore"] });
+  } catch {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  const text = bytes.toString("utf8");
+  if (!Buffer.from(text, "utf8").equals(bytes) || (text !== "" && !text.endsWith("\0"))) {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  return codeUnitSortedUniquePaths(text === "" ? [] : text.slice(0, -1).split("\0"));
+}
+
+function pathInventoryDigest(paths) {
+  return sha256Bytes(Buffer.from(`${paths.join("\n")}\n`, "utf8"));
+}
+
+function gitNulNameStatus(repoRoot, args) {
+  let bytes;
+  try {
+    bytes = execFileSync("git", args, { cwd: repoRoot, stdio: ["ignore", "pipe", "ignore"] });
+  } catch {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  const text = bytes.toString("utf8");
+  if (!Buffer.from(text, "utf8").equals(bytes) || (text !== "" && !text.endsWith("\0"))) {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  const fields = text === "" ? [] : text.slice(0, -1).split("\0");
+  if (fields.length % 2 !== 0) fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  const rows = [];
+  for (let index = 0; index < fields.length; index += 2) {
+    const status = fields[index];
+    const path = fields[index + 1];
+    if (!new Set(["A", "M"]).has(status) || path === "" || path.includes("\0")) {
+      fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+    }
+    rows.push([status, path]);
+  }
+  rows.sort((left, right) => left[1] < right[1] ? -1 : left[1] > right[1] ? 1 : 0);
+  if (rows.some((row, index) => index > 0 && row[1] === rows[index - 1][1])) {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  return rows;
+}
+
+function sameRows(left, right) {
+  return left.length === right.length && left.every((row, index) =>
+    row.length === 2 && row[0] === right[index]?.[0] && row[1] === right[index]?.[1]);
+}
+
+export function verifySliceBProtectedInputsForTest(repoRoot, headCommitInput = "HEAD") {
+  const protectedRoots = ["src", "bin"];
+  const explicitProtectedPaths = [
+    "package.json", "package-lock.json",
     "test/retrieval-evaluation-cli.test.mjs", "test/fixtures/retrieval-evaluation-cli-phase4.json",
   ];
+  let headCommit;
+  try {
+    headCommit = execFileSync("git", ["rev-parse", "--verify", `${headCommitInput}^{commit}`], {
+      cwd: repoRoot, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+  } catch {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  if (!/^[0-9a-f]{40}$/u.test(headCommit)) fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  const baselineRootPaths = gitNulPathInventory(repoRoot, [
+    "ls-tree", "-r", "--name-only", "-z", SLICE_B_EVIDENCE_COMMIT, "--", ...protectedRoots,
+  ]);
+  const baselineProtectedPaths = codeUnitSortedUniquePaths([...baselineRootPaths, ...explicitProtectedPaths]);
+  const currentRootPaths = gitNulPathInventory(repoRoot, ["ls-tree", "-r", "--name-only", "-z", headCommit, "--", ...protectedRoots]);
+  const baselineRootSet = new Set(baselineRootPaths);
+  const currentRootSet = new Set(currentRootPaths);
+  const authorizedAdditions = currentRootPaths.filter((path) => !baselineRootSet.has(path));
+  const baseAllPaths = gitNulPathInventory(repoRoot, ["ls-tree", "-r", "--name-only", "-z", PHASE5_SLICE_B_BASE_COMMIT]);
+  const currentAllPaths = gitNulPathInventory(repoRoot, ["ls-tree", "-r", "--name-only", "-z", headCommit]);
+  const comparedPaths = codeUnitSortedUniquePaths([...new Set([...baseAllPaths, ...currentAllPaths])]);
+  const committedRows = gitNulNameStatus(repoRoot, [
+    "diff", "--name-status", "--no-renames", "-z", PHASE5_SLICE_B_BASE_COMMIT, headCommit, "--", ...comparedPaths,
+  ]);
+  const indexPaths = gitNulPathInventory(repoRoot, ["ls-files", "-z"]);
+  const untrackedPaths = gitNulPathInventory(repoRoot, ["ls-files", "--others", "--exclude-standard", "-z"]);
+  if (baselineProtectedPaths.length !== SLICE_B_PROTECTED_PATH_COUNT ||
+      pathInventoryDigest(baselineProtectedPaths) !== SLICE_B_PROTECTED_PATH_INVENTORY_DIGEST ||
+      baselineRootPaths.some((path) => !currentRootSet.has(path)) ||
+      authorizedAdditions.length !== SLICE_B_AUTHORIZED_ADDITION_PATHS.length ||
+      authorizedAdditions.some((path, index) => path !== SLICE_B_AUTHORIZED_ADDITION_PATHS[index]) ||
+      pathInventoryDigest(authorizedAdditions) !== SLICE_B_AUTHORIZED_ADDITION_INVENTORY_DIGEST ||
+      !sameRows(committedRows, PHASE5_SLICE_B_EXPECTED_CHANGE_ROWS) ||
+      indexPaths.length !== currentAllPaths.length || indexPaths.some((path, index) => path !== currentAllPaths[index]) ||
+      untrackedPaths.length !== 0 || !gitDiffClean(repoRoot, headCommit, currentAllPaths)) {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
+  return Object.freeze({
+    baseline_path_count: baselineProtectedPaths.length,
+    baseline_inventory_digest: SLICE_B_PROTECTED_PATH_INVENTORY_DIGEST,
+    authorized_addition_count: authorizedAdditions.length,
+    authorized_addition_inventory_digest: SLICE_B_AUTHORIZED_ADDITION_INVENTORY_DIGEST,
+    committed_change_count: committedRows.length,
+    phase5_slice_b_base_commit: PHASE5_SLICE_B_BASE_COMMIT,
+    source_head_commit: headCommit,
+  });
+}
+
+export async function verifyFrozenQualificationInputsForTest(repoRoot) {
+  const packRoot = "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1";
   const phase03 = [
     "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1",
     "contracts/retrieval/gkos-retrieval-1.0.0-draft.1",
@@ -332,8 +510,8 @@ export async function verifyFrozenQualificationInputsForTest(repoRoot) {
     "evidence/2026-08-21-functional-uplift-phase-2.md",
     "evidence/2026-08-21-functional-uplift-phase-3.md",
   ];
-  if (!gitDiffClean(repoRoot, SLICE_B_EVIDENCE_COMMIT, protectedAtSliceB) ||
-      !gitDiffClean(repoRoot, SLICE_A_PACK_COMMIT, [packRoot]) ||
+  verifySliceBProtectedInputsForTest(repoRoot);
+  if (!gitDiffClean(repoRoot, SLICE_A_PACK_COMMIT, [packRoot]) ||
       !gitDiffClean(repoRoot, PHASE3_BASE_COMMIT, phase03)) {
     fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
   }
@@ -930,9 +1108,9 @@ async function observationStage(code, operation) {
 }
 
 async function runObservation(repoRoot, artifactRoot, source) {
+  if (normalizedPlatform() !== "linux" || arch() !== "x64") fail("OBS_REPORT_INVALID");
   try { await verifyFrozenQualificationInputsForTest(repoRoot); }
   catch (error) { throwObservation("OBS_PACK_IMMUTABILITY_INVALID", error); }
-  if (normalizedPlatform() !== "linux" || arch() !== "x64") fail("OBS_REPORT_INVALID");
   const offline = installOfflineGuardsForTest();
   let temporary = null;
   let offlineRestored = false;
@@ -1421,7 +1599,7 @@ export async function main(argv = process.argv.slice(2)) {
 }
 
 const invokedPath = process.argv[1] ? resolve(process.argv[1]) : null;
-if (invokedPath !== null && invokedPath === resolve(fileURLToPath(import.meta.url))) {
+if (invokedPath !== null && invokedPath === resolve(fileURLToPath(import.meta.url)) && process.argv[2] === "--mode") {
   main().catch((error) => {
     process.stderr.write(`phase4 retrieval qualification: ${error?.message ?? "operational failure"}\n`);
     process.exitCode = 2;

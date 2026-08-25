@@ -47,6 +47,22 @@ const AUTHORITY_EVIDENCE_NAMES = new Set([
   "active-ingest.json",
   "active-retrieval.json",
 ]);
+const WATCHER_AUTHORITY_FILE = "watcher-authority.json";
+const WATCHER_EVIDENCE_NAMES = new Set([
+  WATCHER_AUTHORITY_FILE,
+  ".watcher-authority.json.gkos-watcher.tmp",
+  "watcher-authority.lock",
+  "watcher-authority.recovery",
+  "watcher-active.json",
+  ".watcher-active.json.gkos-watcher.guard",
+  ".watcher-active.json.gkos-watcher.guard-stage",
+  ".watcher-active.json.gkos-watcher.tmp",
+  "watcher-journal-bootstrap-recovery-bridge.json",
+  ".watcher-journal-bootstrap-recovery-bridge.json.gkos-watcher.stage",
+  ".watcher-journal-bootstrap-recovery-executor.json.gkos-watcher.stage",
+  "watcher-journal-bootstrap-recovery-executor.json",
+  "journals",
+]);
 
 interface LegacyWriterLock {
   contract_version: typeof LOCK_CONTRACT;
@@ -63,6 +79,39 @@ interface SealedReadQualificationHooks {
 
 export interface LegacyRetrievalWriterCapability {
   readonly state_directory: string;
+}
+
+const WATCHER_EXCLUDED_WRITER_LEAF = /^(?:retrieval-writer\.(?:lock|recovery)|ingest-authority\.(?:lock|recovery))(?:\.|$)/u;
+
+/**
+ * Watcher-side half of the cross-generation writer handshake. The watcher
+ * invokes this immediately before and after acquiring its HostLock and around
+ * every retrieval staging/publication boundary. Stable Phase-3 generations
+ * remain readable; only live/recovery writer authority is excluded.
+ */
+export function assertNoLegacyOrPhase3WriterForWatcher(stateDirectory: string): void {
+  const requested = validateStateDirectory(stateDirectory);
+  if (!pathExists(requested)) throw new Error("GKX_WATCHER_RETRIEVAL_ROOT_INVALID");
+  const directory = canonicalPathSync(requested, { alias_error: "GKX_WATCHER_RETRIEVAL_ROOT_INVALID" });
+  if (!sameCanonicalPath(directory, requested)) throw new Error("GKX_WATCHER_RETRIEVAL_ROOT_INVALID");
+  const state = lstatSync(directory);
+  if (!state.isDirectory() || state.isSymbolicLink()) throw new Error("GKX_WATCHER_RETRIEVAL_ROOT_INVALID");
+  const entries = readdirSync(directory, { withFileTypes: true });
+  if (entries.length > 100_000) throw new Error("GKX_WATCHER_RETRIEVAL_ROOT_INVALID");
+  for (const entry of entries) {
+    if (WATCHER_EXCLUDED_WRITER_LEAF.test(entry.name)) throw new Error("GKX_WATCHER_WRITER_INTERLOCKED");
+  }
+  // Reopen after enumeration so a writer that raced the first observation is
+  // visible before the caller may create or use watcher authority.
+  const after = readdirSync(directory, { withFileTypes: true });
+  if (after.length > 100_000 || after.some((entry) => WATCHER_EXCLUDED_WRITER_LEAF.test(entry.name))) {
+    throw new Error("GKX_WATCHER_WRITER_INTERLOCKED");
+  }
+  const reopened = lstatSync(directory);
+  const sameDevice = state.dev === reopened.dev || (process.platform === "win32" && (state.dev === 0 || reopened.dev === 0));
+  if (!sameDevice || state.ino !== reopened.ino || state.mode !== reopened.mode || !reopened.isDirectory() || reopened.isSymbolicLink()) {
+    throw new Error("GKX_WATCHER_RETRIEVAL_ROOT_INVALID");
+  }
 }
 
 function pathExists(path: string): boolean {
@@ -296,6 +345,66 @@ function assertNoPhase3Authority(directory: string): void {
   assertCanonicalLegacyPointer(bytes);
 }
 
+/**
+ * Fail closed when the sibling Phase-5 watcher authority has begun acquiring
+ * ownership of retrieval state. An empty securely-created W/J root is not an
+ * authority by itself: the watcher rechecks the complete global-genesis
+ * predicate after acquiring its own lock. Every durable or transient watcher
+ * leaf, however, excludes legacy/Phase-3 writers.
+ */
+export function assertNoWatcherCoherentWriter(stateDirectory: string): void {
+  const retrievalDirectory = validateStateDirectory(stateDirectory);
+  const derivedDirectory = dirname(retrievalDirectory);
+  if (!pathExists(derivedDirectory)) return;
+  const derived = canonicalPathSync(derivedDirectory, { alias_error: "GKX_WATCHER_STATE_ROOT_INVALID" });
+  const derivedState = lstatSync(derived);
+  if (!derivedState.isDirectory() || derivedState.isSymbolicLink()) throw new Error("GKX_WATCHER_STATE_ROOT_INVALID");
+  const derivedEntries = readdirSync(derived, { withFileTypes: true });
+  if (derivedEntries.length > 100_000) throw new Error("GKX_WATCHER_STATE_ROOT_INVALID");
+  const watcherEntry = derivedEntries.find((entry) => entry.name.toLowerCase() === "watcher");
+  if (watcherEntry === undefined) return;
+  if (watcherEntry.name !== "watcher" || !watcherEntry.isDirectory() || watcherEntry.isSymbolicLink()) {
+    throw new Error("GKX_WATCHER_STATE_ROOT_INVALID");
+  }
+  const watcherPath = join(derived, watcherEntry.name);
+  const watcher = canonicalPathSync(watcherPath, { alias_error: "GKX_WATCHER_STATE_ROOT_INVALID" });
+  if (!sameCanonicalPath(dirname(watcher), derived)) throw new Error("GKX_WATCHER_STATE_ROOT_INVALID");
+  const watcherState = lstatSync(watcher);
+  if (!watcherState.isDirectory() || watcherState.isSymbolicLink()) throw new Error("GKX_WATCHER_STATE_ROOT_INVALID");
+  if (process.platform !== "win32" && (watcherState.mode & 0o777) !== 0o700) {
+    throw new Error("GKX_WATCHER_STATE_ROOT_INVALID");
+  }
+  const entries = readdirSync(watcher, { withFileTypes: true });
+  if (entries.length > 100_000) throw new Error("GKX_WATCHER_STATE_ROOT_INVALID");
+  for (const entry of entries) {
+    const canonical = [...WATCHER_EVIDENCE_NAMES].find((name) => name.toLowerCase() === entry.name.toLowerCase());
+    if (canonical !== undefined && canonical !== entry.name) throw new Error("GKX_WATCHER_AUTHORITY_INVALID");
+  }
+  if (entries.some((entry) => entry.name === WATCHER_AUTHORITY_FILE)) {
+    // Presence is itself the permanent no-fallback witness. A malformed file
+    // is intentionally not interpreted as absence by a legacy writer.
+    throw new Error("GKX_WATCHER_AUTHORITY_ACTIVE");
+  }
+  for (const entry of entries) {
+    if (entry.name === "journals") {
+      if (!entry.isDirectory() || entry.isSymbolicLink()) throw new Error("GKX_WATCHER_AUTHORITY_INVALID");
+      const journalsPath = join(watcher, entry.name);
+      const journals = canonicalPathSync(journalsPath, { alias_error: "GKX_WATCHER_AUTHORITY_INVALID" });
+      if (!sameCanonicalPath(dirname(journals), watcher)) throw new Error("GKX_WATCHER_AUTHORITY_INVALID");
+      const journalState = lstatSync(journals);
+      if (!journalState.isDirectory() || journalState.isSymbolicLink() ||
+          (process.platform !== "win32" && (journalState.mode & 0o777) !== 0o700)) {
+        throw new Error("GKX_WATCHER_AUTHORITY_INVALID");
+      }
+      if (readdirSync(journals).length !== 0) throw new Error("GKX_WATCHER_WRITER_LOCKED");
+      continue;
+    }
+    // W is a dedicated capability root. Any non-root evidence here is a
+    // watcher publication/recovery attempt and excludes concurrent writers.
+    throw new Error("GKX_WATCHER_WRITER_LOCKED");
+  }
+}
+
 function sealLock(value: unknown): LegacyWriterLock {
   if (value === null || typeof value !== "object" || Array.isArray(value) || Object.getPrototypeOf(value) !== Object.prototype) {
     throw new TypeError("RETRIEVAL_STATE_WRITER_LOCK_INVALID");
@@ -365,7 +474,10 @@ export function acquireLegacyRetrievalWriter(stateDirectory: string): LegacyRetr
   });
   const created = !pathExists(requestedCanonical);
   const directory = ensureDirectory(stateDirectory);
-  try { assertNoPhase3Authority(directory); }
+  try {
+    assertNoWatcherCoherentWriter(directory);
+    assertNoPhase3Authority(directory);
+  }
   catch (error) {
     if (created && readdirSync(directory).length === 0) rmdirSync(directory);
     throw error;
@@ -393,6 +505,7 @@ export function acquireLegacyRetrievalWriter(stateDirectory: string): LegacyRetr
   syncDirectory(directory);
   try {
     // The second half of the handshake closes both create/check interleavings.
+    assertNoWatcherCoherentWriter(directory);
     assertNoPhase3Authority(directory);
     const reopened = readLock(directory);
     if (reopened.file_digest !== retrievalSha256(bytes)) throw new Error("RETRIEVAL_STATE_WRITER_LOCK_CHANGED");
@@ -437,6 +550,7 @@ export function bindLegacyRetrievalWriterTarget(
   targetPointerBytes: Uint8Array,
 ): void {
   assertLegacyRetrievalWriterCapability(capability);
+  assertNoWatcherCoherentWriter(capability.state_directory);
   assertNoPhase3Authority(capability.state_directory);
   const expected = LOCK_CAPABILITIES.get(capability)!;
   if (expected.lock.target_pointer_digest !== null) throw new Error("RETRIEVAL_STATE_WRITER_TARGET_ALREADY_BOUND");
@@ -463,6 +577,7 @@ export function assertLegacyRetrievalWriterCommit(
   targetPointerBytes: Uint8Array,
 ): void {
   assertLegacyRetrievalWriterCapability(capability);
+  assertNoWatcherCoherentWriter(capability.state_directory);
   assertNoPhase3Authority(capability.state_directory);
   const held = LOCK_CAPABILITIES.get(capability)!;
   const targetDigest = retrievalSha256(targetPointerBytes);
@@ -484,6 +599,7 @@ export function verifyLegacyRetrievalWriterTargetPublished(
   if (held.lock.target_pointer_digest !== expected || pointerDigest(capability.state_directory) !== expected) {
     throw new Error("RETRIEVAL_STATE_WRITER_TARGET_PUBLICATION_INVALID");
   }
+  assertNoWatcherCoherentWriter(capability.state_directory);
   assertNoPhase3Authority(capability.state_directory);
   assertLegacyRetrievalWriterCapability(capability);
 }
@@ -594,6 +710,7 @@ export function recoverStaleLegacyRetrievalWriter(
   const claimed = readLock(directory, claimPath, 2);
   if (claimed.file_digest !== preliminary.file_digest) throw new Error("RETRIEVAL_STATE_WRITER_RECOVERY_CLAIM_CHANGED");
   recoverLegacyWriterTemporaries(directory);
+  assertNoWatcherCoherentWriter(directory);
   assertNoPhase3Authority(directory);
   const current = pointerDigest(directory);
   if (current !== preliminary.lock.prior_pointer_digest && current !== preliminary.lock.target_pointer_digest) {

@@ -373,6 +373,7 @@ test("Slice-C temp capability cleans exact roots and fail-retains identity subst
 test("Slice-C workflows freeze scheduled Observation and supplementary cross-runtime lanes", async () => {
   const observation = await readFile(join(ROOT, ".github", "workflows", "phase4-retrieval-observation.yml"), "utf8");
   const continuous = await readFile(join(ROOT, ".github", "workflows", "ci.yml"), "utf8");
+  const bridgeJob = workflowJobBody(continuous, "phase4-retrieval-observation-manual");
   const packageJson = JSON.parse(await readFile(join(ROOT, "package.json"), "utf8"));
 
   assert.equal((observation.match(/cron: "17 4 \* \* \*"/gu) ?? []).length, 1);
@@ -414,13 +415,12 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
   assert.equal((continuous.match(/^      phase4_observation_expected_head:$/gmu) ?? []).length, 1);
   assert.match(continuous, /phase4_observation_expected_head:\r?\n        description: Exact lowercase 40-hex Phase 4 Observation source head\r?\n        required: true\r?\n        type: string/u);
   assert.equal((continuous.match(/Bind exact manual observation source/gu) ?? []).length, 1);
-  assert.equal((continuous.match(/\^\[0-9a-f\]\{40\}\$/gu) ?? []).length, 1);
+  assert.equal((bridgeJob.join("\n").match(/\^\[0-9a-f\]\{40\}\$/gu) ?? []).length, 1);
   assert.equal((continuous.match(/refs\/heads\/codex\/phase-4-retrieval-evaluation/gu) ?? []).length, 1);
   assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT: \$\{\{ inputs\.phase4_observation_expected_head \}\}/gu) ?? []).length, 1);
   assert.equal((continuous.match(/group: phase4-retrieval-observation-\$\{\{ github\.ref \}\}/gu) ?? []).length, 1);
 
   const standaloneJob = workflowJobBody(observation, "observe");
-  const bridgeJob = workflowJobBody(continuous, "phase4-retrieval-observation-manual");
   assert.deepEqual(bridgeObservationProjection(bridgeJob), standaloneJob);
   const bindIndex = bridgeJob.indexOf("      - name: Bind exact manual observation source");
   const setupIndex = bridgeJob.indexOf("      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4");

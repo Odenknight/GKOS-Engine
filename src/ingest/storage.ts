@@ -34,6 +34,7 @@ import { retrievalCanonicalDigest, retrievalCodeUnitCompare, retrievalSha256, st
 import {
   assertCanonicalStateAuthorityNames,
   assertNoLegacyRetrievalWriter,
+  assertNoWatcherCoherentWriter,
   INGEST_AUTHORITY_LOCK_FILE as AUTHORITY_LOCK_FILE,
   LEGACY_WRITER_LOCK_FILE,
   LEGACY_WRITER_RECOVERY_FILE,
@@ -80,6 +81,10 @@ import type {
   IngestRejectionJournal,
   IngestValidationPlan,
 } from "./types";
+import {
+  assertWatcherIngestWriterCapability,
+  type WatcherIngestWriterCapability,
+} from "../watcher/index-validation-hook";
 
 const ACTIVE_RETRIEVAL_FILE = "active-retrieval.json";
 const ACTIVE_INGEST_FILE = "active-ingest.json";
@@ -329,6 +334,22 @@ export function preflightIngestVaultRoot(vaultRoot: string): IngestVaultRootPref
     mode: state.mode,
   });
   return capability;
+}
+
+/**
+ * Watcher bootstrap reuses the exact Phase-3 vault-root capability and state
+ * directory creation authority. It creates/reopens only the governed
+ * `.gkx/derived/retrieval` coordinate; watcher W/J roots are established by
+ * their own direct-child capabilities after this returns.
+ */
+export function ensureWatcherIngestStateDirectory(capability: IngestVaultRootPreflight): string {
+  const identity = revalidateVaultRootPreflight(capability);
+  const directory = ensureStateDirectory(identity.state_directory);
+  revalidateVaultRootPreflight(capability);
+  if (!sameCanonicalPath(directory, identity.state_directory)) {
+    throw new Error("GKX_INGEST_AUTHORITY_STATE_COORDINATE_CHANGED");
+  }
+  return directory;
 }
 
 function controlledArtifactName(name: string): boolean {
@@ -1115,6 +1136,201 @@ export async function stageValidatedGkxIngestGeneration(
     embedding_provider_id: vectorProvider.provider_id,
     embedding_model_id: vectorProvider.model_id,
     embedding_dimensions: vectorProvider.dimensions,
+  });
+}
+
+export interface WatcherStagedIngestGeneration {
+  readonly state_directory: string;
+  readonly inner_database_path: string;
+  readonly journal_path: string;
+  readonly owner_manifest_path: string;
+  readonly owner_manifest: IngestOwnerGenerationManifest;
+  readonly embedding_work: {
+    readonly provider_call_count: number;
+    readonly provider_item_count: number;
+    readonly reused_content_count: number;
+    readonly provider_failed: boolean;
+  };
+}
+
+function watcherCandidateChunks(
+  plan: IngestValidationPlan,
+  chunkingOptions: unknown,
+): {
+  readonly chunking: IngestChunkingCoordinate;
+  readonly candidate_sources: PreparedIngestGeneration["candidate_sources"];
+  readonly candidate_declarations: PreparedIngestGeneration["candidate_declarations"];
+  readonly candidate_chunks: PreparedIngestGeneration["candidate_chunks"];
+} {
+  assertIngestValidationPlan(plan);
+  const chunking = normalizeChunkingCoordinate(chunkingOptions);
+  const candidateSources = inertClone<PreparedIngestGeneration["candidate_sources"]>(
+    plan.accepted_sources.map((source) => source.candidate_source),
+    "GKX_INGEST_PREPARED_CANDIDATE_SOURCES_INVALID",
+  );
+  const candidateDeclarations = inertClone<PreparedIngestGeneration["candidate_declarations"]>(
+    plan.accepted_declarations,
+    "GKX_INGEST_PREPARED_CANDIDATE_DECLARATIONS_INVALID",
+  );
+  const candidateChunks = plan.accepted_sources.flatMap((source) => bindGkxRetrievalCandidateChunks(
+    source.record_key,
+    chunkMarkdown(source.chunk_input, { max_tokens: chunking.max_tokens, overlap_tokens: chunking.overlap_tokens }),
+  )).sort((left, right) => retrievalCodeUnitCompare(left.candidate_chunk_key, right.candidate_chunk_key));
+  return deepFreeze({
+    chunking,
+    candidate_sources: candidateSources,
+    candidate_declarations: candidateDeclarations,
+    candidate_chunks: candidateChunks,
+  });
+}
+
+/** Exact Phase-3 public-only provider boundary, reused by the watcher host. */
+export function watcherPublicEmbeddingEligibility(
+  plan: IngestValidationPlan,
+  chunkingOptions: unknown = { max_tokens: 400, overlap_tokens: 0 },
+): readonly string[] {
+  const prepared = watcherCandidateChunks(plan, chunkingOptions);
+  const chunksByRecordKey = new Map<string, typeof prepared.candidate_chunks[number][]>();
+  for (const candidate of prepared.candidate_chunks) {
+    const group = chunksByRecordKey.get(candidate.record_key) ?? [];
+    group.push(candidate);
+    chunksByRecordKey.set(candidate.record_key, group);
+  }
+  const publicRecordKeys = new Set(prepared.candidate_sources
+    .filter((source) => source.source_metadata.sensitivity === "public")
+    .filter((source) => (chunksByRecordKey.get(source.record_key) ?? [])
+      .every((candidate) => candidate.chunk.metadata.sensitivity === "public"))
+    .map((source) => source.record_key));
+  return Object.freeze(prepared.candidate_chunks
+    .filter((candidate) => publicRecordKeys.has(candidate.record_key))
+    .map((candidate) => candidate.candidate_chunk_key)
+    .sort(retrievalCodeUnitCompare));
+}
+
+/**
+ * Watcher-only inner-generation staging. The outer watcher HostLock remains
+ * the sole writer authority; this function publishes only immutable Phase-3
+ * owner/schema-3 material and never updates a Phase-3 active pointer.
+ */
+export async function stageWatcherValidatedGkxIngestGeneration(
+  capability: WatcherIngestWriterCapability,
+  plan: IngestValidationPlan,
+  coordinateInput: unknown,
+  chunkingOptions: unknown = { max_tokens: 400, overlap_tokens: 0 },
+  vectorProvider?: VectorProvider,
+  priorDatabasePath?: string | null,
+): Promise<WatcherStagedIngestGeneration> {
+  const coordinate = generationCoordinate(coordinateInput);
+  assertWatcherIngestWriterCapability(capability, plan, coordinate.state_directory);
+  const prepared = watcherCandidateChunks(plan, chunkingOptions);
+  const { chunking, candidate_sources: candidateSources, candidate_declarations: candidateDeclarations,
+    candidate_chunks: candidateChunks } = prepared;
+  if (!vectorProvider && coordinate.embedding_eligible_candidate_chunk_keys.length !== 0) {
+    throw new TypeError("GKX_WATCHER_INGEST_VECTOR_STAGE_REQUIRES_PROVIDER");
+  }
+  if (vectorProvider) validateIngestVectorProvider(vectorProvider);
+  const expectedChunkKeys = new Set(candidateChunks.map((candidate) => candidate.candidate_chunk_key));
+  if (coordinate.embedding_eligible_candidate_chunk_keys.some((key) => !expectedChunkKeys.has(key))) {
+    throw new TypeError("GKX_INGEST_GENERATION_ELIGIBILITY_INVALID");
+  }
+  const directory = ensureStateDirectory(coordinate.state_directory);
+  assertWatcherIngestWriterCapability(capability, plan, coordinate.state_directory);
+  const base: GkxRetrievalGenerationInput = {
+    ...coordinate,
+    source_snapshot_digest: plan.observation_snapshot_digest,
+    candidate_sources: candidateSources,
+    candidate_declarations: candidateDeclarations,
+    candidate_chunks: candidateChunks,
+  };
+  let providerCallCount = 0;
+  let providerItemCount = 0;
+  let reusedContentCount = 0;
+  let providerFailed = false;
+  let generationInput: GkxRetrievalGenerationInput = base;
+  if (vectorProvider && coordinate.embedding_eligible_candidate_chunk_keys.length > 0) {
+    const eligible = new Set(coordinate.embedding_eligible_candidate_chunk_keys);
+    const providerCandidates = candidateChunks.filter((candidate) => eligible.has(candidate.candidate_chunk_key));
+    const unique = new Map<string, typeof providerCandidates[number]>();
+    for (const candidate of providerCandidates) if (!unique.has(candidate.chunk.content_digest)) {
+      unique.set(candidate.chunk.content_digest, candidate);
+    }
+    const uniqueCandidates = [...unique.values()].sort((left, right) =>
+      retrievalCodeUnitCompare(left.chunk.content_digest, right.chunk.content_digest));
+    const byDigest = new Map<string, Float32Array>();
+    if (priorDatabasePath != null) {
+      if (!sameCanonicalPath(dirname(resolve(priorDatabasePath)), directory)) {
+        throw new Error("GKX_WATCHER_PRIOR_DATABASE_PATH_INVALID");
+      }
+      const prior = openSealedStateDatabase(priorDatabasePath, directory, "GKX_WATCHER_PRIOR_DATABASE");
+      try {
+        if (prior.manifest.vault_id !== coordinate.vault_id) throw new Error("GKX_WATCHER_PRIOR_DATABASE_VAULT_INVALID");
+        const cached = prior.contentVectorCache(vectorProvider.provider_id, vectorProvider.model_id, vectorProvider.dimensions);
+        if (cached) for (const [digest, vector] of cached) byDigest.set(digest, vector);
+      } finally { prior.close(); }
+    }
+    const missing = uniqueCandidates.filter((candidate) => !byDigest.has(candidate.chunk.content_digest));
+    reusedContentCount = uniqueCandidates.length - missing.length;
+    try {
+      for (let offset = 0; offset < missing.length;) {
+        const batch: typeof missing = [];
+        let bytes = 0;
+        while (offset + batch.length < missing.length && batch.length < 32) {
+          const candidate = missing[offset + batch.length];
+          const candidateBytes = Buffer.byteLength(candidate.chunk.text, "utf8");
+          if (batch.length > 0 && bytes + candidateBytes > 262_144) break;
+          batch.push(candidate);
+          bytes += candidateBytes;
+        }
+        providerCallCount += 1;
+        providerItemCount += batch.length;
+        const requestId = retrievalSha256(`watcher-index\0${offset}\0${batch.map((item) => item.chunk.content_digest).join("\0")}`);
+        const vectors = await invokeIngestProvider(vectorProvider, batch.map((item) => item.chunk.text), requestId);
+        batch.forEach((candidate, index) => byDigest.set(candidate.chunk.content_digest, vectors[index]));
+        offset += batch.length;
+      }
+      generationInput = {
+        ...base,
+        vectors: providerCandidates.map((candidate) => ({
+          candidate_chunk_key: candidate.candidate_chunk_key,
+          vector: [...byDigest.get(candidate.chunk.content_digest)!],
+        })),
+        embedding_provider_id: vectorProvider.provider_id,
+        embedding_model_id: vectorProvider.model_id,
+        embedding_dimensions: vectorProvider.dimensions,
+      };
+    } catch {
+      providerFailed = true;
+      reusedContentCount = 0;
+      generationInput = base;
+    }
+  }
+  const artifact = buildGkxRetrievalGenerationUnactivated(generationInput);
+  if (!sameCanonicalPath(dirname(artifact.database_path), directory)) throw new Error("GKX_INGEST_INNER_DATABASE_PATH_INVALID");
+  const journal = journalForPlan(plan);
+  const journalPath = join(directory, `ingest-rejections-${journal.rejection_journal_digest.slice("sha256:".length)}.json`);
+  publishImmutableJson(journalPath, directory, journal);
+  const ownerManifest = ownerManifestFor(plan, "non_strict", artifact, journal, chunking);
+  const ownerManifestPath = join(directory, `ingest-generation-${ownerManifest.owner_manifest_digest.slice("sha256:".length)}.json`);
+  publishImmutableJson(ownerManifestPath, directory, ownerManifest);
+  const store = openSealedStateDatabase(artifact.database_path, directory, "GKX_WATCHER_INNER_DATABASE");
+  try {
+    if (!sameJson(store.manifest, ownerManifest.inner.manifest)) throw new Error("GKX_INGEST_INNER_DATABASE_MANIFEST_MISMATCH");
+  } finally {
+    store.close();
+  }
+  assertWatcherIngestWriterCapability(capability, plan, coordinate.state_directory);
+  return deepFreeze({
+    state_directory: directory,
+    inner_database_path: artifact.database_path,
+    journal_path: journalPath,
+    owner_manifest_path: ownerManifestPath,
+    owner_manifest: ownerManifest,
+    embedding_work: {
+      provider_call_count: providerCallCount,
+      provider_item_count: providerItemCount,
+      reused_content_count: reusedContentCount,
+      provider_failed: providerFailed,
+    },
   });
 }
 
@@ -2552,6 +2768,7 @@ export function preflightIngestAuthority(
     allow_missing: true,
     alias_error: "GKX_INGEST_STATE_ANCESTOR_ALIAS_REJECTED",
   });
+  assertNoWatcherCoherentWriter(canonical);
   const namespaceBefore = existing === null
     ? deepFreeze({ entries: [] as ArtifactNamespaceEntry[], digest: retrievalCanonicalDigest([]) })
     : captureArtifactNamespace(existing);
@@ -2576,6 +2793,7 @@ export function preflightIngestAuthority(
     // Second half of the two-way legacy/ingest writer handshake. A legacy
     // guard created after the first observation cannot coexist with this lock.
     assertNoLegacyRetrievalWriter(directory);
+    assertNoWatcherCoherentWriter(directory);
     const active = currentActive(directory);
     const authorityDigest = captureAuthorityDigest(directory);
     const namespaceSnapshot = captureArtifactNamespace(directory);
@@ -2615,6 +2833,7 @@ function revalidateAuthorityPreflight(snapshot: IngestAuthorityPreflight): void 
   assertAuthorityPreflight(snapshot);
   const vaultRoot = AUTHORITY_ROOTS.get(snapshot);
   if (vaultRoot !== undefined) revalidateVaultRootPreflight(vaultRoot);
+  assertNoWatcherCoherentWriter(snapshot.state_directory);
   assertNoLegacyRetrievalWriter(snapshot.state_directory);
   const held = AUTHORITY_LOCKS.get(snapshot)!;
   const currentLock = readAuthorityLock(snapshot.state_directory);
@@ -2644,6 +2863,7 @@ function revalidateAuthorityPreflight(snapshot: IngestAuthorityPreflight): void 
     throw new Error("GKX_INGEST_AUTHORITY_LOCK_CHANGED");
   }
   assertNoLegacyRetrievalWriter(snapshot.state_directory);
+  assertNoWatcherCoherentWriter(snapshot.state_directory);
 }
 
 function assertAuthorityLockUnchanged(snapshot: IngestAuthorityPreflight): void {
