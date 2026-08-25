@@ -58,7 +58,11 @@ test("Windows scoped polling admits only the governed bounded leaf set", () => {
 });
 
 test("Linux shutdown cannot reopen a native watcher after a refresh hook has yielded", {
-  skip: process.platform === "linux" ? false : "Linux native-watcher regression",
+  skip: process.platform !== "linux"
+    ? "Linux native-watcher regression"
+    : LEXICAL_CAPABILITY.fts5_available
+      ? false
+      : "physical SQLite FTS5 unavailable",
 }, async () => {
   const watcherModule = new URL("../dist/watcher-host.mjs", import.meta.url).href;
   const childScript = `
