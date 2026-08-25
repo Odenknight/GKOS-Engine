@@ -196,7 +196,13 @@ const NAV_POLICY = Object.freeze({ id: "engine.cli.public-only-discoverability",
 const NAV_CONFIG_ID = "018f0000-0000-7000-8000-000000000001";
 
 function frontmatterValue(content, key) {
-  const match = new RegExp(`^${key}\\s*:\\s*["']?([^"'\\r\\n#]+)`, "im").exec(content);
+  const source = content.charCodeAt(0) === 0xfeff ? content.slice(1) : content;
+  const lines = source.split(/\r?\n/u);
+  if (lines[0]?.trim() !== "---") return undefined;
+  const closing = lines.findIndex((line, index) => index > 0 && line.trim() === "---");
+  if (closing < 0) return undefined;
+  const header = lines.slice(1, closing).join("\n");
+  const match = new RegExp(`^${key}\\s*:\\s*["']?([^"'\\r\\n#]+)`, "im").exec(header);
   return match?.[1]?.trim();
 }
 

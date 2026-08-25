@@ -47,6 +47,24 @@ test("all nav analysis commands emit stdout and leave source bytes untouched", a
   assert.deepEqual(await treeBytes(root), before);
 });
 
+test("nav context never treats body or fenced-code keys as frontmatter", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkx-nav-body-frontmatter-"));
+  await writeFile(join(root, "Quoted-Fixture.md"), [
+    "# Quoted fixture",
+    "```yaml",
+    "uid: 123e4567-e89b-42d3-a456-426614174888",
+    "sensitivity: public",
+    "title: BODY-ONLY-TITLE",
+    "```",
+    "BODY-ONLY-CONTENT",
+    "",
+  ].join("\n"));
+  const result = await exec(process.execPath, [cli, "nav", "context", root,
+    "--recipient", "human:reader", "--purpose", "review", "--stdout"]);
+  assert.match(result.stdout, /engine\.navigation-context-pack/);
+  assert.doesNotMatch(result.stdout, /BODY-ONLY-CONTENT|BODY-ONLY-TITLE/);
+});
+
 test("nav context rejects duplicate public identities with stable code and no source metadata", async () => {
   const root = await mkdtemp(join(tmpdir(), "gkx-nav-duplicate-"));
   const uid = "123e4567-e89b-42d3-a456-426614174777";
