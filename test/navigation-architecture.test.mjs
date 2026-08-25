@@ -51,6 +51,13 @@ test("NavigationCore cannot transitively reach filesystem mutation primitives", 
   assertNoMutationCalls(reachable);
 });
 
+test("framework-neutral Navigation Effects cannot transitively reach Node filesystem modules", async () => {
+  const reachable = await reachableFrom("src/navigation-effects/index.ts");
+  assert.ok(reachable.size > 10);
+  assertNoMutationCalls(reachable);
+  assert.equal([...reachable.keys()].some((file) => file.includes(`${join("navigation-effects", "node")}`)), false);
+});
+
 test("architecture gate proves it catches a transitive hidden writer", async () => {
   const root = await mkdtemp(join(tmpdir(), "nav-architecture-negative-"));
   await writeFile(join(root, "index.ts"), 'export * from "./helper";\n');

@@ -1,0 +1,16 @@
+{
+  "fixtureId": "effects-agent-cas-conflict",
+  "category": "conflict",
+  "input": {
+    "operation": "agent-note:update",
+    "noteUid": "018f22c8-4b63-7a12-9f45-8d91c734beef",
+    "expectedDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "currentDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "expected": {
+    "outcome": "conflict",
+    "sourceWrite": false,
+    "reasonCodes": ["COMPARE_AND_SWAP_MISMATCH"],
+    "currentContentIncluded": false
+  }
+}

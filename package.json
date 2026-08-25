@@ -31,6 +31,16 @@
       "import": "./dist/navigation.mjs",
       "default": "./dist/navigation.mjs"
     },
+    "./navigation-effects": {
+      "types": "./dist/navigation-effects/index.d.ts",
+      "import": "./dist/navigation-effects.mjs",
+      "default": "./dist/navigation-effects.mjs"
+    },
+    "./navigation-effects/node": {
+      "types": "./dist/navigation-effects/node/index.d.ts",
+      "import": "./dist/navigation-effects-node.mjs",
+      "default": "./dist/navigation-effects-node.mjs"
+    },
     "./governance": {
       "types": "./dist/governance/index.d.ts",
       "import": "./dist/governance.mjs",
@@ -80,7 +90,7 @@
     "pretest": "node scripts/build.mjs",
     "test": "node --test \"test/*.test.mjs\"",
     "pretest:navigation": "node scripts/build.mjs",
-    "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
+    "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-effects-contract.test.mjs test/navigation-effects-planner.test.mjs test/navigation-effects-node.test.mjs test/navigation-effects-performance.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
     "test:intelligence": "node scripts/test-intelligence.mjs",
     "pack:check": "node scripts/check-pack.mjs",
     "check:license": "node scripts/check-license.mjs",

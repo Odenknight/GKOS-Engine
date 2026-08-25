@@ -434,7 +434,24 @@ applicable standard suite.
 
 ## Deliberately deferred
 
-NAV-002, the undefined Walk Test, source application, managed-region writes,
-archive deletion, locks/leases, stale-plan enforcement, rollback/compensation
-execution, retention disposition, and sync-concurrency mutation tests are 2.2
-or later work. Their absence must remain visible through capability reporting.
+NAV-002, the undefined Walk Test, archive deletion, retention disposition,
+Obsidian event coordination, MCP agent-write tools, and product-level
+sync-concurrency remain deferred. The post-Phase-5 feature worktree adds an
+experimental, separately exported Navigation Effects 1.0 planner and optional
+Node executor. It does not alter Navigation 1.0, activate writes by default, or
+constitute a released 2.2 artifact.
+
+The pure surface is `gkos-engine/navigation-effects`; the filesystem surface is
+`gkos-engine/navigation-effects/node`. The latter requires a vault-scoped host
+adapter configuration, a current precondition provider, and explicit selection
+of its cooperative-vault path threat model. It rejects existing link/reparse
+ancestors but does not claim safety against a concurrent hostile local process
+that replaces an already-checked ancestor. It journals intent,
+archives exact before-images, writes same-directory temporary files, verifies
+after-images, emits immutable digest-addressed receipt versions, checkpoints
+shutdown, and blocks startup on corrupt journal/archive bindings. Unsafe
+recovery latches later writes closed; a fresh executor must complete the same
+recovery preflight before its first write, so restart cannot bypass the latch's
+persisted cause. Canonical effect IDs prevent artifact filename aliases. Its
+capability remains false until the host
+truthfully reports all dependencies active.

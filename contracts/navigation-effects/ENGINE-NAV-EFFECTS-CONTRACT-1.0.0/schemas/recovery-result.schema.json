@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/recovery-result.schema.json",
+  "title": "Navigation Effect Recovery Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifactKind", "effectsContract", "effectId", "classification", "writeCapabilityMayEnable", "reasonCodes", "observed"],
+  "properties": {
+    "artifactKind": { "const": "engine.navigation-effect-recovery-result" },
+    "effectsContract": { "const": "1.0.0" },
+    "effectId": { "type": "string", "pattern": "^effect:(?:[0-9a-f]{32}|rollback:[0-9a-f]{32})$" },
+    "classification": { "enum": ["effect-absent-retryable", "effect-present-verified", "conflicting-external-bytes", "ambiguous-or-corrupt"] },
+    "writeCapabilityMayEnable": { "type": "boolean" },
+    "reasonCodes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "observed": {
+      "type": "object",
+      "required": ["proposedDigest"],
+      "properties": {
+        "targetDigest": { "$ref": "#/$defs/digest" },
+        "temporaryDigest": { "$ref": "#/$defs/digest" },
+        "archiveBeforeDigest": { "$ref": "#/$defs/digest" },
+        "proposedDigest": { "$ref": "#/$defs/digest" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": { "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}
