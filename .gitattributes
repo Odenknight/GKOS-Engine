@@ -18,5 +18,13 @@ contracts/watcher/**/*.md text eol=lf
 # byte-governed and must remain LF on Windows checkouts.
 contracts/identity/** text eol=lf
 scripts/generate-agent-identity-mcp-contract.mjs text eol=lf
+scripts/generate-agent-identity-mcp-contract-draft1.mjs text eol=lf
 .github/workflows/phase6-identity-contract.yml text eol=lf
+.github/workflows/phase6-identity-contract-draft2.yml text eol=lf
 .github/workflows/phase4-retrieval-observation.yml text eol=lf
+bin/gkos-mcp-stdio.mjs text eol=lf
+src/service/stdio.ts text eol=lf
+test/agent-identity-mcp-contract*.test.mjs text eol=lf
+test/service-stdio.test.mjs text eol=lf
+test/service-stdio-package.test.mjs text eol=lf
+test/service-secret-canary.test.mjs text eol=lf

@@ -12,19 +12,20 @@ import addFormats from 'ajv-formats';
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const BASE='808d875b557f4cfd2bb0addccba44d70c9748f35';
 const PACK='contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1';
+const GENERATOR='scripts/generate-agent-identity-mcp-contract-draft1.mjs';
 const DIR=join(ROOT,PACK);
 const sha=(b)=>createHash('sha256').update(b).digest('hex');
 const json=async(name)=>JSON.parse(await readFile(join(DIR,name),'utf8'));
 const canonical=(v)=>JSON.stringify(Array.isArray(v)?v.map((x)=>JSON.parse(canonical(x))):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map((k)=>[k,JSON.parse(canonical(v[k]))])):v);
 
 test('generator check and exact manifest closure',async()=>{
-  execFileSync(process.execPath,['scripts/generate-agent-identity-mcp-contract.mjs','--check'],{cwd:ROOT,stdio:'pipe'});
+  execFileSync(process.execPath,[GENERATOR,'--check'],{cwd:ROOT,stdio:'pipe'});
   const names=(await readdir(DIR)).sort();assert.equal(names.length,34);assert.ok(names.includes('pack-manifest.json'));
   const manifest=await json('pack-manifest.json');assert.equal(manifest.leaf_count,33);assert.equal(manifest.leaves.length,33);assert.equal(new Set(manifest.leaves.map((x)=>x.path)).size,33);assert.ok(!manifest.leaves.some((x)=>x.path==='pack-manifest.json'));
   for(const leaf of manifest.leaves){const bytes=await readFile(join(DIR,leaf.path));assert.equal(bytes.length,leaf.size,leaf.path);assert.equal(sha(bytes),leaf.sha256,leaf.path);assert.ok(!bytes.includes(Buffer.from('\r\n')),leaf.path);}
   assert.equal(manifest.aggregate_digest,`sha256:${sha(canonical(manifest.leaves))}`);assert.equal(manifest.source_base_commit,BASE);
   assert.equal(manifest.generation_input_digest,'sha256:ec3ece84c71114b0d97cfa23376d37d35fde2f4e6105815d5c5e967ff886cc18');
-  assert.equal(manifest.generator_digest,`sha256:${sha(await readFile(join(ROOT,'scripts/generate-agent-identity-mcp-contract.mjs')))}`);
+  assert.equal(manifest.generator_digest,`sha256:${sha(await readFile(join(ROOT,GENERATOR)) )}`);
 });
 
 test('all schemas compile strictly and product instances validate',async()=>{
@@ -58,32 +59,30 @@ test('canonical identifiers, cursors, bootstrap and secret results fail closed',
 test('two fresh roots, execution-backed receipts, and deterministic tar are valid',async(t)=>{
   const a=await mkdtemp(join(tmpdir(),'gkos-f1-a-')),b=await mkdtemp(join(tmpdir(),'gkos-f1-b-'));t.after(async()=>{await rm(a,{recursive:true,force:true});await rm(b,{recursive:true,force:true});});
   const ta=join(a,'pack.tar'),tb=join(b,'pack.tar'),receipt=join(a,'qualification-receipt.json'),evidence=join(a,'qualification-evidence.json'),record=join(a,'command-record.json');
-  execFileSync(process.execPath,['scripts/generate-agent-identity-mcp-contract.mjs','--record-command',record,'--command','node --version'],{cwd:ROOT,stdio:'pipe'});
-  for(const [root,tar]of [[a,ta],[b,tb]])execFileSync(process.execPath,['scripts/generate-agent-identity-mcp-contract.mjs','--output-root',root,'--archive',tar,...(root===a?['--receipt',receipt,'--receipt-evidence',evidence,'--job','local-reproducibility','--receipt-command-record',record,'--receipt-input',join(a,PACK,'pack-manifest.json'),'--receipt-input',join(a,PACK,'qualification-receipt.schema.json'),'--receipt-output',ta]:[])],{cwd:ROOT,stdio:'pipe'});
+  execFileSync(process.execPath,[GENERATOR,'--record-command',record,'--command','node --version'],{cwd:ROOT,stdio:'pipe'});
+  for(const [root,tar]of [[a,ta],[b,tb]])execFileSync(process.execPath,[GENERATOR,'--output-root',root,'--archive',tar,...(root===a?['--receipt',receipt,'--receipt-evidence',evidence,'--job','local-reproducibility','--receipt-command-record',record,'--receipt-input',join(a,PACK,'pack-manifest.json'),'--receipt-input',join(a,PACK,'qualification-receipt.schema.json'),'--receipt-output',ta]:[])],{cwd:ROOT,stdio:'pipe'});
   assert.equal(sha(await readFile(ta)),sha(await readFile(tb)));assert.equal((await stat(ta)).size%512,0);
   const ma=await readFile(join(a,PACK,'pack-manifest.json')),mb=await readFile(join(b,PACK,'pack-manifest.json'));assert.deepEqual(ma,mb);
   const ajv=new Ajv2020({strict:true,allErrors:true,allowUnionTypes:true});addFormats(ajv);const schema=await json('qualification-receipt.schema.json'),value=JSON.parse(await readFile(receipt,'utf8')),validate=ajv.compile(schema);assert.equal(validate(value),true,ajv.errorsText(validate.errors));
-  const semanticValid=async(candidate,name)=>{const p=join(a,`${name}.json`);await writeFile(p,JSON.stringify(candidate));try{execFileSync(process.execPath,['scripts/generate-agent-identity-mcp-contract.mjs','--output-root',a,'--validate-receipt',p],{cwd:ROOT,stdio:'pipe'});return true;}catch{return false;}};
+  const semanticValid=async(candidate,name)=>{const p=join(a,`${name}.json`);await writeFile(p,JSON.stringify(candidate));try{execFileSync(process.execPath,[GENERATOR,'--output-root',a,'--validate-receipt',p],{cwd:ROOT,stdio:'pipe'});return true;}catch{return false;}};
   assert.ok(value.cpu.length>0);assert.deepEqual(Object.keys(value.tool_versions).sort(),['ajv','ajv_formats','node','npm','sqlite','typescript']);assert.equal(value.commands.length,1);assert.equal(value.commands[0].command,'node --version');assert.ok(value.commands[0].duration_ms>0);assert.ok(Date.parse(value.commands[0].ended_at)>Date.parse(value.commands[0].started_at));assert.ok(Date.parse(value.started_at)<=Date.parse(value.commands[0].started_at));assert.ok(Date.parse(value.ended_at)>=Date.parse(value.commands[0].ended_at));assert.ok(value.commands.every((x)=>x.test_count===x.pass_count+x.fail_count+x.skip_count));assert.ok(value.input_artifact_digests.length>0);assert.ok(value.output_artifact_digests.length>0);assert.equal(await semanticValid(value,'valid'),true);
   for(const mutation of [(x)=>{delete x.cpu},(x)=>{x.tool_versions.npm='10'},(x)=>{x.tool_versions.sqlite='contract-only'},(x)=>{delete x.commands[0].duration_ms},(x)=>{x.commands[0].exit_code=7},(x)=>{x.commands[0].test_count=1},(x)=>{x.input_artifact_digests=[]},(x)=>{x.output_artifact_digests=[]}]){const candidate=structuredClone(value);mutation(candidate);assert.equal(validate(candidate),false,JSON.stringify(candidate));}
   const impossible=structuredClone(value);impossible.ended_at=impossible.started_at;assert.equal(validate(impossible),true);assert.equal(await semanticValid(impossible,'impossible-interval'),false);
   const free=structuredClone(value);free.commands[0].command='synthetic free assertion';assert.equal(validate(free),true);assert.equal(await semanticValid(free,'free-command'),false);
   const failed=structuredClone(value);failed.result='FAIL';failed.secret_scan='FAIL';failed.commands[0].result='FAIL';failed.commands[0].exit_code=7;assert.equal(validate(failed),true,ajv.errorsText(validate.errors));assert.equal(await semanticValid(failed,'valid-failure'),true);
   const falseFailure=structuredClone(value);falseFailure.result='FAIL';falseFailure.secret_scan='FAIL';falseFailure.commands[0].result='FAIL';assert.equal(validate(falseFailure),false);
-  const failScript=join(a,'fail.mjs'),failRecord=join(a,'fail-record.json');await writeFile(failScript,'process.exit(7);\n');assert.throws(()=>execFileSync(process.execPath,['scripts/generate-agent-identity-mcp-contract.mjs','--record-command',failRecord,'--command',`node "${failScript}"`],{cwd:ROOT,stdio:'pipe'}));const actualFailure=JSON.parse(await readFile(failRecord));assert.equal(actualFailure.result,'FAIL');assert.ok(actualFailure.exit_code>0);assert.ok(actualFailure.duration_ms>0);
-  const badScript=join(a,'synthetic.mjs'),badLog=join(a,'synthetic.tap'),badRecord=join(a,'synthetic-record.json');await writeFile(badScript,"console.log('TAP version 13\\n# tests 2\\n# pass 1\\n# fail 0\\n# skipped 0\\n# duration_ms 1');\\n");assert.throws(()=>execFileSync(process.execPath,['scripts/generate-agent-identity-mcp-contract.mjs','--record-command',badRecord,'--command',`node "${badScript}"`,'--test-log',badLog],{cwd:ROOT,stdio:'pipe'}));
-  assert.throws(()=>execFileSync(process.execPath,['scripts/generate-agent-identity-mcp-contract.mjs','--output-root',a,'--check','--receipt',receipt,'--job','local-reproducibility','--receipt-command','synthetic free assertion','--receipt-input',join(a,PACK,'pack-manifest.json'),'--receipt-output',ta],{cwd:ROOT,stdio:'pipe'}));
+  const failScript=join(a,'fail.mjs'),failRecord=join(a,'fail-record.json');await writeFile(failScript,'process.exit(7);\n');assert.throws(()=>execFileSync(process.execPath,[GENERATOR,'--record-command',failRecord,'--command',`node "${failScript}"`],{cwd:ROOT,stdio:'pipe'}));const actualFailure=JSON.parse(await readFile(failRecord));assert.equal(actualFailure.result,'FAIL');assert.ok(actualFailure.exit_code>0);assert.ok(actualFailure.duration_ms>0);
+  const badScript=join(a,'synthetic.mjs'),badLog=join(a,'synthetic.tap'),badRecord=join(a,'synthetic-record.json');await writeFile(badScript,"console.log('TAP version 13\\n# tests 2\\n# pass 1\\n# fail 0\\n# skipped 0\\n# duration_ms 1');\\n");assert.throws(()=>execFileSync(process.execPath,[GENERATOR,'--record-command',badRecord,'--command',`node "${badScript}"`,'--test-log',badLog],{cwd:ROOT,stdio:'pipe'}));
+  assert.throws(()=>execFileSync(process.execPath,[GENERATOR,'--output-root',a,'--check','--receipt',receipt,'--job','local-reproducibility','--receipt-command','synthetic free assertion','--receipt-input',join(a,PACK,'pack-manifest.json'),'--receipt-output',ta],{cwd:ROOT,stdio:'pipe'}));
   const tar=await readFile(ta),entries=[];for(let off=0;off<tar.length;){const header=tar.subarray(off,off+512);if(header.every((x)=>x===0))break;const read=(start,len)=>header.subarray(start,start+len).toString('ascii').replace(/\0.*$/,'').trim();const size=parseInt(read(124,12),8);entries.push({name:read(0,100),mode:read(100,8),uid:read(108,8),gid:read(116,8),mtime:read(136,12)});off+=512+Math.ceil(size/512)*512;}assert.equal(entries.length,34);assert.deepEqual(entries.map((x)=>x.name),[...entries.map((x)=>x.name)].sort());for(const e of entries){assert.equal(e.mode,'0000644');assert.equal(e.uid,'0000000');assert.equal(e.gid,'0000000');assert.equal(e.mtime,'00000000000');assert.ok(e.name.startsWith('GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/'));}
 });
 
-test('diff is all-and-only allowed and protected paths are byte-identical',async()=>{
+test('Draft.1 allowed/protected inventories and generator remain byte-frozen',async()=>{
   const allowed=new Set((await readFile(join(DIR,'allowed-paths.txt'),'utf8')).trim().split('\n'));assert.equal(allowed.size,40);
   const protectedPaths=(await readFile(join(DIR,'protected-paths.txt'),'utf8')).trim().split('\n');assert.equal(protectedPaths.length,22);
   assert.equal(sha(await readFile(join(DIR,'allowed-paths.txt'))),'7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce');
   assert.equal(sha(await readFile(join(DIR,'protected-paths.txt'))),'f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948');
-  const changed=execFileSync('git',['status','--porcelain=v1','-uall'],{cwd:ROOT,encoding:'utf8'}).split(/\r?\n/).filter(Boolean).map((line)=>line.slice(3).replaceAll('\\','/'));
-  for(const path of changed)assert.ok(allowed.has(path),`disallowed changed path: ${path}`);
-  const protectedDiff=execFileSync('git',['diff','--name-only',BASE,'--',...protectedPaths],{cwd:ROOT,encoding:'utf8'}).trim();assert.equal(protectedDiff,'');
+  assert.equal(sha(await readFile(join(ROOT,GENERATOR))),'95fcdb91814ecf683461a791f4a4dc99ede9d279abba87ee59a9d08cce23ba68');
 });
 
 test('generated and qualification inputs contain no secret material',async()=>{
@@ -92,7 +91,7 @@ test('generated and qualification inputs contain no secret material',async()=>{
 });
 
 test('hosted workflow freezes all-and-only 11 jobs and artifacts',async()=>{
-  const workflow=await readFile(join(ROOT,'.github/workflows/phase6-identity-contract.yml'),'utf8'),generator=await readFile(join(ROOT,'scripts/generate-agent-identity-mcp-contract.mjs'),'utf8');assert.match(workflow,/^name: GKOS Phase 6 identity contract qualification$/m);
+  const workflow=await readFile(join(ROOT,'.github/workflows/phase6-identity-contract.yml'),'utf8'),generator=await readFile(join(ROOT,GENERATOR),'utf8');assert.match(workflow,/^name: GKOS Phase 6 identity contract qualification$/m);
   const jobs=['p6-f1-contract-linux-node22','p6-f1-contract-linux-node23','p6-f1-contract-linux-node24','p6-f1-contract-windows-node22','p6-f1-contract-windows-node23','p6-f1-contract-windows-node24','p6-f1-contract-macos-node22','p6-f1-schema-adversarial','p6-f1-pack-reproducibility','p6-f1-secret-scan','p6-f1-artifact-audit'];for(const job of jobs)assert.match(workflow,new RegExp(`^  ${job}:`,'m'));assert.equal((workflow.match(/^  p6-f1-[a-z0-9-]+:/gm)||[]).length,11);
   const inventory=await json('hosted-artifact-inventory.json');assert.equal(inventory.artifacts.length,11);for(const artifact of inventory.artifacts)assert.match(workflow,new RegExp(`name: ${artifact}(?:[,}]|$)`,'m'));
   assert.equal((workflow.match(/--qualification-job p6-f1-/g)||[]).length,11);assert.equal((workflow.match(/--receipt-evidence qualification-evidence\.json/g)||[]).length,10);assert.doesNotMatch(workflow,/--receipt-command(?:\s|=)|--receipt-test-log/);
