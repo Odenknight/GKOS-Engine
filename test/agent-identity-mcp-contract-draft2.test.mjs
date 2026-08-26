@@ -92,6 +92,20 @@ test("Draft.2 workflow freezes all-and-only eleven governed jobs", async () => {
   assert.match(workflow, /^name: GKOS Phase 6 identity\/MCP Draft\.2 qualification$/m);
   assert.equal((workflow.match(/^  p6-d2-[a-z0-9-]+:/gm) || []).length, 11);
   assert.equal((workflow.match(/--qualification-job p6-d2-/g) || []).length, 11);
+  assert.equal((workflow.match(/\$\{\{ runner\.temp \}\}\/focused\.tap/g) || []).length, 7);
+  assert.equal((workflow.match(/\$\{\{ runner\.temp \}\}\/adversarial\.tap/g) || []).length, 8);
+  assert.equal((workflow.match(/\$\{\{ runner\.temp \}\}\/full\.tap/g) || []).length, 1);
+  for (const job of [
+    "p6-d2-contract-linux-node22", "p6-d2-contract-linux-node23", "p6-d2-contract-linux-node24",
+    "p6-d2-contract-windows-node22", "p6-d2-contract-windows-node23", "p6-d2-contract-windows-node24",
+    "p6-d2-contract-macos-node22",
+  ]) {
+    const start = workflow.indexOf(`  ${job}:`);
+    const next = workflow.indexOf("\n  p6-d2-", start + 1);
+    const block = workflow.slice(start, next < 0 ? undefined : next);
+    assert.match(block, /\$\{\{ runner\.temp \}\}\/focused\.tap/);
+    assert.match(block, /\$\{\{ runner\.temp \}\}\/adversarial\.tap/);
+  }
   assert.doesNotMatch(workflow, /p6-f1|draft\.1/);
   const inventory = await json("hosted-artifact-inventory.json");
   assert.equal(inventory.artifacts.length, 11);
