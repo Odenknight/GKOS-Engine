@@ -32,21 +32,21 @@ jobs:
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
       - name: Focused contract tests with retained counts
         shell: bash
-        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee focused.tap
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee "$RUNNER_TEMP/focused.tap"
       - name: Write bound qualification receipt
         shell: bash
         run: |
           node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-linux-node22 \
             --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check" \
-            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap" \
-            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
+            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::$RUNNER_TEMP/focused.tap" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output "$RUNNER_TEMP/focused.tap"
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-linux-node22-receipt
           path: |
             qualification-receipt.json
             qualification-evidence.json
-            focused.tap
+            ${{ runner.temp }}/focused.tap
           retention-days: 90
           if-no-files-found: error
 
@@ -65,21 +65,21 @@ jobs:
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
       - name: Focused contract tests with retained counts
         shell: bash
-        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee focused.tap
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee "$RUNNER_TEMP/focused.tap"
       - name: Write bound qualification receipt
         shell: bash
         run: |
           node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-linux-node23 \
             --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check" \
-            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap" \
-            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
+            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::$RUNNER_TEMP/focused.tap" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output "$RUNNER_TEMP/focused.tap"
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-linux-node23-receipt
           path: |
             qualification-receipt.json
             qualification-evidence.json
-            focused.tap
+            ${{ runner.temp }}/focused.tap
           retention-days: 90
           if-no-files-found: error
 
@@ -98,26 +98,26 @@ jobs:
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
       - name: Focused contract tests with retained counts
         shell: bash
-        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee focused.tap
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee "$RUNNER_TEMP/focused.tap"
       - name: Full suite with retained counts
         shell: bash
-        run: npm test 2>&1 | tee full.tap
+        run: npm test 2>&1 | tee "$RUNNER_TEMP/full.tap"
       - run: npm pack --dry-run
       - name: Write bound qualification receipt
         shell: bash
         run: |
           node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-linux-node24 \
             --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check" --receipt-command "npm pack --dry-run" \
-            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap" --receipt-test-log "npm test::full.tap" \
-            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap --receipt-output full.tap
+            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::$RUNNER_TEMP/focused.tap" --receipt-test-log "npm test::$RUNNER_TEMP/full.tap" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output "$RUNNER_TEMP/focused.tap" --receipt-output "$RUNNER_TEMP/full.tap"
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-linux-node24-receipt
           path: |
             qualification-receipt.json
             qualification-evidence.json
-            focused.tap
-            full.tap
+            ${{ runner.temp }}/focused.tap
+            ${{ runner.temp }}/full.tap
           retention-days: 90
           if-no-files-found: error
 
@@ -137,21 +137,21 @@ jobs:
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
       - name: Focused contract tests with retained counts
         shell: pwsh
-        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | Tee-Object -FilePath focused.tap
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | Tee-Object -FilePath (Join-Path $env:RUNNER_TEMP 'focused.tap')
       - name: Write bound qualification receipt
         shell: pwsh
         run: >-
           node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-windows-node22
           --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check"
-          --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap"
-          --receipt-input "$env:CONTRACT_ROOT/pack-manifest.json" --receipt-input "$env:CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
+          --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::$env:RUNNER_TEMP/focused.tap"
+          --receipt-input "$env:CONTRACT_ROOT/pack-manifest.json" --receipt-input "$env:CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output "$env:RUNNER_TEMP/focused.tap"
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-windows-node22-receipt
           path: |
             qualification-receipt.json
             qualification-evidence.json
-            focused.tap
+            ${{ runner.temp }}/focused.tap
           retention-days: 90
           if-no-files-found: error
 
@@ -171,21 +171,21 @@ jobs:
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
       - name: Focused contract tests with retained counts
         shell: pwsh
-        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | Tee-Object -FilePath focused.tap
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | Tee-Object -FilePath (Join-Path $env:RUNNER_TEMP 'focused.tap')
       - name: Write bound qualification receipt
         shell: pwsh
         run: >-
           node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-windows-node23
           --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check"
-          --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap"
-          --receipt-input "$env:CONTRACT_ROOT/pack-manifest.json" --receipt-input "$env:CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
+          --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::$env:RUNNER_TEMP/focused.tap"
+          --receipt-input "$env:CONTRACT_ROOT/pack-manifest.json" --receipt-input "$env:CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output "$env:RUNNER_TEMP/focused.tap"
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-windows-node23-receipt
           path: |
             qualification-receipt.json
             qualification-evidence.json
-            focused.tap
+            ${{ runner.temp }}/focused.tap
           retention-days: 90
           if-no-files-found: error
 
@@ -205,21 +205,21 @@ jobs:
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
       - name: Focused contract tests with retained counts
         shell: pwsh
-        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | Tee-Object -FilePath focused.tap
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | Tee-Object -FilePath (Join-Path $env:RUNNER_TEMP 'focused.tap')
       - name: Write bound qualification receipt
         shell: pwsh
         run: >-
           node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-windows-node24
           --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check"
-          --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap"
-          --receipt-input "$env:CONTRACT_ROOT/pack-manifest.json" --receipt-input "$env:CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
+          --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::$env:RUNNER_TEMP/focused.tap"
+          --receipt-input "$env:CONTRACT_ROOT/pack-manifest.json" --receipt-input "$env:CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output "$env:RUNNER_TEMP/focused.tap"
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-windows-node24-receipt
           path: |
             qualification-receipt.json
             qualification-evidence.json
-            focused.tap
+            ${{ runner.temp }}/focused.tap
           retention-days: 90
           if-no-files-found: error
 
@@ -238,21 +238,21 @@ jobs:
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
       - name: Focused contract tests with retained counts
         shell: bash
-        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee focused.tap
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee "$RUNNER_TEMP/focused.tap"
       - name: Write bound qualification receipt
         shell: bash
         run: |
           node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-macos-node22 \
             --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check" \
-            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap" \
-            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
+            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::$RUNNER_TEMP/focused.tap" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output "$RUNNER_TEMP/focused.tap"
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-macos-node22-receipt
           path: |
             qualification-receipt.json
             qualification-evidence.json
-            focused.tap
+            ${{ runner.temp }}/focused.tap
           retention-days: 90
           if-no-files-found: error
 
@@ -269,18 +269,18 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Adversarial tests with retained counts
         shell: bash
-        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee adversarial.tap
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee "$RUNNER_TEMP/adversarial.tap"
       - run: >-
           node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-schema-adversarial
-          --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::adversarial.tap"
-          --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output adversarial.tap
+          --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::$RUNNER_TEMP/adversarial.tap"
+          --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output "$RUNNER_TEMP/adversarial.tap"
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-adversarial-receipt
           path: |
             qualification-receipt.json
             qualification-evidence.json
-            adversarial.tap
+            ${{ runner.temp }}/adversarial.tap
           retention-days: 90
           if-no-files-found: error
 
@@ -328,18 +328,18 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Secret scan with retained counts
         shell: bash
-        run: node --test --test-name-pattern="secret material" test/agent-identity-mcp-contract.test.mjs 2>&1 | tee secret-scan.tap
+        run: node --test --test-name-pattern="secret material" test/agent-identity-mcp-contract.test.mjs 2>&1 | tee "$RUNNER_TEMP/secret-scan.tap"
       - run: >-
           node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-secret-scan
-          --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-test-log "node --test --test-name-pattern=secret material test/agent-identity-mcp-contract.test.mjs::secret-scan.tap"
-          --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output secret-scan.tap
+          --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-test-log "node --test --test-name-pattern=secret material test/agent-identity-mcp-contract.test.mjs::$RUNNER_TEMP/secret-scan.tap"
+          --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output "$RUNNER_TEMP/secret-scan.tap"
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-secret-scan-receipt
           path: |
             qualification-receipt.json
             qualification-evidence.json
-            secret-scan.tap
+            ${{ runner.temp }}/secret-scan.tap
           retention-days: 90
           if-no-files-found: error
 
