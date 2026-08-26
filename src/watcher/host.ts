@@ -186,6 +186,12 @@ export interface WatcherHostOptions {
     readonly reparsed_source_count: number;
   }) => void;
   readonly on_before_watcher_refresh?: () => void | Promise<void>;
+  /**
+   * Supplies the host's exact live S-directory capability before the host can
+   * mutate S. A compatibility owner may share this one capability so every
+   * verified mutation refreshes one seal; it must never reopen S to recover.
+   */
+  readonly on_status_directory_capability?: (directory: WatcherDirectoryCapability) => void;
   readonly on_status_change?: (status: Readonly<JsonRecord>) => void;
   readonly coordinator_options: Omit<RetrievalCoordinatorOptions, "source_reader" | "runtime_policy_digest" | "lineage_view_freshness">;
 }
@@ -381,6 +387,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
   const journalDirectory = ensureWatcherDirectory(join(watcherDirectory.path, "journals"), watcherDirectory);
   let retrievalDirectory = openWatcherDirectory(retrievalPath);
   const statusDirectory = openWatcherDirectory(dirname(resolve(options.status_file)));
+  options.on_status_directory_capability?.(statusDirectory);
   const profile = await loadIngestProfile(options.profile_selector);
   const projectionIndex = new GkxIndex(options.projection_options);
   let projectionIndexReady = false;

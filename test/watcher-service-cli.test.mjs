@@ -409,12 +409,15 @@ test("desktop main delegates legacy routes to one coherent watcher host and shar
   assert.equal(existsSync(join(statusRoot, "watcher-service-locator.json")), false);
   assert.equal(existsSync(join(vault, ".gkx", "derived", "watcher", "watcher-authority.lock")), false);
   const finalStatus = JSON.parse(readFileSync(statusFile, "utf8"));
+  assert.equal(finalStatus.notes_indexed, 1, "fresh-profile status advances beyond the initial zero-note document");
+  assert.equal(typeof finalStatus.last_scan_iso, "string", "repeated governed status updates persist the committed scan time");
   assert.equal(finalStatus.token_path, join(statusRoot, "desktop-agent.token"));
   assert.equal(finalStatus.mcp_token_path, join(statusRoot, "desktop-agent.mcp.token"));
   assert.equal(finalStatus.mcp_identity_path, join(statusRoot, "desktop-agent.mcp.identity.json"));
   const produced = `${stdout}\n${stderr}\n${JSON.stringify(finalStatus)}`;
   assert.equal(produced.includes(token), false);
   assert.equal(produced.includes(mcpToken), false);
+  assert.doesNotMatch(stderr, /failed to write status file:/u);
   assert.match(stdout, /viewer credential: .*desktop-agent\.token/);
   assert.match(stdout, /MCP credential: .*desktop-agent\.mcp\.token/);
 });
