@@ -1,0 +1,150 @@
+{
+  "contract_version": "1.0.0-draft.1",
+  "kind": "canonical",
+  "positive": {
+    "canonical_utf8_hex": "7b2261223a22c3a9222c2262223a317d",
+    "digest": "sha256:aa58fba8483623bed37c1b02edfccbdd9a53123837c20bfa4cb4049993a2872e",
+    "input": {
+      "a": "é",
+      "b": 1
+    }
+  },
+  "vectors": [
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "utf8-bom"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "utf8-overlong"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "invalid-continuation"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "surrogate"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "nul"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "unpaired-utf16"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "duplicate-key"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "negative-zero"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "decimal-1.0"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "exponent-1e0"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "nan"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "infinity"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "unsafe-integer"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "crlf"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "accept",
+      "id": "cursor-canonical-E"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "cursor-alias-B"
+    },
+    {
+      "assertions": [
+        "strict parsing precedes JSON.parse",
+        "canonical output is shortest UTF-8 with no whitespace"
+      ],
+      "expect": "reject",
+      "id": "cursor-alias-D"
+    }
+  ]
+}

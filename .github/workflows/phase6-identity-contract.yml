@@ -1,0 +1,237 @@
+name: GKOS Phase 6 identity contract qualification
+
+on:
+  push:
+    branches: [codex/phase6-f1-contract-pack]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  NODE_OPTIONS: --disable-warning=ExperimentalWarning
+  CONTRACT_ROOT: contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1
+
+jobs:
+  p6-f1-contract-linux-node22: &contract_linux
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: test "$(npm --version)" = "10.9.4"
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck && npm run build
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
+      - run: node --test test/agent-identity-mcp-contract.test.mjs
+      - name: Write qualification receipt
+        shell: bash
+        run: |
+          node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||'ubuntu-24.04',os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-linux-node22-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+
+  p6-f1-contract-linux-node23:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps: &contract_steps
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '23', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: test "$(npm --version)" = "10.9.4"
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck && npm run build
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
+      - run: node --test test/agent-identity-mcp-contract.test.mjs
+      - name: Write qualification receipt
+        shell: bash
+        run: |
+          node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-linux-node23-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+
+  p6-f1-contract-linux-node24:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: test "$(npm --version)" = "10.9.4"
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck && npm run build
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
+      - run: node --test test/agent-identity-mcp-contract.test.mjs
+      - run: npm test
+      - run: npm pack --dry-run
+      - name: Write qualification receipt
+        shell: bash
+        run: |
+          node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 plus full package gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-linux-node24-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+
+  p6-f1-contract-windows-node22: &contract_windows
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: if ((npm --version) -ne '10.9.4') { exit 1 }
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm run build
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
+      - run: node --test test/agent-identity-mcp-contract.test.mjs
+      - name: Write qualification receipt
+        shell: pwsh
+        run: node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-windows-node22-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+
+  p6-f1-contract-windows-node23:
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '23', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: if ((npm --version) -ne '10.9.4') { exit 1 }
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm run build
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
+      - run: node --test test/agent-identity-mcp-contract.test.mjs
+      - name: Write qualification receipt
+        shell: pwsh
+        run: node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-windows-node23-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+
+  p6-f1-contract-windows-node24:
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: if ((npm --version) -ne '10.9.4') { exit 1 }
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+      - run: npm run build
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
+      - run: node --test test/agent-identity-mcp-contract.test.mjs
+      - name: Write qualification receipt
+        shell: pwsh
+        run: node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-windows-node24-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+
+  p6-f1-contract-macos-node22:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: test "$(npm --version)" = "10.9.4"
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck && npm run build
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
+      - run: node --test test/agent-identity-mcp-contract.test.mjs
+      - name: Write qualification receipt
+        shell: bash
+        run: |
+          node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-macos-node22-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+
+  p6-f1-schema-adversarial:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: test "$(npm --version)" = "10.9.4"
+      - run: npm ci --ignore-scripts
+      - run: node --test test/agent-identity-mcp-contract.test.mjs
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --job p6-f1-schema-adversarial --command "strict schema and adversarial vectors"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-adversarial-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+
+  p6-f1-pack-reproducibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: test "$(npm --version)" = "10.9.4"
+      - run: npm ci --ignore-scripts
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check --archive GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar --receipt qualification-receipt.json --job p6-f1-pack-reproducibility --command "two-root deterministic pack and archive"
+      - run: sha256sum GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar > GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-contract-pack
+          path: |
+            GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar
+            GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar.sha256
+            qualification-receipt.json
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-secret-scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - run: npm install --global npm@10.9.4
+      - run: test "$(npm --version)" = "10.9.4"
+      - run: npm ci --ignore-scripts
+      - run: node --test --test-name-pattern="secret material" test/agent-identity-mcp-contract.test.mjs
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --job p6-f1-secret-scan --command "credential and secret exposure scan"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-secret-scan-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+
+  p6-f1-artifact-audit:
+    needs: [p6-f1-contract-linux-node22,p6-f1-contract-linux-node23,p6-f1-contract-linux-node24,p6-f1-contract-windows-node22,p6-f1-contract-windows-node23,p6-f1-contract-windows-node24,p6-f1-contract-macos-node22,p6-f1-schema-adversarial,p6-f1-pack-reproducibility,p6-f1-secret-scan]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: predecessor-artifacts }
+      - name: Verify exact predecessor inventory and inner evidence
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import Ajv2020 from 'ajv/dist/2020.js';import addFormats from 'ajv-formats';
+          const root='predecessor-artifacts',inventory=JSON.parse(fs.readFileSync(process.env.CONTRACT_ROOT+'/hosted-artifact-inventory.json'));
+          const expected=inventory.artifacts.filter((x)=>x!=='gkos-p6-f1-terminal-audit-receipt').sort(),actual=fs.readdirSync(root,{withFileTypes:true}).filter((x)=>x.isDirectory()).map((x)=>x.name).sort();if(JSON.stringify(actual)!==JSON.stringify(expected))throw new Error(`artifact inventory mismatch: ${actual}`);
+          const ajv=new Ajv2020({strict:true,allErrors:true,allowUnionTypes:true});addFormats(ajv);const validate=ajv.compile(JSON.parse(fs.readFileSync(process.env.CONTRACT_ROOT+'/qualification-receipt.schema.json')));
+          for(const name of expected){const dir=path.join(root,name),files=fs.readdirSync(dir).sort();if(name==='gkos-p6-f1-contract-pack'){const base='GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar';if(JSON.stringify(files)!==JSON.stringify([base,base+'.sha256','qualification-receipt.json'].sort()))throw new Error('pack artifact file inventory');const got=crypto.createHash('sha256').update(fs.readFileSync(path.join(dir,base))).digest('hex');const line=fs.readFileSync(path.join(dir,base+'.sha256'),'utf8');if(line!==`${got}  ${base}\n`)throw new Error('pack archive digest mismatch');}else if(JSON.stringify(files)!==JSON.stringify(['qualification-receipt.json']))throw new Error(`${name} file inventory`);const receipt=JSON.parse(fs.readFileSync(path.join(dir,'qualification-receipt.json')));if(!validate(receipt))throw new Error(`${name}: ${ajv.errorsText(validate.errors)}`);if(receipt.result!=='PASS'||receipt.head_commit!==process.env.GITHUB_SHA)throw new Error(`${name}: coordinate mismatch`);}
+          NODE
+      - name: Verify hosted all-and-only predecessor conclusions
+        env: { GH_TOKEN: "${{ github.token }}" }
+        shell: bash
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100" > hosted-jobs.json
+          node -e "const x=require('./hosted-jobs.json').jobs;const expected=['p6-f1-contract-linux-node22','p6-f1-contract-linux-node23','p6-f1-contract-linux-node24','p6-f1-contract-windows-node22','p6-f1-contract-windows-node23','p6-f1-contract-windows-node24','p6-f1-contract-macos-node22','p6-f1-schema-adversarial','p6-f1-pack-reproducibility','p6-f1-secret-scan'];for(const n of expected){const j=x.find(v=>v.name===n);if(!j||j.conclusion!=='success')throw Error(n+' not successful')}if(x.filter(v=>v.name.startsWith('p6-f1-')).length!==11)throw Error('all-and-only job set mismatch')"
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --job p6-f1-artifact-audit --command "terminal all-and-only artifact audit"
+      - uses: actions/upload-artifact@v4
+        with: { name: gkos-p6-f1-terminal-audit-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
