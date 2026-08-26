@@ -1,19 +1,48 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
-import { chmodSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import http from "node:http";
 import { tmpdir } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import { delimiter, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { once } from "node:events";
 import test from "node:test";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
+function resolveNpmCli(environment = process.env) {
+  const candidates = [];
+  if (environment.npm_execpath) candidates.push(environment.npm_execpath);
+  const pathValue = environment.PATH ?? environment.Path ?? "";
+  for (const directory of pathValue.split(delimiter).filter(Boolean)) {
+    if (process.platform === "win32") {
+      if (existsSync(join(directory, "npm.cmd"))) candidates.push(join(directory, "node_modules", "npm", "bin", "npm-cli.js"));
+    } else {
+      const executable = join(directory, "npm");
+      if (existsSync(executable)) {
+        try { candidates.push(realpathSync(executable)); }
+        catch { /* keep searching the bounded PATH inventory */ }
+      }
+    }
+  }
+  candidates.push(
+    resolve(dirname(process.execPath), "node_modules/npm/bin/npm-cli.js"),
+    resolve(dirname(process.execPath), "../lib/node_modules/npm/bin/npm-cli.js"),
+  );
+  const found = [...new Set(candidates.map((candidate) => resolve(candidate)))].find((candidate) => existsSync(candidate));
+  if (!found) throw new Error("npm CLI not found in the current Node toolchain");
+  return found;
+}
+
+test("npm CLI discovery works outside an npm lifecycle", () => {
+  const npmCli = resolveNpmCli({ ...process.env, npm_execpath: undefined });
+  assert.match(npmCli.replaceAll("\\", "/"), /\/npm(?:-cli\.js|\/bin\/npm-cli\.js)$/u);
+});
+
 test("packed installation runs the stdio bridge against one authenticated real process", { timeout: 90_000 }, async (t) => {
   const temporary = mkdtempSync(join(tmpdir(), "gkos-stdio-package-"));
   t.after(() => rmSync(temporary, { recursive: true, force: true }));
-  const npmCli = process.env.npm_execpath || resolve(dirname(process.execPath), "node_modules/npm/bin/npm-cli.js");
+  const npmCli = resolveNpmCli();
   // npm pack may run prepare even with ignore-scripts on some npm releases.
   // Build and pack a clean local clone so its dist recreation cannot race the
   // concurrently executing repository test processes.
