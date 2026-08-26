@@ -65,7 +65,7 @@ test('two fresh roots and deterministic tar are byte-identical',async(t)=>{
 test('diff is all-and-only allowed and protected paths are byte-identical',async()=>{
   const allowed=new Set((await readFile(join(DIR,'allowed-paths.txt'),'utf8')).trim().split('\n'));assert.equal(allowed.size,40);
   const protectedPaths=(await readFile(join(DIR,'protected-paths.txt'),'utf8')).trim().split('\n');assert.equal(protectedPaths.length,22);
-  const changed=execFileSync('git',['status','--porcelain=v1','-uall'],{cwd:ROOT,encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean).map((line)=>line.slice(3).replaceAll('\\','/'));
+  const changed=execFileSync('git',['status','--porcelain=v1','-uall'],{cwd:ROOT,encoding:'utf8'}).split(/\r?\n/).filter(Boolean).map((line)=>line.slice(3).replaceAll('\\','/'));
   for(const path of changed)assert.ok(allowed.has(path),`disallowed changed path: ${path}`);
   const protectedDiff=execFileSync('git',['diff','--name-only',BASE,'--',...protectedPaths],{cwd:ROOT,encoding:'utf8'}).trim();assert.equal(protectedDiff,'');
 });
