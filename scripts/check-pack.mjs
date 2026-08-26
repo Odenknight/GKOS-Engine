@@ -128,6 +128,20 @@ const expectedWatcherPackDigest = `sha256:${createHash("sha256").update(canonica
 if (watcherManifest.total_bytes !== watcherPackBytes || watcherManifest.pack_digest !== expectedWatcherPackDigest) {
   throw new Error("watcher recovery pack aggregate/digest mismatch");
 }
+const identityPackFiles = [];
+for (const version of ["draft.1", "draft.2"]) {
+  const directory = new URL(`../contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-${version}/`, import.meta.url);
+  const manifest = JSON.parse(readFileSync(new URL("pack-manifest.json", directory), "utf8"));
+  const names = readdirSync(directory).sort(codeUnitCompare);
+  const declared = ["pack-manifest.json", ...manifest.leaves.map((row) => row.path)].sort(codeUnitCompare);
+  if (JSON.stringify(names) !== JSON.stringify(declared)) throw new Error(`identity ${version} pack closure mismatch`);
+  for (const row of manifest.leaves) {
+    const bytes = readFileSync(new URL(row.path, directory));
+    const digest = createHash("sha256").update(bytes).digest("hex");
+    if (row.size !== bytes.length || row.sha256 !== digest) throw new Error(`identity ${version} manifest mismatch: ${row.path}`);
+  }
+  identityPackFiles.push(...names.map((name) => `contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-${version}/${name}`));
+}
 for (const fixtureName of ["conformance-fixture.json", "storage-conformance-fixture.json", "cli-conformance-fixture.json"]) {
   const fixture = JSON.parse(readFileSync(new URL(fixtureName, ingestPackDirectory), "utf8"));
   if (fixture.status !== "frozen" || fixture.frozen !== true) throw new Error(`${fixtureName} is not frozen`);
@@ -186,12 +200,18 @@ for (const name of watcherPackFiles) {
   const required = `contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/${name}`;
   if (!files.includes(required)) throw new Error(`npm package is missing ${required}`);
 }
+for (const required of identityPackFiles) {
+  if (!files.includes(required)) throw new Error(`npm package is missing ${required}`);
+}
 for (const required of [
   "dist/gkos-engine.mjs",
   "dist/adapter.mjs",
   "dist/gkx.mjs",
   "dist/graphiti-adapter.mjs",
   "dist/gkos-desktop-agent.mjs",
+  "dist/service-stdio.mjs",
+  "dist/service/stdio.d.ts",
+  "bin/gkos-mcp-stdio.mjs",
   "dist/navigation.mjs",
   "dist/navigation/index.d.ts",
   "dist/governance.mjs",

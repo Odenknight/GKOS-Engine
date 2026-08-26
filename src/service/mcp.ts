@@ -12,7 +12,7 @@ export const MCP_PROTOCOL_VERSION = "2025-11-25";
 export const MCP_REQUEST_BYTES = 393_216;
 export const MCP_RESULT_BYTES = 1_048_576;
 
-const CONTRACT_VERSION = "1.0.0-draft.1";
+const CONTRACT_VERSION = "1.0.0-draft.2";
 const UUID_V7 = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 const REF = /^(?:gkrec1|gkscp1)_[A-Za-z0-9_-]{21}[AQgw]$/u;
 const CAPABILITY_NAMES = [

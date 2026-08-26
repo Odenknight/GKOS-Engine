@@ -1,0 +1,65 @@
+{
+  "$id": "conformance.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "const": "1.0.0-draft.2"
+    },
+    "kind": {
+      "enum": [
+        "canonical",
+        "migration",
+        "race",
+        "security",
+        "mcp",
+        "core_operations"
+      ]
+    },
+    "vectors": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "assertions": {
+            "items": {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "expect": {
+            "enum": [
+              "accept",
+              "reject",
+              "pass",
+              "fail_closed"
+            ]
+          },
+          "id": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "expect",
+          "assertions"
+        ],
+        "title": "Vector",
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract_version",
+    "kind",
+    "vectors"
+  ],
+  "title": "Conformance fixture",
+  "type": "object"
+}
