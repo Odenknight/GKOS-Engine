@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { cpus } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
@@ -169,7 +171,9 @@ function schemasAndInstances(){
   const stages=[['physical_peer','GKOS_P6_PEER_FORBIDDEN'],['host','GKOS_P6_HOST_FORBIDDEN'],['origin','GKOS_P6_ORIGIN_FORBIDDEN'],['method','GKOS_P6_METHOD_NOT_ALLOWED'],['content_type_or_delete_shape','GKOS_P6_UNSUPPORTED_MEDIA_TYPE'],['protocol_version','GKOS_P6_PROTOCOL_VERSION_INVALID'],['accept','GKOS_P6_NOT_ACCEPTABLE'],['session','GKOS_P6_SESSION_UNKNOWN'],['authentication','GKOS_P6_AUTH_FAILED']].map(([name,error_code],i)=>({stage:i+1,name,request_id:null,error_code}));
   const transportSchema=schema('transport.schema.json',object('Frozen transports',{contract_version:{const:VERSION},protocol_version:{const:'2025-11-25'},transports:{type:'array',minItems:2,maxItems:2,items:object('Transport',{name:{enum:['native_stdio','loopback_streamable_http']},availability:{const:'contract_only'},request_timeout_ms:{type:'integer',minimum:1000,maximum:30000}})},http_predispatch:{type:'array',minItems:9,maxItems:9,items:object('Admission stage',{stage:{type:'integer',minimum:1,maximum:9},name:str(64),request_id:{type:'null'},error_code:{enum:stages.map((x)=>x.error_code)}})}}));
   const platformSchema=schema('platform-matrix.schema.json',object('Platform matrix',{contract_version:{const:VERSION},entries:{type:'array',minItems:20,maxItems:20,items:object('Platform',{id:str(64),repository:{enum:['full','lite']},os:{enum:['linux','windows','macos','multi']},runner:str(128),arch:{enum:['x64','arm64','aarch64','other']},runtime:str(64),status:{enum:['required','optional','unavailable']},claim:{enum:['contract_portability_only','conformance_only','none']}})}}));
-  const qualificationSchema=schema('qualification-receipt.schema.json',object('Qualification receipt',{contract_version:{const:VERSION},base_commit:{const:BASE},head_commit:{type:'string',pattern:'^[0-9a-f]{40}$'},workflow:str(128),run_id:str(64),job:str(128),runner_image:str(128),os:str(32),architecture:str(32),tool_versions:{type:'object',minProperties:3,additionalProperties:str(64)},commands:{type:'array',minItems:1,items:object('Command result',{command:str(1024),exit_code:{type:'integer'},result:{enum:['PASS','FAIL']},pass_count:safeInt,fail_count:safeInt,skip_count:safeInt})},allowed_paths_digest:digest,protected_paths_digest:digest,pack_aggregate_digest:digest,input_artifact_digests:{type:'array',items:digest},output_artifact_digests:{type:'array',items:digest},secret_scan:{const:'PASS'},started_at:ts,ended_at:ts,result:{enum:['PASS','FAIL']}}));
+  const exactVersion={type:'string',pattern:'^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$'};
+  const artifactDigests={type:'array',minItems:1,uniqueItems:true,items:digest};
+  const qualificationSchema=schema('qualification-receipt.schema.json',object('Qualification receipt',{contract_version:{const:VERSION},base_commit:{const:BASE},head_commit:{type:'string',pattern:'^[0-9a-f]{40}$'},workflow:{const:'GKOS Phase 6 identity contract qualification'},run_id:str(64),job:str(128),runner_image:str(128),os:str(32),architecture:str(32),cpu:str(256),tool_versions:object('Exact qualification tool versions',{node:exactVersion,npm:exactVersion,typescript:exactVersion,ajv:exactVersion,ajv_formats:exactVersion,sqlite:exactVersion}),commands:{type:'array',minItems:1,items:object('Command result',{command:str(1024),exit_code:{const:0},result:{const:'PASS'},test_count:safeInt,pass_count:safeInt,fail_count:{const:0},skip_count:safeInt})},allowed_paths_digest:digest,protected_paths_digest:digest,pack_aggregate_digest:digest,input_artifact_digests:artifactDigests,output_artifact_digests:artifactDigests,secret_scan:{const:'PASS'},started_at:ts,ended_at:ts,result:{const:'PASS'}}));
   const conformance=schema('conformance.schema.json',object('Conformance fixture',{contract_version:{const:VERSION},kind:{enum:['canonical','migration','race','security','mcp','core_operations']},vectors:{type:'array',minItems:1,items:object('Vector',{id:str(128),expect:{enum:['accept','reject','pass','fail_closed']},assertions:{type:'array',minItems:1,items:str(512)}})}}));
   const states=['UNINITIALIZED','OWNER_PROVED','PLAN_STAGED','OWNER_LOCATOR_STAGED','DB_PUBLISHED','OWNER_ACTIVE','LEGACY_REMOVED','COMPLETE','RECOVERY_REQUIRED'];
   return {errors,errorSchema,transportSchema,platformSchema,qualificationSchema,conformance,states,stages};
@@ -214,12 +218,44 @@ async function checkGenerated(root,files){const errors=[];for(const [name,expect
 function tarHeader(name,size){const b=Buffer.alloc(512);const put=(s,o,n)=>b.write(s.slice(0,n),o,n,'ascii');put(name,0,100);put('0000644\0',100,8);put('0000000\0',108,8);put('0000000\0',116,8);put(`${size.toString(8).padStart(11,'0')}\0`,124,12);put('00000000000\0',136,12);b.fill(0x20,148,156);b[156]=0x30;put('ustar\0',257,6);put('00',263,2);const sum=b.reduce((a,x)=>a+x,0);put(`${sum.toString(8).padStart(6,'0')}\0 `,148,8);return b;}
 async function makeArchive(path,files){const parts=[];for(const [name,bytes]of [...files].sort(([a],[b])=>a<b?-1:a>b?1:0)){parts.push(tarHeader(`${CONTRACT}/${name}`,bytes.length),bytes,Buffer.alloc((512-bytes.length%512)%512));}parts.push(Buffer.alloc(1024));await mkdir(dirname(path),{recursive:true});await writeFile(path,Buffer.concat(parts));}
 
-async function writeQualificationReceipt(path,files,job,command){
-  const manifest=JSON.parse(files.get('pack-manifest.json').toString('utf8'));const now=new Date().toISOString();
-  const receipt={contract_version:VERSION,base_commit:BASE,head_commit:process.env.GITHUB_SHA||BASE,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID||'local-contract-only',job,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10.9.4',sqlite:'contract-only'},commands:[{command,exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:`sha256:${sha256(files.get('allowed-paths.txt'))}`,protected_paths_digest:`sha256:${sha256(files.get('protected-paths.txt'))}`,pack_aggregate_digest:manifest.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:now,ended_at:now,result:'PASS'};
+const args=process.argv.slice(2);
+const value=(flag)=>{const i=args.indexOf(flag);return i<0?null:args[i+1]};
+const values=(flag)=>args.flatMap((x,i)=>x===flag&&args[i+1]?[args[i+1]]:[]);
+const exactPackageVersion=async(name)=>JSON.parse(await readFile(resolve(ROOT,'node_modules',name,'package.json'),'utf8')).version;
+const artifactRecords=async(paths)=>Promise.all([...new Set(paths.map((x)=>resolve(x)))].sort().map(async(path)=>({path:relative(ROOT,path).replaceAll('\\','/'),sha256:`sha256:${sha256(await readFile(path))}`})));
+const filesUnder=async(root)=>{const found=[];for(const entry of await readdir(root,{withFileTypes:true})){const path=join(root,entry.name);if(entry.isDirectory())found.push(...await filesUnder(path));else if(entry.isFile())found.push(path);else throw new Error(`non-regular receipt input: ${path}`);}return found;};
+const nodeTestCounts=async(path)=>{
+  const text=await readFile(resolve(path),'utf8'),counts={};
+  for(const key of ['tests','pass','fail','skipped']){const matches=[...text.matchAll(new RegExp(`^(?:#\\s*|ℹ\\s*)${key}\\s+(\\d+)\\s*$`,'gmu'))];if(matches.length===0)throw new Error(`missing ${key} count in ${path}`);counts[key]=Number(matches.at(-1)[1]);}
+  if(counts.tests!==counts.pass+counts.fail+counts.skipped)throw new Error(`incoherent test counts in ${path}`);
+  if(counts.fail!==0)throw new Error(`failing test log cannot produce PASS receipt: ${path}`);
+  return {test_count:counts.tests,pass_count:counts.pass,fail_count:counts.fail,skip_count:counts.skipped,log_path:relative(ROOT,resolve(path)).replaceAll('\\','/'),log_digest:`sha256:${sha256(Buffer.from(text))}`};
+};
+
+async function writeQualificationReceipt(path,files,job){
+  const startedAt=new Date().toISOString(),commands=[];
+  for(const command of values('--receipt-command'))commands.push({command,exit_code:0,result:'PASS',test_count:0,pass_count:0,fail_count:0,skip_count:0});
+  for(const spec of values('--receipt-test-log')){const split=spec.indexOf('::');if(split<1)throw new Error(`invalid --receipt-test-log: ${spec}`);const command=spec.slice(0,split),logPath=spec.slice(split+2);commands.push({command,exit_code:0,result:'PASS',...await nodeTestCounts(logPath)});}
+  if(commands.length===0)throw new Error('at least one exact receipt command is required');
+  const rootedInputs=(await Promise.all(values('--receipt-input-root').map((x)=>filesUnder(resolve(x))))).flat();
+  const inputRecords=await artifactRecords([...values('--receipt-input'),...rootedInputs]);
+  if(inputRecords.length===0)throw new Error('at least one receipt input artifact is required');
+  const evidencePath=resolve(value('--receipt-evidence')||'qualification-evidence.json');
+  const outputRecords=await artifactRecords(values('--receipt-output'));
+  const cpu=cpus()[0]?.model?.trim();if(!cpu)throw new Error('CPU model unavailable');
+  const npmVersion=(process.platform==='win32'?execFileSync(process.env.ComSpec||'cmd.exe',['/d','/s','/c','npm --version'],{encoding:'utf8'}):execFileSync('npm',['--version'],{encoding:'utf8'})).trim();
+  const tool_versions={node:process.version,npm:npmVersion,typescript:await exactPackageVersion('typescript'),ajv:await exactPackageVersion('ajv'),ajv_formats:await exactPackageVersion('ajv-formats'),sqlite:process.versions.sqlite};
+  for(const [name,version]of Object.entries(tool_versions))if(!version||version==='contract-only'||version==='10')throw new Error(`inexact ${name} version`);
+  const evidence={contract_version:VERSION,job,head_commit:process.env.GITHUB_SHA||BASE,cpu,tool_versions,commands,input_artifacts:inputRecords,produced_artifacts:outputRecords,created_at:new Date().toISOString()};
+  await writeFile(evidencePath,jsonBytes(evidence));
+  const allOutputRecords=[...outputRecords,{path:relative(ROOT,evidencePath).replaceAll('\\','/'),sha256:`sha256:${sha256(await readFile(evidencePath))}`}];
+  const inputDigests=[...new Set(inputRecords.map((x)=>x.sha256))].sort(),outputDigests=[...new Set(allOutputRecords.map((x)=>x.sha256))].sort();
+  if(outputDigests.length===0)throw new Error('at least one receipt output artifact is required');
+  const manifest=JSON.parse(files.get('pack-manifest.json').toString('utf8'));
+  const receipt={contract_version:VERSION,base_commit:BASE,head_commit:process.env.GITHUB_SHA||BASE,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID||'local-contract-only',job,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,cpu,tool_versions,commands:commands.map(({log_digest,log_path,...command})=>command),allowed_paths_digest:`sha256:${sha256(files.get('allowed-paths.txt'))}`,protected_paths_digest:`sha256:${sha256(files.get('protected-paths.txt'))}`,pack_aggregate_digest:manifest.aggregate_digest,input_artifact_digests:inputDigests,output_artifact_digests:outputDigests,secret_scan:'PASS',started_at:startedAt,ended_at:new Date().toISOString(),result:'PASS'};
   await writeFile(resolve(path),jsonBytes(receipt));
 }
 
-const args=process.argv.slice(2);const value=(flag)=>{const i=args.indexOf(flag);return i<0?null:args[i+1]};const outputRoot=resolve(value('--output-root')||ROOT);const files=await generatedLeaves();
-if(args.includes('--check'))await checkGenerated(outputRoot,files);else await writeGenerated(outputRoot,files);const archivePath=value('--archive');if(archivePath)await makeArchive(resolve(archivePath),files);const receiptPath=value('--receipt');if(receiptPath)await writeQualificationReceipt(receiptPath,files,value('--job')||process.env.GITHUB_JOB||'local-f1',value('--command')||'F1 contract gate');
+const outputRoot=resolve(value('--output-root')||ROOT);const files=await generatedLeaves();
+if(args.includes('--check'))await checkGenerated(outputRoot,files);else await writeGenerated(outputRoot,files);const archivePath=value('--archive');if(archivePath)await makeArchive(resolve(archivePath),files);const receiptPath=value('--receipt');if(receiptPath)await writeQualificationReceipt(receiptPath,files,value('--job')||process.env.GITHUB_JOB||'local-f1');
 console.log(JSON.stringify({contract:CONTRACT,output_root:outputRoot,leaf_count:files.size,hashed_leaf_count:files.size-1,mode:args.includes('--check')?'check':'write',archive:archivePath?resolve(archivePath):null,receipt:receiptPath?resolve(receiptPath):null}));

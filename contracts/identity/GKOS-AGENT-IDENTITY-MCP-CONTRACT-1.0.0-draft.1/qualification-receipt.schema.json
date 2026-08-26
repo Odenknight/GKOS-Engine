@@ -25,12 +25,10 @@
             "type": "string"
           },
           "exit_code": {
-            "type": "integer"
+            "const": 0
           },
           "fail_count": {
-            "maximum": 9007199254740991,
-            "minimum": 0,
-            "type": "integer"
+            "const": 0
           },
           "pass_count": {
             "maximum": 9007199254740991,
@@ -38,12 +36,14 @@
             "type": "integer"
           },
           "result": {
-            "enum": [
-              "PASS",
-              "FAIL"
-            ]
+            "const": "PASS"
           },
           "skip_count": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "test_count": {
             "maximum": 9007199254740991,
             "minimum": 0,
             "type": "integer"
@@ -53,6 +53,7 @@
           "command",
           "exit_code",
           "result",
+          "test_count",
           "pass_count",
           "fail_count",
           "skip_count"
@@ -65,6 +66,11 @@
     },
     "contract_version": {
       "const": "1.0.0-draft.1"
+    },
+    "cpu": {
+      "maxLength": 256,
+      "minLength": 1,
+      "type": "string"
     },
     "ended_at": {
       "format": "date-time",
@@ -80,7 +86,9 @@
         "pattern": "^sha256:[0-9a-f]{64}$",
         "type": "string"
       },
-      "type": "array"
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
     },
     "job": {
       "maxLength": 128,
@@ -97,7 +105,9 @@
         "pattern": "^sha256:[0-9a-f]{64}$",
         "type": "string"
       },
-      "type": "array"
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
     },
     "pack_aggregate_digest": {
       "pattern": "^sha256:[0-9a-f]{64}$",
@@ -108,10 +118,7 @@
       "type": "string"
     },
     "result": {
-      "enum": [
-        "PASS",
-        "FAIL"
-      ]
+      "const": "PASS"
     },
     "run_id": {
       "maxLength": 64,
@@ -132,18 +139,46 @@
       "type": "string"
     },
     "tool_versions": {
-      "additionalProperties": {
-        "maxLength": 64,
-        "minLength": 1,
-        "type": "string"
+      "additionalProperties": false,
+      "properties": {
+        "ajv": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "ajv_formats": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "node": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "npm": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "sqlite": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "typescript": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        }
       },
-      "minProperties": 3,
+      "required": [
+        "node",
+        "npm",
+        "typescript",
+        "ajv",
+        "ajv_formats",
+        "sqlite"
+      ],
+      "title": "Exact qualification tool versions",
       "type": "object"
     },
     "workflow": {
-      "maxLength": 128,
-      "minLength": 1,
-      "type": "string"
+      "const": "GKOS Phase 6 identity contract qualification"
     }
   },
   "required": [
@@ -156,6 +191,7 @@
     "runner_image",
     "os",
     "architecture",
+    "cpu",
     "tool_versions",
     "commands",
     "allowed_paths_digest",
