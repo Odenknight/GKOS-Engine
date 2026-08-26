@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/service/GKOS-LOCAL-SERVICE-1.0.0-draft.1/capabilities.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "protocol", "features"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version"],
+      "properties": {
+        "id": { "const": "gkos-local-service" },
+        "version": { "const": "1.0.0-draft.1" }
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["graph", "notes", "graphiti_episodes", "mcp", "events", "proposal_ingress", "navigation", "navigation_effects"],
+      "properties": {
+        "graph": { "$ref": "#/$defs/feature" },
+        "notes": { "$ref": "#/$defs/feature" },
+        "graphiti_episodes": { "$ref": "#/$defs/feature" },
+        "mcp": { "$ref": "#/$defs/feature" },
+        "events": { "$ref": "#/$defs/feature" },
+        "proposal_ingress": { "$ref": "#/$defs/feature" },
+        "navigation": { "$ref": "#/$defs/feature" },
+        "navigation_effects": { "$ref": "#/$defs/feature" }
+      }
+    }
+  },
+  "$defs": {
+    "feature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["available", "configured", "authorized", "enabled", "reason_codes"],
+      "properties": {
+        "available": { "type": "boolean" },
+        "configured": { "type": "boolean" },
+        "authorized": { "type": "boolean" },
+        "enabled": { "type": "boolean" },
+        "reason_codes": {
+          "type": "array",
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,63}$" }
+        }
+      }
+    }
+  }
+}

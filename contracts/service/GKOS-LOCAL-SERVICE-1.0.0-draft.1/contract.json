@@ -1,0 +1,29 @@
+{
+  "contract_id": "GKOS-LOCAL-SERVICE-1.0.0-draft.1",
+  "schema_version": 1,
+  "protocol": {
+    "id": "gkos-local-service",
+    "version": "1.0.0-draft.1"
+  },
+  "standing": "integration-only",
+  "default_port": 4814,
+  "bind_policy": "loopback-only",
+  "authentication": "authorization-bearer-header",
+  "query_tokens": false,
+  "routes": [
+    { "method": "GET", "path": "/health", "availability": "enabled-authenticated" },
+    { "method": "GET", "path": "/capabilities", "availability": "enabled-authenticated" },
+    { "method": "GET", "path": "/notes", "availability": "enabled-authenticated" },
+    { "method": "GET", "path": "/graph", "availability": "enabled-authenticated" },
+    { "method": "GET", "path": "/graphiti/episodes", "availability": "enabled-authenticated" },
+    { "method": "GET", "path": "/events", "availability": "configured-authenticated" },
+    { "method": "GET_POST_DELETE", "path": "/mcp", "availability": "identity-runtime-gated" },
+    { "method": "POST", "path": "/proposals", "availability": "disabled-by-default" }
+  ],
+  "event_transport": {
+    "content_type": "text/event-stream; charset=utf-8",
+    "framing": "sse-data-json",
+    "resume_header": "Last-Event-ID",
+    "resume_semantics": "strictly-after-acknowledged-sequence"
+  }
+}
