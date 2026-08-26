@@ -349,10 +349,10 @@ test("desktop main delegates legacy routes to one coherent watcher host and shar
   const headers = { authorization: `Bearer ${token}` };
   const rootResponse = await fetch(`http://127.0.0.1:${port}/`, { headers });
   assert.equal(rootResponse.status, 200);
-  const legacyStatus = await rootResponse.json();
-  assert.equal(legacyStatus.default_sensitivity, "internal");
-  assert.equal(legacyStatus.notes_indexed, 1);
-  assert.equal(legacyStatus.token_path, join(statusRoot, "desktop-agent.token"));
+  const safeHealth = await rootResponse.json();
+  assert.equal(safeHealth.state, "serving");
+  assert.equal(safeHealth.visible_counts.notes, 1);
+  assert.equal(JSON.stringify(safeHealth).includes(statusRoot), false);
   const notes = await (await fetch(`http://127.0.0.1:${port}/notes`, { headers })).json();
   assert.equal(notes.count, 1);
   assert.equal(notes.notes[0].sensitivity, "internal");
@@ -365,15 +365,58 @@ test("desktop main delegates legacy routes to one coherent watcher host and shar
   assert.equal(watcherStatus.freshness, "fresh");
   const absentRetrieval = await fetch(`http://127.0.0.1:${port}/retrieval`, { headers });
   assert.equal(absentRetrieval.status, 404);
-  assert.equal(await absentRetrieval.text(), '{"error":"not_found","detail":"/retrieval"}');
+  assert.equal(await absentRetrieval.text(), '{"error":"not_found"}');
+
+  const mcpToken = readFileSync(join(statusRoot, "desktop-agent.mcp.token"), "utf8").trim();
+  assert.notEqual(mcpToken, token);
+  const viewerMcp = await fetch(`http://127.0.0.1:${port}/mcp`, {
+    method: "POST", headers: { ...headers, "content-type": "application/json" }, body: "{}",
+  });
+  assert.equal(viewerMcp.status, 403);
+  const agentGraph = await fetch(`http://127.0.0.1:${port}/graph`, { headers: { authorization: `Bearer ${mcpToken}` } });
+  assert.equal(agentGraph.status, 403);
+
+  const eventAbort = new AbortController();
+  const eventResponse = await fetch(`http://127.0.0.1:${port}/events`, { headers, signal: eventAbort.signal });
+  assert.equal(eventResponse.status, 200);
+  const initialized = await fetch(`http://127.0.0.1:${port}/mcp`, {
+    method: "POST",
+    headers: { authorization: `Bearer ${mcpToken}`, "content-type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: "init", method: "initialize", params: { protocolVersion: "2025-11-25", capabilities: {}, clientInfo: { name: "watcher-fixture", version: "1" } } }),
+  });
+  assert.equal(initialized.status, 200);
+  const mcpSession = initialized.headers.get("mcp-session-id");
+  const mcpHeaders = { authorization: `Bearer ${mcpToken}`, "content-type": "application/json", "mcp-session-id": mcpSession, "mcp-protocol-version": "2025-11-25" };
+  assert.equal((await fetch(`http://127.0.0.1:${port}/mcp`, { method: "POST", headers: mcpHeaders, body: JSON.stringify({ jsonrpc: "2.0", method: "notifications/initialized" }) })).status, 202);
+  const discoveryResponse = await fetch(`http://127.0.0.1:${port}/mcp`, { method: "POST", headers: mcpHeaders, body: JSON.stringify({ jsonrpc: "2.0", id: "discover", method: "tools/call", params: { name: "gkos_navigation_discover", arguments: { scope_ref: null, cursor: null, limit: 20 } } }) });
+  const discovery = (await discoveryResponse.json()).result.structuredContent;
+  assert.deepEqual(discovery.items.map((item) => item.canonical_path), ["accepted.md"]);
+  const eventReader = eventResponse.body.getReader();
+  const eventRead = eventReader.read();
+  const eventChunk = await Promise.race([eventRead, new Promise((_, reject) => setTimeout(() => reject(new Error("event timeout")), 5000))]);
+  const eventText = Buffer.from(eventChunk.value).toString("utf8");
+  assert.match(eventText, /event: traversal/);
+  const event = JSON.parse(/^data: (.+)$/mu.exec(eventText)[1]);
+  assert.equal(event.operation_id, discovery.request_id);
+  assert.deepEqual(event.paths, ["accepted.md"]);
   const shutdown = await fetch(`http://127.0.0.1:${port}/control/shutdown`, { method: "POST", headers });
   assert.equal(shutdown.status, 202);
   assert.equal(await shutdown.text(), '{"status":"stopping"}\n');
   const [exitCode] = await once(child, "exit");
   assert.equal(exitCode, 0, `${stdout}\n${stderr}`);
+  const streamEnd = await eventReader.read().catch(() => ({ done: true }));
+  assert.equal(streamEnd.done, true, "shutdown closes the active viewer stream before watcher cleanup");
   assert.equal(existsSync(join(statusRoot, "watcher-service-locator.json")), false);
   assert.equal(existsSync(join(vault, ".gkx", "derived", "watcher", "watcher-authority.lock")), false);
-  assert.equal(JSON.parse(readFileSync(statusFile, "utf8")).token_path, join(statusRoot, "desktop-agent.token"));
+  const finalStatus = JSON.parse(readFileSync(statusFile, "utf8"));
+  assert.equal(finalStatus.token_path, join(statusRoot, "desktop-agent.token"));
+  assert.equal(finalStatus.mcp_token_path, join(statusRoot, "desktop-agent.mcp.token"));
+  assert.equal(finalStatus.mcp_identity_path, join(statusRoot, "desktop-agent.mcp.identity.json"));
+  const produced = `${stdout}\n${stderr}\n${JSON.stringify(finalStatus)}`;
+  assert.equal(produced.includes(token), false);
+  assert.equal(produced.includes(mcpToken), false);
+  assert.match(stdout, /viewer credential: .*desktop-agent\.token/);
+  assert.match(stdout, /MCP credential: .*desktop-agent\.mcp\.token/);
 });
 
 test("desktop rejects an unsafe custom S before token or status mutation", async (t) => {

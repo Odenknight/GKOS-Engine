@@ -273,10 +273,10 @@ export interface WatcherServiceHandle {
  * false leaves the exact `/status` and `/control/shutdown` routes to this
  * service. The handler receives no locator or token authority from here.
  */
-export type WatcherServiceRequestHandler = (
-  request: IncomingMessage,
-  response: ServerResponse,
-) => boolean | Promise<boolean>;
+export interface WatcherServiceRequestHandler {
+  (request: IncomingMessage, response: ServerResponse): boolean | Promise<boolean>;
+  closeStreams?: () => void;
+}
 
 export async function startWatcherService(options: {
   readonly status_directory: WatcherDirectoryCapability;
@@ -376,6 +376,7 @@ export async function startWatcherService(options: {
         }, 10_000);
       });
       const graceful = (async () => {
+        options.compatibility_request_handler?.closeStreams?.();
         await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
         if (controller.signal.aborted) fail("GKX_WATCHER_SHUTDOWN_UNSAFE");
         await options.on_shutdown({ signal: controller.signal, deadline_ms: deadlineMs });

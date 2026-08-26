@@ -178,6 +178,8 @@ export interface WatcherHostOptions {
   readonly create_compatibility_request_handler?: (context: {
     readonly get_status: () => Readonly<JsonRecord>;
     readonly get_graph: () => GkxGraph | null;
+    readonly get_sources: () => readonly SourceFile[];
+    readonly get_snapshot: () => { readonly graph: GkxGraph; readonly sources: readonly SourceFile[]; readonly service_generation_id: string };
   }) => WatcherServiceRequestHandler;
   readonly on_index_execution?: (receipt: {
     readonly execution_kind: "set_files" | "apply_changes";
@@ -383,6 +385,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
   const projectionIndex = new GkxIndex(options.projection_options);
   let projectionIndexReady = false;
   let projectionFiles: readonly SourceFile[] = [];
+  let projectionServiceGenerationId: string | null = null;
   const serviceInstanceId = watcherUuid7();
   let priorPointer = readWatcherPointer(watcherDirectory, "outer");
   let priorManifest = priorPointer === null ? null : readWatcherCoherentManifest(watcherDirectory, priorPointer);
@@ -716,6 +719,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
           }
           coverageScan = hintEpoch === batchHintEpoch ? scan : null;
           projectionFiles = scan.files;
+          projectionServiceGenerationId = String(priorManifest.service_generation_id);
           projectionIndexReady = true;
           options.on_status_change?.(getStatus());
           return;
@@ -768,6 +772,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
           completeRetryEpoch();
           if (!consumePendingRetryAuthority(commitScan, commitHintEpoch)) coverageScan = null;
           projectionFiles = commitScan.files;
+          projectionServiceGenerationId = String(priorManifest.service_generation_id);
           projectionIndexReady = true;
           options.on_status_change?.(getStatus());
           return;
@@ -853,6 +858,9 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       }
         coverageScan = hintEpoch === batchHintEpoch ? scan : null;
         projectionFiles = scan.files;
+        const committedPointer = readWatcherPointer(watcherDirectory, "outer");
+        if (committedPointer === null) fail("GKX_WATCHER_PROJECTION_GENERATION_MISSING");
+        projectionServiceGenerationId = String(readWatcherCoherentManifest(watcherDirectory, committedPointer).service_generation_id);
         projectionIndexReady = true;
         if (kind === "failure_reconciliation") {
           await new Promise<void>((resolveTurn) => setImmediate(resolveTurn));
@@ -867,6 +875,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       } catch (error) {
         projectionIndexReady = false;
         projectionFiles = [];
+        projectionServiceGenerationId = null;
         if (!pendingUnscoped) for (const path of batchPaths) pendingPaths.add(path);
         pendingUnscoped ||= batchUnscoped;
         pendingOverflow ||= batchOverflow;
@@ -1117,6 +1126,21 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       return artifact.graph as GkxGraph;
     };
 
+    const getCommittedProjectionSnapshot = (): { graph: GkxGraph; sources: readonly SourceFile[]; service_generation_id: string } => {
+      const before = readWatcherPointer(watcherDirectory, "outer");
+      if (before === null || projectionServiceGenerationId === null || !projectionIndexReady) fail("GKX_WATCHER_PROJECTION_UNAVAILABLE");
+      const manifest = readWatcherCoherentManifest(watcherDirectory, before);
+      if (manifest.service_generation_id !== projectionServiceGenerationId) fail("GKX_WATCHER_PROJECTION_GENERATION_MISMATCH");
+      const artifact = readWatcherRawGraph(watcherDirectory, manifest);
+      if (artifact.service_generation_id !== manifest.service_generation_id || artifact.topology_snapshot_digest !== manifest.topology_snapshot_digest) {
+        fail("GKX_WATCHER_GRAPH_INVALID");
+      }
+      const sources = projectionFiles.map((source) => ({ ...source }));
+      const after = readWatcherPointer(watcherDirectory, "outer");
+      if (after === null || after.pointer_digest !== before.pointer_digest) fail("GKX_WATCHER_PROJECTION_GENERATION_CHANGED");
+      return { graph: artifact.graph as GkxGraph, sources, service_generation_id: String(manifest.service_generation_id) };
+    };
+
     const queueEvent = (name: string | Buffer | null, directoryPrefix = ""): void => {
       if (stopped || stopping) return;
       const rawName = typeof name === "string" ? name : name?.toString("utf8") ?? null;
@@ -1255,6 +1279,8 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       compatibility_request_handler: options.create_compatibility_request_handler?.({
         get_status: getStatus,
         get_graph: getGraph,
+        get_sources: () => getCommittedProjectionSnapshot().sources,
+        get_snapshot: getCommittedProjectionSnapshot,
       }),
       port: options.port,
       on_stopping: () => {

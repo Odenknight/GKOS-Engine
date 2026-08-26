@@ -32,6 +32,11 @@ export interface ServiceCredentialIdentity {
   sensitivityCeiling: GkxSensitivity;
   capabilities: readonly ServiceReadCapability[];
   revoked: boolean;
+  limits?: {
+    concurrentRequests: number;
+    bucketCapacity: number;
+    refillMs: number;
+  };
 }
 export interface ServiceAuthorizationConfiguration {
   configured: boolean;
@@ -44,6 +49,14 @@ export interface ServiceCorpusSnapshot {
   sourceRecords?: readonly SourceFile[];
   attachments?: readonly string[];
   generation?: number;
+  /** Stable timestamp bound to this corpus generation, never request time. */
+  evaluationTime?: string;
+}
+
+export interface ServiceCredentialBinding {
+  /** Secret bearer material. It is retained only by the host credential store. */
+  token: string;
+  identity: ServiceCredentialIdentity;
 }
 
 export interface ServiceCorpusChange {

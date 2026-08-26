@@ -135,3 +135,28 @@ test("missing or invalid note sensitivity fails closed to secret", () => {
   assert.equal(view.notes.length, 0);
   assert.equal(view.graph.nodes.length, 0);
 });
+
+test("untrusted visible-record evidence cannot serialize arbitrary canary identifiers", () => {
+  const graph = fixtureGraph();
+  graph.nodes.find((item) => item.id === "internal").gkx.projection = {
+    contentHash: CANARY,
+    effective: { sensitivity: "internal" },
+    diagnostics: [{ code: CANARY, severity: "warning" }],
+    assessment: {
+      scores: { structural_completeness: 0.5, [CANARY]: 1 },
+      exclusions: [CANARY],
+      diagnostics: [{ code: CANARY }],
+    },
+  };
+  const view = build({ corpus: { graph } });
+  assert.equal(JSON.stringify(view).includes(CANARY), false);
+  const evidence = view.record_evidence.find((item) => item.node_id === "internal");
+  assert.equal(evidence.content_digest, null);
+  assert.deepEqual(evidence.diagnostic_codes, []);
+  assert.deepEqual(evidence.assessment.exclusions, []);
+  assert.deepEqual(evidence.assessment.diagnostic_codes, []);
+  assert.deepEqual(Object.keys(evidence.assessment.scores), [
+    "structural_completeness", "provenance_quality", "evidence_support", "relationship_integrity",
+    "temporal_freshness", "contradiction_status", "review_readiness", "overall",
+  ]);
+});
