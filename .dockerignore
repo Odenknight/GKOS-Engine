@@ -1,0 +1,11 @@
+*
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.declarations.json
+!scripts/
+!scripts/**
+!src/
+!src/**
+!docker/
+!docker/Dockerfile
