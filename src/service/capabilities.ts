@@ -21,6 +21,12 @@ export interface ServiceCapabilityConfiguration {
   navigationEffectsRecoverySafe?: boolean;
   navigationEffectsReconciliationSafe?: boolean;
   navigationEffectsEnabled?: boolean;
+  graphAuthorized?: boolean;
+  notesAuthorized?: boolean;
+  graphitiAuthorized?: boolean;
+  mcpAuthorized?: boolean;
+  eventsAuthorized?: boolean;
+  navigationAuthorized?: boolean;
 }
 const status = (
   available: boolean,
@@ -42,9 +48,14 @@ export function buildServiceCapabilities(
 ): ServiceCapabilitiesDocument {
   const graphConfigured = input.graphConfigured === true;
   const identityConfigured = input.identityRuntimeConfigured === true;
-  const readEnabled = graphConfigured && identityConfigured;
-  const mcpConfigured = readEnabled && input.mcpConfigured === true;
-  const eventsConfigured = readEnabled && input.eventStreamConfigured === true;
+  const graphAuthorized = identityConfigured && input.graphAuthorized !== false;
+  const notesAuthorized = identityConfigured && input.notesAuthorized !== false;
+  const graphitiAuthorized = identityConfigured && input.graphitiAuthorized !== false;
+  const mcpAuthorized = identityConfigured && input.mcpAuthorized !== false;
+  const eventsAuthorized = identityConfigured && input.eventsAuthorized !== false;
+  const navigationAuthorized = identityConfigured && input.navigationAuthorized !== false;
+  const mcpConfigured = graphConfigured && identityConfigured && input.mcpConfigured === true;
+  const eventsConfigured = graphConfigured && identityConfigured && input.eventStreamConfigured === true;
   const proposalConfigured = identityConfigured && input.proposalIngressConfigured === true;
   const proposalAuthorized = proposalConfigured && input.proposalIngressAuthorized === true;
   const proposalEnabled = proposalAuthorized && input.proposalIngressEnabled === true;
@@ -63,24 +74,24 @@ export function buildServiceCapabilities(
     schema_version: 1,
     protocol: GKOS_LOCAL_SERVICE_PROTOCOL,
     features: {
-      graph: status(true, graphConfigured, identityConfigured, readEnabled,
-        readEnabled ? [] : [graphConfigured ? "IDENTITY_RUNTIME_NOT_CONFIGURED" : "CORPUS_NOT_CONFIGURED"]),
-      notes: status(true, graphConfigured, identityConfigured, readEnabled,
-        readEnabled ? [] : [graphConfigured ? "IDENTITY_RUNTIME_NOT_CONFIGURED" : "CORPUS_NOT_CONFIGURED"]),
-      graphiti_episodes: status(true, graphConfigured, identityConfigured, readEnabled,
-        readEnabled ? [] : [graphConfigured ? "IDENTITY_RUNTIME_NOT_CONFIGURED" : "CORPUS_NOT_CONFIGURED"]),
-      mcp: status(true, mcpConfigured, identityConfigured, mcpConfigured,
-        mcpConfigured ? [] : [identityConfigured ? "MCP_RUNTIME_NOT_CONFIGURED" : "IDENTITY_RUNTIME_NOT_CONFIGURED"]),
-      events: status(true, eventsConfigured, identityConfigured, eventsConfigured,
-        eventsConfigured ? [] : [identityConfigured ? "EVENT_STREAM_NOT_CONFIGURED" : "IDENTITY_RUNTIME_NOT_CONFIGURED"]),
+      graph: status(true, graphConfigured, graphAuthorized, graphConfigured && graphAuthorized,
+        !graphConfigured ? ["CORPUS_NOT_CONFIGURED"] : graphAuthorized ? [] : ["CREDENTIAL_NOT_AUTHORIZED"]),
+      notes: status(true, graphConfigured, notesAuthorized, graphConfigured && notesAuthorized,
+        !graphConfigured ? ["CORPUS_NOT_CONFIGURED"] : notesAuthorized ? [] : ["CREDENTIAL_NOT_AUTHORIZED"]),
+      graphiti_episodes: status(true, graphConfigured, graphitiAuthorized, graphConfigured && graphitiAuthorized,
+        !graphConfigured ? ["CORPUS_NOT_CONFIGURED"] : graphitiAuthorized ? [] : ["CREDENTIAL_NOT_AUTHORIZED"]),
+      mcp: status(true, mcpConfigured, mcpAuthorized, mcpConfigured && mcpAuthorized,
+        !mcpConfigured ? [identityConfigured ? "MCP_RUNTIME_NOT_CONFIGURED" : "IDENTITY_RUNTIME_NOT_CONFIGURED"] : mcpAuthorized ? [] : ["CREDENTIAL_NOT_AUTHORIZED"]),
+      events: status(true, eventsConfigured, eventsAuthorized, eventsConfigured && eventsAuthorized,
+        !eventsConfigured ? [identityConfigured ? "EVENT_STREAM_NOT_CONFIGURED" : "IDENTITY_RUNTIME_NOT_CONFIGURED"] : eventsAuthorized ? [] : ["CREDENTIAL_NOT_AUTHORIZED"]),
       proposal_ingress: status(true, proposalConfigured, proposalAuthorized, proposalEnabled,
         proposalEnabled ? [] : [
           !proposalConfigured ? "PROPOSAL_INGRESS_NOT_CONFIGURED" :
             !proposalAuthorized ? "PROPOSAL_INGRESS_NOT_AUTHORIZED" : "PROPOSAL_INGRESS_DISABLED",
         ]),
       navigation: status(input.navigationAvailable === true, input.navigationAvailable === true,
-        identityConfigured, input.navigationAvailable === true && identityConfigured,
-        input.navigationAvailable === true ? (identityConfigured ? [] : ["IDENTITY_RUNTIME_NOT_CONFIGURED"]) : ["NAVIGATION_UNAVAILABLE"]),
+        navigationAuthorized, input.navigationAvailable === true && navigationAuthorized,
+        input.navigationAvailable !== true ? ["NAVIGATION_UNAVAILABLE"] : navigationAuthorized ? [] : ["CREDENTIAL_NOT_AUTHORIZED"]),
       navigation_effects: status(effectsAvailable, effectsConfigured,
         effectsConfigured && input.navigationEffectsAuthorityConfigured === true, effectsEnabled,
         effectsEnabled ? [] : [

@@ -1,6 +1,7 @@
 import { buildGraphitiEpisodes } from "../graphiti";
 import { SENSITIVITY_RANK } from "../gkx23";
-import type { GkxGraph, GkxLink, GkxNode, GkxSensitivity, GraphitiEpisode, LinkKind } from "../types";
+import { computeTemporalState } from "../temporal";
+import type { GkxGraph, GkxLink, GkxNode, GkxSensitivity, GraphitiEpisode, LinkKind, LineageModel } from "../types";
 import type {
   ServiceCorpusSnapshot,
   ServiceCredentialIdentity,
@@ -24,6 +25,21 @@ const REQUIRED_CAPABILITY: Partial<Record<ServiceOperation, ServiceReadCapabilit
 };
 const CONTROL = /[\u0000-\u001f\u007f]/u;
 const LINK_KINDS = new Set<LinkKind>(["wikilink", "markdown", "property", "semantic", "lineage", "contains"]);
+const SAFE_DIAGNOSTIC_CODES = new Set([
+  "GKX-AUTHORITY-ROLE-001", "GKX-AUTHORITY-ROLE-002", "GKX-EPISTEMIC-002", "GKX-EPISTEMIC-004",
+  "GKX-EVIDENCE-002", "GKX-EVIDENCE-003", "GKX-IDENTITY-001", "GKX-IDENTITY-002", "GKX-IDENTITY-003",
+  "GKX-IDENTITY-004", "GKX-LINEAGE", "GKX-LINEAGE-001", "GKX-LINEAGE-002", "GKX-LINEAGE-003",
+  "GKX-LINEAGE-004", "GKX-LINEAGE-005", "GKX-LINEAGE-006", "GKX-LINEAGE-007", "GKX-LINEAGE-999",
+  "GKX-PLUS-2", "GKX-PROVENANCE", "GKX-PROVENANCE-001", "GKX-PROVENANCE-002", "GKX-RELATIONSHIP",
+  "GKX-RELATIONSHIP-001", "GKX-RELATIONSHIP-002", "GKX-RELATIONSHIP-003", "GKX-SCHEMA-001",
+  "GKX-SCHEMA-002", "GKX-SCHEMA-003", "GKX-SCHEMA-004", "GKX-SENSITIVITY-001", "GKX-SENSITIVITY-005",
+  "GKX-TEMPORAL-001",
+]);
+const ASSESSMENT_FIELDS = [
+  "structural_completeness", "provenance_quality", "evidence_support", "relationship_integrity",
+  "temporal_freshness", "contradiction_status", "review_readiness", "overall",
+] as const;
+const ASSESSMENT_FIELD_SET = new Set<string>(ASSESSMENT_FIELDS);
 
 export class GkosServiceDeniedError extends Error {
   readonly code = "GKOS_SERVICE_ACCESS_DENIED";
@@ -52,12 +68,26 @@ export interface GkosAuthorizedView {
   notes: AuthorizedNoteSummary[];
   graph: GkxGraph;
   graphiti_episodes: GraphitiEpisode[];
+  /** Non-content validation evidence for MCP tools, already visibility-filtered. */
+  record_evidence: AuthorizedRecordEvidence[];
   visible_counts: {
     notes: number;
     folders: number;
     links: number;
     episodes: number;
   };
+}
+
+export interface AuthorizedRecordEvidence {
+  node_id: string;
+  path: string;
+  content_digest: string | null;
+  diagnostic_codes: Array<{ code: string; severity: "info" | "warning" | "error" | "critical" }>;
+  assessment: {
+    scores: Record<string, number | null>;
+    exclusions: string[];
+    diagnostic_codes: string[];
+  } | null;
 }
 
 export interface BuildAuthorizedViewInput {
@@ -186,6 +216,7 @@ function projectGraph(graph: GkxGraph | null, ceiling: GkxSensitivity, evaluatio
     ...visibleFolders.map(safeFolderNode),
   ].sort((left, right) => compare(left.id, right.id));
   const visibleIds = new Set(nodes.map((node) => node.id));
+  const originalById = new Map(graph.nodes.filter((node) => visibleIds.has(node.id)).map((node) => [node.id, node]));
   const links: GkxLink[] = graph.links
     .filter((link) => link && visibleIds.has(link.source) && visibleIds.has(link.target))
     .map((link) => {
@@ -211,6 +242,26 @@ function projectGraph(graph: GkxGraph | null, ceiling: GkxSensitivity, evaluatio
   for (const node of nodes) {
     node.outgoing = outgoing.get(node.id) ?? 0;
     node.incoming = incoming.get(node.id) ?? 0;
+  }
+  const lineageEdges = nodes.filter((node) => node.kind === "file").flatMap((node) => {
+    const older = originalById.get(node.id)?.gkx?.supersedesIds ?? [];
+    return older.filter((id) => visibleIds.has(id)).map((id) => ({ newer: node.id, older: id }));
+  });
+  const supersedes = new Map<string, string[]>(), supersededBy = new Map<string, string[]>(), members = new Set<string>();
+  for (const { newer, older } of lineageEdges) {
+    supersedes.set(newer, [...(supersedes.get(newer) ?? []), older]);
+    supersededBy.set(older, [...(supersededBy.get(older) ?? []), newer]);
+    members.add(newer); members.add(older);
+  }
+  const lineage: LineageModel = { edges: lineageEdges, supersedes, supersededBy, members, warnings: [], cycles: 0 };
+  const temporalInputs = nodes.filter((node) => node.kind === "file" && exactIso(node.validAt)).map((node) => ({ id: node.id, validAtMs: new Date(node.validAt!).getTime() }));
+  const temporal = computeTemporalState(temporalInputs, lineage);
+  for (const node of nodes) if (node.kind === "file" && node.gkx) {
+    node.gkx.supersedesIds = [...(supersedes.get(node.id) ?? [])].sort(compare);
+    node.gkx.supersededByIds = [...(supersededBy.get(node.id) ?? [])].sort(compare);
+    const invalid = temporal.invalidAt.get(node.id);
+    node.gkx.invalidAt = invalid == null ? null : new Date(invalid).toISOString();
+    node.gkx.head = temporal.head.get(node.id) ?? false;
   }
   const files = nodes.filter((node) => node.kind === "file");
   const folders = nodes.filter((node) => node.kind === "folder");
@@ -239,6 +290,12 @@ function projectGraph(graph: GkxGraph | null, ceiling: GkxSensitivity, evaluatio
   };
 }
 
+function exactIso(value: unknown): value is string {
+  if (typeof value !== "string") return false;
+  const parsed = new Date(value);
+  return Number.isFinite(parsed.getTime()) && parsed.toISOString() === value;
+}
+
 /** Build the only graph/note/episode serialization input for a credential. */
 export function buildAuthorizedView(input: BuildAuthorizedViewInput): GkosAuthorizedView {
   const identity = validateRequest(input);
@@ -258,6 +315,34 @@ export function buildAuthorizedView(input: BuildAuthorizedViewInput): GkosAuthor
     vault: input.vaultName ?? "vault",
     processingTime: input.evaluationTime,
   });
+  const visibleIds = new Set(graph.nodes.filter((node) => node.kind === "file").map((node) => node.id));
+  const recordEvidence: AuthorizedRecordEvidence[] = (input.corpus.graph?.nodes ?? [])
+    .filter((node) => node.kind === "file" && visibleIds.has(node.id))
+    .map((node) => {
+      const projection = node.gkx?.projection;
+      const diagnostics = (projection?.diagnostics ?? [])
+        .filter((item) => SAFE_DIAGNOSTIC_CODES.has(item.code) && ["info", "warning", "error", "critical"].includes(item.severity))
+        .map((item) => ({ code: item.code, severity: item.severity }))
+        .sort((left, right) => compare(left.code, right.code));
+      const assessment = projection?.assessment;
+      return {
+        node_id: node.id,
+        path: node.path,
+        content_digest: typeof projection?.contentHash === "string" && /^sha256:[0-9a-f]{64}$/u.test(projection.contentHash)
+          ? projection.contentHash : null,
+        diagnostic_codes: diagnostics,
+        assessment: assessment ? {
+          scores: Object.fromEntries(ASSESSMENT_FIELDS.map((field) => {
+            const score = assessment.scores[field];
+            return [field, score === null || typeof score === "number" && Number.isFinite(score) && score >= 0 && score <= 1 ? score : null];
+          })),
+          exclusions: assessment.exclusions.filter((item) => ASSESSMENT_FIELD_SET.has(item)).sort(compare),
+          diagnostic_codes: assessment.diagnostics
+            .map((item) => item.code).filter((item) => SAFE_DIAGNOSTIC_CODES.has(item)).sort(compare),
+        } : null,
+      };
+    })
+    .sort((left, right) => compare(left.path, right.path));
   return {
     schema_version: 1,
     operation: input.operation,
@@ -268,6 +353,7 @@ export function buildAuthorizedView(input: BuildAuthorizedViewInput): GkosAuthor
     notes,
     graph,
     graphiti_episodes: graphiti,
+    record_evidence: recordEvidence,
     visible_counts: {
       notes: notes.length,
       folders: graph.stats.folders,

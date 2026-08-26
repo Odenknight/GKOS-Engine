@@ -64,6 +64,11 @@ try {
     writeFileSync(resolve(root, output), await bundle(entry));
     console.log(`built ${output}`);
   }
+  // Node loopback transport remains separate from the framework-neutral
+  // service contract/view bundle and is repository-private until the frozen
+  // package export gate is explicitly revised.
+  writeFileSync(resolve(root, "dist/service-node.mjs"), await bundle("src/service/node.ts", { platform: "node" }));
+  console.log("built dist/service-node.mjs");
 
   // Retrieval is a host-plane bundle. Keep node:sqlite and filesystem state
   // outside the platform-neutral root and NavigationCore bundles.
