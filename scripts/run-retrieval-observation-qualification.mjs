@@ -76,6 +76,7 @@ const SLICE_B_AUTHORIZED_ADDITION_PATHS = Object.freeze([
 ]);
 const SLICE_B_AUTHORIZED_ADDITION_INVENTORY_DIGEST = "sha256:a812a6378310da741ed009d3123498050794c4d7ff5f1e1d305ed10b0175fa54";
 const PHASE5_SLICE_B_BASE_COMMIT = "6e9346c7e749b5288ff3680766b34a038e816d18";
+const PHASE5_SLICE_B_QUALIFIED_HEAD = "7b5262baee9fcda23d50b0cee0c4977d6e4305e7";
 const PHASE5_SLICE_B_EXPECTED_CHANGE_ROWS = Object.freeze([
   ["M", ".gitattributes"],
   ["M", ".github/workflows/ci.yml"],
@@ -446,7 +447,8 @@ function sameRows(left, right) {
     row.length === 2 && row[0] === right[index]?.[0] && row[1] === right[index]?.[1]);
 }
 
-export function verifySliceBProtectedInputsForTest(repoRoot, headCommitInput = "HEAD") {
+function verifySliceBProtectedInputs(repoRoot, headCommitInput, checkoutBound) {
+  if (typeof checkoutBound !== "boolean") fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
   const protectedRoots = ["src", "bin"];
   const explicitProtectedPaths = [
     "package.json", "package-lock.json",
@@ -461,6 +463,18 @@ export function verifySliceBProtectedInputsForTest(repoRoot, headCommitInput = "
     fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
   }
   if (!/^[0-9a-f]{40}$/u.test(headCommit)) fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  if (!checkoutBound) {
+    try {
+      const checkoutHead = execFileSync("git", ["rev-parse", "--verify", "HEAD^{commit}"], {
+        cwd: repoRoot, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"],
+      }).trim();
+      execFileSync("git", ["merge-base", "--is-ancestor", headCommit, checkoutHead], {
+        cwd: repoRoot, stdio: "ignore",
+      });
+    } catch {
+      fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+    }
+  }
   const baselineRootPaths = gitNulPathInventory(repoRoot, [
     "ls-tree", "-r", "--name-only", "-z", SLICE_B_EVIDENCE_COMMIT, "--", ...protectedRoots,
   ]);
@@ -475,8 +489,8 @@ export function verifySliceBProtectedInputsForTest(repoRoot, headCommitInput = "
   const committedRows = gitNulNameStatus(repoRoot, [
     "diff", "--name-status", "--no-renames", "-z", PHASE5_SLICE_B_BASE_COMMIT, headCommit, "--", ...comparedPaths,
   ]);
-  const indexPaths = gitNulPathInventory(repoRoot, ["ls-files", "-z"]);
-  const untrackedPaths = gitNulPathInventory(repoRoot, ["ls-files", "--others", "--exclude-standard", "-z"]);
+  const indexPaths = checkoutBound ? gitNulPathInventory(repoRoot, ["ls-files", "-z"]) : [];
+  const untrackedPaths = checkoutBound ? gitNulPathInventory(repoRoot, ["ls-files", "--others", "--exclude-standard", "-z"]) : [];
   if (baselineProtectedPaths.length !== SLICE_B_PROTECTED_PATH_COUNT ||
       pathInventoryDigest(baselineProtectedPaths) !== SLICE_B_PROTECTED_PATH_INVENTORY_DIGEST ||
       baselineRootPaths.some((path) => !currentRootSet.has(path)) ||
@@ -484,8 +498,9 @@ export function verifySliceBProtectedInputsForTest(repoRoot, headCommitInput = "
       authorizedAdditions.some((path, index) => path !== SLICE_B_AUTHORIZED_ADDITION_PATHS[index]) ||
       pathInventoryDigest(authorizedAdditions) !== SLICE_B_AUTHORIZED_ADDITION_INVENTORY_DIGEST ||
       !sameRows(committedRows, PHASE5_SLICE_B_EXPECTED_CHANGE_ROWS) ||
-      indexPaths.length !== currentAllPaths.length || indexPaths.some((path, index) => path !== currentAllPaths[index]) ||
-      untrackedPaths.length !== 0 || !gitDiffClean(repoRoot, headCommit, currentAllPaths)) {
+      (checkoutBound && (indexPaths.length !== currentAllPaths.length ||
+        indexPaths.some((path, index) => path !== currentAllPaths[index]) ||
+        untrackedPaths.length !== 0 || !gitDiffClean(repoRoot, headCommit, currentAllPaths)))) {
     fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
   }
   return Object.freeze({
@@ -499,6 +514,10 @@ export function verifySliceBProtectedInputsForTest(repoRoot, headCommitInput = "
   });
 }
 
+export function verifySliceBProtectedInputsForTest(repoRoot, headCommitInput = "HEAD") {
+  return verifySliceBProtectedInputs(repoRoot, headCommitInput, true);
+}
+
 export async function verifyFrozenQualificationInputsForTest(repoRoot) {
   const packRoot = "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1";
   const phase03 = [
@@ -510,7 +529,11 @@ export async function verifyFrozenQualificationInputsForTest(repoRoot) {
     "evidence/2026-08-21-functional-uplift-phase-2.md",
     "evidence/2026-08-21-functional-uplift-phase-3.md",
   ];
-  verifySliceBProtectedInputsForTest(repoRoot);
+  // Slice B is a frozen historical input. Later, separately governed phases may
+  // add runtime surfaces, so validate the reviewed Phase-5 tree exactly and
+  // require it to be an ancestor instead of misclassifying every descendant
+  // checkout as a mutation of the historical qualification pack.
+  verifySliceBProtectedInputs(repoRoot, PHASE5_SLICE_B_QUALIFIED_HEAD, false);
   if (!gitDiffClean(repoRoot, SLICE_A_PACK_COMMIT, [packRoot]) ||
       !gitDiffClean(repoRoot, PHASE3_BASE_COMMIT, phase03)) {
     fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");

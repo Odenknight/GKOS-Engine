@@ -474,6 +474,8 @@ test("Phase4 qualification protects the exact reviewed Slice-B status and path i
     const runner = await import(pathToFileURL(runnerFile).href);
     const currentHead = git(REPOSITORY_ROOT, ["rev-parse", "HEAD"]).trim();
     assert.doesNotThrow(() => git(REPOSITORY_ROOT, ["merge-base", "--is-ancestor", qualifiedPhase5Head, currentHead]));
+    const currentImmutable = await runner.verifyFrozenQualificationInputsForTest(REPOSITORY_ROOT);
+    assert.equal(currentImmutable.phase4_pack_file_count, 37);
     const head = qualifiedPhase5Head;
     const main = join(container, "reviewed-slice-b");
     git(REPOSITORY_ROOT, ["clone", "--quiet", "--shared", REPOSITORY_ROOT, main]);
