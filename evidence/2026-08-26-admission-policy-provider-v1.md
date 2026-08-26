@@ -1,9 +1,11 @@
 # Generic admission-policy provider v1 implementation report
 
-Date: 2026-08-26  
-Base: `Odenknight/GKOS-Engine` main at `2fbd4ec68ec825b09e5194c9878a7ae90a281392` (`2.1.2`)  
-Branch: `agent/admission-policy-provider-v1`  
-Status: implementation evidence only; uncommitted, unratified, untagged, and unreleased at handoff
+Date: 2026-08-26
+
+Base: `Odenknight/GKOS-Engine` main at `2fbd4ec68ec825b09e5194c9878a7ae90a281392` (`2.1.2`)
+
+Branch: `agent/admission-policy-provider-v1`
+Status: implementation evidence only; unratified, untagged, and unreleased
 
 ## Implemented surface
 
