@@ -69,6 +69,10 @@ try {
   // package export gate is explicitly revised.
   writeFileSync(resolve(root, "dist/service-node.mjs"), await bundle("src/service/node.ts", { platform: "node" }));
   console.log("built dist/service-node.mjs");
+  // Private compatibility transport for the gkos-mcp-stdio executable. It
+  // delegates to the authenticated loopback service and is not exported.
+  writeFileSync(resolve(root, "dist/service-stdio.mjs"), await bundle("src/service/stdio.ts", { platform: "node" }));
+  console.log("built dist/service-stdio.mjs");
 
   // Retrieval is a host-plane bundle. Keep node:sqlite and filesystem state
   // outside the platform-neutral root and NavigationCore bundles.

@@ -44,7 +44,8 @@
   },
   "bin": {
     "gkx": "bin/gkx.mjs",
-    "gkos": "bin/gkos.mjs"
+    "gkos": "bin/gkos.mjs",
+    "gkos-mcp-stdio": "bin/gkos-mcp-stdio.mjs"
   },
   "files": [
     "dist/",
