@@ -12,6 +12,9 @@ permissions:
 env:
   NODE_OPTIONS: --disable-warning=ExperimentalWarning
   CONTRACT_ROOT: contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1
+  GIT_CONFIG_COUNT: 1
+  GIT_CONFIG_KEY_0: core.autocrlf
+  GIT_CONFIG_VALUE_0: 'false'
 
 jobs:
   p6-f1-contract-linux-node22: &contract_linux
@@ -85,10 +88,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - name: Restore canonical tracked bytes
-        run: |
-          git config core.autocrlf false
-          git checkout-index --force --all
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -110,10 +109,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - name: Restore canonical tracked bytes
-        run: |
-          git config core.autocrlf false
-          git checkout-index --force --all
       - uses: actions/setup-node@v4
         with: { node-version: '23', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -135,10 +130,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - name: Restore canonical tracked bytes
-        run: |
-          git config core.autocrlf false
-          git checkout-index --force --all
       - uses: actions/setup-node@v4
         with: { node-version: '24', cache: npm }
       - run: npm install --global npm@10.9.4
