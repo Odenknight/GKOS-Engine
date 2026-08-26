@@ -9,6 +9,7 @@ import { once } from "node:events";
 import test from "node:test";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const CANONICAL_TEMPORARY_ROOT = realpathSync(tmpdir());
 
 function resolveNpmCli(environment = process.env) {
   const candidates = [];
@@ -40,7 +41,7 @@ test("npm CLI discovery works outside an npm lifecycle", () => {
 });
 
 test("packed installation runs the stdio bridge against one authenticated real process", { timeout: 90_000 }, async (t) => {
-  const temporary = mkdtempSync(join(tmpdir(), "gkos-stdio-package-"));
+  const temporary = mkdtempSync(join(CANONICAL_TEMPORARY_ROOT, "gkos-stdio-package-"));
   t.after(() => rmSync(temporary, { recursive: true, force: true }));
   const npmCli = resolveNpmCli();
   // npm pack may run prepare even with ignore-scripts on some npm releases.

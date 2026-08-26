@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { once } from "node:events";
-import { chmodSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import http from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -10,7 +10,8 @@ import { after, test } from "node:test";
 import { build } from "esbuild";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const bundleRoot = mkdtempSync(join(tmpdir(), "gkos-stdio-test-"));
+const canonicalTemporaryRoot = realpathSync(tmpdir());
+const bundleRoot = mkdtempSync(join(canonicalTemporaryRoot, "gkos-stdio-test-"));
 const bundlePath = join(bundleRoot, "service-stdio.mjs");
 const bundled = await build({
   entryPoints: [resolve(root, "src/service/stdio.ts")], bundle: true, write: false,
@@ -21,7 +22,7 @@ const bridge = await import(`${pathToFileURL(bundlePath).href}?test=${Date.now()
 after(() => rmSync(bundleRoot, { recursive: true, force: true }));
 
 function privateTokenFile(token = "a".repeat(64)) {
-  const directory = mkdtempSync(join(tmpdir(), "gkos-stdio-token-"));
+  const directory = mkdtempSync(join(canonicalTemporaryRoot, "gkos-stdio-token-"));
   if (process.platform !== "win32") chmodSync(directory, 0o700);
   const file = join(directory, "desktop-agent.mcp.token");
   writeFileSync(file, `${token}\n`, { mode: 0o600 });
