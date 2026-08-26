@@ -1,0 +1,550 @@
+{
+  "authority_class_counts": {
+    "LOCAL_BOOTSTRAP": 1,
+    "OWNER_ONLY": 24,
+    "PUBLIC_AUTHENTICATED": 7
+  },
+  "contract_version": "1.0.0-draft.1",
+  "operation_count": 32,
+  "operations": [
+    {
+      "authority": "PUBLIC_AUTHENTICATED",
+      "first_stage": "F3",
+      "idempotency": "not_applicable",
+      "mcp_tool": "gkos_capabilities",
+      "mutates_authority": false,
+      "operation": "capability.list_effective",
+      "policy_capability": "capability.read.self",
+      "request_schema_ref": "tool-registry.schema.json#/$defs/input_capabilities",
+      "result_schema_ref": "tool-registry.schema.json#/$defs/result_capabilities",
+      "transports": [
+        "native_stdio",
+        "loopback_streamable_http"
+      ]
+    },
+    {
+      "authority": "PUBLIC_AUTHENTICATED",
+      "first_stage": "F3",
+      "idempotency": "not_applicable",
+      "mcp_tool": "gkos_record_validate",
+      "mutates_authority": false,
+      "operation": "record.validate",
+      "policy_capability": "record.validate",
+      "request_schema_ref": "tool-registry.schema.json#/$defs/input_record_ref",
+      "required_private_dependencies": [
+        "record_ref.resolve",
+        "physical_path.qualify"
+      ],
+      "result_schema_ref": "tool-registry.schema.json#/$defs/result_record_validate",
+      "result_semantics": "the caller-supplied record_ref is resolved and its bound physical identity requalified before validation; the same ref is echoed and no new opaque reference is minted",
+      "transports": [
+        "native_stdio",
+        "loopback_streamable_http"
+      ]
+    },
+    {
+      "authority": "PUBLIC_AUTHENTICATED",
+      "first_stage": "F3",
+      "idempotency": "not_applicable",
+      "mcp_tool": "gkos_record_assess",
+      "mutates_authority": false,
+      "operation": "record.assess",
+      "policy_capability": "record.assess",
+      "request_schema_ref": "tool-registry.schema.json#/$defs/input_record_ref",
+      "required_private_dependencies": [
+        "record_ref.resolve",
+        "physical_path.qualify"
+      ],
+      "result_schema_ref": "tool-registry.schema.json#/$defs/result_record_assess",
+      "result_semantics": "the caller-supplied record_ref is resolved and its bound physical identity requalified before assessment; the same ref is echoed and no new opaque reference is minted",
+      "transports": [
+        "native_stdio",
+        "loopback_streamable_http"
+      ]
+    },
+    {
+      "authority": "PUBLIC_AUTHENTICATED",
+      "first_stage": "F3",
+      "idempotency": "not_applicable",
+      "mcp_tool": "gkos_lineage_get",
+      "mutates_authority": false,
+      "operation": "record.lineage.read",
+      "policy_capability": "record.lineage.read",
+      "request_schema_ref": "tool-registry.schema.json#/$defs/input_lineage_get",
+      "required_private_dependencies": [
+        "record_ref.resolve",
+        "physical_path.qualify",
+        "record_ref.issue",
+        "snapshot.create",
+        "cursor.issue"
+      ],
+      "result_schema_ref": "tool-registry.schema.json#/$defs/result_lineage_get",
+      "result_semantics": "caller record_ref is resolved and physically requalified first; every related record returned as an opaque reference is minted only through record_ref.issue; lineage traversal uses the bound lineage graph and does not scan the filesystem, so it does not invoke record_ref.discover; bounded pages use the common snapshot and cursor issuers",
+      "transports": [
+        "native_stdio",
+        "loopback_streamable_http"
+      ]
+    },
+    {
+      "authority": "PUBLIC_AUTHENTICATED",
+      "first_stage": "F3",
+      "idempotency": "not_applicable",
+      "mcp_tool": "gkos_graph_at_time",
+      "mutates_authority": false,
+      "operation": "graph.temporal.read",
+      "policy_capability": "graph.temporal.read",
+      "request_schema_ref": "tool-registry.schema.json#/$defs/input_graph_at_time",
+      "request_semantics": "scope_ref is required, non-null, canonical and live in the same session; request also requires at, state, cursor and limit; scope resolution and canonical physical requalification precede graph policy evaluation",
+      "required_private_dependencies": [
+        "scope_ref.resolve",
+        "physical_path.qualify",
+        "snapshot.create",
+        "cursor.issue",
+        "record_ref.discover",
+        "record_ref.issue"
+      ],
+      "result_schema_ref": "tool-registry.schema.json#/$defs/result_graph_at_time",
+      "result_semantics": "snapshot/filter bind scope_ref digest, session, agent, auth_epoch, authority_generation, policy decision, physical identity, at, state and valid_at:asc/record_ref:asc ordering; graph projection discovers only records beneath the resolved physical scope and mints their in-scope record_ref values through record_ref.issue; no scope_ref is issued",
+      "transports": [
+        "native_stdio",
+        "loopback_streamable_http"
+      ]
+    },
+    {
+      "authority": "PUBLIC_AUTHENTICATED",
+      "first_stage": "F3",
+      "idempotency": "not_applicable",
+      "mcp_tool": "gkos_navigation_discover",
+      "mutates_authority": false,
+      "operation": "navigation.discover",
+      "policy_capability": "navigation.discover",
+      "request_schema_ref": "tool-registry.schema.json#/$defs/input_navigation_discover",
+      "request_semantics": "scope_ref null with cursor null is the sole initial issuance path and does not invoke scope_ref.resolve; every non-null scope_ref is canonicalized and resolved before policy/path qualification",
+      "required_private_dependencies": [
+        "scope_ref.resolve",
+        "physical_path.qualify",
+        "record_ref.discover",
+        "record_ref.issue",
+        "scope_ref.issue",
+        "snapshot.create",
+        "cursor.issue"
+      ],
+      "result_schema_ref": "tool-registry.schema.json#/$defs/result_navigation_discover",
+      "result_semantics": "physical records are discovered only after scope/policy/path qualification; every returned record_ref is minted through record_ref.issue and every returned scope_ref through scope_ref.issue",
+      "transports": [
+        "native_stdio",
+        "loopback_streamable_http"
+      ]
+    },
+    {
+      "authority": "PUBLIC_AUTHENTICATED",
+      "first_stage": "F3",
+      "idempotency": "not_applicable",
+      "mcp_tool": "gkos_navigation_audit",
+      "mutates_authority": false,
+      "operation": "navigation.audit",
+      "policy_capability": "navigation.audit",
+      "request_schema_ref": "tool-registry.schema.json#/$defs/input_navigation_audit",
+      "required_private_dependencies": [
+        "scope_ref.resolve",
+        "physical_path.qualify",
+        "record_ref.discover",
+        "record_ref.issue",
+        "snapshot.create",
+        "cursor.issue"
+      ],
+      "result_schema_ref": "tool-registry.schema.json#/$defs/result_navigation_audit",
+      "result_semantics": "audit resolves its required scope before policy/path qualification, scans only authorized physical records through record_ref.discover, and mints every returned record_ref through record_ref.issue; bounded pages use the common snapshot and cursor issuers",
+      "transports": [
+        "native_stdio",
+        "loopback_streamable_http"
+      ]
+    },
+    {
+      "authority": "LOCAL_BOOTSTRAP",
+      "first_stage": "F2",
+      "idempotency": "derived_bootstrap_key",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "bootstrap.initialize",
+      "policy_capability": "bootstrap.initialize",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/bootstrap_request",
+      "request_semantics": "legacy_source is required and canonical: absent is accepted only when the physically qualified canonical legacy-token locator is absent; desktop_agent_token is accepted only when that exact physically qualified source is present and passes format/protection checks; omission is invalid parameters, declaration/observed-state mismatch is migration conflict, and a declared present malformed source is migration malformed",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/bootstrap_result",
+      "transports": [
+        "owner_cli"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "not_applicable",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "activity.list",
+      "policy_capability": "activity.read.owner",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/page_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/activity_list_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "agent.disable",
+      "policy_capability": "agent.disable",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/agent_state_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "agent.enable",
+      "policy_capability": "agent.enable",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/agent_state_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "not_applicable",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "agent.get",
+      "policy_capability": "agent.read.owner",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/agent_id_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/agent_get_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "not_applicable",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "agent.list",
+      "policy_capability": "agent.read.owner",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/page_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/agent_list_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "agent.provision",
+      "policy_capability": "agent.provision",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/agent_provision_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "agent.rename",
+      "policy_capability": "agent.rename",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/agent_rename_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "authority.backup",
+      "policy_capability": "authority.backup",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/backup_create_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/backup_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "authority.restore",
+      "policy_capability": "authority.restore",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/restore_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/restore_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "authority.restore.abort",
+      "policy_capability": "authority.restore.abort",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/restore_abort_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/restore_abort_result",
+      "transports": [
+        "owner_cli"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "not_applicable",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "authority.status",
+      "policy_capability": "authority.read.owner",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/empty_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/authority_status_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "credential.issue",
+      "policy_capability": "credential.issue",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/credential_issue_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/credential_mutation_result",
+      "result_semantics": "target_id is the newly active credential; secret_revealed is true only on the first completed request and only after the selected out-of-band one-time handoff actually succeeds; failed/lost handoff and every exact idempotent retry return the committed nonsecret mutation coordinates with secret_revealed false; no raw credential bytes enter this JSON result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "not_applicable",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "credential.list",
+      "policy_capability": "credential.read.owner",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/page_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/credential_list_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "credential.revoke",
+      "policy_capability": "credential.revoke",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/credential_revoke_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "credential.rotate",
+      "policy_capability": "credential.rotate",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/credential_rotate_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/credential_mutation_result",
+      "result_semantics": "the transaction atomically activates the target_id replacement and revokes the selected old credential with zero grace; secret_revealed is true only on the first completed request and only after the selected out-of-band one-time handoff actually succeeds; failed/lost handoff and every exact retry return the same target and receipt with secret_revealed false and never repeat credential bytes",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "mapping.add",
+      "policy_capability": "mapping.add",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/mapping_add_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "not_applicable",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "mapping.list",
+      "policy_capability": "mapping.read.owner",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/page_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mapping_list_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "mapping.revoke",
+      "policy_capability": "mapping.revoke",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/mapping_revoke_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "not_applicable",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "migration.inspect",
+      "policy_capability": "migration.inspect",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/empty_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/migration_inspect_result",
+      "transports": [
+        "owner_cli"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "migration.recover",
+      "policy_capability": "migration.recover",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/migration_recover_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "not_applicable",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "retention.get",
+      "policy_capability": "retention.read.owner",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/empty_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/retention_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "retention.set",
+      "policy_capability": "retention.set",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/retention_set_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "required",
+      "mcp_tool": null,
+      "mutates_authority": true,
+      "operation": "session.close",
+      "policy_capability": "session.close.owner",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/session_close_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/mutation_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    },
+    {
+      "authority": "OWNER_ONLY",
+      "first_stage": "F2",
+      "idempotency": "not_applicable",
+      "mcp_tool": null,
+      "mutates_authority": false,
+      "operation": "session.list",
+      "policy_capability": "session.read.owner",
+      "request_schema_ref": "operation-inventory.schema.json#/$defs/page_request",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/session_list_result",
+      "transports": [
+        "owner_cli",
+        "private_authority"
+      ]
+    }
+  ],
+  "reference_lifecycle": {
+    "capacity": "2048 live references per session and 32768 per process/vault; issuance beyond either cap returns GKOS_P6_CONCURRENCY_LIMIT",
+    "durable_authorization_evidence": "the existing page_snapshot row binds operation/filter/order, issued_reference_count and issued_reference_set_digest; request, policy_decision and activity rows bind each subsequent resolution by input digest and outcome; no seventeenth record type is introduced",
+    "graph_temporal_read": "requires a non-null live same-session scope_ref plus at, state, cursor and limit; canonical decode/re-encode and scope_ref.resolve precede policy and physical qualification; filter/snapshot bind scope_ref digest, session_id, agent_id, auth_epoch, authority_generation, policy_decision_id, physical identity, at, state and ordering; only record_ref values inside that resolved scope may be issued; it can never bootstrap a scope",
+    "invalidation": "all refs expire at the earliest of 900000 ms, page snapshot expiry, session close/expiry/stale, auth_epoch change, authority_generation change, process restart or write-gate closure",
+    "issuance": "navigation.discover with scope_ref null and cursor null is the only initial issuance path: after current policy and physical-root qualification it returns authorized root scope_ref, record_ref and child scope_ref values; later pages/calls may reuse only a same-session issued scope_ref; capability.list_effective issues no references",
+    "lifetime_ms": 900000,
+    "private_dependency_rule": "every operation that returns a newly minted record_ref declares record_ref.issue; every operation that scans or discovers physical records also declares record_ref.discover before issue; record_ref.resolve is distinct and required for caller-supplied refs",
+    "resolution_errors": "malformed ref is GKOS_P6_INVALID_PARAMS; unknown/expired/wrong-session/wrong-agent ref is authenticated-redacted GKOS_P6_RESOURCE_NOT_FOUND; generation or auth-epoch mismatch is GKOS_P6_REQUEST_STALE_AUTHORITY",
+    "runtime_registry": "the resolver mapping is process-memory-only and binds ref type, physical no-follow handle identity, canonical locator digest, session_id, agent_id, auth_epoch, authority_generation, policy_decision_id, capability, filter_digest, issued_at and expires_at; no raw path enters SQLite, logs, activity or protocol results",
+    "wire": "record_ref is gkrec1_ plus 22 base64url characters; scope_ref is gkscp1_ plus 22 base64url characters; each suffix is 128 CSPRNG bits encoded without padding"
+  }
+}

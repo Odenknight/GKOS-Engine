@@ -1,0 +1,173 @@
+{
+  "$id": "qualification-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_paths_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "architecture": {
+      "maxLength": 32,
+      "minLength": 1,
+      "type": "string"
+    },
+    "base_commit": {
+      "const": "808d875b557f4cfd2bb0addccba44d70c9748f35"
+    },
+    "commands": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "command": {
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string"
+          },
+          "exit_code": {
+            "type": "integer"
+          },
+          "fail_count": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "pass_count": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "result": {
+            "enum": [
+              "PASS",
+              "FAIL"
+            ]
+          },
+          "skip_count": {
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "command",
+          "exit_code",
+          "result",
+          "pass_count",
+          "fail_count",
+          "skip_count"
+        ],
+        "title": "Command result",
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "contract_version": {
+      "const": "1.0.0-draft.1"
+    },
+    "ended_at": {
+      "format": "date-time",
+      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "type": "string"
+    },
+    "head_commit": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "input_artifact_digests": {
+      "items": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "job": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "os": {
+      "maxLength": 32,
+      "minLength": 1,
+      "type": "string"
+    },
+    "output_artifact_digests": {
+      "items": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "pack_aggregate_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "protected_paths_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "run_id": {
+      "maxLength": 64,
+      "minLength": 1,
+      "type": "string"
+    },
+    "runner_image": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "secret_scan": {
+      "const": "PASS"
+    },
+    "started_at": {
+      "format": "date-time",
+      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "type": "string"
+    },
+    "tool_versions": {
+      "additionalProperties": {
+        "maxLength": 64,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minProperties": 3,
+      "type": "object"
+    },
+    "workflow": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "contract_version",
+    "base_commit",
+    "head_commit",
+    "workflow",
+    "run_id",
+    "job",
+    "runner_image",
+    "os",
+    "architecture",
+    "tool_versions",
+    "commands",
+    "allowed_paths_digest",
+    "protected_paths_digest",
+    "pack_aggregate_digest",
+    "input_artifact_digests",
+    "output_artifact_digests",
+    "secret_scan",
+    "started_at",
+    "ended_at",
+    "result"
+  ],
+  "title": "Qualification receipt",
+  "type": "object"
+}

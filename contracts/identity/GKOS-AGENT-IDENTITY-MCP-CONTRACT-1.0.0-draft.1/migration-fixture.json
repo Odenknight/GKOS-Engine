@@ -1,0 +1,42 @@
+{
+  "contract_version": "1.0.0-draft.1",
+  "kind": "migration",
+  "vectors": [
+    {
+      "assertions": [
+        "legacy_source is required",
+        "physical source state is authoritative",
+        "retry never substitutes identity or secret"
+      ],
+      "expect": "reject",
+      "id": "BOOTSTRAP-SOURCE-001"
+    },
+    {
+      "assertions": [
+        "legacy_source is required",
+        "physical source state is authoritative",
+        "retry never substitutes identity or secret"
+      ],
+      "expect": "accept",
+      "id": "BOOTSTRAP-SOURCE-002"
+    },
+    {
+      "assertions": [
+        "legacy_source is required",
+        "physical source state is authoritative",
+        "retry never substitutes identity or secret"
+      ],
+      "expect": "accept",
+      "id": "BOOTSTRAP-SOURCE-003"
+    },
+    {
+      "assertions": [
+        "legacy_source is required",
+        "physical source state is authoritative",
+        "retry never substitutes identity or secret"
+      ],
+      "expect": "reject",
+      "id": "BOOTSTRAP-SOURCE-004"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "$id": "bootstrap-migration.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "initial": {
+      "const": "UNINITIALIZED"
+    },
+    "owner_locator_no_replace": {
+      "const": true
+    },
+    "sqlite_transactions_span_effects": {
+      "const": false
+    },
+    "states": {
+      "const": [
+        "UNINITIALIZED",
+        "OWNER_PROVED",
+        "PLAN_STAGED",
+        "OWNER_LOCATOR_STAGED",
+        "DB_PUBLISHED",
+        "OWNER_ACTIVE",
+        "LEGACY_REMOVED",
+        "COMPLETE",
+        "RECOVERY_REQUIRED"
+      ],
+      "type": "array"
+    },
+    "terminal": {
+      "const": "COMPLETE"
+    }
+  },
+  "required": [
+    "states",
+    "initial",
+    "terminal",
+    "owner_locator_no_replace",
+    "sqlite_transactions_span_effects"
+  ],
+  "title": "Bootstrap migration contract",
+  "type": "object"
+}

@@ -1,0 +1,1651 @@
+{
+  "$defs": {
+    "authority_anchor": {
+      "additionalProperties": false,
+      "properties": {
+        "anchor_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "anchor_state": {
+          "enum": [
+            "MUTATION_INTENT",
+            "RESTORE_INTENT",
+            "COMMITTED"
+          ]
+        },
+        "authority_generation": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "global_event_head_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "global_event_seq": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "authority_generation",
+        "global_event_seq",
+        "global_event_head_digest",
+        "anchor_state",
+        "updated_at",
+        "anchor_digest"
+      ],
+      "title": "authority_anchor",
+      "type": "object"
+    },
+    "authority_backup_manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_generation": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "backup_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "global_event_head_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "global_event_seq": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "manifest_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "sqlite_snapshot_bytes": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "sqlite_snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "backup_id",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "authority_generation",
+        "global_event_seq",
+        "global_event_head_digest",
+        "schema_version",
+        "sqlite_snapshot_bytes",
+        "sqlite_snapshot_digest",
+        "created_at",
+        "manifest_digest"
+      ],
+      "title": "authority_backup_manifest",
+      "type": "object"
+    },
+    "authority_meta": {
+      "additionalProperties": false,
+      "properties": {
+        "authority_generation": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "bootstrap_state": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "event_history_floor_predecessor_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "event_history_floor_seq": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "global_event_head_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "global_event_seq": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "meta_id": {
+          "const": "authority"
+        },
+        "record_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "write_gate": {
+          "enum": [
+            "open",
+            "recovery_required",
+            "blocked"
+          ]
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "meta_id",
+        "schema_version",
+        "authority_generation",
+        "global_event_seq",
+        "global_event_head_digest",
+        "event_history_floor_seq",
+        "event_history_floor_predecessor_digest",
+        "write_gate",
+        "bootstrap_state",
+        "created_at",
+        "updated_at",
+        "record_digest"
+      ],
+      "title": "authority_meta",
+      "type": "object"
+    },
+    "effect_outbox_event": {
+      "additionalProperties": false,
+      "properties": {
+        "activity_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agent_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "attempt": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "auth_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "auth_epoch_after": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "auth_epoch_before": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "authority_generation_after": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_generation_before": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "authority_instance_id_after": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "authority_instance_id_before": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "bridge_state": {
+          "enum": [
+            "PREPARED",
+            "EFFECT_TERMINAL_OBSERVED",
+            "AUDIT_PUBLISHED",
+            "RECOVERED"
+          ]
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "credential_id": {
+          "maxLength": 31,
+          "minLength": 31,
+          "pattern": "^gkc(?:0|1)_[a-z2-7]{26}$",
+          "type": "string"
+        },
+        "effect_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "effects_archive_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "effects_journal_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "effects_receipt_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "event_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "event_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "event_kind": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "expected_recovery_gate_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "global_event_seq": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "input_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "plan_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "policy_decision_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "predecessor_event_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "request_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch_after": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch_before": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transport": {
+          "const": "effect_bridge"
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "event_id",
+        "event_kind",
+        "global_event_seq",
+        "authority_instance_id_before",
+        "authority_instance_id_after",
+        "restore_epoch_before",
+        "restore_epoch_after",
+        "authority_generation_before",
+        "authority_generation_after",
+        "agent_id",
+        "auth_epoch_before",
+        "auth_epoch_after",
+        "transport",
+        "occurred_at",
+        "predecessor_event_digest",
+        "event_digest",
+        "auth_epoch",
+        "credential_id",
+        "session_id",
+        "request_id",
+        "policy_decision_id",
+        "input_digest",
+        "plan_digest",
+        "effect_id",
+        "attempt",
+        "bridge_state",
+        "expected_recovery_gate_digest",
+        "effects_receipt_digest",
+        "effects_journal_digest",
+        "effects_archive_digest",
+        "activity_id"
+      ],
+      "title": "effect_outbox_event",
+      "type": "object"
+    },
+    "identity_audit_receipt": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "bootstrap_owner",
+            "bootstrap_legacy_agent",
+            "provision_agent",
+            "rename_agent",
+            "disable_agent",
+            "enable_agent",
+            "issue_credential",
+            "revoke_credential",
+            "rotate_credential",
+            "add_mapping",
+            "revoke_mapping",
+            "close_session",
+            "set_retention",
+            "migration_recovery"
+          ]
+        },
+        "actor": {
+          "enum": [
+            "local_owner",
+            "system_bootstrap",
+            "system_migration"
+          ]
+        },
+        "after_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agent_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "auth_epoch_after": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "auth_epoch_before": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "authority_generation_after": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_generation_before": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "authority_instance_id_after": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "authority_instance_id_before": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "before_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "event_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "event_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "event_kind": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "global_event_seq": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "idempotency_key_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "predecessor_event_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "request_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch_after": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch_before": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "target_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "target_type": {
+          "enum": [
+            "authority",
+            "agent",
+            "credential",
+            "mapping",
+            "session",
+            "retention",
+            "migration"
+          ]
+        },
+        "transport": {
+          "enum": [
+            "owner_cli",
+            "native_stdio",
+            "loopback_streamable_http",
+            "private_authority",
+            "effect_bridge",
+            "migration_recovery"
+          ]
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "event_id",
+        "event_kind",
+        "global_event_seq",
+        "authority_instance_id_before",
+        "authority_instance_id_after",
+        "restore_epoch_before",
+        "restore_epoch_after",
+        "authority_generation_before",
+        "authority_generation_after",
+        "agent_id",
+        "auth_epoch_before",
+        "auth_epoch_after",
+        "transport",
+        "occurred_at",
+        "predecessor_event_digest",
+        "event_digest",
+        "request_id",
+        "idempotency_key_digest",
+        "before_digest",
+        "after_digest",
+        "actor",
+        "action",
+        "target_type",
+        "target_id"
+      ],
+      "title": "identity_audit_receipt",
+      "type": "object"
+    },
+    "page_cursor": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "auth_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_generation": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "cursor_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "filter_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "issued_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "operation": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "order_version": {
+          "maxLength": 32,
+          "minLength": 1,
+          "type": "string"
+        },
+        "page_limit": {
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "page_offset": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "record_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "snapshot_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "transport": {
+          "enum": [
+            "owner_cli",
+            "native_stdio",
+            "loopback_streamable_http",
+            "private_authority",
+            "effect_bridge",
+            "migration_recovery"
+          ]
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "cursor_digest",
+        "snapshot_id",
+        "agent_id",
+        "auth_epoch",
+        "session_id",
+        "transport",
+        "authority_generation",
+        "operation",
+        "filter_digest",
+        "page_offset",
+        "page_limit",
+        "order_version",
+        "issued_at",
+        "expires_at",
+        "record_digest"
+      ],
+      "title": "page_cursor",
+      "type": "object"
+    },
+    "page_snapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "auth_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_generation": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "canonical_bytes": {
+          "maximum": 524288,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "entry_count": {
+          "maximum": 2000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "filter_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "issued_reference_count": {
+          "maximum": 2000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "issued_reference_set_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "operation": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "order_version": {
+          "maxLength": 32,
+          "minLength": 1,
+          "type": "string"
+        },
+        "record_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "snapshot_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "transport": {
+          "enum": [
+            "owner_cli",
+            "native_stdio",
+            "loopback_streamable_http",
+            "private_authority",
+            "effect_bridge",
+            "migration_recovery"
+          ]
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "snapshot_id",
+        "agent_id",
+        "auth_epoch",
+        "session_id",
+        "transport",
+        "authority_generation",
+        "operation",
+        "filter_digest",
+        "order_version",
+        "entry_count",
+        "canonical_bytes",
+        "snapshot_digest",
+        "issued_reference_count",
+        "issued_reference_set_digest",
+        "created_at",
+        "expires_at",
+        "record_digest"
+      ],
+      "title": "page_snapshot",
+      "type": "object"
+    },
+    "policy_decision": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "auth_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_generation": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "capability": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "configuration_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "allow",
+            "deny",
+            "indeterminate"
+          ]
+        },
+        "policy_decision_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "policy_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 32,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "record_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "request_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transport": {
+          "enum": [
+            "owner_cli",
+            "native_stdio",
+            "loopback_streamable_http",
+            "private_authority",
+            "effect_bridge",
+            "migration_recovery"
+          ]
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "policy_decision_id",
+        "agent_id",
+        "auth_epoch",
+        "session_id",
+        "request_id",
+        "transport",
+        "authority_generation",
+        "capability",
+        "policy_digest",
+        "configuration_digest",
+        "outcome",
+        "reason_codes",
+        "evaluated_at",
+        "record_digest"
+      ],
+      "title": "policy_decision",
+      "type": "object"
+    },
+    "rate_bucket": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "auth_epoch": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "authority_generation": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "bucket_class": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "bucket_id": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "capacity_micro": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "last_refill_monotonic_ms": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "last_refill_wall_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "record_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "refill_micro_per_ms": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "tokens_micro": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "bucket_id",
+        "agent_id",
+        "auth_epoch",
+        "authority_generation",
+        "bucket_class",
+        "tokens_micro",
+        "capacity_micro",
+        "refill_micro_per_ms",
+        "last_refill_wall_at",
+        "last_refill_monotonic_ms",
+        "record_digest"
+      ],
+      "title": "rate_bucket",
+      "type": "object"
+    },
+    "restore_event": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "authority_restore",
+            "authority_restore_abort"
+          ]
+        },
+        "actor": {
+          "const": "local_owner_recovery"
+        },
+        "agent_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "anchor_published": {
+          "type": "boolean"
+        },
+        "auth_epoch_after": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "auth_epoch_before": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "authority_generation_after": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_generation_before": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "authority_instance_id_after": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "authority_instance_id_before": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "backup_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "candidate_credential_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "database_published": {
+          "type": "boolean"
+        },
+        "event_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "event_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "event_kind": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "global_event_seq": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "predecessor_event_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "replacement_active": {
+          "type": "boolean"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch_after": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch_before": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_plan_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "target_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "target_type": {
+          "enum": [
+            "authority_instance",
+            "restore_plan"
+          ]
+        },
+        "tombstone_digest": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transport": {
+          "enum": [
+            "owner_cli",
+            "native_stdio",
+            "loopback_streamable_http",
+            "private_authority",
+            "effect_bridge",
+            "migration_recovery"
+          ]
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "event_id",
+        "event_kind",
+        "global_event_seq",
+        "authority_instance_id_before",
+        "authority_instance_id_after",
+        "restore_epoch_before",
+        "restore_epoch_after",
+        "authority_generation_before",
+        "authority_generation_after",
+        "agent_id",
+        "auth_epoch_before",
+        "auth_epoch_after",
+        "transport",
+        "occurred_at",
+        "predecessor_event_digest",
+        "event_digest",
+        "actor",
+        "action",
+        "target_type",
+        "target_id",
+        "restore_plan_digest",
+        "backup_digest",
+        "candidate_credential_digest",
+        "replacement_active",
+        "database_published",
+        "anchor_published",
+        "tombstone_digest"
+      ],
+      "title": "restore_event",
+      "type": "object"
+    },
+    "retention_batch": {
+      "additionalProperties": false,
+      "properties": {
+        "agent_id": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "auth_epoch_after": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "auth_epoch_before": {
+          "anyOf": [
+            {
+              "maximum": 9007199254740991,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "authority_generation_after": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_generation_before": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "authority_instance_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "authority_instance_id_after": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "authority_instance_id_before": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "deleted_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "event_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "event_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        "event_kind": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "first_sequence": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "global_event_seq": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "last_sequence": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "ordered_rows_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "predecessor_event_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "record_type": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "restore_epoch": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch_after": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "restore_epoch_before": {
+          "maximum": 9007199254740991,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "retention_policy_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "row_count": {
+          "maximum": 1000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "transport": {
+          "enum": [
+            "owner_cli",
+            "native_stdio",
+            "loopback_streamable_http",
+            "private_authority",
+            "effect_bridge",
+            "migration_recovery"
+          ]
+        },
+        "vault_id": {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_version",
+        "vault_id",
+        "authority_instance_id",
+        "restore_epoch",
+        "event_id",
+        "event_kind",
+        "global_event_seq",
+        "authority_instance_id_before",
+        "authority_instance_id_after",
+        "restore_epoch_before",
+        "restore_epoch_after",
+        "authority_generation_before",
+        "authority_generation_after",
+        "agent_id",
+        "auth_epoch_before",
+        "auth_epoch_after",
+        "transport",
+        "occurred_at",
+        "predecessor_event_digest",
+        "event_digest",
+        "record_type",
+        "first_sequence",
+        "last_sequence",
+        "row_count",
+        "ordered_rows_digest",
+        "retention_policy_digest",
+        "deleted_at"
+      ],
+      "title": "retention_batch",
+      "type": "object"
+    }
+  },
+  "$id": "audit-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/authority_meta"
+    },
+    {
+      "$ref": "#/$defs/policy_decision"
+    },
+    {
+      "$ref": "#/$defs/identity_audit_receipt"
+    },
+    {
+      "$ref": "#/$defs/retention_batch"
+    },
+    {
+      "$ref": "#/$defs/rate_bucket"
+    },
+    {
+      "$ref": "#/$defs/page_snapshot"
+    },
+    {
+      "$ref": "#/$defs/page_cursor"
+    },
+    {
+      "$ref": "#/$defs/effect_outbox_event"
+    },
+    {
+      "$ref": "#/$defs/restore_event"
+    },
+    {
+      "$ref": "#/$defs/authority_anchor"
+    },
+    {
+      "$ref": "#/$defs/authority_backup_manifest"
+    }
+  ]
+}
