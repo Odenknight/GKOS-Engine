@@ -35,6 +35,11 @@
       "types": "./dist/governance/index.d.ts",
       "import": "./dist/governance.mjs",
       "default": "./dist/governance.mjs"
+    },
+    "./admission-policy": {
+      "types": "./dist/admission-policy/index.d.ts",
+      "import": "./dist/admission-policy.mjs",
+      "default": "./dist/admission-policy.mjs"
     }
   },
   "bin": {
@@ -52,6 +57,7 @@
     "evidence/ENGINE-NAV-CONTRACT-1.0.0.json",
     "evidence/2026-08-16-navigation-2.1.0-verification.md",
     "evidence/2026-08-20-navigation-2.1.2-corrective-verification.md",
+    "evidence/2026-08-26-admission-policy-provider-v1.md",
     "README.md",
     "TECHNICAL_README.md",
     "BEGINNERS_GUIDE.md",

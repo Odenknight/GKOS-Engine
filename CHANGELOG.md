@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Proposed the generic, deterministic `gkos.admission-policy.v1` provider
+  contract with strict schemas, canonical replay vectors, hash-bound
+  non-authoritative receipts, and no I/O or materialization capability.
+
 ## 2.1.2
 
 - Added a shared fail-closed validation-to-context gate. Discoverable sources

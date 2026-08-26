@@ -111,6 +111,17 @@ Standard owns the provisional, informative, non-normative draft; Suite stages
 proposal-only records for this evaluator, while Marshal and KRS Lite remain
 execution-evidence producers rather than Engine authority sources.
 
+## Generic admission-policy provider proposal
+
+The unreleased `gkos.admission-policy.v1` contract offers deterministic,
+product-neutral admission-policy evaluation without I/O, materialization, or
+authority creation. It emits only the three bounded dispositions and the
+pre-adjudication `REVIEW_INVALID` outcome. Reviewer recommendations are evidence,
+not approval. See [the contract boundary](docs/ADMISSION-POLICY-PROVIDER-V1.md).
+
+This proposal does not change the package version and must not be treated as a
+released authority pin until separately ratified.
+
 ## Optional intelligence sidecar
 
 The separately installable Python service under `services/gkos-intelligence/`

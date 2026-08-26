@@ -59,6 +59,7 @@ try {
     ["src/graphiti-adapter.ts", "dist/graphiti-adapter.mjs"],
     ["src/navigation/index.ts", "dist/navigation.mjs"],
     ["src/governance/index.ts", "dist/governance.mjs"],
+    ["src/admission-policy/index.ts", "dist/admission-policy.mjs"],
   ]) {
     writeFileSync(resolve(root, output), await bundle(entry));
     console.log(`built ${output}`);

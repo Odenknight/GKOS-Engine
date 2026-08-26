@@ -32,6 +32,7 @@ export * from "./adapter";
 export * from "./graphiti-adapter";
 export * from "./navigation/index";
 export * from "./governance/index";
+export * from "./admission-policy/index";
 
 /** Non-normative draft SRTP support. It is opt-in and does not alter GKX defaults. */
 export * as experimentalScience from "./science/index";

@@ -23,6 +23,10 @@ import {
   InMemoryGovernanceStore as GovernanceStoreFromSubpath,
   buildStateChangeReceipt as buildStateChangeReceiptFromSubpath,
 } from "gkos-engine/governance";
+import {
+  ADMISSION_POLICY_CONTRACT as admissionPolicyContractFromSubpath,
+  evaluateAdmissionPolicy as evaluateAdmissionPolicyFromSubpath,
+} from "gkos-engine/admission-policy";
 
 test("canonical GKX API is available from the engine and package subpaths", () => {
   assert.equal(GKX23_PROFILE, "gkx-2.3-validating-projection");
@@ -38,6 +42,8 @@ test("canonical GKX API is available from the engine and package subpaths", () =
   assert.equal(navigationCapabilitiesFromSubpath.navigation.source_content_write, false);
   assert.equal(typeof GovernanceStoreFromSubpath, "function");
   assert.equal(typeof buildStateChangeReceiptFromSubpath, "function");
+  assert.equal(admissionPolicyContractFromSubpath, "gkos.admission-policy.v1");
+  assert.equal(typeof evaluateAdmissionPolicyFromSubpath, "function");
 });
 
 test("downstream adapter is immutable, policy-bound, and product-neutral", () => {

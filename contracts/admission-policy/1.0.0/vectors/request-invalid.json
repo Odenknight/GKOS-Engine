@@ -1,0 +1,44 @@
+{
+  "schema": "gkos.admission-policy.request.v1",
+  "contract": "gkos.admission-policy.v1",
+  "contractVersion": "1.0.0",
+  "requestId": "fixture:invalid",
+  "idempotencyKey": "fixture:invalid:1",
+  "subject": {
+    "id": "fixture:artifact:invalid",
+    "type": "derived_summary",
+    "contentHash": "sha256:8080808080808080808080808080808080808080808080808080808080808080"
+  },
+  "policyRef": {
+    "id": "fixture:bounded-derived-memory",
+    "version": "1.0.0",
+    "digest": "sha256:15a839802b373661c54d3a97b268db49291d84e0ac8aa9b42aaeed9eac4b94a4"
+  },
+  "inputHashes": [
+    { "name": "source-packet", "digest": "sha256:9090909090909090909090909090909090909090909090909090909090909090" },
+    { "name": "semantic-assessment", "digest": "sha256:a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0"
+    }
+  ],
+  "validity": {
+    "valid": false,
+    "receiptHash": "sha256:b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0"
+  },
+  "artifact": {
+    "type": "derived_summary",
+    "reversible": true,
+    "reconstructable": true
+  },
+  "deterministicChecks": {
+    "receiptHash": "sha256:c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0",
+    "detectedTriggers": []
+  },
+  "reviewer": {
+    "assessmentHash": "sha256:a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0",
+    "independent": true,
+    "conflictsWithDeterministicChecks": false,
+    "unsupportedClaimIds": [],
+    "contradictionIds": [],
+    "scopeMatch": true,
+    "recommendedLane": "AUTO_ADMIT_CANDIDATE"
+  }
+}
