@@ -23,6 +23,8 @@ test('generator check and exact manifest closure',async()=>{
   const manifest=await json('pack-manifest.json');assert.equal(manifest.leaf_count,33);assert.equal(manifest.leaves.length,33);assert.equal(new Set(manifest.leaves.map((x)=>x.path)).size,33);assert.ok(!manifest.leaves.some((x)=>x.path==='pack-manifest.json'));
   for(const leaf of manifest.leaves){const bytes=await readFile(join(DIR,leaf.path));assert.equal(bytes.length,leaf.size,leaf.path);assert.equal(sha(bytes),leaf.sha256,leaf.path);assert.ok(!bytes.includes(Buffer.from('\r\n')),leaf.path);}
   assert.equal(manifest.aggregate_digest,`sha256:${sha(canonical(manifest.leaves))}`);assert.equal(manifest.source_base_commit,BASE);
+  assert.equal(manifest.generation_input_digest,'sha256:ec3ece84c71114b0d97cfa23376d37d35fde2f4e6105815d5c5e967ff886cc18');
+  assert.equal(manifest.generator_digest,`sha256:${sha(await readFile(join(ROOT,'scripts/generate-agent-identity-mcp-contract.mjs')))}`);
 });
 
 test('all schemas compile strictly and product instances validate',async()=>{
@@ -65,6 +67,8 @@ test('two fresh roots and deterministic tar are byte-identical',async(t)=>{
 test('diff is all-and-only allowed and protected paths are byte-identical',async()=>{
   const allowed=new Set((await readFile(join(DIR,'allowed-paths.txt'),'utf8')).trim().split('\n'));assert.equal(allowed.size,40);
   const protectedPaths=(await readFile(join(DIR,'protected-paths.txt'),'utf8')).trim().split('\n');assert.equal(protectedPaths.length,22);
+  assert.equal(sha(await readFile(join(DIR,'allowed-paths.txt'))),'7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce');
+  assert.equal(sha(await readFile(join(DIR,'protected-paths.txt'))),'f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948');
   const changed=execFileSync('git',['status','--porcelain=v1','-uall'],{cwd:ROOT,encoding:'utf8'}).split(/\r?\n/).filter(Boolean).map((line)=>line.slice(3).replaceAll('\\','/'));
   for(const path of changed)assert.ok(allowed.has(path),`disallowed changed path: ${path}`);
   const protectedDiff=execFileSync('git',['diff','--name-only',BASE,'--',...protectedPaths],{cwd:ROOT,encoding:'utf8'}).trim();assert.equal(protectedDiff,'');

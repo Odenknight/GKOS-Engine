@@ -1,9 +1,9 @@
 {
-  "aggregate_digest": "sha256:b887fe4aedc63578d7dc9aff05f596d5daddbc19eca55a01130c1a61c7f26045",
+  "aggregate_digest": "sha256:ab23360c2bcac837f2dd68555c042539ec144a34daff4e0795ac499daf2a12dc",
   "contract_name": "GKOS-AGENT-IDENTITY-MCP-CONTRACT",
   "contract_version": "1.0.0-draft.1",
-  "generation_input_digest": "sha256:caf777892e61e017c2e2c3cb8c9e06d5c728fdff27f26d62a7477bf07608f482",
-  "generator_digest": "sha256:a30eab247de184b501c132dbf4d15f79337e1004e11c2dcc58521f0f87cc2ed2",
+  "generation_input_digest": "sha256:ec3ece84c71114b0d97cfa23376d37d35fde2f4e6105815d5c5e967ff886cc18",
+  "generator_digest": "sha256:04e817bb906f4e73749a47878832ca220ec56a5571ee1fd0fa2583d319cd1333",
   "leaf_count": 33,
   "leaves": [
     {
@@ -123,8 +123,8 @@
     },
     {
       "path": "protected-paths.txt",
-      "sha256": "4d98ccbabb810bcd9cab9442edf1ea22117c4678c3d331a5b0d9cf2ff2801231",
-      "size": 482
+      "sha256": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948",
+      "size": 515
     },
     {
       "path": "qualification-receipt.schema.json",

@@ -12,13 +12,13 @@ const PACK = `contracts/identity/${CONTRACT}`;
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SELF = fileURLToPath(import.meta.url);
 const SOURCE_COORDINATES = Object.freeze({
-  core_spec: '168d6865d9b7860917643f539ed5313095bbdbc87e04f97d916ebd4d7647a8bf',
+  core_spec: '168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c',
   core_operation_inventory: 'd84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87',
-  core_decision: '29f49ac2299bc9cfaa3ac5d5aaaff62f238db90e47fbb9f5b5ebf60cb386f2fc',
-  error_registry: '5dd45eaa7e20a923f88b5871af8d71fdd9a880a6f793b144517522df01b6bd57',
-  core_validation: '4f31f7380365918bd3dc04b466d4ae4058720620a6b3c785bb850dd96f9660e7',
+  core_decision: '29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5',
+  error_registry: '5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5',
+  core_validation: '4f31f73833344b0d771775beb869f32da3404c6ef49b1c53f365e2407cd3b6b8',
   allowed_paths: '7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce',
-  protected_paths: 'f920a006407f357c0de2254656335295437fc5cc7f5f9d75ab2118088d48c439',
+  protected_paths: 'f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948',
   interface_spec: '476e839fb81f2f936785a38278846d33c7a680a84069607b1188c5ca2609e427',
   tool_registry_schema: '5c043dc5570c4c52ad13425925711e672ec198d5910ab5c9e8c1438cb5ed8004',
   tool_catalog: 'c0ed2b963dcaef8a8bd08a427687d493bb7e85f1e26076a88a04f68b2117de7e',
@@ -30,7 +30,7 @@ const SOURCE_COORDINATES = Object.freeze({
 
 const PACK_LEAVES = ['README.md','TECHNICAL_README.md','activity.schema.json','agent-identity.schema.json','allowed-paths.txt','audit-receipt.schema.json','bootstrap-migration.schema.json','canonical-fixture.json','conformance.schema.json','credential.schema.json','error-fixture.json','error.schema.json','external-mapping.schema.json','hosted-artifact-inventory.json','lifecycle.schema.json','limits.schema.json','mcp-conformance-fixture.json','migration-fixture.json','migration.schema.json','operation-inventory.json','operation-inventory.schema.json','pack-manifest.json','platform-matrix.json','platform-matrix.schema.json','protected-paths.txt','qualification-receipt.schema.json','race-fixture.json','request.schema.json','security-fixture.json','session.schema.json','tool-registry.json','tool-registry.schema.json','transport.json','transport.schema.json'];
 const ALLOWED = ['.github/workflows/phase6-identity-contract.yml',...PACK_LEAVES.map((x)=>`${PACK}/${x}`),'docs/decisions/0006-phase6-agent-identity-mcp-contract.md','docs/phase6-agent-identity-mcp-contract.md','evidence/2026-08-25-functional-uplift-phase-6-f1.md','scripts/generate-agent-identity-mcp-contract.mjs','test/agent-identity-mcp-contract.test.mjs'];
-const PROTECTED = ['.github/workflows/ci.yml','.github/workflows/phase4-navigation-effects.yml','.github/workflows/release.yml','.github/workflows/release-archive.yml','README.md','TECHNICAL_README.md','bin/gkx.mjs','contracts/GKX_VAULT_CONTRACT-2.3.md','contracts/effects','contracts/navigation','docs/decisions/0003-gkx-vault-contract-2.3.md','docs/decisions/0005-navigation-effects.md','package-lock.json','package.json','src/effects','src/intelligence','src/navigation','src/primary','src/reentry','src/security','src/tags','src/versioning'];
+const PROTECTED = ['.github/workflows/ci.yml','.github/workflows/phase4-retrieval-observation.yml','.github/workflows/sidecar-release.yml','README.md','TECHNICAL_README.md','bin/gkx.mjs','contracts/ingest/','contracts/navigation-effects/','contracts/navigation/','contracts/retrieval/','contracts/watcher/','docs/decisions/0003-multi-agent-identity-and-authentication.md','docs/decisions/0005-lite-packaging.md','package-lock.json','package.json','src/desktop-agent.ts','src/governance/','src/ingest/','src/navigation-effects/','src/navigation/','src/retrieval/','src/watcher/'];
 
 const sha256 = (data) => createHash('sha256').update(data).digest('hex');
 const sorted = (v) => Array.isArray(v) ? v.map(sorted) : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map((k)=>[k,sorted(v[k])])) : v;
