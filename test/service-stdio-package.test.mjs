@@ -10,11 +10,17 @@ import test from "node:test";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
-test("packed installation runs the stdio bridge against one authenticated real process", { timeout: 60_000 }, async (t) => {
+test("packed installation runs the stdio bridge against one authenticated real process", { timeout: 90_000 }, async (t) => {
   const temporary = mkdtempSync(join(tmpdir(), "gkos-stdio-package-"));
   t.after(() => rmSync(temporary, { recursive: true, force: true }));
   const npmCli = process.env.npm_execpath || resolve(dirname(process.execPath), "node_modules/npm/bin/npm-cli.js");
-  const packOutput = execFileSync(process.execPath, [npmCli, "pack", "--json", "--ignore-scripts", "--pack-destination", temporary], { cwd: ROOT, encoding: "utf8" });
+  // npm pack may run prepare even with ignore-scripts on some npm releases.
+  // Build and pack a clean local clone so its dist recreation cannot race the
+  // concurrently executing repository test processes.
+  const source = join(temporary, "source");
+  execFileSync("git", ["clone", "--quiet", "--shared", ROOT, source], { stdio: "pipe" });
+  execFileSync(process.execPath, [npmCli, "ci", "--no-audit", "--no-fund"], { cwd: source, stdio: "pipe" });
+  const packOutput = execFileSync(process.execPath, [npmCli, "pack", "--json", "--pack-destination", temporary], { cwd: source, encoding: "utf8" });
   const jsonStart = packOutput.indexOf("[");
   const jsonEnd = packOutput.lastIndexOf("]");
   assert.ok(jsonStart >= 0 && jsonEnd >= jsonStart, "npm pack did not emit its JSON report");
