@@ -13,3 +13,10 @@ contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/*.json text eol=lf
 contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/*.md text eol=lf
 contracts/watcher/**/*.json text eol=lf
 contracts/watcher/**/*.md text eol=lf
+
+# Phase 6 identity/MCP contract artifacts and their generator/workflow are
+# byte-governed and must remain LF on Windows checkouts.
+contracts/identity/** text eol=lf
+scripts/generate-agent-identity-mcp-contract.mjs text eol=lf
+.github/workflows/phase6-identity-contract.yml text eol=lf
+.github/workflows/phase4-retrieval-observation.yml text eol=lf
