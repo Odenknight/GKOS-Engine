@@ -1,6 +1,6 @@
 import { buildGraphitiEpisodes } from "../graphiti";
 import { SENSITIVITY_RANK } from "../gkx23";
-import type { GkxGraph, GkxLink, GkxNode, GkxSensitivity, GraphitiEpisode } from "../types";
+import type { GkxGraph, GkxLink, GkxNode, GkxSensitivity, GraphitiEpisode, LinkKind } from "../types";
 import type {
   ServiceCorpusSnapshot,
   ServiceCredentialIdentity,
@@ -8,6 +8,7 @@ import type {
   ServiceReadCapability,
   ServiceAuthorizationConfiguration,
 } from "./types";
+import { isServiceVaultRelativePath } from "./paths";
 
 const OPERATIONS: readonly ServiceOperation[] = [
   "health", "capabilities", "notes", "graph", "graphiti_episodes", "mcp", "events", "proposal_ingress",
@@ -22,6 +23,7 @@ const REQUIRED_CAPABILITY: Partial<Record<ServiceOperation, ServiceReadCapabilit
   events: "events.read",
 };
 const CONTROL = /[\u0000-\u001f\u007f]/u;
+const LINK_KINDS = new Set<LinkKind>(["wikilink", "markdown", "property", "semantic", "lineage", "contains"]);
 
 export class GkosServiceDeniedError extends Error {
   readonly code = "GKOS_SERVICE_ACCESS_DENIED";
@@ -76,12 +78,6 @@ function validIdentityPart(value: unknown, maximum: number): value is string {
   return typeof value === "string" && value.length > 0 && value.length <= maximum && !CONTROL.test(value);
 }
 
-function validPath(value: unknown): value is string {
-  if (typeof value !== "string" || value.length === 0 || value.length > 1024 || CONTROL.test(value)) return false;
-  if (value !== value.normalize("NFC") || value.includes("\\") || value.startsWith("/") || /^[A-Za-z]:/u.test(value)) return false;
-  return value.split("/").every((segment) => segment.length > 0 && segment !== "." && segment !== "..");
-}
-
 function sensitivity(node: GkxNode): GkxSensitivity {
   const projection = node.gkx?.projection;
   const candidate = projection
@@ -111,7 +107,7 @@ function validateRequest(input: BuildAuthorizedViewInput): ServiceCredentialIden
 }
 
 function safeFileNode(node: GkxNode, level: GkxSensitivity): GkxNode {
-  if (!validPath(node.path) || !validIdentityPart(node.id, 1024) || !validIdentityPart(node.label, 512)) deny();
+  if (!isServiceVaultRelativePath(node.path) || !validIdentityPart(node.id, 1024) || !validIdentityPart(node.label, 512)) deny();
   const text = (value: unknown, max: number): string | undefined =>
     typeof value === "string" && value.length <= max && !CONTROL.test(value) ? value : undefined;
   const uid = text(node.gkx?.uid, 160);
@@ -158,7 +154,7 @@ function safeFileNode(node: GkxNode, level: GkxSensitivity): GkxNode {
 }
 
 function safeFolderNode(node: GkxNode): GkxNode {
-  if (!validPath(node.path) || !validIdentityPart(node.id, 1024) || !validIdentityPart(node.label, 512)) deny();
+  if (!isServiceVaultRelativePath(node.path) || !validIdentityPart(node.id, 1024) || !validIdentityPart(node.label, 512)) deny();
   return {
     id: node.id, kind: "folder", path: node.path, label: node.label,
     area: typeof node.area === "string" && !CONTROL.test(node.area) ? node.area : "",
@@ -183,7 +179,7 @@ function projectGraph(graph: GkxGraph | null, ceiling: GkxSensitivity, evaluatio
   const ceilingRank = SENSITIVITY_RANK[ceiling];
   const visibleFiles = graph.nodes.filter((node) => node.kind === "file" && SENSITIVITY_RANK[sensitivity(node)] <= ceilingRank);
   const visiblePaths = visibleFiles.map((node) => node.path);
-  const visibleFolders = graph.nodes.filter((node) => node.kind === "folder" && validPath(node.path) &&
+  const visibleFolders = graph.nodes.filter((node) => node.kind === "folder" && isServiceVaultRelativePath(node.path) &&
     visiblePaths.some((filePath) => filePath.startsWith(`${node.path}/`)));
   const nodes = [
     ...visibleFiles.map((node) => safeFileNode(node, sensitivity(node))),
@@ -192,11 +188,19 @@ function projectGraph(graph: GkxGraph | null, ceiling: GkxSensitivity, evaluatio
   const visibleIds = new Set(nodes.map((node) => node.id));
   const links: GkxLink[] = graph.links
     .filter((link) => link && visibleIds.has(link.source) && visibleIds.has(link.target))
-    .map((link) => ({
-      id: String(link.id), source: link.source, target: link.target, kind: link.kind,
-      ...(typeof link.label === "string" && !CONTROL.test(link.label) ? { label: link.label } : {}),
-      ...(typeof link.sourcePath === "string" && validPath(link.sourcePath) ? { sourcePath: link.sourcePath } : {}),
-    }))
+    .map((link) => {
+      if (!validIdentityPart(link.id, 1024) || !LINK_KINDS.has(link.kind)) deny();
+      if (link.label !== undefined && !validIdentityPart(link.label, 512)) deny();
+      return {
+        id: link.id,
+        source: link.source,
+        target: link.target,
+        kind: link.kind,
+        ...(link.label !== undefined ? { label: link.label } : {}),
+        // Never trust graph-carried sourcePath. The visible source node is the
+        // sole path authority and transports can derive it by source id.
+      };
+    })
     .sort((left, right) => compare(left.id, right.id));
   const outgoing = new Map<string, number>();
   const incoming = new Map<string, number>();
