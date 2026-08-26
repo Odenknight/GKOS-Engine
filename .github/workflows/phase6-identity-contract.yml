@@ -19,6 +19,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -39,6 +40,7 @@ jobs:
     timeout-minutes: 30
     steps: &contract_steps
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: '23', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -59,6 +61,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: '24', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -81,6 +84,11 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Restore canonical tracked bytes
+        run: |
+          git config core.autocrlf false
+          git checkout-index --force --all
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -101,6 +109,11 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Restore canonical tracked bytes
+        run: |
+          git config core.autocrlf false
+          git checkout-index --force --all
       - uses: actions/setup-node@v4
         with: { node-version: '23', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -121,6 +134,11 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Restore canonical tracked bytes
+        run: |
+          git config core.autocrlf false
+          git checkout-index --force --all
       - uses: actions/setup-node@v4
         with: { node-version: '24', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -141,6 +159,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -161,6 +180,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -176,6 +196,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -198,6 +219,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: npm }
       - run: npm install --global npm@10.9.4
@@ -214,6 +236,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
       - uses: actions/download-artifact@v4
         with: { path: predecessor-artifacts }
       - name: Verify exact predecessor inventory and inner evidence
