@@ -1,9 +1,9 @@
 {
-  "aggregate_digest": "sha256:a807a0d15cad146e833de3e7dc0fef1ed2f8b520dd6a1d3e00afa7070700c8e7",
+  "aggregate_digest": "sha256:e3dab5b4ee3da62a845cc92bc9dc9b831ed492f34371104b503587c566300380",
   "contract_name": "GKOS-AGENT-IDENTITY-MCP-CONTRACT",
   "contract_version": "1.0.0-draft.1",
   "generation_input_digest": "sha256:ec3ece84c71114b0d97cfa23376d37d35fde2f4e6105815d5c5e967ff886cc18",
-  "generator_digest": "sha256:7229c774ed1fc96188538f7d6e6a6114b25a00d4f16a81cb5696d1980ca5f8ab",
+  "generator_digest": "sha256:95fcdb91814ecf683461a791f4a4dc99ede9d279abba87ee59a9d08cce23ba68",
   "leaf_count": 33,
   "leaves": [
     {
@@ -128,8 +128,8 @@
     },
     {
       "path": "qualification-receipt.schema.json",
-      "sha256": "3c459b901854758ac187de5141672e854580151ec5feada437f29a0540995d59",
-      "size": 5073
+      "sha256": "d6eb8f70ac954302b147c4ef32f2d03b9667253014c40e816eb06d08a29847f8",
+      "size": 11230
     },
     {
       "path": "race-fixture.json",

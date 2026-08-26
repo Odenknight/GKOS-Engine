@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import { createHash } from 'node:crypto';
-import { execFileSync } from 'node:child_process';
+import fs from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
-import { cpus } from 'node:os';
+import { cpus, tmpdir } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
@@ -173,7 +174,22 @@ function schemasAndInstances(){
   const platformSchema=schema('platform-matrix.schema.json',object('Platform matrix',{contract_version:{const:VERSION},entries:{type:'array',minItems:20,maxItems:20,items:object('Platform',{id:str(64),repository:{enum:['full','lite']},os:{enum:['linux','windows','macos','multi']},runner:str(128),arch:{enum:['x64','arm64','aarch64','other']},runtime:str(64),status:{enum:['required','optional','unavailable']},claim:{enum:['contract_portability_only','conformance_only','none']}})}}));
   const exactVersion={type:'string',pattern:'^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$'};
   const artifactDigests={type:'array',minItems:1,uniqueItems:true,items:digest};
-  const qualificationSchema=schema('qualification-receipt.schema.json',object('Qualification receipt',{contract_version:{const:VERSION},base_commit:{const:BASE},head_commit:{type:'string',pattern:'^[0-9a-f]{40}$'},workflow:{const:'GKOS Phase 6 identity contract qualification'},run_id:str(64),job:str(128),runner_image:str(128),os:str(32),architecture:str(32),cpu:str(256),tool_versions:object('Exact qualification tool versions',{node:exactVersion,npm:exactVersion,typescript:exactVersion,ajv:exactVersion,ajv_formats:exactVersion,sqlite:exactVersion}),commands:{type:'array',minItems:1,items:object('Command result',{command:str(1024),exit_code:{const:0},result:{const:'PASS'},test_count:safeInt,pass_count:safeInt,fail_count:{const:0},skip_count:safeInt})},allowed_paths_digest:digest,protected_paths_digest:digest,pack_aggregate_digest:digest,input_artifact_digests:artifactDigests,output_artifact_digests:artifactDigests,secret_scan:{const:'PASS'},started_at:ts,ended_at:ts,result:{const:'PASS'}}));
+  const emptyCountDigest=`sha256:${sha256(canonical({test_count:0,pass_count:0,fail_count:0,skip_count:0}))}`;
+  const commandResult=object('Execution-backed command result',{kind:{enum:['process','test']},command:str(1024),started_at:ts,ended_at:ts,duration_ms:{type:'number',exclusiveMinimum:0,maximum:3600000},exit_code:{type:'integer',minimum:0,maximum:255},result:{enum:['PASS','FAIL']},test_count:safeInt,pass_count:safeInt,fail_count:safeInt,skip_count:safeInt,counts_digest:digest,log_name:{type:'string',pattern:'^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$'},log_digest:digest,test_duration_ms:{type:'number',exclusiveMinimum:0,maximum:3600000}},['kind','command','started_at','ended_at','duration_ms','exit_code','result','test_count','pass_count','fail_count','skip_count','counts_digest']);
+  commandResult.allOf=[
+    {if:{type:'object',properties:{kind:{const:'process'}},required:['kind']},then:{type:'object',properties:{test_count:{const:0},pass_count:{const:0},fail_count:{const:0},skip_count:{const:0},counts_digest:{const:emptyCountDigest},log_name:false,log_digest:false,test_duration_ms:false}}},
+    {if:{type:'object',properties:{kind:{const:'test'}},required:['kind']},then:{type:'object',required:['log_name','log_digest','test_duration_ms'],properties:{test_count:{type:'integer',minimum:1}}}},
+    {if:{type:'object',properties:{result:{const:'PASS'}},required:['result']},then:{type:'object',properties:{exit_code:{const:0},fail_count:{const:0}}}},
+    {if:{type:'object',properties:{result:{const:'FAIL'}},required:['result']},then:{anyOf:[{type:'object',properties:{exit_code:{type:'integer',minimum:1}}},{type:'object',properties:{fail_count:{type:'integer',minimum:1}}}]}}
+  ];
+  const qualificationBody=object('Qualification receipt',{contract_version:{const:VERSION},base_commit:{const:BASE},head_commit:{type:'string',pattern:'^[0-9a-f]{40}$'},workflow:{const:'GKOS Phase 6 identity contract qualification'},run_id:str(64),job:str(128),runner_image:str(128),os:str(32),architecture:str(32),cpu:str(256),tool_versions:object('Exact qualification tool versions',{node:exactVersion,npm:exactVersion,typescript:exactVersion,ajv:exactVersion,ajv_formats:exactVersion,sqlite:exactVersion}),commands:{type:'array',minItems:1,items:ref('#/$defs/command_result')},allowed_paths_digest:digest,protected_paths_digest:digest,pack_aggregate_digest:digest,input_artifact_digests:artifactDigests,output_artifact_digests:{type:'array',uniqueItems:true,items:digest},secret_scan:{enum:['PASS','FAIL']},started_at:ts,ended_at:ts,result:{enum:['PASS','FAIL']}});
+  qualificationBody.$comment='Authoritative validation is JSON Schema plus validateQualificationReceiptSemantics: counts must add exactly, counts_digest binds their canonical object, every duration and interval is real and encompassing, the job command inventory is closed, and top-level PASS or FAIL must agree with every command.';
+  qualificationBody.$defs={command_result:commandResult};
+  qualificationBody.allOf=[
+    {if:{type:'object',properties:{result:{const:'PASS'}},required:['result']},then:{type:'object',properties:{commands:{type:'array',items:{type:'object',properties:{result:{const:'PASS'}}}},output_artifact_digests:{type:'array',minItems:1},secret_scan:{type:'string',const:'PASS'}}}},
+    {if:{type:'object',properties:{result:{const:'FAIL'}},required:['result']},then:{type:'object',properties:{commands:{type:'array',contains:{type:'object',properties:{result:{const:'FAIL'}},required:['result']},minContains:1}}}}
+  ];
+  const qualificationSchema=schema('qualification-receipt.schema.json',qualificationBody);
   const conformance=schema('conformance.schema.json',object('Conformance fixture',{contract_version:{const:VERSION},kind:{enum:['canonical','migration','race','security','mcp','core_operations']},vectors:{type:'array',minItems:1,items:object('Vector',{id:str(128),expect:{enum:['accept','reject','pass','fail_closed']},assertions:{type:'array',minItems:1,items:str(512)}})}}));
   const states=['UNINITIALIZED','OWNER_PROVED','PLAN_STAGED','OWNER_LOCATOR_STAGED','DB_PUBLISHED','OWNER_ACTIVE','LEGACY_REMOVED','COMPLETE','RECOVERY_REQUIRED'];
   return {errors,errorSchema,transportSchema,platformSchema,qualificationSchema,conformance,states,stages};
@@ -228,34 +244,103 @@ const nodeTestCounts=async(path)=>{
   const text=await readFile(resolve(path),'utf8'),counts={};
   for(const key of ['tests','pass','fail','skipped']){const matches=[...text.matchAll(new RegExp(`^(?:#\\s*|ℹ\\s*)${key}\\s+(\\d+)\\s*$`,'gmu'))];if(matches.length===0)throw new Error(`missing ${key} count in ${path}`);counts[key]=Number(matches.at(-1)[1]);}
   if(counts.tests!==counts.pass+counts.fail+counts.skipped)throw new Error(`incoherent test counts in ${path}`);
-  if(counts.fail!==0)throw new Error(`failing test log cannot produce PASS receipt: ${path}`);
-  return {test_count:counts.tests,pass_count:counts.pass,fail_count:counts.fail,skip_count:counts.skipped,log_path:relative(ROOT,resolve(path)).replaceAll('\\','/'),log_digest:`sha256:${sha256(Buffer.from(text))}`};
+  const durationMatches=[...text.matchAll(/^(?:#\s*|ℹ\s*)duration_ms\s+([0-9]+(?:\.[0-9]+)?)\s*$/gmu)];if(durationMatches.length===0)throw new Error(`missing duration_ms in ${path}`);
+  const testDuration=Number(durationMatches.at(-1)[1]);if(!Number.isFinite(testDuration)||testDuration<=0)throw new Error(`invalid duration_ms in ${path}`);
+  return {test_count:counts.tests,pass_count:counts.pass,fail_count:counts.fail,skip_count:counts.skipped,log_name:resolve(path).split(/[\\/]/).at(-1),log_digest:`sha256:${sha256(Buffer.from(text))}`,test_duration_ms:testDuration};
 };
 
-async function writeQualificationReceipt(path,files,job){
-  const startedAt=new Date().toISOString(),commands=[];
-  for(const command of values('--receipt-command'))commands.push({command,exit_code:0,result:'PASS',test_count:0,pass_count:0,fail_count:0,skip_count:0});
-  for(const spec of values('--receipt-test-log')){const split=spec.indexOf('::');if(split<1)throw new Error(`invalid --receipt-test-log: ${spec}`);const command=spec.slice(0,split),logPath=spec.slice(split+2);commands.push({command,exit_code:0,result:'PASS',...await nodeTestCounts(logPath)});}
-  if(commands.length===0)throw new Error('at least one exact receipt command is required');
-  const rootedInputs=(await Promise.all(values('--receipt-input-root').map((x)=>filesUnder(resolve(x))))).flat();
-  const inputRecords=await artifactRecords([...values('--receipt-input'),...rootedInputs]);
+const countDigest=(command)=>`sha256:${sha256(canonical({test_count:command.test_count,pass_count:command.pass_count,fail_count:command.fail_count,skip_count:command.skip_count}))}`;
+const qualificationValidator=async(schemaBytes)=>{const [{default:Ajv2020},{default:addFormats}]=await Promise.all([import('ajv/dist/2020.js'),import('ajv-formats')]),ajv=new Ajv2020({strict:true,allErrors:true,allowUnionTypes:true});addFormats(ajv);return {ajv,validate:ajv.compile(JSON.parse(schemaBytes.toString('utf8')))};};
+const commonPlan=()=>[
+  {label:'npm install --global npm@10.9.4',shell:'npm install --global npm@10.9.4'},
+  {label:'npm --version equals 10.9.4',shell:'npm --version',expectStdout:'10.9.4'},
+  {label:'npm ci --ignore-scripts',shell:'npm ci --ignore-scripts'}
+];
+const qualificationPlan=(job)=>{
+  const temp=resolve(process.env.RUNNER_TEMP||tmpdir()),script='scripts/generate-agent-identity-mcp-contract.mjs',focused=join(temp,'focused.tap'),full=join(temp,'full.tap'),adversarial=join(temp,'adversarial.tap'),secret=join(temp,'secret-scan.tap'),archive=resolve(`${CONTRACT}.tar`),sidecar=resolve(`${CONTRACT}.tar.sha256`);
+  if(/^p6-f1-contract-(?:linux|windows|macos)-node(?:22|23|24)$/.test(job)){
+    const plan=[...commonPlan(),{label:'npm run typecheck',shell:'npm run typecheck'},{label:'npm run build',shell:'npm run build'},{label:`node ${script} --check`,shell:`node ${script} --check`}];
+    if(job==='p6-f1-contract-linux-node24')plan.push({label:'npm pack --dry-run',shell:'npm pack --dry-run'});
+    plan.push({label:'node --test test/agent-identity-mcp-contract.test.mjs',shell:'node --test test/agent-identity-mcp-contract.test.mjs',testLog:focused});
+    if(job==='p6-f1-contract-linux-node24')plan.push({label:'npm test',shell:'npm test',testLog:full});
+    return {plan,outputs:plan.filter((x)=>x.testLog).map((x)=>x.testLog),evidence:true};
+  }
+  if(job==='p6-f1-schema-adversarial')return {plan:[...commonPlan(),{label:'node --test test/agent-identity-mcp-contract.test.mjs',shell:'node --test test/agent-identity-mcp-contract.test.mjs',testLog:adversarial}],outputs:[adversarial],evidence:true};
+  if(job==='p6-f1-pack-reproducibility')return {plan:[...commonPlan(),{label:`node ${script} --check --archive ${CONTRACT}.tar`,shell:`node ${script} --check --archive ${CONTRACT}.tar`},{label:`node ${script} --write-sidecar ${CONTRACT}.tar`,shell:`node ${script} --write-sidecar ${CONTRACT}.tar`}],outputs:[archive,sidecar],evidence:false};
+  if(job==='p6-f1-secret-scan')return {plan:[...commonPlan(),{label:'node --test --test-name-pattern=secret material test/agent-identity-mcp-contract.test.mjs',shell:'node --test --test-name-pattern="secret material" test/agent-identity-mcp-contract.test.mjs',testLog:secret}],outputs:[secret],evidence:true};
+  if(job==='p6-f1-artifact-audit')return {plan:[...commonPlan(),{label:'node scripts/generate-agent-identity-mcp-contract.mjs --audit-predecessors predecessor-artifacts',shell:`node ${script} --audit-predecessors predecessor-artifacts --audit-report terminal-audit-report.json`},{label:'node scripts/generate-agent-identity-mcp-contract.mjs --verify-hosted-jobs',shell:`node ${script} --verify-hosted-jobs`}],outputs:[resolve('terminal-audit-report.json')],evidence:true,inputRoots:[resolve('predecessor-artifacts')]};
+  throw new Error(`unknown qualification job: ${job}`);
+};
+const expectedCommands=(job)=>job==='local-reproducibility'?['node --version']:qualificationPlan(job).plan.map((x)=>x.label);
+
+function assertQualificationReceiptSemantics(receipt){
+  const expected=expectedCommands(receipt.job),actual=receipt.commands.map((x)=>x.command),allPass=receipt.commands.every((x)=>x.result==='PASS');
+  if(receipt.result==='PASS'&&JSON.stringify(actual)!==JSON.stringify(expected))throw new Error(`${receipt.job}: command inventory mismatch`);
+  if(receipt.result==='FAIL'&&(actual.length>expected.length||JSON.stringify(actual)!==JSON.stringify(expected.slice(0,actual.length))||receipt.commands.at(-1)?.result!=='FAIL'))throw new Error(`${receipt.job}: failed command inventory is not an exact terminal prefix`);
+  const receiptStart=Date.parse(receipt.started_at),receiptEnd=Date.parse(receipt.ended_at);if(!Number.isFinite(receiptStart)||!Number.isFinite(receiptEnd)||receiptEnd<=receiptStart)throw new Error(`${receipt.job}: invalid receipt interval`);
+  for(const command of receipt.commands){
+    const start=Date.parse(command.started_at),end=Date.parse(command.ended_at);if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start||command.duration_ms<=0||command.duration_ms>3600000||start<receiptStart||end>receiptEnd||end-start+2<command.duration_ms)throw new Error(`${receipt.job}: invalid real command interval: ${command.command}`);
+    if(command.test_count!==command.pass_count+command.fail_count+command.skip_count||command.counts_digest!==countDigest(command))throw new Error(`${receipt.job}: incoherent command counts: ${command.command}`);
+    const shouldPass=command.exit_code===0&&command.fail_count===0;if((command.result==='PASS')!==shouldPass)throw new Error(`${receipt.job}: status/exit/failure mismatch: ${command.command}`);
+    if(command.kind==='process'&&(command.test_count!==0||command.pass_count!==0||command.fail_count!==0||command.skip_count!==0||'log_digest' in command||'log_name' in command||'test_duration_ms' in command))throw new Error(`${receipt.job}: process command carries synthetic test evidence`);
+    if(command.kind==='test'&&(!command.log_name||!command.log_digest||!(command.test_duration_ms>0)||command.test_duration_ms>command.duration_ms+2000))throw new Error(`${receipt.job}: invalid test log/duration binding`);
+  }
+  if((receipt.result==='PASS')!==allPass)throw new Error(`${receipt.job}: terminal result mismatch`);if(receipt.result==='PASS'&&(receipt.secret_scan!=='PASS'||receipt.output_artifact_digests.length===0))throw new Error(`${receipt.job}: successful receipt lacks terminal evidence`);
+  for(const key of ['input_artifact_digests','output_artifact_digests'])if(new Set(receipt[key]).size!==receipt[key].length)throw new Error(`${receipt.job}: duplicate ${key}`);
+}
+
+async function executeCommand(spec,recordPath=null){
+  const startedMs=Date.now(),started_at=new Date(startedMs).toISOString(),monotonic=process.hrtime.bigint();
+  const result=process.platform==='win32'?spawnSync(process.env.ComSpec||'cmd.exe',['/d','/s','/c',spec.shell],{cwd:ROOT,encoding:null,maxBuffer:64*1024*1024}):spawnSync('/bin/sh',['-c',spec.shell],{cwd:ROOT,encoding:null,maxBuffer:64*1024*1024});
+  const stdout=result.stdout||Buffer.alloc(0),stderr=result.stderr||Buffer.alloc(0),combined=Buffer.concat([stdout,stderr]);if(stdout.length)process.stdout.write(stdout);if(stderr.length)process.stderr.write(stderr);
+  if(spec.testLog){await writeFile(spec.testLog,combined);}
+  let exit_code=Number.isInteger(result.status)?Math.min(255,Math.max(0,result.status)):255;if(spec.expectStdout&&stdout.toString('utf8').trim()!==spec.expectStdout)exit_code=1;
+  const elapsed=Math.max(0.001,Number((Number(process.hrtime.bigint()-monotonic)/1e6).toFixed(6))),endedMs=Math.max(Date.now(),startedMs+Math.ceil(elapsed)),base={kind:spec.testLog?'test':'process',command:spec.label,started_at,ended_at:new Date(endedMs).toISOString(),duration_ms:elapsed,exit_code,test_count:0,pass_count:0,fail_count:0,skip_count:0};
+  if(spec.testLog)Object.assign(base,await nodeTestCounts(spec.testLog));base.result=base.exit_code===0&&base.fail_count===0?'PASS':'FAIL';base.counts_digest=countDigest(base);
+  if(recordPath)await writeFile(resolve(recordPath),jsonBytes(base));return base;
+}
+
+async function writeQualificationReceipt(path,files,job,commands,{inputPaths=[],inputRoots=[],outputPaths=[],evidencePath=null}={}){
+  if(commands.length===0)throw new Error('at least one execution-backed command is required');
+  const rootedInputs=(await Promise.all(inputRoots.map((x)=>filesUnder(resolve(x))))).flat(),inputRecords=await artifactRecords([...inputPaths,...rootedInputs]);
   if(inputRecords.length===0)throw new Error('at least one receipt input artifact is required');
-  const evidencePath=resolve(value('--receipt-evidence')||'qualification-evidence.json');
-  const outputRecords=await artifactRecords(values('--receipt-output'));
+  const existingOutputs=outputPaths.filter((x)=>fs.existsSync(resolve(x))),outputRecords=await artifactRecords(existingOutputs);
   const cpu=cpus()[0]?.model?.trim();if(!cpu)throw new Error('CPU model unavailable');
   const npmVersion=(process.platform==='win32'?execFileSync(process.env.ComSpec||'cmd.exe',['/d','/s','/c','npm --version'],{encoding:'utf8'}):execFileSync('npm',['--version'],{encoding:'utf8'})).trim();
   const tool_versions={node:process.version,npm:npmVersion,typescript:await exactPackageVersion('typescript'),ajv:await exactPackageVersion('ajv'),ajv_formats:await exactPackageVersion('ajv-formats'),sqlite:process.versions.sqlite};
   for(const [name,version]of Object.entries(tool_versions))if(!version||version==='contract-only'||version==='10')throw new Error(`inexact ${name} version`);
-  const evidence={contract_version:VERSION,job,head_commit:process.env.GITHUB_SHA||BASE,cpu,tool_versions,commands,input_artifacts:inputRecords,produced_artifacts:outputRecords,created_at:new Date().toISOString()};
-  await writeFile(evidencePath,jsonBytes(evidence));
-  const allOutputRecords=[...outputRecords,{path:relative(ROOT,evidencePath).replaceAll('\\','/'),sha256:`sha256:${sha256(await readFile(evidencePath))}`}];
+  const allOutputRecords=[...outputRecords];if(evidencePath){const resolvedEvidence=resolve(evidencePath),evidence={contract_version:VERSION,job,head_commit:process.env.GITHUB_SHA||BASE,cpu,tool_versions,commands,input_artifacts:inputRecords,produced_artifacts:outputRecords,created_at:new Date().toISOString()};await writeFile(resolvedEvidence,jsonBytes(evidence));allOutputRecords.push({path:relative(ROOT,resolvedEvidence).replaceAll('\\','/'),sha256:`sha256:${sha256(await readFile(resolvedEvidence))}`});}
   const inputDigests=[...new Set(inputRecords.map((x)=>x.sha256))].sort(),outputDigests=[...new Set(allOutputRecords.map((x)=>x.sha256))].sort();
-  if(outputDigests.length===0)throw new Error('at least one receipt output artifact is required');
   const manifest=JSON.parse(files.get('pack-manifest.json').toString('utf8'));
-  const receipt={contract_version:VERSION,base_commit:BASE,head_commit:process.env.GITHUB_SHA||BASE,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID||'local-contract-only',job,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,cpu,tool_versions,commands:commands.map(({log_digest,log_path,...command})=>command),allowed_paths_digest:`sha256:${sha256(files.get('allowed-paths.txt'))}`,protected_paths_digest:`sha256:${sha256(files.get('protected-paths.txt'))}`,pack_aggregate_digest:manifest.aggregate_digest,input_artifact_digests:inputDigests,output_artifact_digests:outputDigests,secret_scan:'PASS',started_at:startedAt,ended_at:new Date().toISOString(),result:'PASS'};
+  const result=commands.every((x)=>x.result==='PASS')?'PASS':'FAIL',receipt={contract_version:VERSION,base_commit:BASE,head_commit:process.env.GITHUB_SHA||BASE,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID||'local-contract-only',job,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,cpu,tool_versions,commands,allowed_paths_digest:`sha256:${sha256(files.get('allowed-paths.txt'))}`,protected_paths_digest:`sha256:${sha256(files.get('protected-paths.txt'))}`,pack_aggregate_digest:manifest.aggregate_digest,input_artifact_digests:inputDigests,output_artifact_digests:outputDigests,secret_scan:result,started_at:commands[0].started_at,ended_at:commands.at(-1).ended_at,result};
+  const {ajv,validate}=await qualificationValidator(files.get('qualification-receipt.schema.json'));if(!validate(receipt))throw new Error(ajv.errorsText(validate.errors));assertQualificationReceiptSemantics(receipt);
   await writeFile(resolve(path),jsonBytes(receipt));
+  return receipt;
 }
 
-const outputRoot=resolve(value('--output-root')||ROOT);const files=await generatedLeaves();
-if(args.includes('--check'))await checkGenerated(outputRoot,files);else await writeGenerated(outputRoot,files);const archivePath=value('--archive');if(archivePath)await makeArchive(resolve(archivePath),files);const receiptPath=value('--receipt');if(receiptPath)await writeQualificationReceipt(receiptPath,files,value('--job')||process.env.GITHUB_JOB||'local-f1');
-console.log(JSON.stringify({contract:CONTRACT,output_root:outputRoot,leaf_count:files.size,hashed_leaf_count:files.size-1,mode:args.includes('--check')?'check':'write',archive:archivePath?resolve(archivePath):null,receipt:receiptPath?resolve(receiptPath):null}));
+const walkFilesSync=(root,here=root)=>fs.readdirSync(here,{withFileTypes:true}).flatMap((entry)=>{const target=join(here,entry.name);if(entry.isDirectory())return walkFilesSync(root,target);if(!entry.isFile())throw new Error(`non-regular artifact entry: ${target}`);return [relative(root,target).replaceAll('\\','/')];}).sort();
+const hashFile=(path)=>`sha256:${sha256(fs.readFileSync(path))}`;
+
+async function auditPredecessors(rootPath,reportPath,files){
+  const root=resolve(rootPath),contract=resolve(value('--output-root')||ROOT,PACK),inventory=JSON.parse(fs.readFileSync(join(contract,'hosted-artifact-inventory.json'))),expected=inventory.artifacts.filter((x)=>x!=='gkos-p6-f1-terminal-audit-receipt').sort(),actual=fs.readdirSync(root,{withFileTypes:true}).filter((x)=>x.isDirectory()).map((x)=>x.name).sort();if(JSON.stringify(actual)!==JSON.stringify(expected))throw new Error(`artifact inventory mismatch: ${actual}`);
+  const {ajv,validate}=await qualificationValidator(fs.readFileSync(join(contract,'qualification-receipt.schema.json'))),committedInputs=new Set([hashFile(join(contract,'pack-manifest.json')),hashFile(join(contract,'qualification-receipt.schema.json'))]),predecessorFiles=[];
+  for(const name of expected){const dir=join(root,name),artifactFiles=walkFilesSync(dir),locate=(base)=>{const matches=artifactFiles.filter((file)=>file.split('/').at(-1)===base);if(matches.length!==1)throw new Error(`${name}: expected one ${base}, got ${matches.length}`);return join(dir,matches[0]);};for(const file of artifactFiles)predecessorFiles.push({path:`${name}/${file}`,sha256:hashFile(join(dir,file))});const receiptPath=locate('qualification-receipt.json'),receipt=JSON.parse(fs.readFileSync(receiptPath));if(!validate(receipt))throw new Error(`${name}: ${ajv.errorsText(validate.errors)}`);assertQualificationReceiptSemantics(receipt);if(receipt.result!=='PASS'||receipt.head_commit!==process.env.GITHUB_SHA)throw new Error(`${name}: coordinate mismatch`);
+    const isPack=name==='gkos-p6-f1-contract-pack',evidenceMatches=artifactFiles.filter((x)=>x.split('/').at(-1)==='qualification-evidence.json');if(evidenceMatches.length!==(isPack?0:1))throw new Error(`${name}: qualification evidence topology mismatch`);if(isPack){const base=`${CONTRACT}.tar`,exact=[base,`${base}.sha256`,'qualification-receipt.json'];if(JSON.stringify(artifactFiles)!==JSON.stringify(exact))throw new Error(`pack exact three-file inventory mismatch: ${artifactFiles}`);}else{const evidence=JSON.parse(fs.readFileSync(join(dir,evidenceMatches[0])));if(receipt.cpu!==evidence.cpu||JSON.stringify(receipt.tool_versions)!==JSON.stringify(evidence.tool_versions)||JSON.stringify(receipt.commands)!==JSON.stringify(evidence.commands))throw new Error(`${name}: environment or command evidence mismatch`);}
+    for(const command of receipt.commands.filter((x)=>x.kind==='test')){const log=locate(command.log_name);if(hashFile(log)!==command.log_digest)throw new Error(`${name}: test log binding mismatch`);const parsed=await nodeTestCounts(log);for(const key of ['test_count','pass_count','fail_count','skip_count','log_digest','test_duration_ms'])if(parsed[key]!==command[key])throw new Error(`${name}: test evidence mismatch: ${key}`);}
+    const outputDigests=[...new Set(artifactFiles.map((x)=>join(dir,x)).filter((x)=>x!==receiptPath).map(hashFile))].sort();if(JSON.stringify(receipt.output_artifact_digests)!==JSON.stringify(outputDigests))throw new Error(`${name}: output digest set not exact`);if(JSON.stringify(receipt.input_artifact_digests)!==JSON.stringify([...committedInputs].sort()))throw new Error(`${name}: input digest set not exact`);
+  }
+  const packDir=join(root,'gkos-p6-f1-contract-pack'),base=`${CONTRACT}.tar`,archive=join(packDir,base),sidecar=fs.readFileSync(join(packDir,`${base}.sha256`),'utf8'),archiveHex=hashFile(archive).slice(7);if(sidecar!==`${archiveHex}  ${base}\n`)throw new Error('pack archive sidecar mismatch');
+  const physicalTemp=fs.realpathSync(tmpdir()),extractRoot=fs.mkdtempSync(join(physicalTemp,'gkos-f1-terminal-'));try{execFileSync('tar',['-xf',fs.realpathSync(archive),'-C',extractRoot]);const extracted=join(extractRoot,CONTRACT),manifest=JSON.parse(fs.readFileSync(join(extracted,'pack-manifest.json'))),names=fs.readdirSync(extracted).sort();if(names.length!==34||manifest.leaves.length!==33||manifest.leaves.some((x)=>x.path==='pack-manifest.json'))throw new Error('extracted leaf closure mismatch');for(const leaf of manifest.leaves){const bytes=fs.readFileSync(join(extracted,leaf.path));if(bytes.length!==leaf.size||`sha256:${sha256(bytes)}`!==`sha256:${leaf.sha256}`)throw new Error(`extracted leaf mismatch: ${leaf.path}`);}if(manifest.aggregate_digest!==`sha256:${sha256(Buffer.from(canonical(manifest.leaves)))}`)throw new Error('extracted aggregate mismatch');if(hashFile(join(extracted,'pack-manifest.json'))!==hashFile(join(contract,'pack-manifest.json')))throw new Error('extracted manifest differs from committed manifest');await writeFile(resolve(reportPath),jsonBytes({contract_version:VERSION,head_commit:process.env.GITHUB_SHA||BASE,predecessor_artifacts:expected,predecessor_files:predecessorFiles,archive_digest:hashFile(archive),leaf_count:manifest.leaves.length,leaf_digests:manifest.leaves.map((x)=>({path:x.path,sha256:`sha256:${x.sha256}`})),aggregate_digest:manifest.aggregate_digest,non_self_manifest:true,fresh_physical_root:true,pack_inner_inventory:[base,`${base}.sha256`,'qualification-receipt.json'],result:'PASS'}));}finally{fs.rmSync(extractRoot,{recursive:true,force:true});}
+}
+
+function verifyHostedJobs(){const repository=process.env.GITHUB_REPOSITORY,run=process.env.GITHUB_RUN_ID;if(!repository||!run)throw new Error('hosted job coordinates unavailable');const jobs=JSON.parse(execFileSync('gh',['api',`repos/${repository}/actions/runs/${run}/jobs?per_page=100`],{encoding:'utf8'})).jobs,expected=['p6-f1-contract-linux-node22','p6-f1-contract-linux-node23','p6-f1-contract-linux-node24','p6-f1-contract-windows-node22','p6-f1-contract-windows-node23','p6-f1-contract-windows-node24','p6-f1-contract-macos-node22','p6-f1-schema-adversarial','p6-f1-pack-reproducibility','p6-f1-secret-scan'];for(const name of expected){const job=jobs.find((x)=>x.name===name);if(!job||job.conclusion!=='success')throw new Error(`${name} not successful`);}if(jobs.filter((x)=>x.name.startsWith('p6-f1-')).length!==11)throw new Error('all-and-only job set mismatch');}
+
+const outputRoot=resolve(value('--output-root')||ROOT),files=await generatedLeaves();let mode=args.includes('--check')?'check':'write',archivePath=value('--archive'),receiptPath=value('--receipt');
+if(value('--audit-predecessors')){await auditPredecessors(value('--audit-predecessors'),value('--audit-report')||'terminal-audit-report.json',files);mode='audit';}
+else if(args.includes('--verify-hosted-jobs')){verifyHostedJobs();mode='verify-hosted-jobs';}
+else if(value('--write-sidecar')){const target=resolve(value('--write-sidecar')),name=target.split(/[\\/]/).at(-1);await writeFile(`${target}.sha256`,`${sha256(await readFile(target))}  ${name}\n`);mode='write-sidecar';}
+else if(value('--record-command')){const command=value('--command');if(!command)throw new Error('--record-command requires --command');const record=await executeCommand({label:command,shell:command,...(value('--test-log')?{testLog:resolve(value('--test-log'))}:{})},value('--record-command'));mode='record-command';if(record.result==='FAIL')process.exitCode=record.exit_code||1;}
+else if(value('--validate-receipt')){const receipt=JSON.parse(await readFile(resolve(value('--validate-receipt')),'utf8')),{ajv,validate}=await qualificationValidator(files.get('qualification-receipt.schema.json'));if(!validate(receipt))throw new Error(ajv.errorsText(validate.errors));assertQualificationReceiptSemantics(receipt);mode='validate-receipt';}
+else if(value('--qualification-job')){const job=value('--qualification-job'),configuration=qualificationPlan(job),commands=[];for(const spec of configuration.plan){const command=await executeCommand(spec);commands.push(command);if(command.result==='FAIL')break;}await writeQualificationReceipt(receiptPath||'qualification-receipt.json',files,job,commands,{inputPaths:[join(outputRoot,PACK,'pack-manifest.json'),join(outputRoot,PACK,'qualification-receipt.schema.json')],inputRoots:configuration.inputRoots||[],outputPaths:configuration.outputs,evidencePath:configuration.evidence?(value('--receipt-evidence')||'qualification-evidence.json'):null});mode='qualification';if(commands.some((x)=>x.result==='FAIL'))process.exitCode=commands.find((x)=>x.result==='FAIL').exit_code||1;}
+else {if(args.includes('--check'))await checkGenerated(outputRoot,files);else await writeGenerated(outputRoot,files);if(archivePath)await makeArchive(resolve(archivePath),files);if(receiptPath){if(values('--receipt-command').length||values('--receipt-test-log').length)throw new Error('free receipt commands are forbidden; use execution-backed --receipt-command-record');const commands=await Promise.all(values('--receipt-command-record').map(async(path)=>JSON.parse(await readFile(resolve(path),'utf8'))));await writeQualificationReceipt(receiptPath,files,value('--job')||process.env.GITHUB_JOB||'local-reproducibility',commands,{inputPaths:values('--receipt-input'),inputRoots:values('--receipt-input-root'),outputPaths:values('--receipt-output'),evidencePath:value('--receipt-without-evidence')?null:(value('--receipt-evidence')||'qualification-evidence.json')});}}
+console.log(JSON.stringify({contract:CONTRACT,output_root:outputRoot,leaf_count:files.size,hashed_leaf_count:files.size-1,mode,archive:archivePath?resolve(archivePath):null,receipt:receiptPath?resolve(receiptPath):null}));
