@@ -30,13 +30,25 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run typecheck && npm run build
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
-      - run: node --test test/agent-identity-mcp-contract.test.mjs
-      - name: Write qualification receipt
+      - name: Focused contract tests with retained counts
+        shell: bash
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee focused.tap
+      - name: Write bound qualification receipt
         shell: bash
         run: |
-          node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||'ubuntu-24.04',os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-linux-node22 \
+            --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check" \
+            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-linux-node22-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-linux-node22-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            focused.tap
+          retention-days: 90
+          if-no-files-found: error
 
   p6-f1-contract-linux-node23:
     runs-on: ubuntu-24.04
@@ -51,13 +63,25 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run typecheck && npm run build
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
-      - run: node --test test/agent-identity-mcp-contract.test.mjs
-      - name: Write qualification receipt
+      - name: Focused contract tests with retained counts
+        shell: bash
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee focused.tap
+      - name: Write bound qualification receipt
         shell: bash
         run: |
-          node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-linux-node23 \
+            --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check" \
+            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-linux-node23-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-linux-node23-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            focused.tap
+          retention-days: 90
+          if-no-files-found: error
 
   p6-f1-contract-linux-node24:
     runs-on: ubuntu-24.04
@@ -72,15 +96,30 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run typecheck && npm run build
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
-      - run: node --test test/agent-identity-mcp-contract.test.mjs
-      - run: npm test
+      - name: Focused contract tests with retained counts
+        shell: bash
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee focused.tap
+      - name: Full suite with retained counts
+        shell: bash
+        run: npm test 2>&1 | tee full.tap
       - run: npm pack --dry-run
-      - name: Write qualification receipt
+      - name: Write bound qualification receipt
         shell: bash
         run: |
-          node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 plus full package gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-linux-node24 \
+            --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check" --receipt-command "npm pack --dry-run" \
+            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap" --receipt-test-log "npm test::full.tap" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap --receipt-output full.tap
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-linux-node24-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-linux-node24-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            focused.tap
+            full.tap
+          retention-days: 90
+          if-no-files-found: error
 
   p6-f1-contract-windows-node22: &contract_windows
     runs-on: windows-2025
@@ -96,12 +135,25 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
-      - run: node --test test/agent-identity-mcp-contract.test.mjs
-      - name: Write qualification receipt
+      - name: Focused contract tests with retained counts
         shell: pwsh
-        run: node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | Tee-Object -FilePath focused.tap
+      - name: Write bound qualification receipt
+        shell: pwsh
+        run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-windows-node22
+          --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check"
+          --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap"
+          --receipt-input "$env:CONTRACT_ROOT/pack-manifest.json" --receipt-input "$env:CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-windows-node22-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-windows-node22-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            focused.tap
+          retention-days: 90
+          if-no-files-found: error
 
   p6-f1-contract-windows-node23:
     runs-on: windows-2025
@@ -117,12 +169,25 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
-      - run: node --test test/agent-identity-mcp-contract.test.mjs
-      - name: Write qualification receipt
+      - name: Focused contract tests with retained counts
         shell: pwsh
-        run: node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | Tee-Object -FilePath focused.tap
+      - name: Write bound qualification receipt
+        shell: pwsh
+        run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-windows-node23
+          --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check"
+          --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap"
+          --receipt-input "$env:CONTRACT_ROOT/pack-manifest.json" --receipt-input "$env:CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-windows-node23-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-windows-node23-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            focused.tap
+          retention-days: 90
+          if-no-files-found: error
 
   p6-f1-contract-windows-node24:
     runs-on: windows-2025
@@ -138,12 +203,25 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
-      - run: node --test test/agent-identity-mcp-contract.test.mjs
-      - name: Write qualification receipt
+      - name: Focused contract tests with retained counts
         shell: pwsh
-        run: node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | Tee-Object -FilePath focused.tap
+      - name: Write bound qualification receipt
+        shell: pwsh
+        run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-windows-node24
+          --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check"
+          --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap"
+          --receipt-input "$env:CONTRACT_ROOT/pack-manifest.json" --receipt-input "$env:CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-windows-node24-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-windows-node24-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            focused.tap
+          retention-days: 90
+          if-no-files-found: error
 
   p6-f1-contract-macos-node22:
     runs-on: macos-15
@@ -158,13 +236,25 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm run typecheck && npm run build
       - run: node scripts/generate-agent-identity-mcp-contract.mjs --check
-      - run: node --test test/agent-identity-mcp-contract.test.mjs
-      - name: Write qualification receipt
+      - name: Focused contract tests with retained counts
+        shell: bash
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee focused.tap
+      - name: Write bound qualification receipt
         shell: bash
         run: |
-          node -e "const f=require('fs'),c=require('crypto'),p=JSON.parse(f.readFileSync(process.env.CONTRACT_ROOT+'/pack-manifest.json'));const h=x=>'sha256:'+c.createHash('sha256').update(f.readFileSync(process.env.CONTRACT_ROOT+'/'+x)).digest('hex');const t=new Date().toISOString().replace(/\.\d{3}Z$/,'.000Z');f.writeFileSync('qualification-receipt.json',JSON.stringify({contract_version:'1.0.0-draft.1',base_commit:'808d875b557f4cfd2bb0addccba44d70c9748f35',head_commit:process.env.GITHUB_SHA,workflow:'GKOS Phase 6 identity contract qualification',run_id:process.env.GITHUB_RUN_ID,job:process.env.GITHUB_JOB,runner_image:process.env.ImageOS||process.platform,os:process.platform,architecture:process.arch,tool_versions:{node:process.version,npm:'10',sqlite:'contract-only'},commands:[{command:'F1 focused contract gate',exit_code:0,result:'PASS',pass_count:1,fail_count:0,skip_count:0}],allowed_paths_digest:h('allowed-paths.txt'),protected_paths_digest:h('protected-paths.txt'),pack_aggregate_digest:p.aggregate_digest,input_artifact_digests:[],output_artifact_digests:[],secret_scan:'PASS',started_at:t,ended_at:t,result:'PASS'})+'\n')"
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-contract-macos-node22 \
+            --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "npm run typecheck" --receipt-command "npm run build" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check" \
+            --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::focused.tap" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output focused.tap
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-macos-node22-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-macos-node22-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            focused.tap
+          retention-days: 90
+          if-no-files-found: error
 
   p6-f1-schema-adversarial:
     runs-on: ubuntu-24.04
@@ -177,10 +267,22 @@ jobs:
       - run: npm install --global npm@10.9.4
       - run: test "$(npm --version)" = "10.9.4"
       - run: npm ci --ignore-scripts
-      - run: node --test test/agent-identity-mcp-contract.test.mjs
-      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --job p6-f1-schema-adversarial --command "strict schema and adversarial vectors"
+      - name: Adversarial tests with retained counts
+        shell: bash
+        run: node --test test/agent-identity-mcp-contract.test.mjs 2>&1 | tee adversarial.tap
+      - run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-schema-adversarial
+          --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-test-log "node --test test/agent-identity-mcp-contract.test.mjs::adversarial.tap"
+          --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output adversarial.tap
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-adversarial-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-adversarial-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            adversarial.tap
+          retention-days: 90
+          if-no-files-found: error
 
   p6-f1-pack-reproducibility:
     runs-on: ubuntu-24.04
@@ -193,8 +295,15 @@ jobs:
       - run: npm install --global npm@10.9.4
       - run: test "$(npm --version)" = "10.9.4"
       - run: npm ci --ignore-scripts
-      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check --archive GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar --receipt qualification-receipt.json --job p6-f1-pack-reproducibility --command "two-root deterministic pack and archive"
+      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check --archive GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar
       - run: sha256sum GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar > GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar.sha256
+      - name: Write bound qualification receipt
+        shell: bash
+        run: |
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-pack-reproducibility \
+            --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "node scripts/generate-agent-identity-mcp-contract.mjs --check --archive GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar" --receipt-command "sha256sum GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" \
+            --receipt-output GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar --receipt-output GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar.sha256
       - uses: actions/upload-artifact@v4
         with:
           name: gkos-p6-f1-contract-pack
@@ -202,6 +311,7 @@ jobs:
             GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar
             GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar.sha256
             qualification-receipt.json
+            qualification-evidence.json
           retention-days: 90
           if-no-files-found: error
 
@@ -216,10 +326,22 @@ jobs:
       - run: npm install --global npm@10.9.4
       - run: test "$(npm --version)" = "10.9.4"
       - run: npm ci --ignore-scripts
-      - run: node --test --test-name-pattern="secret material" test/agent-identity-mcp-contract.test.mjs
-      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --job p6-f1-secret-scan --command "credential and secret exposure scan"
+      - name: Secret scan with retained counts
+        shell: bash
+        run: node --test --test-name-pattern="secret material" test/agent-identity-mcp-contract.test.mjs 2>&1 | tee secret-scan.tap
+      - run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-secret-scan
+          --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-test-log "node --test --test-name-pattern=secret material test/agent-identity-mcp-contract.test.mjs::secret-scan.tap"
+          --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-output secret-scan.tap
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-secret-scan-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-secret-scan-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            secret-scan.tap
+          retention-days: 90
+          if-no-files-found: error
 
   p6-f1-artifact-audit:
     needs: [p6-f1-contract-linux-node22,p6-f1-contract-linux-node23,p6-f1-contract-linux-node24,p6-f1-contract-windows-node22,p6-f1-contract-windows-node23,p6-f1-contract-windows-node24,p6-f1-contract-macos-node22,p6-f1-schema-adversarial,p6-f1-pack-reproducibility,p6-f1-secret-scan]
@@ -235,15 +357,31 @@ jobs:
       - run: npm ci --ignore-scripts
       - uses: actions/download-artifact@v4
         with: { path: predecessor-artifacts }
-      - name: Verify exact predecessor inventory and inner evidence
+      - name: Verify exact predecessor evidence and freshly extract the real pack
         shell: bash
         run: |
           node --input-type=module <<'NODE'
-          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import Ajv2020 from 'ajv/dist/2020.js';import addFormats from 'ajv-formats';
-          const root='predecessor-artifacts',inventory=JSON.parse(fs.readFileSync(process.env.CONTRACT_ROOT+'/hosted-artifact-inventory.json'));
+          import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import crypto from 'node:crypto';import {execFileSync} from 'node:child_process';import Ajv2020 from 'ajv/dist/2020.js';import addFormats from 'ajv-formats';
+          const hash=(bytes)=>`sha256:${crypto.createHash('sha256').update(bytes).digest('hex')}`,hashFile=(p)=>hash(fs.readFileSync(p));
+          const canonical=(v)=>JSON.stringify(Array.isArray(v)?v.map((x)=>JSON.parse(canonical(x))):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map((k)=>[k,JSON.parse(canonical(v[k]))])):v);
+          const root='predecessor-artifacts',contract=process.env.CONTRACT_ROOT,inventory=JSON.parse(fs.readFileSync(`${contract}/hosted-artifact-inventory.json`));
           const expected=inventory.artifacts.filter((x)=>x!=='gkos-p6-f1-terminal-audit-receipt').sort(),actual=fs.readdirSync(root,{withFileTypes:true}).filter((x)=>x.isDirectory()).map((x)=>x.name).sort();if(JSON.stringify(actual)!==JSON.stringify(expected))throw new Error(`artifact inventory mismatch: ${actual}`);
-          const ajv=new Ajv2020({strict:true,allErrors:true,allowUnionTypes:true});addFormats(ajv);const validate=ajv.compile(JSON.parse(fs.readFileSync(process.env.CONTRACT_ROOT+'/qualification-receipt.schema.json')));
-          for(const name of expected){const dir=path.join(root,name),files=fs.readdirSync(dir).sort();if(name==='gkos-p6-f1-contract-pack'){const base='GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar';if(JSON.stringify(files)!==JSON.stringify([base,base+'.sha256','qualification-receipt.json'].sort()))throw new Error('pack artifact file inventory');const got=crypto.createHash('sha256').update(fs.readFileSync(path.join(dir,base))).digest('hex');const line=fs.readFileSync(path.join(dir,base+'.sha256'),'utf8');if(line!==`${got}  ${base}\n`)throw new Error('pack archive digest mismatch');}else if(JSON.stringify(files)!==JSON.stringify(['qualification-receipt.json']))throw new Error(`${name} file inventory`);const receipt=JSON.parse(fs.readFileSync(path.join(dir,'qualification-receipt.json')));if(!validate(receipt))throw new Error(`${name}: ${ajv.errorsText(validate.errors)}`);if(receipt.result!=='PASS'||receipt.head_commit!==process.env.GITHUB_SHA)throw new Error(`${name}: coordinate mismatch`);}
+          const ajv=new Ajv2020({strict:true,allErrors:true,allowUnionTypes:true});addFormats(ajv);const validate=ajv.compile(JSON.parse(fs.readFileSync(`${contract}/qualification-receipt.schema.json`)));
+          const committedInputs=new Set([hashFile(`${contract}/pack-manifest.json`),hashFile(`${contract}/qualification-receipt.schema.json`)]),predecessorFiles=[];
+          for(const name of expected){
+            const dir=path.join(root,name),files=fs.readdirSync(dir).sort();for(const file of files)predecessorFiles.push({path:`${name}/${file}`,sha256:hashFile(path.join(dir,file))});
+            if(!files.includes('qualification-receipt.json')||!files.includes('qualification-evidence.json'))throw new Error(`${name}: missing bound evidence files`);
+            const receipt=JSON.parse(fs.readFileSync(path.join(dir,'qualification-receipt.json'))),evidence=JSON.parse(fs.readFileSync(path.join(dir,'qualification-evidence.json')));
+            if(!validate(receipt))throw new Error(`${name}: ${ajv.errorsText(validate.errors)}`);if(receipt.result!=='PASS'||receipt.head_commit!==process.env.GITHUB_SHA)throw new Error(`${name}: coordinate mismatch`);
+            if(Date.parse(receipt.ended_at)<=Date.parse(receipt.started_at))throw new Error(`${name}: nonpositive evidence interval`);
+            if(receipt.commands.some((x)=>x.test_count!==x.pass_count+x.fail_count+x.skip_count))throw new Error(`${name}: synthetic command counts`);
+            if(receipt.cpu!==evidence.cpu||JSON.stringify(receipt.tool_versions)!==JSON.stringify(evidence.tool_versions)||JSON.stringify(receipt.commands)!==JSON.stringify(evidence.commands.map(({log_path,log_digest,...x})=>x)))throw new Error(`${name}: environment or command evidence mismatch`);
+            for(const command of evidence.commands.filter((x)=>x.test_count>0)){const log=path.join(dir,path.basename(command.log_path));if(!files.includes(path.basename(log))||hashFile(log)!==command.log_digest)throw new Error(`${name}: test log binding mismatch`);}
+            const outputDigests=[...new Set(files.filter((x)=>x!=='qualification-receipt.json').map((x)=>hashFile(path.join(dir,x))))].sort();if(JSON.stringify(receipt.output_artifact_digests)!==JSON.stringify(outputDigests))throw new Error(`${name}: output digest set not exact`);
+            const evidenceInputs=[...new Set(evidence.input_artifacts.map((x)=>x.sha256))].sort();if(JSON.stringify(receipt.input_artifact_digests)!==JSON.stringify(evidenceInputs)||JSON.stringify(evidenceInputs)!==JSON.stringify([...committedInputs].sort()))throw new Error(`${name}: input digest set not exact`);
+          }
+          const packDir=path.join(root,'gkos-p6-f1-contract-pack'),base='GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar',archive=path.join(packDir,base),sidecar=fs.readFileSync(`${archive}.sha256`,'utf8'),archiveHex=hashFile(archive).slice(7);if(sidecar!==`${archiveHex}  ${base}\n`)throw new Error('pack archive sidecar mismatch');
+          const physicalTemp=fs.realpathSync(os.tmpdir()),extractRoot=fs.mkdtempSync(path.join(physicalTemp,'gkos-f1-terminal-'));try{execFileSync('tar',['-xf',fs.realpathSync(archive),'-C',extractRoot]);const extracted=path.join(extractRoot,'GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1'),manifest=JSON.parse(fs.readFileSync(path.join(extracted,'pack-manifest.json'))),names=fs.readdirSync(extracted).sort();if(names.length!==34||manifest.leaves.length!==33||manifest.leaves.some((x)=>x.path==='pack-manifest.json'))throw new Error('extracted leaf closure mismatch');for(const leaf of manifest.leaves){const bytes=fs.readFileSync(path.join(extracted,leaf.path));if(bytes.length!==leaf.size||hash(bytes)!==`sha256:${leaf.sha256}`)throw new Error(`extracted leaf mismatch: ${leaf.path}`);}if(manifest.aggregate_digest!==hash(Buffer.from(canonical(manifest.leaves))))throw new Error('extracted aggregate mismatch');if(hashFile(path.join(extracted,'pack-manifest.json'))!==hashFile(`${contract}/pack-manifest.json`))throw new Error('extracted manifest differs from committed manifest');fs.writeFileSync('terminal-audit-report.json',JSON.stringify({contract_version:'1.0.0-draft.1',head_commit:process.env.GITHUB_SHA,predecessor_artifacts:expected,predecessor_files:predecessorFiles,archive_digest:hashFile(archive),leaf_count:manifest.leaves.length,leaf_digests:manifest.leaves.map((x)=>({path:x.path,sha256:`sha256:${x.sha256}`})),aggregate_digest:manifest.aggregate_digest,non_self_manifest:true,fresh_physical_root:true,result:'PASS'},null,2)+'\n');}finally{fs.rmSync(extractRoot,{recursive:true,force:true});}
           NODE
       - name: Verify hosted all-and-only predecessor conclusions
         env: { GH_TOKEN: "${{ github.token }}" }
@@ -251,6 +389,19 @@ jobs:
         run: |
           gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs?per_page=100" > hosted-jobs.json
           node -e "const x=require('./hosted-jobs.json').jobs;const expected=['p6-f1-contract-linux-node22','p6-f1-contract-linux-node23','p6-f1-contract-linux-node24','p6-f1-contract-windows-node22','p6-f1-contract-windows-node23','p6-f1-contract-windows-node24','p6-f1-contract-macos-node22','p6-f1-schema-adversarial','p6-f1-pack-reproducibility','p6-f1-secret-scan'];for(const n of expected){const j=x.find(v=>v.name===n);if(!j||j.conclusion!=='success')throw Error(n+' not successful')}if(x.filter(v=>v.name.startsWith('p6-f1-')).length!==11)throw Error('all-and-only job set mismatch')"
-      - run: node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --job p6-f1-artifact-audit --command "terminal all-and-only artifact audit"
+      - name: Write terminal receipt bound to every predecessor byte
+        shell: bash
+        run: |
+          node scripts/generate-agent-identity-mcp-contract.mjs --check --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json --job p6-f1-artifact-audit \
+            --receipt-command "npm install --global npm@10.9.4" --receipt-command "npm --version equals 10.9.4" --receipt-command "npm ci --ignore-scripts" --receipt-command "node --input-type=module embedded terminal artifact audit" --receipt-command "gh api hosted job conclusions and exact p6-f1 set verification" \
+            --receipt-input "$CONTRACT_ROOT/pack-manifest.json" --receipt-input "$CONTRACT_ROOT/qualification-receipt.schema.json" --receipt-input-root predecessor-artifacts \
+            --receipt-output terminal-audit-report.json
       - uses: actions/upload-artifact@v4
-        with: { name: gkos-p6-f1-terminal-audit-receipt, path: qualification-receipt.json, retention-days: 90, if-no-files-found: error }
+        with:
+          name: gkos-p6-f1-terminal-audit-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            terminal-audit-report.json
+          retention-days: 90
+          if-no-files-found: error
