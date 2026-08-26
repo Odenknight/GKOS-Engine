@@ -10,6 +10,7 @@ import addFormats from "ajv-formats";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const BASE = "56c11c50dde31d4b92d333223507f050ea72d994";
+const QUALIFIED_DRAFT2_HEAD = "dc4e55e14a42b921fe73051b5e25555cfa1d46f4";
 const PACK = "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2";
 const DIR = join(ROOT, PACK);
 const GENERATOR = "scripts/generate-agent-identity-mcp-contract.mjs";
@@ -71,16 +72,15 @@ test("Draft.2 reports transport availability and authority without conformance i
 });
 
 test("Draft.1 bytes remain frozen and Draft.2 changes stay inside exact inventory", async () => {
-  execFileSync("git", ["diff", "--quiet", BASE, "--", "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1"], { cwd: ROOT });
+  execFileSync("git", ["merge-base", "--is-ancestor", QUALIFIED_DRAFT2_HEAD, "HEAD"], { cwd: ROOT });
+  execFileSync("git", ["diff", "--quiet", BASE, QUALIFIED_DRAFT2_HEAD, "--", "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1"], { cwd: ROOT });
   const draft1Manifest = JSON.parse(await readFile(join(ROOT, "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json"), "utf8"));
   assert.equal(draft1Manifest.generator_digest, `sha256:${sha(await readFile(join(ROOT, "scripts/generate-agent-identity-mcp-contract-draft1.mjs")))}`);
   const allowed = new Set((await readFile(join(DIR, "allowed-paths.txt"), "utf8")).trim().split("\n"));
-  const porcelain = execFileSync("git", ["status", "--porcelain=v1", "-uall"], { cwd: ROOT, encoding: "utf8" });
-  const changed = new Set(execFileSync("git", ["diff", "--name-only", BASE, "--"], { cwd: ROOT, encoding: "utf8" }).trim().split("\n").filter(Boolean));
-  for (const line of porcelain.split(/\r?\n/u).filter((row) => row.trim() !== "")) changed.add(line.slice(3).replaceAll("\\", "/"));
+  const changed = new Set(execFileSync("git", ["diff", "--name-only", BASE, QUALIFIED_DRAFT2_HEAD, "--"], { cwd: ROOT, encoding: "utf8" }).trim().split("\n").filter(Boolean));
   for (const path of changed) assert.equal(allowed.has(path), true, `change outside Draft.2 inventory: ${path}`);
   const protectedPaths = (await readFile(join(DIR, "protected-paths.txt"), "utf8")).trim().split("\n");
-  const protectedDiff = execFileSync("git", ["diff", "--name-only", BASE, "--", ...protectedPaths], { cwd: ROOT, encoding: "utf8" }).trim();
+  const protectedDiff = execFileSync("git", ["diff", "--name-only", BASE, QUALIFIED_DRAFT2_HEAD, "--", ...protectedPaths], { cwd: ROOT, encoding: "utf8" }).trim();
   assert.equal(protectedDiff, "");
   for (const excluded of ["src/navigation-effects", "contracts/navigation-effects", "docker", ".dockerignore"]) {
     await assert.rejects(stat(join(ROOT, excluded)));

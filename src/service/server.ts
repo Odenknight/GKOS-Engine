@@ -129,6 +129,7 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
     response.setHeader("Vary", "Origin");
     response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Last-Event-ID, GKOS-Event-Session, MCP-Protocol-Version, Mcp-Session-Id");
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+    response.setHeader("Access-Control-Expose-Headers", "GKOS-Event-Session, Mcp-Session-Id, MCP-Protocol-Version");
   };
   const send = (response: http.ServerResponse, status: number, value: unknown, allowedOrigin: string | null, headers: Record<string, string> = {}): void => {
     let bytes = jsonBytes(value);

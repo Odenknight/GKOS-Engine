@@ -153,6 +153,43 @@ test("viewer and MCP-agent credentials cannot be reused across authority surface
   } finally { await close(fixture.server); }
 });
 
+test("file-origin JavaScript can read event and MCP session response headers", async () => {
+  const fixture = await fixtureServer();
+  let eventRequest;
+  let eventResponse;
+  try {
+    ({ req: eventRequest, res: eventResponse } = await new Promise((resolve, reject) => {
+      const req = http.request({
+        host: HOST, port: fixture.port, path: "/events",
+        headers: { authorization: `Bearer ${VIEWER_TOKEN}`, origin: "null" },
+      }, (res) => resolve({ req, res }));
+      req.on("error", reject); req.end();
+    }));
+    assert.equal(eventResponse.statusCode, 200);
+    assert.equal(eventResponse.headers["access-control-allow-origin"], "null");
+    const eventExposed = new Set(String(eventResponse.headers["access-control-expose-headers"] ?? "").toLowerCase().split(/,\s*/u));
+    assert.equal(eventExposed.has("gkos-event-session"), true);
+    assert.match(String(eventResponse.headers["gkos-event-session"]), /^event-stream:/u);
+
+    const initialized = await request(fixture.port, "/mcp", {
+      token: AGENT_TOKEN, method: "POST", headers: { origin: "null" }, body: {
+        jsonrpc: "2.0", id: "browser-init", method: "initialize",
+        params: { protocolVersion: MCP_PROTOCOL_VERSION, capabilities: {}, clientInfo: { name: "file-viewer", version: "1" } },
+      },
+    });
+    assert.equal(initialized.status, 200);
+    assert.equal(initialized.headers["access-control-allow-origin"], "null");
+    const mcpExposed = new Set(String(initialized.headers["access-control-expose-headers"] ?? "").toLowerCase().split(/,\s*/u));
+    assert.equal(mcpExposed.has("mcp-session-id"), true);
+    assert.equal(mcpExposed.has("mcp-protocol-version"), true);
+    assert.match(String(initialized.headers["mcp-session-id"]), /^[0-9a-f-]{36}$/u);
+    assert.equal(initialized.headers["mcp-protocol-version"], MCP_PROTOCOL_VERSION);
+  } finally {
+    eventResponse?.destroy(); eventRequest?.destroy();
+    await close(fixture.server);
+  }
+});
+
 test("MCP Navigation issues bounded refs, lineage/temporal neighbors, and a same-operation authorized event", async () => {
   const fixture = await fixtureServer();
   try {
