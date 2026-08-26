@@ -23,6 +23,8 @@ import {
   formatDefaultCredentialPaths,
   loadOrCreateDefaultMcpCredential,
   openValidatedCredentialDirectory,
+  bindAuthorizedStatusDirectory,
+  captureStatusDirectoryNamespace,
 } from "../dist/gkos-desktop-agent.mjs";
 import { GkxIndex } from "../dist/gkos-engine.mjs";
 import { mkdtempSync, rmSync, readFileSync, statSync, writeFileSync, symlinkSync } from "node:fs";
@@ -208,6 +210,25 @@ test("credential loaders reject symlinked viewer and MCP token leaves before rea
     rmSync(dir, { recursive: true, force: true });
     rmSync(external, { recursive: true, force: true });
   }
+});
+
+test("status capability handoff shares only the unchanged authorized directory and rejects an external leaf", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-status-capability-"));
+  try {
+    const viewerPath = join(dir, "desktop-agent.token");
+    const viewerToken = loadOrCreateToken(viewerPath);
+    const credential = loadOrCreateDefaultMcpCredential(dir);
+    const first = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const second = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const namespace = captureStatusDirectoryNamespace(first);
+    assert.equal(bindAuthorizedStatusDirectory(first, second, namespace), second);
+
+    const stale = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const proposed = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const expected = captureStatusDirectoryNamespace(stale);
+    writeFileSync(join(dir, "external-race"), "untrusted", { mode: 0o600 });
+    assert.throws(() => bindAuthorizedStatusDirectory(stale, proposed, expected), /GKX_WATCHER_(?:FS_DIRECTORY|STATUS_NAMESPACE)_CHANGED/u);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
 test("server returns 401 with an incorrect bearer token", async () => {

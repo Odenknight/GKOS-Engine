@@ -54,9 +54,11 @@ import {
   openWatcherDirectory,
   readWatcherFile,
   revalidateWatcherDirectory,
+  watcherNamespaceCoordinate,
   watcherLeafExists,
   writeExistingWatcherFile,
   writeNewWatcherFile,
+  type WatcherDirectoryCapability,
 } from "./watcher/fs-authority";
 
 /** The seven-level sensitivity vocabulary (GKOS §11), fail-closed to secret. */
@@ -393,6 +395,35 @@ export function openValidatedCredentialDirectory(directory: string, viewerToken:
   return capability;
 }
 
+/**
+ * Accepts only a second live capability for the same already-bound directory.
+ * The host supplies this before either owner can mutate S, after which both
+ * owners share the same seal object. This never reopens or absorbs a delta.
+ */
+export function bindAuthorizedStatusDirectory(
+  current: WatcherDirectoryCapability,
+  hostDirectory: WatcherDirectoryCapability,
+  expectedNamespace: string,
+): WatcherDirectoryCapability {
+  if (!/^sha256:[0-9a-f]{64}$/u.test(expectedNamespace)) throw new TypeError("GKX_WATCHER_STATUS_NAMESPACE_INVALID");
+  revalidateWatcherDirectory(current);
+  revalidateWatcherDirectory(hostDirectory);
+  if (current.path !== hostDirectory.path || current.identity.device !== hostDirectory.identity.device ||
+    current.identity.inode !== hostDirectory.identity.inode || current.identity.mode !== hostDirectory.identity.mode ||
+    current.identity.nlink !== hostDirectory.identity.nlink) {
+    throw new Error("GKX_WATCHER_STATUS_CAPABILITY_MISMATCH");
+  }
+  if (watcherNamespaceCoordinate(current) !== expectedNamespace ||
+    watcherNamespaceCoordinate(hostDirectory) !== expectedNamespace) {
+    throw new Error("GKX_WATCHER_STATUS_NAMESPACE_CHANGED");
+  }
+  return hostDirectory;
+}
+
+export function captureStatusDirectoryNamespace(directory: WatcherDirectoryCapability): string {
+  return watcherNamespaceCoordinate(directory);
+}
+
 /** Load the persisted bearer token, or generate + persist one on first run. */
 export function loadOrCreateToken(tokenPath: string): string {
   const existingBytes = readProtectedCredentialLeaf(tokenPath);
@@ -661,6 +692,7 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
     }
   };
   writeStatus(initialStatus);
+  let expectedStatusNamespace: string | null = watcherNamespaceCoordinate(statusCapability);
 
   const configurationDigest = retrievalCanonicalDigest({
     contract_version: "gkos-watcher-desktop-configuration/1.0.0-draft.1",
@@ -700,6 +732,14 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
       coordinator_options: {
         discoverability_policy: () => "allow",
         source_discoverability_policy: () => "allow",
+      },
+      on_status_directory_capability(directory) {
+        // Bind once, before the host mutates S, to the host's exact live
+        // capability. Both status writes and locator lifecycle now refresh the
+        // same unforgeable seal. Never reopen S to absorb an unexplained delta.
+        if (expectedStatusNamespace === null) throw new Error("GKX_WATCHER_STATUS_CAPABILITY_ALREADY_BOUND");
+        statusCapability = bindAuthorizedStatusDirectory(statusCapability, directory, expectedStatusNamespace);
+        expectedStatusNamespace = null;
       },
       on_status_change(status) { writeStatus(legacyStatusFromWatcher(status, args, tokenPath, mcpCredential)); },
       create_compatibility_request_handler(context) {
