@@ -59,6 +59,7 @@ try {
     ["src/graphiti-adapter.ts", "dist/graphiti-adapter.mjs"],
     ["src/navigation/index.ts", "dist/navigation.mjs"],
     ["src/navigation-effects/index.ts", "dist/navigation-effects.mjs"],
+    ["src/service/index.ts", "dist/service.mjs"],
     ["src/governance/index.ts", "dist/governance.mjs"],
   ]) {
     writeFileSync(resolve(root, output), await bundle(entry));
