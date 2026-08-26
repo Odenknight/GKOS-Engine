@@ -39,7 +39,7 @@ function fixtureGraph() {
       { id: "contains-public", source: "folder-visible", target: "public", kind: "contains" },
       { id: "contains-internal", source: "folder-visible", target: "internal", kind: "contains" },
       { id: "contains-secret", source: "folder-secret", target: "secret", kind: "contains" },
-      { id: "internal-public", source: "internal", target: "public", kind: "wikilink" },
+      { id: "internal-public", source: "internal", target: "public", kind: "wikilink", sourcePath: `Secrets/${CANARY}.md` },
       { id: "public-secret", source: "public", target: "secret", kind: "semantic", label: CANARY },
     ],
     stats,
@@ -77,9 +77,31 @@ test("authorized view removes hidden nodes, endpoints, attachments, diagnostics,
   assert.deepEqual(view.notes.map((item) => item.path), ["Visible/Internal.md", "Visible/Public.md"]);
   assert.deepEqual(view.graph.nodes.map((item) => item.id), ["folder-visible", "internal", "public"]);
   assert.deepEqual(view.graph.links.map((item) => item.id), ["contains-internal", "contains-public", "internal-public"]);
+  assert.equal("sourcePath" in view.graph.links.find((item) => item.id === "internal-public"), false);
   assert.equal(view.graph.diagnostics.attachments, 0);
   assert.deepEqual(view.visible_counts, { notes: 2, folders: 1, links: 3, episodes: 2 });
   assert.equal(view.graphiti_episodes.some((episode) => episode.name === CANARY), false);
+});
+
+test("visible links with invalid identifiers, kinds, or labels fail closed", () => {
+  for (const mutation of [
+    (link) => { link.id = 7; },
+    (link) => { link.id = "bad\nlink"; },
+    (link) => { link.kind = "unknown"; },
+    (link) => { link.label = "bad\0label"; },
+  ]) {
+    const graph = fixtureGraph();
+    mutation(graph.links.find((item) => item.id === "internal-public"));
+    assert.throws(() => build({ corpus: { graph } }), GkosServiceDeniedError);
+  }
+});
+
+test("encoded and nonportable visible paths fail closed", () => {
+  for (const path of ["Visible/%2e%2e/secret.md", "Visible/%ZZ.md", "Visible/CON.md", "Visible/trailing. "]) {
+    const graph = fixtureGraph();
+    graph.nodes.find((item) => item.id === "internal").path = path;
+    assert.throws(() => build({ corpus: { graph } }), GkosServiceDeniedError);
+  }
 });
 
 test("authorized view is byte deterministic for fixed state and evaluation time", () => {

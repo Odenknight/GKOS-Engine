@@ -60,6 +60,10 @@ test("traversal event validator accepts only bounded redacted v1 envelopes", asy
     { ...event, sequence: -1 },
     { ...event, paths: ["../secret.md"] },
     { ...event, paths: ["C:/secret.md"] },
+    { ...event, paths: ["%2e%2e/secret.md"] },
+    { ...event, paths: ["%252e%252e/secret.md"] },
+    { ...event, paths: ["bad%ZZ.md"] },
+    { ...event, paths: ["CON.md"] },
     { ...event, cost_units: Number.NaN },
     { ...event, token: "forbidden" },
   ]) assert.equal(isServiceTraversalEvent(invalid), false);
@@ -67,4 +71,6 @@ test("traversal event validator accepts only bounded redacted v1 envelopes", asy
   const schema = await json("traversal-event.schema.json");
   const ajv = new Ajv2020({ strict: true, allErrors: true });
   assert.equal(ajv.validate(schema, event), true, ajv.errorsText(ajv.errors));
+  for (const path of ["%2e%2e/secret.md", "%252e%252e/secret.md", "bad%ZZ.md", "CON.md", "bad\npath.md"])
+    assert.equal(ajv.validate(schema, { ...event, paths: [path] }), false, path);
 });
