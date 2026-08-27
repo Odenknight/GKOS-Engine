@@ -1,0 +1,15 @@
+{
+  "fixtureId": "effects-path-escape-denied",
+  "category": "path-escape",
+  "input": {
+    "agentId": "018f22c8-4b63-7a12-9f45-8d91c734beef",
+    "allowedRoot": "_kosmos/agent-notes/atlas",
+    "requestedName": "../other-agent/private.md"
+  },
+  "expected": {
+    "outcome": "denied",
+    "sourceWrite": false,
+    "reasonCodes": ["PATH_TRAVERSAL"],
+    "currentContentIncluded": false
+  }
+}

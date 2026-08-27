@@ -9,6 +9,7 @@ __pycache__/
 .pytest_cache/
 build/
 .DS_Store
+.gkx/
 
 # Codex/AI tooling state and alternate package-manager artifacts (repo is npm-based)
 .codex/

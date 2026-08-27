@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/agent-write-request.schema.json",
+  "title": "Navigation Effects Agent Adapter Write Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["requestId", "operation", "idempotencyKey"],
+  "properties": {
+    "requestId": { "type": "string", "minLength": 1 },
+    "operation": { "enum": ["agent-note:create", "agent-note:update", "agent-note:append", "agent-note:archive"] },
+    "noteName": { "type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$))(?!.*\\u0000).+$" },
+    "noteUid": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$" },
+    "expectedDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "proposedBytes": { "type": "string" },
+    "idempotencyKey": { "type": "string", "minLength": 1, "maxLength": 256 }
+  },
+  "oneOf": [
+    { "properties": { "noteName": {} }, "required": ["noteName"], "not": { "properties": { "noteUid": {} }, "required": ["noteUid"] } },
+    { "properties": { "noteUid": {} }, "required": ["noteUid"], "not": { "properties": { "noteName": {} }, "required": ["noteName"] } }
+  ],
+  "allOf": [
+    { "if": { "properties": { "operation": { "const": "agent-note:create" } } }, "then": { "properties": { "noteName": {}, "proposedBytes": {} }, "required": ["noteName", "proposedBytes"], "not": { "anyOf": [{ "properties": { "noteUid": {} }, "required": ["noteUid"] }, { "properties": { "expectedDigest": {} }, "required": ["expectedDigest"] }] } } },
+    { "if": { "properties": { "operation": { "enum": ["agent-note:update", "agent-note:append"] } } }, "then": { "properties": { "expectedDigest": {}, "proposedBytes": {} }, "required": ["expectedDigest", "proposedBytes"] } },
+    { "if": { "properties": { "operation": { "const": "agent-note:archive" } } }, "then": { "properties": { "expectedDigest": {} }, "required": ["expectedDigest"], "not": { "properties": { "proposedBytes": {} }, "required": ["proposedBytes"] } } }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/receipt.schema.json",
+  "title": "Navigation Effect Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifactKind", "effectsContract", "receiptId", "effectId", "status", "operation", "targetPath", "planDigest", "journalEntryDigest", "authorityDigest", "policyRef", "occurredAt", "reasonCodes", "sourceContentIncluded"],
+  "properties": {
+    "artifactKind": { "const": "engine.navigation-effect-receipt" },
+    "effectsContract": { "const": "1.0.0" },
+    "receiptId": { "type": "string", "minLength": 1 },
+    "effectId": { "type": "string", "pattern": "^effect:(?:[0-9a-f]{32}|rollback:[0-9a-f]{32})$" },
+    "status": { "enum": ["committed", "no-op", "stale", "denied", "conflict", "recovery-required", "aborted"] },
+    "operation": { "enum": ["moc:create", "moc:replace", "moc:rollback", "agent-note:create", "agent-note:update", "agent-note:append", "agent-note:archive"] },
+    "targetPath": { "type": "string", "minLength": 1 },
+    "planDigest": { "$ref": "#/$defs/digest" },
+    "beforeDigest": { "$ref": "#/$defs/digest" },
+    "afterDigest": { "$ref": "#/$defs/digest" },
+    "archiveManifestDigest": { "$ref": "#/$defs/digest", "description": "Digest of the immutable per-effect archive binding; the aggregate run manifest remains append-safe." },
+    "journalEntryDigest": { "$ref": "#/$defs/digest" },
+    "authorityDigest": { "$ref": "#/$defs/digest" },
+    "policyRef": { "type": "object", "required": ["id", "version", "digest"], "properties": { "id": { "type": "string" }, "version": { "type": "string" }, "digest": { "$ref": "#/$defs/digest" } }, "additionalProperties": false },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "reasonCodes": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "sourceContentIncluded": { "const": false }
+  },
+  "$defs": { "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}

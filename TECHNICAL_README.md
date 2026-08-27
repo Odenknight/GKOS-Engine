@@ -590,13 +590,36 @@ Do not hard-code a historical test total. Qualification means zero failures and
 only documented skips at the exact tested SHA. External fixture absence remains
 an explicit skip/unevaluated state, never an implied pass.
 
+## Experimental Navigation Effects integration plane
+
+This reconciliation branch carries the separately exported Navigation Effects
+1.0 planner and optional Node executor as **integration-only, experimental
+code**. It does not alter the read-only Navigation 1.0 contract, activate a
+write capability, or constitute a released Engine 2.2 artifact.
+
+The framework-neutral surface is `gkos-engine/navigation-effects`; the
+filesystem surface is `gkos-engine/navigation-effects/node`. The latter
+requires a vault-scoped host adapter, current digest preconditions, explicit
+authority and policy supplied by its consumer, and acceptance of its documented
+cooperative-vault threat model. It rejects existing link/reparse ancestors but
+does not claim safety against a concurrent hostile local process replacing an
+already checked ancestor.
+
+The experimental executor provides a hash-chained intent journal, exact
+before-image archives, same-directory temporary writes, after-read digest
+verification, receipts, checkpoints, and startup recovery checks. Corrupt or
+ambiguous journal/archive state fails closed. These mechanisms are reusable
+building blocks; they do not by themselves provide Kosmos ownership adoption,
+authority, reconciliation, automatic maintenance, or production readiness.
+
 ## Explicit non-claims and deferred work
 
 This branch does not claim or provide:
 
-- Navigation Effects or a source filesystem executor;
-- MOC application, managed-region writes, adoption, archive creation/deletion,
-  effect locks/leases, rollback, or effect recovery;
+- an authorized or enabled Navigation Effects write plane;
+- Kosmos MOC ownership adoption, event coordination, reconciliation,
+  automatic maintenance, automatic creation, archive deletion, or retention
+  disposition;
 - enabled proposal ingress, decisions, approval, or confidence-based authority;
 - the sixteen deferred identity/MCP tool surfaces;
 - production identity administration or native-stdio conformance;

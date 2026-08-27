@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/journal-entry.schema.json",
+  "title": "Effect Journal Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifactKind", "effectsContract", "sequence", "entryDigest", "effectId", "state", "planDigest", "occurredAt"],
+  "properties": {
+    "artifactKind": { "const": "engine.effect-journal-entry" },
+    "effectsContract": { "const": "1.0.0" },
+    "sequence": { "type": "integer", "minimum": 0 },
+    "predecessorDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "entryDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "effectId": { "type": "string", "pattern": "^effect:(?:[0-9a-f]{32}|rollback:[0-9a-f]{32})$" },
+    "state": { "enum": ["RECEIVED", "PLANNED", "PREPARED", "APPLYING", "VERIFIED", "COMMITTED", "STALE", "RECOVERY_REQUIRED", "ABORTED"] },
+    "planDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "reasonCode": { "type": "string", "minLength": 1 },
+    "receiptDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "plan": { "$ref": "effect-plan.schema.json" },
+    "temporaryPath": { "type": "string", "minLength": 1 }
+  }
+}

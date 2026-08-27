@@ -53,6 +53,7 @@ export * from "./gkx";
 export * from "./adapter";
 export * from "./graphiti-adapter";
 export * from "./navigation/index";
+export * from "./navigation-effects/index";
 export * from "./governance/index";
 
 /** Non-normative draft SRTP support. It is opt-in and does not alter GKX defaults. */

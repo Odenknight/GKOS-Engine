@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/moc-ownership.schema.json",
+  "title": "MOC Ownership Binding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["targetPath", "ownership"],
+  "properties": {
+    "targetPath": { "type": "string", "minLength": 1 },
+    "ownership": { "enum": ["unmanaged", "region-managed", "fully-managed"] },
+    "adoptedDigest": { "$ref": "#/$defs/digest" },
+    "generatedRegion": {
+      "type": "object",
+      "required": ["markerVersion", "configDigest", "startOffset", "endOffset", "bodyDigest"],
+      "properties": {
+        "markerVersion": { "const": "1" },
+        "configDigest": { "$ref": "#/$defs/digest" },
+        "startOffset": { "type": "integer", "minimum": 0 },
+        "endOffset": { "type": "integer", "minimum": 0 },
+        "bodyDigest": { "$ref": "#/$defs/digest" }
+      },
+      "additionalProperties": false
+    },
+    "adoptedBy": { "type": "object", "required": ["actorId", "actorType"], "properties": { "actorId": { "type": "string" }, "actorType": { "enum": ["human", "agent", "system"] }, "displayName": { "type": "string" } }, "additionalProperties": false },
+    "adoptedAt": { "type": "string", "format": "date-time" },
+    "adoptionReceiptId": { "type": "string" },
+    "creationAuthorized": { "const": true }
+  },
+  "allOf": [
+    { "if": { "properties": { "ownership": { "const": "region-managed" } } }, "then": { "properties": { "adoptedDigest": {}, "generatedRegion": {}, "adoptedBy": {}, "adoptedAt": {}, "adoptionReceiptId": {} }, "required": ["adoptedDigest", "generatedRegion", "adoptedBy", "adoptedAt", "adoptionReceiptId"] } },
+    { "if": { "properties": { "ownership": { "const": "fully-managed" } } }, "then": { "anyOf": [{ "properties": { "adoptedDigest": {}, "adoptedBy": {}, "adoptedAt": {}, "adoptionReceiptId": {} }, "required": ["adoptedDigest", "adoptedBy", "adoptedAt", "adoptionReceiptId"] }, { "properties": { "creationAuthorized": {} }, "required": ["creationAuthorized"] }] } }
+  ],
+  "$defs": { "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/archive-diff.schema.json",
+  "title": "Navigation Effect Archive Diff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifactKind", "items"],
+  "properties": {
+    "artifactKind": { "const": "engine.navigation-effect-byte-diff" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["effectId", "targetPath", "beforeDigest", "afterDigest", "beforeByteLength", "afterByteLength"],
+        "properties": {
+          "effectId": { "type": "string", "pattern": "^effect:(?:[0-9a-f]{32}|rollback:[0-9a-f]{32})$" },
+          "targetPath": { "type": "string" },
+          "beforeDigest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+          "afterDigest": { "$ref": "#/$defs/digest" },
+          "beforeByteLength": { "type": "integer", "minimum": 0 },
+          "afterByteLength": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  },
+  "$defs": { "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }
+}
