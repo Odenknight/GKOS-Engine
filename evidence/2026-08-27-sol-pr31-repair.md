@@ -70,10 +70,33 @@ two compatibility/package tests identified required reconciliation work. The
 root export was restored to its frozen surface and the package evidence entries
 were restored in response. Those exact gates are rerun after the merge commit.
 
-The authoritative cross-platform result is the GitHub Actions check set on the
-new PR head. In particular, local Windows execution cannot substitute for the
-repository's Node 22/23/24 Linux and Windows matrices or their uploaded
-qualification artifacts.
+The committed-head local verification result is:
+
+| Check | Result |
+| --- | --- |
+| `npm ci` | PASS; 13 packages, zero audit vulnerabilities |
+| `npm run check:license` | PASS |
+| `npm run typecheck` | PASS |
+| `npm run build` | PASS |
+| `npm run check:nomenclature` | PASS |
+| `npm run test:navigation` | PASS; 45/45 |
+| `npm test` | PASS; 842 passed, 6 platform/external-fixture skips, 0 failed, 848 total |
+| `npm run test:intelligence` | PASS; 4/4 |
+| `npm run pack:check` | PASS; 507 files, 3,235,130 bytes before this report-only update |
+| CLI help and repository assessment smoke checks | PASS |
+| tracked and untracked clean-tree checks | PASS |
+
+The six skips are pre-existing platform/external-fixture gates: three POSIX
+filesystem tests, one Linux native-watcher regression, one coherent-publication
+POSIX permission test, and the unavailable external Standard SRTP catalog. None
+is admission-policy coverage and none was converted to a pass.
+
+The authoritative cross-platform result would normally be the GitHub Actions
+check set on the new PR head. In this run, hosted Actions are unavailable before
+job execution because of an account billing block. That is infrastructure
+`UNEVALUATED`, not a code pass or failure. Local Windows Node 24 execution does
+not substitute for the repository's Node 22/23/24 Linux and Windows matrices or
+their uploaded qualification artifacts.
 
 ## Residual authority and release limits
 
