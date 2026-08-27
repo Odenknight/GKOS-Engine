@@ -1,6 +1,592 @@
 {
   "alias_count": 34,
   "contract_version": "1.0.0-draft.1",
+  "envelope_leaf_count": 53,
+  "envelope_leaves": [
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_PARSE_ERROR",
+        "error_digest": "sha256:a69f903402a88ca6d2eef9d284adda0f53e9dfa5e8eb1eea4e0db08e56f0e36f",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-PARSE_ERROR"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_INVALID_REQUEST",
+        "error_digest": "sha256:c28b3ec7e46476db583d73cac478e1712eb795b62edc8ef0c21c398d9f5026d2",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-INVALID_REQUEST"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_INVALID_PARAMS",
+        "error_digest": "sha256:38219f7f2ff6eb9e8be5f45109289a2c93213f56a8f4f737fc27f9dcb07cc1bb",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-INVALID_PARAMS"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_PEER_FORBIDDEN",
+        "error_digest": "sha256:61aa9bad43d53acc88d274c63959cfafee60cc3f605b7c1891920d00888df8d8",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-PEER_FORBIDDEN"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_HOST_FORBIDDEN",
+        "error_digest": "sha256:baa36a78ce2bf826daf820e56c0f9f76be66a14a207ea99a7b262ac4662d970d",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-HOST_FORBIDDEN"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_ORIGIN_FORBIDDEN",
+        "error_digest": "sha256:dbc1cb765d2aa63ae1c5a5cf08e6a31d59989f0e8528a807ea761a8c8d4dd4ae",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-ORIGIN_FORBIDDEN"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_METHOD_NOT_ALLOWED",
+        "error_digest": "sha256:b79aced4bcd7f8301dfc47553f7ac9dc25f0607effd588f8e6aa32ef1daa1239",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-METHOD_NOT_ALLOWED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_DELETE_INVALID",
+        "error_digest": "sha256:0a545af5ec95b07f481250d4af9fcca380b01dd2a8746c8941e780ca3f6879b7",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-DELETE_INVALID"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_UNSUPPORTED_MEDIA_TYPE",
+        "error_digest": "sha256:d8488aaeb9bd01f0894c95ec84f763afcebb6b9033ae9343cc945d66e8ed375e",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-UNSUPPORTED_MEDIA_TYPE"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_PROTOCOL_VERSION_INVALID",
+        "error_digest": "sha256:31aaeaef36b7aa2a4df526e8eae31d66842df24572886eda1b11671d9692b2f1",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-PROTOCOL_VERSION_INVALID"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_NOT_ACCEPTABLE",
+        "error_digest": "sha256:866f49ad3817db7d37d5ab0140aefc2c59b3bfad4e1495a3bc97cd75023d6602",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-NOT_ACCEPTABLE"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_JSONRPC_METHOD_NOT_FOUND",
+        "error_digest": "sha256:e3812e7ad74e7578efbb2e1d5855e001acecc67e6b1e5db5b914bb40b195f11d",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-JSONRPC_METHOD_NOT_FOUND"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_UNSUPPORTED_CONTRACT_VERSION",
+        "error_digest": "sha256:3cec44d85e9a3c072176f697f951f9107857de87a776e701b49c7640c5092cbf",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-UNSUPPORTED_CONTRACT_VERSION"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_UNKNOWN_OPERATION",
+        "error_digest": "sha256:2ca410879e620ac491e1bbc8f776ee677e41e25c6950b0017c3205057544919d",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-UNKNOWN_OPERATION"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_PAYLOAD_TOO_LARGE",
+        "error_digest": "sha256:52d6c8e33048221a051bd89b4632f1dd6006069264535c30655368554969d569",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-PAYLOAD_TOO_LARGE"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_AUTH_FAILED",
+        "error_digest": "sha256:d10977be723e78d5dec978d6869bff735de9d53e99eecbfd4504acf84451f129",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-AUTH_FAILED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_OWNER_REQUIRED",
+        "error_digest": "sha256:d371fac881041f0950e2328b6dee95b4eb58f37fd145796bb8ed8214063e90bf",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-OWNER_REQUIRED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_POLICY_DENIED",
+        "error_digest": "sha256:799ae65ef5b02753a2923d9fb10ae0d9cd9acb4740fd4a95e900f7885b8df66d",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-POLICY_DENIED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_POLICY_INDETERMINATE",
+        "error_digest": "sha256:f8cdcb86b739f3cd11b9a9d18d3ccc73af2981bee90920ebe03a5ffdfb1b4b78",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-POLICY_INDETERMINATE"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_SESSION_UNKNOWN",
+        "error_digest": "sha256:da61d4159d608b1016576129aee794dba9ae3e4530dbd1398e97ebe0e13edf54",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-SESSION_UNKNOWN"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_SESSION_EXPIRED",
+        "error_digest": "sha256:4c95b18d67f856475e72f95736aec67ceb71b01b2606eff3f6a5d2cc031b87bd",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-SESSION_EXPIRED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_SESSION_STALE",
+        "error_digest": "sha256:597de3349a8b618fb4c04c428ecaee660ed8043d86f905b77c23c139bc1ce8dc",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-SESSION_STALE"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_REQUEST_REPLAY_CONFLICT",
+        "error_digest": "sha256:dd12114f7fec22a737fc8f006736c8354f0a9b7fe62a2384dd9d9d45a08c1cbc",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-REQUEST_REPLAY_CONFLICT"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_REQUEST_STALE_AUTHORITY",
+        "error_digest": "sha256:9e39061191652729087b6f7b46a040d991f72983bef762b3c507e9ffbd876676",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-REQUEST_STALE_AUTHORITY"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_IDEMPOTENCY_EXPIRED",
+        "error_digest": "sha256:66dea1e69c42c45b5e173ec91d075c0d405ce6632a0d801b6dd5c5a60ffa9858",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-IDEMPOTENCY_EXPIRED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_AGENT_DISABLED",
+        "error_digest": "sha256:fbd7d67ff71fa51391a487bc43c81d8d601903857116866a689a7e846a809456",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-AGENT_DISABLED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_CREDENTIAL_REVOKED",
+        "error_digest": "sha256:b5a434fcccac20d6803f6aba4df5b3c0dbb9400083069d84806a3850bd5526e8",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-CREDENTIAL_REVOKED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_IDENTITY_COLLISION",
+        "error_digest": "sha256:727e993fa191845642cadb06fe5dc673c3a18ca5f9f5569072c2e899a43e36a7",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-IDENTITY_COLLISION"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_CREDENTIAL_COLLISION",
+        "error_digest": "sha256:cad1bb42fe655656b19e1c1795a76e8f8f6f1ff957802307bc67d1b196968e6c",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-CREDENTIAL_COLLISION"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_MAPPING_CONFLICT",
+        "error_digest": "sha256:9bac08ef337f902a0d3bc0a15d61c98640b579d1b4600ad41c84e530be88771b",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-MAPPING_CONFLICT"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_STATE_CONFLICT",
+        "error_digest": "sha256:3f3f3fde618751d1df84b598ee2d2161233cff5a075bcdb68955b67dcb182844",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-STATE_CONFLICT"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_RESOURCE_NOT_FOUND",
+        "error_digest": "sha256:67712e3411bec9a698f42c008be39aee0219b5e6bf1745d9be383aa5258106d6",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-RESOURCE_NOT_FOUND"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_RATE_LIMITED",
+        "error_digest": "sha256:94d03911c9bcfee45d5a837c81084585d5b397eb94e82eb84821941ebb3f50ff",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": 6000,
+        "retryable": true
+      },
+      "id": "ERROR-ENVELOPE-RATE_LIMITED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_CONCURRENCY_LIMIT",
+        "error_digest": "sha256:87022cd82773095c7034044cd1c0b7e4b0124e2463bd1b1a867a51068b446ab8",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": 100,
+        "retryable": true
+      },
+      "id": "ERROR-ENVELOPE-CONCURRENCY_LIMIT"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_REQUEST_TIMEOUT",
+        "error_digest": "sha256:37108c5318d83226f4d930210c3826942237a1db93ec91f10689f5f1df5bc751",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-REQUEST_TIMEOUT"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_REQUEST_CANCELLED",
+        "error_digest": "sha256:2905e87a13418c60273ea54408d1a6dcff55ff26f6678abafe0eaad55dd88d72",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-REQUEST_CANCELLED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_CAPABILITY_UNAVAILABLE",
+        "error_digest": "sha256:d61c42a334d901f1512ecf953c361a19df12e330a2a72216cbff3ddda9485c4e",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-CAPABILITY_UNAVAILABLE"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_PLATFORM_UNAVAILABLE",
+        "error_digest": "sha256:edbf21ee1e4ff6e85a11a05974046a8e3dfce4919f81b3a55784ea186b705349",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-PLATFORM_UNAVAILABLE"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_BOOTSTRAP_REQUIRED",
+        "error_digest": "sha256:0c98a4a60d0366fc78af6b08f6d9e67018438bf30181572fe7d68457e011568a",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-BOOTSTRAP_REQUIRED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_MIGRATION_MALFORMED",
+        "error_digest": "sha256:2b07fc421c80360fbb7f0bd4387fbf937b9559fea6a01403e5c65ddcbfaf7cc9",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-MIGRATION_MALFORMED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_MIGRATION_CONFLICT",
+        "error_digest": "sha256:9cc37680b93b7e57eab96cebfb4941631ef950f5a07485c0948e06676fe19c6b",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-MIGRATION_CONFLICT"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_MIGRATION_RECOVERY_REQUIRED",
+        "error_digest": "sha256:78b535709e77f0aae7a543144d10981dc1567f125d86b531b7d40f35fe70beab",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-MIGRATION_RECOVERY_REQUIRED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_AUTHORITY_CORRUPT",
+        "error_digest": "sha256:285b0c208c2d614f55cca09406fe5a34943d6ff5273ac1c1382a033d92202fe0",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-AUTHORITY_CORRUPT"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_DATABASE_CAPACITY",
+        "error_digest": "sha256:9f1bec4c4e9c71814ea958cc5d15affd91de57b93ad78440a862de7824728682",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-DATABASE_CAPACITY"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_ACTIVITY_CAPACITY",
+        "error_digest": "sha256:a89b2d309a5df11fc8a573275d8ba6c6aa4923325ffd7d41f265a236d6774ee3",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-ACTIVITY_CAPACITY"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_RETENTION_INVALID",
+        "error_digest": "sha256:7e28af3b1634ba869dad208258fdffc80e57ffcae1fe774a57ba4393b2d71303",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-RETENTION_INVALID"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_CLOCK_INVALID",
+        "error_digest": "sha256:8def5cc34c748c3e10ce25f980c0a59e6427cea52240e3fb2cd81e3bd112b871",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-CLOCK_INVALID"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_STORAGE_PERMISSION_INVALID",
+        "error_digest": "sha256:46dceb53d23e01f51793d8e8e20aba7a17ab4a32ab6eefdeb9c5802c29274ce7",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-STORAGE_PERMISSION_INVALID"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_AUDIT_WRITE_FAILED",
+        "error_digest": "sha256:ca7ad4b68d58cef9066c19b56a68cf34b5fd41de8cc97d57539958e6b8e6d2dd",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-AUDIT_WRITE_FAILED"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_EVIDENCE_MISMATCH",
+        "error_digest": "sha256:7fb8e7cecf5a24e41970f7d8e5db2b912dc02e6ab9e5bd49feb75159586ae8b5",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-EVIDENCE_MISMATCH"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_SECRET_EXPOSURE",
+        "error_digest": "sha256:4a7d88c2b39ec96bfd2d2c7f43167325371577dbc286aba076b0e9395b8fd90e",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-SECRET_EXPOSURE"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_SHUTTING_DOWN",
+        "error_digest": "sha256:8f58e20b4968a32b107e1fd275e288a5e6329ae9812fd8f4f1ccfbc9f68a4b7b",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": 1000,
+        "retryable": true
+      },
+      "id": "ERROR-ENVELOPE-SHUTTING_DOWN"
+    },
+    {
+      "envelope": {
+        "contract_version": "1.0.0-draft.1",
+        "error_code": "GKOS_P6_INTERNAL_ERROR",
+        "error_digest": "sha256:1e0977e2a8216e0b7570c2ccde527698f0e69bfaedc3a55a2ee53c65a15ed534",
+        "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+        "retry_after_ms": null,
+        "retryable": false
+      },
+      "id": "ERROR-ENVELOPE-INTERNAL_ERROR"
+    }
+  ],
   "error_count": 53,
   "errors": [
     {

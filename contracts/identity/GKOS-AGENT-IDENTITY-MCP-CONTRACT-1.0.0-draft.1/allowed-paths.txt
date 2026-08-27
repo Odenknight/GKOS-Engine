@@ -36,5 +36,5 @@ contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.sche
 docs/decisions/0006-phase6-agent-identity-mcp-contract.md
 docs/phase6-agent-identity-mcp-contract.md
 evidence/2026-08-25-functional-uplift-phase-6-f1.md
-scripts/generate-agent-identity-mcp-contract.mjs
+scripts/generate-agent-identity-mcp-contract-draft1.mjs
 test/agent-identity-mcp-contract.test.mjs

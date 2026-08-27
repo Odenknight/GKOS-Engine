@@ -201,8 +201,20 @@
     "selector_failure_capacity": {
       "const": 3
     },
-    "selector_failure_refill_ms": {
+    "selector_failure_refill_interval_ms": {
       "const": 6000
+    },
+    "selector_failure_refill_microtokens_numerator": {
+      "const": 1000000
+    },
+    "selector_failure_refill_remainder_numerator_max": {
+      "const": 5999
+    },
+    "selector_failure_refill_remainder_numerator_min": {
+      "const": 0
+    },
+    "selector_failure_refill_remainder_persisted": {
+      "const": true
     },
     "session_absolute_ms": {
       "const": 28800000
@@ -267,7 +279,11 @@
     "global_bucket_refill_tokens",
     "global_bucket_refill_ms",
     "selector_failure_capacity",
-    "selector_failure_refill_ms",
+    "selector_failure_refill_microtokens_numerator",
+    "selector_failure_refill_interval_ms",
+    "selector_failure_refill_remainder_numerator_min",
+    "selector_failure_refill_remainder_numerator_max",
+    "selector_failure_refill_remainder_persisted",
     "global_failure_capacity",
     "global_failure_refill_tokens",
     "global_failure_refill_ms",

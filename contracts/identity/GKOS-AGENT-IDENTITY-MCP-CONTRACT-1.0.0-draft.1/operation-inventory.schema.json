@@ -256,53 +256,77 @@
     "authority_status_result": {
       "additionalProperties": false,
       "properties": {
+        "auth_generation": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
         "authority_generation": {
-          "$ref": "#/$defs/positive_safe_integer"
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
         },
-        "authority_instance_id": {
-          "$ref": "#/$defs/uuidv7"
-        },
-        "contract_version": {
-          "const": "1.0.0-draft.1"
-        },
-        "global_event_head_digest": {
-          "$ref": "#/$defs/sha256"
-        },
-        "global_event_seq": {
-          "$ref": "#/$defs/positive_safe_integer"
-        },
-        "request_id": {
-          "$ref": "#/$defs/uuidv7"
-        },
-        "restore_epoch": {
-          "$ref": "#/$defs/positive_safe_integer"
+        "restore_recovery": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "abort_eligible": {
+                  "type": "boolean"
+                },
+                "restore_plan_id": {
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+                  "type": "string"
+                },
+                "state": {
+                  "enum": [
+                    "PLAN_STAGED",
+                    "OWNER_LOCATOR_STAGED",
+                    "DB_PUBLISHED",
+                    "OWNER_ACTIVE",
+                    "RECOVERY_REQUIRED"
+                  ]
+                },
+                "state_digest": {
+                  "pattern": "^sha256:[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "restore_plan_id",
+                "state",
+                "state_digest",
+                "abort_eligible"
+              ],
+              "title": "Active restore recovery",
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "result_digest": {
-          "$ref": "#/$defs/sha256"
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
         },
-        "vault_id": {
-          "$ref": "#/$defs/uuidv7"
-        },
-        "write_gate": {
+        "state": {
           "enum": [
-            "open",
-            "recovery_required",
-            "blocked"
+            "BOOTSTRAP_REQUIRED",
+            "ACTIVE",
+            "RECOVERY_REQUIRED",
+            "WRITE_DISABLED"
           ]
         }
       },
       "required": [
-        "contract_version",
-        "request_id",
-        "vault_id",
-        "authority_instance_id",
-        "restore_epoch",
+        "state",
         "authority_generation",
-        "write_gate",
-        "global_event_seq",
-        "global_event_head_digest",
+        "auth_generation",
+        "restore_recovery",
         "result_digest"
       ],
+      "title": "Authority status",
       "type": "object"
     },
     "backup_create_request": {
@@ -356,6 +380,75 @@
         "result_digest"
       ],
       "type": "object"
+    },
+    "bootstrap_handoff_result": {
+      "additionalProperties": false,
+      "properties": {
+        "bootstrap_state": {
+          "const": "OWNER_LOCATOR_STAGED"
+        },
+        "contract_version": {
+          "const": "1.0.0-draft.1"
+        },
+        "handoff_disposition": {
+          "enum": [
+            "delivered",
+            "ambiguous"
+          ]
+        },
+        "handoff_evidence_id": {
+          "$ref": "#/$defs/uuidv7"
+        },
+        "locator_binding_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "owner_agent_id": {
+          "$ref": "#/$defs/agent_id"
+        },
+        "owner_credential_id": {
+          "$ref": "#/$defs/credential_id"
+        },
+        "plan_id": {
+          "$ref": "#/$defs/uuidv7"
+        },
+        "request_id": {
+          "$ref": "#/$defs/uuidv7"
+        },
+        "result_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "secret_revealed": {
+          "type": "boolean"
+        },
+        "vault_id": {
+          "$ref": "#/$defs/uuidv7"
+        }
+      },
+      "required": [
+        "contract_version",
+        "request_id",
+        "vault_id",
+        "plan_id",
+        "bootstrap_state",
+        "owner_agent_id",
+        "owner_credential_id",
+        "locator_binding_digest",
+        "handoff_evidence_id",
+        "handoff_disposition",
+        "secret_revealed",
+        "result_digest"
+      ],
+      "type": "object"
+    },
+    "bootstrap_initialize_result": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/bootstrap_result"
+        },
+        {
+          "$ref": "#/$defs/bootstrap_handoff_result"
+        }
+      ]
     },
     "bootstrap_request": {
       "additionalProperties": false,
@@ -661,16 +754,12 @@
         "agent_id": {
           "$ref": "#/$defs/agent_id"
         },
-        "external_subject": {
-          "maxLength": 512,
-          "minLength": 1,
-          "type": "string"
-        },
         "idempotency_key": {
           "$ref": "#/$defs/idempotency_key"
         },
         "namespace": {
           "maxLength": 64,
+          "minLength": 1,
           "pattern": "^[a-z][a-z0-9._-]{0,63}$",
           "type": "string"
         }
@@ -678,9 +767,9 @@
       "required": [
         "agent_id",
         "namespace",
-        "external_subject",
         "idempotency_key"
       ],
+      "title": "Add mapping",
       "type": "object"
     },
     "mapping_id": {
