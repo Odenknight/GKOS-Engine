@@ -3,7 +3,7 @@
   "contract_name": "GKOS-AGENT-IDENTITY-MCP-CONTRACT",
   "contract_version": "1.0.0-draft.1",
   "generation_input_digest": "sha256:2c829815bdf138cb49a2a2e2ddc7e5a1b3f317a1d3feddb746101e9161c383bc",
-  "generator_digest": "sha256:ef12d17856a4dee9fe8d982ea08dfdffe327d6d21420d46fd08428fa645a183e",
+  "generator_digest": "sha256:d8f1a8827c482a9f60852be6df2cb4a9e1a5ff02b2378edf3f82aed70ce219e8",
   "leaf_count": 33,
   "leaves": [
     {
