@@ -3,6 +3,9 @@
 This guide describes the library, CLI, ingestion, retrieval, watcher, local
 service, identity/MCP, Graphiti, Navigation, governance, and optional
 intelligence surfaces present in GKOS-Engine `2.1.2` at this repository state.
+It also documents the separately versioned experimental Navigation Effects
+integration carried by this branch; that integration is not a released 2.2.0
+package capability.
 
 The package version, exchange namespace, projection profile, and integration
 contracts are distinct coordinates:
@@ -13,6 +16,7 @@ contracts are distinct coordinates:
 | Public exchange namespace | GKX `2.0` | Breaking public naming generation |
 | Validating projection identifier | `gkx-2.3-validating-projection` | Retained Engine projection identity |
 | Navigation contract | `1.0.0` | Integration-only; source-content read-only |
+| Navigation Effects contract | `1.0.0` | Integration-only; `node-executor-experimental`; Engine 2.2.0 is an unreleased target |
 | Local service protocol | `1.0.0-draft.1` | Integration-only |
 | Agent identity/MCP contract | `1.0.0-draft.2` | Integration-qualified runtime; not production compatibility or conformance |
 | Watcher recovery contract | `1.0.0-draft.1` | Repository-private host contract |
@@ -30,6 +34,8 @@ parse -> validate -> canonical projection -> lineage/time -> canonical graph
         |                                      |                |
         |                                      |                +-> Graphiti projection
         |                                      +-> Navigation 1.0 values/plans
+        |                                                |
+        |                                                +-> optional Effects plan
         +-> accepted/rejected ingest projection -> retrieval generation
                                                    |
                                                    v
@@ -50,14 +56,19 @@ The main ownership rules are:
 - the local service owns authentication, authorization projection, REST/MCP/SSE
   transport, limits, and redaction;
 - Navigation 1.0 owns deterministic discovery and plans, not source effects;
+- Navigation Effects owns separately versioned effect values, marker/path and
+  ownership validation, and an optional host-specific executor; it does not
+  infer authority or change Navigation 1.0;
 - governance interfaces can append explicitly governed metadata through a host
   adapter, but do not create source-write authority; and
 - Graphiti, indexes, episodes, context packs, candidates, and traversal events
   are projections. GKX source records remain canonical.
 
-Navigation Effects, managed-MOC execution, proposal ingress, approval
-authority, and a production identity administration plane are absent from this
-branch.
+Proposal ingress, approval authority, Kosmos coordination/adoption, and a
+production identity administration plane are absent from this branch. The
+experimental Effects executor is present but has no configured host, current
+authority, policy ratification, or automatic enablement merely by being
+installed.
 
 ## Package and build topology
 
@@ -65,11 +76,13 @@ branch.
 
 | Package import | Runtime | Content |
 | --- | --- | --- |
-| `gkos-engine` | Platform-neutral ESM | Public core, graph, lineage, incremental index, migration/enrichment planning, intelligence validation, Navigation/governance re-exports, experimental science namespace |
+| `gkos-engine` | Platform-neutral ESM | Public core, graph, lineage, incremental index, migration/enrichment planning, intelligence validation, Navigation/Effects/governance re-exports, experimental science namespace |
 | `gkos-engine/adapter` | Platform-neutral ESM | Immutable downstream adapter over public core functions |
 | `gkos-engine/gkx` | Platform-neutral ESM | Focused GKX parsing/projection/index surface |
 | `gkos-engine/graphiti` | Platform-neutral ESM | Graphiti adapter |
 | `gkos-engine/navigation` | Platform-neutral ESM | Pure Navigation 1.0 |
+| `gkos-engine/navigation-effects` | Platform-neutral ESM | Experimental Effects contract types, capability reporting, markers, path policy, planner, and in-memory fault adapter |
+| `gkos-engine/navigation-effects/node` | Node ESM | Optional experimental cooperative-vault executor and journal |
 | `gkos-engine/governance` | Platform-neutral ESM | Receipt roles, store interfaces, and deferred-review helpers |
 | `gkos-engine/retrieval` | Node ESM | SQLite-backed retrieval reference implementation |
 
@@ -344,7 +357,9 @@ In the current desktop profile:
 - each feature's authorization is evaluated for the presented credential;
 - Navigation requires the committed source snapshot and MCP authorization;
 - proposal ingress is disabled; and
-- Navigation Effects is unavailable because no planner or adapter is present.
+- Navigation Effects stays unavailable/disabled in this desktop profile: the
+  package planner exists, but it is not wired into the service and no Effects
+  host adapter or stricter runtime safety state is configured.
 
 ### Browser boundary
 
@@ -483,7 +498,9 @@ GKOS Layer-6 Context Manifest.
 `getNavigationCapabilities()` truthfully reports `apply_moc: false` and
 `source_content_write: false`. The CLI rejects Navigation mutation verbs,
 output-file flags, and watch mode. `_archive/moc-runs/**` is an exact Navigation
-ignore namespace, but no archive writer or managed-MOC executor exists here.
+ignore namespace. No archive writer or managed-MOC executor is reachable from
+the Navigation 1.0 subpath; the separate experimental Effects/Node subpath does
+not alter that import graph or capability document.
 
 See [`docs/NAVIGATION-CONTRACT.md`](docs/NAVIGATION-CONTRACT.md) and
 [`docs/NAVIGATION-AUTHORITY-BOUNDARY.md`](docs/NAVIGATION-AUTHORITY-BOUNDARY.md).
@@ -584,6 +601,11 @@ node --test test/agent-identity-mcp-contract.test.mjs
 node --test test/agent-identity-mcp-contract-draft2.test.mjs
 node --test test/service-contracts.test.mjs test/service-runtime.test.mjs
 node --test test/service-stdio.test.mjs test/service-stdio-package.test.mjs
+node --test test/navigation-effects-contract.test.mjs
+node --test test/navigation-effects-planner.test.mjs
+node --test test/navigation-effects-node.test.mjs
+node --test test/navigation-effects-performance.test.mjs
+node --test test/navigation-effects-reconciliation.test.mjs
 ```
 
 Do not hard-code a historical test total. Qualification means zero failures and
@@ -597,20 +619,58 @@ This reconciliation branch carries the separately exported Navigation Effects
 code**. It does not alter the read-only Navigation 1.0 contract, activate a
 write capability, or constitute a released Engine 2.2 artifact.
 
-The framework-neutral surface is `gkos-engine/navigation-effects`; the
-filesystem surface is `gkos-engine/navigation-effects/node`. The latter
-requires a vault-scoped host adapter, current digest preconditions, explicit
-authority and policy supplied by its consumer, and acceptance of its documented
-cooperative-vault threat model. It rejects existing link/reparse ancestors but
-does not claim safety against a concurrent hostile local process replacing an
-already checked ancestor.
+The contract pack is
+`contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0`. Its manifest
+records contract `1.0.0`, standing `integration-only`, implementation phase
+`node-executor-experimental`, `gkos_conformance: false`, and Engine `2.2.0` as
+an unreleased target. Schemas cover capabilities, effect plans, ownership,
+journal/checkpoint records, archive manifest/diff, receipts, recovery, and
+bounded agent-write values. Registered adversarial fixtures cover success,
+no-op, stale, denied, conflict, recovery, malformed markers, path escape, and
+ambiguous lineage; fixture effects remain `sourceWrite: false`.
 
-The experimental executor provides a hash-chained intent journal, exact
-before-image archives, same-directory temporary writes, after-read digest
-verification, receipts, checkpoints, and startup recovery checks. Corrupt or
-ambiguous journal/archive state fails closed. These mechanisms are reusable
-building blocks; they do not by themselves provide Kosmos ownership adoption,
-authority, reconciliation, automatic maintenance, or production readiness.
+The framework-neutral surface is `gkos-engine/navigation-effects`; it exports
+contract types, configured capability reporting, exact version-1 generated
+region handling, portable path/grant validation, deterministic managed-MOC
+planning, and an in-memory fault adapter. Default capabilities advertise plan
+construction only. `apply_managed_moc`, archive, recovery, rollback, and agent
+note capabilities remain false until their declared adapter, authority,
+journal, and policy inputs are explicitly configured. Even a true configured
+capability is not authority for an individual effect.
+
+The filesystem surface is `gkos-engine/navigation-effects/node`. Its executor
+requires an absolute vault root, a current host precondition provider, explicit
+per-effect authority/policy/digest bindings, and acknowledgement of the
+documented `cooperative-vault` threat model. It rejects existing symlink,
+junction, and reparse-point ancestors, but does not claim safety against a
+concurrent hostile local process replacing an already checked ancestor. Node
+does not provide the portable openat-style traversal primitive needed for that
+stronger claim.
+
+The experimental executor provides a single-writer vault lease, deterministic
+target locks, a flushed hash-chained intent journal, exact before/after
+archives, mergeable manifests and diffs, same-directory temporary writes,
+same-volume rename, after-read digest verification, immutable receipt history,
+checkpoints, explicit preconditioned rollback, graceful shutdown, and startup
+recovery classification. External target changes win. Corrupt or ambiguous
+journal, checkpoint, receipt, or archive state blocks the write latch. Its
+durability report does not claim portable directory-entry fsync, including on
+Windows.
+
+Tests independently cover contract closure and default capability truth;
+Navigation import purity; marker/region byte preservation; deterministic
+planning; unmanaged/stale/policy/path denial; archive/receipt/journal bindings;
+lease and lock behavior; external races; idempotency; fault injection; corrupt
+state; real-process interruption across transaction transitions; rollback;
+shutdown; path-link attacks where the host permits them; performance smoke;
+and import-time no-effect reconciliation. These are repository integration
+tests at an exact SHA, not production qualification or a 24-hour soak claim.
+
+The mechanisms are reusable building blocks. They do not by themselves provide
+Kosmos ownership adoption, an Obsidian adapter, a policy or authority provider,
+event debouncing, affected-scope coordination, reconciliation, self-write
+suppression, automatic maintenance, automatic creation, or production
+readiness.
 
 ## Explicit non-claims and deferred work
 
