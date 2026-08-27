@@ -15,6 +15,11 @@ GKOS-Engine is designed to be the quiet machinery underneath products such as
 Kosmos-Oden: one interpretation of GKX, reusable from a library, CLI, headless
 service, or desktop sidecar.
 
+For an exact implemented/deferred matrix, see
+[Current capabilities](docs/CURRENT_CAPABILITIES.md). Builders continuing from
+the accepted 2026-08-27 state should also read the
+[current build handoff](docs/HANDOFF_2026-08-27.md).
+
 ## What is here
 
 | Area | What it does | Current standing |
@@ -230,6 +235,12 @@ while the existing validating projection identifier remains
 `gkx-2.3-validating-projection`. These names describe different layers and are
 not interchangeable; [the compatibility guide](docs/VERSION-PROFILE-COMPATIBILITY.md)
 records the distinction.
+
+The `v2.1.2` tag predates the successor-F1 correction now on `main`. That
+correction changes the Draft.1 identity/MCP contract and qualification pack; it
+does not create a later package version or release by itself. The exact source,
+CI, and release standing is recorded in the
+[current build handoff](docs/HANDOFF_2026-08-27.md).
 
 GKOS-Engine is downstream of
 [gkos-standard](https://github.com/Odenknight/gkos-standard). Repository tests
