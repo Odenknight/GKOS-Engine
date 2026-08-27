@@ -14,7 +14,7 @@ const BASE='808d875b557f4cfd2bb0addccba44d70c9748f35';
 const SUCCESSOR_BASE='e29e04bdad1cd192a25eba2d682a4c46774def28';
 const PACK='contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1';
 const GENERATOR='scripts/generate-agent-identity-mcp-contract-draft1.mjs';
-const INTEGRATION_BASE='3ac1e9e55924ff85031a8a54b54a2cb48f605e0c';
+const INTEGRATION_BASE='7bf14b481e78c5ae9d1e14661602be4f24559d0e';
 const DIR=join(ROOT,PACK);
 const sha=(b)=>createHash('sha256').update(b).digest('hex');
 const digest=(b)=>`sha256:${sha(b)}`;
