@@ -91,12 +91,15 @@ filesystem tests, one Linux native-watcher regression, one coherent-publication
 POSIX permission test, and the unavailable external Standard SRTP catalog. None
 is admission-policy coverage and none was converted to a pass.
 
-The authoritative cross-platform result would normally be the GitHub Actions
-check set on the new PR head. In this run, hosted Actions are unavailable before
-job execution because of an account billing block. That is infrastructure
-`UNEVALUATED`, not a code pass or failure. Local Windows Node 24 execution does
-not substitute for the repository's Node 22/23/24 Linux and Windows matrices or
-their uploaded qualification artifacts.
+The authoritative cross-platform result is the GitHub Actions check set on the
+new PR head. At report time, Engine CI runs `33049924995` (push) and
+`33049927714` (pull request) have started real hosted jobs and remain pending;
+several setup, install, build, and focused gate steps are already successful,
+but neither run has a terminal conclusion. They are therefore `UNEVALUATED`,
+not a pass or failure. Any downstream target-repository billing block is a
+separate infrastructure limitation and is not evidence about Engine PR #31.
+Local Windows Node 24 execution does not substitute for the repository's Node
+22/23/24 Linux and Windows matrices or their uploaded qualification artifacts.
 
 ## Residual authority and release limits
 
