@@ -28,7 +28,7 @@ jobs:
       - name: Execute governed qualification plan and write bound receipt
         shell: bash
         run: |
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-linux-node22 \
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-contract-linux-node22 \
             --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
@@ -51,7 +51,7 @@ jobs:
       - name: Execute governed qualification plan and write bound receipt
         shell: bash
         run: |
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-linux-node23 \
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-contract-linux-node23 \
             --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
@@ -74,7 +74,7 @@ jobs:
       - name: Execute governed qualification plan and write bound receipt
         shell: bash
         run: |
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-linux-node24 \
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-contract-linux-node24 \
             --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
@@ -98,7 +98,7 @@ jobs:
       - name: Execute governed qualification plan and write bound receipt
         shell: pwsh
         run: >-
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-windows-node22
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-contract-windows-node22
           --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
@@ -121,7 +121,7 @@ jobs:
       - name: Execute governed qualification plan and write bound receipt
         shell: pwsh
         run: >-
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-windows-node23
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-contract-windows-node23
           --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
@@ -144,7 +144,7 @@ jobs:
       - name: Execute governed qualification plan and write bound receipt
         shell: pwsh
         run: >-
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-windows-node24
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-contract-windows-node24
           --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
@@ -167,7 +167,7 @@ jobs:
       - name: Execute governed qualification plan and write bound receipt
         shell: bash
         run: |
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-macos-node22 \
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-contract-macos-node22 \
             --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
@@ -190,7 +190,7 @@ jobs:
       - name: Execute governed adversarial qualification plan and write bound receipt
         shell: bash
         run: >-
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-schema-adversarial
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-schema-adversarial
           --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
@@ -213,7 +213,7 @@ jobs:
       - name: Execute governed pack qualification plan and write bound receipt
         shell: bash
         run: |
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-pack-reproducibility \
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-pack-reproducibility \
             --receipt qualification-receipt.json
       - uses: actions/upload-artifact@v4
         with:
@@ -236,7 +236,7 @@ jobs:
       - name: Execute governed secret-scan qualification plan and write bound receipt
         shell: bash
         run: >-
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-secret-scan
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-secret-scan
           --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
@@ -263,7 +263,7 @@ jobs:
         env: { GH_TOKEN: "${{ github.token }}" }
         shell: bash
         run: |
-          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-artifact-audit \
+          node scripts/generate-agent-identity-mcp-contract-draft1.mjs --qualification-job p6-f1-artifact-audit \
             --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
       - uses: actions/upload-artifact@v4
         with:
