@@ -1,81 +1,95 @@
 # GKOS-Engine
 
-**GKOS-Engine 2.1.2** is a deterministic toolkit for working with governed
-knowledge records. It parses, validates, projects, assesses, graphs, and
-exports GKX 2.0 records. Its new Navigation tools can find map-of-content
-(MOC) pages, propose consistent indexes, compare changes, audit a knowledge
-vault, assemble permission-filtered context, and plan safe re-entry.
+Turn a folder of Markdown into a dependable knowledge map—locally,
+deterministically, and with the privacy boundary kept in view.
 
-Version 2.0 is a breaking release line. It uses the GKX namespace throughout:
-`gkx_version`, `.gkx/`, `GKX-*` diagnostics, `gkx` commands, and `Gkx*` public
-APIs. No former command, field, path, diagnostic, or API aliases are supported.
+**GKOS-Engine 2.1.2** parses and validates GKX records, builds canonical graphs,
+projects Graphiti episodes, indexes and retrieves knowledge, analyzes navigation
+pages, and can serve an authenticated live view to local applications and named
+MCP agents. The core is TypeScript, has no Obsidian or browser dependency, and
+does not need an LLM.
 
-This repository is the single source of truth for the engine. It is
-**Obsidian-free, DOM-free, platform-neutral** TypeScript: a reusable core that
-downstream products consume rather than re-vendor.
+GKOS-Engine is designed to be the quiet machinery underneath products such as
+Kosmos-Oden: one interpretation of GKX, reusable from a library, CLI, headless
+service, or desktop sidecar.
 
-- **Kosmos Research Studio (KRS)** consumes this package.
-- **GKOS-Engine-Lite** consumes this package.
+## What is here
 
-## Relationship to GKOS
+| Area | What it does | Current standing |
+| --- | --- | --- |
+| GKX core | Parse, canonicalize, validate, assess, resolve lineage, project time, and build graphs | Implemented in 2.1.2 |
+| Graphiti adapter | Produce deterministic, bounded episode projections | Implemented |
+| Ingest and retrieval | Validate a corpus, publish derived SQLite generations, search lexically or through configured providers, and verify citations | Implemented; provider connectors remain host choices |
+| Watcher host | Keep one coherent graph/retrieval generation current and recover durable derived state after interruption | Implemented as a repository-private host runtime |
+| Navigation 1.0 | Discover MOCs, build candidates, diff, audit, assemble filtered context, and plan re-entry | Implemented and source-content read-only |
+| Local service | Serve authorized graph, notes, Graphiti episodes, capabilities, MCP, and traversal events on loopback port 4814 | Implemented under an integration-only draft contract |
+| MCP | Seven credential-bound, read-only tools over Streamable HTTP, plus a packaged stdio compatibility bridge | Implemented for integration qualification; not a production conformance claim |
+| Optional intelligence | Validate proposal-only responses from a separate Python AI sidecar | Optional; never approval authority |
+| Scientific trace evaluation | Deterministic checks for a provisional research-trace draft | Experimental and opt-in |
+| Admission-policy provider | Evaluate pinned, bounded admission requests and emit deterministic, non-authoritative receipts | Unreleased proposal; no approval, activation, or materialization authority |
 
-GKOS-Engine 2.1.2 at this repository revision implements deterministic
-GKOS/GKX parsing, validation, assessment, graph, and projection machinery. It
-is downstream of
-[gkos-standard](https://github.com/Odenknight/gkos-standard): implementation
-behavior cannot amend the standard or create an alternate schema authority.
+Two boundaries are especially important:
 
-GKOS-Engine is the standard project's reference implementation. It is not an
-independent implementation for the future second-implementation gate. Exact
-compatibility is governed by the standard's current compatibility matrix and
-the immutable release evidence cited by a specific claim; matching version
-numbers or passing this repository's tests do not establish GKOS conformance.
+- **Navigation Effects is not present on this branch.** Navigation can generate
+  and compare MOC candidates, but it cannot apply them to source notes.
+- **Proposal ingress is not active.** The local service reports it as disabled;
+  no agent proposal, approval, or source-write route is available.
 
-## What Navigation 2.1 does
+## A five-minute start
 
-Navigation 2.1 analyzes a snapshot supplied by your application. It can:
-
-- discover and classify navigation pages;
-- generate byte-reproducible MOC candidates without applying them;
-- explain text and semantic changes, including stable-identity moves;
-- audit stale candidates, malformed markers, lineage, configuration, archive,
-  context-budget, and discoverability problems;
-- build context packs only after access policy has filtered protected objects;
-- plan a human-edited artifact as a new Layer-1 source; and
-- evaluate narrowly delegated supersession declarations without granting
-  general write authority.
-
-The five built-in MOC basenames are exactly `index`, `_index`, `readme`, `moc`,
-and `contents`. Names such as `home`, `map`, `overview`, `dashboard`, `start`,
-and `toc` are no longer silent aliases. They are reported for human review and
-can become vault-wide names only through an explicit, governed promotion.
-
-### Safety boundary
-
-GKOS Navigation 2.1 is **source-content read-only**. It never rewrites, replaces,
-archives, or deletes human/source vault content. The CLI emits analysis and
-plans to stdout and has no mutation command. A host may append governance
-metadata only through an explicitly configured `GovernanceStore`, valid
-authority, optimistic preconditions, idempotency, and durable State-Change
-Receipt binding. The included in-memory store is a test adapter, not a hidden
-vault writer.
-
-This claim is intentionally scoped. `gkx graph` writes its requested graph
-file; `gkx export graphiti` writes graph and episode files; the desktop agent
-writes its token and status files; migration/enrichment builds reviewed
-proposals and apply-plan material; and a configured Governance Store appends
-governed records. None of those surfaces is a Navigation source-vault writer.
-
-Navigation Context Packs are Engine artifacts, not GKOS Layer-6 Context
-Manifests. The integration fixture pack tests Engine compatibility only and
-does not create GKOS or GCP conformance standing.
-
-### Try the read-only CLI
+You need Node.js `>=22 <25` and npm `>=10`.
 
 ```sh
-npm install
+git clone https://github.com/Odenknight/GKOS-Engine.git
+cd GKOS-Engine
+npm ci
 npm run build
 
+node bin/gkx.mjs validate ./my-notes
+node bin/gkx.mjs assess ./my-notes
+node bin/gkx.mjs graph ./my-notes -o graph.json
+```
+
+Nothing in those first two commands edits the notes. The graph command writes
+only the output file you name.
+
+For a guided introduction to GKX records, continue with
+[BEGINNERS_GUIDE.md](BEGINNERS_GUIDE.md). For API and operational detail, see
+[TECHNICAL_README.md](TECHNICAL_README.md).
+
+## Useful local workflows
+
+### Validate and index a corpus
+
+The folder-oriented commands use the same parser and projection logic as the
+library:
+
+```sh
+node bin/gkx.mjs validate --kb-path ./my-notes --format text
+node bin/gkx.mjs index --kb-path ./my-notes --strict
+```
+
+Strict indexing blocks activation when governed validation rejects a source.
+Non-strict indexing can publish the accepted subset together with an explicit
+rejection ledger. Derived retrieval state lives under `.gkx/`; it is not
+canonical knowledge.
+
+### Search with verified citations
+
+```sh
+node bin/gkx.mjs search "torpedo guidance" \
+  --kb-path ./my-notes --limit 5
+```
+
+The CLI search policy is intentionally public-only. It filters source and chunk
+eligibility before scoring, verifies returned citations against current source
+bytes, and can accept `--as-of <GKX-timestamp>` for a temporal view. Optional
+embedding and reranking providers are selected only through trusted host
+configuration; the deterministic lexical path works without them.
+
+### Explore Navigation without changing notes
+
+```sh
 node bin/gkx.mjs nav scan ./my-notes
 node bin/gkx.mjs nav audit ./my-notes
 node bin/gkx.mjs nav render ./my-notes --stdout
@@ -83,256 +97,192 @@ node bin/gkx.mjs nav context ./my-notes \
   --recipient alice --purpose research --stdout
 ```
 
-For a first walkthrough, see [BEGINNERS_GUIDE.md](BEGINNERS_GUIDE.md). API and
-architecture details are in [TECHNICAL_README.md](TECHNICAL_README.md), with
-the normative Engine integration surface in
-[`docs/NAVIGATION-CONTRACT.md`](docs/NAVIGATION-CONTRACT.md).
+Navigation recognizes exactly five built-in MOC basenames: `index`, `_index`,
+`readme`, `moc`, and `contents`. Other MOC-like names are findings for review,
+not silent aliases. `render` emits deterministic candidate data to stdout; it
+does not write a MOC.
 
-## Experimental scientific trace evaluation
-
-GKOS-Engine now exposes deterministic Scientific Research Trace Profile (SRTP)
-draft parsing, canonicalization, validation, event-chain checks, artifact
-binding, rerun comparison, assessment, and re-entry checks through the isolated
-`experimentalScience` namespace. This helps downstream products detect missing,
-replayed, duplicated, or mismatched research evidence without changing the
-default GKX pipeline.
-
-The evaluator is experimental and deliberately narrow. It evaluates structural
-evidence under stated policies; it does not execute research, decide scientific
-truth, grant authority, approve promotion, or replace expert review. Recognized
-partial or unevaluated states remain honest diagnostics rather than being
-promoted to `PASS`.
-
-The release suite exercises the experimental API, adversarial traces, and an
-exact read-only mirror of Standard catalog `SRTP-DRAFT-FIXTURES-0.1.1`, manifest
-SHA-256
-`ed9cc63b50ecf332b96c576af9139370a1c708b6145224d881cafefdde8aa651`.
-Standard owns the provisional, informative, non-normative draft; Suite stages
-proposal-only records for this evaluator, while Marshal and KRS Lite remain
-execution-evidence producers rather than Engine authority sources.
-
-## Generic admission-policy provider proposal
-
-The unreleased `gkos.admission-policy.v1` contract offers deterministic,
-product-neutral admission-policy evaluation without I/O, materialization, or
-authority creation. It emits only the three bounded dispositions and the
-pre-adjudication `REVIEW_INVALID` outcome. Reviewer recommendations are evidence,
-not approval. See [the contract boundary](docs/ADMISSION-POLICY-PROVIDER-V1.md).
-
-This proposal does not change the package version and must not be treated as a
-released authority pin until separately ratified.
-
-## Optional intelligence sidecar
-
-The separately installable Python service under `services/gkos-intelligence/`
-provides proposal-only AI assistance. The TypeScript engine remains deterministic,
-LLM-independent, and fully functional offline. It neither writes a filesystem nor
-automatically applies intelligence-generated proposals.
-
-Its JSON responses use `gkos.intelligence.v1` and must pass
-`validateIntelligenceResponse()` before use.
-
-- Proposals cannot set authoritative state.
-- Sensitivity proposals are raise-only.
-- Mismatched targets, unknown types, malformed responses, and unsafe fields fail
-  closed.
-- A separate authorized workflow is required before a suggestion becomes authored
-  or approved state.
-
-See [the sidecar README](services/gkos-intelligence/README.md) for optional
-installation. Normal engine commands require no Python, model, credentials, or
-network access.
-
-## GKX 2.0 document forms
-
-GKX 2.0 supports two document forms:
-
-- **Authoring form** — flat, human- and agent-editable frontmatter.
-- **Machine projection** — a nested deterministic projection.
-
-The engine parses either form, produces a validating GKX 2.0 projection, and
-derives diagnostics and documentation-quality assessments deterministically.
-
-## Install / build
-
-Node.js `>=22 <25` is required.
+### Export a Graphiti projection
 
 ```sh
-npm install
-npm run build     # bundles src/ -> dist/gkos-engine.mjs (ESM)
-npm run typecheck # tsc --noEmit
-npm test          # node --test
+node bin/gkx.mjs export graphiti ./my-notes \
+  --episodes episodes.json --group-id my-vault
 ```
 
-The build bundles `src/index.ts` and its siblings into the package’s public ESM
-module, `dist/gkos-engine.mjs`.
+Graphiti is a projection of GKX, not a second source of truth. Stable IDs,
+bounded content, and canonical attributes make repeated exports comparable.
 
-## Library usage
+## Run the local service
 
-```js
-import { buildGraph, buildGkx23Projection, ENGINE_VERSION } from "gkos-engine";
-```
-
-Everything re-exported from `src/index.ts` is public surface.
-
-### Experimental scientific trace support
-
-Draft Scientific Research Trace Profile support is available only through the
-`experimentalScience` namespace. It is deterministic and offline, validates
-trace evidence and bindings, and never executes research, decides scientific
-truth, grants authority, or changes the default GKX pipeline.
-
-```js
-import { experimentalScience } from "gkos-engine";
-
-const parsed = experimentalScience.parseScientificRecord(providerJson, {
-  experimentalScienceProfile: true,
-});
-const validation = experimentalScience.validateScientificRecord(parsed, {
-  experimentalScienceProfile: true,
-});
-```
-
-`assessScientificTrace()` accepts verifier results under
-`policy.verificationEvidence`. Event-chain integrity, artifact traceability,
-and re-entry completeness remain `UNEVALUATED` until verifier evidence covers
-every corresponding record; field presence alone can never produce `PASS`.
-
-The draft identifier is not a normative GKOS profile. See
-[`docs/VERSION-PROFILE-COMPATIBILITY.md`](docs/VERSION-PROFILE-COMPATIBILITY.md)
-for the package, namespace, projection and historical-version distinctions.
-`SRTP_DRAFT_FIXTURE_BASELINE` records standard base commit `351330ce`, the
-workspace-draft catalog's exact SHA-256, catalog `SRTP-DRAFT-FIXTURES-0.1.1`,
-and its compatible version coordinates.
-The exact catalog test runs when that standard checkout is available; an absent
-catalog is skipped and remains unevaluated, never an implied pass.
-
-### Projection options
-
-`buildGkx23Projection(raw, sourcePath, contentHash, document, options?)` accepts
-an optional `Gkx23ProjectionOptions`.
-
-- **`defaultSensitivity`** — effective sensitivity when a record has no
-  `sensitivity` field. The engine fails closed: a missing value resolves to
-  `secret`, and `GKX-SENSITIVITY-001` makes defaulting visible in diagnostics.
-  Values are validated against the seven-level vocabulary; an unrecognized value
-  also resolves to `secret`.
-
-  ```js
-  buildGkx23Projection(raw, path, hash, null, { defaultSensitivity: "internal" });
-  ```
-
-  `parseSourceFile(f, options?)`, `buildGraph(files, folders, now?, options?)`,
-  and `new GkxIndex(options?)` apply the same option to full and incremental
-  builds.
-
-The engine ships no PII or sensitive-content detector. A deployment that adds one
-may only raise effective sensitivity; it may never lower an authored value.
-
-### Effective-state contracts
-
-- **Epistemic state** — a value outside the frozen twelve-state vocabulary raises
-  `GKX-EPISTEMIC-002` and projects `effective.epistemicState` to `unknown`, with
-  `effective.epistemicStateDefaulted: true`.
-- **Temporal** — a naive wall-clock timestamp in `created_at` or `updated_at`
-  raises `GKX-TEMPORAL-001`. The projection, stamper (`isValidGkxTimestamp`), and
-  schema share one validator.
-
-## CLI: `gkx`
-
-The `gkx` binary runs the engine over a folder of Markdown records. Run
-`npm run build` first; the command imports `dist/gkos-engine.mjs`.
-
-Every command embeds a deterministic `build:` block in its output:
-
-```json
-{ "engine_version": "2.1.1",
-  "policy_hash": "sha256:…",
-  "corpus_hash": "…",
-  "generated_at": "2026-08-05T…Z" }
-```
-
-The shared ignore rules (`DEFAULT_IGNORED_DIRS`) include `.gkx`, `.obsidian`,
-`.git`, `node_modules`, and `.trash`.
-
-### `gkx validate <dir>`
-
-Runs deterministic parsing, projection, and validation over every record. It exits
-non-zero when any `error` or `critical` diagnostic exists.
-
-```sh
-node bin/gkx.mjs validate ./my-notes
-```
-
-### `gkx assess <dir> [--json]`
-
-Runs the assessment engine and prints per-record documentation-quality scores and
-labels. `--json` emits stable-key-ordered JSON.
-
-```sh
-node bin/gkx.mjs assess ./my-notes
-node bin/gkx.mjs assess ./my-notes --json > assessments.json
-```
-
-### `gkx graph <dir> -o <graph.json> [--watch]`
-
-Builds the canonical graph with stable serialization. `--watch` rebuilds on
-change.
-
-```sh
-node bin/gkx.mjs graph ./my-notes -o graph.json
-```
-
-### `gkx export graphiti <dir> --episodes <out.json> [--group-id <ns>]`
-
-Exports Graphiti episodes for the corpus.
-
-```sh
-node bin/gkx.mjs export graphiti ./my-notes --episodes episodes.json --group-id my-vault
-```
-
-## Desktop agent
-
-`src/desktop-agent.ts` is built to `dist/gkos-desktop-agent.mjs` and compiled
-per platform into the `gkos-agent` Node SEA binary. It watches a records folder
-and serves a loopback-only read-only agent API.
+The desktop agent watches a corpus, maintains a coherent derived generation,
+and serves authenticated local clients. It always binds to `127.0.0.1`; there
+is no `--host` option.
 
 ```sh
 npm run build
 node dist/gkos-desktop-agent.mjs \
-  --notes /path/to/notes --default-sensitivity internal --port 4814 \
-  --status-file /path/to/desktop-agent.status.json
-
-node scripts/build-sea.mjs
+  --notes /absolute/path/to/my-notes \
+  --status-file /absolute/path/to/private-state/desktop-agent.status.json \
+  --port 4814
 ```
 
-| Flag | Required | Default | Notes |
-| --- | --- | --- | --- |
-| `--notes <dir>` | yes | — | Records folder to index and watch. |
-| `--default-sensitivity <level>` | no | `secret` | One of the seven levels; invalid or missing values fail closed to `secret`. |
-| `--port <n>` | no | `4814` | Loopback port. |
-| `--status-file <path>` | no | `<notes>/.gkx/desktop-agent.status.json` | Health and state location. |
+On first start it creates separate owner-private credential files for:
 
-There is no `--host` option: the server binds `127.0.0.1` only. Every request
-requires the bearer token generated on first run.
+- the local viewer, which may read REST projections and traversal events; and
+- the default MCP agent, which may use MCP but cannot reuse viewer authority.
 
-That token protects the local HTTP transport; it is not user identity, SSO,
-tenancy, RBAC, or enterprise authorization. CORS is a browser-origin boundary
-and does not replace bearer authentication. On Linux and macOS the token is
-created with mode `0600`; Windows access follows the containing directory's
-ACL. The token is reused while its file exists and rotates when the file is
-removed and the agent restarts.
+The console and status document report credential **paths**, never credential
+values. Supply the appropriate file to a trusted client and send bearer values
+only in the `Authorization` header. Tokens are not accepted in query strings.
 
-### Endpoints
+The service provides:
 
-- `GET /` and `GET /health` — status document.
-- `GET /notes` — indexed records.
-- `GET /graph` — current graph.
-- `GET /graphiti/episodes` — Graphiti projection episodes.
+- `/health`, `/capabilities`, `/notes`, `/graph`, and
+  `/graphiti/episodes` for authorized reads;
+- `/events` for authenticated traversal events over fetch-compatible SSE;
+- `/mcp` for the bounded read-only MCP lifecycle; and
+- watcher-owned `/status` and `/control/shutdown` operator routes.
+
+Every returned note, node, link, episode, count, MCP result, and event path is
+derived from a credential-bound authorized view. Hidden endpoints disappear
+with their edges and derived counts. Missing or invalid sensitivity fails
+closed to `secret`.
+
+### MCP from a stdio-only client
+
+Installed packages include `gkos-mcp-stdio`, a small compatibility bridge to
+the same loopback service. Configure it with the path to the MCP credential:
+
+```text
+GKOS_MCP_TOKEN_FILE=/private/state/desktop-agent.mcp.token
+GKOS_MCP_URL=http://127.0.0.1:4814/mcp
+```
+
+The URL override is optional and must remain a literal loopback HTTP `/mcp`
+endpoint. The bridge rejects raw-token environment variables, URL credentials,
+query parameters, and non-loopback hosts. It is not a second MCP authority and
+does not claim native-stdio conformance.
+
+The seven available tools are capabilities, record validation, record
+assessment, lineage, graph-at-time, Navigation discovery, and Navigation
+audit. Sixteen additional contract surfaces remain deferred.
+
+## Use it as a library
+
+```js
+import {
+  ENGINE_VERSION,
+  buildGraph,
+  buildGkx23Projection,
+  GkxIndex,
+} from "gkos-engine";
+
+import { buildGraphitiEpisodes } from "gkos-engine/graphiti";
+import { discoverNavigation } from "gkos-engine/navigation";
+import { RetrievalCoordinator } from "gkos-engine/retrieval";
+```
+
+Published subpaths are:
+
+| Import | Purpose |
+| --- | --- |
+| `gkos-engine` | Framework-neutral parser, validation, assessment, graph, lineage, migration/enrichment planning, intelligence validation, and experimental namespace |
+| `gkos-engine/adapter` | Small dependency-injection adapter for downstream products |
+| `gkos-engine/gkx` | Focused GKX types, parser, projection, and incremental index |
+| `gkos-engine/graphiti` | Graphiti projection API |
+| `gkos-engine/navigation` | Pure, source-content-read-only Navigation 1.0 API |
+| `gkos-engine/governance` | Receipt roles and explicit append-only governance-store contracts |
+| `gkos-engine/retrieval` | Node/SQLite retrieval reference implementation |
+
+The local-service, watcher, ingest-host, evaluation-host, and filesystem
+authority bundles are deliberately not public package subpaths. Their supported
+entry points are the packaged commands and repository host integrations.
+
+## The safety model, in plain language
+
+- **GKX stays canonical.** Graphs, indexes, Graphiti episodes, Navigation
+  candidates, and event trails are rebuildable projections.
+- **Visibility comes before serialization.** A result is filtered before paths,
+  relationships, episodes, counts, or traversal events are constructed.
+- **Unclear means private.** Missing or invalid sensitivity resolves to
+  `secret`; policy and authorization errors fail closed.
+- **Confidence is evidence, not authority.** Assessments and intelligence
+  proposals never approve themselves.
+- **Navigation reads source content.** It returns values and plans; it has no
+  source-write executor in 2.1.2.
+- **Derived-state writes are explicit.** Indexing, watcher journals, status,
+  tokens, graph exports, and requested output files are effects, but none is a
+  silent source-note rewrite.
+- **Local means loopback.** The service does not expose a configurable network
+  bind and does not accept bearer tokens in URLs.
+
+## Versions and standing
+
+The npm package is `2.1.2`. The public exchange namespace remains GKX `2.0`,
+while the existing validating projection identifier remains
+`gkx-2.3-validating-projection`. These names describe different layers and are
+not interchangeable; [the compatibility guide](docs/VERSION-PROFILE-COMPATIBILITY.md)
+records the distinction.
+
+GKOS-Engine is downstream of
+[gkos-standard](https://github.com/Odenknight/gkos-standard). Repository tests
+and matching version numbers do not by themselves establish GKOS conformance.
+The local-service and identity/MCP Draft.2 contracts are explicitly
+integration-only. Draft.2 qualifies the seven implemented tools and transports
+for integration; it is not a production compatibility, release, or conformance
+declaration.
+
+Governed contract lanes cover Node 22, 23, and 24 on Linux and Windows, plus a
+macOS Node 22 lane. The existing SEA release workflow is configured to build
+unsigned pre-release `gkos-agent` binaries for Windows x64 and macOS arm64/x64;
+it does not define a Linux SEA artifact.
+
+## Optional and experimental components
+
+The Python service in [`services/gkos-intelligence/`](services/gkos-intelligence/README.md)
+can produce bounded `gkos.intelligence.v1` suggestions. The TypeScript engine
+validates those responses, rejects unsafe fields and sensitivity lowering, and
+requires a separate authorized review path before anything becomes authored or
+approved state. Normal engine use needs no Python, model, credentials, or
+network.
+
+Scientific Research Trace Profile support is available only through the
+`experimentalScience` namespace. It checks structural evidence, event chains,
+artifacts, reruns, assessment inputs, and re-entry bindings for a provisional,
+non-normative draft. It does not execute research, decide truth, or grant
+authority.
+
+## Build and verification
+
+```sh
+npm ci
+npm run typecheck
+npm run build
+npm test
+npm run test:navigation
+npm run test:intelligence
+npm run pack:check
+npm run check:license
+npm run check:nomenclature
+```
+
+Pass totals are evidence for the exact commit and environment that produced
+them; the gate is zero failures with only documented skips.
+
+## More documentation
+
+- [Technical guide](TECHNICAL_README.md)
+- [Compatibility notes](COMPAT.md)
+- [Ingestion contract](docs/INGESTION-CONTRACT.md)
+- [Navigation contract](docs/NAVIGATION-CONTRACT.md)
+- [Navigation authority boundary](docs/NAVIGATION-AUTHORITY-BOUNDARY.md)
+- [Watcher host](docs/phase5-watcher-host.md)
+- [Identity and MCP Draft.2](docs/phase6-agent-identity-mcp-draft2.md)
+- [Version/profile compatibility](docs/VERSION-PROFILE-COMPATIBILITY.md)
 
 ## License
 
-First-party software is licensed under Apache-2.0. Documentation and original
-graphics are licensed under CC BY 4.0 as described in [LICENSE](./LICENSE).
-See [NOTICE](NOTICE), [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and
+First-party software is Apache-2.0. Documentation and original graphics are
+CC BY 4.0 as described in [LICENSE](LICENSE). See [NOTICE](NOTICE),
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and
 [TRADEMARKS.md](TRADEMARKS.md).

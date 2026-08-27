@@ -12,11 +12,17 @@
   "policyRef": {
     "id": "fixture:bounded-derived-memory",
     "version": "1.0.0",
-    "digest": "sha256:15a839802b373661c54d3a97b268db49291d84e0ac8aa9b42aaeed9eac4b94a4"
+    "digest": "sha256:52952e308d544a2e3778a9428e6a93b24b57ec7260ae59b45a0b0b10e33b989d"
   },
   "inputHashes": [
-    { "name": "source-packet", "digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666" },
-    { "name": "semantic-assessment", "digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777" }
+    {
+      "name": "source-packet",
+      "digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    {
+      "name": "semantic-assessment",
+      "digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+    }
   ],
   "validity": {
     "valid": true,

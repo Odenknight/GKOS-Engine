@@ -38,6 +38,7 @@
     "inputHashes": {
       "type": "array",
       "minItems": 1,
+      "uniqueItems": true,
       "items": { "$ref": "#/$defs/namedHash" }
     },
     "validity": {
@@ -67,6 +68,7 @@
         "receiptHash": { "$ref": "#/$defs/sha256" },
         "detectedTriggers": {
           "type": "array",
+          "uniqueItems": true,
           "items": { "$ref": "#/$defs/trigger" }
         }
       }

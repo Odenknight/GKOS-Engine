@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema", "contract", "contractVersion", "requestId", "idempotencyKey", "subjectId",
-    "provider", "engine", "schemaHashes", "reasonCodesHash", "policy",
+    "provider", "engine", "schemaHashes", "reasonCodesHash", "semanticRulesHash", "policy",
     "dependencyClosureHash", "requestHash", "inputHashes", "reviewerAssessmentHash",
     "reviewerRecommendedLane", "stage", "outcome", "reasonCodes", "triggerCodes",
     "validationIssues", "authorityState", "materializationAuthorized", "decisionReceiptHash"
@@ -22,6 +22,9 @@
     "engine": { "$ref": "#/$defs/engine" },
     "schemaHashes": { "$ref": "#/$defs/schemaHashes" },
     "reasonCodesHash": { "$ref": "#/$defs/sha256" },
+    "semanticRulesHash": {
+      "const": "sha256:e191a663d29dd2e7f41a1e6b2881ddf4a01190498c980346799209e861246aae"
+    },
     "policy": {
       "type": "object",
       "additionalProperties": false,
@@ -34,7 +37,7 @@
     },
     "dependencyClosureHash": { "$ref": "#/$defs/sha256" },
     "requestHash": { "$ref": "#/$defs/sha256" },
-    "inputHashes": { "type": "array", "items": { "$ref": "#/$defs/namedHash" } },
+    "inputHashes": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/namedHash" } },
     "reviewerAssessmentHash": {
       "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
     },
@@ -79,8 +82,8 @@
       "then": {
         "properties": {
           "reasonCodes": { "const": ["AUTO_ALLOWLIST_MATCH"] },
-          "triggerCodes": { "maxItems": 0 },
-          "validationIssues": { "maxItems": 0 }
+          "triggerCodes": { "type": "array", "maxItems": 0 },
+          "validationIssues": { "type": "array", "maxItems": 0 }
         }
       }
     },
@@ -89,8 +92,8 @@
       "then": {
         "properties": {
           "reasonCodes": { "const": ["PRIORITY_TRIGGER"] },
-          "triggerCodes": { "minItems": 1 },
-          "validationIssues": { "maxItems": 0 }
+          "triggerCodes": { "type": "array", "minItems": 1 },
+          "validationIssues": { "type": "array", "maxItems": 0 }
         }
       }
     },
@@ -102,7 +105,7 @@
             "type": "array", "minItems": 1, "uniqueItems": true,
             "items": { "$ref": "#/$defs/humanReasonCode" }
           },
-          "validationIssues": { "maxItems": 0 }
+          "validationIssues": { "type": "array", "maxItems": 0 }
         }
       }
     }

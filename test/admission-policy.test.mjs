@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import Ajv2020 from "ajv/dist/2020.js";
 
 import { canonicalSha256 } from "../dist/gkos-engine.mjs";
 import {
@@ -13,12 +15,15 @@ import {
   ADMISSION_POLICY_CONTRACT_VERSION,
   ADMISSION_POLICY_REASON_CODES_HASH,
   ADMISSION_POLICY_SCHEMA_HASHES,
+  ADMISSION_POLICY_SEMANTIC_RULES_HASH,
   AdmissionPolicyConfigurationError,
   evaluateAdmissionPolicy,
   validateAdmissionDecisionReceipt,
   validateAdmissionEvaluationRequest,
   validateAdmissionPolicyBundle,
   verifyAdmissionDecisionReceipt,
+  verifyAdmissionDecisionReceiptContext,
+  verifyAdmissionDecisionReceiptSelfHash,
 } from "gkos-engine/admission-policy";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -28,6 +33,21 @@ const load = (path) => JSON.parse(readFileSync(path, "utf8"));
 const vector = (name) => load(join(vectorDir, name));
 const policy = vector("policy.json");
 const sha256 = (path) => `sha256:${createHash("sha256").update(readFileSync(path)).digest("hex")}`;
+
+function applyPatches(value, patches) {
+  const result = structuredClone(value);
+  for (const patch of patches) {
+    assert.equal(patch.op, "add");
+    const segments = patch.path.split("/").slice(1)
+      .map((segment) => segment.replaceAll("~1", "/").replaceAll("~0", "~"));
+    const leaf = segments.pop();
+    let target = result;
+    for (const segment of segments) target = target[segment];
+    if (leaf === "-") target.push(structuredClone(patch.value));
+    else target[leaf] = structuredClone(patch.value);
+  }
+  return result;
+}
 
 function assertStrictObjects(schema, path = "$") {
   if (!schema || typeof schema !== "object") return;
@@ -43,6 +63,7 @@ test("distributed schemas and reason registry match runtime pins", () => {
   assert.equal(sha256(join(contractDir, "policy.schema.json")), ADMISSION_POLICY_SCHEMA_HASHES.policy);
   assert.equal(sha256(join(contractDir, "decision-receipt.schema.json")), ADMISSION_POLICY_SCHEMA_HASHES.decisionReceipt);
   assert.equal(sha256(join(contractDir, "reason-codes.json")), ADMISSION_POLICY_REASON_CODES_HASH);
+  assert.equal(sha256(join(contractDir, "semantic-validation-rules.json")), ADMISSION_POLICY_SEMANTIC_RULES_HASH);
   for (const name of ["request.schema.json", "policy.schema.json", "decision-receipt.schema.json"]) {
     const schema = load(join(contractDir, name));
     assert.equal(schema.$schema, "https://json-schema.org/draft/2020-12/schema");
@@ -54,6 +75,8 @@ test("distributed schemas and reason registry match runtime pins", () => {
   const reviewerRecommendations = ["AUTO_ADMIT_CANDIDATE", "HUMAN_REVIEW", "PRIORITY_HUMAN_REVIEW"];
   assert.equal(policySchema.properties.contract.const, ADMISSION_POLICY_CONTRACT);
   assert.equal(policySchema.properties.contractVersion.const, ADMISSION_POLICY_CONTRACT_VERSION);
+  assert.equal(policySchema.properties.semanticRulesHash.const, ADMISSION_POLICY_SEMANTIC_RULES_HASH);
+  assert.equal(receiptSchema.properties.semanticRulesHash.const, ADMISSION_POLICY_SEMANTIC_RULES_HASH);
   assert.deepEqual(requestSchema.properties.reviewer.properties.recommendedLane.enum, reviewerRecommendations);
   assert.deepEqual(receiptSchema.properties.reviewerRecommendedLane.oneOf[0].enum, reviewerRecommendations);
   assert.deepEqual(receiptSchema.properties.outcome.enum, [...ADMISSION_OUTCOMES]);
@@ -63,22 +86,72 @@ test("distributed schemas and reason registry match runtime pins", () => {
     { $ref: "#/$defs/invalidReasonCode" });
   assert.deepEqual(receiptSchema.allOf[1].then.properties, {
     reasonCodes: { const: ["AUTO_ALLOWLIST_MATCH"] },
-    triggerCodes: { maxItems: 0 },
-    validationIssues: { maxItems: 0 },
+    triggerCodes: { type: "array", maxItems: 0 },
+    validationIssues: { type: "array", maxItems: 0 },
   });
   assert.deepEqual(receiptSchema.allOf[2].then.properties, {
     reasonCodes: { const: ["PRIORITY_TRIGGER"] },
-    triggerCodes: { minItems: 1 },
-    validationIssues: { maxItems: 0 },
+    triggerCodes: { type: "array", minItems: 1 },
+    validationIssues: { type: "array", maxItems: 0 },
   });
   assert.deepEqual(receiptSchema.allOf[3].then.properties.reasonCodes.items,
     { $ref: "#/$defs/humanReasonCode" });
-  assert.deepEqual(receiptSchema.allOf[3].then.properties.validationIssues, { maxItems: 0 });
+  assert.deepEqual(receiptSchema.allOf[3].then.properties.validationIssues, { type: "array", maxItems: 0 });
   const artifactManifest = load(join(contractDir, "artifact-manifest.json"));
   for (const artifact of artifactManifest.artifacts) {
     const path = join(contractDir, artifact.path);
     assert.equal(readFileSync(path).length, artifact.bytes, artifact.path);
     assert.equal(sha256(path), `sha256:${artifact.sha256}`, artifact.path);
+  }
+});
+
+test("contract generation is byte-idempotent over its exact artifact closure", () => {
+  const manifestPath = join(contractDir, "artifact-manifest.json");
+  const beforeManifest = readFileSync(manifestPath);
+  const beforeArtifacts = load(manifestPath).artifacts.map(({ path }) => [
+    path,
+    readFileSync(join(contractDir, path)),
+  ]);
+  execFileSync(process.execPath, [join(root, "scripts", "generate-admission-policy-v1.mjs")], {
+    cwd: root,
+    stdio: "pipe",
+  });
+  assert.deepEqual(readFileSync(manifestPath), beforeManifest);
+  for (const [path, bytes] of beforeArtifacts) {
+    assert.deepEqual(readFileSync(join(contractDir, path)), bytes, path);
+  }
+});
+
+test("Draft 2020-12 schemas and mandatory semantic rules reject adversarial vectors", () => {
+  const ajv = new Ajv2020({ allErrors: true, strict: true });
+  const validators = {
+    policy: ajv.compile(load(join(contractDir, "policy.schema.json"))),
+    request: ajv.compile(load(join(contractDir, "request.schema.json"))),
+    receipt: ajv.compile(load(join(contractDir, "decision-receipt.schema.json"))),
+  };
+  const semanticRules = load(join(contractDir, "semantic-validation-rules.json"));
+  assert.deepEqual(semanticRules.rules.map(({ id }) => id), [
+    "POLICY_DEPENDENCY_ID_VERSION_UNIQUE",
+    "POLICY_TRIGGER_LANES_DISJOINT",
+    "REQUEST_INPUT_NAMES_UNIQUE",
+    "REQUEST_TRIGGER_CODES_UNIQUE",
+  ]);
+  assert.equal(validators.policy(policy), true, JSON.stringify(validators.policy.errors));
+  for (const fixture of vector("manifest.json").cases) {
+    const request = vector(fixture.requestPath);
+    assert.equal(validators.request(request), true, `${fixture.id}: ${JSON.stringify(validators.request.errors)}`);
+  }
+
+  const adversarial = vector("adversarial.json");
+  for (const fixture of adversarial.cases) {
+    const candidate = applyPatches(vector(fixture.basePath), fixture.patches);
+    const schemaValid = validators[fixture.document](candidate);
+    assert.equal(schemaValid, fixture.schemaValid,
+      `${fixture.id}: ${JSON.stringify(validators[fixture.document].errors)}`);
+    const result = fixture.document === "policy"
+      ? validateAdmissionPolicyBundle(candidate)
+      : validateAdmissionEvaluationRequest(candidate);
+    assert.equal(result.valid, fixture.semanticValid, `${fixture.id}: ${JSON.stringify(result.issues)}`);
   }
 });
 
@@ -228,6 +301,7 @@ test("receipt tampering and any bound-input change are detectable", async () => 
   const tampered = structuredClone(receipt);
   tampered.outcome = "HUMAN_REVIEW";
   assert.equal(await verifyAdmissionDecisionReceipt(tampered), false);
+  assert.equal(await verifyAdmissionDecisionReceiptSelfHash(tampered), false);
   assert.deepEqual((await validateAdmissionDecisionReceipt(tampered)).issues,
     ["receipt.decisionReceiptHash:mismatch", "receipt.reasonCodes:invalid-for-outcome"]);
 
@@ -242,6 +316,24 @@ test("receipt tampering and any bound-input change are detectable", async () => 
   const changedReceipt = await evaluateAdmissionPolicy(changed, policy);
   assert.notEqual(changedReceipt.requestHash, receipt.requestHash);
   assert.notEqual(changedReceipt.decisionReceiptHash, receipt.decisionReceiptHash);
+});
+
+test("context verification rejects self-consistent receipts outside their exact request and policy", async () => {
+  const request = vector("request-auto-admit.json");
+  const receipt = await evaluateAdmissionPolicy(request, policy);
+  assert.equal(await verifyAdmissionDecisionReceiptSelfHash(receipt), true);
+  assert.equal(await verifyAdmissionDecisionReceiptContext(receipt, request, policy), true);
+
+  const changedRequest = structuredClone(request);
+  changedRequest.inputHashes[0].digest = `sha256:${"d".repeat(64)}`;
+  assert.equal(await verifyAdmissionDecisionReceiptContext(receipt, changedRequest, policy), false);
+
+  const selfConsistentForgery = structuredClone(receipt);
+  selfConsistentForgery.requestId = "forged-request";
+  const { decisionReceiptHash: _, ...forgedBody } = selfConsistentForgery;
+  selfConsistentForgery.decisionReceiptHash = await canonicalSha256(forgedBody);
+  assert.equal(await verifyAdmissionDecisionReceiptSelfHash(selfConsistentForgery), true);
+  assert.equal(await verifyAdmissionDecisionReceiptContext(selfConsistentForgery, request, policy), false);
 });
 
 test("repinned receipts cannot mix outcome reasons or weaken trigger and diagnostic relations", async () => {

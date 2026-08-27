@@ -1,0 +1,2094 @@
+{
+  "$defs": {
+    "canonical_vault_relative_path": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*[\\\\/]$)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*//)[^\\u0000-\\u001f\\u007f-\\u009f]+$",
+      "type": "string"
+    },
+    "capability_item": {
+      "additionalProperties": false,
+      "properties": {
+        "available": {
+          "const": true
+        },
+        "capability_name": {
+          "enum": [
+            "capability.read.self",
+            "graph.temporal.read",
+            "navigation.audit",
+            "navigation.discover",
+            "record.assess",
+            "record.lineage.read",
+            "record.validate"
+          ]
+        },
+        "reason_code": {
+          "const": null
+        }
+      },
+      "required": [
+        "capability_name",
+        "available",
+        "reason_code"
+      ],
+      "type": "object"
+    },
+    "cursor": {
+      "maxLength": 50,
+      "minLength": 50,
+      "pattern": "^gkcur1_[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$",
+      "type": "string"
+    },
+    "deferred_credential_admin": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "credential_administration"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_effect_execute": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_navigation_effect_execute"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_effect_plan": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_navigation_effect_plan"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_entry": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9_.-]{0,63}$",
+          "type": "string"
+        },
+        "reason_code": {
+          "enum": [
+            "NO_CURRENT_FULL_API",
+            "NO_CLOSED_SCHEMA",
+            "CALLER_BLOB_FORBIDDEN",
+            "AUTHORITY_LOCAL_ONLY",
+            "IRREVERSIBLE_EFFECT_LOCAL_ONLY",
+            "OPTIONAL_ADAPTER_NOT_FOUNDATIONAL",
+            "PROVIDER_SECRET_SURFACE_FORBIDDEN"
+          ]
+        },
+        "reconsideration_gate": {
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "reason_code",
+        "reconsideration_gate"
+      ],
+      "type": "object"
+    },
+    "deferred_governance": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_governance_append"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_graphiti": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "graphiti_adapter"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_identity_admin": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "identity_administration"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_model": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "model_invocation"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_navigation_context": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_navigation_context"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_navigation_diff": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_navigation_diff"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_policy_get": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_policy_get"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_provider": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "provider_configuration"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_record_get": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_record_get"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_record_search": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_record_search"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_reentry_plan": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_reentry_plan"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_related_get": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "gkos_related_get"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "deferred_retrieval": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/deferred_entry"
+        },
+        {
+          "properties": {
+            "name": {
+              "const": "retrieval_adapter"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "diagnostic": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "maxLength": 64,
+          "pattern": "^GKX-[A-Z0-9-]{1,59}$",
+          "type": "string"
+        },
+        "record_ref": {
+          "$ref": "#/$defs/record_ref"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error",
+            "critical"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "record_ref"
+      ],
+      "type": "object"
+    },
+    "error_envelope": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "1.0.0-draft.2"
+        },
+        "error_code": {
+          "maxLength": 63,
+          "pattern": "^GKOS_P6_[A-Z0-9_]{1,55}$",
+          "type": "string"
+        },
+        "error_digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "request_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/uuidv7"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "retry_after_ms": {
+          "anyOf": [
+            {
+              "maximum": 60000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "retryable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "contract_version",
+        "error_code",
+        "request_id",
+        "retryable",
+        "retry_after_ms",
+        "error_digest"
+      ],
+      "type": "object"
+    },
+    "input_capabilities": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    },
+    "input_graph_at_time": {
+      "additionalProperties": false,
+      "properties": {
+        "at": {
+          "$ref": "#/$defs/utc_timestamp"
+        },
+        "cursor": {
+          "$ref": "#/$defs/nullable_cursor"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "scope_ref": {
+          "$ref": "#/$defs/scope_ref"
+        },
+        "state": {
+          "enum": [
+            "valid",
+            "superseded",
+            "not_yet_created",
+            "all"
+          ]
+        }
+      },
+      "required": [
+        "scope_ref",
+        "at",
+        "state",
+        "cursor",
+        "limit"
+      ],
+      "type": "object"
+    },
+    "input_lineage_get": {
+      "additionalProperties": false,
+      "properties": {
+        "cursor": {
+          "$ref": "#/$defs/nullable_cursor"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "record_ref": {
+          "$ref": "#/$defs/record_ref"
+        }
+      },
+      "required": [
+        "record_ref",
+        "cursor",
+        "limit"
+      ],
+      "type": "object"
+    },
+    "input_navigation_audit": {
+      "additionalProperties": false,
+      "properties": {
+        "cursor": {
+          "$ref": "#/$defs/nullable_cursor"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "scope_ref": {
+          "$ref": "#/$defs/scope_ref"
+        },
+        "severity_at_least": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "scope_ref",
+        "severity_at_least",
+        "cursor",
+        "limit"
+      ],
+      "type": "object"
+    },
+    "input_navigation_discover": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scope_ref": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "scope_ref"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "cursor": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ],
+      "properties": {
+        "cursor": {
+          "$ref": "#/$defs/nullable_cursor"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "scope_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/scope_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "scope_ref",
+        "cursor",
+        "limit"
+      ],
+      "type": "object"
+    },
+    "input_record_ref": {
+      "additionalProperties": false,
+      "properties": {
+        "record_ref": {
+          "$ref": "#/$defs/record_ref"
+        }
+      },
+      "required": [
+        "record_ref"
+      ],
+      "type": "object"
+    },
+    "navigation_entry": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_path": {
+          "$ref": "#/$defs/canonical_vault_relative_path"
+        },
+        "child_scope_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/scope_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "classification": {
+          "enum": [
+            "directory",
+            "semantic",
+            "operational"
+          ]
+        },
+        "evidence_codes": {
+          "items": {
+            "maxLength": 64,
+            "pattern": "^[A-Z][A-Z0-9_]{0,63}$",
+            "type": "string"
+          },
+          "maxItems": 32,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "management": {
+          "enum": [
+            "managed",
+            "hybrid",
+            "unmanaged"
+          ]
+        },
+        "name_standing": {
+          "enum": [
+            "built-in",
+            "promoted",
+            "noncanonical-like",
+            "ordinary"
+          ]
+        },
+        "recognized_moc_name": {
+          "type": "boolean"
+        },
+        "record_ref": {
+          "$ref": "#/$defs/record_ref"
+        }
+      },
+      "required": [
+        "record_ref",
+        "child_scope_ref",
+        "canonical_path",
+        "classification",
+        "management",
+        "name_standing",
+        "recognized_moc_name",
+        "evidence_codes"
+      ],
+      "type": "object"
+    },
+    "navigation_finding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "maxLength": 64,
+          "pattern": "^NAV_[A-Z0-9_]{1,59}$",
+          "type": "string"
+        },
+        "record_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/record_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "record_ref"
+      ],
+      "type": "object"
+    },
+    "nullable_basis_points": {
+      "anyOf": [
+        {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nullable_cursor": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/cursor"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "page_input": {
+      "additionalProperties": false,
+      "properties": {
+        "cursor": {
+          "$ref": "#/$defs/nullable_cursor"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cursor",
+        "limit"
+      ],
+      "type": "object"
+    },
+    "page_result": {
+      "additionalProperties": false,
+      "properties": {
+        "has_more": {
+          "type": "boolean"
+        },
+        "limit": {
+          "maximum": 100,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "next_cursor": {
+          "$ref": "#/$defs/nullable_cursor"
+        },
+        "snapshot_id": {
+          "$ref": "#/$defs/uuidv7"
+        }
+      },
+      "required": [
+        "limit",
+        "has_more",
+        "next_cursor",
+        "snapshot_id"
+      ],
+      "type": "object"
+    },
+    "positive_safe_integer": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "record_ref": {
+      "maxLength": 29,
+      "minLength": 29,
+      "pattern": "^gkrec1_[A-Za-z0-9_-]{21}[AQgw]$",
+      "type": "string"
+    },
+    "record_summary": {
+      "additionalProperties": false,
+      "properties": {
+        "canonical_path": {
+          "$ref": "#/$defs/canonical_vault_relative_path"
+        },
+        "head": {
+          "type": "boolean"
+        },
+        "record_ref": {
+          "$ref": "#/$defs/record_ref"
+        },
+        "superseded": {
+          "type": "boolean"
+        },
+        "uid": {
+          "anyOf": [
+            {
+              "maxLength": 36,
+              "minLength": 36,
+              "pattern": "^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89AaBb][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "valid_at": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/utc_timestamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "record_ref",
+        "uid",
+        "canonical_path",
+        "valid_at",
+        "head",
+        "superseded"
+      ],
+      "type": "object"
+    },
+    "result_capabilities": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "agent_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "auth_epoch": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "authority_generation": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "capabilities": {
+              "items": {
+                "$ref": "#/$defs/capability_item"
+              },
+              "maxItems": 7,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "contract_version": {
+              "const": "1.0.0-draft.2"
+            },
+            "policy_decision_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "request_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "result_digest": {
+              "$ref": "#/$defs/sha256"
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "agent_id",
+            "auth_epoch",
+            "authority_generation",
+            "policy_decision_id",
+            "capabilities",
+            "result_digest"
+          ],
+          "type": "object"
+        },
+        {
+          "$ref": "#/$defs/tool_error_structured_content"
+        }
+      ],
+      "type": "object"
+    },
+    "result_graph_at_time": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "agent_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "at": {
+              "$ref": "#/$defs/utc_timestamp"
+            },
+            "auth_epoch": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "authority_generation": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "contract_version": {
+              "const": "1.0.0-draft.2"
+            },
+            "items": {
+              "items": {
+                "$ref": "#/$defs/record_summary"
+              },
+              "maxItems": 100,
+              "type": "array"
+            },
+            "page": {
+              "$ref": "#/$defs/page_result"
+            },
+            "policy_decision_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "request_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "result_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "scope_ref": {
+              "$ref": "#/$defs/scope_ref"
+            },
+            "state": {
+              "enum": [
+                "valid",
+                "superseded",
+                "not_yet_created",
+                "all"
+              ]
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "agent_id",
+            "auth_epoch",
+            "authority_generation",
+            "policy_decision_id",
+            "scope_ref",
+            "at",
+            "state",
+            "items",
+            "page",
+            "result_digest"
+          ],
+          "type": "object"
+        },
+        {
+          "$ref": "#/$defs/tool_error_structured_content"
+        }
+      ],
+      "type": "object"
+    },
+    "result_lineage_get": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "agent_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "auth_epoch": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "authority_generation": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "contract_version": {
+              "const": "1.0.0-draft.2"
+            },
+            "items": {
+              "items": {
+                "$ref": "#/$defs/record_summary"
+              },
+              "maxItems": 100,
+              "type": "array"
+            },
+            "page": {
+              "$ref": "#/$defs/page_result"
+            },
+            "policy_decision_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "request_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "result_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "root_record_ref": {
+              "$ref": "#/$defs/record_ref"
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "agent_id",
+            "auth_epoch",
+            "authority_generation",
+            "policy_decision_id",
+            "root_record_ref",
+            "items",
+            "page",
+            "result_digest"
+          ],
+          "type": "object"
+        },
+        {
+          "$ref": "#/$defs/tool_error_structured_content"
+        }
+      ],
+      "type": "object"
+    },
+    "result_navigation_audit": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "agent_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "artifact_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "auth_epoch": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "authority_generation": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "contract_version": {
+              "const": "1.0.0-draft.2"
+            },
+            "items": {
+              "items": {
+                "$ref": "#/$defs/navigation_finding"
+              },
+              "maxItems": 100,
+              "type": "array"
+            },
+            "page": {
+              "$ref": "#/$defs/page_result"
+            },
+            "policy_decision_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "request_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "result_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "scope_ref": {
+              "$ref": "#/$defs/scope_ref"
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "agent_id",
+            "auth_epoch",
+            "authority_generation",
+            "policy_decision_id",
+            "scope_ref",
+            "artifact_digest",
+            "items",
+            "page",
+            "result_digest"
+          ],
+          "type": "object"
+        },
+        {
+          "$ref": "#/$defs/tool_error_structured_content"
+        }
+      ],
+      "type": "object"
+    },
+    "result_navigation_discover": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "agent_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "artifact_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "auth_epoch": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "authority_generation": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "contract_version": {
+              "const": "1.0.0-draft.2"
+            },
+            "items": {
+              "items": {
+                "$ref": "#/$defs/navigation_entry"
+              },
+              "maxItems": 100,
+              "type": "array"
+            },
+            "page": {
+              "$ref": "#/$defs/page_result"
+            },
+            "policy_decision_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "request_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "result_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "scope_ref": {
+              "$ref": "#/$defs/scope_ref"
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "agent_id",
+            "auth_epoch",
+            "authority_generation",
+            "policy_decision_id",
+            "scope_ref",
+            "artifact_digest",
+            "items",
+            "page",
+            "result_digest"
+          ],
+          "type": "object"
+        },
+        {
+          "$ref": "#/$defs/tool_error_structured_content"
+        }
+      ],
+      "type": "object"
+    },
+    "result_record_assess": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "agent_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "auth_epoch": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "authority_generation": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "contract_version": {
+              "const": "1.0.0-draft.2"
+            },
+            "diagnostic_codes": {
+              "items": {
+                "maxLength": 64,
+                "pattern": "^GKX-[A-Z0-9-]{1,59}$",
+                "type": "string"
+              },
+              "maxItems": 200,
+              "type": "array"
+            },
+            "exclusions": {
+              "items": {
+                "enum": [
+                  "structural_completeness",
+                  "provenance_quality",
+                  "evidence_support",
+                  "relationship_integrity",
+                  "temporal_freshness",
+                  "contradiction_status",
+                  "review_readiness",
+                  "overall"
+                ]
+              },
+              "maxItems": 8,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "interpretation": {
+              "const": "documentation-and-support-quality-not-truth"
+            },
+            "policy_decision_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "profile": {
+              "const": "gkx-2.3-validating-projection"
+            },
+            "record_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "record_ref": {
+              "$ref": "#/$defs/record_ref"
+            },
+            "request_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "result_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "scores_basis_points": {
+              "additionalProperties": false,
+              "properties": {
+                "contradiction_status": {
+                  "$ref": "#/$defs/nullable_basis_points"
+                },
+                "evidence_support": {
+                  "$ref": "#/$defs/nullable_basis_points"
+                },
+                "overall": {
+                  "$ref": "#/$defs/nullable_basis_points"
+                },
+                "provenance_quality": {
+                  "$ref": "#/$defs/nullable_basis_points"
+                },
+                "relationship_integrity": {
+                  "$ref": "#/$defs/nullable_basis_points"
+                },
+                "review_readiness": {
+                  "$ref": "#/$defs/nullable_basis_points"
+                },
+                "structural_completeness": {
+                  "$ref": "#/$defs/nullable_basis_points"
+                },
+                "temporal_freshness": {
+                  "$ref": "#/$defs/nullable_basis_points"
+                }
+              },
+              "required": [
+                "structural_completeness",
+                "provenance_quality",
+                "evidence_support",
+                "relationship_integrity",
+                "temporal_freshness",
+                "contradiction_status",
+                "review_readiness",
+                "overall"
+              ],
+              "type": "object"
+            },
+            "truth_authority": {
+              "const": false
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "agent_id",
+            "auth_epoch",
+            "authority_generation",
+            "policy_decision_id",
+            "record_ref",
+            "record_digest",
+            "profile",
+            "scores_basis_points",
+            "exclusions",
+            "diagnostic_codes",
+            "interpretation",
+            "truth_authority",
+            "result_digest"
+          ],
+          "type": "object"
+        },
+        {
+          "$ref": "#/$defs/tool_error_structured_content"
+        }
+      ],
+      "type": "object"
+    },
+    "result_record_validate": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "agent_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "auth_epoch": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "authority_generation": {
+              "$ref": "#/$defs/positive_safe_integer"
+            },
+            "contract_version": {
+              "const": "1.0.0-draft.2"
+            },
+            "diagnostics": {
+              "items": {
+                "$ref": "#/$defs/diagnostic"
+              },
+              "maxItems": 200,
+              "type": "array"
+            },
+            "policy_decision_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "record_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "record_ref": {
+              "$ref": "#/$defs/record_ref"
+            },
+            "request_id": {
+              "$ref": "#/$defs/uuidv7"
+            },
+            "result_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "valid": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "contract_version",
+            "request_id",
+            "agent_id",
+            "auth_epoch",
+            "authority_generation",
+            "policy_decision_id",
+            "record_ref",
+            "record_digest",
+            "valid",
+            "diagnostics",
+            "result_digest"
+          ],
+          "type": "object"
+        },
+        {
+          "$ref": "#/$defs/tool_error_structured_content"
+        }
+      ],
+      "type": "object"
+    },
+    "safe_integer": {
+      "maximum": 9007199254740991,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "scope_ref": {
+      "maxLength": 29,
+      "minLength": 29,
+      "pattern": "^gkscp1_[A-Za-z0-9_-]{21}[AQgw]$",
+      "type": "string"
+    },
+    "sha256": {
+      "maxLength": 71,
+      "minLength": 71,
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "tool_capabilities": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/tool_entry"
+        },
+        {
+          "properties": {
+            "core_operation": {
+              "const": "capability.list_effective"
+            },
+            "full_api": {
+              "const": [
+                "getNavigationCapabilities"
+              ]
+            },
+            "input_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/input_capabilities"
+            },
+            "max_result_bytes": {
+              "const": 262144
+            },
+            "name": {
+              "const": "gkos_capabilities"
+            },
+            "ordering": {
+              "const": [
+                "capability_name:asc"
+              ]
+            },
+            "output_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/result_capabilities"
+            },
+            "pagination": {
+              "const": "none"
+            },
+            "policy_operations": {
+              "const": [
+                "capability.read.self"
+              ]
+            },
+            "private_dependencies": {
+              "const": []
+            },
+            "side_effect_class": {
+              "const": "read"
+            },
+            "timeout_ms": {
+              "const": 5000
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "tool_entry": {
+      "additionalProperties": false,
+      "properties": {
+        "_meta": {
+          "additionalProperties": false,
+          "properties": {
+            "gkos.dev/contract-version": {
+              "const": "1.0.0-draft.2"
+            },
+            "gkos.dev/registry-version": {
+              "const": "1.0.0-draft.7"
+            }
+          },
+          "required": [
+            "gkos.dev/contract-version",
+            "gkos.dev/registry-version"
+          ],
+          "type": "object"
+        },
+        "annotations": {
+          "additionalProperties": false,
+          "properties": {
+            "destructiveHint": {
+              "const": false
+            },
+            "idempotentHint": {
+              "const": true
+            },
+            "openWorldHint": {
+              "const": false
+            },
+            "readOnlyHint": {
+              "const": true
+            }
+          },
+          "required": [
+            "readOnlyHint",
+            "destructiveHint",
+            "idempotentHint",
+            "openWorldHint"
+          ],
+          "type": "object"
+        },
+        "authority": {
+          "const": "PUBLIC_AUTHENTICATED"
+        },
+        "core_operation": {
+          "maxLength": 64,
+          "pattern": "^[a-z][a-z0-9_.]{0,63}$",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string"
+        },
+        "full_api": {
+          "items": {
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_.]{0,127}$",
+            "type": "string"
+          },
+          "maxItems": 4,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "input_schema_ref": {
+          "maxLength": 160,
+          "pattern": "^tool-registry\\.schema\\.json#/\\$defs/[a-z][a-z0-9_]{0,63}$",
+          "type": "string"
+        },
+        "max_result_bytes": {
+          "maximum": 1048576,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "name": {
+          "maxLength": 63,
+          "pattern": "^gkos_[a-z0-9_]{1,58}$",
+          "type": "string"
+        },
+        "ordering": {
+          "items": {
+            "maxLength": 64,
+            "pattern": "^[a-z][a-z0-9_.:-]{0,63}$",
+            "type": "string"
+          },
+          "maxItems": 8,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "output_schema_ref": {
+          "maxLength": 160,
+          "pattern": "^tool-registry\\.schema\\.json#/\\$defs/[a-z][a-z0-9_]{0,63}$",
+          "type": "string"
+        },
+        "output_variants": {
+          "const": [
+            "success",
+            "error_envelope"
+          ]
+        },
+        "pagination": {
+          "enum": [
+            "none",
+            "stateful_snapshot_cursor"
+          ]
+        },
+        "policy_operations": {
+          "items": {
+            "maxLength": 64,
+            "pattern": "^[a-z][a-z0-9_.]{0,63}$",
+            "type": "string"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "private_dependencies": {
+          "items": {
+            "maxLength": 64,
+            "pattern": "^[a-z][a-z0-9_.]{0,63}$",
+            "type": "string"
+          },
+          "maxItems": 7,
+          "minItems": 0,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "side_effect_class": {
+          "enum": [
+            "read",
+            "compute_only",
+            "proposal_only"
+          ]
+        },
+        "timeout_ms": {
+          "enum": [
+            5000,
+            10000,
+            15000,
+            20000,
+            30000
+          ]
+        },
+        "title": {
+          "maxLength": 80,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "title",
+        "description",
+        "authority",
+        "core_operation",
+        "full_api",
+        "private_dependencies",
+        "policy_operations",
+        "side_effect_class",
+        "timeout_ms",
+        "max_result_bytes",
+        "pagination",
+        "ordering",
+        "input_schema_ref",
+        "output_schema_ref",
+        "output_variants",
+        "annotations",
+        "_meta"
+      ],
+      "type": "object"
+    },
+    "tool_error_structured_content": {
+      "additionalProperties": false,
+      "properties": {
+        "error": {
+          "$ref": "#/$defs/error_envelope"
+        }
+      },
+      "required": [
+        "error"
+      ],
+      "type": "object"
+    },
+    "tool_graph_at_time": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/tool_entry"
+        },
+        {
+          "properties": {
+            "core_operation": {
+              "const": "graph.temporal.read"
+            },
+            "full_api": {
+              "const": [
+                "projectAtTime"
+              ]
+            },
+            "input_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/input_graph_at_time"
+            },
+            "max_result_bytes": {
+              "const": 1048576
+            },
+            "name": {
+              "const": "gkos_graph_at_time"
+            },
+            "ordering": {
+              "const": [
+                "valid_at:asc",
+                "record_ref:asc"
+              ]
+            },
+            "output_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/result_graph_at_time"
+            },
+            "pagination": {
+              "const": "stateful_snapshot_cursor"
+            },
+            "policy_operations": {
+              "const": [
+                "graph.temporal.read"
+              ]
+            },
+            "private_dependencies": {
+              "const": [
+                "scope_ref.resolve",
+                "physical_path.qualify",
+                "snapshot.create",
+                "cursor.issue",
+                "record_ref.discover",
+                "record_ref.issue"
+              ]
+            },
+            "side_effect_class": {
+              "const": "compute_only"
+            },
+            "timeout_ms": {
+              "const": 20000
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "tool_lineage_get": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/tool_entry"
+        },
+        {
+          "properties": {
+            "core_operation": {
+              "const": "record.lineage.read"
+            },
+            "full_api": {
+              "const": [
+                "GkxIndex.getRecords",
+                "GkxIndex.graph"
+              ]
+            },
+            "input_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/input_lineage_get"
+            },
+            "max_result_bytes": {
+              "const": 1048576
+            },
+            "name": {
+              "const": "gkos_lineage_get"
+            },
+            "ordering": {
+              "const": [
+                "valid_at:asc",
+                "record_ref:asc"
+              ]
+            },
+            "output_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/result_lineage_get"
+            },
+            "pagination": {
+              "const": "stateful_snapshot_cursor"
+            },
+            "policy_operations": {
+              "const": [
+                "record.discover",
+                "record.lineage.read"
+              ]
+            },
+            "private_dependencies": {
+              "const": [
+                "record_ref.resolve",
+                "physical_path.qualify",
+                "record_ref.issue",
+                "snapshot.create",
+                "cursor.issue"
+              ]
+            },
+            "side_effect_class": {
+              "const": "read"
+            },
+            "timeout_ms": {
+              "const": 10000
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "tool_navigation_audit": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/tool_entry"
+        },
+        {
+          "properties": {
+            "core_operation": {
+              "const": "navigation.audit"
+            },
+            "full_api": {
+              "const": [
+                "auditNavigation"
+              ]
+            },
+            "input_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/input_navigation_audit"
+            },
+            "max_result_bytes": {
+              "const": 1048576
+            },
+            "name": {
+              "const": "gkos_navigation_audit"
+            },
+            "ordering": {
+              "const": [
+                "severity:desc",
+                "code:asc",
+                "record_ref:asc"
+              ]
+            },
+            "output_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/result_navigation_audit"
+            },
+            "pagination": {
+              "const": "stateful_snapshot_cursor"
+            },
+            "policy_operations": {
+              "const": [
+                "navigation.discover",
+                "navigation.audit"
+              ]
+            },
+            "private_dependencies": {
+              "const": [
+                "scope_ref.resolve",
+                "physical_path.qualify",
+                "record_ref.discover",
+                "record_ref.issue",
+                "snapshot.create",
+                "cursor.issue"
+              ]
+            },
+            "side_effect_class": {
+              "const": "compute_only"
+            },
+            "timeout_ms": {
+              "const": 30000
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "tool_navigation_discover": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/tool_entry"
+        },
+        {
+          "properties": {
+            "core_operation": {
+              "const": "navigation.discover"
+            },
+            "full_api": {
+              "const": [
+                "discoverNavigation"
+              ]
+            },
+            "input_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/input_navigation_discover"
+            },
+            "max_result_bytes": {
+              "const": 1048576
+            },
+            "name": {
+              "const": "gkos_navigation_discover"
+            },
+            "ordering": {
+              "const": [
+                "classification:asc",
+                "canonical_path:asc",
+                "record_ref:asc"
+              ]
+            },
+            "output_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/result_navigation_discover"
+            },
+            "pagination": {
+              "const": "stateful_snapshot_cursor"
+            },
+            "policy_operations": {
+              "const": [
+                "navigation.discover"
+              ]
+            },
+            "private_dependencies": {
+              "const": [
+                "scope_ref.resolve",
+                "physical_path.qualify",
+                "record_ref.discover",
+                "record_ref.issue",
+                "scope_ref.issue",
+                "snapshot.create",
+                "cursor.issue"
+              ]
+            },
+            "side_effect_class": {
+              "const": "compute_only"
+            },
+            "timeout_ms": {
+              "const": 20000
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "tool_record_assess": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/tool_entry"
+        },
+        {
+          "properties": {
+            "core_operation": {
+              "const": "record.assess"
+            },
+            "full_api": {
+              "const": [
+                "buildGkx23Projection",
+                "assessGkx23"
+              ]
+            },
+            "input_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/input_record_ref"
+            },
+            "max_result_bytes": {
+              "const": 262144
+            },
+            "name": {
+              "const": "gkos_record_assess"
+            },
+            "ordering": {
+              "const": [
+                "code:asc"
+              ]
+            },
+            "output_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/result_record_assess"
+            },
+            "pagination": {
+              "const": "none"
+            },
+            "policy_operations": {
+              "const": [
+                "record.discover",
+                "record.assess"
+              ]
+            },
+            "private_dependencies": {
+              "const": [
+                "record_ref.resolve",
+                "physical_path.qualify"
+              ]
+            },
+            "side_effect_class": {
+              "const": "compute_only"
+            },
+            "timeout_ms": {
+              "const": 15000
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "tool_record_validate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/tool_entry"
+        },
+        {
+          "properties": {
+            "core_operation": {
+              "const": "record.validate"
+            },
+            "full_api": {
+              "const": [
+                "parseGkx",
+                "parseGkx23Frontmatter"
+              ]
+            },
+            "input_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/input_record_ref"
+            },
+            "max_result_bytes": {
+              "const": 262144
+            },
+            "name": {
+              "const": "gkos_record_validate"
+            },
+            "ordering": {
+              "const": [
+                "severity:desc",
+                "code:asc",
+                "record_ref:asc"
+              ]
+            },
+            "output_schema_ref": {
+              "const": "tool-registry.schema.json#/$defs/result_record_validate"
+            },
+            "pagination": {
+              "const": "none"
+            },
+            "policy_operations": {
+              "const": [
+                "record.discover",
+                "record.validate"
+              ]
+            },
+            "private_dependencies": {
+              "const": [
+                "record_ref.resolve",
+                "physical_path.qualify"
+              ]
+            },
+            "side_effect_class": {
+              "const": "compute_only"
+            },
+            "timeout_ms": {
+              "const": 10000
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "utc_timestamp": {
+      "format": "date-time",
+      "maxLength": 24,
+      "minLength": 24,
+      "pattern": "^(197[0-9]|19[89][0-9]|[2-9][0-9]{3})-(0[1-9]|1[0-2])-([0-2][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "type": "string"
+    },
+    "uuidv7": {
+      "maxLength": 36,
+      "minLength": 36,
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    }
+  },
+  "$id": "https://gkos.example/contracts/phase6/mcp-tool-registry/1.0.0-draft.7/schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "const": "1.0.0-draft.2"
+    },
+    "core_error_registry": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "1.0.0-draft.2"
+        },
+        "error_count": {
+          "const": 53
+        },
+        "proposal_sha256": {
+          "const": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5"
+        }
+      },
+      "required": [
+        "contract_version",
+        "proposal_sha256",
+        "error_count"
+      ],
+      "type": "object"
+    },
+    "core_operation_inventory": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "const": "1.0.0-draft.2"
+        },
+        "product_instance_path": {
+          "const": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/operation-inventory.json"
+        },
+        "product_schema_path": {
+          "const": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/operation-inventory.schema.json"
+        },
+        "proposal_sha256": {
+          "const": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87"
+        }
+      },
+      "required": [
+        "contract_version",
+        "proposal_sha256",
+        "product_schema_path",
+        "product_instance_path"
+      ],
+      "type": "object"
+    },
+    "deferred_tools": {
+      "items": false,
+      "maxItems": 16,
+      "minItems": 16,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/deferred_record_get"
+        },
+        {
+          "$ref": "#/$defs/deferred_record_search"
+        },
+        {
+          "$ref": "#/$defs/deferred_related_get"
+        },
+        {
+          "$ref": "#/$defs/deferred_policy_get"
+        },
+        {
+          "$ref": "#/$defs/deferred_navigation_context"
+        },
+        {
+          "$ref": "#/$defs/deferred_navigation_diff"
+        },
+        {
+          "$ref": "#/$defs/deferred_reentry_plan"
+        },
+        {
+          "$ref": "#/$defs/deferred_effect_plan"
+        },
+        {
+          "$ref": "#/$defs/deferred_effect_execute"
+        },
+        {
+          "$ref": "#/$defs/deferred_governance"
+        },
+        {
+          "$ref": "#/$defs/deferred_identity_admin"
+        },
+        {
+          "$ref": "#/$defs/deferred_credential_admin"
+        },
+        {
+          "$ref": "#/$defs/deferred_graphiti"
+        },
+        {
+          "$ref": "#/$defs/deferred_retrieval"
+        },
+        {
+          "$ref": "#/$defs/deferred_model"
+        },
+        {
+          "$ref": "#/$defs/deferred_provider"
+        }
+      ],
+      "type": "array"
+    },
+    "full_source_commit": {
+      "const": "808d875b557f4cfd2bb0addccba44d70c9748f35"
+    },
+    "mcp_protocol_version": {
+      "const": "2025-11-25"
+    },
+    "registry_version": {
+      "const": "1.0.0-draft.7"
+    },
+    "required_tools": {
+      "items": false,
+      "maxItems": 7,
+      "minItems": 7,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/tool_capabilities"
+        },
+        {
+          "$ref": "#/$defs/tool_record_validate"
+        },
+        {
+          "$ref": "#/$defs/tool_record_assess"
+        },
+        {
+          "$ref": "#/$defs/tool_lineage_get"
+        },
+        {
+          "$ref": "#/$defs/tool_graph_at_time"
+        },
+        {
+          "$ref": "#/$defs/tool_navigation_discover"
+        },
+        {
+          "$ref": "#/$defs/tool_navigation_audit"
+        }
+      ],
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract_version",
+    "mcp_protocol_version",
+    "registry_version",
+    "full_source_commit",
+    "core_operation_inventory",
+    "core_error_registry",
+    "required_tools",
+    "deferred_tools"
+  ],
+  "title": "GKOS Phase 6 initial MCP tool registry proposal",
+  "type": "object"
+}

@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema", "contract", "contractVersion", "policyId", "policyVersion",
-    "provider", "engine", "schemaHashes", "reasonCodesHash",
+    "provider", "engine", "schemaHashes", "reasonCodesHash", "semanticRulesHash",
     "dependencyClosure", "priorityTriggerCodes", "humanReviewTriggerCodes", "autoAllowlist"
   ],
   "properties": {
@@ -19,9 +19,13 @@
     "engine": { "$ref": "#/$defs/engine" },
     "schemaHashes": { "$ref": "#/$defs/schemaHashes" },
     "reasonCodesHash": { "$ref": "#/$defs/sha256" },
+    "semanticRulesHash": {
+      "const": "sha256:e191a663d29dd2e7f41a1e6b2881ddf4a01190498c980346799209e861246aae"
+    },
     "dependencyClosure": {
       "type": "array",
       "minItems": 1,
+      "uniqueItems": true,
       "items": { "$ref": "#/$defs/identity" }
     },
     "priorityTriggerCodes": {

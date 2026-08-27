@@ -1,0 +1,3 @@
+# Technical contract notes
+
+Every accepting object instance boundary is closed under JSON Schema Draft 2020-12. JSON is deterministic UTF-8 with LF. The manifest hashes 33 leaves and excludes itself. Opaque references are path-free and session-bound. Fixtures contain no credential wire values. Draft.2 versions the runtime/package boundary without changing Draft.1 bytes. Streamable HTTP remains loopback-only and credential-bound. The stdio package accepts only an absolute private token-file path, delegates every operation to that loopback authority, bounds frames, results, concurrency, timeouts, and shutdown, and emits generic diagnostics. Deferred tools remain unavailable.

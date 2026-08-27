@@ -22,16 +22,17 @@ const TOKEN_RE = /^[A-Za-z0-9][A-Za-z0-9._:/-]{0,254}$/;
 
 /** These pins are hashes of the distributed v1 contract artifacts. */
 export const ADMISSION_POLICY_SCHEMA_HASHES = deepFreeze({
-  request: "sha256:ab40525c7fdec86134ec12fb4b72009e2cfd3810dd8c6aa2357a2ed03c19da8e",
-  policy: "sha256:8a66821d79f968e3883f5053616cd3541ed1f2932db0efc1e9c77f1ddce8a8f8",
-  decisionReceipt: "sha256:1298a3e7d29bee3966c9c647bb65143906398be0e7d0674165b90d666015d7ae",
+  request: "sha256:2288ae493a6fb3e60e0a6c5b89880c5c8f38c735c13949b7b8c67d309dada2f1",
+  policy: "sha256:e08dd3d96c770a3568bae4ecf9bea37addde944c2c806d2467eac565588b8d48",
+  decisionReceipt: "sha256:db32e1fc39233b09ba746be9123912bb0c47a1246e2609e992e02e090d66befb",
 });
 
 export const ADMISSION_POLICY_REASON_CODES_HASH = "sha256:5ce8da908102ddeebacb46d1aba0f62bb1776d7416fad89e4c8c5aae4f51a8e3";
+export const ADMISSION_POLICY_SEMANTIC_RULES_HASH = "sha256:e191a663d29dd2e7f41a1e6b2881ddf4a01190498c980346799209e861246aae";
 
 const POLICY_KEYS = [
   "schema", "contract", "contractVersion", "policyId", "policyVersion", "provider", "engine",
-  "schemaHashes", "reasonCodesHash", "dependencyClosure", "priorityTriggerCodes", "humanReviewTriggerCodes", "autoAllowlist",
+  "schemaHashes", "reasonCodesHash", "semanticRulesHash", "dependencyClosure", "priorityTriggerCodes", "humanReviewTriggerCodes", "autoAllowlist",
 ] as const;
 const REQUEST_KEYS = [
   "schema", "contract", "contractVersion", "requestId", "idempotencyKey", "subject", "policyRef",
@@ -39,7 +40,7 @@ const REQUEST_KEYS = [
 ] as const;
 const RECEIPT_KEYS = [
   "schema", "contract", "contractVersion", "requestId", "idempotencyKey", "subjectId", "provider", "engine",
-  "schemaHashes", "reasonCodesHash", "policy", "dependencyClosureHash", "requestHash", "inputHashes",
+  "schemaHashes", "reasonCodesHash", "semanticRulesHash", "policy", "dependencyClosureHash", "requestHash", "inputHashes",
   "reviewerAssessmentHash", "reviewerRecommendedLane", "stage", "outcome", "reasonCodes", "triggerCodes",
   "validationIssues", "authorityState", "materializationAuthorized", "decisionReceiptHash",
 ] as const;
@@ -215,6 +216,7 @@ function validatePolicy(value: unknown): string[] {
   validateEngine(policy.engine, "policy.engine", issues);
   validateSchemaHashes(policy.schemaHashes, "policy.schemaHashes", issues);
   hashField(policy.reasonCodesHash, "policy.reasonCodesHash", issues);
+  hashField(policy.semanticRulesHash, "policy.semanticRulesHash", issues);
   if (!Array.isArray(policy.dependencyClosure) || policy.dependencyClosure.length === 0) {
     issues.push("policy.dependencyClosure:invalid-array");
   } else {
@@ -248,6 +250,9 @@ function validatePolicy(value: unknown): string[] {
   }
   if (policy.reasonCodesHash !== ADMISSION_POLICY_REASON_CODES_HASH) {
     issues.push("policy.reasonCodesHash:contract-pin-mismatch");
+  }
+  if (policy.semanticRulesHash !== ADMISSION_POLICY_SEMANTIC_RULES_HASH) {
+    issues.push("policy.semanticRulesHash:contract-pin-mismatch");
   }
   return [...new Set(issues)].sort(codeUnitCompare);
 }
@@ -356,6 +361,7 @@ function validateReceiptShape(value: unknown): string[] {
   validateEngine(receipt.engine, "receipt.engine", issues);
   validateSchemaHashes(receipt.schemaHashes, "receipt.schemaHashes", issues);
   hashField(receipt.reasonCodesHash, "receipt.reasonCodesHash", issues);
+  hashField(receipt.semanticRulesHash, "receipt.semanticRulesHash", issues);
   const receiptSchemaHashes = record(receipt.schemaHashes);
   if (receiptSchemaHashes) {
     for (const key of ["request", "policy", "decisionReceipt"] as const) {
@@ -366,6 +372,9 @@ function validateReceiptShape(value: unknown): string[] {
   }
   if (receipt.reasonCodesHash !== ADMISSION_POLICY_REASON_CODES_HASH) {
     issues.push("receipt.reasonCodesHash:contract-pin-mismatch");
+  }
+  if (receipt.semanticRulesHash !== ADMISSION_POLICY_SEMANTIC_RULES_HASH) {
+    issues.push("receipt.semanticRulesHash:contract-pin-mismatch");
   }
   validateIdentity(receipt.policy, "receipt.policy", issues);
   hashField(receipt.dependencyClosureHash, "receipt.dependencyClosureHash", issues);
@@ -484,9 +493,41 @@ async function finishReceipt(body: AdmissionDecisionReceiptBodyV1): Promise<Admi
   return deepFreeze({ ...body, decisionReceiptHash });
 }
 
-/** Verify the receipt's self-binding hash without granting it any authority. */
-export async function verifyAdmissionDecisionReceipt(receipt: AdmissionDecisionReceiptV1): Promise<boolean> {
+/**
+ * Verify only the receipt's shape, contract pins, and self-binding hash.
+ * This does not establish that a particular request and policy produced it.
+ */
+export async function verifyAdmissionDecisionReceiptSelfHash(receipt: AdmissionDecisionReceiptV1): Promise<boolean> {
   return (await validateAdmissionDecisionReceipt(receipt)).valid;
+}
+
+/**
+ * Backward-compatible self-hash-only verifier. Callers relying on a decision
+ * must use verifyAdmissionDecisionReceiptContext instead.
+ * @deprecated Use verifyAdmissionDecisionReceiptSelfHash for inspection or
+ * verifyAdmissionDecisionReceiptContext for decision reliance.
+ */
+export async function verifyAdmissionDecisionReceipt(receipt: AdmissionDecisionReceiptV1): Promise<boolean> {
+  return verifyAdmissionDecisionReceiptSelfHash(receipt);
+}
+
+/**
+ * Verify a receipt against its exact request and policy by deterministic replay.
+ * No authority is conferred; this only proves contextual consistency.
+ */
+export async function verifyAdmissionDecisionReceiptContext(
+  receipt: AdmissionDecisionReceiptV1,
+  requestValue: unknown,
+  policyValue: unknown,
+): Promise<boolean> {
+  if (!(await verifyAdmissionDecisionReceiptSelfHash(receipt))) return false;
+  try {
+    const replayed = await evaluateAdmissionPolicy(requestValue, policyValue);
+    return replayed.decisionReceiptHash === receipt.decisionReceiptHash
+      && await canonicalSha256(replayed) === await canonicalSha256(receipt);
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -523,6 +564,7 @@ export async function evaluateAdmissionPolicy(
       engine: { ...policy.engine },
       schemaHashes: { ...policy.schemaHashes },
       reasonCodesHash: policy.reasonCodesHash,
+      semanticRulesHash: policy.semanticRulesHash,
       policy: { id: policy.policyId, version: policy.policyVersion, digest: policyHash },
       dependencyClosureHash,
       requestHash,
@@ -563,6 +605,7 @@ export async function evaluateAdmissionPolicy(
       engine: { ...policy.engine },
       schemaHashes: { ...policy.schemaHashes },
       reasonCodesHash: policy.reasonCodesHash,
+      semanticRulesHash: policy.semanticRulesHash,
       policy: { id: policy.policyId, version: policy.policyVersion, digest: policyHash },
       dependencyClosureHash,
       requestHash,
@@ -594,6 +637,7 @@ export async function evaluateAdmissionPolicy(
       engine: { ...policy.engine },
       schemaHashes: { ...policy.schemaHashes },
       reasonCodesHash: policy.reasonCodesHash,
+      semanticRulesHash: policy.semanticRulesHash,
       policy: { id: policy.policyId, version: policy.policyVersion, digest: policyHash },
       dependencyClosureHash,
       requestHash,
@@ -645,6 +689,7 @@ export async function evaluateAdmissionPolicy(
     engine: { ...policy.engine },
     schemaHashes: { ...policy.schemaHashes },
     reasonCodesHash: policy.reasonCodesHash,
+    semanticRulesHash: policy.semanticRulesHash,
     policy: { id: policy.policyId, version: policy.policyVersion, digest: policyHash },
     dependencyClosureHash,
     requestHash,

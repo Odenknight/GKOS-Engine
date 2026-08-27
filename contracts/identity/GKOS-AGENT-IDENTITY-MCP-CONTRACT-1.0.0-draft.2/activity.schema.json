@@ -1,0 +1,241 @@
+{
+  "$id": "activity.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "activity_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    },
+    "activity_seq": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "agent_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    },
+    "auth_epoch": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "authority_generation": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "authority_instance_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    },
+    "contract_version": {
+      "const": "1.0.0-draft.2"
+    },
+    "credential_id": {
+      "maxLength": 31,
+      "minLength": 31,
+      "pattern": "^gkc(?:0|1)_[a-z2-7]{26}$",
+      "type": "string"
+    },
+    "duration_ms": {
+      "maximum": 9007199254740991,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "enum": [
+            "GKOS_P6_PARSE_ERROR",
+            "GKOS_P6_INVALID_REQUEST",
+            "GKOS_P6_INVALID_PARAMS",
+            "GKOS_P6_PEER_FORBIDDEN",
+            "GKOS_P6_HOST_FORBIDDEN",
+            "GKOS_P6_ORIGIN_FORBIDDEN",
+            "GKOS_P6_METHOD_NOT_ALLOWED",
+            "GKOS_P6_DELETE_INVALID",
+            "GKOS_P6_UNSUPPORTED_MEDIA_TYPE",
+            "GKOS_P6_PROTOCOL_VERSION_INVALID",
+            "GKOS_P6_NOT_ACCEPTABLE",
+            "GKOS_P6_JSONRPC_METHOD_NOT_FOUND",
+            "GKOS_P6_UNSUPPORTED_CONTRACT_VERSION",
+            "GKOS_P6_UNKNOWN_OPERATION",
+            "GKOS_P6_PAYLOAD_TOO_LARGE",
+            "GKOS_P6_AUTH_FAILED",
+            "GKOS_P6_OWNER_REQUIRED",
+            "GKOS_P6_POLICY_DENIED",
+            "GKOS_P6_POLICY_INDETERMINATE",
+            "GKOS_P6_SESSION_UNKNOWN",
+            "GKOS_P6_SESSION_EXPIRED",
+            "GKOS_P6_SESSION_STALE",
+            "GKOS_P6_REQUEST_REPLAY_CONFLICT",
+            "GKOS_P6_REQUEST_STALE_AUTHORITY",
+            "GKOS_P6_IDEMPOTENCY_EXPIRED",
+            "GKOS_P6_AGENT_DISABLED",
+            "GKOS_P6_CREDENTIAL_REVOKED",
+            "GKOS_P6_IDENTITY_COLLISION",
+            "GKOS_P6_CREDENTIAL_COLLISION",
+            "GKOS_P6_MAPPING_CONFLICT",
+            "GKOS_P6_STATE_CONFLICT",
+            "GKOS_P6_RESOURCE_NOT_FOUND",
+            "GKOS_P6_RATE_LIMITED",
+            "GKOS_P6_CONCURRENCY_LIMIT",
+            "GKOS_P6_REQUEST_TIMEOUT",
+            "GKOS_P6_REQUEST_CANCELLED",
+            "GKOS_P6_CAPABILITY_UNAVAILABLE",
+            "GKOS_P6_PLATFORM_UNAVAILABLE",
+            "GKOS_P6_BOOTSTRAP_REQUIRED",
+            "GKOS_P6_MIGRATION_MALFORMED",
+            "GKOS_P6_MIGRATION_CONFLICT",
+            "GKOS_P6_MIGRATION_RECOVERY_REQUIRED",
+            "GKOS_P6_AUTHORITY_CORRUPT",
+            "GKOS_P6_DATABASE_CAPACITY",
+            "GKOS_P6_ACTIVITY_CAPACITY",
+            "GKOS_P6_RETENTION_INVALID",
+            "GKOS_P6_CLOCK_INVALID",
+            "GKOS_P6_STORAGE_PERMISSION_INVALID",
+            "GKOS_P6_AUDIT_WRITE_FAILED",
+            "GKOS_P6_EVIDENCE_MISMATCH",
+            "GKOS_P6_SECRET_EXPOSURE",
+            "GKOS_P6_SHUTTING_DOWN",
+            "GKOS_P6_INTERNAL_ERROR"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "finished_at": {
+      "format": "date-time",
+      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "type": "string"
+    },
+    "input_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "metadata": {
+      "additionalProperties": {
+        "type": [
+          "integer",
+          "string",
+          "null"
+        ]
+      },
+      "maxProperties": 16,
+      "propertyNames": {
+        "enum": [
+          "input_bytes",
+          "output_bytes",
+          "item_count",
+          "result_count",
+          "cache_outcome",
+          "side_effect_class"
+        ]
+      },
+      "type": "object"
+    },
+    "operation": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "outcome": {
+      "enum": [
+        "allowed",
+        "denied",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "policy_decision_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    },
+    "record_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "request_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    },
+    "restore_epoch": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "result_digest": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "session_id": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "started_at": {
+      "format": "date-time",
+      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "type": "string"
+    },
+    "transport": {
+      "enum": [
+        "owner_cli",
+        "native_stdio",
+        "loopback_streamable_http",
+        "private_authority",
+        "effect_bridge",
+        "migration_recovery"
+      ]
+    },
+    "vault_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "contract_version",
+    "vault_id",
+    "authority_instance_id",
+    "restore_epoch",
+    "activity_id",
+    "activity_seq",
+    "agent_id",
+    "auth_epoch",
+    "credential_id",
+    "session_id",
+    "request_id",
+    "transport",
+    "authority_generation",
+    "operation",
+    "outcome",
+    "policy_decision_id",
+    "input_digest",
+    "result_digest",
+    "error_code",
+    "started_at",
+    "finished_at",
+    "duration_ms",
+    "metadata",
+    "record_digest"
+  ],
+  "title": "activity",
+  "type": "object"
+}

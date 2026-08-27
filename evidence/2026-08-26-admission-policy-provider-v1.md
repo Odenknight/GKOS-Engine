@@ -2,7 +2,9 @@
 
 Date: 2026-08-26
 
-Base: `Odenknight/GKOS-Engine` main at `2fbd4ec68ec825b09e5194c9878a7ae90a281392` (`2.1.2`)
+Original base: `Odenknight/GKOS-Engine` at `2fbd4ec68ec825b09e5194c9878a7ae90a281392` (`2.1.2`)
+
+Reconciled base: current main at `c0eac9351b73bfa4b93b2c0cb752fd55c0b88933` on 2026-08-27
 
 Branch: `agent/admission-policy-provider-v1`
 Status: implementation evidence only; unratified, untagged, and unreleased
@@ -16,7 +18,8 @@ Status: implementation evidence only; unratified, untagged, and unreleased
 - Synthetic policy and four replay vectors with exact request and receipt hashes.
 - Product-neutral TypeScript types, strict validators, deterministic evaluator,
   receipt verifier, and configuration error.
-- Root and `gkos-engine/admission-policy` package exports.
+- Isolated `gkos-engine/admission-policy` package export; the frozen root export
+  remains unchanged.
 - Build, declaration, pack, public API, replay, precedence, fail-closed,
   tamper, dependency, and purity coverage.
 - Authority-boundary and safe pinning/vendoring documentation.
@@ -45,10 +48,11 @@ values and must not be interpreted as release identities.
    disposition because a trustworthy receipt cannot be formed without valid
    provider/policy bindings. Canonicalizable request failures use
    `REVIEW_INVALID` and remain pre-adjudication.
-4. Runtime validation is dependency-free and mirrors the shipped schemas.
-   Tests bind the raw schema hashes, require every object schema to reject
-   unknown fields, and replay the canonical vectors. A future schema change
-   must change its pin and vectors rather than weakening validation.
+4. Runtime validation uses the shipped Draft 2020-12 schemas plus the mandatory,
+   hash-pinned language-neutral semantic rules for cross-item uniqueness and
+   trigger-lane disjointness that JSON Schema cannot express. Ajv executes the
+   real schemas against positive and adversarial vectors. A future contract
+   change must change its pins and vectors rather than weakening validation.
 5. This proposal does not amend the GKOS Standard. Upstream governance must
    either attach the corresponding Standard proposal/decision or explicitly
    ratify the bounded Engine contract exception before release.
@@ -62,11 +66,15 @@ values and must not be interpreted as release identities.
    lanes. Runtime validation and the distributed receipt schema now enforce the
    same closed, outcome-specific reason sets and substantive trigger/diagnostic
    relations. Adversarial tests repin each mutation before requiring rejection.
+8. Current-main reconciliation made the old receipt verifier's scope explicit:
+   it checks only shape, pins, and a self-hash. The new context verifier replays
+   the exact request and policy and rejects self-consistent receipts from any
+   different context.
 
 ## Code rewrites
 
 No existing algorithm was rewritten. Changes are isolated to a new
-`src/admission-policy/` module, public export/build/package wiring, two test
+`src/admission-policy/` module, subpath export/build/package wiring, two test
 files, new contract artifacts, and documentation/evidence. The package remains
 version `2.1.2` as instructed.
 

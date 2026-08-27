@@ -1,0 +1,39 @@
+{
+  "schema": "gkos.admission-policy.semantic-validation-rules.v1",
+  "contractVersion": "1.0.0",
+  "application": "Apply after successful Draft 2020-12 schema validation. Every rule is mandatory; a failed rule makes the document invalid.",
+  "rules": [
+    {
+      "id": "POLICY_DEPENDENCY_ID_VERSION_UNIQUE",
+      "document": "policy",
+      "operation": "uniqueComposite",
+      "arrayPointer": "/dependencyClosure",
+      "keyPointers": ["/id", "/version"],
+      "issueTemplate": "policy.dependencyClosure[{index}]:duplicate"
+    },
+    {
+      "id": "POLICY_TRIGGER_LANES_DISJOINT",
+      "document": "policy",
+      "operation": "disjointScalarArrays",
+      "leftPointer": "/priorityTriggerCodes",
+      "rightPointer": "/humanReviewTriggerCodes",
+      "issueTemplate": "policy.humanReviewTriggerCodes[{index}]:lane-overlap"
+    },
+    {
+      "id": "REQUEST_INPUT_NAMES_UNIQUE",
+      "document": "request",
+      "operation": "uniqueComposite",
+      "arrayPointer": "/inputHashes",
+      "keyPointers": ["/name"],
+      "issueTemplate": "request.inputHashes[{index}].name:duplicate"
+    },
+    {
+      "id": "REQUEST_TRIGGER_CODES_UNIQUE",
+      "document": "request",
+      "operation": "uniqueComposite",
+      "arrayPointer": "/deterministicChecks/detectedTriggers",
+      "keyPointers": ["/code"],
+      "issueTemplate": "request.deterministicChecks.detectedTriggers[{index}].code:duplicate"
+    }
+  ]
+}

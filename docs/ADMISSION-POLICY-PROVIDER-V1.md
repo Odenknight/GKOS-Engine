@@ -9,8 +9,9 @@ ratified, bounded admission policy. It distinguishes deterministic policy
 evaluation from storage, execution, approval, and materialization. The contract
 contains no product names and does not grant a provider permission to act.
 
-The public TypeScript surface is available from both `gkos-engine` and
-`gkos-engine/admission-policy`. Language-neutral artifacts are under
+The public TypeScript surface is isolated to the
+`gkos-engine/admission-policy` subpath so the frozen root export remains
+unchanged. Language-neutral artifacts are under
 `contracts/admission-policy/1.0.0/`.
 
 ## Outcomes and precedence
@@ -53,12 +54,19 @@ A valid policy bundle binds:
 - provider identifier, version, and digest;
 - Engine name, version, and source commit;
 - policy identifier, version, and canonical digest;
-- exact request, policy, decision-receipt, and reason-code artifact hashes;
+- exact request, policy, decision-receipt, reason-code, and semantic-rule artifact hashes;
 - the complete declared dependency closure; and
-- an explicit artifact-type allowlist.
+- an explicit artifact-type allowlist; and
 - disjoint closed priority and ordinary trigger vocabularies.
 
-The decision receipt additionally binds the canonical request hash, named input
+Draft 2020-12 schemas enforce the portable structural constraints. Four
+cross-item constraints that JSON Schema cannot express—dependency identity
+uniqueness, trigger-lane disjointness, input-name uniqueness, and detected
+trigger-code uniqueness—are defined in the hash-pinned
+`semantic-validation-rules.json` artifact. Conformance requires both schema and
+semantic-rule validation; schema success alone is insufficient.
+
+The decision receipt additionally binds the semantic-rules hash, canonical request hash, named input
 hashes, validity and deterministic-check inputs through that request, reviewer
 assessment hash, dependency-closure hash, outcome, reasons, and its own hash.
 Receipt validation enforces closed lane semantics even when a caller recomputes
@@ -92,8 +100,13 @@ transaction boundaries.
 
 Unknown request and policy fields fail validation. Extensions cannot grant
 authority. Consumers must verify the exact provider, Engine, policy, schema,
-reason-code, dependency, request, input, and receipt pins before relying on a
-decision.
+semantic-rule, reason-code, dependency, request, input, and receipt pins before
+relying on a decision. `verifyAdmissionDecisionReceiptSelfHash()` checks only
+closed receipt shape, pins, and self-consistency. The backward-compatible
+`verifyAdmissionDecisionReceipt()` name has the same explicitly limited
+self-hash semantics. Decision reliance requires
+`verifyAdmissionDecisionReceiptContext(receipt, request, policy)`, which
+re-evaluates the exact request and policy and compares the complete receipt.
 
 ## Pinning and vendoring
 
@@ -102,7 +115,7 @@ must not cite it as a released contract until the repository owner ratifies and
 publishes an exact upstream commit or release.
 
 After ratification, a language-neutral consumer may vendor only the exact
-schema, reason-code, and vector bytes with:
+schema, semantic-rule, reason-code, and vector bytes with:
 
 - upstream repository and commit;
 - raw SHA-256 and byte length per file;
@@ -132,3 +145,6 @@ npm run pack:check
 The vector manifest records exact canonical request and receipt hashes for all
 four outcomes, including a case where priority and ordinary triggers coexist
 and cases where reviewer recommendations disagree with the deterministic lane.
+The adversarial vector set is executed through Ajv's Draft 2020-12 validator and
+the mandatory semantic validator, including cases that necessarily pass the
+schema layer before the portable semantic rules reject them.

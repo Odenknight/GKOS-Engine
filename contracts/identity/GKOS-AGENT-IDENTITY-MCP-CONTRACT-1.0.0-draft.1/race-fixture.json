@@ -1,0 +1,42 @@
+{
+  "contract_version": "1.0.0-draft.1",
+  "kind": "race",
+  "vectors": [
+    {
+      "assertions": [
+        "persistent authority lease serializes mutation",
+        "short SQLite transactions never span effects",
+        "generation and epoch are rechecked"
+      ],
+      "expect": "fail_closed",
+      "id": "disable-before-admit"
+    },
+    {
+      "assertions": [
+        "persistent authority lease serializes mutation",
+        "short SQLite transactions never span effects",
+        "generation and epoch are rechecked"
+      ],
+      "expect": "fail_closed",
+      "id": "disable-after-admit-before-commit"
+    },
+    {
+      "assertions": [
+        "persistent authority lease serializes mutation",
+        "short SQLite transactions never span effects",
+        "generation and epoch are rechecked"
+      ],
+      "expect": "fail_closed",
+      "id": "revoke-before-admit"
+    },
+    {
+      "assertions": [
+        "persistent authority lease serializes mutation",
+        "short SQLite transactions never span effects",
+        "generation and epoch are rechecked"
+      ],
+      "expect": "fail_closed",
+      "id": "restore-generation-change"
+    }
+  ]
+}

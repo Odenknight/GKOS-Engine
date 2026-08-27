@@ -58,12 +58,57 @@ try {
     ["src/gkx.ts", "dist/gkx.mjs"],
     ["src/graphiti-adapter.ts", "dist/graphiti-adapter.mjs"],
     ["src/navigation/index.ts", "dist/navigation.mjs"],
+    ["src/service/index.ts", "dist/service.mjs"],
     ["src/governance/index.ts", "dist/governance.mjs"],
     ["src/admission-policy/index.ts", "dist/admission-policy.mjs"],
   ]) {
     writeFileSync(resolve(root, output), await bundle(entry));
     console.log(`built ${output}`);
   }
+  // Node loopback transport remains separate from the framework-neutral
+  // service contract/view bundle and is repository-private until the frozen
+  // package export gate is explicitly revised.
+  writeFileSync(resolve(root, "dist/service-node.mjs"), await bundle("src/service/node.ts", { platform: "node" }));
+  console.log("built dist/service-node.mjs");
+  // Private compatibility transport for the gkos-mcp-stdio executable. It
+  // delegates to the authenticated loopback service and is not exported.
+  writeFileSync(resolve(root, "dist/service-stdio.mjs"), await bundle("src/service/stdio.ts", { platform: "node" }));
+  console.log("built dist/service-stdio.mjs");
+
+  // Retrieval is a host-plane bundle. Keep node:sqlite and filesystem state
+  // outside the platform-neutral root and NavigationCore bundles.
+  writeFileSync(resolve(root, "dist/retrieval.mjs"), await bundle("src/retrieval/index.ts", { platform: "node" }));
+  console.log("built dist/retrieval.mjs");
+  writeFileSync(resolve(root, "dist/retrieval-host.mjs"), await bundle("src/retrieval/host.ts", { platform: "node" }));
+  console.log("built dist/retrieval-host.mjs");
+  // The CLI corpus scanner needs the same alias/reparse/8.3 semantics as the
+  // retrieval host, but legacy commands must not eagerly load node:sqlite.
+  // Keep the small filesystem boundary in its own lazily imported bundle.
+  writeFileSync(resolve(root, "dist/retrieval-path-security.mjs"), await bundle("src/retrieval/path-security.ts", { platform: "node" }));
+  console.log("built dist/retrieval-path-security.mjs");
+  // Phase-4 raw fixture parsing, coordinator replay, tuning, and guarded output
+  // publication are repository-host-only. Keep them outside the package export
+  // map and ordinary retrieval bundle authority surface.
+  writeFileSync(resolve(root, "dist/retrieval-evaluation-host.mjs"), await bundle("src/retrieval/evaluation-host.ts", { platform: "node" }));
+  console.log("built dist/retrieval-evaluation-host.mjs");
+  // Phase-3 validation/journal authority is a trusted CLI host plane. Keep
+  // parser receipts and rejection envelopes out of ordinary package exports.
+  writeFileSync(resolve(root, "dist/ingest-host.mjs"), await bundle("src/ingest/host.ts", { platform: "node" }));
+  console.log("built dist/ingest-host.mjs");
+  // The exact Phase-3 filesystem scanner is shared by the legacy CLI and the
+  // watcher host. Keeping one private bundle prevents either host from owning
+  // a divergent extension/path/capability grammar.
+  writeFileSync(resolve(root, "dist/ingest-source-scan.mjs"), await bundle("src/ingest/source-scan.ts", { platform: "node" }));
+  console.log("built dist/ingest-source-scan.mjs");
+  // Phase-5 watcher/recovery contracts and pure sealers are a private host
+  // authority. Slice A intentionally exposes no watcher package subpath and
+  // performs no filesystem, SQLite, pointer, service, or adapter operation.
+  writeFileSync(resolve(root, "dist/watcher-contracts.mjs"), await bundle("src/watcher/contracts.ts", { platform: "node" }));
+  console.log("built dist/watcher-contracts.mjs");
+  // Phase-5 Slice-B host runtime. This remains repository-private and is not
+  // added to package exports; `bin/gkos.mjs` is its sole command boundary.
+  writeFileSync(resolve(root, "dist/watcher-host.mjs"), await bundle("src/watcher/host.ts", { platform: "node" }));
+  console.log("built dist/watcher-host.mjs");
 
   // Desktop-agent sidecar entry. Two node-platform bundles from the same
   // source: an ESM bundle for `node dist/...mjs` runs and the test suite, and

@@ -53,6 +53,7 @@ export interface AdmissionPolicyBundleV1 {
   engine: AdmissionEngineIdentityV1;
   schemaHashes: AdmissionSchemaHashesV1;
   reasonCodesHash: string;
+  semanticRulesHash: string;
   dependencyClosure: AdmissionDependencyV1[];
   priorityTriggerCodes: string[];
   humanReviewTriggerCodes: string[];
@@ -142,6 +143,7 @@ export interface AdmissionDecisionReceiptBodyV1 {
   engine: AdmissionEngineIdentityV1;
   schemaHashes: AdmissionSchemaHashesV1;
   reasonCodesHash: string;
+  semanticRulesHash: string;
   policy: {
     id: string;
     version: string;

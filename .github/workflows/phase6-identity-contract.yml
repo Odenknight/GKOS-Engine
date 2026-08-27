@@ -1,0 +1,276 @@
+name: GKOS Phase 6 identity contract qualification
+
+on:
+  push:
+    branches: [codex/phase6-f1-contract-pack]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  NODE_OPTIONS: --disable-warning=ExperimentalWarning
+  CONTRACT_ROOT: contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1
+  GIT_CONFIG_COUNT: 1
+  GIT_CONFIG_KEY_0: core.autocrlf
+  GIT_CONFIG_VALUE_0: 'false'
+
+jobs:
+  p6-f1-contract-linux-node22: &contract_linux
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - name: Execute governed qualification plan and write bound receipt
+        shell: bash
+        run: |
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-linux-node22 \
+            --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-linux-node22-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            ${{ runner.temp }}/focused.tap
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-contract-linux-node23:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps: &contract_steps
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '23', cache: npm }
+      - name: Execute governed qualification plan and write bound receipt
+        shell: bash
+        run: |
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-linux-node23 \
+            --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-linux-node23-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            ${{ runner.temp }}/focused.tap
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-contract-linux-node24:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: npm }
+      - name: Execute governed qualification plan and write bound receipt
+        shell: bash
+        run: |
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-linux-node24 \
+            --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-linux-node24-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            ${{ runner.temp }}/focused.tap
+            ${{ runner.temp }}/full.tap
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-contract-windows-node22: &contract_windows
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - name: Execute governed qualification plan and write bound receipt
+        shell: pwsh
+        run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-windows-node22
+          --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-windows-node22-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            ${{ runner.temp }}/focused.tap
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-contract-windows-node23:
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '23', cache: npm }
+      - name: Execute governed qualification plan and write bound receipt
+        shell: pwsh
+        run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-windows-node23
+          --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-windows-node23-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            ${{ runner.temp }}/focused.tap
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-contract-windows-node24:
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: npm }
+      - name: Execute governed qualification plan and write bound receipt
+        shell: pwsh
+        run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-windows-node24
+          --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-windows-node24-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            ${{ runner.temp }}/focused.tap
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-contract-macos-node22:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - name: Execute governed qualification plan and write bound receipt
+        shell: bash
+        run: |
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-contract-macos-node22 \
+            --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-macos-node22-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            ${{ runner.temp }}/focused.tap
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-schema-adversarial:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - name: Execute governed adversarial qualification plan and write bound receipt
+        shell: bash
+        run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-schema-adversarial
+          --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-adversarial-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            ${{ runner.temp }}/adversarial.tap
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-pack-reproducibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - name: Execute governed pack qualification plan and write bound receipt
+        shell: bash
+        run: |
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-pack-reproducibility \
+            --receipt qualification-receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-contract-pack
+          path: |
+            GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar
+            GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar.sha256
+            qualification-receipt.json
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-secret-scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - name: Execute governed secret-scan qualification plan and write bound receipt
+        shell: bash
+        run: >-
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-secret-scan
+          --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-secret-scan-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            ${{ runner.temp }}/secret-scan.tap
+          retention-days: 90
+          if-no-files-found: error
+
+  p6-f1-artifact-audit:
+    needs: [p6-f1-contract-linux-node22,p6-f1-contract-linux-node23,p6-f1-contract-linux-node24,p6-f1-contract-windows-node22,p6-f1-contract-windows-node23,p6-f1-contract-windows-node24,p6-f1-contract-macos-node22,p6-f1-schema-adversarial,p6-f1-pack-reproducibility,p6-f1-secret-scan]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: npm }
+      - uses: actions/download-artifact@v4
+        with: { path: predecessor-artifacts }
+      - name: Execute governed terminal audit plan and write bound receipt
+        env: { GH_TOKEN: "${{ github.token }}" }
+        shell: bash
+        run: |
+          node scripts/generate-agent-identity-mcp-contract.mjs --qualification-job p6-f1-artifact-audit \
+            --receipt qualification-receipt.json --receipt-evidence qualification-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gkos-p6-f1-terminal-audit-receipt
+          path: |
+            qualification-receipt.json
+            qualification-evidence.json
+            terminal-audit-report.json
+          retention-days: 90
+          if-no-files-found: error

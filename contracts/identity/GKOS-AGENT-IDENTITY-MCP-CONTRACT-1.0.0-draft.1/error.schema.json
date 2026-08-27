@@ -1,0 +1,121 @@
+{
+  "$id": "error.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "code": {
+      "enum": [
+        "GKOS_P6_PARSE_ERROR",
+        "GKOS_P6_INVALID_REQUEST",
+        "GKOS_P6_INVALID_PARAMS",
+        "GKOS_P6_PEER_FORBIDDEN",
+        "GKOS_P6_HOST_FORBIDDEN",
+        "GKOS_P6_ORIGIN_FORBIDDEN",
+        "GKOS_P6_METHOD_NOT_ALLOWED",
+        "GKOS_P6_DELETE_INVALID",
+        "GKOS_P6_UNSUPPORTED_MEDIA_TYPE",
+        "GKOS_P6_PROTOCOL_VERSION_INVALID",
+        "GKOS_P6_NOT_ACCEPTABLE",
+        "GKOS_P6_JSONRPC_METHOD_NOT_FOUND",
+        "GKOS_P6_UNSUPPORTED_CONTRACT_VERSION",
+        "GKOS_P6_UNKNOWN_OPERATION",
+        "GKOS_P6_PAYLOAD_TOO_LARGE",
+        "GKOS_P6_AUTH_FAILED",
+        "GKOS_P6_OWNER_REQUIRED",
+        "GKOS_P6_POLICY_DENIED",
+        "GKOS_P6_POLICY_INDETERMINATE",
+        "GKOS_P6_SESSION_UNKNOWN",
+        "GKOS_P6_SESSION_EXPIRED",
+        "GKOS_P6_SESSION_STALE",
+        "GKOS_P6_REQUEST_REPLAY_CONFLICT",
+        "GKOS_P6_REQUEST_STALE_AUTHORITY",
+        "GKOS_P6_IDEMPOTENCY_EXPIRED",
+        "GKOS_P6_AGENT_DISABLED",
+        "GKOS_P6_CREDENTIAL_REVOKED",
+        "GKOS_P6_IDENTITY_COLLISION",
+        "GKOS_P6_CREDENTIAL_COLLISION",
+        "GKOS_P6_MAPPING_CONFLICT",
+        "GKOS_P6_STATE_CONFLICT",
+        "GKOS_P6_RESOURCE_NOT_FOUND",
+        "GKOS_P6_RATE_LIMITED",
+        "GKOS_P6_CONCURRENCY_LIMIT",
+        "GKOS_P6_REQUEST_TIMEOUT",
+        "GKOS_P6_REQUEST_CANCELLED",
+        "GKOS_P6_CAPABILITY_UNAVAILABLE",
+        "GKOS_P6_PLATFORM_UNAVAILABLE",
+        "GKOS_P6_BOOTSTRAP_REQUIRED",
+        "GKOS_P6_MIGRATION_MALFORMED",
+        "GKOS_P6_MIGRATION_CONFLICT",
+        "GKOS_P6_MIGRATION_RECOVERY_REQUIRED",
+        "GKOS_P6_AUTHORITY_CORRUPT",
+        "GKOS_P6_DATABASE_CAPACITY",
+        "GKOS_P6_ACTIVITY_CAPACITY",
+        "GKOS_P6_RETENTION_INVALID",
+        "GKOS_P6_CLOCK_INVALID",
+        "GKOS_P6_STORAGE_PERMISSION_INVALID",
+        "GKOS_P6_AUDIT_WRITE_FAILED",
+        "GKOS_P6_EVIDENCE_MISMATCH",
+        "GKOS_P6_SECRET_EXPOSURE",
+        "GKOS_P6_SHUTTING_DOWN",
+        "GKOS_P6_INTERNAL_ERROR"
+      ]
+    },
+    "contract_version": {
+      "const": "1.0.0-draft.1"
+    },
+    "details": {
+      "additionalProperties": {
+        "type": [
+          "string",
+          "integer",
+          "boolean",
+          "null"
+        ]
+      },
+      "maxProperties": 16,
+      "type": "object"
+    },
+    "message": {
+      "maxLength": 1024,
+      "minLength": 1,
+      "type": "string"
+    },
+    "request_id": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "retry_after_ms": {
+      "anyOf": [
+        {
+          "maximum": 60000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "retryable": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "contract_version",
+    "code",
+    "message",
+    "request_id",
+    "retryable",
+    "retry_after_ms",
+    "details"
+  ],
+  "title": "Closed error envelope",
+  "type": "object"
+}

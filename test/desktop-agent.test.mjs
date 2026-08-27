@@ -19,9 +19,15 @@ import {
   SENSITIVITY_LEVELS,
   DEFAULT_PORT,
   LOOPBACK_HOST,
+  defaultCredentialStatusPaths,
+  formatDefaultCredentialPaths,
+  loadOrCreateDefaultMcpCredential,
+  openValidatedCredentialDirectory,
+  bindAuthorizedStatusDirectory,
+  captureStatusDirectoryNamespace,
 } from "../dist/gkos-desktop-agent.mjs";
 import { GkxIndex } from "../dist/gkos-engine.mjs";
-import { mkdtempSync, rmSync, readFileSync, statSync } from "node:fs";
+import { mkdtempSync, rmSync, readFileSync, statSync, writeFileSync, symlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -123,6 +129,105 @@ test("deleting the token file rotates it on recovery", () => {
     rmSync(p);
     const rotated = loadOrCreateToken(p);
     assert.notEqual(rotated, first);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("default MCP credential persists a distinct identity and status/startup expose paths only", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-mcp-credential-"));
+  try {
+    const viewerPath = join(dir, "desktop-agent.token");
+    const viewerToken = loadOrCreateToken(viewerPath);
+    const first = loadOrCreateDefaultMcpCredential(dir);
+    const second = loadOrCreateDefaultMcpCredential(dir);
+    assert.equal(first.token, second.token);
+    assert.equal(first.state.agent_id, second.state.agent_id);
+    assert.notEqual(first.token, viewerToken);
+    const status = defaultCredentialStatusPaths(viewerPath, first);
+    const startup = formatDefaultCredentialPaths(viewerPath, first, join(dir, "status.json"));
+    const bytes = JSON.stringify({ status, startup });
+    assert.match(startup, /viewer credential: .*desktop-agent\.token/);
+    assert.match(startup, /MCP credential: .*desktop-agent\.mcp\.token/);
+    assert.match(startup, /MCP identity: .*desktop-agent\.mcp\.identity\.json/);
+    assert.equal(bytes.includes(viewerToken), false);
+    assert.equal(bytes.includes(first.token), false);
+    openValidatedCredentialDirectory(dir, viewerToken, first);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("corrupt existing MCP identity blocks without overwrite", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-mcp-corrupt-"));
+  try {
+    const credential = loadOrCreateDefaultMcpCredential(dir);
+    writeFileSync(credential.identityPath, "corrupt-identity");
+    assert.throws(() => loadOrCreateDefaultMcpCredential(dir));
+    assert.equal(readFileSync(credential.identityPath, "utf8"), "corrupt-identity");
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("protected credential reopen rejects a symlinked MCP identity without changing its target", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-mcp-link-"));
+  const external = mkdtempSync(join(tmpdir(), "gkos-mcp-external-"));
+  try {
+    const viewerPath = join(dir, "desktop-agent.token");
+    const viewerToken = loadOrCreateToken(viewerPath);
+    const credential = loadOrCreateDefaultMcpCredential(dir);
+    const externalIdentity = join(external, "identity.json");
+    const expected = readFileSync(credential.identityPath, "utf8");
+    writeFileSync(externalIdentity, expected);
+    rmSync(credential.identityPath);
+    try { symlinkSync(externalIdentity, credential.identityPath, "file"); }
+    catch { return; }
+    assert.throws(() => loadOrCreateDefaultMcpCredential(dir), /CREDENTIAL_LEAF_INVALID|ELOOP/u);
+    assert.throws(() => openValidatedCredentialDirectory(dir, viewerToken, credential));
+    assert.equal(readFileSync(externalIdentity, "utf8"), expected);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+    rmSync(external, { recursive: true, force: true });
+  }
+});
+
+test("credential loaders reject symlinked viewer and MCP token leaves before reading targets", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-token-links-"));
+  const external = mkdtempSync(join(tmpdir(), "gkos-token-links-external-"));
+  try {
+    const externalToken = join(external, "token");
+    const secret = "z".repeat(64);
+    writeFileSync(externalToken, secret, { mode: 0o600 });
+    const viewerPath = join(dir, "desktop-agent.token");
+    try { symlinkSync(externalToken, viewerPath, "file"); }
+    catch { return; }
+    assert.throws(() => loadOrCreateToken(viewerPath), /CREDENTIAL_LEAF_INVALID|ELOOP/u);
+    assert.equal(readFileSync(externalToken, "utf8"), secret);
+    rmSync(viewerPath);
+
+    loadOrCreateToken(viewerPath);
+    const mcp = loadOrCreateDefaultMcpCredential(dir);
+    rmSync(mcp.tokenPath);
+    symlinkSync(externalToken, mcp.tokenPath, "file");
+    assert.throws(() => loadOrCreateDefaultMcpCredential(dir), /CREDENTIAL_LEAF_INVALID|ELOOP/u);
+    assert.equal(readFileSync(externalToken, "utf8"), secret);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+    rmSync(external, { recursive: true, force: true });
+  }
+});
+
+test("status capability handoff shares only the unchanged authorized directory and rejects an external leaf", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-status-capability-"));
+  try {
+    const viewerPath = join(dir, "desktop-agent.token");
+    const viewerToken = loadOrCreateToken(viewerPath);
+    const credential = loadOrCreateDefaultMcpCredential(dir);
+    const first = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const second = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const namespace = captureStatusDirectoryNamespace(first);
+    assert.equal(bindAuthorizedStatusDirectory(first, second, namespace), second);
+
+    const stale = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const proposed = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const expected = captureStatusDirectoryNamespace(stale);
+    writeFileSync(join(dir, "external-race"), "untrusted", { mode: 0o600 });
+    assert.throws(() => bindAuthorizedStatusDirectory(stale, proposed, expected), /GKX_WATCHER_(?:FS_DIRECTORY|STATUS_NAMESPACE)_CHANGED/u);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 

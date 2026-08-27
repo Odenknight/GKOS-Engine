@@ -1,0 +1,42 @@
+{
+  "contract_version": "1.0.0-draft.1",
+  "kind": "security",
+  "vectors": [
+    {
+      "assertions": [
+        "secret_revealed is deterministic",
+        "JSON contains no secret",
+        "replay never repeats one-time delivery"
+      ],
+      "expect": "pass",
+      "id": "CREDENTIAL-RESULT-001"
+    },
+    {
+      "assertions": [
+        "secret_revealed is deterministic",
+        "JSON contains no secret",
+        "replay never repeats one-time delivery"
+      ],
+      "expect": "pass",
+      "id": "CREDENTIAL-RESULT-002"
+    },
+    {
+      "assertions": [
+        "secret_revealed is deterministic",
+        "JSON contains no secret",
+        "replay never repeats one-time delivery"
+      ],
+      "expect": "pass",
+      "id": "CREDENTIAL-RESULT-003"
+    },
+    {
+      "assertions": [
+        "secret_revealed is deterministic",
+        "JSON contains no secret",
+        "replay never repeats one-time delivery"
+      ],
+      "expect": "pass",
+      "id": "CREDENTIAL-RESULT-004"
+    }
+  ]
+}

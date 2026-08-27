@@ -24,7 +24,6 @@
  */
 import * as http from "node:http";
 import * as fs from "node:fs";
-import * as fsp from "node:fs/promises";
 import * as path from "node:path";
 import * as crypto from "node:crypto";
 import type { AddressInfo } from "node:net";
@@ -38,9 +37,29 @@ import {
   extensionFromPath,
   ENGINE_VERSION,
   type GkxSensitivity,
+  type GkxGraph,
   type SourceFile,
-  type IndexChanges,
 } from "./index";
+import { retrievalCanonicalDigest } from "./retrieval/digest";
+import { buildVaultNavigationConfig } from "./navigation";
+import {
+  createLocalServiceRequestHandler,
+  defaultMcpAgentBinding,
+  legacyViewerBinding,
+  ServiceCredentialRegistry,
+} from "./service/node";
+import { startWatcherHost } from "./watcher/host";
+import {
+  ensureWatcherStatusDirectory,
+  openWatcherDirectory,
+  readWatcherFile,
+  revalidateWatcherDirectory,
+  watcherNamespaceCoordinate,
+  watcherLeafExists,
+  writeExistingWatcherFile,
+  writeNewWatcherFile,
+  type WatcherDirectoryCapability,
+} from "./watcher/fs-authority";
 
 /** The seven-level sensitivity vocabulary (GKOS §11), fail-closed to secret. */
 export const SENSITIVITY_LEVELS: readonly GkxSensitivity[] = [
@@ -268,6 +287,8 @@ export interface StatusDoc {
   port: number;
   url: string;
   token_path: string;
+  mcp_token_path?: string;
+  mcp_identity_path?: string;
   notes_dir: string;
   default_sensitivity: GkxSensitivity;
   notes_indexed: number;
@@ -275,19 +296,150 @@ export interface StatusDoc {
   last_scan_iso: string | null;
 }
 
+export interface DefaultMcpCredentialState {
+  schema_version: 1;
+  credential_id: string;
+  agent_id: string;
+  agent_label: string;
+  sensitivity_ceiling: GkxSensitivity;
+  revoked: boolean;
+  limits: { concurrent_requests: 4; bucket_capacity: 10; refill_ms: 1000 };
+}
+
+function readProtectedCredentialLeaf(leafPath: string, maximumBytes = 4_096): string | null {
+  let before: fs.Stats;
+  try { before = fs.lstatSync(leafPath); }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+    throw error;
+  }
+  if (before.isSymbolicLink() || !before.isFile() || before.size < 1 || before.size > maximumBytes) {
+    throw new Error("GKX_WATCHER_CREDENTIAL_LEAF_INVALID");
+  }
+  if (process.platform !== "win32") {
+    const currentUid = typeof process.getuid === "function" ? process.getuid() : null;
+    if (currentUid !== null && before.uid !== currentUid) throw new Error("GKX_WATCHER_CREDENTIAL_OWNER_INVALID");
+    if ((before.mode & 0o077) !== 0) throw new Error("GKX_WATCHER_CREDENTIAL_MODE_INVALID");
+  }
+  const descriptor = fs.openSync(leafPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+  try {
+    const after = fs.fstatSync(descriptor);
+    if (!after.isFile() || after.dev !== before.dev || after.ino !== before.ino || after.size !== before.size) {
+      throw new Error("GKX_WATCHER_CREDENTIAL_LEAF_CHANGED");
+    }
+    return fs.readFileSync(descriptor, "utf8");
+  } finally { fs.closeSync(descriptor); }
+}
+
+function uuidV7(): string {
+  const bytes = crypto.randomBytes(16);
+  let value = BigInt(Date.now());
+  for (let index = 5; index >= 0; index--) { bytes[index] = Number(value & 0xffn); value >>= 8n; }
+  bytes[6] = (bytes[6] & 0x0f) | 0x70;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = bytes.toString("hex");
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
+export function loadOrCreateDefaultMcpCredential(directory: string): {
+  token: string;
+  tokenPath: string;
+  identityPath: string;
+  state: DefaultMcpCredentialState;
+} {
+  const tokenPath = path.join(directory, "desktop-agent.mcp.token");
+  const identityPath = path.join(directory, "desktop-agent.mcp.identity.json");
+  const token = loadOrCreateToken(tokenPath);
+  let state: DefaultMcpCredentialState;
+  const existingIdentity = readProtectedCredentialLeaf(identityPath);
+  if (existingIdentity !== null) {
+    const parsed = JSON.parse(existingIdentity) as DefaultMcpCredentialState;
+    if (parsed.schema_version !== 1 || !/^credential:[a-z0-9:-]{1,128}$/u.test(parsed.credential_id) ||
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u.test(parsed.agent_id) ||
+      parsed.agent_label !== "Local MCP Agent" || parsed.sensitivity_ceiling !== "internal" || typeof parsed.revoked !== "boolean" ||
+      JSON.stringify(parsed.limits) !== JSON.stringify({ concurrent_requests: 4, bucket_capacity: 10, refill_ms: 1000 })) throw new Error("GKX_WATCHER_MCP_IDENTITY_INVALID");
+    state = parsed;
+  } else {
+    state = {
+      schema_version: 1,
+      credential_id: `credential:${crypto.randomBytes(16).toString("hex")}`,
+      agent_id: uuidV7(),
+      agent_label: "Local MCP Agent",
+      sensitivity_ceiling: "internal",
+      revoked: false,
+      limits: { concurrent_requests: 4, bucket_capacity: 10, refill_ms: 1000 },
+    };
+    const bytes = JSON.stringify(state, null, 2);
+    fs.writeFileSync(identityPath, bytes, { flag: "wx", mode: 0o600 });
+    try { fs.chmodSync(identityPath, 0o600); } catch { /* Windows best effort */ }
+  }
+  return { token, tokenPath, identityPath, state };
+}
+
+export function defaultCredentialStatusPaths(tokenPath: string, mcp: { tokenPath: string; identityPath: string }): Pick<StatusDoc, "token_path" | "mcp_token_path" | "mcp_identity_path"> {
+  return { token_path: tokenPath, mcp_token_path: mcp.tokenPath, mcp_identity_path: mcp.identityPath };
+}
+
+export function formatDefaultCredentialPaths(tokenPath: string, mcp: { tokenPath: string; identityPath: string }, statusFile: string): string {
+  return `viewer credential: ${tokenPath}  MCP credential: ${mcp.tokenPath}  MCP identity: ${mcp.identityPath}  status: ${statusFile}`;
+}
+
+export function openValidatedCredentialDirectory(directory: string, viewerToken: string, mcp: ReturnType<typeof loadOrCreateDefaultMcpCredential>): ReturnType<typeof openWatcherDirectory> {
+  const capability = openWatcherDirectory(directory);
+  const reopenedToken = readWatcherFile(capability, "desktop-agent.token", { maximum_bytes: 4_096 });
+  if (reopenedToken.bytes.toString("utf8").trim() !== viewerToken) throw new Error("GKX_WATCHER_SERVICE_TOKEN_INVALID");
+  const reopenedMcpToken = readWatcherFile(capability, "desktop-agent.mcp.token", { maximum_bytes: 4_096 });
+  if (reopenedMcpToken.bytes.toString("utf8").trim() !== mcp.token) throw new Error("GKX_WATCHER_MCP_TOKEN_INVALID");
+  const reopenedMcpIdentity = readWatcherFile(capability, "desktop-agent.mcp.identity.json", { maximum_bytes: 4_096 });
+  if (reopenedMcpIdentity.bytes.toString("utf8") !== JSON.stringify(mcp.state, null, 2)) throw new Error("GKX_WATCHER_MCP_IDENTITY_INVALID");
+  return capability;
+}
+
+/**
+ * Accepts only a second live capability for the same already-bound directory.
+ * The host supplies this before either owner can mutate S, after which both
+ * owners share the same seal object. This never reopens or absorbs a delta.
+ */
+export function bindAuthorizedStatusDirectory(
+  current: WatcherDirectoryCapability,
+  hostDirectory: WatcherDirectoryCapability,
+  expectedNamespace: string,
+): WatcherDirectoryCapability {
+  if (!/^sha256:[0-9a-f]{64}$/u.test(expectedNamespace)) throw new TypeError("GKX_WATCHER_STATUS_NAMESPACE_INVALID");
+  revalidateWatcherDirectory(current);
+  revalidateWatcherDirectory(hostDirectory);
+  if (current.path !== hostDirectory.path || current.identity.device !== hostDirectory.identity.device ||
+    current.identity.inode !== hostDirectory.identity.inode || current.identity.mode !== hostDirectory.identity.mode ||
+    current.identity.nlink !== hostDirectory.identity.nlink) {
+    throw new Error("GKX_WATCHER_STATUS_CAPABILITY_MISMATCH");
+  }
+  if (watcherNamespaceCoordinate(current) !== expectedNamespace ||
+    watcherNamespaceCoordinate(hostDirectory) !== expectedNamespace) {
+    throw new Error("GKX_WATCHER_STATUS_NAMESPACE_CHANGED");
+  }
+  return hostDirectory;
+}
+
+export function captureStatusDirectoryNamespace(directory: WatcherDirectoryCapability): string {
+  return watcherNamespaceCoordinate(directory);
+}
+
 /** Load the persisted bearer token, or generate + persist one on first run. */
 export function loadOrCreateToken(tokenPath: string): string {
-  try {
-    const existing = fs.readFileSync(tokenPath, "utf8").trim();
-    if (existing) return existing;
-  } catch {
-    /* first run */
+  const existingBytes = readProtectedCredentialLeaf(tokenPath);
+  if (existingBytes !== null) {
+    const existing = existingBytes.trim();
+    if (!/^[A-Za-z0-9._~-]{32,512}$/u.test(existing)) throw new Error("GKX_WATCHER_CREDENTIAL_INVALID");
+    return existing;
   }
   const token = crypto.randomBytes(32).toString("hex");
-  fs.mkdirSync(path.dirname(tokenPath), { recursive: true });
+  const directory = path.dirname(tokenPath);
+  const directoryExisted = fs.existsSync(directory);
+  fs.mkdirSync(directory, { recursive: true, mode: 0o700 });
+  if (!directoryExisted && process.platform !== "win32") fs.chmodSync(directory, 0o700);
   // 0600 intent: readable only by the owner. On Windows the mode is largely
   // advisory; we still pass it so POSIX CI runners get real permissions.
-  fs.writeFileSync(tokenPath, token, { mode: 0o600 });
+  fs.writeFileSync(tokenPath, token, { flag: "wx", mode: 0o600 });
   try {
     fs.chmodSync(tokenPath, 0o600);
   } catch {
@@ -309,17 +461,17 @@ export interface AgentServerHandle {
   close(): Promise<void>;
 }
 
-/**
- * Create the loopback-only read-only agent API. The `index` is the live
- * GkxIndex; endpoints project its current graph. Every request requires the
- * bearer token (401 otherwise). The server binds 127.0.0.1 and nothing else.
- */
-export function createAgentServer(opts: {
-  index: GkxIndex;
+interface AgentGraphView {
+  readonly graph: GkxGraph | null;
+}
+
+function createAgentRequestHandler(opts: {
+  index: AgentGraphView;
   token: string;
   getStatus: () => StatusDoc;
   vaultName?: string;
-}): http.Server {
+  reservedWatcherRoutes?: ReadonlySet<string>;
+}): (request: http.IncomingMessage, response: http.ServerResponse) => boolean {
   const { index, token, getStatus } = opts;
   const vault = opts.vaultName ?? "vault";
 
@@ -364,7 +516,8 @@ export function createAgentServer(opts: {
     return constantTimeEqual(m[1].trim(), token);
   };
 
-  return http.createServer((req, res) => {
+  return (req, res) => {
+    if (opts.reservedWatcherRoutes?.has(req.url ?? "") === true) return false;
     const origin = allowedOrigin(req);
 
     // CORS preflight: the browser sends OPTIONS with no credentials to learn
@@ -377,14 +530,14 @@ export function createAgentServer(opts: {
       if (origin) applyCorsHeaders(res, origin);
       res.writeHead(204);
       res.end();
-      return;
+      return true;
     }
 
     // Token required on EVERY non-preflight request, no exceptions (spec). CORS
     // headers are still reflected on the 401 so a browser can read the status.
     if (!authorized(req)) {
       send(res, 401, { error: "unauthorized", detail: "Bearer token required." }, origin);
-      return;
+      return true;
     }
 
     const url = new URL(req.url ?? "/", `http://${LOOPBACK_HOST}`);
@@ -397,14 +550,14 @@ export function createAgentServer(opts: {
         { error: "method_not_allowed", detail: "Read-only agent API; GET only." },
         origin,
       );
-      return;
+      return true;
     }
 
     switch (route) {
       case "/":
       case "/health": {
         send(res, 200, getStatus(), origin);
-        return;
+        return true;
       }
       case "/notes": {
         const graph = index.graph;
@@ -418,25 +571,62 @@ export function createAgentServer(opts: {
             sensitivity: n.gkx?.projection?.effective.sensitivity ?? null,
           }));
         send(res, 200, { notes, count: notes.length }, origin);
-        return;
+        return true;
       }
       case "/graph": {
         send(res, 200, index.graph ?? { nodes: [], links: [] }, origin);
-        return;
+        return true;
       }
       case "/graphiti/episodes": {
         const graph = index.graph;
         const episodes = graph ? buildGraphitiEpisodes(graph, { vault }) : [];
         send(res, 200, { episodes, count: episodes.length }, origin);
-        return;
+        return true;
       }
       default:
         send(res, 404, { error: "not_found", detail: route }, origin);
+        return true;
     }
-  });
+  };
 }
 
-/** Entry point: scan → index → watch → serve. */
+/**
+ * Create the loopback-only read-only agent API. The `index` is the live
+ * GkxIndex; endpoints project its current graph. Every request requires the
+ * bearer token (401 otherwise). The server binds 127.0.0.1 and nothing else.
+ */
+export function createAgentServer(opts: {
+  index: GkxIndex;
+  token: string;
+  getStatus: () => StatusDoc;
+  vaultName?: string;
+}): http.Server {
+  const handle = createAgentRequestHandler(opts);
+  return http.createServer((request, response) => { handle(request, response); });
+}
+
+function legacyStatusFromWatcher(
+  status: Readonly<Record<string, unknown>>,
+  args: DesktopAgentArgs,
+  tokenPath: string,
+  mcpCredential?: { tokenPath: string; identityPath: string },
+): StatusDoc {
+  const watcherState = String(status.watcher_state);
+  return {
+    pid: process.pid,
+    port: args.port,
+    url: `http://${LOOPBACK_HOST}:${args.port}/`,
+    token_path: tokenPath,
+    ...(mcpCredential ? { mcp_token_path: mcpCredential.tokenPath, mcp_identity_path: mcpCredential.identityPath } : {}),
+    notes_dir: args.notesDir,
+    default_sensitivity: args.defaultSensitivity,
+    notes_indexed: Number.isSafeInteger(status.document_count) ? Number(status.document_count) : 0,
+    state: watcherState === "error" ? "error" : watcherState === "serving" ? "serving" : "indexing",
+    last_scan_iso: typeof status.last_sync === "string" ? status.last_sync : null,
+  };
+}
+
+/** Entry point: one governed watcher/index generation → one loopback service. */
 export async function main(argv = process.argv.slice(2)): Promise<void> {
   if (argv.includes("--help") || argv.includes("-h")) {
     console.log(DESKTOP_AGENT_USAGE);
@@ -444,110 +634,166 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   }
   const args = parseArgs(argv);
   const tokenPath = path.join(path.dirname(args.statusFile), "desktop-agent.token");
+  // S is a security capability, not a side effect of token/status creation.
+  // Existing unsafe custom roots fail before either legacy file is touched.
+  let statusCapability = ensureWatcherStatusDirectory(args.statusFile);
   const vaultName = path.basename(args.notesDir) || "vault";
-
-  let state: StatusDoc["state"] = "indexing";
-  let lastScanIso: string | null = null;
-  const index = new GkxIndex({ defaultSensitivity: args.defaultSensitivity });
-
-  const token = loadOrCreateToken(tokenPath);
-
-  const getStatus = (): StatusDoc => ({
+  const initialStatus: StatusDoc = {
     pid: process.pid,
     port: args.port,
     url: `http://${LOOPBACK_HOST}:${args.port}/`,
-    token_path: tokenPath,
+    ...defaultCredentialStatusPaths(tokenPath, {
+      tokenPath: path.join(path.dirname(args.statusFile), "desktop-agent.mcp.token"),
+      identityPath: path.join(path.dirname(args.statusFile), "desktop-agent.mcp.identity.json"),
+    }),
     notes_dir: args.notesDir,
     default_sensitivity: args.defaultSensitivity,
-    notes_indexed: index.noteCount,
-    state,
-    last_scan_iso: lastScanIso,
-  });
-
-  const writeStatus = (): void => {
+    notes_indexed: 0,
+    state: "indexing",
+    last_scan_iso: null,
+  };
+  const token = loadOrCreateToken(tokenPath);
+  const mcpCredential = loadOrCreateDefaultMcpCredential(path.dirname(args.statusFile));
+  const credentialRegistry = new ServiceCredentialRegistry([
+    legacyViewerBinding(token, "secret"),
+    defaultMcpAgentBinding(mcpCredential.token, {
+      credentialId: mcpCredential.state.credential_id,
+      agentId: mcpCredential.state.agent_id,
+      agentLabel: mcpCredential.state.agent_label,
+      sensitivityCeiling: mcpCredential.state.sensitivity_ceiling,
+      revoked: mcpCredential.state.revoked,
+      limits: {
+        concurrentRequests: mcpCredential.state.limits.concurrent_requests,
+        bucketCapacity: mcpCredential.state.limits.bucket_capacity,
+        refillMs: mcpCredential.state.limits.refill_ms,
+      },
+    }),
+  ]);
+  // Token creation is the one protected legacy mutation that precedes the
+  // watcher service. On POSIX an initial create changes the S directory seal;
+  // rebind only after securely reopening the exact token that was just loaded.
+  const tokenDirectory = openValidatedCredentialDirectory(path.dirname(args.statusFile), token, mcpCredential);
+  statusCapability = tokenDirectory;
+  let latestStatus = initialStatus;
+  const writeStatus = (status: StatusDoc): void => {
+    latestStatus = status;
     try {
-      fs.mkdirSync(path.dirname(args.statusFile), { recursive: true });
-      fs.writeFileSync(args.statusFile, JSON.stringify(getStatus(), null, 2));
+      revalidateWatcherDirectory(statusCapability);
+      const bytes = Buffer.from(JSON.stringify(status, null, 2), "utf8");
+      const statusLeaf = path.basename(args.statusFile);
+      if (watcherLeafExists(statusCapability, statusLeaf)) {
+        writeExistingWatcherFile(statusCapability, statusLeaf, bytes);
+      } else {
+        writeNewWatcherFile(statusCapability, statusLeaf, bytes);
+      }
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error("failed to write status file:", (e as Error).message);
     }
   };
+  writeStatus(initialStatus);
+  let expectedStatusNamespace: string | null = watcherNamespaceCoordinate(statusCapability);
 
-  writeStatus();
+  const configurationDigest = retrievalCanonicalDigest({
+    contract_version: "gkos-watcher-desktop-configuration/1.0.0-draft.1",
+    default_sensitivity: args.defaultSensitivity,
+    lexical_backend: "sqlite_fts5",
+  });
+  const policyDigest = retrievalCanonicalDigest({
+    contract_version: "gkos-watcher-desktop-policy/1.0.0-draft.1",
+    discoverability: "allow",
+    default_sensitivity: args.defaultSensitivity,
+  });
+  const vaultId = `vault:${retrievalCanonicalDigest({
+    contract_version: "gkos-watcher-desktop-vault-coordinate/1.0.0-draft.1",
+    vault_root: args.notesDir,
+  }).slice("sha256:".length, "sha256:".length + 24)}`;
+  const configSeed = crypto.createHash("sha256").update(vaultId, "utf8").digest("hex");
+  const navigationConfig = await buildVaultNavigationConfig({
+    configId: `018f47a3-7b5e-7${configSeed.slice(0, 3)}-8${configSeed.slice(3, 6)}-${configSeed.slice(6, 18)}`,
+    version: 1,
+    vaultId,
+    promotedMocNames: [],
+    createdAt: "2026-08-26T00:00:00.000Z",
+    createdBy: "system:gkos-standalone-service",
+    policy: { id: "policy:gkos-standalone-navigation", version: "1.0.0", digest: policyDigest },
+  });
 
-  // ---- initial scan ----
+  let host;
   try {
-    const scan = scanNotesDir(args.notesDir);
-    index.setFiles(scan.files, scan.folders, scan.attachments);
-    lastScanIso = new Date().toISOString();
-    state = "serving";
+    host = await startWatcherHost({
+      vault_root: args.notesDir,
+      status_file: args.statusFile,
+      vault_id: vaultId,
+      configuration_digest: configurationDigest,
+      policy_digest: policyDigest,
+      projection_options: { defaultSensitivity: args.defaultSensitivity },
+      port: args.port,
+      coordinator_options: {
+        discoverability_policy: () => "allow",
+        source_discoverability_policy: () => "allow",
+      },
+      on_status_directory_capability(directory) {
+        // Bind once, before the host mutates S, to the host's exact live
+        // capability. Both status writes and locator lifecycle now refresh the
+        // same unforgeable seal. Never reopen S to absorb an unexplained delta.
+        if (expectedStatusNamespace === null) throw new Error("GKX_WATCHER_STATUS_CAPABILITY_ALREADY_BOUND");
+        statusCapability = bindAuthorizedStatusDirectory(statusCapability, directory, expectedStatusNamespace);
+        expectedStatusNamespace = null;
+      },
+      on_status_change(status) { writeStatus(legacyStatusFromWatcher(status, args, tokenPath, mcpCredential)); },
+      create_compatibility_request_handler(context) {
+        const snapshot = () => {
+          const committed = context.get_snapshot();
+          const generationDigest = crypto.createHash("sha256").update(committed.service_generation_id, "utf8").digest("hex");
+          const generation = Number.parseInt(generationDigest.slice(0, 13), 16) + 1;
+          return {
+            graph: committed.graph,
+            sourceRecords: committed.sources,
+            generation,
+            evaluationTime: committed.graph.stats.indexedAt,
+          };
+        };
+        return createLocalServiceRequestHandler({
+          credentials: credentialRegistry,
+          snapshot,
+          authorization: (committed) => ({ configured: true, generation: committed.generation ?? 1, policyDigest: policyDigest as `sha256:${string}` }),
+          status: () => ({ state: legacyStatusFromWatcher(context.get_status(), args, tokenPath, mcpCredential).state }),
+          vaultName,
+          vaultId,
+          navigationConfig,
+          corsAllowlist: CORS_ALLOWLIST,
+          reservedRoutes: new Set(["/status", "/control/shutdown"]),
+        });
+      },
+    });
+    writeStatus(legacyStatusFromWatcher(host.status(), args, tokenPath, mcpCredential));
   } catch (e) {
-    state = "error";
-    writeStatus();
+    writeStatus({ ...latestStatus, state: "error" });
     // eslint-disable-next-line no-console
     console.error("initial scan failed:", (e as Error).message);
     process.exitCode = 1;
     return;
   }
 
-  // ---- watch with coalescing debounce ----
-  const rescanAndApply = (): void => {
-    const scan = scanNotesDir(args.notesDir);
-    const changes: IndexChanges = {
-      changed: scan.files,
-      folders: scan.folders,
-      attachments: scan.attachments,
-    };
-    // Removals: any indexed record no longer present on disk.
-    const present = new Set(scan.files.map((f) => normalizeVaultRelative(f.relativePath)));
-    const removed: string[] = [];
-    for (const rel of index.getRecords().keys()) {
-      if (!present.has(rel)) removed.push(rel);
-    }
-    if (removed.length) changes.removed = removed;
-    index.applyChanges(changes);
-    lastScanIso = new Date().toISOString();
-    writeStatus();
-  };
+  // eslint-disable-next-line no-console
+  console.log(
+    `gkos-agent v${ENGINE_VERSION} serving ${String(host.status().document_count)} notes on http://${LOOPBACK_HOST}:${args.port}/ (loopback only)`,
+  );
+  // eslint-disable-next-line no-console
+  console.log(formatDefaultCredentialPaths(tokenPath, mcpCredential, args.statusFile));
 
-  const debouncer = new Debouncer(DEBOUNCE_MS, () => {
-    try {
-      rescanAndApply();
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error("applyChanges failed:", (e as Error).message);
-    }
-  });
-
-  try {
-    fs.watch(args.notesDir, { recursive: true }, (_evt, filename) => {
-      debouncer.schedule(filename ? String(filename) : "");
-    });
-  } catch (e) {
+  const shutdown = (): void => { void host.shutdown().catch((error: unknown) => {
+    process.exitCode = 1;
     // eslint-disable-next-line no-console
-    console.error("fs.watch failed (continuing without live updates):", (e as Error).message);
-  }
-
-  // ---- serve (loopback only) ----
-  const server = createAgentServer({ index, token, getStatus, vaultName });
-  server.listen(args.port, LOOPBACK_HOST, () => {
-    writeStatus();
-    // eslint-disable-next-line no-console
-    console.log(
-      `gkos-agent v${ENGINE_VERSION} serving ${index.noteCount} notes on http://${LOOPBACK_HOST}:${args.port}/ (loopback only)`,
-    );
-    // eslint-disable-next-line no-console
-    console.log(`token: ${tokenPath}  status: ${args.statusFile}`);
-  });
-
-  const shutdown = (): void => {
-    debouncer.dispose();
-    server.close();
-    process.exit(0);
-  };
+    console.error("watcher shutdown failed:", (error as Error).message);
+  }); };
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
+  void host.closed.finally(() => {
+    process.off("SIGINT", shutdown);
+    process.off("SIGTERM", shutdown);
+  });
 }
 
 // Auto-run only for a real CLI/SEA invocation, never when imported by tests.
