@@ -91,7 +91,7 @@
     "pretest": "node scripts/build.mjs",
     "test": "node --test \"test/*.test.mjs\"",
     "pretest:navigation": "node scripts/build.mjs",
-    "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-effects-contract.test.mjs test/navigation-effects-planner.test.mjs test/navigation-effects-node.test.mjs test/navigation-effects-performance.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
+    "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-effects-contract.test.mjs test/navigation-effects-planner.test.mjs test/navigation-effects-node.test.mjs test/navigation-effects-performance.test.mjs test/navigation-effects-reconciliation.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
     "test:intelligence": "node scripts/test-intelligence.mjs",
     "pack:check": "node scripts/check-pack.mjs",
     "check:license": "node scripts/check-license.mjs",
