@@ -1,6 +1,6 @@
 # Generic admission-policy provider contract v1
 
-Status: upstream contract proposal; no release, runtime authority, or activation is implied.
+Status: released with GKOS-Engine 2.1.2; no runtime authority or activation is implied.
 
 ## Purpose
 
@@ -110,11 +110,11 @@ re-evaluates the exact request and policy and compares the complete receipt.
 
 ## Pinning and vendoring
 
-This proposal does not change the package version and has no tag. A consumer
-must not cite it as a released contract until the repository owner ratifies and
-publishes an exact upstream commit or release.
+This contract is released by the annotated GKOS-Engine `v2.1.2` tag. Consumers
+must pin that exact tag or its resolved commit and verify the packaged artifact
+integrity; a moving branch is not a release coordinate.
 
-After ratification, a language-neutral consumer may vendor only the exact
+A language-neutral consumer may vendor only the exact
 schema, semantic-rule, reason-code, and vector bytes with:
 
 - upstream repository and commit;

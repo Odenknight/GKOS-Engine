@@ -7,7 +7,9 @@ deterministically, and with the privacy boundary kept in view.
 projects Graphiti episodes, indexes and retrieves knowledge, analyzes navigation
 pages, and can serve an authenticated live view to local applications and named
 MCP agents. The core is TypeScript, has no Obsidian or browser dependency, and
-does not need an LLM.
+does not need an LLM. A separate admission-policy subpath can replay bounded,
+hash-pinned policies and emit deterministic receipts without granting approval
+or materialization authority.
 
 GKOS-Engine is designed to be the quiet machinery underneath products such as
 Kosmos-Oden: one interpretation of GKX, reusable from a library, CLI, headless
@@ -26,7 +28,7 @@ service, or desktop sidecar.
 | MCP | Seven credential-bound, read-only tools over Streamable HTTP, plus a packaged stdio compatibility bridge | Implemented for integration qualification; not a production conformance claim |
 | Optional intelligence | Validate proposal-only responses from a separate Python AI sidecar | Optional; never approval authority |
 | Scientific trace evaluation | Deterministic checks for a provisional research-trace draft | Experimental and opt-in |
-| Admission-policy provider | Evaluate pinned, bounded admission requests and emit deterministic, non-authoritative receipts | Unreleased proposal; no approval, activation, or materialization authority |
+| Admission-policy provider | Evaluate pinned, bounded admission requests and emit deterministic, hash-bound receipts | Implemented in 2.1.2; no approval, activation, or materialization authority |
 
 Two boundaries are especially important:
 
@@ -180,6 +182,7 @@ import {
 import { buildGraphitiEpisodes } from "gkos-engine/graphiti";
 import { discoverNavigation } from "gkos-engine/navigation";
 import { RetrievalCoordinator } from "gkos-engine/retrieval";
+import { evaluateAdmissionPolicy } from "gkos-engine/admission-policy";
 ```
 
 Published subpaths are:
@@ -193,6 +196,7 @@ Published subpaths are:
 | `gkos-engine/navigation` | Pure, source-content-read-only Navigation 1.0 API |
 | `gkos-engine/governance` | Receipt roles and explicit append-only governance-store contracts |
 | `gkos-engine/retrieval` | Node/SQLite retrieval reference implementation |
+| `gkos-engine/admission-policy` | Product-neutral deterministic policy evaluation, receipt validation, and context-bound replay verification |
 
 The local-service, watcher, ingest-host, evaluation-host, and filesystem
 authority bundles are deliberately not public package subpaths. Their supported
@@ -208,6 +212,9 @@ entry points are the packaged commands and repository host integrations.
   `secret`; policy and authorization errors fail closed.
 - **Confidence is evidence, not authority.** Assessments and intelligence
   proposals never approve themselves.
+- **Admission receipts are evidence, not authority.** The admission-policy
+  provider performs no I/O and cannot approve, activate, or materialize an
+  artifact; relying consumers must verify the exact request and policy context.
 - **Navigation reads source content.** It returns values and plans; it has no
   source-write executor in 2.1.2.
 - **Derived-state writes are explicit.** Indexing, watcher journals, status,

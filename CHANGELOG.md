@@ -2,12 +2,11 @@
 
 ## Unreleased
 
-- Proposed the generic, deterministic `gkos.admission-policy.v1` provider
-  contract with strict schemas, canonical replay vectors, hash-bound
-  non-authoritative receipts, and no I/O or materialization capability.
-
 ## 2.1.2
 
+- Added the generic, deterministic `gkos.admission-policy.v1` provider contract
+  with strict schemas, canonical replay vectors, hash-bound non-authoritative
+  receipts, and no I/O, approval, activation, or materialization capability.
 - Added private Phase 4 `gkx retrieval eval` and `gkx retrieval tune` host
   execution over sealed general offline fixtures and the optional strict
   24-query reviewed overlay, including actual coordinator/counter replay,

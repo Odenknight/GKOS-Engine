@@ -2,7 +2,8 @@
 
 This guide describes the library, CLI, ingestion, retrieval, watcher, local
 service, identity/MCP, Graphiti, Navigation, governance, and optional
-intelligence surfaces present in GKOS-Engine `2.1.2` at this repository state.
+intelligence surfaces, plus the isolated admission-policy provider, present in
+GKOS-Engine `2.1.2` at this repository state.
 
 The package version, exchange namespace, projection profile, and integration
 contracts are distinct coordinates:
@@ -16,6 +17,7 @@ contracts are distinct coordinates:
 | Local service protocol | `1.0.0-draft.1` | Integration-only |
 | Agent identity/MCP contract | `1.0.0-draft.2` | Integration-qualified runtime; not production compatibility or conformance |
 | Watcher recovery contract | `1.0.0-draft.1` | Repository-private host contract |
+| Admission-policy contract | `gkos.admission-policy.v1` | Released provider surface; deterministic evidence only, with no runtime authority |
 
 GKOS-Engine is downstream of `gkos-standard`. Engine behavior and repository
 tests cannot amend the standard or independently establish GKOS conformance.
@@ -51,7 +53,10 @@ The main ownership rules are:
   transport, limits, and redaction;
 - Navigation 1.0 owns deterministic discovery and plans, not source effects;
 - governance interfaces can append explicitly governed metadata through a host
-  adapter, but do not create source-write authority; and
+  adapter, but do not create source-write authority;
+- the admission-policy provider owns deterministic evaluation and receipt
+  replay, but performs no I/O and grants no approval or materialization
+  authority; and
 - Graphiti, indexes, episodes, context packs, candidates, and traversal events
   are projections. GKX source records remain canonical.
 
@@ -72,6 +77,7 @@ branch.
 | `gkos-engine/navigation` | Platform-neutral ESM | Pure Navigation 1.0 |
 | `gkos-engine/governance` | Platform-neutral ESM | Receipt roles, store interfaces, and deferred-review helpers |
 | `gkos-engine/retrieval` | Node ESM | SQLite-backed retrieval reference implementation |
+| `gkos-engine/admission-policy` | Platform-neutral ESM | Product-neutral policy evaluation, hash-bound receipts, and context-bound replay verification |
 
 The package installs three commands:
 
@@ -503,6 +509,34 @@ or conflicting idempotency replay produces no governed effect.
 `InMemoryGovernanceStore` is a test/reference adapter. It is not a hidden vault
 writer or production durability claim.
 
+## Admission-policy provider
+
+The isolated `gkos-engine/admission-policy` subpath implements
+`gkos.admission-policy.v1`. `evaluateAdmissionPolicy(request, policy)` validates
+closed Draft 2020-12 schemas plus hash-pinned semantic rules, applies fixed
+lane precedence, and emits a canonical, self-hashed decision receipt. The
+substantive outcomes are `AUTO_ADMIT_DERIVED`, `HUMAN_REVIEW`, and
+`PRIORITY_HUMAN_REVIEW`; `REVIEW_INVALID` is a fail-closed quarantine outcome.
+
+Policies bind the provider and Engine identity, policy digest, schema and rule
+artifacts, dependency closure, artifact-type allowlist, and disjoint priority
+and ordinary trigger vocabularies. Unknown trigger codes fail closed. Priority
+triggers outrank ordinary review, prohibitions cannot be offset by a score, and
+reviewer recommendations are recorded as evidence but do not select the lane.
+
+Evaluation performs no filesystem or network access, model call, clock read,
+randomness, state mutation, write, or materialization. Every receipt states
+`authorityState: "NONE"` and `materializationAuthorized: false`.
+`verifyAdmissionDecisionReceiptSelfHash()` checks closed receipt shape, pins,
+and self-consistency only. Reliance requires
+`verifyAdmissionDecisionReceiptContext(receipt, request, policy)`, which
+re-evaluates the exact request and policy and compares the complete receipt.
+Language-neutral schemas, semantic rules, reason codes, and conformance vectors
+are published under `contracts/admission-policy/1.0.0/`.
+
+See [`docs/ADMISSION-POLICY-PROVIDER-V1.md`](docs/ADMISSION-POLICY-PROVIDER-V1.md)
+for the full contract and authority boundary.
+
 ## Optional intelligence and experimental science
 
 The Python 3.11+ intelligence service is a separate process and dependency
@@ -584,6 +618,7 @@ node --test test/agent-identity-mcp-contract.test.mjs
 node --test test/agent-identity-mcp-contract-draft2.test.mjs
 node --test test/service-contracts.test.mjs test/service-runtime.test.mjs
 node --test test/service-stdio.test.mjs test/service-stdio-package.test.mjs
+node --test test/admission-policy.test.mjs test/public-api.test.mjs
 ```
 
 Do not hard-code a historical test total. Qualification means zero failures and
@@ -598,6 +633,8 @@ This branch does not claim or provide:
 - MOC application, managed-region writes, adoption, archive creation/deletion,
   effect locks/leases, rollback, or effect recovery;
 - enabled proposal ingress, decisions, approval, or confidence-based authority;
+- admission-policy approval, canonical-knowledge mutation, ledger writes,
+  activation, credential issuance, or materialization authority;
 - the sixteen deferred identity/MCP tool surfaces;
 - production identity administration or native-stdio conformance;
 - a production-compatible, released, or GKOS-conformant Draft.2 service;
