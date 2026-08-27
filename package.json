@@ -40,6 +40,11 @@
       "types": "./dist/retrieval/index.d.ts",
       "import": "./dist/retrieval.mjs",
       "default": "./dist/retrieval.mjs"
+    },
+    "./admission-policy": {
+      "types": "./dist/admission-policy/index.d.ts",
+      "import": "./dist/admission-policy.mjs",
+      "default": "./dist/admission-policy.mjs"
     }
   },
   "bin": {
@@ -59,6 +64,8 @@
     "evidence/ENGINE-NAV-CONTRACT-1.0.0.json",
     "evidence/2026-08-16-navigation-2.1.0-verification.md",
     "evidence/2026-08-20-navigation-2.1.2-corrective-verification.md",
+    "evidence/2026-08-26-admission-policy-provider-v1.md",
+    "evidence/2026-08-27-sol-pr31-repair.md",
     "README.md",
     "TECHNICAL_README.md",
     "BEGINNERS_GUIDE.md",
@@ -85,7 +92,8 @@
     "test:intelligence": "node scripts/test-intelligence.mjs",
     "pack:check": "node scripts/check-pack.mjs",
     "check:license": "node scripts/check-license.mjs",
-    "check:nomenclature": "node scripts/check-nomenclature.mjs"
+    "check:nomenclature": "node scripts/check-nomenclature.mjs",
+    "generate:admission-policy": "node scripts/generate-admission-policy-v1.mjs"
   },
   "license": "Apache-2.0",
   "author": "OdenKnight",

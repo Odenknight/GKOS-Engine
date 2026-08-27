@@ -1,0 +1,58 @@
+{
+  "schema": "gkos.admission-policy.request.v1",
+  "contract": "gkos.admission-policy.v1",
+  "contractVersion": "1.0.0",
+  "requestId": "fixture:priority-review",
+  "idempotencyKey": "fixture:priority-review:1",
+  "subject": {
+    "id": "fixture:artifact:priority",
+    "type": "derived_summary",
+    "contentHash": "sha256:1010101010101010101010101010101010101010101010101010101010101010"
+  },
+  "policyRef": {
+    "id": "fixture:bounded-derived-memory",
+    "version": "1.0.0",
+    "digest": "sha256:52952e308d544a2e3778a9428e6a93b24b57ec7260ae59b45a0b0b10e33b989d"
+  },
+  "inputHashes": [
+    {
+      "name": "source-packet",
+      "digest": "sha256:2020202020202020202020202020202020202020202020202020202020202020"
+    },
+    {
+      "name": "semantic-assessment",
+      "digest": "sha256:3030303030303030303030303030303030303030303030303030303030303030"
+    }
+  ],
+  "validity": {
+    "valid": true,
+    "receiptHash": "sha256:4040404040404040404040404040404040404040404040404040404040404040"
+  },
+  "artifact": {
+    "type": "derived_summary",
+    "reversible": true,
+    "reconstructable": true
+  },
+  "deterministicChecks": {
+    "receiptHash": "sha256:5050505050505050505050505050505050505050505050505050505050505050",
+    "detectedTriggers": [
+      {
+        "code": "suspected-secret",
+        "evidenceHash": "sha256:6060606060606060606060606060606060606060606060606060606060606060"
+      },
+      {
+        "code": "new-factual-assertion",
+        "evidenceHash": "sha256:7070707070707070707070707070707070707070707070707070707070707070"
+      }
+    ]
+  },
+  "reviewer": {
+    "assessmentHash": "sha256:3030303030303030303030303030303030303030303030303030303030303030",
+    "independent": true,
+    "conflictsWithDeterministicChecks": false,
+    "unsupportedClaimIds": [],
+    "contradictionIds": [],
+    "scopeMatch": true,
+    "recommendedLane": "AUTO_ADMIT_CANDIDATE"
+  }
+}

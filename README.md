@@ -26,6 +26,7 @@ service, or desktop sidecar.
 | MCP | Seven credential-bound, read-only tools over Streamable HTTP, plus a packaged stdio compatibility bridge | Implemented for integration qualification; not a production conformance claim |
 | Optional intelligence | Validate proposal-only responses from a separate Python AI sidecar | Optional; never approval authority |
 | Scientific trace evaluation | Deterministic checks for a provisional research-trace draft | Experimental and opt-in |
+| Admission-policy provider | Evaluate pinned, bounded admission requests and emit deterministic, non-authoritative receipts | Unreleased proposal; no approval, activation, or materialization authority |
 
 Two boundaries are especially important:
 

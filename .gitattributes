@@ -28,3 +28,7 @@ test/agent-identity-mcp-contract*.test.mjs text eol=lf
 test/service-stdio.test.mjs text eol=lf
 test/service-stdio-package.test.mjs text eol=lf
 test/service-secret-canary.test.mjs text eol=lf
+
+# The admission-policy proposal is byte-governed. These files are contract
+# inputs and must retain their published LF representation on every platform.
+contracts/admission-policy/** text eol=lf

@@ -1,0 +1,51 @@
+{
+  "schema": "gkos.admission-policy.vectors.v1",
+  "contractVersion": "1.0.0",
+  "canonicalization": "GKOS-Engine canonicalJson: UTF-8 JSON, object keys in UTF-16 code-unit order, CR/CRLF normalized to LF, no insignificant whitespace",
+  "policy": {
+    "path": "policy.json",
+    "canonicalHash": "sha256:52952e308d544a2e3778a9428e6a93b24b57ec7260ae59b45a0b0b10e33b989d"
+  },
+  "cases": [
+    {
+      "id": "auto-admit-derived",
+      "requestPath": "request-auto-admit.json",
+      "requestHash": "sha256:a2ca517b31065a8fd830ae71d21fe6a0b374d49c4093461b03965d77e3a2ce3a",
+      "outcome": "AUTO_ADMIT_DERIVED",
+      "reasonCodes": [
+        "AUTO_ALLOWLIST_MATCH"
+      ],
+      "decisionReceiptHash": "sha256:e817e459d7429468a05958cfd60f50ac85838f1660c4c76b1901d42867086047"
+    },
+    {
+      "id": "ordinary-human-review",
+      "requestPath": "request-human-review.json",
+      "requestHash": "sha256:19c0c0fa79025d64fb2b1261305553ed0f4bb299dc6148bf44dd3a1891be2de9",
+      "outcome": "HUMAN_REVIEW",
+      "reasonCodes": [
+        "HUMAN_REVIEW_TRIGGER"
+      ],
+      "decisionReceiptHash": "sha256:4bff546086339e0e1cde132fd628f31cb99ef6b62e8f219dd1caa8606934d49e"
+    },
+    {
+      "id": "priority-dominates-human",
+      "requestPath": "request-priority-review.json",
+      "requestHash": "sha256:3bfb8fa29855c843a82949ab1255f2aafcb771caeec9e1fd62d1f70826888c70",
+      "outcome": "PRIORITY_HUMAN_REVIEW",
+      "reasonCodes": [
+        "PRIORITY_TRIGGER"
+      ],
+      "decisionReceiptHash": "sha256:f59910e3f7e24e3d5066830dfe3fe9f878fb2da8258643dfffe2155f9fef1ef0"
+    },
+    {
+      "id": "invalid-pre-adjudication",
+      "requestPath": "request-invalid.json",
+      "requestHash": "sha256:10c52163c56e7f7b721c3ec72ecd347f005dd0908258e04a182a625ed039fb60",
+      "outcome": "REVIEW_INVALID",
+      "reasonCodes": [
+        "VALIDITY_GATE_FAILED"
+      ],
+      "decisionReceiptHash": "sha256:08531d5caad3c41a088b383af760ed8607f0e6b8ca4480f857d28b292864462a"
+    }
+  ]
+}

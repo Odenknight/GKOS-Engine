@@ -1,0 +1,39 @@
+{
+  "schema": "gkos.admission-policy.policy.v1",
+  "contract": "gkos.admission-policy.v1",
+  "contractVersion": "1.0.0",
+  "policyId": "fixture:bounded-derived-memory",
+  "policyVersion": "1.0.0",
+  "provider": {
+    "id": "fixture:deterministic-provider",
+    "version": "1.0.0",
+    "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "engine": {
+    "name": "gkos-engine",
+    "version": "2.1.2-fixture",
+    "commit": "2222222222222222222222222222222222222222"
+  },
+  "schemaHashes": {
+    "request": "sha256:2288ae493a6fb3e60e0a6c5b89880c5c8f38c735c13949b7b8c67d309dada2f1",
+    "policy": "sha256:e08dd3d96c770a3568bae4ecf9bea37addde944c2c806d2467eac565588b8d48",
+    "decisionReceipt": "sha256:db32e1fc39233b09ba746be9123912bb0c47a1246e2609e992e02e090d66befb"
+  },
+  "reasonCodesHash": "sha256:5ce8da908102ddeebacb46d1aba0f62bb1776d7416fad89e4c8c5aae4f51a8e3",
+  "semanticRulesHash": "sha256:e191a663d29dd2e7f41a1e6b2881ddf4a01190498c980346799209e861246aae",
+  "dependencyClosure": [
+    {
+      "id": "fixture:governance-standard",
+      "version": "0.0.1",
+      "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    {
+      "id": "fixture:reviewer-configuration",
+      "version": "1.0.0",
+      "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+    }
+  ],
+  "priorityTriggerCodes": ["executable-change", "suspected-secret"],
+  "humanReviewTriggerCodes": ["new-factual-assertion", "unresolved-contradiction"],
+  "autoAllowlist": ["derived_summary", "index_projection"]
+}
