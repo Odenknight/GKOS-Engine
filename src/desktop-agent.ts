@@ -1,3 +1,4 @@
+import { loadLocalEmbeddingProvider } from "./service/local-embedding";
 /**
  * GKOS-Engine — desktop agent sidecar (headless).
  *
@@ -116,11 +117,19 @@ Options:
   --notes <folder>                 Notes folder to read (required)
   --default-sensitivity <level>    Privacy level for unlabeled notes (default: secret)
   --port <number>                  Local connection port (default: 4814)
-  --status-file <path>             Status file location
+  --status-file <path>             Default: <notes>/.gkx/desktop-agent.status.json
   --help                           Show this help
 
+Environment (operator settings; restart required):
+  GKOS_CODEX_MCP_ENABLED           Unset/0 disables; 1 enables a separate MCP identity
+  GKOS_MCP_CONTENT_LIMITS          JSON: files, per_file_bytes, total_bytes
+  GKOS_LOCAL_EMBEDDING_CONFIG      Protected local ONNX configuration path; unset disables
+
+gkos.toml is not loaded by this helper. Use the flags/environment above.
+Unknown/duplicate flags and positional arguments are rejected. Invalid sensitivity
+falls back to secret; invalid port falls back to 4814 (no numeric-prefix parsing).
 This helper reads notes but never edits them. It accepts connections from this
-computer only.`;
+computer only. See docs/SETTINGS.md for bounds, defaults and runtime ownership.`;
 
 /**
  * Parse CLI args. Mirrors the spec exactly:
@@ -135,8 +144,12 @@ export function parseArgs(argv: string[]): DesktopAgentArgs {
   const map = new Map<string, string>();
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
+    if (!["--notes", "--default-sensitivity", "--port", "--status-file", "--host"].includes(a)) {
+      throw new Error("Unsupported desktop-agent argument; see --help.");
+    }
     if (a.startsWith("--")) {
       const key = a.slice(2);
+      if (map.has(key)) throw new Error("Duplicate desktop-agent option; see --help.");
       const val = argv[i + 1] && !argv[i + 1].startsWith("--") ? argv[++i] : "";
       map.set(key, val);
     }
@@ -158,7 +171,7 @@ export function parseArgs(argv: string[]): DesktopAgentArgs {
       : "secret";
 
   const rawPort = map.get("port");
-  const parsedPort = rawPort != null ? Number.parseInt(rawPort, 10) : NaN;
+  const parsedPort = rawPort != null && /^[0-9]+$/u.test(rawPort) ? Number(rawPort) : NaN;
   const port =
     Number.isInteger(parsedPort) && parsedPort > 0 && parsedPort < 65536 ? parsedPort : DEFAULT_PORT;
 
@@ -303,7 +316,7 @@ export interface DefaultMcpCredentialState {
   agent_label: string;
   sensitivity_ceiling: GkxSensitivity;
   revoked: boolean;
-  limits: { concurrent_requests: 4; bucket_capacity: 10; refill_ms: 1000 };
+  limits: { concurrent_requests: 4; bucket_capacity: 10 | 40; refill_ms: 1000 };
 }
 
 function readProtectedCredentialLeaf(leafPath: string, maximumBytes = 4_096): string | null {
@@ -313,7 +326,7 @@ function readProtectedCredentialLeaf(leafPath: string, maximumBytes = 4_096): st
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
     throw error;
   }
-  if (before.isSymbolicLink() || !before.isFile() || before.size < 1 || before.size > maximumBytes) {
+  if (before.isSymbolicLink() || !before.isFile() || before.nlink !== 1 || before.size < 1 || before.size > maximumBytes) {
     throw new Error("GKX_WATCHER_CREDENTIAL_LEAF_INVALID");
   }
   if (process.platform !== "win32") {
@@ -341,14 +354,16 @@ function uuidV7(): string {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
-export function loadOrCreateDefaultMcpCredential(directory: string): {
+function loadOrCreateProfileMcpCredential(directory: string, profile: "default" | "codex"): {
   token: string;
   tokenPath: string;
   identityPath: string;
   state: DefaultMcpCredentialState;
 } {
-  const tokenPath = path.join(directory, "desktop-agent.mcp.token");
-  const identityPath = path.join(directory, "desktop-agent.mcp.identity.json");
+  const stem = profile === "codex" ? "desktop-agent.codex.mcp" : "desktop-agent.mcp";
+  const label = profile === "codex" ? "Codex MCP Agent" : "Local MCP Agent";
+  const tokenPath = path.join(directory, `${stem}.token`);
+  const identityPath = path.join(directory, `${stem}.identity.json`);
   const token = loadOrCreateToken(tokenPath);
   let state: DefaultMcpCredentialState;
   const existingIdentity = readProtectedCredentialLeaf(identityPath);
@@ -356,16 +371,16 @@ export function loadOrCreateDefaultMcpCredential(directory: string): {
     const parsed = JSON.parse(existingIdentity) as DefaultMcpCredentialState;
     if (parsed.schema_version !== 1 || !/^credential:[a-z0-9:-]{1,128}$/u.test(parsed.credential_id) ||
       !/^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u.test(parsed.agent_id) ||
-      parsed.agent_label !== "Local MCP Agent" || parsed.sensitivity_ceiling !== "internal" || typeof parsed.revoked !== "boolean" ||
-      JSON.stringify(parsed.limits) !== JSON.stringify({ concurrent_requests: 4, bucket_capacity: 10, refill_ms: 1000 })) throw new Error("GKX_WATCHER_MCP_IDENTITY_INVALID");
+      parsed.agent_label !== label || !SENSITIVITY_LEVELS.includes(parsed.sensitivity_ceiling) || typeof parsed.revoked !== "boolean" ||
+      ![10, 40].includes(parsed.limits?.bucket_capacity) || JSON.stringify(parsed.limits) !== JSON.stringify({ concurrent_requests: 4, bucket_capacity: parsed.limits?.bucket_capacity, refill_ms: 1000 })) throw new Error("GKX_WATCHER_MCP_IDENTITY_INVALID");
     state = parsed;
   } else {
     state = {
       schema_version: 1,
       credential_id: `credential:${crypto.randomBytes(16).toString("hex")}`,
       agent_id: uuidV7(),
-      agent_label: "Local MCP Agent",
-      sensitivity_ceiling: "internal",
+      agent_label: label,
+      sensitivity_ceiling: profile === "codex" ? "secret" : "internal",
       revoked: false,
       limits: { concurrent_requests: 4, bucket_capacity: 10, refill_ms: 1000 },
     };
@@ -376,6 +391,17 @@ export function loadOrCreateDefaultMcpCredential(directory: string): {
   return { token, tokenPath, identityPath, state };
 }
 
+export function loadOrCreateDefaultMcpCredential(directory: string): ReturnType<typeof loadOrCreateProfileMcpCredential> {
+  return loadOrCreateProfileMcpCredential(directory, "default");
+}
+
+/** Explicit operator opt-in only; disabled mode performs no credential I/O. */
+export function loadOptionalCodexMcpCredential(directory: string, enabled = process.env.GKOS_CODEX_MCP_ENABLED): ReturnType<typeof loadOrCreateProfileMcpCredential> | null {
+  if (enabled === undefined || enabled === "0") return null;
+  if (enabled !== "1") throw new Error("GKX_WATCHER_CODEX_MCP_CONFIGURATION_INVALID");
+  return loadOrCreateProfileMcpCredential(directory, "codex");
+}
+
 export function defaultCredentialStatusPaths(tokenPath: string, mcp: { tokenPath: string; identityPath: string }): Pick<StatusDoc, "token_path" | "mcp_token_path" | "mcp_identity_path"> {
   return { token_path: tokenPath, mcp_token_path: mcp.tokenPath, mcp_identity_path: mcp.identityPath };
 }
@@ -384,7 +410,7 @@ export function formatDefaultCredentialPaths(tokenPath: string, mcp: { tokenPath
   return `viewer credential: ${tokenPath}  MCP credential: ${mcp.tokenPath}  MCP identity: ${mcp.identityPath}  status: ${statusFile}`;
 }
 
-export function openValidatedCredentialDirectory(directory: string, viewerToken: string, mcp: ReturnType<typeof loadOrCreateDefaultMcpCredential>): ReturnType<typeof openWatcherDirectory> {
+export function openValidatedCredentialDirectory(directory: string, viewerToken: string, mcp: ReturnType<typeof loadOrCreateDefaultMcpCredential>, codex: ReturnType<typeof loadOptionalCodexMcpCredential> = null): ReturnType<typeof openWatcherDirectory> {
   const capability = openWatcherDirectory(directory);
   const reopenedToken = readWatcherFile(capability, "desktop-agent.token", { maximum_bytes: 4_096 });
   if (reopenedToken.bytes.toString("utf8").trim() !== viewerToken) throw new Error("GKX_WATCHER_SERVICE_TOKEN_INVALID");
@@ -392,6 +418,13 @@ export function openValidatedCredentialDirectory(directory: string, viewerToken:
   if (reopenedMcpToken.bytes.toString("utf8").trim() !== mcp.token) throw new Error("GKX_WATCHER_MCP_TOKEN_INVALID");
   const reopenedMcpIdentity = readWatcherFile(capability, "desktop-agent.mcp.identity.json", { maximum_bytes: 4_096 });
   if (reopenedMcpIdentity.bytes.toString("utf8") !== JSON.stringify(mcp.state, null, 2)) throw new Error("GKX_WATCHER_MCP_IDENTITY_INVALID");
+  if (codex) {
+    if (new Set([viewerToken, mcp.token, codex.token]).size !== 3 || mcp.state.credential_id === codex.state.credential_id || mcp.state.agent_id === codex.state.agent_id) throw new Error("GKOS_SERVICE_CREDENTIAL_DUPLICATE");
+    const codexToken = readWatcherFile(capability, "desktop-agent.codex.mcp.token", { maximum_bytes: 4096 });
+    const codexIdentity = readWatcherFile(capability, "desktop-agent.codex.mcp.identity.json", { maximum_bytes: 4096 });
+    if (codexToken.bytes.toString("utf8").trim() !== codex.token) throw new Error("GKX_WATCHER_MCP_TOKEN_INVALID");
+    if (codexIdentity.bytes.toString("utf8") !== JSON.stringify(codex.state, null, 2)) throw new Error("GKX_WATCHER_MCP_IDENTITY_INVALID");
+  }
   return capability;
 }
 
@@ -654,25 +687,26 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   };
   const token = loadOrCreateToken(tokenPath);
   const mcpCredential = loadOrCreateDefaultMcpCredential(path.dirname(args.statusFile));
+  const codexCredential = loadOptionalCodexMcpCredential(path.dirname(args.statusFile));
   const credentialRegistry = new ServiceCredentialRegistry([
     legacyViewerBinding(token, "secret"),
-    defaultMcpAgentBinding(mcpCredential.token, {
-      credentialId: mcpCredential.state.credential_id,
-      agentId: mcpCredential.state.agent_id,
-      agentLabel: mcpCredential.state.agent_label,
-      sensitivityCeiling: mcpCredential.state.sensitivity_ceiling,
-      revoked: mcpCredential.state.revoked,
+    ...[mcpCredential, ...(codexCredential ? [codexCredential] : [])].map(credential => defaultMcpAgentBinding(credential.token, {
+      credentialId: credential.state.credential_id,
+      agentId: credential.state.agent_id,
+      agentLabel: credential.state.agent_label,
+      sensitivityCeiling: credential.state.sensitivity_ceiling,
+      revoked: credential.state.revoked,
       limits: {
-        concurrentRequests: mcpCredential.state.limits.concurrent_requests,
-        bucketCapacity: mcpCredential.state.limits.bucket_capacity,
-        refillMs: mcpCredential.state.limits.refill_ms,
+        concurrentRequests: credential.state.limits.concurrent_requests,
+        bucketCapacity: credential.state.limits.bucket_capacity,
+        refillMs: credential.state.limits.refill_ms,
       },
-    }),
+    })),
   ]);
   // Token creation is the one protected legacy mutation that precedes the
   // watcher service. On POSIX an initial create changes the S directory seal;
   // rebind only after securely reopening the exact token that was just loaded.
-  const tokenDirectory = openValidatedCredentialDirectory(path.dirname(args.statusFile), token, mcpCredential);
+  const tokenDirectory = openValidatedCredentialDirectory(path.dirname(args.statusFile), token, mcpCredential, codexCredential);
   statusCapability = tokenDirectory;
   let latestStatus = initialStatus;
   const writeStatus = (status: StatusDoc): void => {
@@ -694,10 +728,12 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
   writeStatus(initialStatus);
   let expectedStatusNamespace: string | null = watcherNamespaceCoordinate(statusCapability);
 
+  const localEmbedding = await loadLocalEmbeddingProvider(process.env.GKOS_LOCAL_EMBEDDING_CONFIG);
   const configurationDigest = retrievalCanonicalDigest({
     contract_version: "gkos-watcher-desktop-configuration/1.0.0-draft.1",
     default_sensitivity: args.defaultSensitivity,
     lexical_backend: "sqlite_fts5",
+    ...(localEmbedding ? { local_embedding: localEmbedding.coordinate } : {}),
   });
   const policyDigest = retrievalCanonicalDigest({
     contract_version: "gkos-watcher-desktop-policy/1.0.0-draft.1",
@@ -729,7 +765,11 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
       policy_digest: policyDigest,
       projection_options: { defaultSensitivity: args.defaultSensitivity },
       port: args.port,
+      unchanged_scan_fast_path: true,
+      periodic_reconciliation_ms: 60000,
+      local_embedding_sensitivity: localEmbedding?.indexingCeiling,
       coordinator_options: {
+        vector_provider: localEmbedding?.provider,
         discoverability_policy: () => "allow",
         source_discoverability_policy: () => "allow",
       },
@@ -761,6 +801,10 @@ export async function main(argv = process.argv.slice(2)): Promise<void> {
           status: () => ({ state: legacyStatusFromWatcher(context.get_status(), args, tokenPath, mcpCredential).state }),
           vaultName,
           vaultId,
+          retrievalSearch: async (request, guards) => {
+            const generation = context.get_snapshot().service_generation_id;
+            return context.search_authorized(request, guards, generation);
+          },
           navigationConfig,
           corsAllowlist: CORS_ALLOWLIST,
           reservedRoutes: new Set(["/status", "/control/shutdown"]),

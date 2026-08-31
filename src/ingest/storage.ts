@@ -1184,6 +1184,19 @@ function watcherCandidateChunks(
   });
 }
 
+/** Trusted local-only watcher override; caller must prove the executor before using it. */
+export function watcherLocalEmbeddingEligibility(plan: IngestValidationPlan, ceiling: string): readonly string[] {
+  const levels = ["public", "internal", "restricted", "confidential", "regulated", "phi", "secret"];
+  const rank = levels.indexOf(ceiling);
+  if (rank < 0) throw new Error("LOCAL_EMBEDDING_CEILING_INVALID");
+  const prepared = watcherCandidateChunks(plan, { max_tokens: 400, overlap_tokens: 0 });
+  const allowed = (value: unknown) => typeof value === "string" && levels.indexOf(value) >= 0 && levels.indexOf(value) <= rank;
+  const disallowedRecords = new Set(prepared.candidate_chunks.filter(chunk => !allowed(chunk.chunk.metadata.sensitivity)).map(chunk => chunk.record_key));
+  const accepted = new Set(prepared.candidate_sources.filter(source => allowed(source.source_metadata.sensitivity) && !disallowedRecords.has(source.record_key)).map(source => source.record_key));
+  return Object.freeze(prepared.candidate_chunks.filter(chunk => accepted.has(chunk.record_key))
+    .map(chunk => chunk.candidate_chunk_key).sort(retrievalCodeUnitCompare));
+}
+
 /** Exact Phase-3 public-only provider boundary, reused by the watcher host. */
 export function watcherPublicEmbeddingEligibility(
   plan: IngestValidationPlan,

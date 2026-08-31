@@ -354,6 +354,8 @@ export async function runSearch(query, dir, limit = 5, hostOptions = {}) {
       trust_cwd: hostOptions.trustCwdConfig === true,
       vault_root: vaultDir,
     });
+  const {warnInactiveSettings} = await import('./settings-inventory.mjs');
+  warnInactiveSettings(trustedConfig, 'cli-search');
   const retrievalConfig = trustedConfig?.document?.retrieval ?? {};
   const vectorIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "vectors") : undefined;
   const rerankerIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "reranker") : undefined;
@@ -750,6 +752,9 @@ export async function runIngestIndex(kbPath, options = {}) {
       vault_root: vaultDir,
     });
     if (await revalidatePhase3ScanRoot(scan) !== vaultDir) throw new Error("GKX_SCAN_ROOT_CHANGED_DURING_SCAN");
+    const {warnInactiveSettings} = await import('./settings-inventory.mjs');
+    // Preserve frozen legacy index stderr; the additive explicit-config route opts in.
+    if (options.reportSettings === true) warnInactiveSettings(trustedConfig, 'cli-index');
     const retrievalConfig = trustedConfig?.document?.retrieval ?? {};
     const vectorIdentity = trustedConfig ? configuredProviderIdentityFromTrustedConfig(trustedConfig, "vectors") : undefined;
     let vectorProvider = options.vectorProvider;
@@ -915,9 +920,11 @@ function watchGraph(config) {
 /* ---------------- CLI ---------------- */
 const USAGE = `gkx (GKOS-Engine) v${ENGINE_VERSION}
 Usage:
+  gkx settings [--runtime desktop|cli-search|cli-index] [--config <file>] [--json]
   gkx validate <dir>                                  schema/identity/lineage diagnostics; non-zero exit on error
   gkx validate --kb-path <path> [--schema <path-or-id>] [--format text|json]
   gkx index --kb-path <path> [--schema <path-or-id>] [--strict]
+            [--config <file>] [--trust-cwd-config]
   gkx assess   <dir> [--json]                         per-note documentation-quality scores/labels
   gkx search <query> --kb-path <dir> [--limit <n>]    public-only lexical retrieval with exact citations
              [--as-of <GKX-timestamp>] [--config <trusted-gkos.toml>] [--trust-cwd-config]
@@ -1119,16 +1126,16 @@ function isPhase3ValidateInvocation(args) {
 function parsePhase3CommandArgs(command, args) {
   if (args.length === 1 && (args[0] === "--help" || args[0] === "-h")) return { help: true };
   const seen = new Set();
-  const result = { help: false, kbPath: null, schema: null, format: "text", strict: false };
+  const result = { help: false, kbPath: null, schema: null, format: "text", strict: false, configPath: null, trustCwdConfig: false };
   const valueFlags = command === "validate"
     ? new Set(["--kb-path", "--schema", "--format"])
-    : new Set(["--kb-path", "--schema"]);
+    : new Set(["--kb-path", "--schema", "--config"]);
   for (let index = 0; index < args.length; index++) {
     const item = args[index];
-    if (command === "index" && item === "--strict") {
+    if (command === "index" && (item === "--strict" || item === "--trust-cwd-config")) {
       if (seen.has(item)) return null;
       seen.add(item);
-      result.strict = true;
+      if (item === "--strict") result.strict = true; else result.trustCwdConfig = true;
       continue;
     }
     if (!valueFlags.has(item) || seen.has(item)) return null;
@@ -1137,6 +1144,7 @@ function parsePhase3CommandArgs(command, args) {
     if (typeof value !== "string" || value.length === 0 || value.startsWith("-")) return null;
     if (item === "--kb-path") result.kbPath = value;
     else if (item === "--schema") result.schema = value;
+    else if (item === "--config") result.configPath = value;
     else result.format = value;
   }
   if (result.kbPath === null || (command === "validate" && result.format !== "text" && result.format !== "json")) return null;
@@ -1205,6 +1213,7 @@ export async function main(argv = process.argv.slice(2)) {
   }
 
   if (first === "retrieval") return runRetrievalEvaluationCli(argv.slice(1));
+  if (first === "settings") return (await import('./settings-inventory.mjs')).runSettingsCli(argv.slice(1));
 
   if (first === "index" || (first === "validate" && isPhase3ValidateInvocation(argv.slice(1)))) {
     const parsed = parsePhase3CommandArgs(first, argv.slice(1));
@@ -1231,7 +1240,7 @@ export async function main(argv = process.argv.slice(2)) {
     }
     const mode = parsed.strict ? "strict" : "non_strict";
     try {
-      const result = await runIngestIndex(parsed.kbPath, { schema: parsed.schema, strict: parsed.strict });
+      const result = await runIngestIndex(parsed.kbPath, { schema: parsed.schema, strict: parsed.strict, configPath: parsed.configPath, trustCwdConfig: parsed.trustCwdConfig, reportSettings: !!parsed.configPath || parsed.trustCwdConfig });
       console.log(JSON.stringify(result, null, 2));
       return result.status === "blocked_strict" ? 1 : 0;
     } catch (error) {

@@ -68,6 +68,14 @@ const jsonBytes = (value) =>
   Buffer.from(JSON.stringify(value, null, 2) + "\n", "utf8");
 
 function withoutPhase1SearchHelp(help) {
+  // Strip only exact additive settings-help lines; legacy help remains frozen.
+  for (const line of [
+    '  gkx settings [--runtime desktop|cli-search|cli-index] [--config <file>] [--json]\n',
+    '            [--config <file>] [--trust-cwd-config]\n',
+  ]) {
+    assert.equal(help.split(line).length - 1, 1, 'additive settings help must occur exactly once');
+    help = help.replace(line, '');
+  }
   assert.equal(help.split(ADDITIVE_RETRIEVAL_SEARCH_HELP).length - 1, 1, "additive retrieval search help must occur exactly once");
   assert.equal(help.split(ADDITIVE_INGEST_HELP).length - 1, 1, "additive ingest help must occur exactly once");
   return help.replace(ADDITIVE_RETRIEVAL_SEARCH_HELP, "").replace(ADDITIVE_INGEST_HELP, "");

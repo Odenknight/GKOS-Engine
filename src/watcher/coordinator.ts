@@ -103,6 +103,8 @@ export interface WatcherActivationDerivationInput {
 }
 
 export interface WatcherCoherentSearchOptions {
+  /** Trusted immutable reader; filesystem freshness/root checks still run. */
+  readonly source_reader?: RetrievalCoordinatorOptions["source_reader"];
   readonly watcher_directory: WatcherDirectoryCapability;
   readonly retrieval_directory: WatcherDirectoryCapability;
   readonly vault_root: string;
@@ -1608,7 +1610,14 @@ async function openWatcherRetrievalCoordinator(options: Omit<WatcherCoherentSear
   }
   const coordinator = new RetrievalCoordinator(join(options.retrieval_directory.path, String(retrieval.database_file)), {
     ...options.coordinator_options,
-    source_reader: sourceReader,
+    source_reader: options.source_reader ? async (path) => {
+      // Authorize against captured immutable bytes, but retain the sealed live
+      // reader's alias checks and close the scan-to-citation freshness gap.
+      const expected = await options.source_reader!(path);
+      const live = await sourceReader(path);
+      if (!Buffer.from(live).equals(Buffer.from(expected))) throw new Error("GKX_WATCHER_SOURCE_SNAPSHOT_MISMATCH");
+      return expected;
+    } : sourceReader,
     runtime_policy_digest: String(manifest.policy_digest),
     lineage_view_freshness: "fresh",
   });

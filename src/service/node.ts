@@ -2,3 +2,6 @@
 export * from "./auth";
 export * from "./mcp";
 export * from "./server";
+export * from "./local-embedding";
+
+export * from "./work-scheduler";

@@ -1,5 +1,7 @@
 # GKOS-Engine
 
+Operator settings: [complete settings reference](docs/SETTINGS.md) and [all TOML coordinates](docs/SETTINGS-TOML.md). Run `gkx settings --runtime desktop --json` to distinguish configuration wiring from runtime readiness. Integration/remaining-work tracker: [#36](https://github.com/Odenknight/GKOS-Engine/issues/36).
+
 Turn a folder of Markdown into a dependable knowledge map—locally,
 deterministically, and with the privacy boundary kept in view.
 
