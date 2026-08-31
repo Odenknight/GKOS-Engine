@@ -1,0 +1,550 @@
+{
+  "gkos_capabilities": {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-791e-9d22-9ca544face4c\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"extension_version\":\"observatory.mcp-content.v0\",\"discovery\":{\"version\":\"observatory.discovery/1\",\"view_boundary\":\"admitted_authorized_view_only\",\"availability\":\"tool_available_does_not_imply_scope_coherent\",\"references\":\"record refs are session/generation scoped; note_read also verifies source bytes; reconnect is not a new session\",\"recovery_tool\":\"gkos_record_resolve\",\"catalog_digest\":\"navigation_discover: authorized source snapshot; compare only same artifact kind and authorization context\",\"result_digest\":\"request envelope, not a payload cache key\",\"pagination\":\"required nullable cursor; repeat filters and detail on every page\",\"limits\":{\"request_bytes\":393216,\"result_bytes\":1048576,\"navigation_page\":100,\"search_page\":50,\"note_page_bytes\":16384}},\"capabilities\":[{\"capability_name\":\"capability.read.self\",\"available\":true,\"reason_code\":null},{\"capability_name\":\"graph.temporal.read\",\"available\":true,\"reason_code\":null},{\"capability_name\":\"navigation.audit\",\"available\":true,\"reason_code\":null},{\"capability_name\":\"navigation.discover\",\"available\":true,\"reason_code\":null},{\"capability_name\":\"record.assess\",\"available\":true,\"reason_code\":null},{\"capability_name\":\"record.lineage.read\",\"available\":true,\"reason_code\":null},{\"capability_name\":\"record.validate\",\"available\":true,\"reason_code\":null},{\"capability_name\":\"note.content.read\",\"available\":true,\"reason_code\":null},{\"capability_name\":\"record.locator.resolve\",\"available\":true,\"reason_code\":null},{\"capability_name\":\"note.fulltext.search\",\"available\":true,\"reason_code\":null}],\"result_digest\":\"sha256:4cb30c8c540581eed31cd70f33407faef4b9340ba56dc9a67ce997d27d562825\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-791e-9d22-9ca544face4c",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "extension_version": "observatory.mcp-content.v0",
+        "discovery": {
+          "version": "observatory.discovery/1",
+          "view_boundary": "admitted_authorized_view_only",
+          "availability": "tool_available_does_not_imply_scope_coherent",
+          "references": "record refs are session/generation scoped; note_read also verifies source bytes; reconnect is not a new session",
+          "recovery_tool": "gkos_record_resolve",
+          "catalog_digest": "navigation_discover: authorized source snapshot; compare only same artifact kind and authorization context",
+          "result_digest": "request envelope, not a payload cache key",
+          "pagination": "required nullable cursor; repeat filters and detail on every page",
+          "limits": {
+            "request_bytes": 393216,
+            "result_bytes": 1048576,
+            "navigation_page": 100,
+            "search_page": 50,
+            "note_page_bytes": 16384
+          }
+        },
+        "capabilities": [
+          {
+            "capability_name": "capability.read.self",
+            "available": true,
+            "reason_code": null
+          },
+          {
+            "capability_name": "graph.temporal.read",
+            "available": true,
+            "reason_code": null
+          },
+          {
+            "capability_name": "navigation.audit",
+            "available": true,
+            "reason_code": null
+          },
+          {
+            "capability_name": "navigation.discover",
+            "available": true,
+            "reason_code": null
+          },
+          {
+            "capability_name": "record.assess",
+            "available": true,
+            "reason_code": null
+          },
+          {
+            "capability_name": "record.lineage.read",
+            "available": true,
+            "reason_code": null
+          },
+          {
+            "capability_name": "record.validate",
+            "available": true,
+            "reason_code": null
+          },
+          {
+            "capability_name": "note.content.read",
+            "available": true,
+            "reason_code": null
+          },
+          {
+            "capability_name": "record.locator.resolve",
+            "available": true,
+            "reason_code": null
+          },
+          {
+            "capability_name": "note.fulltext.search",
+            "available": true,
+            "reason_code": null
+          }
+        ],
+        "result_digest": "sha256:4cb30c8c540581eed31cd70f33407faef4b9340ba56dc9a67ce997d27d562825"
+      },
+      "isError": false
+    }
+  },
+  "gkos_record_validate": {
+    "jsonrpc": "2.0",
+    "id": 4,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-7e35-8d19-7b2366888b11\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"record_ref\":\"gkrec1_XDM8k3xxpD0UFS9h3wTTRw\",\"record_digest\":\"sha256:f0e6b05f3cbec80d94b3fc4e8496a8138e9af943262e8873fdfb64358d549177\",\"valid\":true,\"diagnostics\":[{\"code\":\"GKX-PROVENANCE-001\",\"severity\":\"warning\",\"record_ref\":\"gkrec1_XDM8k3xxpD0UFS9h3wTTRw\"}],\"result_digest\":\"sha256:f1d36cf323880c9b5dc514d81cedb8147171fd9122fe7ff9bd5b47736bad9ef4\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-7e35-8d19-7b2366888b11",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "record_ref": "gkrec1_XDM8k3xxpD0UFS9h3wTTRw",
+        "record_digest": "sha256:f0e6b05f3cbec80d94b3fc4e8496a8138e9af943262e8873fdfb64358d549177",
+        "valid": true,
+        "diagnostics": [
+          {
+            "code": "GKX-PROVENANCE-001",
+            "severity": "warning",
+            "record_ref": "gkrec1_XDM8k3xxpD0UFS9h3wTTRw"
+          }
+        ],
+        "result_digest": "sha256:f1d36cf323880c9b5dc514d81cedb8147171fd9122fe7ff9bd5b47736bad9ef4"
+      },
+      "isError": false
+    }
+  },
+  "gkos_record_assess": {
+    "jsonrpc": "2.0",
+    "id": 5,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-744e-9f6e-e7838f31879b\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"record_ref\":\"gkrec1_XDM8k3xxpD0UFS9h3wTTRw\",\"record_digest\":\"sha256:f0e6b05f3cbec80d94b3fc4e8496a8138e9af943262e8873fdfb64358d549177\",\"profile\":\"gkx-2.3-validating-projection\",\"scores_basis_points\":{\"structural_completeness\":5000,\"provenance_quality\":0,\"evidence_support\":null,\"relationship_integrity\":10000,\"temporal_freshness\":null,\"contradiction_status\":null,\"review_readiness\":2000,\"overall\":4083},\"exclusions\":[\"contradiction_status\",\"evidence_support\",\"temporal_freshness\"],\"diagnostic_codes\":[\"GKX-PROVENANCE-001\"],\"interpretation\":\"documentation-and-support-quality-not-truth\",\"truth_authority\":false,\"result_digest\":\"sha256:7cdad27333962f6b8200354a40e575b609222a8a8f40a534607df5d288e104c4\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-744e-9f6e-e7838f31879b",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "record_ref": "gkrec1_XDM8k3xxpD0UFS9h3wTTRw",
+        "record_digest": "sha256:f0e6b05f3cbec80d94b3fc4e8496a8138e9af943262e8873fdfb64358d549177",
+        "profile": "gkx-2.3-validating-projection",
+        "scores_basis_points": {
+          "structural_completeness": 5000,
+          "provenance_quality": 0,
+          "evidence_support": null,
+          "relationship_integrity": 10000,
+          "temporal_freshness": null,
+          "contradiction_status": null,
+          "review_readiness": 2000,
+          "overall": 4083
+        },
+        "exclusions": [
+          "contradiction_status",
+          "evidence_support",
+          "temporal_freshness"
+        ],
+        "diagnostic_codes": [
+          "GKX-PROVENANCE-001"
+        ],
+        "interpretation": "documentation-and-support-quality-not-truth",
+        "truth_authority": false,
+        "result_digest": "sha256:7cdad27333962f6b8200354a40e575b609222a8a8f40a534607df5d288e104c4"
+      },
+      "isError": false
+    }
+  },
+  "gkos_lineage_get": {
+    "jsonrpc": "2.0",
+    "id": 6,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-78be-ab80-3c3040bfce55\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"root_record_ref\":\"gkrec1_XDM8k3xxpD0UFS9h3wTTRw\",\"items\":[{\"record_ref\":\"gkrec1_XDM8k3xxpD0UFS9h3wTTRw\",\"uid\":\"550e8400-e29b-41d4-a716-446655449202\",\"canonical_path\":\"Other.md\",\"valid_at\":\"2026-08-24T00:00:00.000Z\",\"head\":false,\"superseded\":false}],\"page\":{\"limit\":100,\"has_more\":false,\"next_cursor\":null,\"snapshot_id\":\"01a03111-1c00-7f7f-ab00-bfd79b3a3b68\"},\"result_digest\":\"sha256:e1c2653d28ad85fa0a70aa60dda9cffb6e30470abe945f1e499881c0dcd87871\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-78be-ab80-3c3040bfce55",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "root_record_ref": "gkrec1_XDM8k3xxpD0UFS9h3wTTRw",
+        "items": [
+          {
+            "record_ref": "gkrec1_XDM8k3xxpD0UFS9h3wTTRw",
+            "uid": "550e8400-e29b-41d4-a716-446655449202",
+            "canonical_path": "Other.md",
+            "valid_at": "2026-08-24T00:00:00.000Z",
+            "head": false,
+            "superseded": false
+          }
+        ],
+        "page": {
+          "limit": 100,
+          "has_more": false,
+          "next_cursor": null,
+          "snapshot_id": "01a03111-1c00-7f7f-ab00-bfd79b3a3b68"
+        },
+        "result_digest": "sha256:e1c2653d28ad85fa0a70aa60dda9cffb6e30470abe945f1e499881c0dcd87871"
+      },
+      "isError": false
+    }
+  },
+  "gkos_graph_at_time": {
+    "jsonrpc": "2.0",
+    "id": 7,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-72e8-b185-c7eb3c67448d\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"scope_ref\":\"gkscp1_gwCgl2egchHVoMYbXVndXQ\",\"at\":\"2026-08-24T00:00:00.000Z\",\"state\":\"all\",\"items\":[{\"record_ref\":\"gkrec1_XDM8k3xxpD0UFS9h3wTTRw\",\"uid\":\"550e8400-e29b-41d4-a716-446655449202\",\"canonical_path\":\"Other.md\",\"valid_at\":\"2026-08-24T00:00:00.000Z\",\"head\":false,\"superseded\":false},{\"record_ref\":\"gkrec1_5SIaDtBJqiHV8XoBc2f4OQ\",\"uid\":\"550e8400-e29b-41d4-a716-446655449201\",\"canonical_path\":\"index.md\",\"valid_at\":\"2026-08-24T00:00:00.000Z\",\"head\":false,\"superseded\":false}],\"page\":{\"limit\":100,\"has_more\":false,\"next_cursor\":null,\"snapshot_id\":\"01a03111-1c00-7d51-b0b2-0abd7dcbf3c1\"},\"result_digest\":\"sha256:464b105cc7c00668028b09c36c0203c0f9f1a81688b09b45798b87f79092dc7a\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-72e8-b185-c7eb3c67448d",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "scope_ref": "gkscp1_gwCgl2egchHVoMYbXVndXQ",
+        "at": "2026-08-24T00:00:00.000Z",
+        "state": "all",
+        "items": [
+          {
+            "record_ref": "gkrec1_XDM8k3xxpD0UFS9h3wTTRw",
+            "uid": "550e8400-e29b-41d4-a716-446655449202",
+            "canonical_path": "Other.md",
+            "valid_at": "2026-08-24T00:00:00.000Z",
+            "head": false,
+            "superseded": false
+          },
+          {
+            "record_ref": "gkrec1_5SIaDtBJqiHV8XoBc2f4OQ",
+            "uid": "550e8400-e29b-41d4-a716-446655449201",
+            "canonical_path": "index.md",
+            "valid_at": "2026-08-24T00:00:00.000Z",
+            "head": false,
+            "superseded": false
+          }
+        ],
+        "page": {
+          "limit": 100,
+          "has_more": false,
+          "next_cursor": null,
+          "snapshot_id": "01a03111-1c00-7d51-b0b2-0abd7dcbf3c1"
+        },
+        "result_digest": "sha256:464b105cc7c00668028b09c36c0203c0f9f1a81688b09b45798b87f79092dc7a"
+      },
+      "isError": false
+    }
+  },
+  "gkos_navigation_discover": {
+    "jsonrpc": "2.0",
+    "id": 8,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-716a-8df3-020f500b0ef3\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"scope_ref\":\"gkscp1_gwCgl2egchHVoMYbXVndXQ\",\"artifact_digest\":\"sha256:a1987d7fd705b91bb7f2539e74b3304d18af96497ea60e778de0ca275786ce2e\",\"items\":[{\"record_ref\":\"gkrec1_XDM8k3xxpD0UFS9h3wTTRw\",\"child_scope_ref\":null,\"canonical_path\":\"Other.md\",\"classification\":\"directory\",\"management\":\"unmanaged\",\"name_standing\":\"ordinary\",\"recognized_moc_name\":false,\"evidence_codes\":[\"CLASS_DIRECTORY_RULE\",\"MANAGEMENT_NO_MARKERS\",\"MOC_NAME_NOT_EFFECTIVE\"]},{\"record_ref\":\"gkrec1_5SIaDtBJqiHV8XoBc2f4OQ\",\"child_scope_ref\":null,\"canonical_path\":\"index.md\",\"classification\":\"directory\",\"management\":\"unmanaged\",\"name_standing\":\"built-in\",\"recognized_moc_name\":true,\"evidence_codes\":[\"CLASS_DIRECTORY_RULE\",\"MANAGEMENT_NO_MARKERS\",\"MOC_NAME_EFFECTIVE\"]}],\"page\":{\"limit\":100,\"has_more\":false,\"next_cursor\":null,\"snapshot_id\":\"01a03111-1c00-78f7-a7f6-e77c1741402a\"},\"result_digest\":\"sha256:9d2106e4bdfaf9202be890fab24529247efed7937e312592c7835c045112f759\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-716a-8df3-020f500b0ef3",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "scope_ref": "gkscp1_gwCgl2egchHVoMYbXVndXQ",
+        "artifact_digest": "sha256:a1987d7fd705b91bb7f2539e74b3304d18af96497ea60e778de0ca275786ce2e",
+        "items": [
+          {
+            "record_ref": "gkrec1_XDM8k3xxpD0UFS9h3wTTRw",
+            "child_scope_ref": null,
+            "canonical_path": "Other.md",
+            "classification": "directory",
+            "management": "unmanaged",
+            "name_standing": "ordinary",
+            "recognized_moc_name": false,
+            "evidence_codes": [
+              "CLASS_DIRECTORY_RULE",
+              "MANAGEMENT_NO_MARKERS",
+              "MOC_NAME_NOT_EFFECTIVE"
+            ]
+          },
+          {
+            "record_ref": "gkrec1_5SIaDtBJqiHV8XoBc2f4OQ",
+            "child_scope_ref": null,
+            "canonical_path": "index.md",
+            "classification": "directory",
+            "management": "unmanaged",
+            "name_standing": "built-in",
+            "recognized_moc_name": true,
+            "evidence_codes": [
+              "CLASS_DIRECTORY_RULE",
+              "MANAGEMENT_NO_MARKERS",
+              "MOC_NAME_EFFECTIVE"
+            ]
+          }
+        ],
+        "page": {
+          "limit": 100,
+          "has_more": false,
+          "next_cursor": null,
+          "snapshot_id": "01a03111-1c00-78f7-a7f6-e77c1741402a"
+        },
+        "result_digest": "sha256:9d2106e4bdfaf9202be890fab24529247efed7937e312592c7835c045112f759"
+      },
+      "isError": false
+    }
+  },
+  "gkos_navigation_audit": {
+    "jsonrpc": "2.0",
+    "id": 9,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-7ed6-93c4-89b1f4168dcc\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"scope_ref\":\"gkscp1_gwCgl2egchHVoMYbXVndXQ\",\"artifact_digest\":\"sha256:a1987d7fd705b91bb7f2539e74b3304d18af96497ea60e778de0ca275786ce2e\",\"items\":[],\"page\":{\"limit\":100,\"has_more\":false,\"next_cursor\":null,\"snapshot_id\":\"01a03111-1c00-7d00-bf84-c2c7c86bd53b\"},\"result_digest\":\"sha256:91d4d31071347b36635b7f39ee4465a421faa585f425b9d485f4b120e48a6b17\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-7ed6-93c4-89b1f4168dcc",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "scope_ref": "gkscp1_gwCgl2egchHVoMYbXVndXQ",
+        "artifact_digest": "sha256:a1987d7fd705b91bb7f2539e74b3304d18af96497ea60e778de0ca275786ce2e",
+        "items": [],
+        "page": {
+          "limit": 100,
+          "has_more": false,
+          "next_cursor": null,
+          "snapshot_id": "01a03111-1c00-7d00-bf84-c2c7c86bd53b"
+        },
+        "result_digest": "sha256:91d4d31071347b36635b7f39ee4465a421faa585f425b9d485f4b120e48a6b17"
+      },
+      "isError": false
+    }
+  },
+  "gkos_note_read": {
+    "jsonrpc": "2.0",
+    "id": 10,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-7ba8-82f4-fab5ac176643\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"extension_version\":\"observatory.mcp-content.v0\",\"record_ref\":\"gkrec1_XDM8k3xxpD0UFS9h3wTTRw\",\"canonical_path\":\"Other.md\",\"content_encoding\":\"utf-8\",\"content\":\"---\\ngkx_version: \\\"2.3\\\"\\nuid: \\\"550e8400-e29b-41d4-a716-446655449202\\\"\\ntitle: \\\"Synthetic\\\"\\ntype: note\\ncreated_at: 2026-08-24T00:00:00.000Z\\nepistemic_state: observation\\nsensitivity: public\\n---\\nPUBLIC-BODY-CANARY-param-errors-638a\",\"offset_bytes\":0,\"returned_bytes\":223,\"total_bytes\":223,\"source_digest\":\"sha256:3fe3b8b03e1b63bed8c7ef014271b4986e04191832369dc8e362df0ae2fc4f33\",\"page\":{\"limit\":600,\"has_more\":false,\"next_cursor\":null,\"snapshot_id\":\"01a03111-1c00-7fb6-a448-1b98ba31ac15\"},\"result_digest\":\"sha256:55e416f870c009c0e5d83e3cd8e3f54f9daa16d9cfcaf91a2731da085dffc5e4\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-7ba8-82f4-fab5ac176643",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "extension_version": "observatory.mcp-content.v0",
+        "record_ref": "gkrec1_XDM8k3xxpD0UFS9h3wTTRw",
+        "canonical_path": "Other.md",
+        "content_encoding": "utf-8",
+        "content": "---\ngkx_version: \"2.3\"\nuid: \"550e8400-e29b-41d4-a716-446655449202\"\ntitle: \"Synthetic\"\ntype: note\ncreated_at: 2026-08-24T00:00:00.000Z\nepistemic_state: observation\nsensitivity: public\n---\nPUBLIC-BODY-CANARY-param-errors-638a",
+        "offset_bytes": 0,
+        "returned_bytes": 223,
+        "total_bytes": 223,
+        "source_digest": "sha256:3fe3b8b03e1b63bed8c7ef014271b4986e04191832369dc8e362df0ae2fc4f33",
+        "page": {
+          "limit": 600,
+          "has_more": false,
+          "next_cursor": null,
+          "snapshot_id": "01a03111-1c00-7fb6-a448-1b98ba31ac15"
+        },
+        "result_digest": "sha256:55e416f870c009c0e5d83e3cd8e3f54f9daa16d9cfcaf91a2731da085dffc5e4"
+      },
+      "isError": false
+    }
+  },
+  "gkos_record_resolve": {
+    "jsonrpc": "2.0",
+    "id": 11,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-741b-8c4b-42ef4e6e71d4\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"extension_version\":\"observatory.mcp-content.v0\",\"record_ref\":\"gkrec1_5SIaDtBJqiHV8XoBc2f4OQ\",\"uid\":\"550e8400-e29b-41d4-a716-446655449201\",\"canonical_path\":\"index.md\",\"valid_at\":\"2026-08-24T00:00:00.000Z\",\"head\":false,\"superseded\":false,\"source_digest\":\"sha256:0779d719008a8c26416ea8edf4d5b4852fb3e5c9ad85e7ca141fa246d38f8f64\",\"result_digest\":\"sha256:b1a3cf55280cc2437d17c6ac1d42d6e456a32b1ff15eca0a99b5966efd64d319\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-741b-8c4b-42ef4e6e71d4",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "extension_version": "observatory.mcp-content.v0",
+        "record_ref": "gkrec1_5SIaDtBJqiHV8XoBc2f4OQ",
+        "uid": "550e8400-e29b-41d4-a716-446655449201",
+        "canonical_path": "index.md",
+        "valid_at": "2026-08-24T00:00:00.000Z",
+        "head": false,
+        "superseded": false,
+        "source_digest": "sha256:0779d719008a8c26416ea8edf4d5b4852fb3e5c9ad85e7ca141fa246d38f8f64",
+        "result_digest": "sha256:b1a3cf55280cc2437d17c6ac1d42d6e456a32b1ff15eca0a99b5966efd64d319"
+      },
+      "isError": false
+    }
+  },
+  "gkos_search": {
+    "jsonrpc": "2.0",
+    "id": 12,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"request_id\":\"01a03111-1c00-7239-87a0-b428ab9f9145\",\"agent_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abe\",\"auth_epoch\":1,\"authority_generation\":1,\"policy_decision_id\":\"018f47a3-7b5e-7c9d-8a1b-123456789abd\",\"extension_version\":\"observatory.mcp-retrieval.v0\",\"query\":\"Synthetic\",\"retrieval\":{\"projection_freshness\":\"fresh\"},\"retrieval_window\":{\"limit\":100,\"returned_chunks\":0,\"exhaustive\":false},\"items\":[],\"page\":{\"limit\":10,\"has_more\":false,\"next_cursor\":null,\"snapshot_id\":\"01a03111-1c00-7670-b7d5-cef90b64b1bb\"},\"result_digest\":\"sha256:9a1935644761914eb2953984c3b565b0815c7016d97e169fc4adeeb21a520f1e\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "request_id": "01a03111-1c00-7239-87a0-b428ab9f9145",
+        "agent_id": "018f47a3-7b5e-7c9d-8a1b-123456789abe",
+        "auth_epoch": 1,
+        "authority_generation": 1,
+        "policy_decision_id": "018f47a3-7b5e-7c9d-8a1b-123456789abd",
+        "extension_version": "observatory.mcp-retrieval.v0",
+        "query": "Synthetic",
+        "retrieval": {
+          "projection_freshness": "fresh"
+        },
+        "retrieval_window": {
+          "limit": 100,
+          "returned_chunks": 0,
+          "exhaustive": false
+        },
+        "items": [],
+        "page": {
+          "limit": 10,
+          "has_more": false,
+          "next_cursor": null,
+          "snapshot_id": "01a03111-1c00-7670-b7d5-cef90b64b1bb"
+        },
+        "result_digest": "sha256:9a1935644761914eb2953984c3b565b0815c7016d97e169fc4adeeb21a520f1e"
+      },
+      "isError": false
+    }
+  },
+  "unknown_ref": {
+    "jsonrpc": "2.0",
+    "id": 13,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"error_code\":\"GKOS_P6_REFERENCE_UNKNOWN\",\"request_id\":\"01a03111-1c00-7518-8c2d-b4b19bc388d0\",\"retryable\":false,\"retry_after_ms\":null,\"recovery\":{\"code\":\"RESOLVE_KNOWN_PATH_OR_REDISCOVER\",\"message\":\"Reference unavailable in the current admitted view. This does not establish existence or a specific invalidation reason.\",\"next_action\":\"Resolve a previously known canonical path with gkos_record_resolve, optionally guarded by expected_uid; otherwise restart discovery with cursor null. Do not reuse old cursors or another MCP session's references.\"},\"error_digest\":\"sha256:5e27cb2c1c357ce4ea1b56692cd1b8bf05d0e0d100edd65f8425a4e1541f33ad\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "error_code": "GKOS_P6_REFERENCE_UNKNOWN",
+        "request_id": "01a03111-1c00-7518-8c2d-b4b19bc388d0",
+        "retryable": false,
+        "retry_after_ms": null,
+        "recovery": {
+          "code": "RESOLVE_KNOWN_PATH_OR_REDISCOVER",
+          "message": "Reference unavailable in the current admitted view. This does not establish existence or a specific invalidation reason.",
+          "next_action": "Resolve a previously known canonical path with gkos_record_resolve, optionally guarded by expected_uid; otherwise restart discovery with cursor null. Do not reuse old cursors or another MCP session's references."
+        },
+        "error_digest": "sha256:5e27cb2c1c357ce4ea1b56692cd1b8bf05d0e0d100edd65f8425a4e1541f33ad"
+      },
+      "isError": true
+    }
+  },
+  "unknown_cursor": {
+    "jsonrpc": "2.0",
+    "id": 14,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"error_code\":\"GKOS_P6_REFERENCE_UNKNOWN\",\"request_id\":\"01a03111-1c00-71d1-8116-029f8058c9d1\",\"retryable\":false,\"retry_after_ms\":null,\"recovery\":{\"code\":\"RESOLVE_KNOWN_PATH_OR_REDISCOVER\",\"message\":\"Reference unavailable in the current admitted view. This does not establish existence or a specific invalidation reason.\",\"next_action\":\"Resolve a previously known canonical path with gkos_record_resolve, optionally guarded by expected_uid; otherwise restart discovery with cursor null. Do not reuse old cursors or another MCP session's references.\"},\"error_digest\":\"sha256:520e6329ac3cd0c51067e7cdbcd205230d6ff8dc993837079e3db2405adb184e\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "error_code": "GKOS_P6_REFERENCE_UNKNOWN",
+        "request_id": "01a03111-1c00-71d1-8116-029f8058c9d1",
+        "retryable": false,
+        "retry_after_ms": null,
+        "recovery": {
+          "code": "RESOLVE_KNOWN_PATH_OR_REDISCOVER",
+          "message": "Reference unavailable in the current admitted view. This does not establish existence or a specific invalidation reason.",
+          "next_action": "Resolve a previously known canonical path with gkos_record_resolve, optionally guarded by expected_uid; otherwise restart discovery with cursor null. Do not reuse old cursors or another MCP session's references."
+        },
+        "error_digest": "sha256:520e6329ac3cd0c51067e7cdbcd205230d6ff8dc993837079e3db2405adb184e"
+      },
+      "isError": true
+    }
+  },
+  "conflict": {
+    "jsonrpc": "2.0",
+    "id": 15,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"error_code\":\"GKOS_P6_AUTHORIZED_VIEW_CONFLICT\",\"request_id\":\"01a03111-1c00-7db0-bbfc-83844c722745\",\"retryable\":false,\"retry_after_ms\":null,\"error_digest\":\"sha256:ac03cecdd18faff2e347183255db678bdcc42c7b60948154cc670d0664201561\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "error_code": "GKOS_P6_AUTHORIZED_VIEW_CONFLICT",
+        "request_id": "01a03111-1c00-7db0-bbfc-83844c722745",
+        "retryable": false,
+        "retry_after_ms": null,
+        "error_digest": "sha256:ac03cecdd18faff2e347183255db678bdcc42c7b60948154cc670d0664201561"
+      },
+      "isError": true
+    }
+  },
+  "auth_failed": {
+    "jsonrpc": "2.0",
+    "id": 16,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"contract_version\":\"1.0.0-draft.2\",\"error_code\":\"GKOS_P6_AUTH_FAILED\",\"request_id\":\"01a03111-1c00-7c21-a7ce-a9b829d5b725\",\"retryable\":false,\"retry_after_ms\":null,\"error_digest\":\"sha256:4e71287af9a9b022b19a1e12e10eb359fda07a426e070a5d3646625109165381\"}"
+        }
+      ],
+      "structuredContent": {
+        "contract_version": "1.0.0-draft.2",
+        "error_code": "GKOS_P6_AUTH_FAILED",
+        "request_id": "01a03111-1c00-7c21-a7ce-a9b829d5b725",
+        "retryable": false,
+        "retry_after_ms": null,
+        "error_digest": "sha256:4e71287af9a9b022b19a1e12e10eb359fda07a426e070a5d3646625109165381"
+      },
+      "isError": true
+    }
+  }
+}

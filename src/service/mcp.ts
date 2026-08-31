@@ -34,6 +34,10 @@ const CONTENT_MAX_TOTAL_BYTES = CONTENT_LIMITS.total_bytes;
 const SESSION_REFERENCE_LIMIT = 8_192;
 
 const CONTRACT_VERSION = "1.0.0-draft.2";
+export const PARAM_ERROR_CONTRACT_VERSION = "1.0.0-draft.3";
+export const PARAM_ERROR_LIMIT = 16;
+export type ParamErrorReason = "missing" | "malformed" | "out_of_range" | "unknown_param";
+interface ParamError { param: string; reason: ParamErrorReason; expected: string; hint: string }
 const UUID_V7 = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 const REF = /^(?:gkrec1|gkscp1)_[A-Za-z0-9_-]{21}[AQgw]$/u;
 const CAPABILITY_NAMES = [
@@ -53,6 +57,35 @@ const annotations = Object.freeze({ readOnlyHint: true, destructiveHint: false, 
 const recordRefSchema = { type: "string", minLength: 29, maxLength: 29, pattern: "^gkrec1_[A-Za-z0-9_-]{21}[AQgw]$" };
 const scopeRefSchema = { type: "string", minLength: 29, maxLength: 29, pattern: "^gkscp1_[A-Za-z0-9_-]{21}[AQgw]$" };
 
+// Reviewed schema-owned prose, never constructed from caller values or state.
+// Published on each input property so a consumer can inspect the same rules.
+const PARAM_HELP: Readonly<Record<string, { expected: string; hint: string }>> = Object.freeze({
+  $: { expected: "object containing published parameters only", hint: "Pass an object and remove fields not listed in the tool schema." },
+  cursor: { expected: "string | null", hint: "Pass null explicitly for the first page." },
+  record_ref: { expected: "string matching ^gkrec1_[A-Za-z0-9_-]{21}[AQgw]$", hint: "Pass a record_ref returned by discovery or record resolution; do not pass a path." },
+  scope_ref: { expected: "string matching ^gkscp1_[A-Za-z0-9_-]{21}[AQgw]$", hint: "Pass the scope_ref returned by navigation discovery." },
+  discovery_scope: { expected: "scope reference string | null", hint: "Omit scope_ref or pass null to start root discovery." },
+  limit: { expected: "integer 1–100", hint: "Pass an integer from 1 through 100." },
+  search_limit: { expected: "integer 1–50", hint: "Pass an integer from 1 through 50." },
+  limit_bytes: { expected: "integer 4–16384", hint: "Pass an integer from 4 through 16384." },
+  at: { expected: "RFC3339 UTC/offset timestamp, optional 1–3 fractional digits, e.g. 2026-08-24T00:00:00.000Z", hint: "Use a real calendar date with an explicit zone; omit the fraction or use milliseconds. Leap seconds are unsupported." },
+  state: { expected: "valid | superseded | not_yet_created | all", hint: "Pass one of the published state values." },
+  severity_at_least: { expected: "info | warning | error", hint: "Pass one of the published severity values." },
+  detail: { expected: "full | compact", hint: "Omit detail for full rows or pass full or compact." },
+  canonical_path: { expected: "canonical relative path, 1–4096 characters", hint: "Use valid Unicode and forward slashes; omit empty, dot, parent, drive and control segments." },
+  path_prefix: { expected: "canonical relative path prefix, 0–4096 characters", hint: "Use a canonical path with an optional trailing slash, or an empty string for no filter." },
+  expected_uid: { expected: "string of 1–128 characters | null", hint: "Omit expected_uid or pass null if no UID guard is needed." },
+  name_query: { expected: "nonblank Unicode string, 1–128 characters, at most 8 whitespace-separated terms", hint: "Remove control characters and reduce the number of terms if needed." },
+  query: { expected: "nonblank Unicode lexical query, 1–256 characters, at most 1024 UTF-8 bytes and 8 whitespace-separated terms", hint: "Use searchable words and balanced double-quoted phrases; omit control characters." },
+  path_include: { expected: "array of 1–16 portable relative globs, each 1–512 characters and at most 1024 UTF-8 bytes", hint: "Use forward slashes, no dot/parent/empty segments or controls; omit the filter to search the authorized view." },
+});
+
+function parameterHelp(tool: string, field: string): { expected: string; hint: string } {
+  const key = field === "limit" && tool === "gkos_search" ? "search_limit" :
+    field === "scope_ref" && tool === "gkos_navigation_discover" ? "discovery_scope" : field;
+  return Object.hasOwn(PARAM_HELP, key) ? PARAM_HELP[key] : PARAM_HELP.$;
+}
+
 export const SERVICE_MCP_TOOLS: readonly ServiceMcpTool[] = Object.freeze([
   { name: "gkos_capabilities", title: "List effective GKOS capabilities", description: "Lists only effective capabilities for this authenticated identity.", inputSchema: { type: "object", additionalProperties: false, properties: {} }, annotations },
   { name: "gkos_record_validate", title: "Validate one discovered GKX record", description: "Returns bounded validation codes for an authority-issued record reference.", inputSchema: { type: "object", additionalProperties: false, properties: { record_ref: recordRefSchema }, required: ["record_ref"] }, annotations },
@@ -64,7 +97,11 @@ export const SERVICE_MCP_TOOLS: readonly ServiceMcpTool[] = Object.freeze([
   { name: "gkos_note_read", title: "Read an authorized note body", description: "Observatory extension: paginated raw Markdown from a current authorized source snapshot, using a session-issued record reference. cursor is required and nullable. References bind the MCP session, generation and source bytes; recover a known canonical path with gkos_record_resolve. Includes frontmatter; record-level authorization, no per-span redaction.", inputSchema: { type: "object", additionalProperties: false, properties: { record_ref: recordRefSchema, cursor: { type: ["string", "null"] }, limit_bytes: { type: "integer", minimum: 4, maximum: 16384 } }, required: ["record_ref", "cursor", "limit_bytes"] }, annotations },
   { name: "gkos_record_resolve", title: "Resolve an admitted canonical path", description: "Observatory extension: resolve an exact known canonical vault-relative path to a current session-issued read reference, without enumeration. A path is a locator, not identity: renames/path reuse can change its meaning. Optional expected_uid guards a previously known UID; UIDs are not proof of uniqueness or authorship. Missing, restricted, moved and UID-mismatched targets share one non-disclosing refusal.", inputSchema: { type: "object", additionalProperties: false, properties: { canonical_path: { type: "string", minLength: 1, maxLength: 4096 }, expected_uid: { type: ["string", "null"], minLength: 1, maxLength: 128 } }, required: ["canonical_path"] }, annotations },
   { name: "gkos_search", title: "Search authorized note text", description: "Observatory extension: native Engine retrieval over authorized indexed chunks, with verified citations and actual ranking/stage confidence. Optional path_include explicitly narrows the search using native portable globs; omitted means the complete authorized view. Paginates a bounded top-100 retrieval window; only an operator-configured local ONNX embedding provider may be enabled; remote providers and reranking remain disabled.", inputSchema: { type: "object", additionalProperties: false, properties: { path_include: { type: "array", minItems: 1, maxItems: 16, items: { type: "string", minLength: 1, maxLength: 512 } }, query: { type: "string", minLength: 1, maxLength: 256 }, cursor: { type: ["string", "null"] }, limit: { type: "integer", minimum: 1, maximum: 50 } }, required: ["query", "cursor", "limit"] }, annotations },
-]);
+].map(tool => ({ ...tool, inputSchema: { ...tool.inputSchema, "x-gkos-param-help": PARAM_HELP.$, properties: Object.fromEntries(
+  Object.entries(tool.inputSchema.properties).map(([field, schema]) => [field, {
+    ...schema, "x-gkos-param-help": parameterHelp(tool.name, field),
+  }]),
+) } })));
 
 interface McpSession {
   id: string;
@@ -146,11 +183,45 @@ function parameterIssues(tool: string, args: unknown): ParameterIssue[] {
     if (!variants.some(typeMatches)) issues.push({ field, code: "INVALID_TYPE" });
     else if (spec.enum && !spec.enum.includes(value)) issues.push({ field, code: "INVALID_ENUM" });
     else if (typeof value === "number" && (value < spec.minimum || value > spec.maximum)) issues.push({ field, code: "OUT_OF_RANGE" });
-    // Reference resolution retains its existing non-disclosing error contract.
-    else if (!field.endsWith("_ref") && typeof value === "string" && (value.length < spec.minLength || value.length > spec.maxLength)) issues.push({ field, code: "INVALID_LENGTH" });
+    // Syntax is public schema information. Well-shaped references still resolve
+    // through the unchanged session/authorization checks below.
+    else if (typeof value === "string" && variants.some((s: Record<string, any>) => s.pattern && !new RegExp(s.pattern, "u").test(value))) issues.push({ field, code: "INVALID_PATTERN" });
+    else if (typeof value === "string" && (value.length < spec.minLength || value.length > spec.maxLength)) issues.push({ field, code: "INVALID_LENGTH" });
     else if (Array.isArray(value) && (value.length < spec.minItems || value.length > spec.maxItems || value.some(item => typeof item !== "string" || item.length < spec.items.minLength || item.length > spec.items.maxLength))) issues.push({ field, code: "INVALID_ITEMS" });
+    else if (field === "at" && typeof value === "string" && !queryInstant(value)) issues.push({ field, code: "INVALID_TIMESTAMP" });
+    else if (field === "canonical_path" && typeof value === "string" && !canonicalLocator(value)) issues.push({ field, code: "INVALID_PATH" });
+    else if (field === "path_prefix" && typeof value === "string" && value !== "" && !canonicalLocator(value.replace(/\/$/u, ""))) issues.push({ field, code: "INVALID_PATH" });
+    else if (field === "name_query" && typeof value === "string" && (!value.trim() || value.trim().split(/\s+/u).length > 8 || Buffer.from(value, "utf8").toString("utf8") !== value || /[\u0000-\u001f\u007f]/u.test(value))) issues.push({ field, code: "INVALID_VALUE" });
+    else if (field === "query" && typeof value === "string") {
+      try {
+        if (!value.trim() || Buffer.byteLength(value, "utf8") > 1024 || value.trim().split(/\s+/u).length > 8 || Buffer.from(value, "utf8").toString("utf8") !== value) throw new Error();
+        lexicalQueryClauses(value.trim());
+      } catch { issues.push({ field, code: "INVALID_VALUE" }); }
+    } else if (field === "path_include" && Array.isArray(value)) {
+      try { validateRetrievalFilters({ path_include: value }); }
+      catch { issues.push({ field, code: "INVALID_ITEMS" }); }
+    }
   }
-  return issues.slice(0, 8);
+  // One error per published field and one aggregate for unknown keys. The
+  // published schema is bounded, so no failing field is silently truncated.
+  if (Object.keys(properties).length + 1 > PARAM_ERROR_LIMIT) throw new Error("GKOS_PARAM_SCHEMA_LIMIT");
+  return issues;
+}
+
+function paramErrors(tool: string, args: unknown, issues: readonly ParameterIssue[]): ParamError[] {
+  const properties = SERVICE_MCP_TOOLS.find(item => item.name === tool)!.inputSchema.properties as Record<string, Record<string, any>>;
+  return issues.map(({ field, code }) => {
+    const value = args && typeof args === "object" ? (args as Record<string, unknown>)[field] : undefined;
+    const spec = Object.hasOwn(properties, field) ? properties[field] : {};
+    const arrayBound = code === "INVALID_ITEMS" && Array.isArray(value) &&
+      (value.length < spec.minItems || value.length > spec.maxItems || value.some(item => typeof item === "string" &&
+        (item.length < spec.items?.minLength || item.length > spec.items?.maxLength || Buffer.byteLength(item, "utf8") > 1024)));
+    return { param: field,
+      reason: code === "MISSING_REQUIRED_FIELD" ? "missing" : code === "UNEXPECTED_FIELD" ? "unknown_param" :
+        code === "OUT_OF_RANGE" || code === "INVALID_LENGTH" || arrayBound ? "out_of_range" : "malformed",
+      ...parameterHelp(tool, field),
+    };
+  });
 }
 
 // Query instants only. Source/admission timestamp validation is unchanged.
@@ -280,14 +351,15 @@ function common(context: ServiceMcpExecutionContext, requestId: string): Record<
   };
 }
 
-function toolError(requestId: string, code: string, issues?: ParameterIssue[]): Record<string, unknown> {
+function toolError(requestId: string, code: string, issues?: ParameterIssue[], errors: ParamError[] = []): Record<string, unknown> {
   const error = {
-    contract_version: CONTRACT_VERSION,
+    contract_version: code === "GKOS_P6_INVALID_PARAMS" ? PARAM_ERROR_CONTRACT_VERSION : CONTRACT_VERSION,
     error_code: code,
     request_id: UUID_V7.test(requestId) ? requestId : null,
     retryable: false,
     retry_after_ms: null,
     ...(issues?.length ? { parameter_issues: issues } : {}),
+    ...(code === "GKOS_P6_INVALID_PARAMS" ? { param_errors: errors } : {}),
     ...(code === "GKOS_P6_REFERENCE_UNKNOWN" ? { recovery: {
       code: "RESOLVE_KNOWN_PATH_OR_REDISCOVER",
       message: "Reference unavailable in the current admitted view. This does not establish existence or a specific invalidation reason.",
@@ -412,7 +484,7 @@ export class ServiceMcpRuntime {
   }
 
   private async executeTool(session: McpSession, tool: string, args: unknown, context: ServiceMcpExecutionContext, requestId: string): Promise<{ result: Record<string, unknown>; paths: string[]; isError: boolean }> {
-    const fail = (code: string, issues?: ParameterIssue[]) => ({ result: toolError(requestId, code, issues ?? (code === "GKOS_P6_INVALID_PARAMS" ? [{ field: "$", code: "INVALID_VALUE" }] : undefined)), paths: [] as string[], isError: true });
+    const fail = (code: string, issues?: ParameterIssue[]) => ({ result: toolError(requestId, code, issues ?? (code === "GKOS_P6_INVALID_PARAMS" ? [{ field: "$", code: "INVALID_VALUE" }] : undefined), code === "GKOS_P6_INVALID_PARAMS" ? paramErrors(tool, args, parameterIssues(tool, args)) : []), paths: [] as string[], isError: true });
     if (!UUID_V7.test(context.identity.agentId) || !UUID_V7.test(context.policyDecisionId)) return fail("GKOS_P6_AUTH_FAILED");
     const issues = parameterIssues(tool, args);
     if (issues.length) return fail("GKOS_P6_INVALID_PARAMS", issues);
@@ -423,6 +495,8 @@ export class ServiceMcpRuntime {
       const contentNames = context.sourceRecords ? ["note.content.read", "record.locator.resolve", ...(context.retrievalSearch ? ["note.fulltext.search"] : [])] : [];
       const discovery = {
         version: "observatory.discovery/1",
+        invalid_params_contract: { contract_version: PARAM_ERROR_CONTRACT_VERSION, max_param_errors: PARAM_ERROR_LIMIT,
+          reasons: ["missing", "malformed", "out_of_range", "unknown_param"], unknown_fields: "aggregated as $; names and values are never echoed" },
         view_boundary: "admitted_authorized_view_only",
         availability: "tool_available_does_not_imply_scope_coherent",
         references: "record refs are session/generation scoped; note_read also verifies source bytes; reconnect is not a new session",
