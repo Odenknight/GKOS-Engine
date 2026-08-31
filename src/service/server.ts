@@ -354,7 +354,7 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
           if (!checkedIdentity || checkedIdentity.revoked || checkedIdentity.credentialId !== currentIdentity.credentialId || checkedIdentity.agentId !== currentIdentity.agentId || checkedIdentity.sensitivityCeiling !== currentIdentity.sensitivityCeiling || JSON.stringify(checkedIdentity.capabilities) !== JSON.stringify(currentIdentity.capabilities)) { send(response, 401, GENERIC_DENIAL, requestOrigin); return; }
           const reply = await mcp.handle(body, sessionId, {
             identity: checkedIdentity, view: authorized.view, generation: Math.max(1, Number(authorized.authorization.generation)),
-            policyDecisionId: POLICY_DECISION_ID, sourceRecords: snapshot.sourceRecords,
+            policyDecisionId: POLICY_DECISION_ID, policyDigest: authorized.authorization.policyDigest, sourceRecords: snapshot.sourceRecords,
             retrievalSearch: options.retrievalSearch ? async (request, guards) => {
               const before = await options.snapshot();
               if (before.generation !== snapshot.generation) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
