@@ -434,7 +434,7 @@
     {
       "path": "test/service-reference-freshness.test.mjs",
       "before": null,
-      "after": "32fb64252166c099ba6027c4ca7295b4a80496da6cfdc1b5186a769a603ef761",
+      "after": "f4c45d6c1085acd0bc6743a1161c8b0615c0e74507acf0a01c048fcf3c66484c",
       "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
     }
   ]
