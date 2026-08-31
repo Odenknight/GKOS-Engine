@@ -22,12 +22,13 @@ import {
   defaultCredentialStatusPaths,
   formatDefaultCredentialPaths,
   loadOrCreateDefaultMcpCredential,
+  loadOptionalCodexMcpCredential,
   openValidatedCredentialDirectory,
   bindAuthorizedStatusDirectory,
   captureStatusDirectoryNamespace,
 } from "../dist/gkos-desktop-agent.mjs";
 import { GkxIndex } from "../dist/gkos-engine.mjs";
-import { mkdtempSync, rmSync, readFileSync, statSync, writeFileSync, symlinkSync } from "node:fs";
+import { mkdtempSync, rmSync, readFileSync, statSync, writeFileSync, symlinkSync, existsSync, linkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -72,6 +73,18 @@ test("parseArgs: port defaults to 4814; invalid falls back to default", () => {
 test("SENSITIVITY_LEVELS is the seven-level vocabulary ending at secret", () => {
   assert.equal(SENSITIVITY_LEVELS.length, 7);
   assert.equal(SENSITIVITY_LEVELS[SENSITIVITY_LEVELS.length - 1], "secret");
+});
+
+test("desktop settings reject ambiguity and do not parse numeric prefixes", () => {
+  for (const tail of [["--prt", "5100"], ["extra"], ["--port", "5100", "--port", "5200"]]) {
+    assert.throws(() => parseArgs(["--notes", "/x", ...tail]));
+  }
+  for (const port of ["5000junk", "5000.5", "5e3", " 5000", "65536", "-1"]) {
+    assert.equal(parseArgs(["--notes", "/x", "--port", port]).port, DEFAULT_PORT);
+  }
+  assert.equal(parseArgs(["--notes", "/x", "--port", "65535"]).port, 65535);
+  assert.match(DESKTOP_AGENT_USAGE, /gkos.toml is not loaded/);
+  assert.match(DESKTOP_AGENT_USAGE, /GKOS_MCP_CONTENT_LIMITS/);
 });
 
 // ---- debounce -----------------------------------------------------------
@@ -377,4 +390,133 @@ test("GET with no Origin (same-origin / non-browser) → 200 and no CORS headers
     assert.equal(res.status, 200);
     assert.equal(res.headers["access-control-allow-origin"], undefined, "no behavior change");
   });
+});
+
+
+test("operator identity ceiling supports all seven levels without rotating identity or clearing revocation", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-mcp-ceilings-"));
+  try {
+    const viewer = loadOrCreateToken(join(dir, "desktop-agent.token"));
+    const initial = loadOrCreateDefaultMcpCredential(dir);
+    assert.equal(initial.state.sensitivity_ceiling, "internal", "new credentials retain least default authority");
+    for (const ceiling of SENSITIVITY_LEVELS) {
+      const state = { ...initial.state, sensitivity_ceiling: ceiling, revoked: true };
+      const bytes = JSON.stringify(state, null, 2);
+      writeFileSync(initial.identityPath, bytes, { mode: 0o600 });
+      const loaded = loadOrCreateDefaultMcpCredential(dir);
+      assert.equal(loaded.state.sensitivity_ceiling, ceiling);
+      assert.equal(loaded.state.revoked, true);
+      assert.equal(loaded.state.credential_id, initial.state.credential_id);
+      assert.equal(loaded.state.agent_id, initial.state.agent_id);
+      assert.equal(loaded.token, initial.token);
+      assert.equal(readFileSync(initial.identityPath, "utf8"), bytes);
+      openValidatedCredentialDirectory(dir, viewer, loaded);
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("invalid ceilings fail closed and existing byte-canonical identity check remains enforced", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-mcp-invalid-ceiling-"));
+  try {
+    const viewer = loadOrCreateToken(join(dir, "desktop-agent.token"));
+    const initial = loadOrCreateDefaultMcpCredential(dir);
+    for (const ceiling of ["all", "SECRET", "secret ", "", null, 6, ["secret"]]) {
+      const bytes = JSON.stringify({ ...initial.state, sensitivity_ceiling: ceiling }, null, 2);
+      writeFileSync(initial.identityPath, bytes, { mode: 0o600 });
+      assert.throws(() => loadOrCreateDefaultMcpCredential(dir), /GKX_WATCHER_MCP_IDENTITY_INVALID/u);
+      assert.equal(readFileSync(initial.identityPath, "utf8"), bytes, "invalid operator configuration is never overwritten");
+    }
+    writeFileSync(initial.identityPath, JSON.stringify({ ...initial.state, sensitivity_ceiling: "secret" }, null, 2) + "\n", { mode: 0o600 });
+    const loaded = loadOrCreateDefaultMcpCredential(dir);
+    assert.throws(() => openValidatedCredentialDirectory(dir, viewer, loaded), /GKX_WATCHER_MCP_IDENTITY_INVALID/u);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+
+test("optional Codex credential preserves existing identity and has independent full-access authority", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-codex-identity-"));
+  try {
+    const viewer = loadOrCreateToken(join(dir, "desktop-agent.token"));
+    const original = loadOrCreateDefaultMcpCredential(dir);
+    const originalBytes = readFileSync(original.identityPath, "utf8");
+    assert.equal(loadOptionalCodexMcpCredential(dir, "0"), null);
+    assert.equal(existsSync(join(dir, "desktop-agent.codex.mcp.token")), false);
+    assert.throws(() => loadOptionalCodexMcpCredential(dir, "true"), /CONFIGURATION_INVALID/);
+    const codex = loadOptionalCodexMcpCredential(dir, "1");
+    assert.equal(codex.state.agent_label, "Codex MCP Agent");
+    assert.equal(codex.state.sensitivity_ceiling, "secret");
+    assert.notEqual(codex.token, original.token);
+    assert.notEqual(codex.state.agent_id, original.state.agent_id);
+    assert.notEqual(codex.state.credential_id, original.state.credential_id);
+    assert.equal(loadOptionalCodexMcpCredential(dir, "1").token, codex.token);
+    assert.equal(readFileSync(original.identityPath, "utf8"), originalBytes);
+    assert.equal(loadOrCreateDefaultMcpCredential(dir).token, original.token);
+    openValidatedCredentialDirectory(dir, viewer, original, codex);
+    writeFileSync(codex.identityPath, JSON.stringify({ ...codex.state, revoked: true }, null, 2));
+    const revoked = loadOptionalCodexMcpCredential(dir, "1");
+    assert.equal(revoked.state.revoked, true);
+    assert.equal(loadOrCreateDefaultMcpCredential(dir).state.revoked, false);
+    openValidatedCredentialDirectory(dir, viewer, original, revoked);
+    writeFileSync(codex.identityPath, JSON.stringify(revoked.state, null, 2) + "\n");
+    assert.throws(() => openValidatedCredentialDirectory(dir, viewer, original, loadOptionalCodexMcpCredential(dir, "1")), /MCP_IDENTITY_INVALID/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("Codex credential duplicate tokens/identities and hard-link aliases fail closed", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-codex-duplicate-"));
+  try {
+    const viewer = loadOrCreateToken(join(dir, "desktop-agent.token"));
+    const original = loadOrCreateDefaultMcpCredential(dir);
+    const codex = loadOptionalCodexMcpCredential(dir, "1");
+    writeFileSync(codex.tokenPath, original.token);
+    assert.throws(() => openValidatedCredentialDirectory(dir, viewer, original, loadOptionalCodexMcpCredential(dir, "1")), /CREDENTIAL_DUPLICATE/);
+    writeFileSync(codex.tokenPath, codex.token);
+    for (const field of ["credential_id", "agent_id"]) {
+      writeFileSync(codex.identityPath, JSON.stringify({ ...codex.state, [field]: original.state[field] }, null, 2));
+      assert.throws(() => openValidatedCredentialDirectory(dir, viewer, original, loadOptionalCodexMcpCredential(dir, "1")), /CREDENTIAL_DUPLICATE/);
+    }
+    rmSync(codex.identityPath);
+    linkSync(original.identityPath, codex.identityPath);
+    assert.throws(() => loadOptionalCodexMcpCredential(dir, "1"), /CREDENTIAL_LEAF_INVALID/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+
+test("separate default and Codex registry revocations do not affect the other credential", async () => {
+  const { ServiceCredentialRegistry, defaultMcpAgentBinding } = await import("../dist/service-node.mjs");
+  const dir = mkdtempSync(join(tmpdir(), "gkos-codex-revoke-"));
+  try {
+    const original = loadOrCreateDefaultMcpCredential(dir);
+    const codex = loadOptionalCodexMcpCredential(dir, "1");
+    const registry = new ServiceCredentialRegistry([original, codex].map(credential => defaultMcpAgentBinding(credential.token, {
+      credentialId: credential.state.credential_id, agentId: credential.state.agent_id,
+      agentLabel: credential.state.agent_label, sensitivityCeiling: credential.state.sensitivity_ceiling, revoked: false,
+    })));
+    registry.setRevoked(codex.state.credential_id, true);
+    assert.equal(registry.resolve(codex.token).revoked, true);
+    assert.equal(registry.resolve(original.token).revoked, false);
+    registry.setRevoked(codex.state.credential_id, false);
+    registry.setRevoked(original.state.credential_id, true);
+    assert.equal(registry.resolve(codex.token).revoked, false);
+    assert.equal(registry.resolve(original.token).revoked, true);
+    assert.equal(registry.resolve(codex.token).sensitivityCeiling, "secret");
+    assert.equal(registry.resolve(original.token).sensitivityCeiling, "internal");
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("operator startup burst accepts 40 without raising concurrency or refill and rejects other limits", () => {
+ const dir=mkdtempSync(join(tmpdir(),'gkos-startup-burst-'));
+ try {
+  const viewer=loadOrCreateToken(join(dir,'desktop-agent.token'));
+  const original=loadOrCreateDefaultMcpCredential(dir);
+  const widened={...original.state,limits:{concurrent_requests:4,bucket_capacity:40,refill_ms:1000}};
+  writeFileSync(original.identityPath,JSON.stringify(widened,null,2));
+  const loaded=loadOrCreateDefaultMcpCredential(dir);
+  assert.equal(loaded.token,original.token);assert.equal(loaded.state.limits.bucket_capacity,40);
+  openValidatedCredentialDirectory(dir,viewer,loaded);
+  for(const limits of [{concurrent_requests:5,bucket_capacity:40,refill_ms:1000},{concurrent_requests:4,bucket_capacity:100,refill_ms:1000},{concurrent_requests:4,bucket_capacity:40,refill_ms:10}]) {
+   writeFileSync(original.identityPath,JSON.stringify({...original.state,limits},null,2));
+   assert.throws(()=>loadOrCreateDefaultMcpCredential(dir),/MCP_IDENTITY_INVALID/);
+  }
+ } finally {rmSync(dir,{recursive:true,force:true});}
 });

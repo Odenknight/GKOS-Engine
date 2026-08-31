@@ -2832,7 +2832,7 @@ function reopenWatcherArtifact(
   const sizeField = role === "observation" ? "observation_byte_size" : "plan_byte_size";
   const expectedFile = `watcher-${role}-${String(authority[digestField]).slice(7)}.json`;
   if (authority[fileField] !== expectedFile) fail("WATCHER_JOURNAL_VALUE_INVALID");
-  const file = readWatcherFile(directory, expectedFile);
+  const file = readWatcherFile(directory, expectedFile, { maximum_bytes: 536_870_912 });
   const record = sealWatcherRecoveryRecord(parseCanonicalWatcherJson(file));
   if (record[digestField] !== authority[digestField] || file.raw_sha256 !== authority[rawField]
       || file.bytes.byteLength !== authority[sizeField] || !file.bytes.equals(watcherCanonicalBytes(record))) {
@@ -2853,9 +2853,11 @@ function reopenCurrentOuterMaterial(
   if (fixed === null || stableBody(fixed) !== stableBody(pointer)) fail("WATCHER_JOURNAL_VALUE_INVALID");
   const manifestFile = readWatcherFile(directory, sqlString(pointer.coherent_manifest_file));
   const reopenedManifest = sealWatcherRecoveryRecord(parseCanonicalWatcherJson(manifestFile));
-  const topologyFile = readWatcherFile(directory, sqlString(manifest.topology_artifact_file));
+  // Match coherent publication/reopen bounds. The generic 1 MiB authority
+  // limit rejects legitimate large-vault artifacts during restart/retry.
+  const topologyFile = readWatcherFile(directory, sqlString(manifest.topology_artifact_file), { maximum_bytes: 536_870_912 });
   const reopenedTopology = sealWatcherRecoveryRecord(parseCanonicalWatcherJson(topologyFile));
-  const graphFile = readWatcherFile(directory, sqlString((manifest.graph_projection_state as JsonRecord).graph_artifact_file));
+  const graphFile = readWatcherFile(directory, sqlString((manifest.graph_projection_state as JsonRecord).graph_artifact_file), { maximum_bytes: 536_870_912 });
   const reopenedGraph = sealWatcherRecoveryRecord(parseCanonicalWatcherJson(graphFile));
   if (stableBody(reopenedManifest) !== stableBody(manifest) || stableBody(reopenedTopology) !== stableBody(topology)
       || stableBody(reopenedGraph) !== stableBody(rawGraph)
@@ -2972,7 +2974,7 @@ function preScanCandidates(
     seen.add(pointerDigest);
     const manifestFile = readWatcherFile(watcherDirectory, sqlString(pointer.coherent_manifest_file));
     const manifest = sealWatcherRecoveryRecord(parseCanonicalWatcherJson(manifestFile));
-    const topologyFile = readWatcherFile(watcherDirectory, sqlString(manifest.topology_artifact_file));
+    const topologyFile = readWatcherFile(watcherDirectory, sqlString(manifest.topology_artifact_file), { maximum_bytes: 536_870_912 });
     const topology = sealWatcherRecoveryRecord(parseCanonicalWatcherJson(topologyFile));
     if (pointer.coherent_manifest_digest !== manifest.coherent_manifest_digest
         || manifest.topology_snapshot_digest !== topology.topology_snapshot_digest

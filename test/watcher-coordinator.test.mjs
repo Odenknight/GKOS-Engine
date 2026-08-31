@@ -634,6 +634,41 @@ test("one-pass Phase3 outcome derives and publishes a real genesis ServiceGenera
   assert.equal(searched.coherent_manifest_digest, published.manifest.coherent_manifest_digest);
   assert.equal(searched.result.hits.length, 1);
   assert.equal(searched.result.hits[0].chunk.source_path, "accepted.md");
+  await t.test("authorized snapshot cannot mask a live sensitivity change between freshness scan and citation read", async () => {
+    let snapshotReads = 0;
+    const changed = content.replace('sensitivity: "public"', 'sensitivity: "secret"');
+    assert.notEqual(changed, content);
+    try {
+      const raced = await searchWatcherCoherentGeneration({
+        watcher_directory: watcher,
+        retrieval_directory: openWatcherDirectory(retrieval.path),
+        vault_root: vaultPath,
+        configuration_digest: configurationDigest,
+        policy_digest: policyDigest,
+        effective_profile_digest: profile.coordinate.effective_profile_digest,
+        request: { query: "Body", limit: 5 },
+        freshness_wait_ms: 0,
+        coordinator_options: {
+          discoverability_policy: () => "allow",
+          source_discoverability_policy: () => "allow",
+        },
+        source_reader: async (path) => {
+          assert.equal(path, "accepted.md");
+          snapshotReads++;
+          // This callback only runs after the coherent freshness scan. Return
+          // the previously authorized bytes while changing the actual source.
+          writeFileSync(join(vaultPath, path), changed, { mode: 0o600 });
+          return Buffer.from(content, "utf8");
+        },
+      });
+      assert.equal(snapshotReads, 1, "race was injected at the snapshot/native-reader boundary");
+      assert.equal(raced.result.projection_freshness, "stale");
+      assert.deepEqual(raced.result.hits, [], "no old public body or verified citation escapes");
+      assert.equal(raced.result.eligible_result_count, 0);
+    } finally {
+      writeFileSync(join(vaultPath, "accepted.md"), content, { mode: 0o600 });
+    }
+  });
   await assert.rejects(() => searchWatcherCoherentGeneration({
     watcher_directory: watcher,
     retrieval_directory: openWatcherDirectory(retrieval.path),

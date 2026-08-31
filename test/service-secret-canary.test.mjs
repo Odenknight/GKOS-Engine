@@ -294,6 +294,9 @@ test("cross-surface secret canary never enters REST, MCP, SSE, denial, status, o
       "gkos_graph_at_time",
       "gkos_navigation_discover",
       "gkos_navigation_audit",
+      "gkos_note_read",
+      "gkos_record_resolve",
+      "gkos_search",
     ]);
 
     stream = await openEvents(held.port);
@@ -330,6 +333,12 @@ test("cross-surface secret canary never enters REST, MCP, SSE, denial, status, o
     await mcp(held.port, headers, "lineage", "gkos_lineage_get", { record_ref: recordRef, cursor: null, limit: 100 });
     await mcp(held.port, headers, "temporal", "gkos_graph_at_time", { scope_ref: scopeRef, at: AT, state: "all", cursor: null, limit: 100 });
     await mcp(held.port, headers, "audit", "gkos_navigation_audit", { scope_ref: scopeRef, severity_at_least: "info", cursor: null, limit: 100 });
+    const resolved = await mcp(held.port, headers, "resolve-visible", "gkos_record_resolve", { canonical_path: "Visible/Older.md" });
+    assert.equal(resolved.isError, false);
+    assert.equal((await mcp(held.port, headers, "resolve-hidden", "gkos_record_resolve", { canonical_path: HIDDEN_PATH })).isError, true);
+    const compact = await mcp(held.port, headers, "compact-hidden", "gkos_navigation_discover", { cursor: null, limit: 100, detail: "compact", path_prefix: HIDDEN_PATH });
+    assert.equal(compact.isError, false);
+    assert.deepEqual(compact.structuredContent.items, []);
     const invalidReference = await mcp(held.port, headers, "invalid-ref", "gkos_record_validate", { record_ref: `gkrec1_${"A".repeat(21)}A` });
     assert.equal(invalidReference.isError, true);
 

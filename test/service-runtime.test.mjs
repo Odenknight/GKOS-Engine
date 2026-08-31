@@ -79,7 +79,7 @@ async function fixtureServer(options = {}) {
     policy: { id: "policy:test", version: "1.0.0", digest: `sha256:${"b".repeat(64)}` },
   });
   const snapshot = async () => ({
-    graph: structuredClone(index.graph), sourceRecords: structuredClone(liveSources), generation: 7, evaluationTime: AT,
+    graph: structuredClone(index.graph), sourceRecords: structuredClone(liveSources), generation: options.generation?.() ?? 7, evaluationTime: AT,
   });
   const server = createLocalServiceServer({
     credentials, snapshot, status: () => ({ state: "serving" }), vaultName: "test", vaultId: "vault:test",
@@ -198,6 +198,7 @@ test("MCP Navigation issues bounded refs, lineage/temporal neighbors, and a same
     assert.deepEqual(JSON.parse(listed.body).result.tools.map((tool) => tool.name), [
       "gkos_capabilities", "gkos_record_validate", "gkos_record_assess", "gkos_lineage_get",
       "gkos_graph_at_time", "gkos_navigation_discover", "gkos_navigation_audit",
+      "gkos_note_read", "gkos_record_resolve", "gkos_search",
     ]);
     const discovery = await call(fixture.port, headers, "discover", "gkos_navigation_discover", { scope_ref: null, cursor: null, limit: 1 });
     assert.equal(discovery.isError, false);
@@ -264,11 +265,11 @@ test("MCP uses source bytes cloned into the authorized generation, never later l
   } finally { await close(fixture.server); }
 });
 
-test("event streams occupy bounded credential concurrency until close", async () => {
+test("event streams occupy eight separate credential slots until close", async () => {
   const fixture = await fixtureServer();
   const held = [];
   try {
-    for (let index = 0; index < 4; index++) {
+    for (let index = 0; index < 8; index++) {
       const pair = await new Promise((resolve, reject) => {
         const req = http.request({ host: HOST, port: fixture.port, path: "/events", headers: { authorization: `Bearer ${VIEWER_TOKEN}` } }, (res) => resolve({ req, res }));
         req.on("error", reject); req.end();
@@ -276,8 +277,8 @@ test("event streams occupy bounded credential concurrency until close", async ()
       assert.equal(pair.res.statusCode, 200);
       held.push(pair);
     }
-    const fifth = await request(fixture.port, "/events", { token: VIEWER_TOKEN });
-    assert.equal(fifth.status, 429);
+    const ninth = await request(fixture.port, "/events", { token: VIEWER_TOKEN });
+    assert.equal(ninth.status, 429);
   } finally {
     for (const { req, res } of held) { res.destroy(); req.destroy(); }
     await close(fixture.server);
@@ -375,5 +376,39 @@ test("aborted slow MCP bodies release capacity without an unhandled response wri
     });
     const initialized = await initialize(fixture.port);
     assert.ok(initialized["mcp-session-id"]);
+  } finally { await close(fixture.server); }
+});
+
+
+test("navigation continuation recovers same-session scope while rejecting cross-session and stale cursors", async () => {
+  let generation = 7;
+  const fixture = await fixtureServer({ generation: () => generation });
+  try {
+    const headers = await initialize(fixture.port);
+    const first = (await call(fixture.port, headers, "nav-first", "gkos_navigation_discover", { cursor: null, limit: 1 })).structuredContent;
+    assert.ok(first.page.next_cursor);
+    const args = { cursor: first.page.next_cursor, limit: 1 };
+    const explicit = (await call(fixture.port, headers, "nav-explicit", "gkos_navigation_discover", { ...args, scope_ref: first.scope_ref })).structuredContent;
+    for (const scope of [{ scope_ref: null }, {}]) {
+      const next = await call(fixture.port, headers, "nav-recovered", "gkos_navigation_discover", { ...args, ...scope });
+      assert.equal(next.isError, false);
+      assert.deepEqual(next.structuredContent.items, explicit.items);
+      assert.equal(next.structuredContent.scope_ref, first.scope_ref);
+      assert.equal(next.structuredContent.page.snapshot_id, first.page.snapshot_id);
+      assert.equal(next.structuredContent.artifact_digest, first.artifact_digest);
+      assert.equal(next.structuredContent.page.next_cursor, explicit.page.next_cursor);
+    }
+    const other = await initialize(fixture.port);
+    const foreign = await call(fixture.port, other, "nav-foreign", "gkos_navigation_discover", { ...args, scope_ref: null });
+    assert.equal(foreign.isError, true);
+    assert.match(JSON.stringify(foreign), /GKOS_P6_REFERENCE_UNKNOWN/);
+    const badScope = await call(fixture.port, headers, "nav-wrong-scope", "gkos_navigation_discover", { ...args, scope_ref: "gkscp1_" + "A".repeat(22) });
+    assert.equal(badScope.isError, true);
+    generation++;
+    const stale = await call(fixture.port, headers, "nav-stale", "gkos_navigation_discover", args);
+    assert.equal(stale.isError, true);
+    assert.match(JSON.stringify(stale), /GKOS_P6_REFERENCE_UNKNOWN/);
+    const restarted = await call(fixture.port, headers, "nav-restart", "gkos_navigation_discover", { cursor: null, limit: 1 });
+    assert.equal(restarted.isError, false);
   } finally { await close(fixture.server); }
 });

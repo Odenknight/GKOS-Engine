@@ -1,3 +1,5 @@
+import { isTrustedLocalEmbeddingProvider } from "../service/local-embedding";
+import type { ServiceRetrievalGuards } from "../service/retrieval";
 /**
  * Repository-private Phase-5 watcher host plane.
  *
@@ -24,6 +26,7 @@ import {
   sealIngestOwnerGenerationManifestEnvelope,
   stageWatcherValidatedGkxIngestGeneration,
   watcherPublicEmbeddingEligibility,
+  watcherLocalEmbeddingEligibility,
 } from "../ingest/storage";
 import type { RetrievalCoordinatorOptions } from "../retrieval/coordinator";
 import { stableJson } from "../retrieval/digest";
@@ -166,6 +169,7 @@ export interface WatcherHostOptions {
   readonly projection_options?: Gkx23ProjectionOptions;
   readonly port?: number;
   readonly periodic_reconciliation_ms?: number;
+  readonly unchanged_scan_fast_path?: boolean;
   readonly periodic_clock?: {
     readonly set_timeout: (callback: () => void, delay_ms: number) => unknown;
     readonly clear_timeout: (handle: unknown) => void;
@@ -179,6 +183,7 @@ export interface WatcherHostOptions {
     readonly get_status: () => Readonly<JsonRecord>;
     readonly get_graph: () => GkxGraph | null;
     readonly get_sources: () => readonly SourceFile[];
+    readonly search_authorized: (request: RetrievalSearchRequest, guards: ServiceRetrievalGuards, expected_generation: string) => Promise<RetrievalSearchResult>;
     readonly get_snapshot: () => { readonly graph: GkxGraph; readonly sources: readonly SourceFile[]; readonly service_generation_id: string };
   }) => WatcherServiceRequestHandler;
   readonly on_index_execution?: (receipt: {
@@ -193,6 +198,7 @@ export interface WatcherHostOptions {
    */
   readonly on_status_directory_capability?: (directory: WatcherDirectoryCapability) => void;
   readonly on_status_change?: (status: Readonly<JsonRecord>) => void;
+  readonly local_embedding_sensitivity?: string;
   readonly coordinator_options: Omit<RetrievalCoordinatorOptions, "source_reader" | "runtime_policy_digest" | "lineage_view_freshness">;
 }
 
@@ -425,6 +431,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
   let firstHintAt: number | null = null;
   let hintEpoch = 0;
   let coverageScan: WatcherSourceScan | null = null;
+  let committedProjectionNamespace: string | null = null;
   let adapterDegraded = false;
   let providerDegraded = false;
   let refreshFileWatchers = (): void => undefined;
@@ -627,6 +634,36 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
         const scan = await secureWatcherSourceScan(vault);
       const selectedProfile: LoadedIngestProfile = await loadIngestProfile(options.profile_selector);
       if (requestedExecution === "apply_changes" && !projectionIndexReady) fail("GKX_WATCHER_FAILURE_RECONCILIATION_REQUIRED");
+      // A complete secure scan can prove that there is no new input to the
+      // already committed projection. This is not a new activation/noop journal
+      // transition: retain its exact authority, and only renew coverage.
+      if (options.unchanged_scan_fast_path === true && kind === "event" && projectionIndexReady &&
+          retryEpoch === null && !adapterDegraded && !providerDegraded &&
+          committedProjectionNamespace !== null && scan.namespace_digest === committedProjectionNamespace &&
+          attemptPointer !== null && attemptManifest !== null && attemptTopology !== null &&
+          attemptManifest.service_generation_id === projectionServiceGenerationId &&
+          attemptManifest.configuration_digest === options.configuration_digest &&
+          attemptManifest.policy_digest === options.policy_digest &&
+          attemptManifest.effective_profile_digest === selectedProfile.coordinate.effective_profile_digest &&
+          watcherScanMatchesTopology(scan, attemptTopology) &&
+          !watcherJournalIsAnchoredResetPendingReconciliation(journal!, attemptPointer, attemptManifest)) {
+        assertWatcherHostLock(hostLock);
+        const currentPointer = readWatcherPointer(watcherDirectory, "outer");
+        const active = readWatcherJournalActive(journal!);
+        if (currentPointer === null || currentPointer.pointer_digest !== attemptPointer.pointer_digest ||
+            active === null || active.pointer_digest !== attemptPointer.pointer_digest) fail("GKX_WATCHER_ACTIVE_COHERENCE_INVALID");
+        // Reopen sealed persisted authorities; never treat a cached namespace
+        // as permission to overlook a changed/corrupted projection artifact.
+        ownerManifestForStatus(retrievalDirectory, attemptManifest);
+        const raw = readWatcherRawGraph(watcherDirectory, attemptManifest);
+        if (raw.service_generation_id !== projectionServiceGenerationId || raw.topology_snapshot_digest !== attemptManifest.topology_snapshot_digest) fail("GKX_WATCHER_GRAPH_INVALID");
+        coverageScan = hintEpoch === batchHintEpoch ? scan : null;
+        options.on_status_change?.(getStatus());
+        return;
+      }
+      // Allow pending socket work between asynchronous scanning and the
+      // synchronous canonical validation required for actual changed inputs.
+      await new Promise<void>(resolveTurn => setImmediate(resolveTurn));
       const priorFilesByPath = new Map(projectionFiles.map((file) => [file.relativePath, file]));
       const currentFilesByPath = new Map(scan.files.map((file) => [file.relativePath, file]));
       const changedPaths = scan.files.filter((file) => {
@@ -726,6 +763,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
           }
           coverageScan = hintEpoch === batchHintEpoch ? scan : null;
           projectionFiles = scan.files;
+          committedProjectionNamespace = scan.namespace_digest;
           projectionServiceGenerationId = String(priorManifest.service_generation_id);
           projectionIndexReady = true;
           options.on_status_change?.(getStatus());
@@ -779,6 +817,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
           completeRetryEpoch();
           if (!consumePendingRetryAuthority(commitScan, commitHintEpoch)) coverageScan = null;
           projectionFiles = commitScan.files;
+          committedProjectionNamespace = commitScan.namespace_digest;
           projectionServiceGenerationId = String(priorManifest.service_generation_id);
           projectionIndexReady = true;
           options.on_status_change?.(getStatus());
@@ -799,7 +838,10 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       let staged;
       try {
         const vectorProvider = options.coordinator_options.vector_provider;
-        const eligibleChunkKeys = vectorProvider === undefined ? [] : watcherPublicEmbeddingEligibility(validationPlan);
+        if (options.local_embedding_sensitivity !== undefined && !isTrustedLocalEmbeddingProvider(vectorProvider)) throw new Error("LOCAL_EMBEDDING_EXECUTOR_UNTRUSTED");
+        const eligibleChunkKeys = vectorProvider === undefined ? [] : options.local_embedding_sensitivity !== undefined
+          ? watcherLocalEmbeddingEligibility(validationPlan, options.local_embedding_sensitivity)
+          : watcherPublicEmbeddingEligibility(validationPlan);
         const priorRetrieval = priorManifest?.retrieval_projection_state as JsonRecord | undefined;
         const priorDatabasePath = priorRetrieval?.state === "ready"
           ? join(retrievalDirectory.path, String(priorRetrieval.database_file))
@@ -865,6 +907,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       }
         coverageScan = hintEpoch === batchHintEpoch ? scan : null;
         projectionFiles = scan.files;
+        committedProjectionNamespace = scan.namespace_digest;
         const committedPointer = readWatcherPointer(watcherDirectory, "outer");
         if (committedPointer === null) fail("GKX_WATCHER_PROJECTION_GENERATION_MISSING");
         projectionServiceGenerationId = String(readWatcherCoherentManifest(watcherDirectory, committedPointer).service_generation_id);
@@ -882,6 +925,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       } catch (error) {
         projectionIndexReady = false;
         projectionFiles = [];
+        committedProjectionNamespace = null;
         projectionServiceGenerationId = null;
         if (!pendingUnscoped) for (const path of batchPaths) pendingPaths.add(path);
         pendingUnscoped ||= batchUnscoped;
@@ -1277,6 +1321,45 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
     periodicEnabled = true;
     schedulePeriodicReconciliation();
 
+    const searchCoherent = async (request: RetrievalSearchRequest, guards?: ServiceRetrievalGuards, expectedGeneration?: string): Promise<RetrievalSearchResult> => {
+        for (;;) {
+          let covered = false;
+          try { covered = await requestAuthorityIsFresh(); }
+          catch { covered = false; }
+          if (covered && retryEpoch === null && !pendingReconciliation) break;
+          try {
+            await reconcile("event");
+          } catch (error) {
+            // A freshness-triggered reconciliation may itself establish a new
+            // durable retry epoch.  In that case this request joins the same
+            // coordinator-owned epoch instead of observing a second failure
+            // root or escaping the frozen backoff arbitration.
+            if (retryEpoch === null || retryTimer === null) throw error;
+          }
+        }
+        if (expectedGeneration !== undefined && getCommittedProjectionSnapshot().service_generation_id !== expectedGeneration) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+        const result = await searchWatcherCoherentGeneration({
+          watcher_directory: watcherDirectory,
+          retrieval_directory: retrievalDirectory,
+          vault_root: vault,
+          configuration_digest: options.configuration_digest,
+          policy_digest: options.policy_digest,
+          effective_profile_digest: (await loadIngestProfile(options.profile_selector)).coordinate.effective_profile_digest,
+          request,
+          source_reader: guards?.source_reader,
+          coordinator_options: guards ? {
+            ...options.coordinator_options,
+            // Intersect with host policy; no request can broaden its authority.
+            discoverability_policy: (chunk) => options.coordinator_options.discoverability_policy(chunk) === "allow" ? guards.discoverability_policy(chunk) : "deny",
+            source_discoverability_policy: (source) => options.coordinator_options.source_discoverability_policy?.(source) === "allow" ? guards.source_discoverability_policy(source) : "deny",
+            vector_provider: isTrustedLocalEmbeddingProvider(options.coordinator_options.vector_provider) ? options.coordinator_options.vector_provider : undefined,
+            rerank_provider: undefined,
+            max_result_bytes: 307200,
+          } : options.coordinator_options,
+        });
+        if (expectedGeneration !== undefined && getCommittedProjectionSnapshot().service_generation_id !== expectedGeneration) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+        return result.result;
+    };
     service = await startWatcherService({
       status_directory: statusDirectory,
       service_instance_id: serviceInstanceId,
@@ -1288,6 +1371,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
         get_graph: getGraph,
         get_sources: () => getCommittedProjectionSnapshot().sources,
         get_snapshot: getCommittedProjectionSnapshot,
+        search_authorized: (request, guards, expectedGeneration) => searchCoherent(request, guards, expectedGeneration),
       }),
       port: options.port,
       on_stopping: () => {
@@ -1333,34 +1417,7 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
       retrieval_directory: retrievalDirectory,
       reconcile,
       status: getStatus,
-      async search(request: RetrievalSearchRequest): Promise<RetrievalSearchResult> {
-        for (;;) {
-          let covered = false;
-          try { covered = await requestAuthorityIsFresh(); }
-          catch { covered = false; }
-          if (covered && retryEpoch === null && !pendingReconciliation) break;
-          try {
-            await reconcile("event");
-          } catch (error) {
-            // A freshness-triggered reconciliation may itself establish a new
-            // durable retry epoch.  In that case this request joins the same
-            // coordinator-owned epoch instead of observing a second failure
-            // root or escaping the frozen backoff arbitration.
-            if (retryEpoch === null || retryTimer === null) throw error;
-          }
-        }
-        const result = await searchWatcherCoherentGeneration({
-          watcher_directory: watcherDirectory,
-          retrieval_directory: retrievalDirectory,
-          vault_root: vault,
-          configuration_digest: options.configuration_digest,
-          policy_digest: options.policy_digest,
-          effective_profile_digest: (await loadIngestProfile(options.profile_selector)).coordinate.effective_profile_digest,
-          request,
-          coordinator_options: options.coordinator_options,
-        });
-        return result.result;
-      },
+      search: searchCoherent,
       shutdown: service.shutdown,
       closed: service.closed,
     });

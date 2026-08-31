@@ -7,6 +7,7 @@ import hmac
 import importlib.util
 import json
 import os
+import socket
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 from urllib.parse import urlparse
@@ -80,14 +81,28 @@ class Handler(BaseHTTPRequestHandler):
             super().log_message(format, *args)
 
 
+def create_server(host: str, port: int) -> ThreadingHTTPServer:
+    if host not in {"127.0.0.1", "::1", "localhost"}:
+        raise ValueError("Refusing non-loopback bind")
+    if not isinstance(port, int) or isinstance(port, bool) or not 1 <= port <= 65535:
+        raise ValueError("Port must be 1 through 65535")
+    # ThreadingHTTPServer defaults to AF_INET, so the previously advertised ::1 failed.
+    class LoopbackServer(ThreadingHTTPServer):
+        address_family = socket.AF_INET6 if host == "::1" else socket.AF_INET
+    return LoopbackServer((host, port), Handler)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Optional DSPy proposal sidecar for GKOS")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
-    if args.host not in {"127.0.0.1", "::1", "localhost"}:
-        raise SystemExit("Refusing non-loopback bind")
-    ThreadingHTTPServer((args.host, args.port), Handler).serve_forever()
+    try:
+        server = create_server(args.host, args.port)
+    except ValueError as exc:
+        parser.error(str(exc))
+    with server:
+        server.serve_forever()
 
 
 if __name__ == "__main__":
