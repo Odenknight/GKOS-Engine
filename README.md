@@ -241,6 +241,23 @@ integration-only. Draft.2 qualifies the seven implemented tools and transports
 for integration; it is not a production compatibility, release, or conformance
 declaration.
 
+The current successor branch is `codex/repair-engine-hosted-ci-20260901`. Its
+implementation evidence coordinate is
+`0dcd9e930d117d8edf316d081211f230cc52d24e`; later documentation commits require
+their own exact-SHA checks. The implementation binds watcher qualification to
+the concrete retrieval backend selected by runtime capabilities and preserves
+fail-closed qualification outcomes. This coordinate is a review candidate, not
+a merge, release, tag, deployment, or TypeScript-oracle selection.
+
+Local qualification has exercised Node 22, 23, and 24. Node 23 used the
+declared compatibility scan because the tested runtime did not provide SQLite
+FTS5; Node 22 exercised the real FTS path. The full local test run remains
+bounded by the current overlay filesystem: nine ownership-change tests fail in
+the candidate and reproduce against its unchanged parent when `chown` is
+rejected. Hosted Linux and Windows Node 22/24 lanes and a capable POSIX
+ownership lane therefore remain required before this candidate can support
+oracle selection. Node 23 remains informative.
+
 Governed contract lanes cover Node 22, 23, and 24 on Linux and Windows, plus a
 macOS Node 22 lane. The existing SEA release workflow is configured to build
 unsigned pre-release `gkos-agent` binaries for Windows x64 and macOS arm64/x64;
