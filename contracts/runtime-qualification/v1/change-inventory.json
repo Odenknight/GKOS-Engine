@@ -408,6 +408,12 @@
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
     },
     {
+      "path": "scripts/run-watcher-observation-qualification.mjs",
+      "before": "a11d7081118cde88a8db2d8bbab6429805f61b2c",
+      "after": "628b383c94d6a83b319a301581356bf73c805f6700a2df79f517c78c69d318a7",
+      "rationale": "CI repair: preserve the strict child stderr protocol while suppressing only Node-owned SQLite and environment-proxy warnings."
+    },
+    {
       "path": "scripts/runtime-qualification.mjs",
       "before": null,
       "after": "ce02c3ab309ae4e1c4d48b27451c9b90e4b06f202096087b7c670b7a7f119b97",
@@ -426,6 +432,12 @@
       "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
     },
     {
+      "path": "src/watcher/host.ts",
+      "before": "552145be95b14ac22a07760c7922a85d038b225c",
+      "after": "3ef7de7452926384168c7152b3f0d8da6a4ba28079a89ab4c95397cba8753555",
+      "rationale": "CI repair: bind the runtime-selected concrete lexical backend so official Node 23 uses the existing manifest-bound compatibility scan."
+    },
+    {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
       "after": "a899295d59d5c129af37053235df103d5d97aeb7bdd4d0d7500b6258532d9974",
@@ -436,6 +448,24 @@
       "before": null,
       "after": "f4c45d6c1085acd0bc6743a1161c8b0615c0e74507acf0a01c048fcf3c66484c",
       "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
+    },
+    {
+      "path": "test/service-retrieval.test.mjs",
+      "before": "83f14477ca28e80cfc990f603e19b73251b6aec6",
+      "after": "f13506904fe1e7f99e7a941c619a4b22988ec4908629c42f5458ccccd7ca56f1",
+      "rationale": "CI repair: execute the native service retrieval contract on the runtime-selected backend without skipping the FTS5 or compatibility-scan paths."
+    },
+    {
+      "path": "test/watcher-large-restart.test.mjs",
+      "before": "6645c5680b85689548f07963fe596e05e12e03ef",
+      "after": "29978a55b73ec828fd1da1900ab7009e0f006209c2a22a86aec447287e9a8c49",
+      "rationale": "CI repair: prove large watcher restart binds and reopens the runtime-selected concrete lexical backend."
+    },
+    {
+      "path": "test/watcher-observation-qualification.test.mjs",
+      "before": "10ee043507f86d913c95ddcd11869390b68d6f6f",
+      "after": "3d6bba52ccb98daa0264dd87309e404ae548e0e1d2c6b6d7d60988e184e2456b",
+      "rationale": "CI repair: prove only the two Node-owned warnings are suppressed and unrelated stderr remains fail-closed."
     }
   ]
 }
