@@ -390,6 +390,12 @@
       "rationale": "Workflow policy: Node 22 and 24 remain blocking, Node 23 is informative, and checkout/setup-node use the approved exact v5 pins."
     },
     {
+      "path": ".github/workflows/phase4-retrieval-observation.yml",
+      "before": "8335d9b88016414584117202b7d083393d360a1c",
+      "after": "033df13af0bfb9f02b1c8679b8d04cf5c32b348718022386b1f919e389254662",
+      "rationale": "Workflow equivalence repair: keep the standalone Phase 4 observation lane byte-equivalent to its CI bridge after the approved exact checkout/setup-node v5 pin upgrade."
+    },
+    {
       "path": ".github/workflows/runtime-qualification.yml",
       "before": null,
       "after": "16b33dad06170fac312bfa66397216653b37f0de9fe1195d472cbeecc1ebdfb5",
@@ -442,6 +448,12 @@
       "before": "552145be95b14ac22a07760c7922a85d038b225c",
       "after": "3ef7de7452926384168c7152b3f0d8da6a4ba28079a89ab4c95397cba8753555",
       "rationale": "CI repair: bind the runtime-selected concrete lexical backend so official Node 23 uses the existing manifest-bound compatibility scan."
+    },
+    {
+      "path": "test/retrieval-observation-qualification.test.mjs",
+      "before": "4e4e0a64a7b03c61dcf933b7ffc4364d56eab0fd",
+      "after": "fa4b9ac55e194b820540aabfc1ff69ad9a308a43882231c1761b5eb44647f00a",
+      "rationale": "Workflow equivalence repair: freeze the approved v5 action coordinates and the updated standalone Phase 4 workflow digest without weakening projection equality."
     },
     {
       "path": "test/runtime-qualification.test.mjs",
