@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { spawnSync } from "node:child_process";
 import { chmodSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -32,6 +33,20 @@ test("watcher observation runner emits exactly one sealed governed measurement",
       logLevel: "silent",
     });
     const runner = await import(pathToFileURL(bundlePath).href);
+    assert.deepEqual(runner.EXTERNAL_SEARCH_NODE_WARNING_ARGS, [
+      "--disable-warning=ExperimentalWarning", "--disable-warning=UNDICI-EHPA",
+    ]);
+    const ownedWarningProbe = spawnSync(process.execPath, [
+      ...runner.EXTERNAL_SEARCH_NODE_WARNING_ARGS, "-e",
+      "process.emitWarning('sqlite probe', 'ExperimentalWarning'); process.emitWarning('proxy probe', {code:'UNDICI-EHPA'})",
+    ], { encoding: "utf8" });
+    assert.equal(ownedWarningProbe.status, 0);
+    assert.equal(ownedWarningProbe.stderr, "", "known Node-owned warnings cannot corrupt the strict child stderr channel");
+    const unrelatedWarningProbe = spawnSync(process.execPath, [
+      ...runner.EXTERNAL_SEARCH_NODE_WARNING_ARGS, "-e", "process.emitWarning('application probe')",
+    ], { encoding: "utf8" });
+    assert.match(unrelatedWarningProbe.stderr, /application probe/u,
+      "unrelated warnings remain visible to the fail-closed stderr check");
     assert.deepEqual(runner.parseExternalSearchChildOutputForTest(
       Buffer.from('{"hits":[]}\n', "utf8"), Buffer.alloc(0),
     ), { hits: [] });

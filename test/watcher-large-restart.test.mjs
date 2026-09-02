@@ -4,6 +4,7 @@ import {chmodSync,linkSync,mkdirSync,mkdtempSync,readFileSync,rmSync,statSync,un
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {startWatcherHost,openWatcherDirectory,readWatcherPointer,readWatcherCoherentManifest} from '../dist/watcher-host.mjs';
+import {detectSqliteLexicalCapability} from '../dist/retrieval.mjs';
 
 test('restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority',async(t)=>{
  const sandbox=mkdtempSync(join(tmpdir(),'gkos-large-restart-')),vault=join(sandbox,'vault'),status=join(sandbox,'status');
@@ -16,6 +17,8 @@ test('restart and unchanged retry reopen coherent topology/graph larger than 1 M
  try{
   host=await startWatcherHost(options);assert.equal(host.status().document_count,count);
   const watcher=join(vault,'.gkx','derived','watcher'),root=openWatcherDirectory(watcher),pointer=readWatcherPointer(root,'outer'),manifest=readWatcherCoherentManifest(root,pointer);
+  assert.equal(manifest.retrieval_projection_state.lexical_backend,detectSqliteLexicalCapability().default_backend,
+    'watcher binds the runtime-selected concrete lexical backend');
   t.diagnostic(JSON.stringify({topology_bytes:statSync(join(watcher,manifest.topology_artifact_file)).size,graph_bytes:statSync(join(watcher,manifest.graph_projection_state.graph_artifact_file)).size}));
   assert.ok(statSync(join(watcher,manifest.topology_artifact_file)).size>1048576);
   assert.ok(statSync(join(watcher,manifest.graph_projection_state.graph_artifact_file)).size>1048576);

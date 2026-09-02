@@ -30,6 +30,7 @@ import {
 } from "../ingest/storage";
 import type { RetrievalCoordinatorOptions } from "../retrieval/coordinator";
 import { stableJson } from "../retrieval/digest";
+import { detectSqliteLexicalCapability } from "../retrieval/sqlite-store";
 import { assertNoLegacyOrPhase3WriterForWatcher } from "../retrieval/state-writer-lock";
 import type { RetrievalSearchRequest, RetrievalSearchResult } from "../retrieval/types";
 import type { GkxGraph, SourceFile } from "../types";
@@ -852,7 +853,11 @@ export async function startWatcherHost(options: WatcherHostOptions): Promise<Wat
           configuration_digest: options.configuration_digest,
           policy_digest: options.policy_digest,
           embedding_eligible_candidate_chunk_keys: eligibleChunkKeys,
-          lexical_backend: "sqlite_fts5",
+          // Node 23's bundled SQLite does not expose FTS5.  The retrieval
+          // generation already binds the capability-selected concrete backend
+          // into its manifest, so the watcher must use that same fail-closed
+          // selection instead of requiring an unavailable optional module.
+          lexical_backend: detectSqliteLexicalCapability().default_backend,
         }, undefined, vectorProvider, priorDatabasePath);
         retrievalDirectory = reopenAuthorizedStagedRetrievalDirectory(retrievalPath, staged);
         providerDegraded = staged.embedding_work.provider_failed;
