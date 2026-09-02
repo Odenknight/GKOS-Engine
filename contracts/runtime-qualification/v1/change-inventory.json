@@ -384,10 +384,16 @@
   ],
   "candidate_changes": [
     {
+      "path": ".github/workflows/ci.yml",
+      "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
+      "after": "361f06c1bfbd188781e93947d06f68f4e9e6cc2a96c58b04256ae2edd26e321a",
+      "rationale": "Workflow policy: Node 22 and 24 remain blocking, Node 23 is informative, and checkout/setup-node use the approved exact v5 pins."
+    },
+    {
       "path": ".github/workflows/runtime-qualification.yml",
       "before": null,
-      "after": "abb770b174118a299689b156e6b025c9f30906e516ae6a5d5f41a7ad07ebe01b",
-      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
+      "after": "16b33dad06170fac312bfa66397216653b37f0de9fe1195d472cbeecc1ebdfb5",
+      "rationale": "Q-GUARD: preserve exact historical/current evidence with macOS coverage; Node 22 and 24 remain blocking, Node 23 is informative, and checkout/setup-node use approved exact v5 pins."
     },
     {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
