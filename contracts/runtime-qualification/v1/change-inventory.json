@@ -402,16 +402,214 @@
       "rationale": "Q-GUARD: preserve exact historical/current evidence; Node 22 and 24 block on Ubuntu and Windows, Node 23 is informative, the exact Standard fixture publication is present, and Git command-scope configuration makes both checkouts canonical from their first write."
     },
     {
+      "path": ".gitignore",
+      "before": "1c3cb4fdd4a97ba1a250ee9240e7f97bb061c8ee",
+      "after": "74d35b2f2b77c5fe153f0001f1f3fb058d114ea4a95431c0d255f8150b162229",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "CHANGELOG.md",
+      "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
+      "after": "52657fbf3134f5a56e750c0f1965c9afa97ece3dcdf3942eb1985c1dbed87f07",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "README.md",
+      "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
+      "after": "6be3a4ff37dd15092f15e72536c0a5be3f7bc45b23cf02e141484fa4a6b554ad",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "TECHNICAL_README.md",
+      "before": "d28fee76dd931095907d35d5582be8f7045f52d8",
+      "after": "8c3b2a91e809713cc97dcc8504c6e572784a27798cba486526b0f7ea1593e1b5",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures.manifest.json",
+      "before": null,
+      "after": "d92f94264a642f36666136f8d394fd5a8f9b033cf696414a36accafe8fe3f0c7",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/ambiguous-lineage.json",
+      "before": null,
+      "after": "b0e98e6af6ed80430ad0da757e30539bafc32b0c7d9669faac80eae2312b2b01",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/conflict.json",
+      "before": null,
+      "after": "bcfc7e095ab8bf32bfeb93b11dbfe6d6269672f09fb2b12ee2e56c7d62a78b49",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/denied.json",
+      "before": null,
+      "after": "598d80fd160ff06bd5140e5cad943b3634bb890f1dcc047ed23ecd61135d56ac",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/malformed-markers.json",
+      "before": null,
+      "after": "5031d28799696b3b8a2490ccc259870c84126c540a4277e23397cbacd33725d3",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/no-op.json",
+      "before": null,
+      "after": "3fb8b8e5bc5abbdec1d777830aef21ebb80e4a9ec5b51ed0485bb0eb939af084",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/path-escape.json",
+      "before": null,
+      "after": "8495d43cd55de447b40f3246b1157b1d6daf2d615d1cfbac55d0123f2cd4ac2d",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/recovery.json",
+      "before": null,
+      "after": "6606d060de5d7cfa31e0826d9eedcc83fa8b7080cc7ec94180e31990bda36e37",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/stale.json",
+      "before": null,
+      "after": "c56eedf18c0cc2a673659c01f9b3e52c8ece2c36cfc946e323937530b0bc32b0",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/success.json",
+      "before": null,
+      "after": "321dbea1555074af0de7dc449e2ff59c7719b10ca03fe408be81fb3f1e0983a2",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/manifest.json",
+      "before": null,
+      "after": "f79f82b030a06ae2824f6e47a16e9a8fd471643b49f5a51ca4ed59a9e558cf60",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/agent-grant.schema.json",
+      "before": null,
+      "after": "43400eb5bebc4e4cf47b728a7a70b0ff2ca4cab39af9dce35f78d06ddb15a4cf",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/agent-write-request.schema.json",
+      "before": null,
+      "after": "fcac39e9c484bebbe5b255881ff2501217567002267e8e8b47f406f4baadf929",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/agent-write-result.schema.json",
+      "before": null,
+      "after": "7c9160369446c33975cb774b485430bd712bcad7480491ce1f1605ce6d14725b",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/archive-diff.schema.json",
+      "before": null,
+      "after": "0cafa80833a8e87bd6d3aa11836235e9875c30ab0fd9fc14697dd6d169a72b83",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/archive-manifest.schema.json",
+      "before": null,
+      "after": "930496576783de3d394a0259421273aa0332b294d5ad4f061ec103267e39a9f7",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/capabilities.schema.json",
+      "before": null,
+      "after": "aa7bbb4a215d90a2ab0b5ca2fb993d3b6cd7040c37f972b380eaa7477d9846ca",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/checkpoint.schema.json",
+      "before": null,
+      "after": "fd261c7dce97a34be1b64ef9b3964665de380eb1dc444318b8f55785be41a9e5",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/contract-fixture.schema.json",
+      "before": null,
+      "after": "4ade60f0cfcc74cfc18645b03fed73c9842d21dc44c344f980586344e4d6231c",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/effect-plan.schema.json",
+      "before": null,
+      "after": "d55233679102688afa74364edf1fc1e1358b6a56087bc969afcdc0483c25e68a",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/journal-entry.schema.json",
+      "before": null,
+      "after": "9094cfc1a89af33904a7f3c3d7e85bbe2137038128b6c9278e57277fed787742",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/moc-ownership.schema.json",
+      "before": null,
+      "after": "52efe7fededfab47ae46da7224251dec0a9ffc2d17d3e86a566c2f07eab194a0",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/receipt.schema.json",
+      "before": null,
+      "after": "2539b8d6256d3f55e85eb57724f0f6d44ca5b92a16948cdd86c6189cc8a26e00",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/recovery-result.schema.json",
+      "before": null,
+      "after": "ec3bf083a73a0d74ba3fc08af10420288dbc65db7798b076232b7b0ae2ec077a",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
       "before": null,
       "after": "6e4e39836f5c2653ddba636311ff0a5607d56e97cd920f943edcb68ab00da425",
       "rationale": "Q-GUARD: separate exact historical replay, canonical cross-platform current-runtime evidence, an explicit owner-resource exemption, and a measured fail-closed timeout; no release qualification."
     },
     {
+      "path": "docs/NAVIGATION-EFFECTS-CONTRACT.md",
+      "before": null,
+      "after": "909e7c90b0058d3a0735be77b07e0552a1b79677162beb920e9406199ef912d2",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "docs/adr/0001-additive-navigation-effects-plane.md",
+      "before": null,
+      "after": "78544e2083552ee8c4b8588db753530bb0c575a5fc5135013bdc5640c2b28124",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "docs/navigation-effects/RECONCILIATION-20260827.md",
+      "before": null,
+      "after": "10875d6ccc1eb33862b949b5cd5fa68581073d4e21c692182ae2e853c6151868",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "evidence/2026-09-04-navigation-effects-current-main-reconciliation.md",
+      "before": null,
+      "after": "f8f41df3eb3fc9f40e8f0d0d693af5da8fb8d221d499031f30077776ad067787",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "528d9621ba8c1e06ed22ba4b7e561fbc99e7d832ebc5ab00b5dcc1e4a95dae87",
+      "after": "f36937fe43d774af53133b81a04dd1a4228e9e9c048115600fef5f1571aec65f",
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
+    },
+    {
+      "path": "scripts/build.mjs",
+      "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
+      "after": "c3685829078b14c669f38e373c1187f5310499cce82826d216ec345236eb23e0",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
       "path": "scripts/current-test-plan.mjs",
@@ -436,6 +634,72 @@
       "before": null,
       "after": "d1120a52f538437548fd444cbd7f929efbef49c23b30ea99547881324d8f85bf",
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
+    },
+    {
+      "path": "src/index.ts",
+      "before": "b4550c73992d38f7fc3e52383efde0de276ae27d",
+      "after": "76e958a89e81530f75a166a34a19b6b1fc63a827d806a2f6a5c79035900fae77",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/capabilities.ts",
+      "before": null,
+      "after": "5ed7230e589bc1bcd8dddc88c2aa4d6bd83f4756820ce5f8a64ccbfdf92ec1a7",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/in-memory-adapter.ts",
+      "before": null,
+      "after": "565905c578435ab5ab7b0b184df3e5a9b90638cd09f7be968c389397e3f9ac85",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/index.ts",
+      "before": null,
+      "after": "1a21f8847b0352ab10bf9a7ae0e05d956f56e8fc0a5155423898aef0dc0382dc",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/markers.ts",
+      "before": null,
+      "after": "c6507147b5de1d6a61bb09c9d6bdb5daeac9dc4d6733521e16809e1b5af346c2",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/node/executor.ts",
+      "before": null,
+      "after": "0c18d09b8dbc8fa46507af9dc641b85f336b4d8902c8d178d49ca3a5fd3bac63",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/node/index.ts",
+      "before": null,
+      "after": "27a351c9a5022289948af1e47a4011737d2759e3987bc9d571b3bdbe49493eca",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/node/journal.ts",
+      "before": null,
+      "after": "3825c05ae0a5ee560fe080e4fedf6d60d94589d9b50391be4cc0603d6e2fc2a9",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/path-policy.ts",
+      "before": null,
+      "after": "6429d1515d0cefd1db546d8c3d9a4787b590447f2669880bb0080e3b92115edd",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/planner.ts",
+      "before": null,
+      "after": "dbe8ab1b5b72901a1da1a9458af9a7e9dd1f885abd6d9239148002f52d291a4d",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/types.ts",
+      "before": null,
+      "after": "d6d343643c4fd488db15a179ad55eb969c9c25b78e64d5888cceaa71746d75b2",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
       "path": "src/retrieval/coordinator.ts",
@@ -466,6 +730,66 @@
       "before": "552145be95b14ac22a07760c7922a85d038b225c",
       "after": "3ef7de7452926384168c7152b3f0d8da6a4ba28079a89ab4c95397cba8753555",
       "rationale": "CI repair: bind the runtime-selected concrete lexical backend so official Node 23 uses the existing manifest-bound compatibility scan."
+    },
+    {
+      "path": "test/agent-identity-mcp-contract-draft2.test.mjs",
+      "before": "4f99d8100ca34835bab6f1058fecb818a46c3be7",
+      "after": "4bb27d8591f774d2fd5bb80e7dc399d4221b2ec6a98fa4d11d60f78ee91a0662",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/compatibility-baseline.test.mjs",
+      "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
+      "after": "9bedb543058149a8407409e79e64785b623e01a70c48c0bc8e3a09c1c0dda3b7",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/fixtures/navigation-effects-crash-child.mjs",
+      "before": null,
+      "after": "702340b218966a17f922ce3af0512f6b09fe2b2b8353ee1bc42ce0e60cdcf3b7",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/navigation-architecture.test.mjs",
+      "before": "b9636738cb6c719e02145386ee5746583a24f878",
+      "after": "a1a517f8fc08f4310b6d2a9aa073b47545f6eddd3ef2ac97337648d7821e550d",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/navigation-effects-contract.test.mjs",
+      "before": null,
+      "after": "4f3504aed44fb5fe22ddeb9c04e0b0d02447cfbe0deb7e673aac367ebcfeb121",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/navigation-effects-node.test.mjs",
+      "before": null,
+      "after": "6b99b51fe94fd83fd6c24d17a008ceba723de8116b8feb64ff954e11034b117a",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/navigation-effects-performance.test.mjs",
+      "before": null,
+      "after": "be8b081b68caa02306a21d9521306b89c0e4c0d59d9fc31720f90b13981634d8",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/navigation-effects-planner.test.mjs",
+      "before": null,
+      "after": "2487e82d06f625bd0768a6e329f5298f275488625caa0f2778280b935ab97542",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/navigation-effects-reconciliation.test.mjs",
+      "before": null,
+      "after": "f0377dbe44efbbba4ff8dc8fcd95001de648954248a36329f7441f9538adb9d1",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/public-api.test.mjs",
+      "before": "ce1c3a62bdfaa2eb7677e04ec3198009838f592d",
+      "after": "4d0634d1ab57f5c9877e9c04a118274bc2afddba11e3a0758cc6feced56fcd0e",
+      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
       "path": "test/retrieval-evaluation-cli.test.mjs",
