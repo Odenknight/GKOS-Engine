@@ -398,14 +398,14 @@
     {
       "path": ".github/workflows/runtime-qualification.yml",
       "before": null,
-      "after": "5a3d57cb86cb3fcb61232db90684279a9d9abd0d3173c504cda5b0063fe6fdd8",
-      "rationale": "Q-GUARD: preserve exact historical/current evidence; Node 22 and 24 block on Ubuntu and Windows, Node 23 is informative, and the exact Standard fixture publication is present."
+      "after": "426913029c67c0f05f36e4474b3aa65a74d0551f520e5caf704084e50d560888",
+      "rationale": "Q-GUARD: preserve exact historical/current evidence; Node 22 and 24 block on Ubuntu and Windows, Node 23 is informative, the exact Standard fixture publication is present, and both checkouts are restored to canonical LF bytes."
     },
     {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
       "before": null,
-      "after": "278d83798bcece3f47527eca0f6173cb56276ab1e623813cb94772073da0e9bc",
-      "rationale": "Q-GUARD: separate exact historical replay, cross-platform current-runtime evidence, and an explicit owner-resource exemption; no release qualification."
+      "after": "a5e04d5bba2a0151da09d53167ec638bb52a7fa7e7335a45ff136eba53b9a9da",
+      "rationale": "Q-GUARD: separate exact historical replay, canonical cross-platform current-runtime evidence, an explicit owner-resource exemption, and a measured fail-closed timeout; no release qualification."
     },
     {
       "path": "package.json",
@@ -434,8 +434,8 @@
     {
       "path": "scripts/runtime-qualification.mjs",
       "before": null,
-      "after": "ce02c3ab309ae4e1c4d48b27451c9b90e4b06f202096087b7c670b7a7f119b97",
-      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
+      "after": "d1120a52f538437548fd444cbd7f929efbef49c23b30ea99547881324d8f85bf",
+      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
     },
     {
       "path": "src/service/mcp.ts",
@@ -470,8 +470,8 @@
     {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
-      "after": "107e5d3e0aa1396aef5a8bcdb54e61d00854f90c358a2853c5cef6feb9dd7555",
-      "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including the closed owner-resource test plan; no release qualification."
+      "after": "e2fec75a23aa637c227d9f891c53c19514983065a823027ac6942e950de62f05",
+      "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including canonical checkout restoration, the measured process deadline, and the closed owner-resource test plan; no release qualification."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",

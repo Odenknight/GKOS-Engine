@@ -65,6 +65,14 @@ jobs:
           ref: ad10dfe94a024f464430fd243c5a918d03389041
           path: gkos-standard
           fetch-depth: 1
+      - name: Restore canonical qualification bytes
+        shell: bash
+        run: |
+          for checkout in candidate gkos-standard; do
+            git -C "$checkout" config core.autocrlf false
+            git -C "$checkout" checkout-index --all --force
+            git -C "$checkout" diff --exit-code
+          done
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: ${{ matrix.node }}

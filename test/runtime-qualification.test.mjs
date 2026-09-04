@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { after, before, test } from 'node:test';
-import { checkInventory, counts, sourceSnapshot, executeQualification, MANIFEST } from '../scripts/runtime-qualification.mjs';
+import { checkInventory, counts, sourceSnapshot, executeQualification, COMMAND_TIMEOUT_MS, MANIFEST } from '../scripts/runtime-qualification.mjs';
 import { HISTORICAL_TEST, selectCurrentTests } from '../scripts/current-test-plan.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -52,6 +52,7 @@ test('frozen evidence cannot be edited or omitted from the versioned inventory',
   finally { writeFileSync(manifestPath, original); }
 });
 test('test receipt counts refuse missing, duplicate, empty and incoherent execution summaries', () => {
+  assert.equal(COMMAND_TIMEOUT_MS, 30 * 60 * 1000);
   const valid = '# tests 3\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 1\n# todo 0\n';
   assert.deepEqual(counts(valid), { tests: 3, pass: 2, fail: 0, cancelled: 0, skipped: 1, todo: 0 });
   assert.throws(() => counts(valid.replace('# pass 2\n', '')), /Missing/);
@@ -68,6 +69,31 @@ test('current test selection exposes only the owner-supplied local-model observa
   }]);
   assert.deepEqual(selectCurrentTests(names, { GKOS_TEST_LOCAL_EMBEDDING_CONFIG: 'operator-owned.json' }).files,
     ['runtime-qualification.test.mjs', 'service-vector-real.test.mjs']);
+});
+test('hosted current qualification restores canonical Engine and Standard bytes', () => {
+  const workflow = readFileSync(join(root, '.github', 'workflows', 'runtime-qualification.yml'), 'utf8');
+  assert.match(workflow, /for checkout in candidate gkos-standard/);
+  assert.match(workflow, /git -C "\$checkout" config core\.autocrlf false/);
+  assert.match(workflow, /git -C "\$checkout" checkout-index --all --force/);
+  assert.match(workflow, /git -C "\$checkout" diff --exit-code/);
+});
+test('canonical restore rewrites an autocrlf checkout to LF bytes', () => {
+  const checkout = mkdtempSync(join(tmpdir(), 'gkos-runtime-autocrlf-'));
+  try {
+    execFileSync('git', ['init'], { cwd: checkout, stdio: 'pipe' });
+    execFileSync('git', ['config', 'user.name', 'Qualification fixture'], { cwd: checkout });
+    execFileSync('git', ['config', 'user.email', 'fixture@example.invalid'], { cwd: checkout });
+    writeFileSync(join(checkout, 'governed.txt'), 'alpha\nbeta\n');
+    execFileSync('git', ['-c', 'core.autocrlf=false', 'add', 'governed.txt'], { cwd: checkout });
+    execFileSync('git', ['-c', 'commit.gpgsign=false', 'commit', '-m', 'fixture'], { cwd: checkout, stdio: 'pipe' });
+    rmSync(join(checkout, 'governed.txt'));
+    execFileSync('git', ['config', 'core.autocrlf', 'true'], { cwd: checkout });
+    execFileSync('git', ['checkout-index', '--all', '--force'], { cwd: checkout, stdio: 'pipe' });
+    assert.equal(readFileSync(join(checkout, 'governed.txt'), 'utf8'), 'alpha\r\nbeta\r\n');
+    execFileSync('git', ['config', 'core.autocrlf', 'false'], { cwd: checkout });
+    execFileSync('git', ['checkout-index', '--all', '--force'], { cwd: checkout, stdio: 'pipe' });
+    assert.equal(readFileSync(join(checkout, 'governed.txt'), 'utf8'), 'alpha\nbeta\n');
+  } finally { rmSync(checkout, { recursive: true, force: true }); }
 });
 test('preflight rejection replaces a stale PASS receipt with a bound FAIL receipt', () => {
   const out = mkdtempSync(join(tmpdir(), 'gkos-receipt-failure-'));

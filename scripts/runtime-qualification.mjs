@@ -8,6 +8,7 @@ export const HISTORICAL = '97ae3560a4fa2e771b60fa63d6dc0349d0b4c864';
 export const AUDITED = '8207958047b3361ae21ac07c5a2abbd26a42a684';
 export const VERSION = 'gkos-current-runtime-qualification/1';
 export const MANIFEST = 'contracts/runtime-qualification/v1/change-inventory.json';
+export const COMMAND_TIMEOUT_MS = 30 * 60 * 1000;
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const git = (root, ...args) => execFileSync('git', args, { cwd: root, maxBuffer: 128 * 1024 * 1024 });
@@ -90,7 +91,7 @@ export function executeQualification({ root = ROOT, output, historical = false }
       : [['scripts/build.mjs'], ['scripts/run-current-tests.mjs']];
     for (const [index, args] of plan.entries()) {
       const start = performance.now();
-      const run = spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8', maxBuffer: 128 * 1024 * 1024, timeout: 20 * 60 * 1000 });
+      const run = spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8', maxBuffer: 128 * 1024 * 1024, timeout: COMMAND_TIMEOUT_MS });
       const text = (run.stdout || '') + (run.stderr || '');
       const log = `${receipt.lane}-${index}.log`;
       writeFileSync(join(out, log), text);
