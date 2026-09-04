@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { after, before, test } from 'node:test';
 import { checkInventory, counts, sourceSnapshot, executeQualification, COMMAND_TIMEOUT_MS, MANIFEST } from '../scripts/runtime-qualification.mjs';
-import { HISTORICAL_TEST, selectCurrentTests } from '../scripts/current-test-plan.mjs';
+import { HISTORICAL_TEST, selectCurrentTests, STABILITY_PRIORITY_TESTS } from '../scripts/current-test-plan.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 let fixture;
@@ -69,6 +69,13 @@ test('current test selection exposes only the owner-supplied local-model observa
   }]);
   assert.deepEqual(selectCurrentTests(names, { GKOS_TEST_LOCAL_EMBEDDING_CONFIG: 'operator-owned.json' }).files,
     ['runtime-qualification.test.mjs', 'service-vector-real.test.mjs']);
+});
+test('strict timing and shutdown oracles run before exhaustive suite load without changing coverage', () => {
+  const ordinary = ['z-last.test.mjs', 'a-first.test.mjs'];
+  const names = [...ordinary, ...STABILITY_PRIORITY_TESTS].reverse();
+  const selected = selectCurrentTests(names, {});
+  assert.deepEqual(selected.files, [...STABILITY_PRIORITY_TESTS, ...ordinary.sort()]);
+  assert.equal(new Set(selected.files).size, names.length);
 });
 test('hosted current qualification restores canonical Engine and Standard bytes', () => {
   const workflow = readFileSync(join(root, '.github', 'workflows', 'runtime-qualification.yml'), 'utf8');

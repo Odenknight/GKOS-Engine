@@ -416,8 +416,8 @@
     {
       "path": "scripts/current-test-plan.mjs",
       "before": null,
-      "after": "1c76c041bda3fea2ad5aec3fadeafa3eb7f0471724e103872a555e21a4ba00ce",
-      "rationale": "Q-GUARD coverage closure: make the sole owner-supplied local-model observation exemption exact, visible, and testable."
+      "after": "58d8789c91770a1a99ff19bc6856aa29d3078e6af113640dd877b3d9bc7cafaa",
+      "rationale": "Q-GUARD coverage closure: make the sole owner-supplied local-model observation exemption exact and run strict timing/shutdown oracles before exhaustive suite load without weakening their limits."
     },
     {
       "path": "scripts/run-current-tests.mjs",
@@ -488,8 +488,8 @@
     {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
-      "after": "43f3a78a6e77c8e37a0ca69f9fbe84089a56697ac19f3f5dd8bad8af4c8bf2ce",
-      "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including pre-checkout canonical Git configuration, the measured process deadline, and the closed owner-resource test plan; no release qualification."
+      "after": "db4f4a31155b490190dc51ddb4736751792e21727e514efc4b203e36e362e206",
+      "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including pre-checkout canonical Git configuration, the measured process deadline, the closed owner-resource test plan, and complete stability-priority ordering; no release qualification."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",
