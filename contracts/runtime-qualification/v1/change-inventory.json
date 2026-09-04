@@ -422,8 +422,8 @@
     {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
-      "after": "0bbb1aba1c424583a6dacc75b5eb032ca8c89392ed2e8ae40563726e097219b2",
-      "rationale": "Q-GUARD coverage closure: run every deterministic current test serially while reporting the exact owner-resource exemption."
+      "after": "b7ee383dabe74ca8dea69e9d07388bb7c7725ec5ba52ed712b3b2deb2d05cd20",
+      "rationale": "Q-GUARD coverage closure: run every deterministic current test serially, execute strict timing/shutdown oracles in isolated leading processes, and emit one exact aggregate receipt while reporting the sole owner-resource exemption."
     },
     {
       "path": "scripts/run-watcher-observation-qualification.mjs",
