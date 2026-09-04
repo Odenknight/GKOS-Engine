@@ -312,6 +312,10 @@ test("Slice-C Observation pass authority is Linux x64 only", async () => {
   const artifactRoot = join(BUILD_ROOT, `non-linux-observation-${randomUUID().replaceAll("-", "")}`);
   await mkdir(artifactRoot, { mode: 0o700 });
   const priorExitCode = process.exitCode;
+  const priorGithubActions = process.env.GITHUB_ACTIONS;
+  const priorGithubEventName = process.env.GITHUB_EVENT_NAME;
+  process.env.GITHUB_ACTIONS = "false";
+  delete process.env.GITHUB_EVENT_NAME;
   try {
     await runner.main(["--mode", "observation", "--artifact-root", artifactRoot]);
     assert.equal(process.exitCode, 1);
@@ -325,6 +329,10 @@ test("Slice-C Observation pass authority is Linux x64 only", async () => {
     await assert.rejects(readFile(join(artifactRoot, "performance-sample-plan.json")), (error) => error.code === "ENOENT");
   } finally {
     process.exitCode = priorExitCode;
+    if (priorGithubActions === undefined) delete process.env.GITHUB_ACTIONS;
+    else process.env.GITHUB_ACTIONS = priorGithubActions;
+    if (priorGithubEventName === undefined) delete process.env.GITHUB_EVENT_NAME;
+    else process.env.GITHUB_EVENT_NAME = priorGithubEventName;
   }
 });
 

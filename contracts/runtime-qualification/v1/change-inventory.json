@@ -438,6 +438,12 @@
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
     },
     {
+      "path": "src/retrieval/sqlite-store.ts",
+      "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
+      "after": "e3cad7944a7bee1f87c5025b3b23911ff663ad2c813ce30c844929a5410e95d8",
+      "rationale": "Q-GUARD Windows coverage closure: pass canonical derived SQLite paths through the Windows namespaced-path boundary so 8.3 expansion cannot exceed the legacy filesystem limit."
+    },
+    {
       "path": "src/service/mcp.ts",
       "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
       "after": "a077315d40f5febcb453e2758da85edc7a437858f43a7b46cc1abaaf5a209c6d",
@@ -456,10 +462,16 @@
       "rationale": "CI repair: bind the runtime-selected concrete lexical backend so official Node 23 uses the existing manifest-bound compatibility scan."
     },
     {
+      "path": "test/retrieval-evaluation-cli.test.mjs",
+      "before": "80d2df55e3c6c97e95b08101a1e892ef63c43da7",
+      "after": "cf17cd786e39b163707f027c74c5445a9d6c321322b9d153541436e936835a39",
+      "rationale": "Q-GUARD Windows coverage closure: compare the sealed temporary capability against the canonical parent spelling while preserving the 8.3-path regression oracle."
+    },
+    {
       "path": "test/retrieval-observation-qualification.test.mjs",
       "before": "4e4e0a64a7b03c61dcf933b7ffc4364d56eab0fd",
-      "after": "fa4b9ac55e194b820540aabfc1ff69ad9a308a43882231c1761b5eb44647f00a",
-      "rationale": "Workflow equivalence repair: freeze the approved v5 action coordinates and the updated standalone Phase 4 workflow digest without weakening projection equality."
+      "after": "fe12202c47f47b9b7a1287ac3c0f15163f1a39f6fca799417b4d4a2f70913778",
+      "rationale": "Workflow equivalence and Q-GUARD repair: retain the approved v5 workflow digest and isolate the non-Linux observation oracle from an unrelated pull-request event environment."
     },
     {
       "path": "test/retrieval-windows-path-security.test.mjs",

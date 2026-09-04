@@ -1,6 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 import { chmodSync, linkSync, lstatSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
-import { basename, dirname, join, parse, resolve } from "node:path";
+import { basename, dirname, join, parse, resolve, toNamespacedPath } from "node:path";
 import { types as utilTypes } from "node:util";
 import { ENGINE_VERSION } from "../version";
 import {
@@ -1195,7 +1195,7 @@ function buildGenerationArtifact(
     // inherit a permissive process umask before note text is inserted.
     writeFileSync(temporary, Buffer.alloc(0), { flag: "wx", mode: 0o600 });
     hardenFilePermissions(temporary);
-    const database = new DatabaseSync(temporary);
+    const database = new DatabaseSync(toNamespacedPath(temporary));
     try {
       if (lineage) insertCandidateGeneration(database, manifest as GkxRetrievalProjectionManifest, input as GkxRetrievalGenerationInput);
       else insertGeneration(database, manifest as RetrievalProjectionManifest, (input as RetrievalGenerationInput).chunks, undefined, undefined, (input as RetrievalGenerationInput).vectors ?? []);
@@ -1349,7 +1349,7 @@ export class SqliteRetrievalStore {
     // Published generations are immutable derived artifacts.  Open them
     // read-only so verification and search cannot create WAL/SHM sidecars or
     // mutate a generation after its manifest digest has been accepted.
-    this.#database = new DatabaseSync(databasePath, { readOnly: true });
+    this.#database = new DatabaseSync(toNamespacedPath(databasePath), { readOnly: true });
     try {
       this.#database.exec("PRAGMA foreign_keys = ON; PRAGMA temp_store = MEMORY;");
       const version = Number((this.#database.prepare("PRAGMA user_version").get() as SqliteRow).user_version);
