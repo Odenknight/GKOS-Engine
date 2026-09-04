@@ -470,7 +470,7 @@
     {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
-      "after": "71f8fe5230a0d4251d95d1a47554e4db589dd46edb9d93246d5bed0b2f6fa6b8",
+      "after": "43f3a78a6e77c8e37a0ca69f9fbe84089a56697ac19f3f5dd8bad8af4c8bf2ce",
       "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including pre-checkout canonical Git configuration, the measured process deadline, and the closed owner-resource test plan; no release qualification."
     },
     {

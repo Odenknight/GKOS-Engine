@@ -87,12 +87,16 @@ test('command-scope Git configuration overrides autocrlf before checkout', () =>
     execFileSync('git', ['-c', 'commit.gpgsign=false', 'commit', '-m', 'fixture'], { cwd: checkout, stdio: 'pipe' });
     rmSync(join(checkout, 'governed.txt'));
     execFileSync('git', ['config', 'core.autocrlf', 'true'], { cwd: checkout });
-    execFileSync('git', ['checkout-index', '--all', '--force'], { cwd: checkout, stdio: 'pipe' });
+    const uncontrolled = { ...process.env };
+    delete uncontrolled.GIT_CONFIG_COUNT;
+    delete uncontrolled.GIT_CONFIG_KEY_0;
+    delete uncontrolled.GIT_CONFIG_VALUE_0;
+    execFileSync('git', ['checkout-index', '--all', '--force'], { cwd: checkout, env: uncontrolled, stdio: 'pipe' });
     assert.equal(readFileSync(join(checkout, 'governed.txt'), 'utf8'), 'alpha\r\nbeta\r\n');
     rmSync(join(checkout, 'governed.txt'));
     execFileSync('git', ['checkout-index', '--all', '--force'], {
       cwd: checkout,
-      env: { ...process.env, GIT_CONFIG_COUNT: '1', GIT_CONFIG_KEY_0: 'core.autocrlf', GIT_CONFIG_VALUE_0: 'false' },
+      env: { ...uncontrolled, GIT_CONFIG_COUNT: '1', GIT_CONFIG_KEY_0: 'core.autocrlf', GIT_CONFIG_VALUE_0: 'false' },
       stdio: 'pipe',
     });
     assert.equal(readFileSync(join(checkout, 'governed.txt'), 'utf8'), 'alpha\nbeta\n');
