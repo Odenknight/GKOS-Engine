@@ -40,7 +40,10 @@ test("npm CLI discovery works outside an npm lifecycle", () => {
   assert.match(npmCli.replaceAll("\\", "/"), /\/npm(?:-cli\.js|\/bin\/npm-cli\.js)$/u);
 });
 
-test("packed installation runs the stdio bridge against one authenticated real process", { timeout: 90_000 }, async (t) => {
+// A clean clone, install, pack, reinstall, and authenticated process round-trip
+// can exceed 90 seconds on a saturated hosted Windows runner. Keep a finite
+// per-test ceiling while leaving headroom below the runtime job's outer bound.
+test("packed installation runs the stdio bridge against one authenticated real process", { timeout: 180_000 }, async (t) => {
   const temporary = mkdtempSync(join(CANONICAL_TEMPORARY_ROOT, "gkos-stdio-package-"));
   t.after(() => rmSync(temporary, { recursive: true, force: true }));
   const npmCli = resolveNpmCli();

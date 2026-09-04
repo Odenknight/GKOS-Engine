@@ -504,6 +504,12 @@
       "rationale": "CI repair: execute the native service retrieval contract on the runtime-selected backend without skipping the FTS5 or compatibility-scan paths."
     },
     {
+      "path": "test/service-stdio-package.test.mjs",
+      "before": "5e302462792e360747bf0254d336f8d747f55e4c",
+      "after": "b2894842f847b77d25377819461ea22c1864e3aeb0032206441d653e431df09d",
+      "rationale": "Q-GUARD hosted stability repair: retain a finite per-test ceiling with enough saturated Windows runner headroom for the clean clone, install, pack, reinstall, and authenticated process round-trip."
+    },
+    {
       "path": "test/watcher-coordinator.test.mjs",
       "before": "ce95634d71454e60ab43d1f0cb33551aac392aa8",
       "after": "8a7a1f9cb29601db967db931bac7faf6cd2cd0dbcd7bfb6204f03403a531e200",
