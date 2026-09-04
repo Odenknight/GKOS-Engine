@@ -11,7 +11,7 @@ import { lexicalCitationSpans, lexicalQueryClauses } from "./lexical";
 import { canonicalPath, canonicalPathContains } from "./path-security";
 import { buildGkxRetrievalProvenance, normalizeRetrievalAsOf } from "./provenance";
 import { buildGkxRetrievalAuthorizedCandidateView } from "./authorized-view";
-import { buildGkxRetrievalGenerationWithWriter, buildRetrievalGenerationWithWriter, type BuiltRetrievalGeneration, type GkxRetrievalGenerationInput, type RetrievalGenerationInput, isGkxRetrievalProjectionManifest, openActiveRetrievalStore, preflightGkxRetrievalIndexInput, preflightRetrievalIndexInput, SqliteRetrievalStore } from "./sqlite-store";
+import { buildGkxRetrievalGenerationWithWriter, buildRetrievalGenerationWithWriter, type BuiltRetrievalGeneration, type GkxRetrievalGenerationInput, type RetrievalGenerationInput, isGkxRetrievalProjectionManifest, openActiveRetrievalStore, openRetrievalEvaluationSqliteStore, preflightGkxRetrievalIndexInput, preflightRetrievalIndexInput, SqliteRetrievalStore } from "./sqlite-store";
 import { openIngestAwareActiveRetrievalStore } from "../ingest/storage";
 import {
   acquireLegacyRetrievalWriter,
@@ -1153,7 +1153,7 @@ export function coordinatorFromRetrievalEvaluationDatabase(
       typeof scanPresentationFts5Available !== "boolean") {
     throw new TypeError("RETRIEVAL_EVALUATION_OBSERVER_INVALID");
   }
-  const store = new SqliteRetrievalStore(databasePath);
+  const store = openRetrievalEvaluationSqliteStore(databasePath);
   EVALUATION_STORE_CONTEXTS.set(store, {
     observer,
     scan_presentation_fts5_available: scanPresentationFts5Available,

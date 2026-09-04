@@ -438,10 +438,16 @@
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
     },
     {
+      "path": "src/retrieval/coordinator.ts",
+      "before": "f7fe89a328c61bebfbfee87eb3d4bb3efdf89111",
+      "after": "0016afb181d572af42996a731de081683369ba572374a6386d8a5b5702c15cf7",
+      "rationale": "Q-GUARD Windows coverage closure: reopen private evaluation generations through the evaluation-only long-path SQLite authority without changing ordinary coordinator stores."
+    },
+    {
       "path": "src/retrieval/sqlite-store.ts",
       "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
-      "after": "e3cad7944a7bee1f87c5025b3b23911ff663ad2c813ce30c844929a5410e95d8",
-      "rationale": "Q-GUARD Windows coverage closure: pass canonical derived SQLite paths through the Windows namespaced-path boundary so 8.3 expansion cannot exceed the legacy filesystem limit."
+      "after": "471d90cc045d8e49bfc3865035a009533a9c4522376bd3e49efcbd41a7f45d4d",
+      "rationale": "Q-GUARD Windows coverage closure: namespace only private unactivated evaluation SQLite opens so canonical 8.3 expansion cannot exceed the Windows path limit or alter ordinary watcher performance."
     },
     {
       "path": "src/service/mcp.ts",
