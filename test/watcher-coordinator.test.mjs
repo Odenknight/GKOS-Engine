@@ -276,9 +276,9 @@ test("coherent publication capability is unforgeable and enforces its exact decl
   }), /GKX_WATCHER_FS_PUBLICATION_DECLARATION_INVALID/u);
 });
 
-test("coherent publication rejects non-private entry files and post-syscall owner or mode drift", {
-  skip: process.platform === "win32",
-}, async (t) => {
+const posixTest = process.platform === "win32" ? () => {} : test;
+
+posixTest("coherent publication rejects non-private entry files and post-syscall owner or mode drift", async (t) => {
   await t.test("preexisting mode", (child) => {
     const { watcher } = roots(child);
     const source = join(watcher.path, "source.json");

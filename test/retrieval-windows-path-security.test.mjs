@@ -14,6 +14,8 @@ import {
   vaultSourceReader,
 } from "../dist/retrieval.mjs";
 
+const windowsTest = process.platform === "win32" ? test : () => {};
+
 const digest = (value) => retrievalCanonicalDigest(value);
 
 function generationInput(state, chunks) {
@@ -36,9 +38,7 @@ function fixtureChunks(text) {
   });
 }
 
-test("ordinary Windows temp spelling, including 8.3 expansion, is not an alias", {
-  skip: process.platform !== "win32",
-}, async (t) => {
+windowsTest("ordinary Windows temp spelling, including 8.3 expansion, is not an alias", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "gkos-windows-path-"));
   try {
     const canonicalRoot = await realpath(root);
@@ -86,9 +86,7 @@ test("ordinary Windows temp spelling, including 8.3 expansion, is not an alias",
   }
 });
 
-test("Windows junction components and source hard links remain fail-closed", {
-  skip: process.platform !== "win32",
-}, async (t) => {
+windowsTest("Windows junction components and source hard links remain fail-closed", async (t) => {
   const root = await mkdtemp(join(tmpdir(), "gkos-windows-alias-"));
   const actual = join(root, "actual");
   const alias = join(root, "alias");

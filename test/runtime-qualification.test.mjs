@@ -6,6 +6,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { after, before, test } from 'node:test';
 import { checkInventory, counts, sourceSnapshot, executeQualification, MANIFEST } from '../scripts/runtime-qualification.mjs';
+import { HISTORICAL_TEST, selectCurrentTests } from '../scripts/current-test-plan.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 let fixture;
@@ -57,6 +58,16 @@ test('test receipt counts refuse missing, duplicate, empty and incoherent execut
   assert.throws(() => counts(valid + '# tests 3\n'), /ambiguous/);
   assert.throws(() => counts(valid.replace('# tests 3', '# tests 4')), /Incoherent/);
   assert.throws(() => counts(valid.replace('# tests 3', '# tests 0')), /Incoherent/);
+});
+test('current test selection exposes only the owner-supplied local-model observation exemption', () => {
+  const names = [HISTORICAL_TEST, 'service-vector-real.test.mjs', 'runtime-qualification.test.mjs', 'not-a-test.txt'];
+  const withoutModel = selectCurrentTests(names, {});
+  assert.deepEqual(withoutModel.files, ['runtime-qualification.test.mjs']);
+  assert.deepEqual(withoutModel.exemptions.map(({ name, environment }) => ({ name, environment })), [{
+    name: 'service-vector-real.test.mjs', environment: 'GKOS_TEST_LOCAL_EMBEDDING_CONFIG',
+  }]);
+  assert.deepEqual(selectCurrentTests(names, { GKOS_TEST_LOCAL_EMBEDDING_CONFIG: 'operator-owned.json' }).files,
+    ['runtime-qualification.test.mjs', 'service-vector-real.test.mjs']);
 });
 test('preflight rejection replaces a stale PASS receipt with a bound FAIL receipt', () => {
   const out = mkdtempSync(join(tmpdir(), 'gkos-receipt-failure-'));

@@ -398,14 +398,14 @@
     {
       "path": ".github/workflows/runtime-qualification.yml",
       "before": null,
-      "after": "16b33dad06170fac312bfa66397216653b37f0de9fe1195d472cbeecc1ebdfb5",
-      "rationale": "Q-GUARD: preserve exact historical/current evidence with macOS coverage; Node 22 and 24 remain blocking, Node 23 is informative, and checkout/setup-node use approved exact v5 pins."
+      "after": "5a3d57cb86cb3fcb61232db90684279a9d9abd0d3173c504cda5b0063fe6fdd8",
+      "rationale": "Q-GUARD: preserve exact historical/current evidence; Node 22 and 24 block on Ubuntu and Windows, Node 23 is informative, and the exact Standard fixture publication is present."
     },
     {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
       "before": null,
-      "after": "bd5332cc6c1a7b75ef2be0084a05337eaf1ee596b4e6cfaf3406ce19afc296ad",
-      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
+      "after": "278d83798bcece3f47527eca0f6173cb56276ab1e623813cb94772073da0e9bc",
+      "rationale": "Q-GUARD: separate exact historical replay, cross-platform current-runtime evidence, and an explicit owner-resource exemption; no release qualification."
     },
     {
       "path": "package.json",
@@ -414,10 +414,16 @@
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
     },
     {
+      "path": "scripts/current-test-plan.mjs",
+      "before": null,
+      "after": "1c76c041bda3fea2ad5aec3fadeafa3eb7f0471724e103872a555e21a4ba00ce",
+      "rationale": "Q-GUARD coverage closure: make the sole owner-supplied local-model observation exemption exact, visible, and testable."
+    },
+    {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
-      "after": "0232a38dfcb04e10e9201abbc09b01439d681d82d1280c9704cb1e2220f6b77c",
-      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
+      "after": "0bbb1aba1c424583a6dacc75b5eb032ca8c89392ed2e8ae40563726e097219b2",
+      "rationale": "Q-GUARD coverage closure: run every deterministic current test serially while reporting the exact owner-resource exemption."
     },
     {
       "path": "scripts/run-watcher-observation-qualification.mjs",
@@ -456,10 +462,16 @@
       "rationale": "Workflow equivalence repair: freeze the approved v5 action coordinates and the updated standalone Phase 4 workflow digest without weakening projection equality."
     },
     {
+      "path": "test/retrieval-windows-path-security.test.mjs",
+      "before": "02f6efced1d43c639fb636996efca5d9e516e9d4",
+      "after": "e5769ac63408cd6cc51ab78928e9e7422379980896b636f7e4988d7b11d5f5a0",
+      "rationale": "Q-GUARD coverage closure: register native Windows security assertions only on Windows so the hosted OS matrix carries the platform claim without synthetic skips."
+    },
+    {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
-      "after": "a899295d59d5c129af37053235df103d5d97aeb7bdd4d0d7500b6258532d9974",
-      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
+      "after": "107e5d3e0aa1396aef5a8bcdb54e61d00854f90c358a2853c5cef6feb9dd7555",
+      "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including the closed owner-resource test plan; no release qualification."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",
@@ -474,6 +486,12 @@
       "rationale": "CI repair: execute the native service retrieval contract on the runtime-selected backend without skipping the FTS5 or compatibility-scan paths."
     },
     {
+      "path": "test/watcher-coordinator.test.mjs",
+      "before": "ce95634d71454e60ab43d1f0cb33551aac392aa8",
+      "after": "8a7a1f9cb29601db967db931bac7faf6cd2cd0dbcd7bfb6204f03403a531e200",
+      "rationale": "Q-GUARD coverage closure: register the native POSIX ownership assertion only where that operating-system capability exists."
+    },
+    {
       "path": "test/watcher-large-restart.test.mjs",
       "before": "6645c5680b85689548f07963fe596e05e12e03ef",
       "after": "29978a55b73ec828fd1da1900ab7009e0f006209c2a22a86aec447287e9a8c49",
@@ -484,6 +502,18 @@
       "before": "10ee043507f86d913c95ddcd11869390b68d6f6f",
       "after": "3d6bba52ccb98daa0264dd87309e404ae548e0e1d2c6b6d7d60988e184e2456b",
       "rationale": "CI repair: prove only the two Node-owned warnings are suppressed and unrelated stderr remains fail-closed."
+    },
+    {
+      "path": "test/watcher-pointer-host.test.mjs",
+      "before": "44d7cfd700c0510a76d746a25ac072791fb32105",
+      "after": "135cf822c2e5b34b0a373c33d6faf3c9a1f2e0d3cd13cdf55701790fa8adeb07",
+      "rationale": "Q-GUARD coverage closure: register the native POSIX file-authority assertions only where those ownership and mode capabilities exist."
+    },
+    {
+      "path": "test/watcher-service-cli.test.mjs",
+      "before": "064563e6a26da7e90e76591fe907463bc29f3a0c",
+      "after": "bb99d4a0794ad37141a096aaaad62b2d74155f7cb33a9176a7ac94525ef11a18",
+      "rationale": "Q-GUARD coverage closure: register the native Linux shutdown regression only where the Linux watcher and physical FTS5 capability exist."
     }
   ]
 }

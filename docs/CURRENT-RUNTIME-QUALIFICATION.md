@@ -10,7 +10,10 @@ workflow remain byte-identical. The unchanged historical test runs at commit
 last changed and the protected paths still match its fixed `7bf14b4` reference.
 No original assertion is deleted, skipped within that test, or rebound to HEAD.
 
-`npm test` runs every current test file except that one historical test. Its
+`npm test` runs every deterministic current test file except that one historical
+test. The real-ONNX observation remains explicitly host-resource-exempt unless
+`GKOS_TEST_LOCAL_EMBEDDING_CONFIG` names an owner-supplied trusted model pack;
+the runner prints that exemption and this gate makes no local-model claim. Its
 replacement current integrity gate checks every original frozen file, the exact
 historical-to-audited change inventory, and each reviewed candidate file/hash.
 Adding or changing code requires a reviewed update of
@@ -31,11 +34,18 @@ The current runner actually builds and executes the current suite. The historica
 runner requires an exact clean checkout with its own dependencies. Both record
 real command arguments, platform, Node version, durations, counts and log hashes.
 Failed commands, changed source or missing/ambiguous test counts cannot pass.
-Any skipped test yields `INCOMPLETE_PLATFORM_COVERAGE` and a nonzero exit: this
-first gate intentionally cannot manufacture alternate-platform qualification.
-Hosted capability evidence and receipt aggregation remain required before full
-CI qualification; a local pass is not a substitute. The pre-existing retrieval,
-watcher and downstream qualification lanes are retained.
+Any skipped selected test yields `INCOMPLETE_PLATFORM_COVERAGE` and a nonzero
+exit. Platform-exclusive tests are registered only on their native platform,
+and the selected suite runs with file concurrency one so resource pressure
+cannot turn durability shutdown bounds into cross-file scheduling failures.
+The blocking hosted matrix executes both Ubuntu and Windows on Node 22 and
+24; Node 23 remains informative. The workflow also checks out Standard commit
+`ad10dfe94a024f464430fd243c5a918d03389041`, the direct fixture-publication
+successor to the Engine-bound `351330ce34ac6bf9f48ac340e3c259ea30e74715`
+baseline, so its science catalog test executes instead of skipping. Hosted
+capability evidence and receipt aggregation remain required
+before full CI qualification; a local pass is not a substitute. The pre-existing
+retrieval, watcher and downstream qualification lanes are retained.
 
 The source-control diff of the manifest itself is an explicit review boundary;
 the manifest cannot cryptographically approve itself. Final acceptance must bind
