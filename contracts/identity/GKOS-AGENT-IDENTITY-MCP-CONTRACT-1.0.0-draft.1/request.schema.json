@@ -1,11 +1,12 @@
 {
+  "$comment": "A stale terminal request has no result, effect, or success activity; lifecycle and binding loss is checked at the final gate.",
   "$id": "request.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
     "admitted_at": {
       "format": "date-time",
-      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "pattern": "^(?:19(?:7[0-9]|[89][0-9])|[2-9][0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
       "type": "string"
     },
     "agent_id": {
@@ -54,7 +55,7 @@
       "anyOf": [
         {
           "format": "date-time",
-          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "pattern": "^(?:19(?:7[0-9]|[89][0-9])|[2-9][0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
           "type": "string"
         },
         {
@@ -73,7 +74,7 @@
     },
     "deadline_at": {
       "format": "date-time",
-      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "pattern": "^(?:19(?:7[0-9]|[89][0-9])|[2-9][0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
       "type": "string"
     },
     "error_code": {
@@ -161,9 +162,9 @@
       "type": "string"
     },
     "operation": {
-      "maxLength": 128,
+      "maxLength": 64,
       "minLength": 1,
-      "pattern": "^[a-z][a-z0-9._-]{0,127}$",
+      "pattern": "^[a-z][a-z0-9._-]{0,63}$",
       "type": "string"
     },
     "record_digest": {
@@ -190,6 +191,15 @@
         }
       ]
     },
+    "retention_policy_digest_at_creation": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "retention_sequence": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
     "session_id": {
       "anyOf": [
         {
@@ -208,7 +218,8 @@
         "committed",
         "rejected",
         "failed",
-        "cancelled"
+        "cancelled",
+        "stale"
       ]
     },
     "transport": {
@@ -231,6 +242,8 @@
     "vault_id",
     "authority_instance_id",
     "restore_epoch",
+    "retention_policy_digest_at_creation",
+    "retention_sequence",
     "request_id",
     "session_id",
     "agent_id",

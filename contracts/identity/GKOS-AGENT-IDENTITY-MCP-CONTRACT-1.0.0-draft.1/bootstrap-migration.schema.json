@@ -18,11 +18,13 @@
         "OWNER_PROVED",
         "PLAN_STAGED",
         "OWNER_LOCATOR_STAGED",
-        "DB_PUBLISHED",
+        "DB_COMMITTED",
+        "ANCHOR_COMMITTED",
         "OWNER_ACTIVE",
-        "LEGACY_REMOVED",
+        "LEGACY_ACTIVE",
+        "LEGACY_REVOKED",
         "COMPLETE",
-        "RECOVERY_REQUIRED"
+        "BLOCKED"
       ],
       "type": "array"
     },

@@ -2,8 +2,51 @@
   "$id": "error.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
+  "allOf": [
+    {
+      "else": {
+        "properties": {
+          "retry_after_ms": {
+            "type": "null"
+          },
+          "retryable": {
+            "const": false
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "error_code": {
+            "enum": [
+              "GKOS_P6_RATE_LIMITED",
+              "GKOS_P6_CONCURRENCY_LIMIT",
+              "GKOS_P6_SHUTTING_DOWN"
+            ]
+          }
+        },
+        "required": [
+          "error_code"
+        ]
+      },
+      "then": {
+        "properties": {
+          "retry_after_ms": {
+            "maximum": 60000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "retryable": {
+            "const": true
+          }
+        }
+      }
+    }
+  ],
   "properties": {
-    "code": {
+    "contract_version": {
+      "const": "1.0.0-draft.1"
+    },
+    "error_code": {
       "enum": [
         "GKOS_P6_PARSE_ERROR",
         "GKOS_P6_INVALID_REQUEST",
@@ -60,24 +103,8 @@
         "GKOS_P6_INTERNAL_ERROR"
       ]
     },
-    "contract_version": {
-      "const": "1.0.0-draft.1"
-    },
-    "details": {
-      "additionalProperties": {
-        "type": [
-          "string",
-          "integer",
-          "boolean",
-          "null"
-        ]
-      },
-      "maxProperties": 16,
-      "type": "object"
-    },
-    "message": {
-      "maxLength": 1024,
-      "minLength": 1,
+    "error_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
       "type": "string"
     },
     "request_id": {
@@ -109,13 +136,12 @@
   },
   "required": [
     "contract_version",
-    "code",
-    "message",
+    "error_code",
     "request_id",
     "retryable",
     "retry_after_ms",
-    "details"
+    "error_digest"
   ],
-  "title": "Closed error envelope",
+  "title": "Closed six-field content-free error envelope",
   "type": "object"
 }

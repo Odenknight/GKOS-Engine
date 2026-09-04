@@ -170,7 +170,7 @@
       "policy_capability": "bootstrap.initialize",
       "request_schema_ref": "operation-inventory.schema.json#/$defs/bootstrap_request",
       "request_semantics": "legacy_source is required and canonical: absent is accepted only when the physically qualified canonical legacy-token locator is absent; desktop_agent_token is accepted only when that exact physically qualified source is present and passes format/protection checks; omission is invalid parameters, declaration/observed-state mismatch is migration conflict, and a declared present malformed source is migration malformed",
-      "result_schema_ref": "operation-inventory.schema.json#/$defs/bootstrap_result",
+      "result_schema_ref": "operation-inventory.schema.json#/$defs/bootstrap_initialize_result",
       "transports": [
         "owner_cli"
       ]

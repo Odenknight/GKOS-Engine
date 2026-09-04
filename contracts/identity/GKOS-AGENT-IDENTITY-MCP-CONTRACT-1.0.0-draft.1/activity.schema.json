@@ -110,7 +110,7 @@
     },
     "finished_at": {
       "format": "date-time",
-      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "pattern": "^(?:19(?:7[0-9]|[89][0-9])|[2-9][0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
       "type": "string"
     },
     "input_digest": {
@@ -118,29 +118,67 @@
       "type": "string"
     },
     "metadata": {
-      "additionalProperties": {
-        "type": [
-          "integer",
-          "string",
-          "null"
-        ]
-      },
+      "additionalProperties": false,
       "maxProperties": 16,
-      "propertyNames": {
-        "enum": [
-          "input_bytes",
-          "output_bytes",
-          "item_count",
-          "result_count",
-          "cache_outcome",
-          "side_effect_class"
-        ]
+      "patternProperties": {
+        "^k{8186}$": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "^operation_key_(?:0[1-9]|1[0-7])$": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        }
       },
+      "properties": {
+        "cache_outcome": {
+          "enum": [
+            "not_applicable",
+            "hit",
+            "miss",
+            "bypassed"
+          ]
+        },
+        "input_bytes": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "item_count": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "output_bytes": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "result_count": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "side_effect_class": {
+          "enum": [
+            "read",
+            "compute_only",
+            "proposal_only",
+            "authority_mutation",
+            "qualified_external_effect"
+          ]
+        }
+      },
+      "required": [],
+      "title": "Closed content-free activity metadata",
       "type": "object"
     },
     "operation": {
-      "maxLength": 128,
+      "maxLength": 64,
       "minLength": 1,
+      "pattern": "^[a-z][a-z0-9._-]{0,63}$",
       "type": "string"
     },
     "outcome": {
@@ -179,6 +217,10 @@
         }
       ]
     },
+    "retention_policy_digest_at_creation": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
     "session_id": {
       "anyOf": [
         {
@@ -192,7 +234,7 @@
     },
     "started_at": {
       "format": "date-time",
-      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "pattern": "^(?:19(?:7[0-9]|[89][0-9])|[2-9][0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
       "type": "string"
     },
     "transport": {
@@ -215,6 +257,7 @@
     "vault_id",
     "authority_instance_id",
     "restore_epoch",
+    "retention_policy_digest_at_creation",
     "activity_id",
     "activity_seq",
     "agent_id",
