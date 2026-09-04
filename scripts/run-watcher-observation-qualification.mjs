@@ -36,6 +36,14 @@ const MEASUREMENT_FILE = "watcher-observation-measurement.json";
 const SAMPLE_DIGEST = "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b";
 const SAMPLE_BYTES = 4_363;
 const MAX_LATENCY_MICROS = 5_000_000;
+// The qualified child has a strict, zero-stderr protocol. Suppress only the
+// two Node-owned warnings that official Node 22 can emit before application
+// code when SQLite and the runner proxy are enabled; every other warning and
+// application stderr remains a hard failure.
+export const EXTERNAL_SEARCH_NODE_WARNING_ARGS = Object.freeze([
+  "--disable-warning=ExperimentalWarning",
+  "--disable-warning=UNDICI-EHPA",
+]);
 
 function fail(code) { throw new Error(code); }
 function sleep(ms) { return new Promise((resolvePromise) => setTimeout(resolvePromise, ms)); }
@@ -241,7 +249,7 @@ async function externalSearch(repoRoot, vault, query, sourceId, plan, watcherDir
   const before = searchAuthorityCoordinates(watcherDirectory);
   assertSearchAuthority(plan, before, expectedPointerDigest);
   const { stdout, stderr } = await execFile(process.execPath, [
-    "--disable-warning=ExperimentalWarning",
+    ...EXTERNAL_SEARCH_NODE_WARNING_ARGS,
     join(repoRoot, "bin", "gkx.mjs"), "search", query, "--kb-path", vault, "--limit", "5",
     "--as-of", plan.execution.as_of,
   ], { cwd: repoRoot, windowsHide: true, timeout: 5_000, maxBuffer: 16 * 1024 * 1024, encoding: "buffer" });

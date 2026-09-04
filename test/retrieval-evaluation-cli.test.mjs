@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import {
-  chmod, copyFile, link, lstat, mkdir, mkdtemp, readFile, readdir, rename, rm, stat, unlink, utimes, writeFile,
+  chmod, copyFile, link, lstat, mkdir, mkdtemp, readFile, readdir, realpath, rename, rm, stat, unlink, utimes, writeFile,
 } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, parse, resolve } from "node:path";
@@ -949,7 +949,7 @@ test("temporary capability seals a private child and detects identity replacemen
   try {
     const capability = await host.createRetrievalEvaluationTemporaryCapability();
     await capability.revalidate();
-    assert.equal(dirname(capability.path), resolve(tempParent));
+    assert.equal(dirname(capability.path), await realpath(tempParent));
     assert.match(capability.path, /gkx-retrieval-evaluation-[0-9a-f]{32}$/u);
     const displaced = `${capability.path}-displaced`;
     await rename(capability.path, displaced);

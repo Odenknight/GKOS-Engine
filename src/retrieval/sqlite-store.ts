@@ -1,6 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 import { chmodSync, linkSync, lstatSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
-import { basename, dirname, join, parse, resolve } from "node:path";
+import { basename, dirname, join, parse, resolve, toNamespacedPath } from "node:path";
 import { types as utilTypes } from "node:util";
 import { ENGINE_VERSION } from "../version";
 import {
@@ -45,6 +45,16 @@ import {
 } from "./state-writer-lock";
 import type { RankedInput } from "./fusion";
 import type { AnyRetrievalProjectionManifest, GkxRetrievalProjectionManifest, GkxRetrievalStoredSourceProvenance, RetrievalChunk, RetrievalProjectionManifest, SqliteLexicalBackend } from "./types";
+
+const RETRIEVAL_EVALUATION_DATABASE = Symbol("gkos.retrieval.evaluation-database");
+
+function databaseRuntimePath(path: string, evaluation: boolean): string {
+  return evaluation && process.platform === "win32" ? toNamespacedPath(path) : path;
+}
+
+function openBuiltStore(path: string, evaluation: boolean): SqliteRetrievalStore {
+  return new SqliteRetrievalStore(path, evaluation ? RETRIEVAL_EVALUATION_DATABASE : undefined);
+}
 
 interface SqliteRow { [key: string]: unknown }
 export interface StoredVector { chunk_id: string; vector: readonly number[] }
@@ -1169,7 +1179,7 @@ function buildGenerationArtifact(
   if (!needsBuild) {
     try {
       hardenFilePermissions(finalPath);
-      const existing = new SqliteRetrievalStore(finalPath);
+      const existing = openBuiltStore(finalPath, immutableNoReplace);
       existing.close();
     } catch {
       if (immutableNoReplace) throw new Error("RETRIEVAL_IMMUTABLE_GENERATION_CONFLICT");
@@ -1195,7 +1205,7 @@ function buildGenerationArtifact(
     // inherit a permissive process umask before note text is inserted.
     writeFileSync(temporary, Buffer.alloc(0), { flag: "wx", mode: 0o600 });
     hardenFilePermissions(temporary);
-    const database = new DatabaseSync(temporary);
+    const database = new DatabaseSync(databaseRuntimePath(temporary, immutableNoReplace));
     try {
       if (lineage) insertCandidateGeneration(database, manifest as GkxRetrievalProjectionManifest, input as GkxRetrievalGenerationInput);
       else insertGeneration(database, manifest as RetrievalProjectionManifest, (input as RetrievalGenerationInput).chunks, undefined, undefined, (input as RetrievalGenerationInput).vectors ?? []);
@@ -1207,7 +1217,7 @@ function buildGenerationArtifact(
       catch (error) {
         unlinkSync(temporary);
         if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
-        const winner = new SqliteRetrievalStore(finalPath);
+        const winner = openBuiltStore(finalPath, immutableNoReplace);
         try {
           if (stableJson(winner.manifest) !== stableJson(manifest)) {
             throw new Error("RETRIEVAL_IMMUTABLE_GENERATION_CONFLICT");
@@ -1218,7 +1228,7 @@ function buildGenerationArtifact(
     } else renameSync(temporary, finalPath);
     hardenFilePermissions(finalPath);
   }
-  const verified = new SqliteRetrievalStore(finalPath);
+  const verified = openBuiltStore(finalPath, immutableNoReplace);
   try {
     const expectedChunks = isGkxRetrievalProjectionManifest(manifest) ? manifest.candidate_chunk_count : manifest.chunk_count;
     if (verified.manifest.projection_digest !== manifest.projection_digest || verified.countChunks() !== expectedChunks ||
@@ -1338,7 +1348,7 @@ export class SqliteRetrievalStore {
   readonly manifest: AnyRetrievalProjectionManifest;
   readonly fts5_available: boolean;
   readonly database_path: string;
-  constructor(database_path: string) {
+  constructor(database_path: string, authority?: typeof RETRIEVAL_EVALUATION_DATABASE) {
     if (database_path.includes("\0") || !statSafe(resolve(database_path))) throw new Error("RETRIEVAL_DATABASE_MISSING");
     const databasePath = canonicalPathSync(database_path, { alias_error: "RETRIEVAL_DATABASE_ALIAS_REJECTED" });
     this.database_path = databasePath;
@@ -1349,7 +1359,10 @@ export class SqliteRetrievalStore {
     // Published generations are immutable derived artifacts.  Open them
     // read-only so verification and search cannot create WAL/SHM sidecars or
     // mutate a generation after its manifest digest has been accepted.
-    this.#database = new DatabaseSync(databasePath, { readOnly: true });
+    this.#database = new DatabaseSync(databaseRuntimePath(
+      databasePath,
+      authority === RETRIEVAL_EVALUATION_DATABASE,
+    ), { readOnly: true });
     try {
       this.#database.exec("PRAGMA foreign_keys = ON; PRAGMA temp_store = MEMORY;");
       const version = Number((this.#database.prepare("PRAGMA user_version").get() as SqliteRow).user_version);
@@ -1712,4 +1725,9 @@ export class SqliteRetrievalStore {
     const insert = this.#database.prepare("INSERT OR IGNORE INTO retrieval_candidate_records(record_key) VALUES (?)");
     for (const recordKey of [...recordKeys].sort(retrievalCodeUnitCompare)) insert.run(recordKey);
   }
+}
+
+/** Trusted private-evaluation seam: preserve canonical identity while opening long Windows paths. */
+export function openRetrievalEvaluationSqliteStore(databasePath: string): SqliteRetrievalStore {
+  return new SqliteRetrievalStore(databasePath, RETRIEVAL_EVALUATION_DATABASE);
 }

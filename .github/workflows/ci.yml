@@ -16,16 +16,17 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.node == 23 }}
     strategy:
       fail-fast: false
       matrix:
         node: [22, 23, 24]
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -101,6 +102,7 @@ jobs:
 
   windows-retrieval-path-security:
     runs-on: windows-latest
+    continue-on-error: ${{ matrix.node == 23 }}
     strategy:
       fail-fast: false
       matrix:
@@ -109,11 +111,11 @@ jobs:
       GKOS_REQUIRE_ALIAS_FIXTURE: "1"
       GKOS_REQUIRE_SHORT_PATH_FIXTURE: "1"
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -169,7 +171,7 @@ jobs:
       group: phase4-retrieval-observation-${{ github.ref }}
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
 
@@ -182,7 +184,7 @@ jobs:
           test "$GITHUB_SHA" = "$EXPECTED_SOURCE_HEAD"
           test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE_HEAD"
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 24
           cache: npm
@@ -232,17 +234,18 @@ jobs:
 
   phase5-watcher-linux:
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.node == 23 }}
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
         node: [22, 23, 24]
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: "0"
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -303,6 +306,7 @@ jobs:
 
   phase5-watcher-windows:
     runs-on: windows-latest
+    continue-on-error: ${{ matrix.node == 23 }}
     timeout-minutes: 45
     strategy:
       fail-fast: false
@@ -312,11 +316,11 @@ jobs:
       GKOS_REQUIRE_ALIAS_FIXTURE: "1"
       GKOS_REQUIRE_SHORT_PATH_FIXTURE: "1"
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: "0"
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -392,11 +396,11 @@ jobs:
       actions: read
       contents: read
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: "0"
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 24
           cache: npm

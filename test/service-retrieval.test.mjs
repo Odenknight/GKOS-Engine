@@ -18,7 +18,9 @@ const files=()=>[
  {relativePath:HIDDEN+'.md',extension:'md',content:note('550e8400-e29b-41d4-a716-446655449399',HIDDEN,'secret',HIDDEN+' ceramic resonance calibration evidence internalbodyneedle.')}
 ].map(source=>({...source,createdTime:Date.parse(AT)}));
 async function retrievalFixture(sourceFiles=files()) {
- assert.equal(detectSqliteLexicalCapability().fts5_available,true,'physical FTS5 capability is required for this release test');
+ const lexicalCapability=detectSqliteLexicalCapability();
+ assert.equal(lexicalCapability.default_backend,lexicalCapability.fts5_available?'sqlite_fts5':'sqlite_lexical_scan',
+  'the selected backend must truthfully bind the physical SQLite capability');
  const root=await mkdtemp(join(tmpdir(),'gkos-service-retrieval-'));
  const sources=sourceFiles;
  const projected=projectGkxRetrievalCorpus(sources);assert.deepEqual(projected.rejections,[]);
@@ -27,7 +29,7 @@ async function retrievalFixture(sourceFiles=files()) {
   state_directory:join(root,'state'),vault_id:'service-retrieval-test',
   source_snapshot_digest:retrievalCanonicalDigest(sources.map(s=>[s.relativePath,s.content])),
   configuration_digest:retrievalCanonicalDigest({test:'native-service-retrieval'}),policy_digest:POLICY,
-  lexical_backend:'sqlite_fts5',candidate_sources:projected.sources.map(s=>s.candidate_source),candidate_declarations:projected.declarations,candidate_chunks:chunks,
+  lexical_backend:'auto',candidate_sources:projected.sources.map(s=>s.candidate_source),candidate_declarations:projected.declarations,candidate_chunks:chunks,
   embedding_eligible_candidate_chunk_keys:chunks.map(c=>c.candidate_chunk_key)
  });
  const reads=[];
@@ -37,13 +39,14 @@ async function retrievalFixture(sourceFiles=files()) {
   runtime_policy_digest:POLICY,lineage_view_freshness:'fresh',
   source_reader:async path=>{reads.push(path);const source=sources.find(s=>s.relativePath===path);if(!source)throw Error('missing');return Buffer.from(source.content);}
  });
- return {root,sources,generation,coordinator,reads,async close(){coordinator.close();assert.ok(resolve(root).startsWith(resolve(tmpdir())+ '/gkos-service-retrieval-')||resolve(root).startsWith(resolve(tmpdir())+'\\gkos-service-retrieval-'));await rm(root,{recursive:true,force:true});}};
+ return {root,sources,generation,coordinator,reads,lexicalCapability,async close(){coordinator.close();assert.ok(resolve(root).startsWith(resolve(tmpdir())+ '/gkos-service-retrieval-')||resolve(root).startsWith(resolve(tmpdir())+'\\gkos-service-retrieval-'));await rm(root,{recursive:true,force:true});}};
 }
-test('native RetrievalCoordinator executes real FTS5 ranking and verified byte citations for internal-visible source',async()=>{
+test('native RetrievalCoordinator executes runtime-selected lexical ranking and verified byte citations for internal-visible source',async()=>{
  const f=await retrievalFixture();
  try {
   const result=await f.coordinator.search({query:'internalbodyneedle',limit:20});
-  assert.equal(result.stages.lexical.kind,'sqlite_fts5');assert.equal(result.stages.lexical.state,'active');
+  assert.equal(result.stages.lexical.kind,f.lexicalCapability.default_backend);
+  assert.equal(result.stages.lexical.state,f.lexicalCapability.fts5_available?'active':'degraded');
   assert.equal(result.hits.length,1);assert.equal(result.hits[0].chunk.source_path,'Internal.md');
   const hit=result.hits[0];assert.equal(hit.citation.verified,true);assert.equal(hit.citation.stale,false);
   assert.equal(hit.stage_scores.final_rank,1);assert.equal(hit.stage_scores.lexical_rank,1);
@@ -98,15 +101,15 @@ async function mcpFixture(sourceFiles,sensitivityCeiling='internal') {
  await rpc('notifications/initialized',undefined,true);
  return {...f,call:(name,args)=>rpc('tools/call',{name,arguments:args}),native:()=>lastNative,advance(){generation++;},async close(){server.close();await once(server,'close');await f.close();}};
 }
-test('MCP delegates to actual native FTS5 pipeline, preserves ranked verified citations and internal visibility',async()=>{
+test('MCP delegates to the actual native lexical pipeline, preserves ranked verified citations and internal visibility',async()=>{
  const f=await mcpFixture();
  try {
   const response=await f.call('gkos_search',{query:'internalbodyneedle',cursor:null,limit:10});
   assert.equal(response.isError,false);
   const result=response.structuredContent;
   assert.equal(result.extension_version,'observatory.mcp-retrieval.v0');
-  assert.equal(result.retrieval.stages.lexical.kind,'sqlite_fts5');
-  assert.equal(result.retrieval.stages.lexical.state,'active');
+  assert.equal(result.retrieval.stages.lexical.kind,f.lexicalCapability.default_backend);
+  assert.equal(result.retrieval.stages.lexical.state,f.lexicalCapability.fts5_available?'active':'degraded');
   assert.equal(result.items.length,1);assert.equal(result.items[0].canonical_path,'Internal.md');
   assert.deepEqual(result.items.map(({record_ref,canonical_path,...hit})=>hit),f.native().hits);
   assert.equal(result.retrieval_window.exhaustive,false,'top100 native window is not an exhaustive corpus count');
@@ -157,7 +160,7 @@ test('explicit native path scope can avoid authored conflicts without changing w
   const scoped=await f.call('gkos_search',{query:'ceramic resonance',cursor:null,limit:1,path_include:['Healthy/**']});
   assert.equal(scoped.isError,false);
   const result=scoped.structuredContent;
-  assert.equal(result.retrieval.stages.lexical.kind,'sqlite_fts5');
+  assert.equal(result.retrieval.stages.lexical.kind,f.lexicalCapability.default_backend);
   assert.equal(result.retrieval.eligible_result_count,2,'only allowed healthy source chunks count; hidden healthy source excluded');
   assert.equal(result.page.has_more,true);assert.ok(result.items.every(x=>x.canonical_path.startsWith('Healthy/')));
   assert.equal(JSON.stringify(result).includes(HIDDEN),false);

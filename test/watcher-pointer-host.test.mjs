@@ -137,7 +137,9 @@ test("second boundary rejects target reuse, target resurrection, and parent repl
   }), /GKX_WATCHER_FS_DIRECTORY_(?:ALIAS_INVALID|CHANGED)/u);
 });
 
-test("POSIX transitions reject sibling aliases and owner changes", { skip: process.platform === "win32" }, (t) => {
+const posixTest = process.platform === "win32" ? () => {} : test;
+
+posixTest("POSIX transitions reject sibling aliases and owner changes", (t) => {
   const aliased = mutationAuthority(t, "gkos-watcher-authority-alias-");
   assert.throws(() => ensureWatcherDirectory(join(aliased.root, "child"), aliased.parent, {
     on_authorized_mutation() {
@@ -233,9 +235,7 @@ test("full-coordinate alias discovery admits a genuine hardlink and rejects an e
   assert.throws(() => readFileSync(join(negative.root, "target.json")), /ENOENT/u);
 });
 
-test("ordinary reads, cleanup, links, unlinks, and replacements reject non-private files", {
-  skip: process.platform === "win32",
-}, async (t) => {
+posixTest("ordinary reads, cleanup, links, unlinks, and replacements reject non-private files", async (t) => {
   async function exercise(label, mutate) {
     await t.test(label, (child) => {
       const authority = mutationAuthority(child, `gkos-watcher-file-${label.replaceAll(" ", "-")}-`, false);
@@ -293,7 +293,7 @@ test("reserved derivation rejects retained authority swap-and-restore", (t) => {
   }), { message: "GKX_WATCHER_FS_DIRECTORY_CHANGED" });
 });
 
-test("file-transition second boundary rejects sibling, target, link, and parent races", { skip: process.platform === "win32" }, (t) => {
+posixTest("file-transition second boundary rejects sibling, target, link, and parent races", (t) => {
   const sibling = mutationAuthority(t, "gkos-watcher-file-sibling-");
   assert.throws(() => writeNewWatcherFile(sibling.parent, "new.json", Buffer.from("new\n"), undefined, {
     on_before_seal_refresh() { writeFileSync(sibling.sibling, "changed\n"); },

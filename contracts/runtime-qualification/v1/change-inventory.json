@@ -1,0 +1,543 @@
+{
+  "version": "gkos-current-runtime-qualification/1",
+  "historical": "97ae3560a4fa2e771b60fa63d6dc0349d0b4c864",
+  "audited": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+  "historical_changes": [
+    {
+      "path": "README.md",
+      "before": "d8ef6444bc1ab4a3c4f5246d7da833c508c4f960",
+      "after": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "bin/gkx.mjs",
+      "before": "bf6272218c685ce52acd8a471d7912078c0064d6",
+      "after": "4c385833b14a76be61f8523258c30a9f7350b715",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "bin/settings-inventory.mjs",
+      "before": null,
+      "after": "64b9c9d2d2cdb2a0e36359301a07fb8376e0e746",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "docs/CURRENT_CAPABILITIES.md",
+      "before": null,
+      "after": "154d01ab1328d6f7a8cc10974cde6d8651402357",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "docs/HANDOFF_2026-08-27.md",
+      "before": null,
+      "after": "fa71613f2efc29daed7d25b4e614cfcfba67d922",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "docs/MCP-PARAM-ERRORS.md",
+      "before": null,
+      "after": "1a204eabe98a24c89b9b2208a55039b91c4f0d22",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "docs/SETTINGS-TOML.md",
+      "before": null,
+      "after": "6418ebdf4fd9c9c30e42daa6ba49fc02acb78ec5",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "docs/SETTINGS.md",
+      "before": null,
+      "after": "3ce48def5cdf6b8ac2fd7b287973f90c7c2d4a77",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "docs/mcp-invalid-params-draft3.schema.json",
+      "before": null,
+      "after": "47d1b5fdd8d839274e32ae6af5f3ca3f82c3eff8",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "services/gkos-intelligence/src/gkos_intelligence/server.py",
+      "before": "9a78e05c771f8a92c3e69c3397a12954bd237669",
+      "after": "050a2ff80f62d6b5327a99b02c61bbcd66c5f960",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "services/gkos-intelligence/tests/test_settings.py",
+      "before": null,
+      "after": "7a8f179ce7db731456c2ef310bf4408bf2407820",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/desktop-agent.ts",
+      "before": "e3dfd8799f79ffeb9fd338d87cffe54bfde3d27b",
+      "after": "5e6dd0ae5885d4107ef7218fbedee0164a940ce1",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/ingest/storage.ts",
+      "before": "c79964715436e4fdb93d39ef7bd41c159ef5fe3b",
+      "after": "7745f7157191d77277bd659b192d95247a42ccc0",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/service/local-embedding.ts",
+      "before": null,
+      "after": "f9fdb8bfb6d90055b0e169d5d362d0f2b12b44d3",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/service/mcp.ts",
+      "before": "0005428444d3586e7ac47f926d3f59a9a23a4e72",
+      "after": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/service/node.ts",
+      "before": "5fbc2814f108df967ae74d352fe8d349c6fa8086",
+      "after": "a66997dc3e0248ddd9988149a224ec462ce74f57",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/service/retrieval.ts",
+      "before": null,
+      "after": "45311d7ca3fe7aac49b3357395397f49c972bf29",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/service/server.ts",
+      "before": "c11f44fe4c95ad9a7eb6326c6be17ee0e3b80ec0",
+      "after": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/service/work-scheduler.ts",
+      "before": null,
+      "after": "9555150e982b90512784d402bfb4f44c52f05212",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/watcher/coordinator.ts",
+      "before": "f301c2af507d39eb5a8fbdd17925113b00a8b40c",
+      "after": "4c2d09a947f81fc28e3ccf3806b348fcaff672ec",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/watcher/host.ts",
+      "before": "a97f16ee888103a765b64ec79b841e7a6bcbff1c",
+      "after": "552145be95b14ac22a07760c7922a85d038b225c",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "src/watcher/journal.ts",
+      "before": "7d698f2ed49fcf821271ba1f883e128d956622b2",
+      "after": "b7edbbf108b52baba29035d09ec2e244498bd265",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/compatibility-baseline.test.mjs",
+      "before": "8cb3f98bdd44e943a1b054ed0bb8a93388ca8b4b",
+      "after": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/desktop-agent.test.mjs",
+      "before": "751e328ff7b9af3752feecb940303496f6d0ea4e",
+      "after": "a015957c17cab453b0c1a0ed8a733bf7b6aee028",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/fixtures/param-errors-before.json",
+      "before": null,
+      "after": "6b4c9c5401ca4d3b76e2a4c86923d892bf9cb969",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/service-content.test.mjs",
+      "before": null,
+      "after": "c8278965df5ea133fee06bd0907ec8e92ad6311b",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/service-multiclient.test.mjs",
+      "before": null,
+      "after": "087c9efca8e7622df56870f6aeb42781ef1e3542",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/service-param-errors.test.mjs",
+      "before": null,
+      "after": "0c353318addae9d8d496ddadd85f9cf52776acb8",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/service-retrieval.test.mjs",
+      "before": null,
+      "after": "83f14477ca28e80cfc990f603e19b73251b6aec6",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/service-runtime.test.mjs",
+      "before": "03bfda24636f4cecf194876aa80fdcd73e520404",
+      "after": "c3ad015d1e157f57cfc7b4f9d99a5e9601ae33bc",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/service-scheduling.test.mjs",
+      "before": null,
+      "after": "973b3bd6921ebcd747297085fc419882f7c1b25a",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/service-secret-canary.test.mjs",
+      "before": "32b9e416539390bd4c60b97a46b6b54d67c93644",
+      "after": "60107beecdd93a66ffebf5bb667a86aea5ec7220",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/service-vector-real.test.mjs",
+      "before": null,
+      "after": "8c495c4f77d9592e905c5bd2b211b8226d9c878d",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/settings-inventory.test.mjs",
+      "before": null,
+      "after": "1c898da5109eb51d7d443835179af0aa88cd5077",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/support/param-fixture.mjs",
+      "before": null,
+      "after": "d03197327839542ebba3b852e0d2a214f6354997",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/watcher-coordinator.test.mjs",
+      "before": "5996ed147e2168a0cb3227790faecc92e1f82e58",
+      "after": "ce95634d71454e60ab43d1f0cb33551aac392aa8",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/watcher-fast-path.test.mjs",
+      "before": null,
+      "after": "0b6bfb8c8d0ba9d8df25322b5314a3d79ce08f54",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    },
+    {
+      "path": "test/watcher-large-restart.test.mjs",
+      "before": null,
+      "after": "6645c5680b85689548f07963fe596e05e12e03ef",
+      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
+    }
+  ],
+  "frozen": [
+    {
+      "path": ".github/workflows/phase6-identity-contract.yml",
+      "sha256": "385c137613af0bee7fae6125fcaec0faf64f1a10533d3477acce67ab1fe26ab6"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/README.md",
+      "sha256": "98a77be95bad3be62e95389b88fa595619090de88ca2d5f9e04feaeab2b099f8"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/TECHNICAL_README.md",
+      "sha256": "6f8da7d8b8fcce480cbd031e34ea6aafa56a8702390284f29892ee0359fa6520"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/activity.schema.json",
+      "sha256": "2f6bdf0621b3b2b12b16a97d9f1e40d485839a7c92b24f7b59bb2f5843e7835f"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/agent-identity.schema.json",
+      "sha256": "c6a7fc8cc654022b5d639fb7234cbeae2dc2a17f0d63ea128030b8900c10b63d"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/allowed-paths.txt",
+      "sha256": "79e454975e981e59b53b9ddca672bb113d9762cbe2fe81a5c04f7498514f0c5f"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/audit-receipt.schema.json",
+      "sha256": "49bdd99a2415ab14c067f6dfe1a07e971b69e76316bfa85785651c87f572650c"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/bootstrap-migration.schema.json",
+      "sha256": "64b9a5572e53d3b8135b7b77ee358f6ee4d8ca8024bad32fe0333b0d26002bc3"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/canonical-fixture.json",
+      "sha256": "643fd0f1860a19a04ff9da27e28539e34b6979346bcdcee0ba5033fab2d9d976"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/conformance.schema.json",
+      "sha256": "f3cf04a75745460c8a743d0524e5e37806434e616360064602cc6e5394c3944c"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/credential.schema.json",
+      "sha256": "0cb96e6cb1bb7950751b5daaae61bb0a4da73689ba8c5d3257127ce719ac468c"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error-fixture.json",
+      "sha256": "94ae8850e7b6feb6899e6574612c87dc81a8d1a87a9b568a2554c7c8a193ecad"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error.schema.json",
+      "sha256": "60790458e9ee7872e23e3d5d234d67e3f6456ddab00305bb0d2c20fbddd7c657"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/external-mapping.schema.json",
+      "sha256": "0b74d9a9385f7511e42c37da2b4c258edd3f9c2ecf92351767ca4180639fd019"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/hosted-artifact-inventory.json",
+      "sha256": "1a1ac34857c4a0e08408670e3d4858e9dea8368b9b14966fb5cc83edaefcc37f"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/lifecycle.schema.json",
+      "sha256": "1865446cb023a43668f930947f69532b4a072c8bbd35f530edc9692ad5803b1a"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/limits.schema.json",
+      "sha256": "b2f8276b05707d5b61e51fb57ae551425baa0ca936e64f29e5f913bafa1d3059"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/mcp-conformance-fixture.json",
+      "sha256": "f3dde86c43973a55c72d804ab46bbcbca96d5431da4824243614415467dc7f23"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration-fixture.json",
+      "sha256": "8907862bf250726990577a86b9d5ae07385b953ab3b3d22c57ce367f0ee7fc96"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration.schema.json",
+      "sha256": "8cdc0ccc0fb1cb2b7ae2cc4d7439c233499bf9a2a562ded476663765c4b4eaa5"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+      "sha256": "9d9436b31a5ee84cea972b07fccac0b442179ad7b3847e30bd35c459bbb2abec"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.schema.json",
+      "sha256": "e6a710af7c64b3617cc4b9d0a6e8e193b45937b1e8da4d43347d2d04a5781229"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
+      "sha256": "c60e34cc0e0ef10bd82b0c819ab2b6dc7d2bd6967400d9f062373bd2624071da"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/platform-matrix.json",
+      "sha256": "16928aa94d9369f1e231467749b9eefb2f6ad079626eff86ca698e6c68dc4e81"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/platform-matrix.schema.json",
+      "sha256": "f99aefdf82ffe833fcfa851cd238d151ee42c79b0ee7e44920d47c3f33b3079d"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/protected-paths.txt",
+      "sha256": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/qualification-receipt.schema.json",
+      "sha256": "e1129ba01e666a9d5c21599b8754195b8a4ae3b4abae8d643debb19a8aa6e916"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/race-fixture.json",
+      "sha256": "35f960cb2bce43624f4fb0334e4d3b4ec4a731c59e6b9c346e162de0fa768e22"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/request.schema.json",
+      "sha256": "0b71e24f0aeb9b6c4b7482a0c45b30349a1ba2f62f9e2992b65f8848eb29dc77"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/security-fixture.json",
+      "sha256": "d0a870439d2a3cef2dc05a484b07f728241c0e4fd49cbd6ddc5f62e0b78becbf"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/session.schema.json",
+      "sha256": "fef93d873b8211284304be7f3e68df566ba0deb9e04c46f6a6a949a151f9c8a5"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.json",
+      "sha256": "433d3e9881833b15dbb72b40accaa9591f8b022149148dc5962d501a3d61cea5"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.schema.json",
+      "sha256": "b41530d92655f52634584db0436b6e3d9bd55aece72bb6ae48cc05878db50087"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.json",
+      "sha256": "01067e32bc3df781744309429c8d0b174ab711aa39ff8daa48f5a03aad881276"
+    },
+    {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.schema.json",
+      "sha256": "c9a824276a569acdd9f2229964f19e4c9f4ca0a99de1ae443d8e9bac514509f1"
+    },
+    {
+      "path": "scripts/generate-agent-identity-mcp-contract-draft1.mjs",
+      "sha256": "d8f1a8827c482a9f60852be6df2cb4a9e1a5ff02b2378edf3f82aed70ce219e8"
+    },
+    {
+      "path": "test/agent-identity-mcp-contract.test.mjs",
+      "sha256": "9440d2f8f8c1de4cd11d1416de2bb342921ff6cd1cc9d4d97f05f3321e67066a"
+    }
+  ],
+  "candidate_changes": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
+      "after": "361f06c1bfbd188781e93947d06f68f4e9e6cc2a96c58b04256ae2edd26e321a",
+      "rationale": "Workflow policy: Node 22 and 24 remain blocking, Node 23 is informative, and checkout/setup-node use the approved exact v5 pins."
+    },
+    {
+      "path": ".github/workflows/phase4-retrieval-observation.yml",
+      "before": "8335d9b88016414584117202b7d083393d360a1c",
+      "after": "033df13af0bfb9f02b1c8679b8d04cf5c32b348718022386b1f919e389254662",
+      "rationale": "Workflow equivalence repair: keep the standalone Phase 4 observation lane byte-equivalent to its CI bridge after the approved exact checkout/setup-node v5 pin upgrade."
+    },
+    {
+      "path": ".github/workflows/runtime-qualification.yml",
+      "before": null,
+      "after": "53bbc57e77641d1021ac75b2974da55211e8774604e17d3aeb51645dda8ea366",
+      "rationale": "Q-GUARD: preserve exact historical/current evidence; Node 22 and 24 block on Ubuntu and Windows, Node 23 is informative, the exact Standard fixture publication is present, and Git command-scope configuration makes both checkouts canonical from their first write."
+    },
+    {
+      "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
+      "before": null,
+      "after": "6e4e39836f5c2653ddba636311ff0a5607d56e97cd920f943edcb68ab00da425",
+      "rationale": "Q-GUARD: separate exact historical replay, canonical cross-platform current-runtime evidence, an explicit owner-resource exemption, and a measured fail-closed timeout; no release qualification."
+    },
+    {
+      "path": "package.json",
+      "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
+      "after": "528d9621ba8c1e06ed22ba4b7e561fbc99e7d832ebc5ab00b5dcc1e4a95dae87",
+      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
+    },
+    {
+      "path": "scripts/current-test-plan.mjs",
+      "before": null,
+      "after": "58d8789c91770a1a99ff19bc6856aa29d3078e6af113640dd877b3d9bc7cafaa",
+      "rationale": "Q-GUARD coverage closure: make the sole owner-supplied local-model observation exemption exact and run strict timing/shutdown oracles before exhaustive suite load without weakening their limits."
+    },
+    {
+      "path": "scripts/run-current-tests.mjs",
+      "before": null,
+      "after": "b7ee383dabe74ca8dea69e9d07388bb7c7725ec5ba52ed712b3b2deb2d05cd20",
+      "rationale": "Q-GUARD coverage closure: run every deterministic current test serially, execute strict timing/shutdown oracles in isolated leading processes, and emit one exact aggregate receipt while reporting the sole owner-resource exemption."
+    },
+    {
+      "path": "scripts/run-watcher-observation-qualification.mjs",
+      "before": "a11d7081118cde88a8db2d8bbab6429805f61b2c",
+      "after": "628b383c94d6a83b319a301581356bf73c805f6700a2df79f517c78c69d318a7",
+      "rationale": "CI repair: preserve the strict child stderr protocol while suppressing only Node-owned SQLite and environment-proxy warnings."
+    },
+    {
+      "path": "scripts/runtime-qualification.mjs",
+      "before": null,
+      "after": "d1120a52f538437548fd444cbd7f929efbef49c23b30ea99547881324d8f85bf",
+      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
+    },
+    {
+      "path": "src/retrieval/coordinator.ts",
+      "before": "f7fe89a328c61bebfbfee87eb3d4bb3efdf89111",
+      "after": "0016afb181d572af42996a731de081683369ba572374a6386d8a5b5702c15cf7",
+      "rationale": "Q-GUARD Windows coverage closure: reopen private evaluation generations through the evaluation-only long-path SQLite authority without changing ordinary coordinator stores."
+    },
+    {
+      "path": "src/retrieval/sqlite-store.ts",
+      "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
+      "after": "471d90cc045d8e49bfc3865035a009533a9c4522376bd3e49efcbd41a7f45d4d",
+      "rationale": "Q-GUARD Windows coverage closure: namespace only private unactivated evaluation SQLite opens so canonical 8.3 expansion cannot exceed the Windows path limit or alter ordinary watcher performance."
+    },
+    {
+      "path": "src/service/mcp.ts",
+      "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
+      "after": "a077315d40f5febcb453e2758da85edc7a437858f43a7b46cc1abaaf5a209c6d",
+      "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
+    },
+    {
+      "path": "src/service/server.ts",
+      "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
+      "after": "be047a5f8d8ae6d65457c714e39e10c65b27e0bfb04296c3d31f1c7919537387",
+      "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
+    },
+    {
+      "path": "src/watcher/host.ts",
+      "before": "552145be95b14ac22a07760c7922a85d038b225c",
+      "after": "3ef7de7452926384168c7152b3f0d8da6a4ba28079a89ab4c95397cba8753555",
+      "rationale": "CI repair: bind the runtime-selected concrete lexical backend so official Node 23 uses the existing manifest-bound compatibility scan."
+    },
+    {
+      "path": "test/retrieval-evaluation-cli.test.mjs",
+      "before": "80d2df55e3c6c97e95b08101a1e892ef63c43da7",
+      "after": "cf17cd786e39b163707f027c74c5445a9d6c321322b9d153541436e936835a39",
+      "rationale": "Q-GUARD Windows coverage closure: compare the sealed temporary capability against the canonical parent spelling while preserving the 8.3-path regression oracle."
+    },
+    {
+      "path": "test/retrieval-observation-qualification.test.mjs",
+      "before": "4e4e0a64a7b03c61dcf933b7ffc4364d56eab0fd",
+      "after": "fe12202c47f47b9b7a1287ac3c0f15163f1a39f6fca799417b4d4a2f70913778",
+      "rationale": "Workflow equivalence and Q-GUARD repair: retain the approved v5 workflow digest and isolate the non-Linux observation oracle from an unrelated pull-request event environment."
+    },
+    {
+      "path": "test/retrieval-windows-path-security.test.mjs",
+      "before": "02f6efced1d43c639fb636996efca5d9e516e9d4",
+      "after": "e5769ac63408cd6cc51ab78928e9e7422379980896b636f7e4988d7b11d5f5a0",
+      "rationale": "Q-GUARD coverage closure: register native Windows security assertions only on Windows so the hosted OS matrix carries the platform claim without synthetic skips."
+    },
+    {
+      "path": "test/runtime-qualification.test.mjs",
+      "before": null,
+      "after": "db4f4a31155b490190dc51ddb4736751792e21727e514efc4b203e36e362e206",
+      "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including pre-checkout canonical Git configuration, the measured process deadline, the closed owner-resource test plan, and complete stability-priority ordering; no release qualification."
+    },
+    {
+      "path": "test/service-reference-freshness.test.mjs",
+      "before": null,
+      "after": "f4c45d6c1085acd0bc6743a1161c8b0615c0e74507acf0a01c048fcf3c66484c",
+      "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
+    },
+    {
+      "path": "test/service-retrieval.test.mjs",
+      "before": "83f14477ca28e80cfc990f603e19b73251b6aec6",
+      "after": "f13506904fe1e7f99e7a941c619a4b22988ec4908629c42f5458ccccd7ca56f1",
+      "rationale": "CI repair: execute the native service retrieval contract on the runtime-selected backend without skipping the FTS5 or compatibility-scan paths."
+    },
+    {
+      "path": "test/service-stdio-package.test.mjs",
+      "before": "5e302462792e360747bf0254d336f8d747f55e4c",
+      "after": "b2894842f847b77d25377819461ea22c1864e3aeb0032206441d653e431df09d",
+      "rationale": "Q-GUARD hosted stability repair: retain a finite per-test ceiling with enough saturated Windows runner headroom for the clean clone, install, pack, reinstall, and authenticated process round-trip."
+    },
+    {
+      "path": "test/watcher-coordinator.test.mjs",
+      "before": "ce95634d71454e60ab43d1f0cb33551aac392aa8",
+      "after": "8a7a1f9cb29601db967db931bac7faf6cd2cd0dbcd7bfb6204f03403a531e200",
+      "rationale": "Q-GUARD coverage closure: register the native POSIX ownership assertion only where that operating-system capability exists."
+    },
+    {
+      "path": "test/watcher-large-restart.test.mjs",
+      "before": "6645c5680b85689548f07963fe596e05e12e03ef",
+      "after": "29978a55b73ec828fd1da1900ab7009e0f006209c2a22a86aec447287e9a8c49",
+      "rationale": "CI repair: prove large watcher restart binds and reopens the runtime-selected concrete lexical backend."
+    },
+    {
+      "path": "test/watcher-observation-qualification.test.mjs",
+      "before": "10ee043507f86d913c95ddcd11869390b68d6f6f",
+      "after": "3d6bba52ccb98daa0264dd87309e404ae548e0e1d2c6b6d7d60988e184e2456b",
+      "rationale": "CI repair: prove only the two Node-owned warnings are suppressed and unrelated stderr remains fail-closed."
+    },
+    {
+      "path": "test/watcher-pointer-host.test.mjs",
+      "before": "44d7cfd700c0510a76d746a25ac072791fb32105",
+      "after": "135cf822c2e5b34b0a373c33d6faf3c9a1f2e0d3cd13cdf55701790fa8adeb07",
+      "rationale": "Q-GUARD coverage closure: register the native POSIX file-authority assertions only where those ownership and mode capabilities exist."
+    },
+    {
+      "path": "test/watcher-service-cli.test.mjs",
+      "before": "064563e6a26da7e90e76591fe907463bc29f3a0c",
+      "after": "bb99d4a0794ad37141a096aaaad62b2d74155f7cb33a9176a7ac94525ef11a18",
+      "rationale": "Q-GUARD coverage closure: register the native Linux shutdown regression only where the Linux watcher and physical FTS5 capability exist."
+    }
+  ]
+}

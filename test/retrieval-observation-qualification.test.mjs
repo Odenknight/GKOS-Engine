@@ -312,6 +312,10 @@ test("Slice-C Observation pass authority is Linux x64 only", async () => {
   const artifactRoot = join(BUILD_ROOT, `non-linux-observation-${randomUUID().replaceAll("-", "")}`);
   await mkdir(artifactRoot, { mode: 0o700 });
   const priorExitCode = process.exitCode;
+  const priorGithubActions = process.env.GITHUB_ACTIONS;
+  const priorGithubEventName = process.env.GITHUB_EVENT_NAME;
+  process.env.GITHUB_ACTIONS = "false";
+  delete process.env.GITHUB_EVENT_NAME;
   try {
     await runner.main(["--mode", "observation", "--artifact-root", artifactRoot]);
     assert.equal(process.exitCode, 1);
@@ -325,6 +329,10 @@ test("Slice-C Observation pass authority is Linux x64 only", async () => {
     await assert.rejects(readFile(join(artifactRoot, "performance-sample-plan.json")), (error) => error.code === "ENOENT");
   } finally {
     process.exitCode = priorExitCode;
+    if (priorGithubActions === undefined) delete process.env.GITHUB_ACTIONS;
+    else process.env.GITHUB_ACTIONS = priorGithubActions;
+    if (priorGithubEventName === undefined) delete process.env.GITHUB_EVENT_NAME;
+    else process.env.GITHUB_EVENT_NAME = priorGithubEventName;
   }
 });
 
@@ -409,7 +417,7 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
   assert.equal(JSON.stringify(packageJson.exports).includes("observation"), false);
   assert.equal(JSON.stringify(packageJson.exports).includes("qualification"), false);
 
-  assert.equal(retrievalSha256(observation), "sha256:d072360963e0b080bb03495971fc342f567f05b0bf17285830a7418ac3c3f5fa");
+  assert.equal(retrievalSha256(observation), "sha256:033df13af0bfb9f02b1c8679b8d04cf5c32b348718022386b1f919e389254662");
   assert.equal((continuous.match(/^  phase4-retrieval-observation-manual:$/gmu) ?? []).length, 1);
   assert.equal((continuous.match(/^    if: github\.event_name == 'workflow_dispatch'$/gmu) ?? []).length, 1);
   assert.equal((continuous.match(/^      phase4_observation_expected_head:$/gmu) ?? []).length, 1);
@@ -423,7 +431,7 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
   const standaloneJob = workflowJobBody(observation, "observe");
   assert.deepEqual(bridgeObservationProjection(bridgeJob), standaloneJob);
   const bindIndex = bridgeJob.indexOf("      - name: Bind exact manual observation source");
-  const setupIndex = bridgeJob.indexOf("      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4");
+  const setupIndex = bridgeJob.indexOf("      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0");
   const artifactRootIndex = bridgeJob.indexOf("      - name: Create private observation artifact root");
   assert.equal(bindIndex > 0 && bindIndex < setupIndex && setupIndex < artifactRootIndex, true);
 });
