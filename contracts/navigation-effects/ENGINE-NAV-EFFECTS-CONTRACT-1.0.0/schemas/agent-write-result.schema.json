@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/agent-write-result.schema.json",
+  "title": "Navigation Effects Agent Adapter Write Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifactKind", "requestId", "status", "reasonCodes", "contentIncluded"],
+  "properties": {
+    "artifactKind": { "const": "engine.agent-write-result" },
+    "requestId": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["planned", "committed", "no-op", "stale", "denied", "conflict", "recovery-required"] },
+    "effectId": { "type": "string", "pattern": "^effect:(?:[0-9a-f]{32}|rollback:[0-9a-f]{32})$" },
+    "receiptId": { "type": "string", "minLength": 1 },
+    "noteUid": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$" },
+    "targetName": { "type": "string", "minLength": 1 },
+    "currentDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "reasonCodes": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "contentIncluded": { "const": false }
+  }
+}

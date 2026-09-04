@@ -26,16 +26,22 @@ service, or desktop sidecar.
 | Ingest and retrieval | Validate a corpus, publish derived SQLite generations, search lexically or through configured providers, and verify citations | Implemented; provider connectors remain host choices |
 | Watcher host | Keep one coherent graph/retrieval generation current and recover durable derived state after interruption | Implemented as a repository-private host runtime |
 | Navigation 1.0 | Discover MOCs, build candidates, diff, audit, assemble filtered context, and plan re-entry | Implemented and source-content read-only |
+| Navigation Effects 1.0 | Deterministic managed-MOC effect planning plus optional Node transaction/recovery groundwork | Experimental, integration-only, and off until a host supplies every required safety input |
 | Local service | Serve authorized graph, notes, Graphiti episodes, capabilities, MCP, and traversal events on loopback port 4814 | Implemented under an integration-only draft contract |
 | MCP | Seven credential-bound, read-only tools over Streamable HTTP, plus a packaged stdio compatibility bridge | Implemented for integration qualification; not a production conformance claim |
 | Optional intelligence | Validate proposal-only responses from a separate Python AI sidecar | Optional; never approval authority |
 | Scientific trace evaluation | Deterministic checks for a provisional research-trace draft | Experimental and opt-in |
 | Admission-policy provider | Evaluate pinned, bounded admission requests and emit deterministic, hash-bound receipts | Implemented in 2.1.2; no approval, activation, or materialization authority |
 
-Two boundaries are especially important:
+Three boundaries are especially important:
 
-- **Navigation Effects is not present on this branch.** Navigation can generate
-  and compare MOC candidates, but it cannot apply them to source notes.
+- **Navigation 1.0 is still read-only.** Its import graph cannot reach the
+  separate Effects executor, and its capability document still reports source
+  writes unavailable.
+- **Navigation Effects is experimental groundwork, not an enabled feature.**
+  This branch contains a separately versioned planner and optional Node
+  executor, but importing them grants no authority, creates no files, and does
+  not turn on managed-MOC writes.
 - **Proposal ingress is not active.** The local service reports it as disabled;
   no agent proposal, approval, or source-write route is available.
 
@@ -191,11 +197,13 @@ Published subpaths are:
 
 | Import | Purpose |
 | --- | --- |
-| `gkos-engine` | Framework-neutral parser, validation, assessment, graph, lineage, migration/enrichment planning, intelligence validation, and experimental namespace |
+| `gkos-engine` | Framework-neutral parser, validation, assessment, graph, lineage, migration/enrichment planning, intelligence validation, Navigation/Effects/governance re-exports, and experimental science namespace |
 | `gkos-engine/adapter` | Small dependency-injection adapter for downstream products |
 | `gkos-engine/gkx` | Focused GKX types, parser, projection, and incremental index |
 | `gkos-engine/graphiti` | Graphiti projection API |
 | `gkos-engine/navigation` | Pure, source-content-read-only Navigation 1.0 API |
+| `gkos-engine/navigation-effects` | Experimental, framework-neutral Effects 1.0 types, capability reporting, marker/path checks, and deterministic planning |
+| `gkos-engine/navigation-effects/node` | Optional experimental Node executor for explicitly configured host integrations |
 | `gkos-engine/governance` | Receipt roles and explicit append-only governance-store contracts |
 | `gkos-engine/retrieval` | Node/SQLite retrieval reference implementation |
 | `gkos-engine/admission-policy` | Product-neutral deterministic policy evaluation, receipt validation, and context-bound replay verification |
@@ -217,8 +225,12 @@ entry points are the packaged commands and repository host integrations.
 - **Admission receipts are evidence, not authority.** The admission-policy
   provider performs no I/O and cannot approve, activate, or materialize an
   artifact; relying consumers must verify the exact request and policy context.
-- **Navigation reads source content.** It returns values and plans; it has no
-  source-write executor in 2.1.2.
+- **Navigation 1.0 reads source content but cannot write it.** Its subpath
+  returns values and plans and cannot reach the separate experimental executor.
+- **Effects stay asleep unless a host proves readiness.** Package availability
+  is not configuration, configuration is not authority, and neither enables an
+  automatic write. The experimental Node executor requires explicit host,
+  policy, journal, precondition, and authority inputs for an individual effect.
 - **Derived-state writes are explicit.** Indexing, watcher journals, status,
   tokens, graph exports, and requested output files are effects, but none is a
   silent source-note rewrite.
@@ -241,12 +253,34 @@ integration-only. Draft.2 qualifies the seven implemented tools and transports
 for integration; it is not a production compatibility, release, or conformance
 declaration.
 
+The Navigation Effects contract is also `1.0.0` and integration-only. Its
+manifest names Engine `2.2.0` as a future release target; this repository still
+declares package version `2.1.2`, and the Effects code here is not a released
+Engine 2.2 artifact.
+
 Governed contract lanes cover Node 22, 23, and 24 on Linux and Windows, plus a
 macOS Node 22 lane. The existing SEA release workflow is configured to build
 unsigned pre-release `gkos-agent` binaries for Windows x64 and macOS arm64/x64;
 it does not define a Linux SEA artifact.
 
 ## Optional and experimental components
+
+### Navigation Effects: careful machinery on the workbench
+
+The framework-neutral Effects planner can validate ownership, markers, paths,
+policy/authority bindings, digests, and exact region-preserving MOC candidates.
+The optional Node executor adds a cooperative-vault implementation of leases,
+target locks, a hash-chained journal, exact archives, temporary replacement,
+after-read verification, receipts, checkpoints, rollback, and startup recovery.
+
+That is useful engineering groundwork, but it is deliberately not a magic
+“organize my vault” switch. This repository does not supply Kosmos adoption UI,
+an Obsidian adapter, an authority provider, event coordination, reconciliation,
+automatic maintenance, or automatic MOC creation. Existing MOCs remain outside
+any managed workflow until a consumer implements explicit, digest-bound
+adoption and all of its own gates pass. The portable Node executor also uses a
+documented cooperative-vault threat model; it is not qualified against a
+hostile local process racing filesystem ancestors.
 
 The Python service in [`services/gkos-intelligence/`](services/gkos-intelligence/README.md)
 can produce bounded `gkos.intelligence.v1` suggestions. The TypeScript engine
@@ -285,6 +319,8 @@ them; the gate is zero failures with only documented skips.
 - [Ingestion contract](docs/INGESTION-CONTRACT.md)
 - [Navigation contract](docs/NAVIGATION-CONTRACT.md)
 - [Navigation authority boundary](docs/NAVIGATION-AUTHORITY-BOUNDARY.md)
+- [Navigation Effects contract](docs/NAVIGATION-EFFECTS-CONTRACT.md)
+- [Navigation Effects reconciliation record](docs/navigation-effects/RECONCILIATION-20260827.md)
 - [Watcher host](docs/phase5-watcher-host.md)
 - [Identity and MCP Draft.2](docs/phase6-agent-identity-mcp-draft2.md)
 - [Version/profile compatibility](docs/VERSION-PROFILE-COMPATIBILITY.md)

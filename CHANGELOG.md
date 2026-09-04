@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Added the separately versioned, opt-in Navigation Effects 1.0 contract,
+  deterministic MOC apply planner, generated-region merger, path/grant
+  validation, and fault-injectable in-memory adapter.
+- Added an optional Node executor with a single-writer lease, hash-chained
+  journal, scoped locks, exact MOC archives, flushed temporary writes,
+  same-volume replacement, after-read verification, receipts, rollback,
+  checkpoints, and startup recovery.
+- Navigation 1.0 remains source-content read-only. This unreleased work makes no
+  release, deployment, or GKOS conformance claim.
+
 ## 2.1.2
 
 - Added the generic, deterministic `gkos.admission-policy.v1` provider contract

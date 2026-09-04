@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFile, readdir, stat } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -82,8 +82,11 @@ test("Draft.1 bytes remain frozen and Draft.2 changes stay inside exact inventor
   const protectedPaths = (await readFile(join(DIR, "protected-paths.txt"), "utf8")).trim().split("\n");
   const protectedDiff = execFileSync("git", ["diff", "--name-only", BASE, QUALIFIED_DRAFT2_HEAD, "--", ...protectedPaths], { cwd: ROOT, encoding: "utf8" }).trim();
   assert.equal(protectedDiff, "");
+  // These exclusions freeze the qualified Draft.2 embodiment, not every later
+  // descendant. Inspect the qualified tree so unrelated, versioned successors
+  // cannot make this historical qualification assertion pass or fail.
   for (const excluded of ["src/navigation-effects", "contracts/navigation-effects", "docker", ".dockerignore"]) {
-    await assert.rejects(stat(join(ROOT, excluded)));
+    assert.throws(() => execFileSync("git", ["cat-file", "-e", `${QUALIFIED_DRAFT2_HEAD}:${excluded}`], { cwd: ROOT, stdio: "ignore" }));
   }
 });
 

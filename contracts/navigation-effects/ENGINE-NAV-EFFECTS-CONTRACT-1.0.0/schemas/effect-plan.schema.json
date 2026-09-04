@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/effect-plan.schema.json",
+  "title": "Navigation Effect Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifactKind", "effectsContract", "effectId", "idempotencyKey", "operation", "vaultId", "targetPath", "proposedDigest", "sourceSnapshotDigest", "corpusDigest", "configDigest", "policyRef", "authority", "precondition"],
+  "properties": {
+    "artifactKind": { "const": "engine.navigation-effect-plan" },
+    "effectsContract": { "const": "1.0.0" },
+    "effectId": { "type": "string", "pattern": "^effect:(?:[0-9a-f]{32}|rollback:[0-9a-f]{32})$" },
+    "idempotencyKey": { "type": "string", "minLength": 1 },
+    "operation": { "enum": ["moc:create", "moc:replace", "moc:rollback", "agent-note:create", "agent-note:update", "agent-note:append", "agent-note:archive"] },
+    "vaultId": { "type": "string", "minLength": 1 },
+    "targetPath": { "$ref": "#/$defs/relativePath" },
+    "proposedDigest": { "$ref": "#/$defs/digest" },
+    "sourceSnapshotDigest": { "$ref": "#/$defs/digest" },
+    "corpusDigest": { "$ref": "#/$defs/digest" },
+    "configDigest": { "$ref": "#/$defs/digest" },
+    "policyRef": { "$ref": "#/$defs/policyRef" },
+    "authority": {
+      "type": "object",
+      "required": ["actor", "grantId", "allowedRoot", "capability", "sensitivityCeiling", "policyRef"],
+      "properties": {
+        "actor": { "type": "object", "required": ["actorId", "actorType"], "properties": { "actorId": { "type": "string", "minLength": 1 }, "actorType": { "enum": ["human", "agent", "system"] }, "displayName": { "type": "string" } }, "additionalProperties": false },
+        "credentialId": { "type": "string" },
+        "grantId": { "type": "string", "minLength": 1 },
+        "allowedRoot": { "$ref": "#/$defs/relativePath" },
+        "capability": { "enum": ["moc:apply", "moc:rollback", "note:create", "note:update", "note:append", "note:archive"] },
+        "sensitivityCeiling": { "type": "string", "minLength": 1 },
+        "policyRef": { "$ref": "#/$defs/policyRef" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "precondition": {
+      "type": "object",
+      "required": ["target", "configDigest", "authorityDigest", "authorityEvaluatedAt", "retentionHold"],
+      "properties": {
+        "target": { "enum": ["absent", "present"] },
+        "priorDigest": { "$ref": "#/$defs/digest" },
+        "configDigest": { "$ref": "#/$defs/digest" },
+        "authorityDigest": { "$ref": "#/$defs/digest" },
+        "authorityEvaluatedAt": { "type": "string", "format": "date-time" },
+        "retentionHold": { "const": "clear" }
+      },
+      "allOf": [
+        { "if": { "properties": { "target": { "const": "present" } } }, "then": { "properties": { "priorDigest": {} }, "required": ["priorDigest"] } },
+        { "if": { "properties": { "target": { "const": "absent" } } }, "then": { "not": { "properties": { "priorDigest": {} }, "required": ["priorDigest"] } } }
+      ],
+      "additionalProperties": false
+    },
+    "ownership": { "$ref": "moc-ownership.schema.json" },
+    "archiveRunPath": { "$ref": "#/$defs/relativePath" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "relativePath": { "type": "string", "minLength": 1, "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$))(?!.*\\u0000).+$" },
+    "policyRef": { "type": "object", "required": ["id", "version", "digest"], "properties": { "id": { "type": "string", "minLength": 1 }, "version": { "type": "string", "minLength": 1 }, "digest": { "$ref": "#/$defs/digest" } }, "additionalProperties": false }
+  }
+}
