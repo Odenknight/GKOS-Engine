@@ -72,12 +72,11 @@ test('current test selection exposes only the owner-supplied local-model observa
 });
 test('hosted current qualification restores canonical Engine and Standard bytes', () => {
   const workflow = readFileSync(join(root, '.github', 'workflows', 'runtime-qualification.yml'), 'utf8');
-  assert.match(workflow, /for checkout in candidate gkos-standard/);
-  assert.match(workflow, /git -C "\$checkout" config core\.autocrlf false/);
-  assert.match(workflow, /git -C "\$checkout" checkout-index --all --force/);
-  assert.match(workflow, /git -C "\$checkout" diff --exit-code/);
+  assert.match(workflow, /GIT_CONFIG_COUNT: 1/);
+  assert.match(workflow, /GIT_CONFIG_KEY_0: core\.autocrlf/);
+  assert.match(workflow, /GIT_CONFIG_VALUE_0: "false"/);
 });
-test('canonical restore rewrites an autocrlf checkout to LF bytes', () => {
+test('command-scope Git configuration overrides autocrlf before checkout', () => {
   const checkout = mkdtempSync(join(tmpdir(), 'gkos-runtime-autocrlf-'));
   try {
     execFileSync('git', ['init'], { cwd: checkout, stdio: 'pipe' });
@@ -90,8 +89,12 @@ test('canonical restore rewrites an autocrlf checkout to LF bytes', () => {
     execFileSync('git', ['config', 'core.autocrlf', 'true'], { cwd: checkout });
     execFileSync('git', ['checkout-index', '--all', '--force'], { cwd: checkout, stdio: 'pipe' });
     assert.equal(readFileSync(join(checkout, 'governed.txt'), 'utf8'), 'alpha\r\nbeta\r\n');
-    execFileSync('git', ['config', 'core.autocrlf', 'false'], { cwd: checkout });
-    execFileSync('git', ['checkout-index', '--all', '--force'], { cwd: checkout, stdio: 'pipe' });
+    rmSync(join(checkout, 'governed.txt'));
+    execFileSync('git', ['checkout-index', '--all', '--force'], {
+      cwd: checkout,
+      env: { ...process.env, GIT_CONFIG_COUNT: '1', GIT_CONFIG_KEY_0: 'core.autocrlf', GIT_CONFIG_VALUE_0: 'false' },
+      stdio: 'pipe',
+    });
     assert.equal(readFileSync(join(checkout, 'governed.txt'), 'utf8'), 'alpha\nbeta\n');
   } finally { rmSync(checkout, { recursive: true, force: true }); }
 });

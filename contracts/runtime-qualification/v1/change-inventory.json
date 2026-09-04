@@ -398,13 +398,13 @@
     {
       "path": ".github/workflows/runtime-qualification.yml",
       "before": null,
-      "after": "426913029c67c0f05f36e4474b3aa65a74d0551f520e5caf704084e50d560888",
-      "rationale": "Q-GUARD: preserve exact historical/current evidence; Node 22 and 24 block on Ubuntu and Windows, Node 23 is informative, the exact Standard fixture publication is present, and both checkouts are restored to canonical LF bytes."
+      "after": "53bbc57e77641d1021ac75b2974da55211e8774604e17d3aeb51645dda8ea366",
+      "rationale": "Q-GUARD: preserve exact historical/current evidence; Node 22 and 24 block on Ubuntu and Windows, Node 23 is informative, the exact Standard fixture publication is present, and Git command-scope configuration makes both checkouts canonical from their first write."
     },
     {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
       "before": null,
-      "after": "a5e04d5bba2a0151da09d53167ec638bb52a7fa7e7335a45ff136eba53b9a9da",
+      "after": "6e4e39836f5c2653ddba636311ff0a5607d56e97cd920f943edcb68ab00da425",
       "rationale": "Q-GUARD: separate exact historical replay, canonical cross-platform current-runtime evidence, an explicit owner-resource exemption, and a measured fail-closed timeout; no release qualification."
     },
     {
@@ -470,8 +470,8 @@
     {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
-      "after": "e2fec75a23aa637c227d9f891c53c19514983065a823027ac6942e950de62f05",
-      "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including canonical checkout restoration, the measured process deadline, and the closed owner-resource test plan; no release qualification."
+      "after": "71f8fe5230a0d4251d95d1a47554e4db589dd46edb9d93246d5bed0b2f6fa6b8",
+      "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including pre-checkout canonical Git configuration, the measured process deadline, and the closed owner-resource test plan; no release qualification."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",

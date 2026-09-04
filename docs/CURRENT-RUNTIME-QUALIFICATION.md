@@ -46,9 +46,10 @@ The blocking hosted matrix executes both Ubuntu and Windows on Node 22 and
 `ad10dfe94a024f464430fd243c5a918d03389041`, the direct fixture-publication
 successor to the Engine-bound `351330ce34ac6bf9f48ac340e3c259ea30e74715`
 coordinate baseline, so its science catalog test executes instead of skipping.
-Before qualification, both checkouts are restored with `core.autocrlf=false`
-so the byte-governed LF inventory is identical on Linux and Windows rather
-than depending on the runner's global Git configuration. Hosted
+The current-runtime job injects Git's command-scope `core.autocrlf=false`
+configuration before either checkout writes a file, so the byte-governed LF
+inventory is identical on Linux and Windows rather than depending on the
+runner's global Git configuration. Hosted
 capability evidence and receipt aggregation remain required
 before full CI qualification; a local pass is not a substitute. The pre-existing
 retrieval, watcher and downstream qualification lanes are retained.
