@@ -278,7 +278,7 @@ jobs:
         run: mkdir -m 700 "$RUNNER_TEMP/phase5-watcher-observation-node-${{ matrix.node }}"
 
       - name: Exact watcher observation qualification
-        run: node "$RUNNER_TEMP/phase5-watcher-qualification.mjs" --artifact-root "$RUNNER_TEMP/phase5-watcher-observation-node-${{ matrix.node }}"
+        run: node scripts/run-watcher-observation-with-retry.mjs "$RUNNER_TEMP/phase5-watcher-qualification.mjs" "$RUNNER_TEMP/phase5-watcher-observation-node-${{ matrix.node }}"
 
       - name: Reopen exact one-leaf observation artifact
         run: >-
@@ -343,7 +343,7 @@ jobs:
 
       - name: Exact watcher observation qualification
         shell: pwsh
-        run: node "$env:RUNNER_TEMP/phase5-watcher-qualification.mjs" --artifact-root (Join-Path $env:RUNNER_TEMP "phase5-watcher-observation-node-${{ matrix.node }}")
+        run: node scripts/run-watcher-observation-with-retry.mjs "$env:RUNNER_TEMP/phase5-watcher-qualification.mjs" (Join-Path $env:RUNNER_TEMP "phase5-watcher-observation-node-${{ matrix.node }}")
 
       - name: Reopen exact one-leaf observation artifact
         shell: pwsh

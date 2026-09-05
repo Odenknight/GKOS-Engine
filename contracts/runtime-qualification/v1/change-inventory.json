@@ -386,8 +386,8 @@
     {
       "path": ".github/workflows/ci.yml",
       "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
-      "after": "7c3eb8f69e0ffac126b52c9c26ed86ba891ebd1bc6ee343f2a497280be232ec1",
-      "rationale": "Runtime modernization: keep Node 22 and 24 blocking, add informative Node 26 lanes, and audit the exact six current watcher artifacts."
+      "after": "81cb20749c449c813efc9c10c1a1315a17385e8149b23303ab347482a70d02f2",
+      "rationale": "Runtime modernization and stability: qualify Node 22/24/26 and execute dedicated watcher observations through one bounded exact-latency retry wrapper."
     },
     {
       "path": ".github/workflows/phase4-retrieval-observation.yml",
@@ -416,7 +416,7 @@
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "a0dc31563b3ccfac6989bd14f92d821608bf9b588fc130fd16da985e542e7b1e",
+      "after": "5680fa90daa8d853e0771b80505c50e8f74913aeaebc1098c6075876c932d1fd",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
@@ -644,20 +644,26 @@
     {
       "path": "scripts/current-test-plan.mjs",
       "before": null,
-      "after": "c4c0f4cd6f6d9674712345fc48e33101481cdc4c74cea385c8b9736016b11ac6",
-      "rationale": "Q-GUARD coverage closure: keep the sole owner-supplied local-model exemption exact and isolate strict oracles before exhaustive load; run latency measurement before the large restart stressor without changing either assertion or limit."
+      "after": "7ba8a03569c99c893f82fe08b9752f49f8abc1a0d8a2ad68d96ad09f7bf1f4de",
+      "rationale": "Stability policy: permit one fresh-process retry only for the exact isolated watcher latency failure, with separate artifact-safe dedicated qualification eligibility."
     },
     {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
-      "after": "b7ee383dabe74ca8dea69e9d07388bb7c7725ec5ba52ed712b3b2deb2d05cd20",
-      "rationale": "Q-GUARD coverage closure: run every deterministic current test serially, execute strict timing/shutdown oracles in isolated leading processes, and emit one exact aggregate receipt while reporting the sole owner-resource exemption."
+      "after": "5161ce1e3092df97f187e1476f94ef2e8ad8ca2e411a01f8afa26b798b79c848",
+      "rationale": "Windows reliability: retry the singleton watcher observation once only after its sole complete TAP latency failure."
     },
     {
       "path": "scripts/run-watcher-observation-qualification.mjs",
       "before": "a11d7081118cde88a8db2d8bbab6429805f61b2c",
       "after": "75136af40d5f7728e01df46a16a62ab8c1d5bc0e868595816d6fbf1aba2ee599",
       "rationale": "CI repair: preserve the strict child stderr protocol while suppressing only Node-owned SQLite and environment-proxy warnings."
+    },
+    {
+      "path": "scripts/run-watcher-observation-with-retry.mjs",
+      "before": null,
+      "after": "4ec0fa21a0fb0e626ba60c713fd51a3aee26354326011ca057799ac072f9f499",
+      "rationale": "Dedicated watcher stability: retry once only after a normal exact latency failure and before any artifact is published."
     },
     {
       "path": "scripts/runtime-qualification.mjs",
@@ -842,8 +848,8 @@
     {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
-      "after": "c35509287bdba60391bd5cb78c12f37b83320f2dd544140eb84836285be44f57",
-      "rationale": "Regression coverage binds package metadata, current and historical runtime matrices, and the Node 24 SEA release baseline."
+      "after": "6e1142781e4acfa5aab30d6db04bd8dc7cd0415b9ba424a22836a7d23dd99eb1",
+      "rationale": "Regression coverage proves both watcher retries reject mixed, signaled, published-artifact, and repeated failures."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",
