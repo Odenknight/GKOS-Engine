@@ -650,7 +650,7 @@ export class NodeNavigationEffectsExecutor {
     } catch { return { valid: false }; }
   }
 
-  private async validateCommittedOperation(entries: readonly Awaited<ReturnType<DurableEffectJournal["load"]>>[number][]): Promise<void> {
+  private async validateCommittedOperation(entries: readonly Awaited<ReturnType<DurableEffectJournal["load"]>>[number][], validateCurrentTarget = true): Promise<void> {
     const plan = entries.find((entry) => entry.plan)?.plan;
     if (!plan) throw new Error("JOURNAL_CORRUPT:committed-plan-missing");
     const committed = entries.at(-1);
@@ -683,8 +683,10 @@ export class NodeNavigationEffectsExecutor {
       const archiveReceipt = await readFile(resolve(runRoot, "receipts", `${effectFileStem(plan.effectId)}.json`), "utf8");
       if (archiveReceipt !== `${canonicalJson(receipt)}\n`) throw new Error(`RECEIPT_CORRUPT:${plan.effectId}`);
     }
-    const target = await this.readTarget(await this.safeAbsolute(plan.targetPath));
-    if (target === null || await sha256Bytes(target) !== plan.proposedDigest) throw new Error(`COMMITTED_TARGET_CORRUPT:${plan.effectId}`);
+    if (validateCurrentTarget) {
+      const target = await this.readTarget(await this.safeAbsolute(plan.targetPath));
+      if (target === null || await sha256Bytes(target) !== plan.proposedDigest) throw new Error(`COMMITTED_TARGET_CORRUPT:${plan.effectId}`);
+    }
   }
 
   execute(request: EffectExecutionRequest): Promise<EffectExecutionResult> {
@@ -708,7 +710,12 @@ export class NodeNavigationEffectsExecutor {
       await this.validateReceiptHistory(priorEntries);
       const latest = priorEntries.at(-1)!;
       if (latest.state === "COMMITTED") {
-        await this.validateCommittedOperation(priorEntries);
+        const allEntries = await this.journal.load();
+        const plans = new Map<string, NavigationEffectPlan>();
+        for (const entry of allEntries) if (entry.plan) plans.set(entry.effectId, entry.plan);
+        const laterCommitted = allEntries.filter((entry) => entry.state === "COMMITTED" && entry.sequence > latest.sequence && plans.get(entry.effectId)?.targetPath === plan.targetPath).at(-1);
+        await this.validateCommittedOperation(priorEntries, !laterCommitted);
+        if (laterCommitted) await this.validateCommittedOperation(allEntries.filter((entry) => entry.effectId === laterCommitted.effectId));
         const receipt = await this.readReceipt(plan.effectId);
         if (!receipt) return { status: "recovery-required", effectId: plan.effectId, reasonCodes: ["COMMITTED_RECEIPT_MISSING"] };
         return { status: receipt.status === "no-op" ? "no-op" : "committed", effectId: plan.effectId, receipt, reasonCodes: ["IDEMPOTENT_REPLAY"] };
@@ -893,6 +900,21 @@ export class NodeNavigationEffectsExecutor {
     const entries = [...await this.journal.load()];
     const byEffect = new Map<string, typeof entries>();
     for (const entry of entries) byEffect.set(entry.effectId, [...(byEffect.get(entry.effectId) ?? []), entry]);
+    const liveCommittedEffectByTarget = new Map<string, { effectId: string; sequence: number }>();
+    for (const [effectId, operationEntries] of byEffect) {
+      const plan = operationEntries.find((entry) => entry.plan)?.plan;
+      const latest = operationEntries.at(-1);
+      if (!plan || latest?.state !== "COMMITTED") continue;
+      const prior = liveCommittedEffectByTarget.get(plan.targetPath);
+      if (!prior || latest.sequence > prior.sequence) liveCommittedEffectByTarget.set(plan.targetPath, { effectId, sequence: latest.sequence });
+    }
+    for (const [effectId, operationEntries] of byEffect) {
+      const plan = operationEntries.find((entry) => entry.plan)?.plan;
+      const latest = operationEntries.at(-1);
+      if (!plan || !latest || ["COMMITTED", "ABORTED", "STALE"].includes(latest.state)) continue;
+      const committed = liveCommittedEffectByTarget.get(plan.targetPath);
+      if (committed && operationEntries[0].sequence > committed.sequence) liveCommittedEffectByTarget.delete(plan.targetPath);
+    }
     const results: RecoveryResult[] = [];
     for (const effectId of [...byEffect.keys()].sort(codeUnitCompare)) {
       const operationEntries = byEffect.get(effectId)!;
@@ -901,7 +923,10 @@ export class NodeNavigationEffectsExecutor {
       if (!plan) throw new Error(`JOURNAL_CORRUPT:missing-plan:${effectId}`);
       if (!CANONICAL_EFFECT_ID.test(plan.effectId) || plan.effectId !== effectId) throw new Error(`JOURNAL_CORRUPT:effect-id:${effectId}`);
       await this.validateReceiptHistory(operationEntries);
-      if (latest.state === "COMMITTED") { await this.validateCommittedOperation(operationEntries); continue; }
+      if (latest.state === "COMMITTED") {
+        await this.validateCommittedOperation(operationEntries, liveCommittedEffectByTarget.get(plan.targetPath)?.effectId === effectId);
+        continue;
+      }
       await this.cleanupStaleTargetLock(plan);
       const planDigest = await canonicalSha256(plan);
       if (latest.state === "STALE") {

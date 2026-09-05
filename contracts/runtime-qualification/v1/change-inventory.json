@@ -668,7 +668,7 @@
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "0c18d09b8dbc8fa46507af9dc641b85f336b4d8902c8d178d49ca3a5fd3bac63",
+      "after": "1f666418f604b17532f7db94157c6c9009d73a6912c44dbe76b7d082cdd9ba44",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
@@ -764,7 +764,7 @@
     {
       "path": "test/navigation-effects-node.test.mjs",
       "before": null,
-      "after": "6b99b51fe94fd83fd6c24d17a008ceba723de8116b8feb64ff954e11034b117a",
+      "after": "3db867bd4309bbfdc67a644cf083286e6cc8d6b9a8047ec4a7e8f3df2263cd90",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {

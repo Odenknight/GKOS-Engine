@@ -32,11 +32,11 @@ function authority(capability = "moc:apply", root = "topics") {
   };
 }
 
-async function makePlan(currentBytes, targetPath = "topics/index.md", runId = "run-node") {
+async function makePlan(currentBytes, targetPath = "topics/index.md", runId = "run-node", candidateBytes = "# Topics\n\n<!-- gkos-navigation:managed:start -->\n- [[topics/A|A]]\n<!-- gkos-navigation:managed:end -->\n") {
   const result = await planMocApply({
     candidate: {
       artifactKind: "engine.moc-candidate", candidateId: "candidate:node", directory: "topics", targetPath,
-      candidateBytes: "# Topics\n\n<!-- gkos-navigation:managed:start -->\n- [[topics/A|A]]\n<!-- gkos-navigation:managed:end -->\n",
+      candidateBytes,
       digest: "candidate-digest", sourceSnapshotDigest: H.source,
       configRef: { id: "config", version: 1, digest: H.config },
       policy: { id: "effects", version: "1", digest: H.policy }, sourceRefs: [],
@@ -240,6 +240,74 @@ test("sequential shared-run commits retain immutable per-effect receipt bindings
   await executor.releaseVaultLease();
 });
 
+test("startup recovery accepts successive committed effects on the same target", async (t) => {
+  const root = await fixture(t, "same-target-successors");
+  const target = join(root, "topics/index.md");
+  await writeFile(target, "original");
+  const first = await makePlan("original", "topics/index.md", "run-successor-1", "first revision");
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  assert.equal((await executor.execute({ plan: first.plan, proposedBytes: first.proposedBytes })).status, "committed");
+  const second = await makePlan(first.proposedBytes, "topics/index.md", "run-successor-2", "second revision");
+  assert.equal((await executor.execute({ plan: second.plan, proposedBytes: second.proposedBytes })).status, "committed");
+  await executor.releaseVaultLease();
+
+  const restarted = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  assert.deepEqual(await restarted.recoverStartup(), { safeToEnableWrites: true, results: [] });
+  assert.equal(await readFile(target, "utf8"), second.proposedBytes);
+  assert.equal((await restarted.execute({ plan: first.plan, proposedBytes: first.proposedBytes })).status, "committed");
+  await writeFile(target, "external tamper");
+  await assert.rejects(restarted.execute({ plan: first.plan, proposedBytes: first.proposedBytes }), /COMMITTED_TARGET_CORRUPT/);
+  await restarted.releaseVaultLease();
+});
+
+test("startup recovery completes an interrupted successor without treating its predecessor as corrupt", async (t) => {
+  const root = await fixture(t, "same-target-interrupted-successor");
+  const target = join(root, "topics/index.md");
+  await writeFile(target, "original");
+  const first = await makePlan("original", "topics/index.md", "run-interrupted-1", "first revision");
+  const initial = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  assert.equal((await initial.execute({ plan: first.plan, proposedBytes: first.proposedBytes })).status, "committed");
+  await initial.releaseVaultLease();
+  const second = await makePlan(first.proposedBytes, "topics/index.md", "run-interrupted-2", "second revision");
+  let armed = true;
+  const crashing = new NodeNavigationEffectsExecutor({
+    vaultRoot: root,
+    preconditionValidator: () => [],
+    faultInjector: (point) => { if (armed && point === "after-replace") { armed = false; throw new SimulatedEffectCrash(point); } },
+  });
+  await assert.rejects(crashing.execute({ plan: second.plan, proposedBytes: second.proposedBytes }), /SIMULATED_EFFECT_CRASH:after-replace/);
+  await crashing.releaseVaultLease();
+
+  const restarted = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  const recovery = await restarted.recoverStartup();
+  assert.equal(recovery.safeToEnableWrites, true);
+  assert.equal(recovery.results.some((result) => result.effectId === second.plan.effectId && result.classification === "effect-present-verified"), true);
+  assert.equal(await readFile(target, "utf8"), second.proposedBytes);
+  await restarted.releaseVaultLease();
+});
+
+test("terminal successor attempts cannot mask corruption of the committed target head", async (t) => {
+  for (const terminal of ["stale", "aborted"]) await t.test(terminal, async (t) => {
+    const root = await fixture(t, `terminal-successor-${terminal}`);
+    const target = join(root, "topics/index.md");
+    await writeFile(target, "original");
+    const first = await makePlan("original", "topics/index.md", `run-${terminal}-1`, "first revision");
+    const initial = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+    assert.equal((await initial.execute({ plan: first.plan, proposedBytes: first.proposedBytes })).status, "committed");
+    const second = await makePlan(first.proposedBytes, "topics/index.md", `run-${terminal}-2`, "second revision");
+    if (terminal === "stale") await writeFile(target, "external tamper");
+    if (terminal === "aborted") await initial.releaseVaultLease();
+    const attempted = terminal === "stale" ? initial : new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => ["POLICY_REVOKED"] });
+    assert.equal((await attempted.execute({ plan: second.plan, proposedBytes: second.proposedBytes })).status, terminal === "aborted" ? "denied" : "stale");
+    if (terminal === "aborted") await writeFile(target, "external tamper");
+    await attempted.releaseVaultLease();
+
+    const restarted = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+    await assert.rejects(restarted.recoverStartup(), /COMMITTED_TARGET_CORRUPT/);
+    await restarted.releaseVaultLease();
+  });
+});
+
 test("concurrent executeMany batches share one queue and merge a common archive", async (t) => {
   const root = await fixture(t, "concurrent-batches");
   await writeFile(join(root, "topics/a.md"), "a-before");
@@ -293,6 +361,10 @@ test("rollback is a separately authorized, preconditioned, archived effect", asy
   assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
   assert.equal(await readFile(join(root, "_archive/moc-runs/2026-08-20/run-rollback/before/topics/index.md"), "utf8"), planned.proposedBytes);
   await executor.releaseVaultLease();
+  const restarted = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  assert.deepEqual(await restarted.recoverStartup(), { safeToEnableWrites: true, results: [] });
+  assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
+  await restarted.releaseVaultLease();
 });
 
 test("startup recovery classifies every injected transition without silent overwrite", async (t) => {
