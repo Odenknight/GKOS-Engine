@@ -47,3 +47,17 @@ stays seven-tool and read-only. `AgentGrant` is structural input at this stage;
 it is not yet bound to the authority database, authentication epoch, live
 session, or current credential status. No merge of this candidate activates a
 writer, enables automatic MOC application, or authorizes owner-data writes.
+
+## Hosted stability follow-up
+
+The first post-rebase hosted runtime attempt at `2d79be0` passed all historical
+lanes, the complete CI workflow, and both blocking Ubuntu lanes. Windows Node
+24 ran 1,032 tests with 1,031 pass and one failure: the watcher latency oracle
+ran immediately after the large-restart stressor and exceeded its unchanged
+limit. The same exact watcher lane passed the dedicated Windows qualification.
+
+The follow-up orders the separately isolated watcher latency process before the
+large-restart stress process. It does not change an assertion, duration limit,
+production behavior, or selected test. The focused local watcher observation
+rerun passed 2/2. Fresh hosted qualification at the follow-up head is required;
+the failed attempt remains preserved as reliability evidence.

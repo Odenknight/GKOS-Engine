@@ -4,8 +4,8 @@ export const HISTORICAL_TEST = "agent-identity-mcp-contract.test.mjs";
 // Run them before the exhaustive suite has accumulated filesystem/process load;
 // their assertions and limits remain unchanged.
 export const STABILITY_PRIORITY_TESTS = Object.freeze([
-  "watcher-large-restart.test.mjs",
   "watcher-observation-qualification.test.mjs",
+  "watcher-large-restart.test.mjs",
   "service-stdio-package.test.mjs",
 ]);
 

@@ -596,7 +596,7 @@
     {
       "path": "evidence/2026-09-04-navigation-effects-current-main-reconciliation.md",
       "before": null,
-      "after": "f8f41df3eb3fc9f40e8f0d0d693af5da8fb8d221d499031f30077776ad067787",
+      "after": "0394b45b86347e65701bed47b7d16c186de9f30a953f9d021c14eaed95789a86",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
@@ -614,8 +614,8 @@
     {
       "path": "scripts/current-test-plan.mjs",
       "before": null,
-      "after": "58d8789c91770a1a99ff19bc6856aa29d3078e6af113640dd877b3d9bc7cafaa",
-      "rationale": "Q-GUARD coverage closure: make the sole owner-supplied local-model observation exemption exact and run strict timing/shutdown oracles before exhaustive suite load without weakening their limits."
+      "after": "c4c0f4cd6f6d9674712345fc48e33101481cdc4c74cea385c8b9736016b11ac6",
+      "rationale": "Q-GUARD coverage closure: keep the sole owner-supplied local-model exemption exact and isolate strict oracles before exhaustive load; run latency measurement before the large restart stressor without changing either assertion or limit."
     },
     {
       "path": "scripts/run-current-tests.mjs",
