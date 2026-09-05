@@ -20,6 +20,11 @@ import {
   generateNavigationCandidates as generateNavigationCandidatesFromSubpath,
 } from "gkos-engine/navigation";
 import {
+  NAVIGATION_EFFECTS_CAPABILITIES as navigationEffectsCapabilitiesFromSubpath,
+  getNavigationEffectsCapabilities as getNavigationEffectsCapabilitiesFromSubpath,
+} from "gkos-engine/navigation-effects";
+import { NodeNavigationEffectsExecutor } from "gkos-engine/navigation-effects/node";
+import {
   InMemoryGovernanceStore as GovernanceStoreFromSubpath,
   buildStateChangeReceipt as buildStateChangeReceiptFromSubpath,
 } from "gkos-engine/governance";
@@ -40,6 +45,9 @@ test("canonical GKX API is available from the engine and package subpaths", () =
   assert.equal(typeof discoverNavigationFromSubpath, "function");
   assert.equal(typeof generateNavigationCandidatesFromSubpath, "function");
   assert.equal(navigationCapabilitiesFromSubpath.navigation.source_content_write, false);
+  assert.equal(navigationEffectsCapabilitiesFromSubpath.navigation_effects.apply_managed_moc, false);
+  assert.equal(typeof getNavigationEffectsCapabilitiesFromSubpath, "function");
+  assert.equal(typeof NodeNavigationEffectsExecutor, "function");
   assert.equal(typeof GovernanceStoreFromSubpath, "function");
   assert.equal(typeof buildStateChangeReceiptFromSubpath, "function");
   assert.equal(admissionPolicyContractFromSubpath, "gkos.admission-policy.v1");

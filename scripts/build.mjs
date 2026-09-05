@@ -59,6 +59,7 @@ try {
     ["src/graphiti-adapter.ts", "dist/graphiti-adapter.mjs"],
     ["src/navigation/index.ts", "dist/navigation.mjs"],
     ["src/service/index.ts", "dist/service.mjs"],
+    ["src/navigation-effects/index.ts", "dist/navigation-effects.mjs"],
     ["src/governance/index.ts", "dist/governance.mjs"],
     ["src/admission-policy/index.ts", "dist/admission-policy.mjs"],
   ]) {
@@ -121,6 +122,10 @@ try {
   const desktopCjs = await bundle("src/desktop-agent.ts", { platform: "node", format: "cjs" });
   writeFileSync(resolve(root, "dist/gkos-desktop-agent.cjs"), desktopCjs);
   console.log("built dist/gkos-desktop-agent.cjs");
+
+  const navigationEffectsNode = await bundle("src/navigation-effects/node/index.ts", { platform: "node", format: "esm" });
+  writeFileSync(resolve(root, "dist/navigation-effects-node.mjs"), navigationEffectsNode);
+  console.log("built dist/navigation-effects-node.mjs");
 
   // Invoke TypeScript's JS entry point directly via node (not the .cmd/.sh
   // shim) so this works identically across platforms with no shell involved.
