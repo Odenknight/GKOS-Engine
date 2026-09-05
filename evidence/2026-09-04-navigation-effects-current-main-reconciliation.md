@@ -61,3 +61,28 @@ large-restart stress process. It does not change an assertion, duration limit,
 production behavior, or selected test. The focused local watcher observation
 rerun passed 2/2. Fresh hosted qualification at the follow-up head is required;
 the failed attempt remains preserved as reliability evidence.
+
+## Successive-target recovery correction
+
+Review of qualified head `c6c7cf828246c1a010fc3238a6ec803b42fdc068`
+found that startup compared live target bytes with every historical committed
+effect. A valid later effect or rollback on the same target therefore caused a
+false `COMMITTED_TARGET_CORRUPT` result for its predecessor. The exact
+implementation correction is
+`de9ea0b909ba4d7e48e365470ad51443e371c9b6`.
+
+The correction keeps immutable receipt and archive validation for every
+historical commit, but compares live bytes with the newest committed target
+head. A later unresolved transaction is handled by recovery without letting an
+aborted or stale successor mask committed-head tampering. Replaying a
+superseded effect validates the newest committed head. Regression coverage
+includes successive writes, interrupted replacement, stale and aborted
+successors, rollback restart, superseded replay, and target tampering.
+
+On Windows Node 24, typecheck, build, license, nomenclature, current inventory,
+package contents (572 files, 6,606,089 bytes), and the focused Navigation suite
+(133/133) passed. The serialized current suite reported 1,036/1,037 pass: the
+unrelated load-sensitive `watcher-large-restart` shutdown deadline failed and
+also failed once in isolation. No assertion or threshold was changed. Fresh
+hosted blocking Ubuntu/Windows Node 22 and 24 qualification at the published
+evidence-binding head is required before merge; Node 23 remains informative.

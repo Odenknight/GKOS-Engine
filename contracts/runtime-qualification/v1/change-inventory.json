@@ -596,7 +596,7 @@
     {
       "path": "evidence/2026-09-04-navigation-effects-current-main-reconciliation.md",
       "before": null,
-      "after": "0394b45b86347e65701bed47b7d16c186de9f30a953f9d021c14eaed95789a86",
+      "after": "61446ede096c1de8a3650f518a9eba00d5af035834a5f7c37979ed40d7881ec7",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
