@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Qualified maintained even-numbered Node.js releases: Node 22 and Node 24 are
+  blocking CI lanes, while Node 26 is an informative current-release lane until
+  it reaches LTS. Node 23 and Node 25 are unsupported.
+- Moved sidecar SEA release builds to Node 24 and pinned the release workflow
+  actions to their reviewed v5 commits.
 - Added the separately versioned, opt-in Navigation Effects 1.0 contract,
   deterministic MOC apply planner, generated-region merger, path/grant
   validation, and fault-injectable in-memory adapter.

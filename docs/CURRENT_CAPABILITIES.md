@@ -25,7 +25,7 @@ explicitly deferred authority.
 | Admission-policy provider | `gkos-engine/admission-policy` | Implemented and packaged | Pure, deterministic, hash-bound request evaluation and replay verification. No I/O, approval, activation, or materialization authority. |
 | Optional intelligence | `services/gkos-intelligence/` plus engine response validation | Optional | Produces proposal-only suggestions. A separate authorized review path is required; normal engine operation needs no model or network. |
 | Scientific trace evaluation | `experimentalScience` namespace | Experimental and opt-in | Structural evaluation of a provisional research-trace draft; it does not execute research, decide truth, or grant authority. |
-| Distribution and platform lanes | npm package, CLI commands, CI on Node 22–24 | Implemented package/build lanes | Linux and Windows contract lanes plus macOS Node 22 coverage. SEA configuration covers unsigned Windows x64 and macOS arm64/x64 pre-release binaries, not Linux SEA. |
+| Distribution and platform lanes | npm package, CLI commands, current CI on Node 22/24/26 | Implemented package/build lanes | Node 22 and 24 are blocking; Node 26 is informative until LTS. Frozen historical evidence retains its original coordinates. SEA configuration covers unsigned Windows x64 and macOS arm64/x64 pre-release binaries, not Linux SEA. |
 
 ## Explicitly absent or deferred
 
@@ -56,7 +56,6 @@ modules are deliberately not public package subpaths.
 ## Verification coordinate
 
 PR #34 merged at `77b5cacd0e01da99fbb4237eac8358f6303e0e74` after the
-Node 22–24 build, Linux/Windows watcher, retrieval-path-security, Draft.1,
+Node 22/23/24 build, Linux/Windows watcher, retrieval-path-security, Draft.1,
 Draft.2, typecheck, build, manifest, and protected-diff gates passed. The
 automatic post-merge `main` run `33065334394` completed successfully.
-

@@ -596,7 +596,10 @@ gkos watcher journal-reset --state <watcher-directory>
 
 ## Runtime and platform standing
 
-The package declares Node `>=22 <25` and npm `>=10`. There are no third-party
+The package declares maintained even-numbered Node lines
+`>=22 <23 || >=24 <25 || >=26 <27` and npm `>=10`. Node 24 LTS is the production
+baseline; Node 26 is informative until LTS, and odd-numbered Node 23/25 are
+unsupported. There are no third-party
 runtime entries in `dependencies`; build and qualification use pinned
 development dependencies. Node itself, SQLite support, the filesystem, and any
 configured provider remain runtime boundaries.
@@ -605,8 +608,9 @@ After installation/build, core parsing, validation, graph, Navigation, and
 fixed-offline evaluation can run without a network. Installing dependencies and
 external provider connectors can require one.
 
-Governed CI lanes cover Node 22, 23, and 24 on Linux and Windows, plus the
-Draft.2 macOS Node 22 integration lane. Host-specific tests distinguish an
+Current CI lanes cover blocking Node 22 and 24 plus informative Node 26 on
+Linux and Windows. Frozen historical/Draft.2 evidence retains its original
+Node coordinates. Host-specific tests distinguish an
 unavailable platform primitive from a pass. The current SEA release workflow
 is configured to build unsigned Windows x64 and macOS arm64/x64 pre-release
 binaries; it has no Linux SEA job.

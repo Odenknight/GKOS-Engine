@@ -70,7 +70,7 @@ test("watcher observation runner emits exactly one sealed governed measurement",
     assert.equal(measurement.sample_plan_digest, "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b");
 
     if (failure !== null) {
-      assert.equal(Number.parseInt(process.versions.node.split(".")[0], 10), 24);
+      assert.equal(Number.parseInt(process.versions.node.split(".")[0], 10) >= 24, true);
       assert.equal(failure.message, "GKX_WATCHER_QUALIFICATION_FTS5_REQUIRED");
       assert.equal(measurement.status, "unavailable");
       return;
@@ -125,8 +125,8 @@ test("terminal watcher observation audit accepts all-and-only six exact governed
     const qualified = fixture.schema_cases.find((row) => row.case_id === "measurement-valid").value;
     const unavailable = fixture.semantic_cases.find((row) => row.case_id === "measurement-unavailable-zero-work").input.arguments[0];
     const lanes = [
-      ["Linux", "linux", 22], ["Linux", "linux", 23], ["Linux", "linux", 24],
-      ["Windows", "windows", 22], ["Windows", "windows", 23], ["Windows", "windows", 24],
+      ["Linux", "linux", 22], ["Linux", "linux", 24], ["Linux", "linux", 26],
+      ["Windows", "windows", 22], ["Windows", "windows", 24], ["Windows", "windows", 26],
     ];
     for (const [archiveOs, recordOs, node] of lanes) {
       const template = archiveOs === "Linux" && node === 22 ? unavailable : qualified;
