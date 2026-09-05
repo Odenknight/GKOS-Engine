@@ -16,11 +16,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.node == 23 }}
+    continue-on-error: ${{ matrix.node == 26 }}
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 23, 24]
+        node: [22, 24, 26]
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
@@ -102,11 +102,11 @@ jobs:
 
   windows-retrieval-path-security:
     runs-on: windows-latest
-    continue-on-error: ${{ matrix.node == 23 }}
+    continue-on-error: ${{ matrix.node == 26 }}
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 23, 24]
+        node: [22, 24, 26]
     env:
       GKOS_REQUIRE_ALIAS_FIXTURE: "1"
       GKOS_REQUIRE_SHORT_PATH_FIXTURE: "1"
@@ -234,12 +234,12 @@ jobs:
 
   phase5-watcher-linux:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.node == 23 }}
+    continue-on-error: ${{ matrix.node == 26 }}
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 23, 24]
+        node: [22, 24, 26]
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
@@ -306,12 +306,12 @@ jobs:
 
   phase5-watcher-windows:
     runs-on: windows-latest
-    continue-on-error: ${{ matrix.node == 23 }}
+    continue-on-error: ${{ matrix.node == 26 }}
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 23, 24]
+        node: [22, 24, 26]
     env:
       GKOS_REQUIRE_ALIAS_FIXTURE: "1"
       GKOS_REQUIRE_SHORT_PATH_FIXTURE: "1"
@@ -413,10 +413,10 @@ jobs:
           import { readFileSync } from 'node:fs';
           const expected = [
             'phase5-watcher-recovery-observation-Linux-node-22',
-            'phase5-watcher-recovery-observation-Linux-node-23',
+            'phase5-watcher-recovery-observation-Linux-node-26',
             'phase5-watcher-recovery-observation-Linux-node-24',
             'phase5-watcher-recovery-observation-Windows-node-22',
-            'phase5-watcher-recovery-observation-Windows-node-23',
+            'phase5-watcher-recovery-observation-Windows-node-26',
             'phase5-watcher-recovery-observation-Windows-node-24',
           ].sort();
           const headers = {

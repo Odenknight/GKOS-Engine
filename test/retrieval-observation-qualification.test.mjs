@@ -401,7 +401,7 @@ test("Slice-C workflows freeze scheduled Observation and supplementary cross-run
   }
 
   assert.doesNotMatch(continuous, /phase4-retrieval-cli-qualification:/u);
-  assert.match(continuous, /node: \[22, 23, 24\]/u);
+  assert.match(continuous, /node: \[22, 24, 26\]/u);
   assert.equal((continuous.match(/fetch-depth: 0/gu) ?? []).length, 3);
   assert.equal((continuous.match(/timeout-minutes: 15/gu) ?? []).length, 2);
   assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT:/gu) ?? []).length, 3);

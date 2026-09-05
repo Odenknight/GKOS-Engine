@@ -463,7 +463,7 @@ export async function runWatcherObservationMeasurementForTest(repoRootInput, art
   }
   if (!fts.available) {
     const receipt = writeMeasurement(artifactRoot, unavailableMeasurement(environment));
-    if (Number.parseInt(process.versions.node.split(".")[0], 10) === 24) {
+    if (Number.parseInt(process.versions.node.split(".")[0], 10) >= 24) {
       fail("GKX_WATCHER_QUALIFICATION_FTS5_REQUIRED");
     }
     return receipt;
@@ -472,8 +472,8 @@ export async function runWatcherObservationMeasurementForTest(repoRootInput, art
 }
 
 const ARCHIVE_LANES = Object.freeze([
-  ["Linux", "linux", 22], ["Linux", "linux", 23], ["Linux", "linux", 24],
-  ["Windows", "windows", 22], ["Windows", "windows", 23], ["Windows", "windows", 24],
+  ["Linux", "linux", 22], ["Linux", "linux", 24], ["Linux", "linux", 26],
+  ["Windows", "windows", 22], ["Windows", "windows", 24], ["Windows", "windows", 26],
 ].map(([archiveOs, recordOs, node]) => Object.freeze({
   archive: `phase5-watcher-recovery-observation-${archiveOs}-node-${node}`,
   record_os: recordOs,

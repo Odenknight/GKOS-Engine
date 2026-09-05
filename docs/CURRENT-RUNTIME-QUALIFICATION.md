@@ -42,7 +42,9 @@ Each qualification command retains a fail-closed 30-minute process deadline;
 the serialized Windows oracle is measured near 20 minutes, so the former
 20-minute deadline did not provide reliable scheduler and filesystem headroom.
 The blocking hosted matrix executes both Ubuntu and Windows on Node 22 and
-24; Node 23 remains informative. The workflow also checks out Standard commit
+24; Node 26 remains informative until LTS. Odd-numbered Node 23 and 25 are not
+supported by the current package. Historical replay retains its original
+Node 22/23/24 matrix as immutable evidence. The workflow also checks out Standard commit
 `ad10dfe94a024f464430fd243c5a918d03389041`, the direct fixture-publication
 successor to the Engine-bound `351330ce34ac6bf9f48ac340e3c259ea30e74715`
 coordinate baseline, so its science catalog test executes instead of skipping.

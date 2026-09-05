@@ -47,7 +47,10 @@ Three boundaries are especially important:
 
 ## A five-minute start
 
-You need Node.js `>=22 <25` and npm `>=10`.
+Use Node.js 24 LTS for production. The package accepts maintained even-numbered
+lines with `>=22 <23 || >=24 <25 || >=26 <27`; Node 26 remains an informative
+compatibility lane until it reaches LTS. Node 23 and 25 are unsupported. npm
+`>=10` is required.
 
 ```sh
 git clone https://github.com/Odenknight/GKOS-Engine.git
@@ -258,8 +261,10 @@ manifest names Engine `2.2.0` as a future release target; this repository still
 declares package version `2.1.2`, and the Effects code here is not a released
 Engine 2.2 artifact.
 
-Governed contract lanes cover Node 22, 23, and 24 on Linux and Windows, plus a
-macOS Node 22 lane. The existing SEA release workflow is configured to build
+Current qualification uses blocking Node 22 and 24 lanes on Linux and Windows,
+with Node 26 informative until LTS. Frozen historical contract replay retains
+its original Node 22/23/24 coordinates. The existing SEA release workflow uses
+Node 24 LTS to build
 unsigned pre-release `gkos-agent` binaries for Windows x64 and macOS arm64/x64;
 it does not define a Linux SEA artifact.
 

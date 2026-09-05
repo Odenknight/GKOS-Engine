@@ -386,8 +386,8 @@
     {
       "path": ".github/workflows/ci.yml",
       "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
-      "after": "361f06c1bfbd188781e93947d06f68f4e9e6cc2a96c58b04256ae2edd26e321a",
-      "rationale": "Workflow policy: Node 22 and 24 remain blocking, Node 23 is informative, and checkout/setup-node use the approved exact v5 pins."
+      "after": "7c3eb8f69e0ffac126b52c9c26ed86ba891ebd1bc6ee343f2a497280be232ec1",
+      "rationale": "Runtime modernization: keep Node 22 and 24 blocking, add informative Node 26 lanes, and audit the exact six current watcher artifacts."
     },
     {
       "path": ".github/workflows/phase4-retrieval-observation.yml",
@@ -398,8 +398,14 @@
     {
       "path": ".github/workflows/runtime-qualification.yml",
       "before": null,
-      "after": "53bbc57e77641d1021ac75b2974da55211e8774604e17d3aeb51645dda8ea366",
-      "rationale": "Q-GUARD: preserve exact historical/current evidence; Node 22 and 24 block on Ubuntu and Windows, Node 23 is informative, the exact Standard fixture publication is present, and Git command-scope configuration makes both checkouts canonical from their first write."
+      "after": "e8a7cf804ade3f03b3caf0616f73f1bcd726d2b42a32239503ae0ba543c1915c",
+      "rationale": "Q-GUARD: preserve the frozen Node 22/23/24 historical replay while qualifying current Node 22 and 24 as blocking and Node 26 as informative on Ubuntu and Windows."
+    },
+    {
+      "path": ".github/workflows/sidecar-release.yml",
+      "before": "4e8b5e5eb49ceabcfdf048b3d3cf7163725e2554",
+      "after": "68209099200a7152b8b95a66dba36fc381124e535fb1326c886ea2a73d020bcb",
+      "rationale": "Release stability: build SEA artifacts on Node 24 LTS and bind checkout and setup-node to reviewed v5 commits."
     },
     {
       "path": ".gitignore",
@@ -410,19 +416,19 @@
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "52657fbf3134f5a56e750c0f1965c9afa97ece3dcdf3942eb1985c1dbed87f07",
+      "after": "a0dc31563b3ccfac6989bd14f92d821608bf9b588fc130fd16da985e542e7b1e",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "6be3a4ff37dd15092f15e72536c0a5be3f7bc45b23cf02e141484fa4a6b554ad",
+      "after": "9238a38310120ae30e1f7fe8f33d07c75a810ca04d3d5d68513bc6776d567d95",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
       "path": "TECHNICAL_README.md",
       "before": "d28fee76dd931095907d35d5582be8f7045f52d8",
-      "after": "8c3b2a91e809713cc97dcc8504c6e572784a27798cba486526b0f7ea1593e1b5",
+      "after": "916c377346718f86595cc4763c8710b7344a947e9e06fbd50a461147dc51e250",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
@@ -572,8 +578,14 @@
     {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
       "before": null,
-      "after": "6e4e39836f5c2653ddba636311ff0a5607d56e97cd920f943edcb68ab00da425",
+      "after": "d0d8c7ac5884f3dfa13027a024f033259db64b534e51da8cc794085f4cb27e39",
       "rationale": "Q-GUARD: separate exact historical replay, canonical cross-platform current-runtime evidence, an explicit owner-resource exemption, and a measured fail-closed timeout; no release qualification."
+    },
+    {
+      "path": "docs/CURRENT_CAPABILITIES.md",
+      "before": "154d01ab1328d6f7a8cc10974cde6d8651402357",
+      "after": "07d74b9eae1d07abed44e057ad9af1d4eb81be0738aa75abffec39778b2eb3cf",
+      "rationale": "Current candidate change, bound to exact reviewed bytes and covered by current runtime qualification."
     },
     {
       "path": "docs/NAVIGATION-EFFECTS-CONTRACT.md",
@@ -588,6 +600,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "docs/decisions/0002-storage-and-provider-topology.md",
+      "before": "427958b219da1aa29106d0776064ad6978e89640",
+      "after": "5b0ed766255494d06eaaa6d2309432b42f1b0624a6f87767975149ae1cf7facf",
+      "rationale": "Current candidate change, bound to exact reviewed bytes and covered by current runtime qualification."
+    },
+    {
       "path": "docs/navigation-effects/RECONCILIATION-20260827.md",
       "before": null,
       "after": "10875d6ccc1eb33862b949b5cd5fa68581073d4e21c692182ae2e853c6151868",
@@ -600,9 +618,21 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "evidence/2026-09-05-node-runtime-modernization.md",
+      "before": null,
+      "after": "7ea88da75ef899ebb7d83ee047045a21e9ea8ca7bc3de94aa90b05810d64a980",
+      "rationale": "Current verification record for the maintained even-numbered Node runtime policy and Windows Node 24/26 checks."
+    },
+    {
+      "path": "package-lock.json",
+      "before": "723712151b00f9988194a4bac2b875c53c8f6d19",
+      "after": "6b0e2aa3e2e09ed85f69a0ef0106821b1e9838b909d90c637cd5dbc52e7ec9f1",
+      "rationale": "Current candidate change, bound to exact reviewed bytes and covered by current runtime qualification."
+    },
+    {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "f36937fe43d774af53133b81a04dd1a4228e9e9c048115600fef5f1571aec65f",
+      "after": "a8ee3e8256c3f99a372c0533082f5c86a5f37ce7471f272cb70b6a4d84487b66",
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
     },
     {
@@ -626,7 +656,7 @@
     {
       "path": "scripts/run-watcher-observation-qualification.mjs",
       "before": "a11d7081118cde88a8db2d8bbab6429805f61b2c",
-      "after": "628b383c94d6a83b319a301581356bf73c805f6700a2df79f517c78c69d318a7",
+      "after": "75136af40d5f7728e01df46a16a62ab8c1d5bc0e868595816d6fbf1aba2ee599",
       "rationale": "CI repair: preserve the strict child stderr protocol while suppressing only Node-owned SQLite and environment-proxy warnings."
     },
     {
@@ -800,7 +830,7 @@
     {
       "path": "test/retrieval-observation-qualification.test.mjs",
       "before": "4e4e0a64a7b03c61dcf933b7ffc4364d56eab0fd",
-      "after": "fe12202c47f47b9b7a1287ac3c0f15163f1a39f6fca799417b4d4a2f70913778",
+      "after": "76080c78a278920fe08fab081d7eccb80395d8620361197e9d8b45cd6e231455",
       "rationale": "Workflow equivalence and Q-GUARD repair: retain the approved v5 workflow digest and isolate the non-Linux observation oracle from an unrelated pull-request event environment."
     },
     {
@@ -812,8 +842,8 @@
     {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
-      "after": "db4f4a31155b490190dc51ddb4736751792e21727e514efc4b203e36e362e206",
-      "rationale": "Q-GUARD: bind exact historical replay and current-runtime evidence, including pre-checkout canonical Git configuration, the measured process deadline, the closed owner-resource test plan, and complete stability-priority ordering; no release qualification."
+      "after": "c35509287bdba60391bd5cb78c12f37b83320f2dd544140eb84836285be44f57",
+      "rationale": "Regression coverage binds package metadata, current and historical runtime matrices, and the Node 24 SEA release baseline."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",
@@ -848,7 +878,7 @@
     {
       "path": "test/watcher-observation-qualification.test.mjs",
       "before": "10ee043507f86d913c95ddcd11869390b68d6f6f",
-      "after": "3d6bba52ccb98daa0264dd87309e404ae548e0e1d2c6b6d7d60988e184e2456b",
+      "after": "d62bd00d49686a7743c1b50eff71f63cb2bf86d4944e3cd4d5ed31c3e2dc20ce",
       "rationale": "CI repair: prove only the two Node-owned warnings are suppressed and unrelated stderr remains fail-closed."
     },
     {

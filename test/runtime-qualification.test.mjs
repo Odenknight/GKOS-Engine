@@ -83,6 +83,21 @@ test('hosted current qualification restores canonical Engine and Standard bytes'
   assert.match(workflow, /GIT_CONFIG_KEY_0: core\.autocrlf/);
   assert.match(workflow, /GIT_CONFIG_VALUE_0: "false"/);
 });
+test('runtime policy admits maintained even releases and preserves the historical matrix', () => {
+  const packageJson = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
+  const current = readFileSync(join(root, '.github', 'workflows', 'ci.yml'), 'utf8');
+  const qualification = readFileSync(join(root, '.github', 'workflows', 'runtime-qualification.yml'), 'utf8');
+  const release = readFileSync(join(root, '.github', 'workflows', 'sidecar-release.yml'), 'utf8');
+  assert.equal(packageJson.engines.node, '>=22 <23 || >=24 <25 || >=26 <27');
+  assert.equal((current.match(/node: \[22, 24, 26\]/g) ?? []).length, 4);
+  assert.equal((current.match(/matrix\.node == 26/g) ?? []).length, 4);
+  assert.equal((qualification.match(/node: \[22, 23, 24\]/g) ?? []).length, 1);
+  assert.equal((qualification.match(/matrix\.node == 23/g) ?? []).length, 1);
+  assert.equal((qualification.match(/node: \[22, 24, 26\]/g) ?? []).length, 1);
+  assert.equal((qualification.match(/matrix\.node == 26/g) ?? []).length, 1);
+  assert.match(release, /actions\/setup-node@a0853c24544627f65ddf259abe73b1d18a591444/);
+  assert.match(release, /node-version: 24/);
+});
 test('command-scope Git configuration overrides autocrlf before checkout', () => {
   const checkout = mkdtempSync(join(tmpdir(), 'gkos-runtime-autocrlf-'));
   try {
