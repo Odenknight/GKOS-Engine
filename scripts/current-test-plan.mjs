@@ -9,6 +9,18 @@ export const STABILITY_PRIORITY_TESTS = Object.freeze([
   "service-stdio-package.test.mjs",
 ]);
 
+export function shouldRetryCurrentTestGroup(group, result, output, attempt) {
+  const count = (key) => {
+    const matches = [...output.matchAll(new RegExp(`^(?:#|ℹ)\\s+${key}\\s+(\\d+)\\s*$`, 'gmu'))];
+    return matches.length === 1 ? matches[0][1] : undefined;
+  };
+  return attempt === 0 && result.status === 1 && result.signal === null
+    && group.length === 1 && group[0] === "watcher-observation-qualification.test.mjs"
+    && output.includes("✖ watcher observation runner emits exactly one sealed governed measurement")
+    && output.includes("GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED")
+    && count("fail") === "1" && count("cancelled") === "0";
+}
+
 export const HOST_RESOURCE_TESTS = Object.freeze({
   "service-vector-real.test.mjs": Object.freeze({
     environment: "GKOS_TEST_LOCAL_EMBEDDING_CONFIG",
