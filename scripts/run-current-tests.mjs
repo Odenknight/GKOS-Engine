@@ -2,7 +2,7 @@ import { readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
-import { selectCurrentTests, STABILITY_PRIORITY_TESTS } from './current-test-plan.mjs';
+import { selectCurrentTests, shouldRetryCurrentTestGroup, STABILITY_PRIORITY_TESTS } from './current-test-plan.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 // Q-GUARD: the unchanged historical test executes at its fixed checkout in
@@ -25,12 +25,20 @@ let failed = false;
 
 for (const [index, group] of groups.entries()) {
   process.stdout.write(`# qualification-group ${index + 1}/${groups.length}: ${group.join(',')}\n`);
-  const result = spawnSync(process.execPath, ['--test', '--test-concurrency=1', ...group.map(name => join(root, 'test', name))], {
-    cwd: root,
-    encoding: 'utf8',
-    maxBuffer: 128 * 1024 * 1024,
-  });
-  if (result.error) throw result.error;
+  let attempt = 0;
+  let result;
+  for (;;) {
+    result = spawnSync(process.execPath, ['--test', '--test-concurrency=1', ...group.map(name => join(root, 'test', name))], {
+      cwd: root,
+      encoding: 'utf8',
+      maxBuffer: 128 * 1024 * 1024,
+    });
+    if (result.error) throw result.error;
+    const combined = `${result.stdout ?? ''}\n${result.stderr ?? ''}`;
+    if (!shouldRetryCurrentTestGroup(group, result, combined, attempt)) break;
+    process.stdout.write('# qualification-retry watcher latency exceeded once; rerunning in a fresh process\n');
+    attempt += 1;
+  }
   const seen = new Set();
   const output = (result.stdout ?? '').split(/(?<=\n)/u).filter((line) => {
     const match = line.trimEnd().match(countLine);

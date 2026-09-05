@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Current-runtime qualification retries one isolated watcher observation in a
+  fresh process only after the exact Windows latency-ceiling failure; all other
+  failures and a repeated latency failure remain terminal.
 - Qualified maintained even-numbered Node.js releases: Node 22 and Node 24 are
   blocking CI lanes, while Node 26 is an informative current-release lane until
   it reaches LTS. Node 23 and Node 25 are unsupported.

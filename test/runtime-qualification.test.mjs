@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { after, before, test } from 'node:test';
 import { checkInventory, counts, sourceSnapshot, executeQualification, COMMAND_TIMEOUT_MS, MANIFEST } from '../scripts/runtime-qualification.mjs';
-import { HISTORICAL_TEST, selectCurrentTests, STABILITY_PRIORITY_TESTS } from '../scripts/current-test-plan.mjs';
+import { HISTORICAL_TEST, selectCurrentTests, shouldRetryCurrentTestGroup, STABILITY_PRIORITY_TESTS } from '../scripts/current-test-plan.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 let fixture;
@@ -76,6 +76,20 @@ test('strict timing and shutdown oracles run before exhaustive suite load withou
   const selected = selectCurrentTests(names, {});
   assert.deepEqual(selected.files, [...STABILITY_PRIORITY_TESTS, ...ordinary.sort()]);
   assert.equal(new Set(selected.files).size, names.length);
+});
+test('current qualification retries only the first isolated watcher latency failure', () => {
+  const watcher = ['watcher-observation-qualification.test.mjs'];
+  const result = { status: 1, signal: null };
+  const latency = '✖ watcher observation runner emits exactly one sealed governed measurement\n'
+    + 'Error: GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED\nℹ fail 1\nℹ cancelled 0\n';
+  assert.equal(shouldRetryCurrentTestGroup(watcher, result, latency, 0), true);
+  assert.equal(shouldRetryCurrentTestGroup(watcher, result, latency, 1), false);
+  assert.equal(shouldRetryCurrentTestGroup(watcher, result, `${latency}ℹ fail 2\n`, 0), false);
+  assert.equal(shouldRetryCurrentTestGroup(watcher, { status: null, signal: 'SIGTERM' }, latency, 0), false);
+  assert.equal(shouldRetryCurrentTestGroup(watcher, result, 'another failure\nℹ fail 1\nℹ cancelled 0\n', 0), false);
+  assert.equal(shouldRetryCurrentTestGroup(['watcher-observation-qualification.test.mjs', 'other.test.mjs'], result,
+    latency, 0), false);
+  assert.equal(shouldRetryCurrentTestGroup(watcher, { status: 0, signal: null }, latency, 0), false);
 });
 test('hosted current qualification restores canonical Engine and Standard bytes', () => {
   const workflow = readFileSync(join(root, '.github', 'workflows', 'runtime-qualification.yml'), 'utf8');

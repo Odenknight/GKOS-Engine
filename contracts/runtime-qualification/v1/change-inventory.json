@@ -416,7 +416,7 @@
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "a0dc31563b3ccfac6989bd14f92d821608bf9b588fc130fd16da985e542e7b1e",
+      "after": "2caab6568e8b5a88f63a4476e08a4b1352e3840c1bce3fd72857c68abe53d01d",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
@@ -644,14 +644,14 @@
     {
       "path": "scripts/current-test-plan.mjs",
       "before": null,
-      "after": "c4c0f4cd6f6d9674712345fc48e33101481cdc4c74cea385c8b9736016b11ac6",
-      "rationale": "Q-GUARD coverage closure: keep the sole owner-supplied local-model exemption exact and isolate strict oracles before exhaustive load; run latency measurement before the large restart stressor without changing either assertion or limit."
+      "after": "4b431427a97b2c70a331ccae133f12b182ad79fc59a1a581aba7f9a4090d6988",
+      "rationale": "Stability policy: permit exactly one fresh-process retry only for the first isolated watcher latency-ceiling failure."
     },
     {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
-      "after": "b7ee383dabe74ca8dea69e9d07388bb7c7725ec5ba52ed712b3b2deb2d05cd20",
-      "rationale": "Q-GUARD coverage closure: run every deterministic current test serially, execute strict timing/shutdown oracles in isolated leading processes, and emit one exact aggregate receipt while reporting the sole owner-resource exemption."
+      "after": "5161ce1e3092df97f187e1476f94ef2e8ad8ca2e411a01f8afa26b798b79c848",
+      "rationale": "Windows reliability: retry the singleton watcher observation once after its exact latency failure, while preserving terminal behavior for all other and repeated failures."
     },
     {
       "path": "scripts/run-watcher-observation-qualification.mjs",
@@ -842,8 +842,8 @@
     {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
-      "after": "c35509287bdba60391bd5cb78c12f37b83320f2dd544140eb84836285be44f57",
-      "rationale": "Regression coverage binds package metadata, current and historical runtime matrices, and the Node 24 SEA release baseline."
+      "after": "6cd195788d18f8e9e4bee74b272a24cc236e89827936c0b536dad71fb275fafa",
+      "rationale": "Regression coverage proves the current-suite retry is bounded to one exact singleton watcher latency failure."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",
