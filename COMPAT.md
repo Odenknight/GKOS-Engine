@@ -61,3 +61,13 @@ The 2.1.2 Engine package is complete independently of a product pilot. The
 Kosmos-Oden/KRS pilot, exact pin update, replacement of its eleven-name
 heuristic behind the Navigation feature flag, promotion UX, archive-ignore
 helper adoption, and product release note remain downstream repository work.
+# Engine 2.2 producer compatibility
+
+The unchanged retrieval schema-2/schema-3 validators accept the explicit
+producer identities `2.1.2` and `2.2.0`. Existing manifest bytes, hashes and
+watcher recovery records are not rewritten during validation. Other versions
+remain rejected; this is not a general semver compatibility claim. Physical
+generation writers always emit the running Engine version. Host-private,
+no-I/O evaluation derivation can explicitly replay the qualified producer
+identity bound into historical fixtures, including its projection digest.
+Historical evidence is not relabeled as a 2.2 execution result.

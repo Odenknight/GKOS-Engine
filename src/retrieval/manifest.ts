@@ -13,6 +13,11 @@ import {
 import { retrievalCodeUnitCompare } from "./digest";
 import type { AnyRetrievalProjectionManifest, GkxRetrievalProjectionManifest } from "./types";
 
+/** Explicitly qualified producer identities for unchanged retrieval contracts. */
+export function isCompatibleRetrievalProducerVersion(value: unknown): value is typeof ENGINE_VERSION | "2.1.2" {
+  return value === ENGINE_VERSION || value === "2.1.2";
+}
+
 export function isGkxRetrievalProjectionManifest(
   value: AnyRetrievalProjectionManifest,
 ): value is GkxRetrievalProjectionManifest {
@@ -56,7 +61,11 @@ export function assertRetrievalProjectionManifest(value: AnyRetrievalProjectionM
   if (value.lexical_backend !== "sqlite_fts5" && value.lexical_backend !== "sqlite_lexical_scan") {
     throw new Error("RETRIEVAL_LEXICAL_BACKEND_INVALID");
   }
-  if (value.engine_version !== ENGINE_VERSION || typeof value.vault_id !== "string" || !value.vault_id || value.vault_id.length > 512) {
+  // Producer identity is provenance, not the active process identity. The 2.2
+  // upgrade retains the unchanged 2.1.2 schema-2/schema-3 records and their
+  // original digests. New manifests still use ENGINE_VERSION at creation.
+  // This is an explicit compatibility allowlist, not a semver-range promise.
+  if (!isCompatibleRetrievalProducerVersion(value.engine_version) || typeof value.vault_id !== "string" || !value.vault_id || value.vault_id.length > 512) {
     throw new Error("RETRIEVAL_MANIFEST_IDENTITY_INVALID");
   }
   for (const digest of [value.source_snapshot_digest, value.configuration_digest, value.policy_digest, value.projection_digest]) {

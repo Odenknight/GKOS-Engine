@@ -428,7 +428,7 @@
     {
       "path": "COMPAT.md",
       "before": "03440af3ee1e44100e70c990baef88a660cf081a",
-      "after": "f12d2c950c1cfbb4643f310b0859947d038697e6e98c746d60d838010ff60fa3",
+      "after": "1b04f8bd4296ecf9c454ebb8b4ec86b5431cd7b9a52c7d6cdca016bc25c6f1ee",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -668,7 +668,7 @@
     {
       "path": "evidence/2026-09-06-engine-2.2-moc-build.md",
       "before": null,
-      "after": "4c411738b1e04a3a5fce971a8ce6b5a1ba8e8b3989d02edbdda5af659ae6682f",
+      "after": "f879a69428a8ffbddaf454453319c1f4467934e2fa373b1097575059d7bb33a9",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -706,6 +706,12 @@
       "before": null,
       "after": "7ba8a03569c99c893f82fe08b9752f49f8abc1a0d8a2ad68d96ad09f7bf1f4de",
       "rationale": "Stability policy: permit one fresh-process retry only for the exact isolated watcher latency failure, with separate artifact-safe dedicated qualification eligibility."
+    },
+    {
+      "path": "scripts/generate-retrieval-evaluation-metric-fixture.mjs",
+      "before": "f5eb9e13ec87b71402f81fb0305b5b143d332468",
+      "after": "0413a1f61fde21ab050b4277c96c4ba7586784ceced871ee2cabf94119f3fe9d",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "scripts/run-current-tests.mjs",
@@ -852,10 +858,34 @@
       "rationale": "Q-GUARD Windows coverage closure: reopen private evaluation generations through the evaluation-only long-path SQLite authority without changing ordinary coordinator stores."
     },
     {
+      "path": "src/retrieval/evaluation-fixtures.ts",
+      "before": "c28116ae6ad210dcca4eac44a89ae5c67b11bc1f",
+      "after": "03fc3bbfb602b253dd0470ea1a74554aebb3d961f6f103197b9314fd88b700c6",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/evaluation-reviewed-bundle.ts",
+      "before": "6889d039ff6df87427206619fd120ea866cb6335",
+      "after": "8639f84d73e39db91c7c93b647e33d42ed434327486ff69fd0ba2a0ea1fda8da",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/evaluation.ts",
+      "before": "a47cd914e09ba637fa84a3a1e96472a3b3a21f19",
+      "after": "3303f400fe6768cd6787eed31a7aa6b857f04f6a513694c9b5a2d8477a8824f5",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/manifest.ts",
+      "before": "9c8517d5c14fdbac1164f05681b875ffb6fa26f0",
+      "after": "0b1a5e1acc36dfb8c6ba213736d93c3d03abe87fc7ec52623cebd61b6c9a4ab0",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "src/retrieval/sqlite-store.ts",
       "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
-      "after": "471d90cc045d8e49bfc3865035a009533a9c4522376bd3e49efcbd41a7f45d4d",
-      "rationale": "Q-GUARD Windows coverage closure: namespace only private unactivated evaluation SQLite opens so canonical 8.3 expansion cannot exceed the Windows path limit or alter ordinary watcher performance."
+      "after": "124ba2a4b1223e344b8cb5df248ea324fe8c200592f709cc34a280e99d801e00",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/service/mcp.ts",
@@ -890,8 +920,8 @@
     {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "9bedb543058149a8407409e79e64785b623e01a70c48c0bc8e3a09c1c0dda3b7",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "8ccdfb38565d16b38bb20f2d625cb1ce263d631ff46519a7473f3fd4e18d81f2",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "test/fixtures/navigation-effects-crash-child.mjs",
@@ -960,6 +990,18 @@
       "rationale": "Q-GUARD Windows coverage closure: compare the sealed temporary capability against the canonical parent spelling while preserving the 8.3-path regression oracle."
     },
     {
+      "path": "test/retrieval-evaluation.test.mjs",
+      "before": "9fad7493cf510fd8a33db9b591373a883b015249",
+      "after": "226e2ce209dfa6d3766557d243f9c0f788e73b4fea76c47a975d4548c5152206",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/retrieval-manifest-upgrade.test.mjs",
+      "before": null,
+      "after": "ba1bf8a38266b004d2b2ebe8f50f20084242c15798d2b0d2c0ece37b32a1d800",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "test/retrieval-observation-qualification.test.mjs",
       "before": "4e4e0a64a7b03c61dcf933b7ffc4364d56eab0fd",
       "after": "76080c78a278920fe08fab081d7eccb80395d8620361197e9d8b45cd6e231455",
@@ -1006,6 +1048,12 @@
       "before": "ce95634d71454e60ab43d1f0cb33551aac392aa8",
       "after": "8a7a1f9cb29601db967db931bac7faf6cd2cd0dbcd7bfb6204f03403a531e200",
       "rationale": "Q-GUARD coverage closure: register the native POSIX ownership assertion only where that operating-system capability exists."
+    },
+    {
+      "path": "test/watcher-journal-host.test.mjs",
+      "before": "c79ca35a719c9d9803e3ebc7fbe471afffbb2377",
+      "after": "c2d60c9a90e2e82ecf472586eb18259fc66b8e53dbd46e8b785b9ac4bbe7a610",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "test/watcher-large-restart.test.mjs",

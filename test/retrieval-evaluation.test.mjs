@@ -359,7 +359,7 @@ function environmentCoordinate(golden, label = "fixed-offline-v1", vaultFixture 
     evaluation_contract_version: "gkos-retrieval-evaluation/1.0.0-draft.1",
     golden_contract_version: "gkos-retrieval-evaluation-golden/1.0.0-draft.1",
     metric_contract_version: "gkos-retrieval-evaluation-metrics/1.0.0-draft.1",
-    engine_version: "2.1.2",
+    engine_version: "2.2.0",
     gkx_standard_commit: "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6",
     gkx_projection_profile: "gkx-2.3-validating-projection",
     projection_schema_version: 3,

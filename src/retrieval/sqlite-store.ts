@@ -32,7 +32,7 @@ import { retrievalCanonicalDigest, retrievalCodeUnitCompare, stableJson } from "
 import { cosineSimilarity } from "./fusion";
 import { lexicalQueryClauses, lexicalScanMatches, lexicalSignal } from "./lexical";
 import { canonicalPathSync, sameCanonicalPath } from "./path-security";
-import { assertRetrievalProjectionManifest, isGkxRetrievalProjectionManifest } from "./manifest";
+import { assertRetrievalProjectionManifest, isGkxRetrievalProjectionManifest, isCompatibleRetrievalProducerVersion } from "./manifest";
 import {
   acquireLegacyRetrievalWriter,
   assertLegacyRetrievalWriterCapability,
@@ -613,7 +613,7 @@ function projectionManifest(input: RetrievalGenerationInput, lexicalBackend: Sql
   return { ...base, projection_id: `retrieval:${digest.slice("sha256:".length, "sha256:".length + 24)}`, projection_digest: digest };
 }
 
-function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBackend: SqliteLexicalBackend): GkxRetrievalProjectionManifest {
+function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBackend: SqliteLexicalBackend, producerVersion: string = ENGINE_VERSION): GkxRetrievalProjectionManifest {
   const validated = validateCandidateGenerationBindings(input, false);
   const base: Omit<GkxRetrievalProjectionManifest, "projection_id" | "projection_digest"> = {
     contract_version: RETRIEVAL_LINEAGE_CONTRACT_VERSION,
@@ -621,7 +621,7 @@ function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBa
     provenance_contract_version: RETRIEVAL_PROVENANCE_CONTRACT_VERSION,
     gkx_standard_commit: RETRIEVAL_GKX_STANDARD_COMMIT,
     gkx_projection_profile: RETRIEVAL_GKX_PROJECTION_PROFILE,
-    engine_version: ENGINE_VERSION,
+    engine_version: producerVersion,
     vault_id: input.vault_id,
     source_snapshot_digest: input.source_snapshot_digest,
     configuration_digest: input.configuration_digest,
@@ -646,18 +646,22 @@ function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBa
  * Trusted-host, no-I/O manifestation of Full's schema-3 projection authority.
  * Phase-4 fixture qualification uses this exact production digest algebra
  * instead of reimplementing or shallowly resealing manifest coordinates.
+ * producerVersion is only for no-I/O replay of qualified historical evidence;
+ * physical generation writers never pass an override and always emit 2.2.0.
  */
 export function deriveGkxRetrievalProjectionManifest(
   value: Omit<GkxRetrievalGenerationInput, "state_directory" | "lexical_backend">,
   lexicalBackend: SqliteLexicalBackend,
+  producerVersion: string = ENGINE_VERSION,
 ): GkxRetrievalProjectionManifest {
-  if (lexicalBackend !== "sqlite_fts5" && lexicalBackend !== "sqlite_lexical_scan" ||
+  if (!isCompatibleRetrievalProducerVersion(producerVersion) ||
+      lexicalBackend !== "sqlite_fts5" && lexicalBackend !== "sqlite_lexical_scan" ||
       typeof value.vault_id !== "string" || value.vault_id.length < 1 || value.vault_id.length > 512 ||
       [value.source_snapshot_digest, value.configuration_digest, value.policy_digest].some((entry) =>
         typeof entry !== "string" || !GENERATION_DIGEST_RE.test(entry))) {
     throw new TypeError("RETRIEVAL_MANIFEST_DERIVATION_INPUT_INVALID");
   }
-  return lineageProjectionManifest({ ...value, state_directory: ".", lexical_backend: lexicalBackend }, lexicalBackend);
+  return lineageProjectionManifest({ ...value, state_directory: ".", lexical_backend: lexicalBackend }, lexicalBackend, producerVersion);
 }
 
 function sourceEnvelope(chunk: RetrievalChunk): string {

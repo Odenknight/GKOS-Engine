@@ -643,7 +643,7 @@ export function buildRetrievalEvaluationReviewedBundle(
     embedding_provider_id: temporalDerivation.manifest.embedding_provider_id,
     embedding_model_id: temporalDerivation.manifest.embedding_model_id,
     embedding_dimensions: temporalDerivation.manifest.embedding_dimensions,
-  }, temporalDerivation.manifest.lexical_backend);
+  }, temporalDerivation.manifest.lexical_backend, temporalDerivation.manifest.engine_version);
   const absentQuery = absentCase.input.query as NormalizedRetrievalEvaluationQuery;
   const absentQueryIndex = scenario.eval_schedule.query_partition.findIndex((coordinate) => coordinate.query_id === absentQuery.id);
   const absentReviewed = deriveRetrievalEvaluationReviewedResult({
