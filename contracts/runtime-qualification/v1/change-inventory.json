@@ -422,19 +422,19 @@
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "3ab6c0457ced60e7382175a202013ceb509246e41738720eed42a85758913042",
+      "after": "f68ce6ba812207b64094d2e62aed6d8791a185d8226a386c30589bf4a22b6e86",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "COMPAT.md",
       "before": "03440af3ee1e44100e70c990baef88a660cf081a",
-      "after": "bcf96083b649273cfd9e6650d826b793242358ca4c205a06e568c6b586a73071",
+      "after": "f12d2c950c1cfbb4643f310b0859947d038697e6e98c746d60d838010ff60fa3",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "7b452af87686a823d284c9885e23666288c7b81d007fed51ea9f82cc46c9bf65",
+      "after": "4922f4b18d0a9f4ed10167cb51e2ff38ea9c9903d24158bee99e903769d97179",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -776,7 +776,7 @@
     {
       "path": "src/navigation-effects/index.ts",
       "before": null,
-      "after": "addf52b177144d97c787ae0804a448a40fa3feaad8a17c5346af2b0e496a4574",
+      "after": "3e1d1ff674840aeaeea223159553457c072683d416751167e91a57c120d16f9f",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -794,13 +794,13 @@
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "42a2fac28b7d79e5a8544454f22cf980f77c747b833e4040342f5e3092853ec6",
+      "after": "81525d1b5df21cf7f4c9f6b15cf0963b04188650c4a2ffd91110c430787ca631",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
       "before": null,
-      "after": "fe5ccb52a8459509fb3732d992b8624f29043a2ff3e67c96e17aa6d8bcc220d6",
+      "after": "87bd99e7e5d757d1d22e6128658c3ac918bb6ed3f00f75e796d8787a65ed5824",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -842,7 +842,7 @@
     {
       "path": "src/navigation/candidate.ts",
       "before": "78e33d001c49886a7a3652f619867323485ed3ca",
-      "after": "db76aa01bd099ca5765ef40eccda13d5ece694a334684de97d620423d0053442",
+      "after": "3badf2ea1eaad1b99298ebc08702fd8ad33101ced9370990fbc46463b3d79658",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -872,7 +872,7 @@
     {
       "path": "src/version.ts",
       "before": "84281708509ede5eb277b229386db17bec577e6b",
-      "after": "6c9f7724236b5beadaab5c118e0e9809f9253a942409792db00baf20dd77aeb7",
+      "after": "35ae5c9508494a00a37567ddb9e326b7694e335bfa0b5148456622770b53d31f",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
