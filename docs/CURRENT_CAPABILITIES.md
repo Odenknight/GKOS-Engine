@@ -4,6 +4,10 @@ Updated 2026-09-06. This inventory describes implemented source behavior, not a 
 
 A capability can exist in code without being configured, authorized, safe after recovery, or enabled by an operator. Qualification is another separate requirement. Installing a package proves none of those later conditions.
 
+For the distinction between current source, Git version tags and published
+downloads, see [source and release status](RELEASE-STATUS.md). Historical releases
+do not acquire new capabilities when this inventory changes.
+
 ## Available surfaces
 
 | Capability | Where to use it | Current boundary |
