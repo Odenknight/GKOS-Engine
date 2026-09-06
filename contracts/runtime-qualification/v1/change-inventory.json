@@ -414,22 +414,40 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "BEGINNERS_GUIDE.md",
+      "before": "9b7f2bcfcdcf926c1698ee94183f6039062343f9",
+      "after": "ba5bdd9e7cba763d389b422d3a484af9da97b5b8f66e7a8ba3a9fab05735a99b",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "5680fa90daa8d853e0771b80505c50e8f74913aeaebc1098c6075876c932d1fd",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "ad1d437229f17a7d5637fffe445feaaa074025133149c73fd809d849b4185c9c",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "COMPAT.md",
+      "before": "03440af3ee1e44100e70c990baef88a660cf081a",
+      "after": "4f9e111c3de6be0e15cee8b84714cc14747bad693d6515a9f7081934755b21e8",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "9238a38310120ae30e1f7fe8f33d07c75a810ca04d3d5d68513bc6776d567d95",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "9607e0b629b6e6135d87b66332fbc21dd53a5369f7c6f90d14fbbd1bf971606b",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "ROADMAP.md",
+      "before": "b2aeccae39da71c9f60cee76a3553481c65ccd93",
+      "after": "be53336a048f95fbdcb6c636995334cebe1bd89fabfe611c5a369608a65286bc",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "TECHNICAL_README.md",
       "before": "d28fee76dd931095907d35d5582be8f7045f52d8",
-      "after": "916c377346718f86595cc4763c8710b7344a947e9e06fbd50a461147dc51e250",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "c0635ea39f0d0ecc2ad746241bc5bd08a813e4c42173ec9cc302450be0294eb6",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures.manifest.json",
@@ -584,14 +602,26 @@
     {
       "path": "docs/CURRENT_CAPABILITIES.md",
       "before": "154d01ab1328d6f7a8cc10974cde6d8651402357",
-      "after": "07d74b9eae1d07abed44e057ad9af1d4eb81be0738aa75abffec39778b2eb3cf",
-      "rationale": "Current candidate change, bound to exact reviewed bytes and covered by current runtime qualification."
+      "after": "5179d6fe0b3ca8fb675b980be260de056c49a17d5abaecdd561f524c89b1c6d0",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "docs/DETERMINISTIC-MOC-ASSISTANCE.md",
+      "before": null,
+      "after": "a34c724c3db22d9eafd13739b38dad0f7fdbb2ce3d6624ace11596a87a6b7dc9",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "docs/NAVIGATION-EFFECTS-CONTRACT.md",
       "before": null,
-      "after": "909e7c90b0058d3a0735be77b07e0552a1b79677162beb920e9406199ef912d2",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "6514c8e48174017a248960b5a1512739c8416abbb76b5b766429e6dc54913c29",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "docs/VERSION-PROFILE-COMPATIBILITY.md",
+      "before": "e2bcc225192fee89b0272ea446a1c3467a22fb9b",
+      "after": "e1a8881dbb3ad3390a041d9d566609b8fb95082493276532320e8f3b23f00270",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
@@ -604,6 +634,30 @@
       "before": "427958b219da1aa29106d0776064ad6978e89640",
       "after": "5b0ed766255494d06eaaa6d2309432b42f1b0624a6f87767975149ae1cf7facf",
       "rationale": "Current candidate change, bound to exact reviewed bytes and covered by current runtime qualification."
+    },
+    {
+      "path": "docs/moc-build-review-2026-09-05/ENGINE-RUST-MOC-BUILD-PLAN.md",
+      "before": null,
+      "after": "57410c9df8917a0d6714690d1a021f7e062238be2d62e48cdaf5eccaa3843dad",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "docs/moc-build-review-2026-09-05/ENGINE-TS-MOC-BUILD-PLAN.md",
+      "before": null,
+      "after": "a28f7056defb5640cff1455b411024542f34512307896afbc504daf975ab4f2e",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "docs/moc-build-review-2026-09-05/EXECUTION-REPORT-2026-09-06.md",
+      "before": null,
+      "after": "4c914f544897f1092dbdfca33aa6c8680f099bf97d755151ec82e3dc531ce395",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "docs/moc-build-review-2026-09-05/REVIEW.md",
+      "before": null,
+      "after": "dbbc112f52e0a2bdaa2d2ace11f0e0c5a36a4ec705a5591261cfc9be5eb4b249",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "docs/navigation-effects/RECONCILIATION-20260827.md",
@@ -624,16 +678,40 @@
       "rationale": "Current verification record for the maintained even-numbered Node runtime policy and Windows Node 24/26 checks."
     },
     {
+      "path": "evidence/2026-09-06-engine-2.2-moc-build.md",
+      "before": null,
+      "after": "9f3b89e74686861dd34eb5df428e03fd0b77eaddb575261b5989e1860dbd6253",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "evidence/2026-09-06-moc-host-lifecycle-qualification.md",
+      "before": null,
+      "after": "34c42d2bea3da6934c575bd27d29b13d02bc08b81fd60992a8543b46c74389af",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "examples/managed-moc.mjs",
+      "before": null,
+      "after": "f97cf6a973ecbba28b4b86d40b052a18fc87560b1d0b59eb9ab3438d472c792c",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "package-lock.json",
       "before": "723712151b00f9988194a4bac2b875c53c8f6d19",
-      "after": "6b0e2aa3e2e09ed85f69a0ef0106821b1e9838b909d90c637cd5dbc52e7ec9f1",
-      "rationale": "Current candidate change, bound to exact reviewed bytes and covered by current runtime qualification."
+      "after": "dce860396993870d6d133bc527dd80ebeb1055df24529e8e040ccbd90ed3d54d",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "a8ee3e8256c3f99a372c0533082f5c86a5f37ce7471f272cb70b6a4d84487b66",
-      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
+      "after": "c54cf1c6c471f745bc6d43dfa0f0cbff1abb50a5e57d6b132715eb4d4378f05b",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "scripts/benchmark-managed-moc.mjs",
+      "before": null,
+      "after": "33548fa366021262741469c80409226df95933f8c0feccbbd35630c101eff0ee",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "scripts/build.mjs",
@@ -646,6 +724,12 @@
       "before": null,
       "after": "7ba8a03569c99c893f82fe08b9752f49f8abc1a0d8a2ad68d96ad09f7bf1f4de",
       "rationale": "Stability policy: permit one fresh-process retry only for the exact isolated watcher latency failure, with separate artifact-safe dedicated qualification eligibility."
+    },
+    {
+      "path": "scripts/generate-retrieval-evaluation-metric-fixture.mjs",
+      "before": "f5eb9e13ec87b71402f81fb0305b5b143d332468",
+      "after": "0413a1f61fde21ab050b4277c96c4ba7586784ceced871ee2cabf94119f3fe9d",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "scripts/run-current-tests.mjs",
@@ -672,16 +756,40 @@
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
     },
     {
+      "path": "services/gkos-intelligence/pyproject.toml",
+      "before": "1660cf89b26c10ac6e2112e0532ce94f4e99fa71",
+      "after": "f6717418d091513cab566cf0e6781d700e5d2b709b705d6fdac72b1888e7a5e3",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "services/gkos-intelligence/src/gkos_intelligence/__init__.py",
+      "before": "8ef321f2073fee8c715b85ce9cb92e7c03262e74",
+      "after": "75f2e6bbc3a58c04403e1a6d9d8c47ea6eb90712e4856b1638003f631be04fbf",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "src/index.ts",
       "before": "b4550c73992d38f7fc3e52383efde0de276ae27d",
       "after": "76e958a89e81530f75a166a34a19b6b1fc63a827d806a2f6a5c79035900fae77",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "src/navigation-effects/assistance.ts",
+      "before": null,
+      "after": "d7d25c7ef719aba40ce808b7ce9c08d7746f063b11f24a810f22554077e32384",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "src/navigation-effects/capabilities.ts",
       "before": null,
       "after": "5ed7230e589bc1bcd8dddc88c2aa4d6bd83f4756820ce5f8a64ccbfdf92ec1a7",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/coordinator.ts",
+      "before": null,
+      "after": "8ba161b4dfe2c918fa2dee7d859e8bc90c1acbd6132993300c736b264f46b16c",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/navigation-effects/in-memory-adapter.ts",
@@ -692,8 +800,8 @@
     {
       "path": "src/navigation-effects/index.ts",
       "before": null,
-      "after": "1a21f8847b0352ab10bf9a7ae0e05d956f56e8fc0a5155423898aef0dc0382dc",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "3e1d1ff674840aeaeea223159553457c072683d416751167e91a57c120d16f9f",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/navigation-effects/markers.ts",
@@ -702,22 +810,40 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "src/navigation-effects/moc-batch.ts",
+      "before": null,
+      "after": "f767587c352d6a9798544d936b931b3236f22290238dad881a63313dc89a6966",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "1f666418f604b17532f7db94157c6c9009d73a6912c44dbe76b7d082cdd9ba44",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "81525d1b5df21cf7f4c9f6b15cf0963b04188650c4a2ffd91110c430787ca631",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
       "before": null,
-      "after": "27a351c9a5022289948af1e47a4011737d2759e3987bc9d571b3bdbe49493eca",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "87bd99e7e5d757d1d22e6128658c3ac918bb6ed3f00f75e796d8787a65ed5824",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/navigation-effects/node/journal.ts",
       "before": null,
       "after": "3825c05ae0a5ee560fe080e4fedf6d60d94589d9b50391be4cc0603d6e2fc2a9",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/navigation-effects/node/moc-host.ts",
+      "before": null,
+      "after": "0de96e4580009ea6e4f771d73205ffb4a7f8b7fe8512ed4cdc5087f2e52e12c3",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/navigation-effects/node/moc-runtime.ts",
+      "before": null,
+      "after": "cbe8f2f230dc559380ca1de457a870b3a4ab322dd6b6582d66b5e8d18375d1a9",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/navigation-effects/path-policy.ts",
@@ -738,28 +864,76 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "src/navigation/candidate.ts",
+      "before": "78e33d001c49886a7a3652f619867323485ed3ca",
+      "after": "3badf2ea1eaad1b99298ebc08702fd8ad33101ced9370990fbc46463b3d79658",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "src/retrieval/coordinator.ts",
       "before": "f7fe89a328c61bebfbfee87eb3d4bb3efdf89111",
       "after": "0016afb181d572af42996a731de081683369ba572374a6386d8a5b5702c15cf7",
       "rationale": "Q-GUARD Windows coverage closure: reopen private evaluation generations through the evaluation-only long-path SQLite authority without changing ordinary coordinator stores."
     },
     {
+      "path": "src/retrieval/evaluation-executor.ts",
+      "before": "6d4b67855536f91ba995e58ebb6c3b301d067c3d",
+      "after": "be53fcb837b8b62e4b73df509665927f2244be219e9031099a393129d7a04dc3",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/evaluation-fixtures.ts",
+      "before": "c28116ae6ad210dcca4eac44a89ae5c67b11bc1f",
+      "after": "03fc3bbfb602b253dd0470ea1a74554aebb3d961f6f103197b9314fd88b700c6",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/evaluation-host.ts",
+      "before": "d9981df36c1c72950863ef0a0f17dcc3b4232a72",
+      "after": "7f73e9df85b5065cb582aef2af0bdd550d1c052ef020b4fdd0f7235122fe8410",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/evaluation-reviewed-bundle.ts",
+      "before": "6889d039ff6df87427206619fd120ea866cb6335",
+      "after": "8639f84d73e39db91c7c93b647e33d42ed434327486ff69fd0ba2a0ea1fda8da",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/evaluation.ts",
+      "before": "a47cd914e09ba637fa84a3a1e96472a3b3a21f19",
+      "after": "3303f400fe6768cd6787eed31a7aa6b857f04f6a513694c9b5a2d8477a8824f5",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/manifest.ts",
+      "before": "9c8517d5c14fdbac1164f05681b875ffb6fa26f0",
+      "after": "0b1a5e1acc36dfb8c6ba213736d93c3d03abe87fc7ec52623cebd61b6c9a4ab0",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "src/retrieval/sqlite-store.ts",
       "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
-      "after": "471d90cc045d8e49bfc3865035a009533a9c4522376bd3e49efcbd41a7f45d4d",
-      "rationale": "Q-GUARD Windows coverage closure: namespace only private unactivated evaluation SQLite opens so canonical 8.3 expansion cannot exceed the Windows path limit or alter ordinary watcher performance."
+      "after": "c3a0c5c066545ef9e88c41116bd7e5ff8bb46e2e335598b463596263276922b4",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/service/mcp.ts",
       "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
-      "after": "a077315d40f5febcb453e2758da85edc7a437858f43a7b46cc1abaaf5a209c6d",
-      "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
+      "after": "edabbbb66c52c3698a4941195fa7ccb3f406280947a453fbde79253a54d6377e",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
       "after": "be047a5f8d8ae6d65457c714e39e10c65b27e0bfb04296c3d31f1c7919537387",
       "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
+    },
+    {
+      "path": "src/version.ts",
+      "before": "84281708509ede5eb277b229386db17bec577e6b",
+      "after": "35ae5c9508494a00a37567ddb9e326b7694e335bfa0b5148456622770b53d31f",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/watcher/host.ts",
@@ -776,8 +950,14 @@
     {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "9bedb543058149a8407409e79e64785b623e01a70c48c0bc8e3a09c1c0dda3b7",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "8ccdfb38565d16b38bb20f2d625cb1ce263d631ff46519a7473f3fd4e18d81f2",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/documentation-capabilities.test.mjs",
+      "before": null,
+      "after": "4f7b532827ca28348b8a510237db6216a17dcb68d801ac5679dbf54ef06916de",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "test/fixtures/navigation-effects-crash-child.mjs",
@@ -788,14 +968,26 @@
     {
       "path": "test/navigation-architecture.test.mjs",
       "before": "b9636738cb6c719e02145386ee5746583a24f878",
-      "after": "a1a517f8fc08f4310b6d2a9aa073b47545f6eddd3ef2ac97337648d7821e550d",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "2b2f0ddbdb21b237cd28363034f318fa9aa73c426629a182c58f8bd6d106a065",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/navigation-effects-assistance.test.mjs",
+      "before": null,
+      "after": "aaf3794f1c37b05d2b600abbd948f0be6836d78052280cb07ee927d638078f6e",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "test/navigation-effects-contract.test.mjs",
       "before": null,
-      "after": "4f3504aed44fb5fe22ddeb9c04e0b0d02447cfbe0deb7e673aac367ebcfeb121",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "b4d21416eeaa360b6e73998d47193788cd0e2e997bfcf09b932d3a6e1b42a385",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/navigation-effects-host.test.mjs",
+      "before": null,
+      "after": "4b8b4fe94280901a598cd5e36088a1b2c304dd428247263d28a759b684147990",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "test/navigation-effects-node.test.mjs",
@@ -834,10 +1026,28 @@
       "rationale": "Q-GUARD Windows coverage closure: compare the sealed temporary capability against the canonical parent spelling while preserving the 8.3-path regression oracle."
     },
     {
+      "path": "test/retrieval-evaluation.test.mjs",
+      "before": "9fad7493cf510fd8a33db9b591373a883b015249",
+      "after": "226e2ce209dfa6d3766557d243f9c0f788e73b4fea76c47a975d4548c5152206",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/retrieval-manifest-upgrade.test.mjs",
+      "before": null,
+      "after": "7dc4248c03f4a27f2799f020b20172b6e7cfa68cb3e6eb796fa18f01949216f9",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "test/retrieval-observation-qualification.test.mjs",
       "before": "4e4e0a64a7b03c61dcf933b7ffc4364d56eab0fd",
       "after": "76080c78a278920fe08fab081d7eccb80395d8620361197e9d8b45cd6e231455",
       "rationale": "Workflow equivalence and Q-GUARD repair: retain the approved v5 workflow digest and isolate the non-Linux observation oracle from an unrelated pull-request event environment."
+    },
+    {
+      "path": "test/retrieval-provenance.test.mjs",
+      "before": "788a3bedf07ec42149fa694dd2246437fdf8de1a",
+      "after": "d017394e826ab4db4a7fd747b7436a7fba7353445a9383044b1ce322e2812c27",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "test/retrieval-windows-path-security.test.mjs",
@@ -852,6 +1062,12 @@
       "rationale": "Regression coverage proves both watcher retries reject mixed, signaled, published-artifact, and repeated failures."
     },
     {
+      "path": "test/science-core.test.mjs",
+      "before": "e02ed007f6a0b7adb361cfedacb33adcd781043e",
+      "after": "da9ab7435151982e968ee9c5eb75039fcc9e8824c35f48e50e69de39f1f5614f",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "test/service-reference-freshness.test.mjs",
       "before": null,
       "after": "f4c45d6c1085acd0bc6743a1161c8b0615c0e74507acf0a01c048fcf3c66484c",
@@ -864,6 +1080,12 @@
       "rationale": "CI repair: execute the native service retrieval contract on the runtime-selected backend without skipping the FTS5 or compatibility-scan paths."
     },
     {
+      "path": "test/service-runtime.test.mjs",
+      "before": "c3ad015d1e157f57cfc7b4f9d99a5e9601ae33bc",
+      "after": "b802dff09605f4d78d279b6444adc36e2247ff2933ecb99323a7b89ae09ce8c9",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "test/service-stdio-package.test.mjs",
       "before": "5e302462792e360747bf0254d336f8d747f55e4c",
       "after": "b2894842f847b77d25377819461ea22c1864e3aeb0032206441d653e431df09d",
@@ -874,6 +1096,12 @@
       "before": "ce95634d71454e60ab43d1f0cb33551aac392aa8",
       "after": "8a7a1f9cb29601db967db931bac7faf6cd2cd0dbcd7bfb6204f03403a531e200",
       "rationale": "Q-GUARD coverage closure: register the native POSIX ownership assertion only where that operating-system capability exists."
+    },
+    {
+      "path": "test/watcher-journal-host.test.mjs",
+      "before": "c79ca35a719c9d9803e3ebc7fbe471afffbb2377",
+      "after": "8db2075f9641173551a8e551352eac2f361bf555f28f9d24d8b36a4e99e3a94e",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "test/watcher-large-restart.test.mjs",

@@ -1,6 +1,21 @@
 # Changelog
 
-## Unreleased
+## 2.2.0
+
+Development candidate; not yet a tagged or published release.
+
+- Reconciled broad-audience README, current capability inventory, technical and
+  beginner guides, version/profile notes and future roadmap with implemented
+  MOC host behavior and ten read-only MCP tools (seven Draft.2 plus three
+  Observatory extensions). Kept experimental and downstream gates explicit.
+- Corrected MCP initialization to report the current Engine package version,
+  with a runtime regression assertion; frozen contract fixtures are unchanged.
+
+- Added deterministic managed-MOC batch planning and optional bounded model
+  suggestions for tags, links and MOC organization; model output requires review.
+- Added durable host coordination, coalesced event admission, explicit Node
+  execution, ownership advancement and interrupted-commit ownership recovery.
+- Preserved Navigation 1.0 read-only semantics and default-disabled effects.
 
 - Watcher qualification retries one isolated observation in a fresh process
   only after the exact latency-ceiling failure and no artifact publication; all

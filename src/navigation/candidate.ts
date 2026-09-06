@@ -30,8 +30,8 @@ function displayDirectory(directory: string): string {
 export async function generateNavigationCandidates(snapshot: NavigationSnapshot, config: VaultNavigationConfig): Promise<NavigationCandidateGeneration> {
   const discovery = discoverNavigation(snapshot, config);
   const sourceSnapshotDigest = await navigationSnapshotDigest(snapshot);
-  const sources = canonicalNavigationSources(snapshot).filter((source) => discovery.entries.some((entry) => entry.path === source.relativePath));
   const entryByPath = new Map(discovery.entries.map((entry) => [entry.path, entry]));
+  const sources = canonicalNavigationSources(snapshot).filter((source) => entryByPath.has(source.relativePath));
   const directories = new Set<string>([""]);
   for (const source of sources) directories.add(directDirectory(source.relativePath));
   for (const raw of snapshot.directories ?? []) {

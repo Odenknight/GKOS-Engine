@@ -1634,7 +1634,7 @@ export function deriveRetrievalEvaluationExecutableEnvironmentBundle(value: unkn
       embedding_provider_id: embeddingActive ? provider!.embedding_provider.provider_id : null,
       embedding_model_id: embeddingActive ? provider!.embedding_provider.model_id : null,
       embedding_dimensions: embeddingActive ? provider!.embedding_provider.dimensions : null,
-    }, environmentMember.environment.lexical_backend);
+    }, environmentMember.environment.lexical_backend, manifest.engine_version);
     if (stableJson(expectedManifest) !== stableJson(manifest)) {
       failure("GKX_EVAL_SOURCE_CORPUS_MANIFEST_RELATION_INVALID");
     }

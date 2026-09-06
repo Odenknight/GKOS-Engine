@@ -9,6 +9,7 @@ import {
   RETRIEVAL_TOKENIZER_VERSION,
 } from "./contracts";
 import { ENGINE_VERSION } from "../version";
+import { isCompatibleRetrievalProducerVersion } from "./manifest";
 import {
   retrievalCanonicalDigest,
   retrievalCodeUnitCompare,
@@ -290,7 +291,7 @@ export interface RetrievalEvaluationEnvironmentCoordinate {
   evaluation_contract_version: typeof RETRIEVAL_EVALUATION_CONTRACT_VERSION;
   golden_contract_version: typeof RETRIEVAL_EVALUATION_GOLDEN_VERSION;
   metric_contract_version: typeof RETRIEVAL_EVALUATION_METRIC_VERSION;
-  engine_version: typeof ENGINE_VERSION;
+  engine_version: typeof ENGINE_VERSION | "2.1.2";
   gkx_standard_commit: typeof RETRIEVAL_GKX_STANDARD_COMMIT;
   gkx_projection_profile: typeof RETRIEVAL_GKX_PROJECTION_PROFILE;
   projection_schema_version: typeof RETRIEVAL_LINEAGE_PROJECTION_SCHEMA_VERSION;
@@ -2531,7 +2532,7 @@ export function sealRetrievalEvaluationEnvironmentCoordinate(value: unknown): Re
       item.retrieval_contract_version !== RETRIEVAL_LINEAGE_CONTRACT_VERSION ||
       item.evaluation_contract_version !== RETRIEVAL_EVALUATION_CONTRACT_VERSION ||
       item.golden_contract_version !== RETRIEVAL_EVALUATION_GOLDEN_VERSION ||
-      item.metric_contract_version !== RETRIEVAL_EVALUATION_METRIC_VERSION || item.engine_version !== ENGINE_VERSION ||
+      item.metric_contract_version !== RETRIEVAL_EVALUATION_METRIC_VERSION || !isCompatibleRetrievalProducerVersion(item.engine_version) ||
       item.gkx_standard_commit !== RETRIEVAL_GKX_STANDARD_COMMIT || item.gkx_projection_profile !== RETRIEVAL_GKX_PROJECTION_PROFILE ||
       item.projection_schema_version !== RETRIEVAL_LINEAGE_PROJECTION_SCHEMA_VERSION || item.chunker_version !== RETRIEVAL_CHUNKER_VERSION ||
       item.tokenizer_version !== RETRIEVAL_TOKENIZER_VERSION || item.ndcg_discount_table_digest !== RETRIEVAL_EVALUATION_NDCG_TABLE.table_digest ||

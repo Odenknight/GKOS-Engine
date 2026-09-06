@@ -246,6 +246,11 @@ export class NodeNavigationEffectsExecutor {
     }
   }
 
+  /** Guarded byte snapshot for an explicitly configured Effects host. */
+  async readSource(relativePath: string): Promise<string | null> {
+    return this.readTarget(await this.safeAbsolute(relativePath));
+  }
+
   private async writeDurable(path: string, bytes: string, exclusive = false): Promise<void> {
     await mkdir(dirname(path), { recursive: true });
     const handle = await open(path, exclusive ? "wx" : "w");

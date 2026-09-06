@@ -102,6 +102,7 @@ async function initialize(port) {
     params: { protocolVersion: MCP_PROTOCOL_VERSION, capabilities: {}, clientInfo: { name: "fixture", version: "1" } },
   } });
   assert.equal(initialized.status, 200);
+  assert.equal(JSON.parse(initialized.body).result.serverInfo.version, '2.2.0');
   const session = initialized.headers["mcp-session-id"];
   const headers = { "mcp-session-id": session, "mcp-protocol-version": MCP_PROTOCOL_VERSION };
   const notification = await request(port, "/mcp", { token: AGENT_TOKEN, method: "POST", headers, body: { jsonrpc: "2.0", method: "notifications/initialized" } });

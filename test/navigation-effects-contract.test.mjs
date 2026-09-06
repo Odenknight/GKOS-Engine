@@ -89,7 +89,7 @@ test("Navigation 1.0 capability truth remains unchanged", () => {
 test("framework-neutral effects source has no filesystem dependency or Node executor primitive", async () => {
   const root = resolve("src/navigation-effects");
   const names = (await readdir(root)).filter((name) => name.endsWith(".ts"));
-  assert.deepEqual(names.sort(), ["capabilities.ts", "in-memory-adapter.ts", "index.ts", "markers.ts", "path-policy.ts", "planner.ts", "types.ts"]);
+  assert.deepEqual(names.sort(), ["assistance.ts", "capabilities.ts", "coordinator.ts", "in-memory-adapter.ts", "index.ts", "markers.ts", "moc-batch.ts", "path-policy.ts", "planner.ts", "types.ts"]);
   const source = (await Promise.all(names.map((name) => readFile(join(root, name), "utf8")))).join("\n");
   assert.doesNotMatch(source, /["'](?:node:)?fs(?:\/promises)?["']/);
   assert.doesNotMatch(source, /\b(?:writeFile|appendFile|rename|unlink|mkdir|createWriteStream)\s*\(/);
@@ -195,7 +195,7 @@ test("security and lineage fixtures encode fail-closed outcomes without content 
 
 test("package export and build products include Navigation Effects without changing release metadata", async () => {
   const pkg = await json(resolve("package.json"));
-  assert.equal(pkg.version, "2.1.2");
+  assert.equal(pkg.version, "2.2.0");
   assert.equal(pkg.exports["./navigation-effects"].types, "./dist/navigation-effects/index.d.ts");
   assert.equal(pkg.exports["./navigation-effects/node"].types, "./dist/navigation-effects/node/index.d.ts");
   await Promise.all([

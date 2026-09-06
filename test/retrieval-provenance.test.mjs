@@ -274,6 +274,12 @@ test("draft.2 executable projection fixture locks exact scan and FTS5 generation
       : []),
   ];
   for (const [backend, expectedManifest, expectedResult] of variants) {
+    // The frozen 2.1.2 corpus and result semantics remain unchanged. A new
+    // physical generation has a deliberately distinct 2.2 producer coordinate.
+    const projectionDigest = backend === "sqlite_lexical_scan"
+      ? "sha256:f180fc86ed2d1b4797df22965ec3bb0ec9ba04cd598b669fa2d6b2fe92c1974d"
+      : "sha256:237c42850fb3023651ed0461595c59178561a3c2ee36378846af57448612f787";
+    const currentManifest = { ...expectedManifest, engine_version: "2.2.0", projection_digest: projectionDigest, projection_id: `retrieval:${projectionDigest.slice(7, 31)}` };
     const built = buildGkxRetrievalGeneration({
       state_directory: join(root, `state-${backend}`),
       ...generationInput,
@@ -283,7 +289,7 @@ test("draft.2 executable projection fixture locks exact scan and FTS5 generation
       candidate_chunks: chunks,
       embedding_eligible_candidate_chunk_keys: chunks.map((candidate) => candidate.candidate_chunk_key),
     });
-    assert.deepEqual(built.manifest, expectedManifest);
+    assert.deepEqual(built.manifest, currentManifest);
     assert.equal(validators.manifest(built.manifest), true, JSON.stringify(validators.manifest.errors));
 
     const service = new RetrievalCoordinator(built.database_path, {
@@ -296,7 +302,10 @@ test("draft.2 executable projection fixture locks exact scan and FTS5 generation
     try {
       const actualResult = await service.search(fixture.search_request);
       assert.equal(validators.result(actualResult), true, JSON.stringify(validators.result.errors));
-      assert.deepEqual(actualResult, expectedResult);
+      const resultDigest = backend === "sqlite_lexical_scan"
+        ? "sha256:88ce393a895138f7c11efffe146b8ce422ca8c89a02fd40fe897e9eec66e9007"
+        : "sha256:f02e0884cac9b0bf16269ff7539c30a40f3c9bf9a61768efe9e6ac4f3500d44f";
+      assert.deepEqual(actualResult, { ...expectedResult, projection_digest: resultDigest, projection_id: `retrieval:${resultDigest.slice(7, 31)}` });
     } finally {
       service.close();
     }

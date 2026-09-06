@@ -46,9 +46,18 @@ Execution capability depends on configured host services:
 | `agent_note_delete` | Always false in contract 1.0 defaults |
 
 Capabilities describe configured infrastructure, not authority for a specific
-request. Each future adapter call must still validate the current grant,
+request. Each adapter call must still validate the current grant,
 expiry, root, operation, sensitivity ceiling, policy, retention hold, and
 optimistic preconditions.
+
+The 2.2 source line also implements deterministic batch planning, a durable
+host-driven coordinator, optional review-only assistance and an explicit Node
+managed-MOC host/runtime. These additions reuse this contract rather than
+altering Navigation 1.0. Configured agent-note flags are infrastructure values;
+the packaged MCP service has no agent-note write tools. See the
+[current capability inventory](CURRENT_CAPABILITIES.md) and
+[host integration guide](DETERMINISTIC-MOC-ASSISTANCE.md) for executable scope
+and outstanding no-op audit, performance/soak and platform durability work.
 
 ## Ownership and paths
 
