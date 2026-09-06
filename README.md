@@ -24,6 +24,18 @@ Start with the read-only commands below. Developers can then explore the
 explicit managed-MOC host. See [current capabilities](docs/CURRENT_CAPABILITIES.md)
 for the complete inventory and the [roadmap](ROADMAP.md) for future work.
 
+## Source, tags and releases
+
+The `main` branch contains the **2.2.0 development candidate**, including the
+experimental managed-MOC host. It is not an installed-product or release claim.
+As checked on September 6, 2026, the newest Git version tag is `v2.1.2`, while
+GitHub marks **2.1.1** as its latest published release. Those older snapshots do
+not include the current 2.2 MOC implementation.
+
+Read [release status and verification evidence](docs/RELEASE-STATUS.md) before
+choosing a dependency. GitHub topic tags describe the project; they do not
+certify a feature, authorize writes, or identify a released artifact.
+
 ## What is here
 
 | Area | What it does | Current standing |

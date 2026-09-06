@@ -434,7 +434,7 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "9607e0b629b6e6135d87b66332fbc21dd53a5369f7c6f90d14fbbd1bf971606b",
+      "after": "e13d2715484aa0eff67d04c691de229cfbcf011444f6c3fe5f8a62e1cd0a99c9",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -602,7 +602,7 @@
     {
       "path": "docs/CURRENT_CAPABILITIES.md",
       "before": "154d01ab1328d6f7a8cc10974cde6d8651402357",
-      "after": "5179d6fe0b3ca8fb675b980be260de056c49a17d5abaecdd561f524c89b1c6d0",
+      "after": "283ce2d15fc7cd02d5e07d7664a40aaab93156d8803dd04b196d703aac62d0fd",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -616,6 +616,12 @@
       "before": null,
       "after": "6514c8e48174017a248960b5a1512739c8416abbb76b5b766429e6dc54913c29",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "docs/RELEASE-STATUS.md",
+      "before": null,
+      "after": "c4be9892ebed0bb9db87c46f91f37a7bbff1767068af66e4122deafedba3c652",
+      "rationale": "Document current source capabilities, release status and exact merged verification evidence; no runtime or release activation."
     },
     {
       "path": "docs/VERSION-PROFILE-COMPATIBILITY.md",
