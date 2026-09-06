@@ -10,12 +10,15 @@ A map of content, or MOC, is a note that links to other notes. Navigation can
 find likely MOCs, propose consistent MOC content, show differences between two
 folders, audit common problems, and assemble a limited context pack.
 
-Version 2.1 does not apply any proposed content. Think of it as an inspector
-and planner: it can show what it would produce, but it cannot edit your notes.
+Navigation 1.0 does not apply proposed content. The commands in this guide are
+an inspector and planner, not a source-note editor. Engine 2.2 also includes a
+separate experimental managed-MOC host for developers who explicitly configure
+ownership, authority and recovery. Installing the engine does not enable it.
 
 ## Before you start
 
-Install Node.js 22, 23, or 24. Then open a terminal in the GKOS-Engine folder
+Use Node.js 24 (Node 22 is also a blocking test lane; 26 is informative).
+Node 23 and 25 are not current supported package lanes. Open a terminal in the GKOS-Engine folder
 and run:
 
 ```sh
@@ -166,7 +169,7 @@ gkx nav moc-apply
 
 There is also no Navigation `--out` or `--watch` mode. Source-content writing,
 archival, locking, stale-plan enforcement, and rollback belong to a separately
-reviewed future executor.
+configured experimental Effects/Node executor, not these read-only commands.
 
 ## Where to go next
 

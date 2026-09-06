@@ -59,7 +59,8 @@ The main ownership rules are:
   transport, limits, and redaction;
 - Navigation 1.0 owns deterministic discovery and plans, not source effects;
 - Navigation Effects owns separately versioned effect values, marker/path and
-  ownership validation, and an optional host-specific executor; it does not
+  ownership validation, batch planning, assistance, durable host coordination
+  and an optional host-specific executor/runtime; it does not
   infer authority or change Navigation 1.0;
 - governance interfaces can append explicitly governed metadata through a host
   adapter, but do not create source-write authority;
@@ -86,8 +87,8 @@ installed.
 | `gkos-engine/gkx` | Platform-neutral ESM | Focused GKX parsing/projection/index surface |
 | `gkos-engine/graphiti` | Platform-neutral ESM | Graphiti adapter |
 | `gkos-engine/navigation` | Platform-neutral ESM | Pure Navigation 1.0 |
-| `gkos-engine/navigation-effects` | Platform-neutral ESM | Experimental Effects contract types, capability reporting, markers, path policy, planner, and in-memory fault adapter |
-| `gkos-engine/navigation-effects/node` | Node ESM | Optional experimental cooperative-vault executor and journal |
+| `gkos-engine/navigation-effects` | Platform-neutral ESM | Effects types, capability reporting, markers, path policy, batch planner, coordinator, assistance and in-memory fault adapter |
+| `gkos-engine/navigation-effects/node` | Node ESM | Experimental cooperative-vault executor, journal, managed-MOC host and watcher/runtime |
 | `gkos-engine/governance` | Platform-neutral ESM | Receipt roles, store interfaces, and deferred-review helpers |
 | `gkos-engine/retrieval` | Node ESM | SQLite-backed retrieval reference implementation |
 | `gkos-engine/admission-policy` | Platform-neutral ESM | Product-neutral policy evaluation, hash-bound receipts, and context-bound replay verification |
@@ -386,8 +387,9 @@ MCP session/protocol headers. Browser-readable response headers expose
 
 ## MCP Draft.2 runtime
 
-The runtime accepts MCP protocol version `2025-11-25` and exposes exactly seven
-read-only, non-destructive, idempotent, closed-world tools:
+The runtime accepts MCP protocol version `2025-11-25` and contains ten
+read-only tools: seven original Draft.2 tools and three separately versioned
+Observatory extensions. Authenticated tools/list returns the permitted subset:
 
 | Tool | Result |
 | --- | --- |
@@ -398,6 +400,13 @@ read-only, non-destructive, idempotent, closed-world tools:
 | `gkos_graph_at_time` | Authorized temporal graph page within an issued scope |
 | `gkos_navigation_discover` | Navigation discovery over the authorized source snapshot |
 | `gkos_navigation_audit` | Navigation findings for an issued authorized scope |
+| `gkos_note_read` | Observatory: paginated authorized raw Markdown including frontmatter |
+| `gkos_record_resolve` | Observatory: exact known canonical path to a current session-bound record reference |
+| `gkos_search` | Observatory: authorized indexed retrieval and verified citations; optional operator-configured local ONNX only |
+
+The service retrieval profile does not enable remote providers or reranking.
+Listing a tool is not proof of coherent retrieval readiness. The runtime server
+identity follows ENGINE_VERSION; frozen Draft.2 contract evidence is unchanged.
 
 Record, scope, and cursor references are opaque and session-bound. Pagination
 is generation/snapshot-bound; a foreign, stale, or mismatched cursor fails.
@@ -653,8 +662,8 @@ an explicit skip/unevaluated state, never an implied pass.
 
 ## Experimental Navigation Effects integration plane
 
-This reconciliation branch carries the separately exported Navigation Effects
-1.0 planner and optional Node executor as **integration-only, experimental
+This source line carries the separately exported Navigation Effects
+1.0 planner, coordinator, assistance and optional Node host/executor as **integration-only, experimental
 code**. It does not alter the read-only Navigation 1.0 contract, activate a
 write capability, or constitute a released Engine 2.2 artifact.
 
@@ -671,7 +680,8 @@ ambiguous lineage; fixture effects remain `sourceWrite: false`.
 The framework-neutral surface is `gkos-engine/navigation-effects`; it exports
 contract types, configured capability reporting, exact version-1 generated
 region handling, portable path/grant validation, deterministic managed-MOC
-planning, and an in-memory fault adapter. Default capabilities advertise plan
+batch planning, durable host-driven coordination, proposal-only assistance
+and an in-memory fault adapter. Default capabilities advertise plan
 construction only. `apply_managed_moc`, archive, recovery, rollback, and agent
 note capabilities remain false until their declared adapter, authority,
 journal, and policy inputs are explicitly configured. Even a true configured
@@ -705,11 +715,19 @@ shutdown; path-link attacks where the host permits them; performance smoke;
 and import-time no-effect reconciliation. These are repository integration
 tests at an exact SHA, not production qualification or a 24-hour soak claim.
 
-The mechanisms are reusable building blocks. They do not by themselves provide
-Kosmos ownership adoption, an Obsidian adapter, a policy or authority provider,
-event debouncing, affected-scope coordination, reconciliation, self-write
-suppression, automatic maintenance, automatic creation, or production
-readiness.
+NodeManagedMocHost and NodeManagedMocRuntime connect those primitives to durable
+ownership state, pending-effect recovery, event debouncing, scoped target
+selection, reconciliation and digest-bound self-event suppression. Consumers
+supply validated snapshots/index deltas and live precondition/authority checks.
+The host uses at-least-once graph publication: consumers must handle replay of
+an effect ID idempotently. It does not emit dedicated durable no-op audit
+receipts. The settings/adoption UI, Obsidian adapter and agent-note authoring
+pipeline remain Kosmos integration work; their foundations are not proof of an
+enabled product. End-to-end parsing/P95 and soak/native-durability gates remain.
+
+See [current capabilities](docs/CURRENT_CAPABILITIES.md) for the exact Effects
+configuration flag rules. In particular, configured agent-note flags do not
+announce implemented MCP write tools or issue a per-agent grant.
 
 ## Explicit non-claims and deferred work
 

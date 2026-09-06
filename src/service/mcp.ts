@@ -3,6 +3,7 @@ import { lexicalQueryClauses } from "../retrieval/lexical";
 import type { ServiceRetrievalSearch } from "./retrieval";
 import { createHash, createHmac, randomBytes } from "node:crypto";
 import { canonicalJson } from "../canonical";
+import { ENGINE_VERSION } from "../version";
 import { auditNavigation, discoverNavigation, navigationSnapshotDigest } from "../navigation";
 import { projectAtTime } from "../temporal";
 import type { GkxNode, SourceFile } from "../types";
@@ -492,7 +493,7 @@ export class ServiceMcpRuntime {
       }
       const nextId = uuidV7();
       this.#sessions.set(nextId, { id: nextId, credentialId: context.identity.credentialId, agentId: context.identity.agentId, initialized: false, lastUsedAt: now, secret: randomBytes(32), records: new Map(), recordBindings: new Map(), scopes: new Map(), cursors: new Map() });
-      return { sessionId: nextId, body: { jsonrpc: "2.0", id, result: { protocolVersion: MCP_PROTOCOL_VERSION, capabilities: { tools: { listChanged: false } }, serverInfo: { name: "gkos-engine", version: "2.1.2" } } } };
+      return { sessionId: nextId, body: { jsonrpc: "2.0", id, result: { protocolVersion: MCP_PROTOCOL_VERSION, capabilities: { tools: { listChanged: false } }, serverInfo: { name: "gkos-engine", version: ENGINE_VERSION } } } };
     }
     const session = this.#sessions.get(sessionId);
     if (!session || session.credentialId !== context.identity.credentialId || session.agentId !== context.identity.agentId) return this.protocolError(id, -32000, "Request refused");

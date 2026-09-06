@@ -416,13 +416,13 @@
     {
       "path": "BEGINNERS_GUIDE.md",
       "before": "9b7f2bcfcdcf926c1698ee94183f6039062343f9",
-      "after": "31a06c573a3dfeb38556859176b21824f79bdd5899f5753f9e10827c33ed1be6",
+      "after": "ba5bdd9e7cba763d389b422d3a484af9da97b5b8f66e7a8ba3a9fab05735a99b",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "f68ce6ba812207b64094d2e62aed6d8791a185d8226a386c30589bf4a22b6e86",
+      "after": "ad1d437229f17a7d5637fffe445feaaa074025133149c73fd809d849b4185c9c",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -434,13 +434,19 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "4922f4b18d0a9f4ed10167cb51e2ff38ea9c9903d24158bee99e903769d97179",
+      "after": "9607e0b629b6e6135d87b66332fbc21dd53a5369f7c6f90d14fbbd1bf971606b",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "ROADMAP.md",
+      "before": "b2aeccae39da71c9f60cee76a3553481c65ccd93",
+      "after": "be53336a048f95fbdcb6c636995334cebe1bd89fabfe611c5a369608a65286bc",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "TECHNICAL_README.md",
       "before": "d28fee76dd931095907d35d5582be8f7045f52d8",
-      "after": "3f492a1f1080ced9bd0188416d0280108979a07bc026e6772a27405bb5839cb7",
+      "after": "c0635ea39f0d0ecc2ad746241bc5bd08a813e4c42173ec9cc302450be0294eb6",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -596,8 +602,8 @@
     {
       "path": "docs/CURRENT_CAPABILITIES.md",
       "before": "154d01ab1328d6f7a8cc10974cde6d8651402357",
-      "after": "07d74b9eae1d07abed44e057ad9af1d4eb81be0738aa75abffec39778b2eb3cf",
-      "rationale": "Current candidate change, bound to exact reviewed bytes and covered by current runtime qualification."
+      "after": "5179d6fe0b3ca8fb675b980be260de056c49a17d5abaecdd561f524c89b1c6d0",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "docs/DETERMINISTIC-MOC-ASSISTANCE.md",
@@ -608,8 +614,14 @@
     {
       "path": "docs/NAVIGATION-EFFECTS-CONTRACT.md",
       "before": null,
-      "after": "909e7c90b0058d3a0735be77b07e0552a1b79677162beb920e9406199ef912d2",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "6514c8e48174017a248960b5a1512739c8416abbb76b5b766429e6dc54913c29",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "docs/VERSION-PROFILE-COMPATIBILITY.md",
+      "before": "e2bcc225192fee89b0272ea446a1c3467a22fb9b",
+      "after": "e1a8881dbb3ad3390a041d9d566609b8fb95082493276532320e8f3b23f00270",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
@@ -908,8 +920,8 @@
     {
       "path": "src/service/mcp.ts",
       "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
-      "after": "a077315d40f5febcb453e2758da85edc7a437858f43a7b46cc1abaaf5a209c6d",
-      "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
+      "after": "edabbbb66c52c3698a4941195fa7ccb3f406280947a453fbde79253a54d6377e",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "src/service/server.ts",
@@ -939,6 +951,12 @@
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
       "after": "8ccdfb38565d16b38bb20f2d625cb1ce263d631ff46519a7473f3fd4e18d81f2",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/documentation-capabilities.test.mjs",
+      "before": null,
+      "after": "4f7b532827ca28348b8a510237db6216a17dcb68d801ac5679dbf54ef06916de",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -1060,6 +1078,12 @@
       "before": "83f14477ca28e80cfc990f603e19b73251b6aec6",
       "after": "f13506904fe1e7f99e7a941c619a4b22988ec4908629c42f5458ccccd7ca56f1",
       "rationale": "CI repair: execute the native service retrieval contract on the runtime-selected backend without skipping the FTS5 or compatibility-scan paths."
+    },
+    {
+      "path": "test/service-runtime.test.mjs",
+      "before": "c3ad015d1e157f57cfc7b4f9d99a5e9601ae33bc",
+      "after": "b802dff09605f4d78d279b6444adc36e2247ff2933ecb99323a7b89ae09ce8c9",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "test/service-stdio-package.test.mjs",
