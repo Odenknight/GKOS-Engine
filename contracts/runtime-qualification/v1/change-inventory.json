@@ -672,6 +672,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "evidence/2026-09-06-moc-host-lifecycle-qualification.md",
+      "before": null,
+      "after": "34c42d2bea3da6934c575bd27d29b13d02bc08b81fd60992a8543b46c74389af",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "examples/managed-moc.mjs",
       "before": null,
       "after": "f97cf6a973ecbba28b4b86d40b052a18fc87560b1d0b59eb9ab3438d472c792c",
@@ -962,7 +968,7 @@
     {
       "path": "test/navigation-effects-host.test.mjs",
       "before": null,
-      "after": "276bd1aa7b8773785835d59c1d23c31de21521b497aa275a43d6ffaf36001b4d",
+      "after": "4b8b4fe94280901a598cd5e36088a1b2c304dd428247263d28a759b684147990",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {

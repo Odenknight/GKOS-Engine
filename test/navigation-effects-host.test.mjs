@@ -131,3 +131,106 @@ test('missing ownership state alongside an existing effect journal fails closed'
   const restarted = new NodeManagedMocHost(options);
   await assert.rejects(restarted.start(0), /HOST_STATE_MISSING_WITH_HISTORY/);
 });
+
+test('periodic and startup reconciliation repair changes with no delivered event', async t => {
+  const { root, context, options } = await fixture(t);
+  const host = new NodeManagedMocHost(options);
+  t.after(() => host.shutdown());
+  await host.start(0);
+  context.snapshot.sources[0].title = 'Missed event';
+  await host.coordinator.tick(300_000);
+  await host.coordinator.tick(300_750);
+  assert.match(await readFile(join(root, 'topics/index.md'), 'utf8'), /Missed event/);
+  assert.equal(host.coordinator.status.pending, false);
+  const journalBeforeNoop = await host.executor.journal.load();
+  await host.coordinator.requestReconciliation(301_000);
+  await host.coordinator.tick(301_750);
+  assert.deepEqual(await host.executor.journal.load(), journalBeforeNoop);
+  await host.shutdown();
+
+  context.snapshot.sources[0].title = 'Changed while offline';
+  const restarted = new NodeManagedMocHost(options);
+  t.after(() => restarted.shutdown());
+  assert.equal(await restarted.start(0), true);
+  assert.match(await readFile(join(root, 'topics/index.md'), 'utf8'), /Changed while offline/);
+});
+
+test('cross-folder rename reconciles both scopes and leaves an unrelated MOC untouched', async t => {
+  const { root, context, options } = await fixture(t);
+  for (const folder of ['destination', 'unrelated']) {
+    await mkdir(join(root, folder));
+    context.snapshot.sources.push({ relativePath: `${folder}/b.md`, content: folder, title: folder, sensitivity: 'public' });
+    context.targets.push({ path: `${folder}/index.md`, ownership: { targetPath: `${folder}/index.md`, ownership: 'fully-managed', creationAuthorized: true }, authority: { ...context.targets[0].authority, allowedRoot: folder } });
+  }
+  const host = new NodeManagedMocHost(options);
+  t.after(() => host.shutdown());
+  await host.start(0);
+  const unaffected = await readFile(join(root, 'unrelated/index.md'));
+  const oldHistoryLength = (await host.executor.journal.load()).length;
+  context.snapshot.sources[0].relativePath = 'destination/a.md';
+  await Promise.all([host.coordinator.notify('topics/a.md', 10), host.coordinator.notify('destination/a.md', 10)]);
+  await host.coordinator.tick(760);
+  assert.doesNotMatch(await readFile(join(root, 'topics/index.md'), 'utf8'), /\[\[/);
+  assert.match(await readFile(join(root, 'destination/index.md'), 'utf8'), /destination\/a/);
+  assert.deepEqual(await readFile(join(root, 'unrelated/index.md')), unaffected);
+  const newPlans = (await host.executor.journal.load()).slice(oldHistoryLength).filter(entry => entry.plan).map(entry => entry.plan.targetPath);
+  assert.deepEqual([...new Set(newPlans)].sort(), ['destination/index.md', 'topics/index.md']);
+});
+
+test('shutdown waits for an active commit and preserves newer admitted work for restart', { timeout: 30_000 }, async t => {
+  const { root, context, options } = await fixture(t);
+  let release;
+  const blocked = new Promise(resolve => { release = resolve; });
+  let entered;
+  const atCommit = new Promise(resolve => { entered = resolve; });
+  let gate = false;
+  const host = new NodeManagedMocHost({ ...options, onCommitted: async () => {
+    if (gate) { entered(); await blocked; }
+  } });
+  t.after(async () => { release(); await host.shutdown(); });
+  await host.start(0);
+  gate = true;
+  context.snapshot.sources[0].title = 'First revision';
+  await host.coordinator.notify('topics/a.md', 1);
+  const active = host.coordinator.tick(751);
+  await atCommit;
+  context.snapshot.sources[0].title = 'Second revision';
+  await host.coordinator.notify('topics/a.md', 800);
+  let finished = false;
+  const closing = host.shutdown().then(() => { finished = true; });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(finished, false);
+  await assert.rejects(host.coordinator.notify('topics/a.md', 801), /COORDINATOR_STOPPED/);
+  release(); await active; await closing;
+  const persisted = JSON.parse(await readFile(join(root, '.gkx/effects/moc-host.json'), 'utf8'));
+  assert.deepEqual(persisted.state.intent.paths, ['topics/a.md']);
+  assert.equal(persisted.state.pending, null);
+  assert.match(await readFile(join(root, 'topics/index.md'), 'utf8'), /First revision/);
+  const restarted = new NodeManagedMocHost(options);
+  t.after(() => restarted.shutdown());
+  await restarted.start(0);
+  assert.match(await readFile(join(root, 'topics/index.md'), 'utf8'), /Second revision/);
+  assert.equal(restarted.coordinator.status.pending, false);
+});
+
+test('failed graph publication replays the same committed effect before ownership advancement', async t => {
+  const { root, options } = await fixture(t);
+  const publications = [];
+  const interrupted = new NodeManagedMocHost({ ...options, onCommitted: async (...args) => {
+    publications.push(args); throw new Error('synthetic publication failure');
+  } });
+  await assert.rejects(interrupted.start(0), /synthetic publication failure/);
+  await interrupted.shutdown();
+  const before = await readFile(join(root, 'topics/index.md'));
+  const runCount = (await readdir(join(root, '_archive/moc-runs/2026-09-06'))).length;
+  const restarted = new NodeManagedMocHost({ ...options, onCommitted: async (...args) => { publications.push(args); } });
+  t.after(() => restarted.shutdown());
+  await restarted.start(0);
+  assert.equal(publications.length, 2);
+  assert.deepEqual(publications[1], publications[0]);
+  assert.deepEqual(await readFile(join(root, 'topics/index.md')), before);
+  assert.equal((await readdir(join(root, '_archive/moc-runs/2026-09-06'))).length, runCount);
+  const state = JSON.parse(await readFile(join(root, '.gkx/effects/moc-host.json'), 'utf8'));
+  assert.equal(state.state.pending, null);
+  assert.equal(state.state.ownership['topics/index.md'].adoptedDigest, publications[0][1]);
+});
