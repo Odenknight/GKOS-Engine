@@ -1,4 +1,5 @@
-import { watch, type FSWatcher } from "node:fs";
+import { watch, realpathSync, type FSWatcher } from "node:fs";
+import { normalize } from "node:path";
 import { performance } from "node:perf_hooks";
 import { sha256Bytes } from "../../canonical";
 import { NodeManagedMocHost, type NodeManagedMocHostOptions } from "./moc-host";
@@ -26,7 +27,13 @@ export class NodeManagedMocRuntime {
     if (!await this.host.start(this.now())) return false;
     this.running = true;
     try {
-      this.watcher = watch(this.options.vaultRoot, { recursive: true }, (_event, filename) => {
+      // libuv's Windows watcher compares native event paths with the watch root.
+      // Expand 8.3 aliases and use native separators: a lexical mismatch can
+      // abort the process in affected runtimes, bypassing JavaScript catch.
+      // This is only a signal source; executor path/authority checks still own
+      // every read and effect, and reconciliation remains authoritative.
+      const watchRoot = normalize(realpathSync.native(this.options.vaultRoot));
+      this.watcher = watch(watchRoot, { recursive: true }, (_event, filename) => {
         if (!this.running) return;
         const path = filename?.toString().replace(/\\/g, "/");
         if (path && /^(?:\.gkx(?:\/|$)|_archive\/moc-runs(?:\/|$))/i.test(path)) return;

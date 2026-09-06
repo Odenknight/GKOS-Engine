@@ -668,7 +668,7 @@
     {
       "path": "evidence/2026-09-06-engine-2.2-moc-build.md",
       "before": null,
-      "after": "2b73eeb8fccdc2c97585e3e13c0690874f71405318e8367ca948cf95624a40ae",
+      "after": "9f3b89e74686861dd34eb5df428e03fd0b77eaddb575261b5989e1860dbd6253",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -824,7 +824,7 @@
     {
       "path": "src/navigation-effects/node/moc-runtime.ts",
       "before": null,
-      "after": "17e357bad9884cd75673e0790c3d79aea690a0a7a1766788e669e762b0700fbc",
+      "after": "cbe8f2f230dc559380ca1de457a870b3a4ab322dd6b6582d66b5e8d18375d1a9",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -962,7 +962,7 @@
     {
       "path": "test/navigation-effects-host.test.mjs",
       "before": null,
-      "after": "4b7b918db3129ecc27b7458420b958b9d3c32bf0f4ad0b02f684ba92c64bbbfd",
+      "after": "276bd1aa7b8773785835d59c1d23c31de21521b497aa275a43d6ffaf36001b4d",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {

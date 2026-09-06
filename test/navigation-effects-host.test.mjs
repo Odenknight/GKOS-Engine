@@ -89,7 +89,9 @@ test('host state tampering blocks startup and preserves evidence', async t => {
 
 test('runtime observes file edits and closes resources within shutdown budget', async t => {
   const { root, context, options } = await fixture(t);
-  const runtime = new NodeManagedMocRuntime({ ...options, snapshot: async () => {
+  // Exercise a non-native spelling too. Windows temp roots can additionally
+  // contain 8.3 aliases; production must canonicalize the watch root, not tests.
+  const runtime = new NodeManagedMocRuntime({ ...options, vaultRoot: root.replace(/\\/g, '/') + '/', snapshot: async () => {
     try { context.snapshot.sources[0].title = (await readFile(join(root, 'topics/a.md'), 'utf8')).trim(); } catch {}
     return context;
   } });
