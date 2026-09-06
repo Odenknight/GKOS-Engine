@@ -5,7 +5,7 @@ Operator settings: [complete settings reference](docs/SETTINGS.md) and [all TOML
 Turn a folder of Markdown into a dependable knowledge map—locally,
 deterministically, and with the privacy boundary kept in view.
 
-**GKOS-Engine 2.1.2** parses and validates GKX records, builds canonical graphs,
+**GKOS-Engine 2.2.0** (development candidate) parses and validates GKX records, builds canonical graphs,
 projects Graphiti episodes, indexes and retrieves knowledge, analyzes navigation
 pages, and can serve an authenticated live view to local applications and named
 MCP agents. The core is TypeScript, has no Obsidian or browser dependency, and
@@ -242,7 +242,7 @@ entry points are the packaged commands and repository host integrations.
 
 ## Versions and standing
 
-The npm package is `2.1.2`. The public exchange namespace remains GKX `2.0`,
+The candidate npm package is `2.2.0`. The public exchange namespace remains GKX `2.0`,
 while the existing validating projection identifier remains
 `gkx-2.3-validating-projection`. These names describe different layers and are
 not interchangeable; [the compatibility guide](docs/VERSION-PROFILE-COMPATIBILITY.md)
@@ -258,8 +258,7 @@ declaration.
 
 The Navigation Effects contract is also `1.0.0` and integration-only. Its
 manifest names Engine `2.2.0` as a future release target; this repository still
-declares package version `2.1.2`, and the Effects code here is not a released
-Engine 2.2 artifact.
+declares candidate package version `2.2.0`; a version bump is not release evidence.
 
 Current qualification uses blocking Node 22 and 24 lanes on Linux and Windows,
 with Node 26 informative until LTS. Frozen historical contract replay retains
@@ -270,6 +269,18 @@ it does not define a Linux SEA artifact.
 
 ## Optional and experimental components
 
+### Managed MOC host in the 2.2.0 candidate
+
+After building, run `npm run example:moc` to create and maintain a MOC in an
+isolated synthetic temporary vault. The example retains its journal, ownership
+state and archive for inspection. It does not discover or modify your vault.
+
+The explicit `NodeManagedMocRuntime` API combines watcher signals, durable
+reconciliation and the existing Effects executor. Supply a validated index
+snapshot and a live authority/configuration/sensitivity provider before using
+an owner vault. Optional model providers only return reviewable suggestions.
+See [the integration guide](docs/DETERMINISTIC-MOC-ASSISTANCE.md).
+
 ### Navigation Effects: careful machinery on the workbench
 
 The framework-neutral Effects planner can validate ownership, markers, paths,
@@ -279,9 +290,10 @@ target locks, a hash-chained journal, exact archives, temporary replacement,
 after-read verification, receipts, checkpoints, rollback, and startup recovery.
 
 That is useful engineering groundwork, but it is deliberately not a magic
-“organize my vault” switch. This repository does not supply Kosmos adoption UI,
-an Obsidian adapter, an authority provider, event coordination, reconciliation,
-automatic maintenance, or automatic MOC creation. Existing MOCs remain outside
+“organize my vault” switch. The new explicit Node host supplies durable event
+coordination, reconciliation and ownership recovery. Consumers supply validated
+index snapshots and live authority checks. Kosmos adoption UI and its Obsidian
+adapter remain downstream integrations. Existing MOCs remain outside
 any managed workflow until a consumer implements explicit, digest-bound
 adoption and all of its own gates pass. The portable Node executor also uses a
 documented cooperative-vault threat model; it is not qualified against a

@@ -1,9 +1,9 @@
-# GKOS-Engine 2.1.2 technical guide
+# GKOS-Engine 2.2.0 technical guide
 
 This guide describes the library, CLI, ingestion, retrieval, watcher, local
 service, identity/MCP, Graphiti, Navigation, governance, and optional
 intelligence surfaces, plus the isolated admission-policy provider, present in
-GKOS-Engine `2.1.2` at this repository state.
+GKOS-Engine `2.2.0` at this repository state.
 It also documents the separately versioned experimental Navigation Effects
 integration carried by this branch; that integration is not a released 2.2.0
 package capability.
@@ -13,7 +13,7 @@ contracts are distinct coordinates:
 
 | Coordinate | Value | Standing |
 | --- | --- | --- |
-| Engine package | `2.1.2` | Current package identity |
+| Engine package | `2.2.0` | Candidate package identity |
 | Public exchange namespace | GKX `2.0` | Breaking public naming generation |
 | Validating projection identifier | `gkx-2.3-validating-projection` | Retained Engine projection identity |
 | Navigation contract | `1.0.0` | Integration-only; source-content read-only |
