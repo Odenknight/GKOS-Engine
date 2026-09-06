@@ -428,7 +428,7 @@
     {
       "path": "COMPAT.md",
       "before": "03440af3ee1e44100e70c990baef88a660cf081a",
-      "after": "1b04f8bd4296ecf9c454ebb8b4ec86b5431cd7b9a52c7d6cdca016bc25c6f1ee",
+      "after": "4f9e111c3de6be0e15cee8b84714cc14747bad693d6515a9f7081934755b21e8",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -668,7 +668,7 @@
     {
       "path": "evidence/2026-09-06-engine-2.2-moc-build.md",
       "before": null,
-      "after": "f879a69428a8ffbddaf454453319c1f4467934e2fa373b1097575059d7bb33a9",
+      "after": "2b73eeb8fccdc2c97585e3e13c0690874f71405318e8367ca948cf95624a40ae",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -770,7 +770,7 @@
     {
       "path": "src/navigation-effects/coordinator.ts",
       "before": null,
-      "after": "a2105d57ac07881030480c6927eba4370cd33c87b073fe1e5e713dea74cb54ef",
+      "after": "8ba161b4dfe2c918fa2dee7d859e8bc90c1acbd6132993300c736b264f46b16c",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -858,9 +858,21 @@
       "rationale": "Q-GUARD Windows coverage closure: reopen private evaluation generations through the evaluation-only long-path SQLite authority without changing ordinary coordinator stores."
     },
     {
+      "path": "src/retrieval/evaluation-executor.ts",
+      "before": "6d4b67855536f91ba995e58ebb6c3b301d067c3d",
+      "after": "be53fcb837b8b62e4b73df509665927f2244be219e9031099a393129d7a04dc3",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
       "path": "src/retrieval/evaluation-fixtures.ts",
       "before": "c28116ae6ad210dcca4eac44a89ae5c67b11bc1f",
       "after": "03fc3bbfb602b253dd0470ea1a74554aebb3d961f6f103197b9314fd88b700c6",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/evaluation-host.ts",
+      "before": "d9981df36c1c72950863ef0a0f17dcc3b4232a72",
+      "after": "7f73e9df85b5065cb582aef2af0bdd550d1c052ef020b4fdd0f7235122fe8410",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -884,7 +896,7 @@
     {
       "path": "src/retrieval/sqlite-store.ts",
       "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
-      "after": "124ba2a4b1223e344b8cb5df248ea324fe8c200592f709cc34a280e99d801e00",
+      "after": "c3a0c5c066545ef9e88c41116bd7e5ff8bb46e2e335598b463596263276922b4",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -938,7 +950,7 @@
     {
       "path": "test/navigation-effects-assistance.test.mjs",
       "before": null,
-      "after": "20cb8aec265bf82684fb09e89cb033618ad63beae3328e1cb9618476ca69ddec",
+      "after": "aaf3794f1c37b05d2b600abbd948f0be6836d78052280cb07ee927d638078f6e",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -998,7 +1010,7 @@
     {
       "path": "test/retrieval-manifest-upgrade.test.mjs",
       "before": null,
-      "after": "ba1bf8a38266b004d2b2ebe8f50f20084242c15798d2b0d2c0ece37b32a1d800",
+      "after": "7dc4248c03f4a27f2799f020b20172b6e7cfa68cb3e6eb796fa18f01949216f9",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
@@ -1006,6 +1018,12 @@
       "before": "4e4e0a64a7b03c61dcf933b7ffc4364d56eab0fd",
       "after": "76080c78a278920fe08fab081d7eccb80395d8620361197e9d8b45cd6e231455",
       "rationale": "Workflow equivalence and Q-GUARD repair: retain the approved v5 workflow digest and isolate the non-Linux observation oracle from an unrelated pull-request event environment."
+    },
+    {
+      "path": "test/retrieval-provenance.test.mjs",
+      "before": "788a3bedf07ec42149fa694dd2246437fdf8de1a",
+      "after": "d017394e826ab4db4a7fd747b7436a7fba7353445a9383044b1ce322e2812c27",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
       "path": "test/retrieval-windows-path-security.test.mjs",
@@ -1052,7 +1070,7 @@
     {
       "path": "test/watcher-journal-host.test.mjs",
       "before": "c79ca35a719c9d9803e3ebc7fbe471afffbb2377",
-      "after": "c2d60c9a90e2e82ecf472586eb18259fc66b8e53dbd46e8b785b9ac4bbe7a610",
+      "after": "8db2075f9641173551a8e551352eac2f361bf555f28f9d24d8b36a4e99e3a94e",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {

@@ -185,6 +185,17 @@ test('concurrent admission coalesces into bounded durable batches', async () => 
   assert.deepEqual(f.stored.paths, []);
 });
 
+test('coordinator requires complete validated limits and detaches caller configuration', async () => {
+  for (const options of [{}, { debounceMs: 1 }, null]) assert.throws(() => new ManagedMocCoordinator({}, options), /INVALID_COORDINATOR_OPTIONS/);
+  const options = { debounceMs: 750, maxDelayMs: 3000, periodicMs: 300000, maxPaths: 1 };
+  const f = fixture(options);
+  await f.coordinator.start(0);
+  options.maxPaths = Infinity;
+  await Promise.all([f.coordinator.notify('one.md', 1), f.coordinator.notify('two.md', 1)]);
+  assert.equal(f.stored.full, true);
+  assert.deepEqual(f.stored.paths, []);
+});
+
 test('deterministic extraction ignores fenced examples, inline code, comments and frontmatter', async () => {
   const result = await buildDeterministicMocAssistance({ ...input, notes: [note('a', 'a.md', '---\ndescription: "#frontmatter"\n---\n# Heading\n#real\n```md\n#fenced [[b]]\n```\n`#inline`\n<!-- #comment -->'), input.notes[1]] });
   assert.deepEqual(result.proposal.tags.find(r => r.uid === 'a').tags, ['real']);

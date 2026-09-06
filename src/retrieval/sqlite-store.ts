@@ -647,7 +647,7 @@ function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBa
  * Phase-4 fixture qualification uses this exact production digest algebra
  * instead of reimplementing or shallowly resealing manifest coordinates.
  * producerVersion is only for no-I/O replay of qualified historical evidence;
- * physical generation writers never pass an override and always emit 2.2.0.
+ * ordinary generation writers never pass an override and emit the current version.
  */
 export function deriveGkxRetrievalProjectionManifest(
   value: Omit<GkxRetrievalGenerationInput, "state_directory" | "lexical_backend">,
@@ -1155,6 +1155,7 @@ function buildGenerationArtifact(
   input: RetrievalGenerationInput | GkxRetrievalGenerationInput,
   lineage: boolean,
   immutableNoReplace = false,
+  replayManifest?: GkxRetrievalProjectionManifest,
 ): BuiltUnactivatedRetrievalGeneration {
   // Validate every record before creating or touching derived state. A single
   // malformed chunk rejects the whole source generation and cannot advance the
@@ -1164,9 +1165,12 @@ function buildGenerationArtifact(
   const lexicalBackend = resolveLexicalBackend(input.lexical_backend);
   const requestedDirectory = validateStateDirectory(input.state_directory);
   const manifest = lineage
-    ? lineageProjectionManifest(input as GkxRetrievalGenerationInput, lexicalBackend)
+    ? lineageProjectionManifest(input as GkxRetrievalGenerationInput, lexicalBackend, replayManifest?.engine_version)
     : projectionManifest(input as RetrievalGenerationInput, lexicalBackend);
   assertRetrievalProjectionManifest(manifest);
+  if (replayManifest && (!lineage || !immutableNoReplace || stableJson(manifest) !== stableJson(replayManifest))) {
+    throw new Error("RETRIEVAL_EVALUATION_REPLAY_MANIFEST_MISMATCH");
+  }
   const directory = canonicalPathSync(requestedDirectory, { allow_missing: true, alias_error: "RETRIEVAL_STATE_ANCESTOR_ALIAS_REJECTED" });
   mkdirSync(directory, { recursive: true, mode: 0o700 });
   assertRealStateDirectory(directory);
@@ -1323,6 +1327,28 @@ export function buildGkxRetrievalGenerationUnactivated(
 ): BuiltUnactivatedRetrievalGeneration {
   preflightGenerationInput(input, true, false);
   return buildGenerationArtifact(input, true, true);
+}
+
+/** Internal evaluation-only restoration of an already derived projection.
+ * Recomputes every binding under the qualified original producer identity;
+ * never activates a pointer or changes an ordinary generation writer's version.
+ * A replayed manifest describes historical data, not the current process.
+ */
+export function restoreGkxRetrievalGenerationForEvaluation(
+  input: GkxRetrievalGenerationInput,
+  expectedManifest: GkxRetrievalProjectionManifest,
+): BuiltUnactivatedRetrievalGeneration {
+  if (!expectedManifest || typeof expectedManifest !== "object" || utilTypes.isProxy(expectedManifest)
+      || Object.getPrototypeOf(expectedManifest) !== Object.prototype
+      || Reflect.ownKeys(expectedManifest).some(key => {
+        const descriptor = Object.getOwnPropertyDescriptor(expectedManifest, key);
+        return typeof key !== "string" || !descriptor?.enumerable || !("value" in descriptor)
+          || (descriptor.value !== null && !["string", "number", "boolean"].includes(typeof descriptor.value));
+      })) throw new Error("RETRIEVAL_EVALUATION_REPLAY_MANIFEST_INVALID");
+  assertRetrievalProjectionManifest(expectedManifest);
+  if (!isGkxRetrievalProjectionManifest(expectedManifest)) throw new Error("RETRIEVAL_EVALUATION_REPLAY_MANIFEST_INVALID");
+  preflightGenerationInput(input, true, false);
+  return buildGenerationArtifact(input, true, true, { ...expectedManifest });
 }
 
 function statSafe(path: string): boolean {

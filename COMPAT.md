@@ -66,8 +66,15 @@ helper adoption, and product release note remain downstream repository work.
 The unchanged retrieval schema-2/schema-3 validators accept the explicit
 producer identities `2.1.2` and `2.2.0`. Existing manifest bytes, hashes and
 watcher recovery records are not rewritten during validation. Other versions
-remain rejected; this is not a general semver compatibility claim. Physical
+remain rejected; this is not a general semver compatibility claim. Ordinary
 generation writers always emit the running Engine version. Host-private,
 no-I/O evaluation derivation can explicitly replay the qualified producer
 identity bound into historical fixtures, including its projection digest.
-Historical evidence is not relabeled as a 2.2 execution result.
+Historical evidence is not relabeled as a 2.2 execution result. The private
+evaluation executor may restore an original qualified projection into an
+unactivated, immutable evaluation database after recomputing every source,
+vector and manifest binding. This is historical data replay, not a new live
+generation: the original producer is retained, no active pointer is published,
+and the surrounding qualification receipt identifies the current source commit.
+Ordinary generation APIs cannot select a historical producer. Current-version
+physical generation/result coordinates have separate explicit test expectations.

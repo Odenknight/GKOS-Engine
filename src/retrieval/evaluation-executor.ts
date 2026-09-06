@@ -55,7 +55,7 @@ import { bindGkxRetrievalCandidateChunks } from "./candidate-types";
 import { chunkMarkdown } from "./chunker";
 import { projectAuthoredGkxRetrievalCorpus } from "./gkx-provenance";
 import {
-  buildGkxRetrievalGenerationUnactivated,
+  restoreGkxRetrievalGenerationForEvaluation,
   deriveGkxRetrievalProjectionManifest,
   detectSqliteLexicalCapability,
 } from "./sqlite-store";
@@ -642,7 +642,7 @@ async function createOperationStore(
       if (!vector) failure("GKX_EVAL_EXECUTOR_INDEX_VECTOR_MISSING");
       return { candidate_chunk_key: candidate.candidate_chunk_key, vector: [...vector] };
     });
-  const built = buildGkxRetrievalGenerationUnactivated({
+  const built = restoreGkxRetrievalGenerationForEvaluation({
     state_directory: join(stateRoot, derivation.vault_fixture),
     vault_id: derivation.corpus.vault_fixture,
     source_snapshot_digest: derivation.catalog_entry.source_snapshot.source_snapshot_digest,
@@ -658,7 +658,7 @@ async function createOperationStore(
     embedding_model_id: embeddingActive ? transcript!.embedding_provider.model_id : null,
     embedding_dimensions: embeddingActive ? transcript!.embedding_provider.dimensions : null,
     lexical_backend: derivation.environment_member.environment.lexical_backend,
-  });
+  }, derivation.manifest);
   same(built.manifest, derivation.manifest, "GKX_EVAL_EXECUTOR_BUILT_MANIFEST_MISMATCH");
   let currentAttempt: AttemptEvidence | null = null;
   const observer: RetrievalEvaluationCoordinatorObserver = {
@@ -770,7 +770,7 @@ async function createReviewedAbsentOperationStore(input: {
     embedding_provider_id: transcript.embedding_provider.provider_id,
     embedding_model_id: transcript.embedding_provider.model_id,
     embedding_dimensions: transcript.embedding_provider.dimensions,
-  }, derivation.environment_member.environment.lexical_backend);
+  }, derivation.environment_member.environment.lexical_backend, derivation.manifest.engine_version);
   const queryIndex = scenario.eval_schedule.query_partition.findIndex((coordinate) =>
     coordinate.query_id === query.id && coordinate.query_digest === query.query_digest);
   const embeddingTemplate = scenario.embedding_query_templates[queryIndex];
@@ -801,7 +801,7 @@ async function createReviewedAbsentOperationStore(input: {
   });
   const textByDigest = new Map(chunks.map((candidate) => [candidate.chunk.content_digest, candidate.chunk.text]));
   const indexVectors = await replay.replay_index(textByDigest);
-  const built = buildGkxRetrievalGenerationUnactivated({
+  const built = restoreGkxRetrievalGenerationForEvaluation({
     state_directory: join(input.state_root, `${derivation.vault_fixture}-reviewed-absent`),
     vault_id: derivation.vault_fixture,
     source_snapshot_digest: manifest.source_snapshot_digest,
@@ -820,7 +820,7 @@ async function createReviewedAbsentOperationStore(input: {
     embedding_model_id: transcript.embedding_provider.model_id,
     embedding_dimensions: transcript.embedding_provider.dimensions,
     lexical_backend: derivation.environment_member.environment.lexical_backend,
-  });
+  }, manifest);
   same(built.manifest, manifest, "GKX_EVAL_EXECUTOR_REVIEWED_ABSENT_MANIFEST_MISMATCH");
   let currentAttempt: AttemptEvidence | null = null;
   const observer: RetrievalEvaluationCoordinatorObserver = {

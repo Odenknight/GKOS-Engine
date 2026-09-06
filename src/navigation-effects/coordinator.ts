@@ -36,7 +36,8 @@ export class ManagedMocCoordinator {
   constructor(private readonly host: MocCoordinatorHost, private readonly options = {
     debounceMs: 750, maxDelayMs: 3000, periodicMs: 300_000, maxPaths: 4096,
   }) {
-    if (Object.values(options).some(v => !Number.isSafeInteger(v) || v < 1) || options.maxDelayMs < options.debounceMs) throw new Error("INVALID_COORDINATOR_OPTIONS");
+    if (!options || [options.debounceMs, options.maxDelayMs, options.periodicMs, options.maxPaths].some(v => !Number.isSafeInteger(v) || v < 1) || options.maxDelayMs < options.debounceMs) throw new Error("INVALID_COORDINATOR_OPTIONS");
+    this.options = { ...options }; // Caller mutation cannot disable validated bounds.
   }
   private serial<T>(fn: () => Promise<T>): Promise<T> {
     const next = this.queue.then(fn);

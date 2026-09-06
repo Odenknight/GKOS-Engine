@@ -987,7 +987,7 @@ test("failure-retry unchanged success commits exactly four rows and preserves Ac
   writeFileSync(ownerPath, '{"unratified":true}\n');
   assert.throws(() => validateWatcherFailureRetryNoopPhysicalAuthority({
     watcher_directory: watcher, retrieval_directory: openWatcherDirectory(retrieval.path), journal: handle, bundle,
-  }), { code: "GKX_WATCHER_CONTRACT_RETRY_INVALID" });
+  }), { message: "WATCHER_JOURNAL_VALUE_INVALID" });
   writeFileSync(ownerPath, ownerBytes);
   const restoredRetrieval = openWatcherDirectory(retrieval.path);
   const activeBefore = readWatcherJournalActive(handle);
