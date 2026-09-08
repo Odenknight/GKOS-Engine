@@ -396,6 +396,12 @@
       "rationale": "Run native no-change process-exit, failure and receipt tests on mandatory Linux/Windows Node22/24 with bounded environment/test evidence."
     },
     {
+      "path": ".github/workflows/npm-release-2.2.yml",
+      "before": null,
+      "after": "8005378fc1e466eda9f5b61c048179d455c934073be964be5c9960c1d33c0ccc",
+      "rationale": "Add immutable exact-tag OIDC-only release workflow that refuses absent approval/evidence and mismatched source or tarball; no release triggered."
+    },
+    {
       "path": ".github/workflows/observation-2.2.yml",
       "before": null,
       "after": "26e2e20eea2b2eb1b7914a6f98433e83383930ecfe5278df73e394b8833792f7",
@@ -416,8 +422,8 @@
     {
       "path": ".github/workflows/sidecar-release.yml",
       "before": "4e8b5e5eb49ceabcfdf048b3d3cf7163725e2554",
-      "after": "68209099200a7152b8b95a66dba36fc381124e535fb1326c886ea2a73d020bcb",
-      "rationale": "Release stability: build SEA artifacts on Node 24 LTS and bind checkout and setup-node to reviewed v5 commits."
+      "after": "d9effe53e0f61158b3238a4f70c41dfa07e464f43bf86c4aeebbdd3f468151a1",
+      "rationale": "Preserve binary builds and artifacts; prevent v2.2.0 sidecar uploads from prematurely creating or rewriting official stable release notes."
     },
     {
       "path": ".gitignore",
@@ -636,6 +642,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "docs/NPM-2.2-OWNER-ACTIONS.md",
+      "before": null,
+      "after": "b072ebe666d141bf43990cca008d377e8f70b4efcd7c849398562ca83d00b7d3",
+      "rationale": "Provide exact npm trusted-publisher and protected GitHub environment setup; preserve absent owner-account and final qualification blockers."
+    },
+    {
       "path": "docs/OBSERVATION-2.2-QUALIFICATION.md",
       "before": null,
       "after": "2e8da20ad7853f5be1ea644f2f1f22c9bc6d2bb41ce8dcf1e5d6033a818aecef",
@@ -784,6 +796,12 @@
       "before": null,
       "after": "d963d6affcc45878b6007c2b5fe052e76a08218019ce720b0db1cea4e77ca56b",
       "rationale": "Independently construct 2.2 projection preimages without production indexing or canonicalization."
+    },
+    {
+      "path": "scripts/release-220-preflight.mjs",
+      "before": null,
+      "after": "d11911dc9445686974dd73df407edb53a08d0286cbb59c3a1f0253d0745d60a2",
+      "rationale": "Fail closed on any missing mandatory exact-commit gate, incomplete soak, missing evidence binding, wrong tag or inspected tarball digest/inventory."
     },
     {
       "path": "scripts/run-current-tests.mjs",
@@ -1090,6 +1108,12 @@
       "before": "ce1c3a62bdfaa2eb7677e04ec3198009838f592d",
       "after": "4d0634d1ab57f5c9877e9c04a118274bc2afddba11e3a0758cc6feced56fcd0e",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/release-220-preflight.test.mjs",
+      "before": null,
+      "after": "b71c27236f755d6ccfeb087839e3336b77c3763efe92c42fc69d93ad1a767e0e",
+      "rationale": "Negative and positive preflight tests for mandatory gates, source identity, soak length, archive digests and package inventory."
     },
     {
       "path": "test/retrieval-evaluation-cli.test.mjs",
