@@ -1,4 +1,4 @@
-name: Phase 4 Retrieval Observation
+name: Phase 4 Retrieval Observation (historical Engine 2.1.2)
 
 on:
   schedule:
@@ -16,9 +16,15 @@ jobs:
   observe:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      GIT_CONFIG_COUNT: 1
+      GIT_CONFIG_KEY_0: core.autocrlf
+      GIT_CONFIG_VALUE_0: 'false'
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
+          # Exact last successful historical implementation; never current main.
+          ref: d81f9d1351f1a9228650a840629191a92f2dfb22
           fetch-depth: 0
 
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0

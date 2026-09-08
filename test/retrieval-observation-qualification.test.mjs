@@ -378,8 +378,10 @@ test("Slice-C temp capability cleans exact roots and fail-retains identity subst
   }
 });
 
-test("Slice-C workflows freeze scheduled Observation and supplementary cross-runtime lanes", async () => {
-  const observation = await readFile(join(ROOT, ".github", "workflows", "phase4-retrieval-observation.yml"), "utf8");
+test("Slice-C historical workflow bytes and supplementary cross-runtime lanes remain replayable", async () => {
+  // The original workflow is immutable history. Current dispatch now names the
+  // exact historical implementation; its successor contract is tested separately.
+  const observation = execFileSync("git", ["show", "650eab4a6752227cae336d7556a57826c22a0d5a:.github/workflows/phase4-retrieval-observation.yml"], { cwd: ROOT, encoding: "utf8" });
   const continuous = await readFile(join(ROOT, ".github", "workflows", "ci.yml"), "utf8");
   const bridgeJob = workflowJobBody(continuous, "phase4-retrieval-observation-manual");
   const packageJson = JSON.parse(await readFile(join(ROOT, "package.json"), "utf8"));

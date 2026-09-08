@@ -390,10 +390,16 @@
       "rationale": "Runtime modernization and stability: qualify Node 22/24/26 and execute dedicated watcher observations through one bounded exact-latency retry wrapper."
     },
     {
+      "path": ".github/workflows/observation-2.2.yml",
+      "before": null,
+      "after": "26e2e20eea2b2eb1b7914a6f98433e83383930ecfe5278df73e394b8833792f7",
+      "rationale": "Add a distinct fail-closed Linux 2.2 observation workflow with bounded artifact upload."
+    },
+    {
       "path": ".github/workflows/phase4-retrieval-observation.yml",
       "before": "8335d9b88016414584117202b7d083393d360a1c",
-      "after": "033df13af0bfb9f02b1c8679b8d04cf5c32b348718022386b1f919e389254662",
-      "rationale": "Workflow equivalence repair: keep the standalone Phase 4 observation lane byte-equivalent to its CI bridge after the approved exact checkout/setup-node v5 pin upgrade."
+      "after": "2addd303a6922d80a936f46edd15be19f24429cdf551473bb6525e08696bcda9",
+      "rationale": "Name historical Engine 2.1.2 lane and execute the exact last successful historical source with full history."
     },
     {
       "path": ".github/workflows/runtime-qualification.yml",
@@ -434,8 +440,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "e13d2715484aa0eff67d04c691de229cfbcf011444f6c3fe5f8a62e1cd0a99c9",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "23fbc3aab2f40022913d5b077585ccf116f89df36b6a0e5edc958193409a4d2b",
+      "rationale": "Retain current capability documentation and add reviewed full-history verification instructions from PR #47."
     },
     {
       "path": "ROADMAP.md",
@@ -618,10 +624,22 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "docs/OBSERVATION-2.2-QUALIFICATION.md",
+      "before": null,
+      "after": "2e8da20ad7853f5be1ea644f2f1f22c9bc6d2bb41ce8dcf1e5d6033a818aecef",
+      "rationale": "Document distinct historical/current identities, workload, digest derivation and limitations."
+    },
+    {
       "path": "docs/RELEASE-STATUS.md",
       "before": null,
       "after": "c4be9892ebed0bb9db87c46f91f37a7bbff1767068af66e4122deafedba3c652",
       "rationale": "Document current source capabilities, release status and exact merged verification evidence; no runtime or release activation."
+    },
+    {
+      "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",
+      "before": null,
+      "after": "89935024c69ad6edef09a40b24eeed073d50c2614bf4ad2ac5d1c147e599de6f",
+      "rationale": "Preserve PR #47 exact bounded failure diagnosis and follow-up record."
     },
     {
       "path": "docs/VERSION-PROFILE-COMPATIBILITY.md",
@@ -696,6 +714,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "evidence/2026-09-08-release-220-starting-state.md",
+      "before": null,
+      "after": "abebb07f5e89794a9a533e81a6a51498041cd63b153e8963fa916bcc22ee9626",
+      "rationale": "Record exact reconciled release starting coordinates, open work, environment and unmet gates."
+    },
+    {
       "path": "examples/managed-moc.mjs",
       "before": null,
       "after": "f97cf6a973ecbba28b4b86d40b052a18fc87560b1d0b59eb9ab3438d472c792c",
@@ -738,10 +762,34 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "scripts/generate-retrieval-observation-fixture-2.2.mjs",
+      "before": null,
+      "after": "83805dd8b3e50accf7eba91ce7bd9b08345c58978a2021c7cb27e45364cbf3aa",
+      "rationale": "Bind separately versioned 2.2 fixture to reviewed fixed expected digests; preserve historical bytes."
+    },
+    {
+      "path": "scripts/observation-2.2-material.mjs",
+      "before": null,
+      "after": "d963d6affcc45878b6007c2b5fe052e76a08218019ce720b0db1cea4e77ca56b",
+      "rationale": "Independently construct 2.2 projection preimages without production indexing or canonicalization."
+    },
+    {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
       "after": "5161ce1e3092df97f187e1476f94ef2e8ad8ca2e411a01f8afa26b798b79c848",
       "rationale": "Windows reliability: retry the singleton watcher observation once only after its sole complete TAP latency failure."
+    },
+    {
+      "path": "scripts/run-retrieval-observation-qualification-2.2.mjs",
+      "before": null,
+      "after": "025cf0d8bd2855c4d044800ee75651e5f8207d986e02a21a3434af222e703c7d",
+      "rationale": "Separate 2.2 runner with strict source binding, complete manifest checks and native vector reuse verification; preserve workload and p95."
+    },
+    {
+      "path": "scripts/run-retrieval-observation-qualification.mjs",
+      "before": "5001102ad0df3a89e27677fe100143353b8f7b1d",
+      "after": "0d4c8aa90b17fda486745ec28a24dec99f0c014952bbfffd223658e137f58f91",
+      "rationale": "Retain existing current qualification adaptation; add only PR #47 allowlisted diagnostic output."
     },
     {
       "path": "scripts/run-watcher-observation-qualification.mjs",
@@ -1044,10 +1092,16 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "test/retrieval-observation-2.2.test.mjs",
+      "before": null,
+      "after": "73d368b0d4791bab1eff8bfe0be839ff9b66c3c00b313e685bfcab01d5b49c47",
+      "rationale": "Test fixed pins, fail-closed oracle substitution, workflow separation, and actual native 10k SQLite convergence/reuse."
+    },
+    {
       "path": "test/retrieval-observation-qualification.test.mjs",
       "before": "4e4e0a64a7b03c61dcf933b7ffc4364d56eab0fd",
-      "after": "76080c78a278920fe08fab081d7eccb80395d8620361197e9d8b45cd6e231455",
-      "rationale": "Workflow equivalence and Q-GUARD repair: retain the approved v5 workflow digest and isolate the non-Linux observation oracle from an unrelated pull-request event environment."
+      "after": "456cb1355c6b60e70f27bbfba34e3b13de6713501943d6b1e1b2ac883e5a3e4e",
+      "rationale": "Retain exact historical workflow hash via immutable Git object; successor workflow contract is tested separately."
     },
     {
       "path": "test/retrieval-provenance.test.mjs",
