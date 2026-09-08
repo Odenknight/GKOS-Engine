@@ -315,8 +315,20 @@ export class GkxIndex {
       group.push(file);
       changedByPath.set(path, group);
     }
+    // Snapshot path groups after renames/removals. Each normalized changed path
+    // is processed once, so its previous group stays valid throughout this loop.
+    // Avoid scanning the complete candidate set once per submitted source.
+    const previousByPath = new Map<string, NoteRecord[]>();
+    if (changedByPath.size > 0) {
+      for (const record of this.candidateRecords.values()) {
+        if (!changedByPath.has(record.relativePath)) continue;
+        const previous = previousByPath.get(record.relativePath) ?? [];
+        previous.push(record);
+        previousByPath.set(record.relativePath, previous);
+      }
+    }
     for (const [path, group] of changedByPath) {
-      const previous = [...this.candidateRecords.values()].filter((record) => record.relativePath === path);
+      const previous = previousByPath.get(path) ?? [];
       const incomingDescriptors = group.map(canonicalCandidateSourceDescriptor).sort();
       const previousDescriptors = previous.map(canonicalCandidateRecordDescriptor).sort();
       // The complete canonical parser descriptor, including source times and

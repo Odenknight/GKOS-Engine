@@ -852,6 +852,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/incremental.ts",
+      "before": "b8e7c28ee99596e461123aca4597237277be758e",
+      "after": "b2b08ec67eddcf025e7b9a54484851902afdfe573451f764e411198fb456c71f",
+      "rationale": "Group canonical candidates once after rename/removal processing to eliminate repeated full-set scans for unchanged source submissions; preserve all identity, duplicate, reuse and validation checks."
+    },
+    {
       "path": "src/index.ts",
       "before": "b4550c73992d38f7fc3e52383efde0de276ae27d",
       "after": "76e958a89e81530f75a166a34a19b6b1fc63a827d806a2f6a5c79035900fae77",
