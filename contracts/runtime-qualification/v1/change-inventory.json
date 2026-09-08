@@ -672,6 +672,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "docs/WINDOWS-QUALIFICATION-REMEDIATION-20260908.md",
+      "before": null,
+      "after": "35730828ad967521c1f2b0e70206fcab0cc3941b74360ddd62f0b8e231f6be41",
+      "rationale": "Record exact failed candidate evidence, measured secure scan bottleneck, bounded implementation repair and remaining exact-head qualification gates without relaxing limits."
+    },
+    {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
       "before": null,
       "after": "78544e2083552ee8c4b8588db753530bb0c575a5fc5135013bdc5640c2b28124",
@@ -862,6 +868,12 @@
       "before": "b4550c73992d38f7fc3e52383efde0de276ae27d",
       "after": "76e958a89e81530f75a166a34a19b6b1fc63a827d806a2f6a5c79035900fae77",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/ingest/source-scan.ts",
+      "before": "c36a98bc8e379177475b5bef7d0df1c95cf45313",
+      "after": "43a0cad6a92bde0fe7445dc707452fc50503aacf10dc6cac27456bcfb5f63c41",
+      "rationale": "Bound independent secure watcher file probes to four; retain serial public Phase3 scanning, every capability/TOCTOU check, both complete snapshots and deterministic ordering; drain work before descent or failure."
     },
     {
       "path": "src/navigation-effects/assistance.ts",
@@ -1214,8 +1226,8 @@
     {
       "path": "test/watcher-large-restart.test.mjs",
       "before": "6645c5680b85689548f07963fe596e05e12e03ef",
-      "after": "29978a55b73ec828fd1da1900ab7009e0f006209c2a22a86aec447287e9a8c49",
-      "rationale": "CI repair: prove large watcher restart binds and reopens the runtime-selected concrete lexical backend."
+      "after": "e9d2e3b1549b3ee450b563c791c13f7b7194fb3a718ee0ee6f5e8c59c9b0d6d3",
+      "rationale": "Retain the unchanged large graph, hardlink refusal, same-parent shutdown retry and pointer assertions; emit bounded shutdown duration for CI diagnosis."
     },
     {
       "path": "test/watcher-observation-qualification.test.mjs",
@@ -1234,6 +1246,12 @@
       "before": "064563e6a26da7e90e76591fe907463bc29f3a0c",
       "after": "bb99d4a0794ad37141a096aaaad62b2d74155f7cb33a9176a7ac94525ef11a18",
       "rationale": "Q-GUARD coverage closure: register the native Linux shutdown regression only where the Linux watcher and physical FTS5 capability exist."
+    },
+    {
+      "path": "test/watcher-source-scan.test.mjs",
+      "before": "a4d4b5f55a18e28b2bd209d5278685b39dd8123c",
+      "after": "6b78d365c46b4ec85dfd885f50863052da780242b85ce9dda5d302a162a222a3",
+      "rationale": "Assert bounded concurrent opens across nested directories, exact stable scan evidence and no pending file work after refusal."
     }
   ]
 }

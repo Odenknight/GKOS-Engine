@@ -98,3 +98,44 @@ test("watch hints are advisory and unsafe names force unscoped reconciliation", 
   assert.equal(normalizeWatcherHint(""), null);
   assert.equal(normalizeWatcherHint("bad\ud800.md"), null);
 });
+
+
+test("secure scans bound concurrent opens across nested directories and preserve ordered evidence", { timeout: 10000 }, async (t) => {
+  const root = vault(t);
+  for (let i = 0; i < 12; i++) put(root, `note-${String(i).padStart(2, "0")}.md`, `# Note ${i}\n`);
+  for (let i = 0; i < 8; i++) put(root, `nested/note-${i}.md`, `# Nested ${i}\n`);
+  const expected = await secureWatcherSourceScan(root);
+  let active = 0, peak = 0, completed = 0, arrived = 0;
+  let releaseFirst;
+  const firstBatch = new Promise(resolve => { releaseFirst = resolve; });
+  const actual = await secureWatcherSourceScan(root, {
+    async on_after_file_open(path) {
+      active++; peak = Math.max(peak, active);
+      if (++arrived === 4) releaseFirst();
+      await firstBatch;
+      await new Promise(resolve => setTimeout(resolve, path.endsWith("0.md") ? 8 : 1));
+      active--; completed++;
+    },
+  });
+  assert.equal(completed, 20);
+  assert.equal(active, 0);
+  assert.equal(peak, 4, "the global scan bound is four even across directory descent");
+  assert.deepEqual(actual, expected, "completion order cannot change files, identities or namespace digest");
+});
+
+test("a failed concurrent secure scan drains file work before returning refusal", async (t) => {
+  const root = vault(t);
+  for (let i = 0; i < 8; i++) put(root, `note-${i}.md`, `# Note ${i}\n`);
+  let active = 0, completed = 0;
+  await assert.rejects(secureWatcherSourceScan(root, {
+    async on_after_file_open(path) {
+      active++;
+      try {
+        await new Promise(resolve => setTimeout(resolve, path === "note-0.md" ? 1 : 8));
+        if (path === "note-0.md") throw new Error("fixture read failure");
+      } finally { active--; completed++; }
+    },
+  }), /WATCHER_SOURCE_CAPABILITY_UNSTABLE/u);
+  assert.equal(active, 0, "no pending open hook may race recovery after refusal");
+  assert.equal(completed, 8);
+});

@@ -28,7 +28,10 @@ test('restart and unchanged retry reopen coherent topology/graph larger than 1 M
   const unstable=join(vault,'unstable.md'),alias=join(vault,'unstable-alias.md');
   writeFileSync(unstable,'# unstable\n',{mode:0o600});linkSync(unstable,alias);
   await assert.rejects(()=>host.reconcile('event'),/WATCHER_SOURCE_CAPABILITY_UNSTABLE/);
-  await host.shutdown();await host.closed;host=null;
+  const shutdownStarted = performance.now();
+  try { await host.shutdown(); await host.closed; }
+  finally { t.diagnostic(JSON.stringify({phase:'failed-reconciliation-shutdown',elapsed_ms:performance.now()-shutdownStarted})); }
+  host=null;
   unlinkSync(alias);unlinkSync(unstable);
   host=await startWatcherHost(options);assert.equal(host.status().document_count,count);
   assert.deepEqual(readFileSync(join(watcher,'watcher-active.json')),before);

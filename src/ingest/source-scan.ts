@@ -278,6 +278,10 @@ function excluded(path: string, extra: ReadonlySet<string>): boolean {
 
 /** Single Phase-3 scanner shared by the established CLI and the watcher. */
 export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOptions = {}): Promise<Phase3CorpusScan> {
+  return scanCorpus(dir, options, 1);
+}
+
+async function scanCorpus(dir: string, options: Phase3CorpusScanOptions, fileConcurrency: number): Promise<Phase3CorpusScan> {
   const files: SourceFile[] = [];
   const attachments: string[] = [];
   const folders: string[] = [];
@@ -433,9 +437,9 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
   async function walk(absolute: string, relativePath: string): Promise<void> {
     const entries = await readdir(absolute, { withFileTypes: true });
     entries.sort((left, right) => codeUnitCompare(left.name, right.name));
-    for (const entry of entries) {
+    const inspectEntry = async (entry: (typeof entries)[number]): Promise<void> => {
       const childRel = portablePath(relativePath ? `${relativePath}/${entry.name}` : entry.name);
-      if (excluded(childRel, extra)) continue;
+      if (excluded(childRel, extra)) return;
       const childAbs = join(absolute, entry.name);
       await options.on_before_child_lstat?.({ relative_path: childRel, absolute_path: childAbs });
       let linkState: FileState;
@@ -446,7 +450,7 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
           rejection(childRel, null, ["ENOENT", "ESTALE"].includes(candidate?.code ?? "")
             ? "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN"
             : "SOURCE_READ_FAILED");
-          continue;
+          return;
         }
         throw error;
       }
@@ -462,11 +466,11 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
           ...(linkState.isSymbolicLink() ? ["SOURCE_FILESYSTEM_ALIAS_REJECTED"] : []),
           "SOURCE_SNAPSHOT_CHANGED_DURING_SCAN",
         ]);
-        continue;
+        return;
       }
       if (linkState.isSymbolicLink()) {
         rejection(childRel, linkState, "SOURCE_FILESYSTEM_ALIAS_REJECTED");
-        continue;
+        return;
       }
       if (linkState.isDirectory()) {
         let canonicalDirectory: string;
@@ -475,7 +479,7 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
           if (!canonicalPathContains(actualRoot, canonicalDirectory)) throw new Error("GKX_SCAN_SOURCE_PATH_ESCAPE");
         } catch {
           rejection(childRel, linkState, "SOURCE_FILESYSTEM_ALIAS_REJECTED");
-          continue;
+          return;
         }
         folders.push(childRel);
         namespaceRow(childRel, "folder", linkState);
@@ -484,7 +488,7 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
         if (preciseRow !== null) losslessNamespaceRows.push(preciseRow);
         namespaceRow(childRel, "note", linkState);
         const inspected = await inspectPlainContainedFile(childAbs, childRel, true);
-        if (!inspected) continue;
+        if (!inspected) return;
         const file: SourceFile = {
           relativePath: childRel,
           name: entry.name,
@@ -514,7 +518,28 @@ export async function scanPhase3Corpus(dir: string, options: Phase3CorpusScanOpt
         if (inspected) attachments.push(childRel);
       }
       if (namespaceRows.length > MAX_SOURCES) fail("WATCHER_SOURCE_CAPABILITY_UNSTABLE");
+    };
+    // Preserve every per-file capability check while overlapping independent
+    // filesystem waits. Drain before descending so the bound applies to the
+    // whole scan, including nested directories. Drain failures too: no file
+    // operation may outlive a rejected scan or race the caller's recovery.
+    let pending: Promise<void>[] = [];
+    const drain = async (): Promise<void> => {
+      const results = await Promise.allSettled(pending);
+      pending = [];
+      const rejected = results.find((result) => result.status === "rejected");
+      if (rejected?.status === "rejected") throw rejected.reason;
+    };
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        await drain();
+        await inspectEntry(entry);
+      } else {
+        pending.push(inspectEntry(entry));
+        if (pending.length === fileConcurrency) await drain();
+      }
     }
+    await drain();
   }
 
   await walk(actualRoot, "");
@@ -602,7 +627,7 @@ function watcherIdentity(
 
 export async function secureWatcherSourceScan(vaultRoot: string, options: WatcherSourceScanOptions = {}): Promise<WatcherSourceScan> {
   const exclusions = [...new Set([WATCHER_ARCHIVE_EXCLUSION, ...(options.extra_exclusions ?? [])])];
-  const first = await scanPhase3Corpus(vaultRoot, {
+  const first = await scanCorpus(vaultRoot, {
     ingest: true,
     extra_exclusions: exclusions,
     capture_lossless_namespace_evidence: true,
@@ -610,7 +635,7 @@ export async function secureWatcherSourceScan(vaultRoot: string, options: Watche
       ? undefined
       : async ({ relative_path }) => options.on_after_file_open?.(relative_path),
     on_before_root_recheck: options.on_after_first_snapshot,
-  });
+  }, 4);
   const rejections = first[PHASE3_SCAN_REJECTIONS] ?? [];
   // Only the stable, pre-NoteRecord size rejection is eligible for the
   // deterministic N-1 validation path. Invalid UTF-8, read instability,
@@ -618,9 +643,9 @@ export async function secureWatcherSourceScan(vaultRoot: string, options: Watche
   if (rejections.some((row) => row.reason_codes.some((reason) => reason !== "SOURCE_SIZE_LIMIT_EXCEEDED"))) {
     fail("WATCHER_SOURCE_CAPABILITY_UNSTABLE");
   }
-  const second = await scanPhase3Corpus(vaultRoot, {
+  const second = await scanCorpus(vaultRoot, {
     ingest: true, extra_exclusions: exclusions, capture_lossless_namespace_evidence: true,
-  });
+  }, 4);
   const firstRows = first[PHASE3_NAMESPACE_EVIDENCE] ?? [];
   const secondRows = second[PHASE3_NAMESPACE_EVIDENCE] ?? [];
   const firstLosslessRows = first[PHASE3_LOSSLESS_NAMESPACE_EVIDENCE] ?? [];
