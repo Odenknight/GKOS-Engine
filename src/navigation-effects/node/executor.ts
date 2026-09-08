@@ -33,6 +33,7 @@ export type NodeEffectFaultPoint =
   | "after-temporary-write"
   | "after-replace"
   | "after-verified"
+  | "after-no-change-audit"
   | "after-receipt";
 
 export class SimulatedEffectCrash extends Error {
@@ -435,10 +436,16 @@ export class NodeNavigationEffectsExecutor {
       journalEntryDigest: latest?.entryDigest ?? planDigest,
       authorityDigest: plan.precondition.authorityDigest,
       policyRef: { ...plan.policyRef },
-      occurredAt: this.clock(),
+      occurredAt: status === "no-op" && plan.idempotencyKey.startsWith("moc-no-change:") && latest ? latest.occurredAt : this.clock(),
       reasonCodes,
       sourceContentIncluded: false,
     };
+    // The additional audit must be durable before even an unsealed success
+    // alias exists; failures can then retain the ordinary refusal receipt.
+    if (status === "no-op") {
+      await this.persistNoChangeAudit(plan, receipt);
+      if (plan.idempotencyKey.startsWith("moc-no-change:")) await this.fault("after-no-change-audit", plan.effectId);
+    }
     const existing = await this.readReceipt(plan.effectId);
     if (existing) {
       const withoutOccurredAt = (value: EffectReceipt) => { const copy = { ...value }; delete (copy as Partial<EffectReceipt>).occurredAt; return copy; };
@@ -476,6 +483,57 @@ export class NodeNavigationEffectsExecutor {
 
   private receiptPath(effectId: string): string {
     return resolve(this.stateRoot, "receipts", `${effectFileStem(effectId)}.json`);
+  }
+
+  /** Separate versioned audit artifact; the frozen Effects receipt is unchanged. */
+  private async noChangeAudit(plan: NavigationEffectPlan, receipt: EffectReceipt) {
+    const entries = await this.journal.load();
+    const anchor = entries.find(entry => entry.entryDigest === receipt.journalEntryDigest);
+    if (!anchor || anchor.effectId !== plan.effectId || anchor.planDigest !== receipt.planDigest ||
+        receipt.status !== "no-op" || plan.precondition.priorDigest !== plan.proposedDigest ||
+        !plan.ownership || !/^moc-no-change:[0-9a-f]{64}:[0-9a-f]{64}$/.test(plan.idempotencyKey)) throw new Error("NO_CHANGE_AUDIT_CONTEXT_INVALID");
+    const material = {
+      artifactKind: "engine.managed-moc-no-change-receipt",
+      version: "2.2.0",
+      operationIdentity: plan.effectId,
+      idempotencyKey: plan.idempotencyKey,
+      actor: plan.authority.actor,
+      authority: plan.authority,
+      ownership: plan.ownership,
+      targetPath: plan.targetPath,
+      sourceDigest: plan.sourceSnapshotDigest,
+      corpusDigest: plan.corpusDigest,
+      configurationDigest: plan.configDigest,
+      policyRef: plan.policyRef,
+      evaluatedPlanDigest: receipt.planDigest,
+      disposition: "NO_CHANGE",
+      occurredAt: receipt.occurredAt,
+      sequence: anchor.sequence,
+      journalEntryDigest: anchor.entryDigest,
+      resultingStateDigest: plan.proposedDigest,
+      effectReceiptDigest: await canonicalSha256(receipt),
+      reconciliationDigest: `sha256:${plan.idempotencyKey.split(":")[1]}`,
+      storageProtocol: "exclusive-file-sync-readback-with-terminal-journal-binding",
+      durableStorageResult: "FILE_SYNCED_READBACK_VERIFIED",
+      sourceContentIncluded: false,
+    };
+    return { ...material, receiptDigest: await canonicalSha256(material) };
+  }
+
+  private async persistNoChangeAudit(plan: NavigationEffectPlan, receipt: EffectReceipt): Promise<void> {
+    if (!plan.idempotencyKey.startsWith("moc-no-change:")) return;
+    const audit = await this.noChangeAudit(plan, receipt);
+    const path = await this.safeAbsolute(`.gkx/effects/no-change/${effectFileStem(plan.effectId)}.json`, true);
+    const bytes = canonicalJson(audit) + "\n";
+    await this.writeImmutableReceipt(path, bytes, plan.effectId);
+    if (await readFile(path, "utf8") !== bytes) throw new Error("NO_CHANGE_AUDIT_READBACK_FAILED");
+  }
+
+  private async verifyNoChangeAudit(plan: NavigationEffectPlan, receipt: EffectReceipt): Promise<void> {
+    if (!plan.idempotencyKey.startsWith("moc-no-change:")) return;
+    const expected = canonicalJson(await this.noChangeAudit(plan, receipt)) + "\n";
+    const path = await this.safeAbsolute(`.gkx/effects/no-change/${effectFileStem(plan.effectId)}.json`, true);
+    if (await readFile(path, "utf8") !== expected) throw new Error("NO_CHANGE_AUDIT_CORRUPT");
   }
 
   private receiptVersionPath(receiptDigest: string): string {
@@ -681,6 +739,7 @@ export class NodeNavigationEffectsExecutor {
     if (!structurallyValid || committed.receiptDigest !== await canonicalSha256(receipt)) throw new Error(`RECEIPT_CORRUPT:${plan.effectId}`);
     const currentReceipt = await this.readReceipt(plan.effectId);
     if (!currentReceipt || canonicalJson(currentReceipt) !== canonicalJson(receipt)) throw new Error(`RECEIPT_CORRUPT:${plan.effectId}`);
+    if (expectedStatus === "no-op") await this.verifyNoChangeAudit(plan, receipt);
     if (expectedStatus === "committed") {
       const archive = await this.validateArchiveBinding(plan, true);
       if (!archive.valid || receipt.archiveManifestDigest !== archive.manifestDigest) throw new Error(`ARCHIVE_CORRUPT:${plan.effectId}`);
@@ -761,7 +820,9 @@ export class NodeNavigationEffectsExecutor {
         return { status: "stale", effectId: plan.effectId, receipt, reasonCodes: ["TARGET_PRECONDITION_MISMATCH"] };
       }
       if (beforeDigest === plan.proposedDigest) {
+        await this.ioFaultInjector?.("receipt", plan.effectId);
         const receipt = await this.writeReceipt(plan, planDigest, "no-op", beforeDigest, undefined, ["BYTE_IDENTICAL"]);
+        await this.fault("after-receipt", plan.effectId);
         await this.journal.append(plan.effectId, "COMMITTED", planDigest, { reasonCode: "BYTE_IDENTICAL", receiptDigest: await canonicalSha256(receipt) });
         return { status: "no-op", effectId: plan.effectId, receipt, reasonCodes: ["BYTE_IDENTICAL"] };
       }
@@ -980,6 +1041,18 @@ export class NodeNavigationEffectsExecutor {
         proposedDigest: plan.proposedDigest,
       };
 
+      if (targetDigest === plan.proposedDigest && plan.precondition.priorDigest === plan.proposedDigest &&
+          plan.idempotencyKey.startsWith("moc-no-change:") && temporary === null &&
+          ["RECEIVED", "PLANNED", "PREPARED"].includes(latest.state)) {
+        if (!this.preconditionValidator || (await this.preconditionValidator(plan)).length) {
+          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["NO_CHANGE_AUTHORITY_REVALIDATION_FAILED"], observed });
+          continue;
+        }
+        const receipt = await this.writeReceipt(plan, planDigest, "no-op", plan.proposedDigest, undefined, ["BYTE_IDENTICAL"]);
+        await this.journal.append(effectId, "COMMITTED", planDigest, { reasonCode: "BYTE_IDENTICAL", receiptDigest: await canonicalSha256(receipt) });
+        results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: true, reasonCodes: ["NO_CHANGE_RECOVERED"], observed });
+        continue;
+      }
       if (targetDigest === plan.proposedDigest) {
         if (!archiveValid) {
           await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "ARCHIVE_BEFORE_INVALID" });

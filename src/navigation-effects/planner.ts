@@ -53,6 +53,8 @@ export async function planMocApply(input: {
   authorityEvaluatedAt: string;
   archiveDate: string;
   runId: string;
+  /** Explicit host audit lane: byte-identical plans still require durable execution. */
+  recordNoChange?: boolean;
 }): Promise<MocApplyPlanningResult> {
   const targetValidation = validateVaultRelativePath(input.candidate.targetPath);
   const targetPath = targetValidation.normalized ?? normalizeVaultRelative(input.candidate.targetPath);
@@ -102,7 +104,9 @@ export async function planMocApply(input: {
   }
 
   const proposedDigest = await sha256Bytes(proposedBytes);
-  if (currentDigest === proposedDigest) return deepFreeze({ status: "no-op", targetPath, currentDigest, proposedDigest, reasonCodes: ["BYTE_IDENTICAL"] });
+  const noChange = currentDigest === proposedDigest;
+  if (noChange && input.recordNoChange && !/^[0-9a-f]{64}$/.test(input.runId)) return denied(targetPath, "NO_CHANGE_RECONCILIATION_ID_INVALID");
+  if (noChange && !input.recordNoChange) return deepFreeze({ status: "no-op", targetPath, currentDigest, proposedDigest, reasonCodes: ["BYTE_IDENTICAL"] });
   const archiveRunPath = canonicalMocArchiveRunPath(input.archiveDate, input.runId);
   const authorityDigest = await canonicalSha256(input.authority);
   const precondition = input.currentBytes === null
@@ -119,12 +123,13 @@ export async function planMocApply(input: {
     policyRef: input.policyRef,
     authorityDigest,
     precondition,
+    ...(noChange ? { reconciliationRunId: input.runId } : {}),
   });
   const plan: NavigationEffectPlan = {
     artifactKind: "engine.navigation-effect-plan",
     effectsContract: NAVIGATION_EFFECTS_CONTRACT_VERSION,
     effectId: `effect:${identity.slice(7, 39)}`,
-    idempotencyKey: `moc:${identity.slice(7)}`,
+    idempotencyKey: noChange ? `moc-no-change:${input.runId}:${identity.slice(7)}` : `moc:${identity.slice(7)}`,
     operation: input.currentBytes === null ? "moc:create" : "moc:replace",
     vaultId: input.vaultId,
     targetPath,
@@ -136,7 +141,7 @@ export async function planMocApply(input: {
     authority: { ...input.authority, actor: { ...input.authority.actor }, policyRef: { ...input.authority.policyRef } },
     precondition,
     ownership: { ...input.ownership, generatedRegion: input.ownership.generatedRegion ? { ...input.ownership.generatedRegion } : undefined },
-    archiveRunPath,
+    ...(noChange ? {} : { archiveRunPath }),
   };
   return deepFreeze({
     status: "planned",

@@ -62,7 +62,7 @@ test('native SQLite initial, one-item reuse, and clean rebuild match independent
   const provider = new runner.ConstantEmbeddingProvider();
   const plan = fixture.performanceSamplePlan();
   const state = join(temp, 'incremental'), clean = join(temp, 'clean');
-  await mkdir(state); await mkdir(clean);
+  await mkdir(state, { mode: 0o700 }); await mkdir(clean, { mode: 0o700 });
   const initial = await runner.runIndexPhase(provider, 'initial_index', state, fixture.buildPerformanceCorpus(false), plan.indexing.initial);
   const before = runner.readReuseRows(initial.database_path);
   const updated = await runner.runIndexPhase(provider, 'incremental_update', state, fixture.buildPerformanceCorpus(true), plan.indexing.incremental_update);

@@ -145,7 +145,10 @@ test('periodic and startup reconciliation repair changes with no delivered event
   const journalBeforeNoop = await host.executor.journal.load();
   await host.coordinator.requestReconciliation(301_000);
   await host.coordinator.tick(301_750);
-  assert.deepEqual(await host.executor.journal.load(), journalBeforeNoop);
+  const journalAfterNoop = await host.executor.journal.load();
+  assert.deepEqual(journalAfterNoop.slice(0, journalBeforeNoop.length), journalBeforeNoop);
+  assert.deepEqual(journalAfterNoop.slice(journalBeforeNoop.length).map(row => row.state), ['RECEIVED', 'PLANNED', 'PREPARED', 'COMMITTED']);
+  assert.equal(journalAfterNoop.at(-1).reasonCode, 'BYTE_IDENTICAL');
   await host.shutdown();
 
   context.snapshot.sources[0].title = 'Changed while offline';

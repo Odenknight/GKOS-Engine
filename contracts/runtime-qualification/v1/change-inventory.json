@@ -390,6 +390,12 @@
       "rationale": "Runtime modernization and stability: qualify Node 22/24/26 and execute dedicated watcher observations through one bounded exact-latency retry wrapper."
     },
     {
+      "path": ".github/workflows/managed-moc-audit-2.2.yml",
+      "before": null,
+      "after": "7421258d9380ae8def43300e6f706339318fcf3b543b060759bf73a827663c76",
+      "rationale": "Run native no-change process-exit, failure and receipt tests on mandatory Linux/Windows Node22/24 with bounded environment/test evidence."
+    },
+    {
       "path": ".github/workflows/observation-2.2.yml",
       "before": null,
       "after": "26e2e20eea2b2eb1b7914a6f98433e83383930ecfe5278df73e394b8833792f7",
@@ -616,6 +622,12 @@
       "before": null,
       "after": "a34c724c3db22d9eafd13739b38dad0f7fdbb2ce3d6624ace11596a87a6b7dc9",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
+      "before": null,
+      "after": "42b2ec2c53ad2866c3a78e524dfdeac54b5e01b1e633d8f21b16c909ee43ac2f",
+      "rationale": "Specify separate no-change audit artifact and truthful file-sync/recovery guarantees and remaining durability gates."
     },
     {
       "path": "docs/NAVIGATION-EFFECTS-CONTRACT.md",
@@ -866,14 +878,14 @@
     {
       "path": "src/navigation-effects/moc-batch.ts",
       "before": null,
-      "after": "f767587c352d6a9798544d936b931b3236f22290238dad881a63313dc89a6966",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "2ebfc2cc63dcbbee46f8df871defbbd99a4154246c732560c41d7b600256ac45",
+      "rationale": "Forward explicit no-change audit planning option for the managed Node host."
     },
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "81525d1b5df21cf7f4c9f6b15cf0963b04188650c4a2ffd91110c430787ca631",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "ece4d38d2c93f58f2a72029253e26cd8fa33cbfb3ba77e82e363589d33fee0be",
+      "rationale": "Persist separate versioned NO_CHANGE audits before terminal completion; verify on replay, revalidate interrupted no-ops, retain exact failure/refusal semantics."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
@@ -890,8 +902,8 @@
     {
       "path": "src/navigation-effects/node/moc-host.ts",
       "before": null,
-      "after": "0de96e4580009ea6e4f771d73205ffb4a7f8b7fe8512ed4cdc5087f2e52e12c3",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "d582ca399ab54cd4c36af6a99495c6c1f1d51805a8028aa5e5ecccebf98cb949",
+      "rationale": "Execute byte-identical managed plans through durable executor; bind reconciliation identity and suppress false source-change callbacks."
     },
     {
       "path": "src/navigation-effects/node/moc-runtime.ts",
@@ -908,8 +920,8 @@
     {
       "path": "src/navigation-effects/planner.ts",
       "before": null,
-      "after": "dbe8ab1b5b72901a1da1a9458af9a7e9dd1f885abd6d9239148002f52d291a4d",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "9ff0726eb113627d22d4bac05d4dd82a8cf54de5285fe4572f2107142773bf46",
+      "rationale": "Add explicit opt-in durable no-change plan with reconciliation identity while preserving default pure no-op behavior."
     },
     {
       "path": "src/navigation-effects/types.ts",
@@ -1020,6 +1032,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "test/managed-moc-no-change.test.mjs",
+      "before": null,
+      "after": "7b1c4db7185c3096da7df6c299fdc1356e2f1958f8716d9036cdf19fe029a1e4",
+      "rationale": "Native no-change receipts, idempotency, five process-exit recovery phases, corrupt-audit refusal and actual destination write failure."
+    },
+    {
       "path": "test/navigation-architecture.test.mjs",
       "before": "b9636738cb6c719e02145386ee5746583a24f878",
       "after": "2b2f0ddbdb21b237cd28363034f318fa9aa73c426629a182c58f8bd6d106a065",
@@ -1040,8 +1058,8 @@
     {
       "path": "test/navigation-effects-host.test.mjs",
       "before": null,
-      "after": "4b8b4fe94280901a598cd5e36088a1b2c304dd428247263d28a759b684147990",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "6f0d3ec51c6bfe414f727f12e5a17339db92f6451177591f98e533a3281273fb",
+      "rationale": "Assert original journal prefix and exact new no-change terminal sequence rather than expecting absent audits."
     },
     {
       "path": "test/navigation-effects-node.test.mjs",
@@ -1094,7 +1112,7 @@
     {
       "path": "test/retrieval-observation-2.2.test.mjs",
       "before": null,
-      "after": "73d368b0d4791bab1eff8bfe0be839ff9b66c3c00b313e685bfcab01d5b49c47",
+      "after": "621d034de1b2980df66e996fee5365967977cb5c87f49fc228969f077c833e6b",
       "rationale": "Test fixed pins, fail-closed oracle substitution, workflow separation, and actual native 10k SQLite convergence/reuse."
     },
     {

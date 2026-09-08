@@ -132,7 +132,7 @@ export class NodeManagedMocHost {
         if (!parsed.ok) throw new Error("HOST_RECOVERY_MARKERS_INVALID");
         binding.generatedRegion = parsed.region;
       }
-      await this.options.onCommitted?.(pending.path, pending.proposedDigest, pending.effectId);
+      if (terminal.reasonCode !== "BYTE_IDENTICAL") await this.options.onCommitted?.(pending.path, pending.proposedDigest, pending.effectId);
       await this.mutate(s => { s.ownership[pending.path] = binding; s.pending = null; });
     } else if (!terminal || terminal.state === "ABORTED" || terminal.state === "STALE") {
       await this.mutate(s => { s.pending = null; });
@@ -151,7 +151,8 @@ export class NodeManagedMocHost {
     }
     const targets = await Promise.all(context.targets.map(async t => ({ ...t, ownership: t.ownership.ownership === "unmanaged" ? t.ownership : (this.state!.ownership[t.path] ?? t.ownership), currentBytes: await this.executor.readSource(t.path) })));
     const now = this.clock();
-    const batch = await planManagedMocBatch({ ...context, targets, authorityEvaluatedAt: now, archiveDate: now.slice(0, 10), runId: randomUUID() });
+    const reconciliationDigest = await canonicalSha256({ intent, hostRevision: this.state!.revision });
+    const batch = await planManagedMocBatch({ ...context, targets, authorityEvaluatedAt: now, archiveDate: now.slice(0, 10), runId: reconciliationDigest.slice(7), recordNoChange: true });
     // A denied target blocks the batch before any new effect, preserving review state.
     if (batch.results.some(r => r.status !== "planned" && r.status !== "no-op")) throw new Error("MOC_BATCH_REQUIRES_REVIEW");
     for (const result of batch.results) {
