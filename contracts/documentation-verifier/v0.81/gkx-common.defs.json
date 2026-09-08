@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/gkx-common.defs.json",
+  "title": "GKX 2.0 shared definitions",
+  "$defs": {
+    "authoredNoteUid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[47][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "targetIdentifier": {
+      "type": "string",
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+        },
+        {
+          "pattern": "^[a-z][a-z0-9_.-]*:[a-z0-9][a-z0-9_.:/-]{2,}$"
+        }
+      ]
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+:[A-Za-z0-9._:-]+$"
+    },
+    "sha256Digest": {
+      "type": "object",
+      "required": ["algorithm", "canonical_profile", "value"],
+      "properties": {
+        "algorithm": { "const": "sha-256" },
+        "canonical_profile": { "const": "GKX-CBOR-1" },
+        "value": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "additionalProperties": false
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "canonicalTimestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{6}Z$"
+    },
+    "epistemicState": {
+      "type": "string",
+      "enum": [
+        "unknown",
+        "observation",
+        "reported",
+        "inferred",
+        "hypothesis",
+        "modeled",
+        "supported",
+        "contested",
+        "refuted",
+        "retracted",
+        "accepted",
+        "superseded"
+      ]
+    },
+    "sensitivity": {
+      "type": "string",
+      "enum": [
+        "public",
+        "internal",
+        "restricted",
+        "confidential",
+        "regulated",
+        "phi",
+        "secret"
+      ]
+    },
+    "origin": {
+      "type": "string",
+      "enum": ["authored", "derived", "proposed", "approved"]
+    },
+    "relationshipTarget": {
+      "type": "string",
+      "anyOf": [
+        { "$ref": "#/$defs/targetIdentifier" },
+        { "pattern": "^\\[\\[[^\\[\\]]+\\]\\]$" }
+      ]
+    },
+    "diagnostic": {
+      "type": "object",
+      "required": ["code", "severity", "message", "deterministic"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^GKX-[A-Z]+-\\d{3}$" },
+        "gate_code": {
+          "type": "string",
+          "pattern": "^GKOS-GATE-L[1-7]-\\d{3}$"
+        },
+        "requirement_id": {
+          "type": "string",
+          "pattern": "^GKOS-[A-Z]+-\\d{3}$"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["info", "warning", "error", "critical"]
+        },
+        "message": { "type": "string" },
+        "deterministic": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "actorIdentity": {
+      "type": "string",
+      "pattern": "^(human|plugin:[a-z0-9_-]+|agent:[A-Za-z0-9_.:-]+|tool:[a-z0-9_-]+)$"
+    },
+    "actorReference": {
+      "type": "object",
+      "required": ["actor_id", "actor_class"],
+      "properties": {
+        "actor_id": { "type": "string", "minLength": 1 },
+        "actor_class": {
+          "type": "string",
+          "enum": ["human", "agent", "service", "tool", "organization"]
+        },
+        "identity_provider": { "type": "string" },
+        "credential_ref": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "artifactReference": {
+      "type": "object",
+      "required": ["artifact_id", "artifact_version", "digest"],
+      "properties": {
+        "artifact_id": { "type": "string", "minLength": 1 },
+        "artifact_version": { "type": "string", "minLength": 1 },
+        "digest": { "$ref": "#/$defs/sha256Digest" }
+      },
+      "additionalProperties": false
+    },
+    "componentReference": {
+      "type": "object",
+      "required": ["component_id", "component_version", "digest"],
+      "properties": {
+        "component_id": { "type": "string", "minLength": 1 },
+        "component_version": { "type": "string", "minLength": 1 },
+        "digest": { "$ref": "#/$defs/sha256Digest" }
+      },
+      "additionalProperties": false
+    },
+    "effectScope": {
+      "type": "object",
+      "description": "Typed effect scope. Arrays marked x-gkx-set-order are logical sets sorted by canonical CBOR member bytes before encoding.",
+      "required": ["effect_class", "resources", "environment", "reversibility"],
+      "properties": {
+        "effect_class": { "type": "string", "minLength": 1 },
+        "resources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "x-gkx-set-order": "canonical-cbor-bytewise"
+        },
+        "environment": { "type": "string", "minLength": 1 },
+        "audience": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "x-gkx-set-order": "canonical-cbor-bytewise"
+        },
+        "sensitivity_ceiling": { "$ref": "#/$defs/sensitivity" },
+        "valid_from": { "$ref": "#/$defs/canonicalTimestamp" },
+        "valid_until": { "$ref": "#/$defs/canonicalTimestamp" },
+        "layer_reach": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 7
+        },
+        "reversibility": {
+          "type": "string",
+          "enum": ["reversible", "compensable", "irreversible"]
+        },
+        "maximum_affected_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
