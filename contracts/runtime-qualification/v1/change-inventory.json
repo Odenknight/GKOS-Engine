@@ -398,7 +398,7 @@
     {
       "path": ".github/workflows/npm-release-2.2.yml",
       "before": null,
-      "after": "8005378fc1e466eda9f5b61c048179d455c934073be964be5c9960c1d33c0ccc",
+      "after": "89289faba34af4b3ae2f0c8b9a644f55f8fad15205ef733c3559ba158c5c319e",
       "rationale": "Add immutable exact-tag OIDC-only release workflow that refuses absent approval/evidence and mismatched source or tarball; no release triggered."
     },
     {
@@ -620,8 +620,8 @@
     {
       "path": "docs/CURRENT_CAPABILITIES.md",
       "before": "154d01ab1328d6f7a8cc10974cde6d8651402357",
-      "after": "283ce2d15fc7cd02d5e07d7664a40aaab93156d8803dd04b196d703aac62d0fd",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "78c3494cd54aa880949782cd6a76e932ce4db5b291a8e627ace67caa42799a90",
+      "rationale": "Describe implemented separate durable no-op audit while preserving unqualified scale/soak and filesystem limitations."
     },
     {
       "path": "docs/DETERMINISTIC-MOC-ASSISTANCE.md",
@@ -656,8 +656,8 @@
     {
       "path": "docs/RELEASE-STATUS.md",
       "before": null,
-      "after": "c4be9892ebed0bb9db87c46f91f37a7bbff1767068af66e4122deafedba3c652",
-      "rationale": "Document current source capabilities, release status and exact merged verification evidence; no runtime or release activation."
+      "after": "d825e703221185c741951bd9b0f20b0d40e35f67a9eafdcf3eb0199994efda2a",
+      "rationale": "Record exact candidate focused evidence without claiming publication or completion of remaining mandatory gates."
     },
     {
       "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",
@@ -800,7 +800,7 @@
     {
       "path": "scripts/release-220-preflight.mjs",
       "before": null,
-      "after": "d11911dc9445686974dd73df407edb53a08d0286cbb59c3a1f0253d0745d60a2",
+      "after": "581f6adb15db65971d66eec236dbc537e22595c2ab357559252209a0585f4747",
       "rationale": "Fail closed on any missing mandatory exact-commit gate, incomplete soak, missing evidence binding, wrong tag or inspected tarball digest/inventory."
     },
     {
@@ -1112,7 +1112,7 @@
     {
       "path": "test/release-220-preflight.test.mjs",
       "before": null,
-      "after": "b71c27236f755d6ccfeb087839e3336b77c3763efe92c42fc69d93ad1a767e0e",
+      "after": "bc2214c5c44b159128bdb9db1b5d225e622c1b11ae16129babb5ac5dfea88a17",
       "rationale": "Negative and positive preflight tests for mandatory gates, source identity, soak length, archive digests and package inventory."
     },
     {

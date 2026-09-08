@@ -37,7 +37,7 @@ The executor uses a vault lease, scoped locks, durable intent, before-image arch
 
 Startup recovery and full reconciliation precede readiness. Overflow and missed events require reconciliation, not faith in watchers. Graph publication can be retried with the same effect ID; consumers must be idempotent. A stopped timer is not a durable clean-shutdown receipt.
 
-The packaged desktop service does not wire this host to a source-write route. Kosmos must complete its own adapter/UI/credential integration. No dedicated durable no-op audit receipt is currently emitted by byte-identical host passes. End-to-end parsing/P95, 24-hour soak, physical power-loss and hostile filesystem-ancestor race protection remain unqualified.
+The packaged desktop service does not wire this host to a source-write route. Kosmos must complete its own adapter/UI/credential integration. A dedicated durable no-op audit receipt is emitted by byte-identical host passes; its separate versioned artifact, file-sync/readback protocol and recovery limits are documented in [the no-change audit guide](MANAGED-MOC-NO-CHANGE-AUDIT.md). End-to-end parsing/P95, 24-hour soak, physical power-loss and hostile filesystem-ancestor race protection remain unqualified.
 
 ## Exact MCP tool inventory
 
@@ -88,7 +88,7 @@ Current package lanes: Node 22 and 24 blocking, Node 26 informative; npm >=10. H
 ## Not yet delivered or not authorized by default
 
 - Production Kosmos write integration, per-agent credential/root lifecycle and create/update/append/archive MCP tools.
-- Dedicated durable no-op host audit receipts; fully qualified scale/soak and native durability guarantees.
+- Fully qualified scale/soak and comprehensive native durability guarantees beyond the bounded no-op audit recovery checks.
 - Enabled proposal ingress, agent approval/decision routes, automatic adoption, deletion or cross-root authority.
 - LAN/internet service binding, token-in-URL mode, automatic sensitivity lowering or confidence-selected lineage winners.
 - Automatic updater/signing/notarization, a published 2.2 artifact, Rust parity or new GKOS conformance.

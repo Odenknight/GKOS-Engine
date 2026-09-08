@@ -15,6 +15,15 @@ export const REQUIRED_GATES = Object.freeze([
 ]);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const hex = value => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
+export function parsePackReport(text) {
+  const value = JSON.parse(text);
+  // npm 12 keys pack reports by package name; older CLIs returned an array.
+  const reports = Array.isArray(value) ? value : Object.keys(value).length === 1 && Object.hasOwn(value, 'gkos-engine') ? [value['gkos-engine']] : [];
+  assert.equal(reports.length, 1);
+  assert.equal(reports[0]?.name, 'gkos-engine');
+  assert.equal(reports[0]?.version, '2.2.0');
+  return reports[0];
+}
 export function validateApproval(record, actualCommit) {
   assert.equal(record?.schema, 'gkos-engine-release-approval/2.2.0');
   assert.equal(record.package, 'gkos-engine');
@@ -74,9 +83,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     git('merge-base','--is-ancestor',head,'origin/main');
     if (process.argv[2] === '--artifact') {
       assert.equal(sha256(readFileSync(resolve(process.env.RUNNER_TEMP, 'release-evidence', 'qualified-evidence.zip'))), record.evidenceBundleSha256);
-      const reports = JSON.parse(readFileSync(process.argv[4], 'utf8'));
-      assert.equal(reports.length, 1);
-      console.log(JSON.stringify(verifyArtifact(record, readFileSync(process.argv[3]), reports[0])));
+      const report = parsePackReport(readFileSync(process.argv[4], 'utf8'));
+      console.log(JSON.stringify(verifyArtifact(record, readFileSync(process.argv[3]), report)));
     } else {
       assert.equal(process.argv.length, 2);
       console.log(JSON.stringify({ status:'PASS', sourceCommit:head, approvalSha256:sha256(process.env.GKOS_220_APPROVAL_JSON) }));

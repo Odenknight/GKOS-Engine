@@ -13,7 +13,7 @@ jobs:
   publish:
     if: github.repository == 'Odenknight/GKOS-Engine'
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 120
     environment: gkos-engine-release
     env:
       GKOS_220_APPROVAL_JSON: ${{ vars.GKOS_220_APPROVAL_JSON }}
@@ -96,7 +96,8 @@ jobs:
         run: |
           set -euo pipefail
           npm view gkos-engine versions --json --registry=https://registry.npmjs.org > "$RUNNER_TEMP/release-evidence/versions-immediate.json"
-          node -e 'const fs=require("node:fs"); if(JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/release-evidence/versions-immediate.json")).includes("2.2.0"))process.exit(1)'
+          npm view gkos-engine dist-tags --json --registry=https://registry.npmjs.org > "$RUNNER_TEMP/release-evidence/dist-tags-immediate.json"
+          node -e 'const fs=require("node:fs"),assert=require("node:assert/strict"),root=process.env.RUNNER_TEMP+"/release-evidence/"; assert.ok(!JSON.parse(fs.readFileSync(root+"versions-immediate.json")).includes("2.2.0")); assert.equal(JSON.parse(fs.readFileSync(root+"dist-tags-immediate.json")).latest,"2.0.1")'
           node scripts/release-220-preflight.mjs --artifact "$RUNNER_TEMP/release-evidence/gkos-engine-2.2.0.tgz" "$RUNNER_TEMP/release-evidence/pack.json"
           npm publish "$RUNNER_TEMP/release-evidence/gkos-engine-2.2.0.tgz" --ignore-scripts --registry=https://registry.npmjs.org --tag=latest --access=public
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

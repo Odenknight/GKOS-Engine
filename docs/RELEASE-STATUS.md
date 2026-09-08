@@ -1,6 +1,6 @@
 # Source and release status
 
-Checked September 6, 2026. This page separates implemented code from published
+Checked September 8, 2026. This page separates implemented code from published
 artifacts and enabled product features. For the functional inventory, see
 [current capabilities](CURRENT_CAPABILITIES.md); for remaining work, see the
 [roadmap](../ROADMAP.md).
@@ -22,9 +22,13 @@ and [historical/current runtime qualification](https://github.com/Odenknight/GKO
 These results belong to that exact revision. They do not certify later commits,
 a downstream Obsidian installation, physical power-loss safety, or a 24-hour soak.
 
-Remaining qualification includes dedicated durable no-op audit receipts,
-end-to-end latency and incremental parsing measurements, long-running soak,
-native durability evidence, and exact-artifact consumer integration. Track
+The release branch adds separately versioned 2.2 retrieval observation and
+durable no-op audit receipts. Native Linux/Windows focused audit checks and
+packed consumer smoke checks have passed on candidate
+`458a23f3771ae7b303cf03956727d0b0a7eed98a`; these do not qualify later commits.
+Remaining qualification includes end-to-end latency and incremental parsing
+measurements, the full 24-hour soak, comprehensive native durability evidence,
+and exact Kosmos consumer integration. Track
 [Engine #44](https://github.com/Odenknight/GKOS-Engine/issues/44).
 
 ## Choosing and publishing a version
