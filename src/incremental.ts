@@ -455,7 +455,13 @@ export class GkxIndex {
     const candidates = [...this.candidateRecords.entries()]
       .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
       .map(([, record]) => record);
-    const graph = assembleGraphWithCanonicalCandidates([...this.records.values()], candidates, this.folders);
+    // Replacing a canonical record changes Map insertion order. Assembly
+    // derives link order and some link IDs from traversal order, so bind it
+    // to source paths rather than the history of incremental edits.
+    const records = [...this.records.entries()]
+      .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+      .map(([, record]) => record);
+    const graph = assembleGraphWithCanonicalCandidates(records, candidates, this.folders);
     graph.diagnostics.attachments = this.attachments.length;
     return graph;
   }

@@ -64,3 +64,25 @@ test("two consecutive full builds of the same fixture are byte-identical", () =>
   const gb = b.setFiles(fixture(), []).graph;
   assert.equal(JSON.stringify(stripVolatile(ga)), JSON.stringify(stripVolatile(gb)));
 });
+
+
+test("incremental edits preserve canonical link order and identities and converge with clean rebuild", () => {
+  const files = [N("z.md", "# Z\n[[a]]"), N("a.md", "# A\n[[z]]"), N("ä.md", "# Umlaut\n[[a]]")];
+  const index = new GkxIndex();
+  index.setFiles(files, []);
+  for (const path of ["a.md", "z.md", "ä.md", "a.md"]) {
+    const position = files.findIndex(file => file.relativePath === path);
+    files[position] = { ...files[position], content: files[position].content + "\nChanged body." };
+    const before = index.parseCount;
+    index.applyChanges({ changed: [files[position]] });
+    assert.equal(index.parseCount - before, 1);
+    const rebuilt = new GkxIndex();
+    rebuilt.setFiles([...files].reverse(), []);
+    assert.deepEqual(index.graph.nodes, rebuilt.graph.nodes);
+    assert.deepEqual(index.graph.links, rebuilt.graph.links, "compare complete ordered links, including generated IDs");
+    const unchanged = index.parseCount;
+    index.applyChanges({ changed: files });
+    assert.equal(index.parseCount, unchanged);
+    assert.deepEqual(index.graph.links, rebuilt.graph.links);
+  }
+});

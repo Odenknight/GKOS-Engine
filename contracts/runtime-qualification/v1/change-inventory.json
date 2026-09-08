@@ -630,6 +630,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
+      "before": null,
+      "after": "38e7a280d18b34b7b005892b755126fcfbd4baf083eabb260b46fac51f66cd92",
+      "rationale": "Record the soak-pilot ordering defect, independently reproduced link-ID drift, canonical assembly repair and pending new-candidate qualification; preserve failed evidence."
+    },
+    {
       "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
       "before": null,
       "after": "42b2ec2c53ad2866c3a78e524dfdeac54b5e01b1e633d8f21b16c909ee43ac2f",
@@ -860,8 +866,8 @@
     {
       "path": "src/incremental.ts",
       "before": "b8e7c28ee99596e461123aca4597237277be758e",
-      "after": "b2b08ec67eddcf025e7b9a54484851902afdfe573451f764e411198fb456c71f",
-      "rationale": "Group canonical candidates once after rename/removal processing to eliminate repeated full-set scans for unchanged source submissions; preserve all identity, duplicate, reuse and validation checks."
+      "after": "5765ac4fac40b2d32e3cbf81f97bddfd5aa041ccca265b7d8e58d903b0c115b4",
+      "rationale": "Group candidates once to avoid quadratic unchanged scans; sort representative source paths before assembly so incremental history cannot alter link order or generated IDs; preserve all candidate, reuse and validation checks."
     },
     {
       "path": "src/index.ts",
@@ -1054,6 +1060,12 @@
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
       "after": "8ccdfb38565d16b38bb20f2d625cb1ce263d631ff46519a7473f3fd4e18d81f2",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/determinism.test.mjs",
+      "before": "d29098024595fc7d53fccb17c69e912c0d1a7457",
+      "after": "9f1bc0062d8846ba32bb73683cc45db8bdad6ca691eae90bf15fe3c950e1a8e7",
+      "rationale": "Regress edited and permuted source traversal: exact full ordered node/link equality and link identities must converge with a clean rebuild while parsing only changed content."
     },
     {
       "path": "test/documentation-capabilities.test.mjs",
