@@ -1,0 +1,786 @@
+{
+  "record_type": "gkos-phase6-f1-full-independent-review",
+  "record_version": "2.0.0",
+  "artifact_name": "PHASE6_F1_FULL_INDEPENDENT_REVIEW_V2_2026-08-26.json",
+  "reviewed_at_utc": "2026-08-26T04:59:25.269Z",
+  "verdict": "REJECT",
+  "gate_state": "F1_NO_GO",
+  "f1_accepted": false,
+  "highest_severity": "HIGH",
+  "terminal_statement": "The corrected F1 result is not accepted. Product bytes, deterministic pack bytes, the immutable boundary, test gates, outer artifacts, receipt digests, and terminal reconstruction pass, but the qualification receipt contract still does not bind the explicitly required command duration/status/exit failure domain and the hosted contract-pack artifact violates the ratified exact three-file inner inventory. D0-15 requires corrected evidence and an entirely new terminal-green run/artifact set.",
+  "reviewer": {
+    "role": "fresh independent Sol reviewer",
+    "reviewer_name": "Beauvoir",
+    "task_coordinate": "/root/phase6_f1_reviewer_beauvoir_v2",
+    "independence_attestation": "Independent read-only product review after immutable V2 handoff; zero contribution to implementation, remediation, proposals, expected outcomes, handoff, or product bytes.",
+    "no_contribution": {
+      "product_bytes_edited": false,
+      "implementation": false,
+      "remediation": false,
+      "proposals": false,
+      "expected_outcomes": false,
+      "handoff": false,
+      "repair": false,
+      "push": false,
+      "pull_request": false,
+      "merge": false,
+      "release": false,
+      "f2": false
+    }
+  },
+  "exact_inputs": {
+    "product_repository": "[LOCAL_PATH]",
+    "review_repository": "[LOCAL_PATH]",
+    "branch": "codex/phase6-f1-contract-pack",
+    "entry_sha": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+    "rejected_predecessor_sha": "25acd484c6f804c8e4a6cfdef21849aa397cb47a",
+    "corrected_candidate_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "implementer_handoff_v2": {
+      "path": "future-build-phase6/reviews/implementer/PHASE6_F1_FULL_IMPLEMENTER_HANDOFF_V2_2026-08-25.json",
+      "bytes": 13282,
+      "sha256": "8857eadc908e3b278c5d2a480e6c6262fd0adbc181c65bf63d1c428e16a20c3f"
+    },
+    "predecessor_independent_review": {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_FULL_INDEPENDENT_REVIEW_2026-08-25.json",
+      "bytes": 17823,
+      "sha256": "c6575487648d263c916022bcf99ecb3d2e7e973ec87163bf23e5cc943cdab895",
+      "verdict": "REJECT",
+      "blocking_finding": "F1-EVIDENCE-RECEIPT-CONTRACT-UNDERBINDS-HOSTED-EVIDENCE"
+    },
+    "owner_ratification": {
+      "path": "future-build-phase6/reviews/final/PHASE6_D0_OWNER_RATIFICATION_2026-08-25.json",
+      "bytes": 2842,
+      "sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929"
+    },
+    "d0_independent_acceptance": {
+      "path": "future-build-phase6/reviews/final/PHASE6_D0_CROSS_REGISTER_ACCEPTANCE_V7_2026-08-25.md",
+      "bytes": 13939,
+      "sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb"
+    },
+    "governance_matrix": {
+      "path": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+      "bytes": 31178,
+      "sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f"
+    }
+  },
+  "immutable_boundary": {
+    "product_clean_before": true,
+    "product_clean_after": true,
+    "branch_tracking": "codex/phase6-f1-contract-pack...origin/codex/phase6-f1-contract-pack",
+    "local_head_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "local_origin_tracking_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "fresh_remote_ls_remote_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "entry_is_ancestor": true,
+    "rejected_predecessor_is_ancestor": true,
+    "commit_chain": [
+      "7d1e34f08a2e6905e8fef4dbe351239d42a59fad",
+      "006882c7f3d9ba495f2167a4671810c7f281151d",
+      "1651b81a353a207dd2990eb6ee6cee7992a23319",
+      "376431388caa7c97e178078d6a39840fd825ce44",
+      "25acd484c6f804c8e4a6cfdef21849aa397cb47a",
+      "92ad258bd3f12f8d4d763bdd328e93995aba748a",
+      "3228ca445a3b341cf6abbd2bbc9b6cda4112df53",
+      "09fb9111d393395f8d50594d6fea802faa34fde7"
+    ],
+    "signature_verification": {
+      "valid": 8,
+      "invalid": 0,
+      "scheme": "SSH ED25519",
+      "principal": "oden@odenknight.com",
+      "fingerprint": "SHA256:dwwxvq69ZWPDlS6bzlvZ0uXo76ZKTRqvMSmDGhABhfM"
+    },
+    "dco_verification": {
+      "valid": 8,
+      "invalid": 0,
+      "identity": "OdenKnight <Odenknight@users.noreply.github.com>"
+    },
+    "entry_to_candidate_diff": {
+      "diff_check": "PASS",
+      "changed_paths": 40,
+      "status": "40 A / 0 M / 0 D",
+      "allowed_paths": 40,
+      "allowed_paths_sha256": "7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce",
+      "missing_allowed_paths": 0,
+      "extra_paths": 0,
+      "protected_paths": 22,
+      "protected_paths_sha256": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948",
+      "protected_diff": 0,
+      "runtime_watcher_lite_root_readme_protected_changes": 0
+    },
+    "predecessor_to_candidate_remediation": {
+      "changed_paths": 5,
+      "all_and_only_authorized": true,
+      "paths": [
+        [
+          ".github/workflows/phase6-identity-contract.yml",
+          "927c9b832dee98383f020e4607a02b77783aa6c85e1004c10c7677243600361b"
+        ],
+        [
+          "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
+          "57086d298bff6b48a01cb32db5914e16df0482a5013505b0aded6c538b9a32ea"
+        ],
+        [
+          "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/qualification-receipt.schema.json",
+          "3c459b901854758ac187de5141672e854580151ec5feada437f29a0540995d59"
+        ],
+        [
+          "scripts/generate-agent-identity-mcp-contract.mjs",
+          "7229c774ed1fc96188538f7d6e6a6114b25a00d4f16a81cb5696d1980ca5f8ab"
+        ],
+        [
+          "test/agent-identity-mcp-contract.test.mjs",
+          "6afd8b9c4761202f06d12392b933a0a59824888811cc7f7ad314c0da000f8bff"
+        ]
+      ]
+    }
+  },
+  "ratified_source_reproduction": {
+    "hashes_recomputed": 14,
+    "mismatches": 0,
+    "generation_input_digest_recomputed": "sha256:ec3ece84c71114b0d97cfa23376d37d35fde2f4e6105815d5c5e967ff886cc18",
+    "generation_input_digest_manifest_match": true,
+    "inputs": [
+      [
+        "core_spec",
+        117722,
+        "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c"
+      ],
+      [
+        "core_operation_inventory",
+        45471,
+        "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87"
+      ],
+      [
+        "core_decision",
+        28582,
+        "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5"
+      ],
+      [
+        "error_registry",
+        17606,
+        "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5"
+      ],
+      [
+        "core_validation",
+        21204,
+        "4f31f73833344b0d771775beb869f32da3404c6ef49b1c53f365e2407cd3b6b8"
+      ],
+      [
+        "allowed_paths",
+        3312,
+        "7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce"
+      ],
+      [
+        "protected_paths",
+        515,
+        "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948"
+      ],
+      [
+        "interface_spec",
+        43542,
+        "476e839fb81f2f936785a38278846d33c7a680a84069607b1188c5ca2609e427"
+      ],
+      [
+        "tool_registry_schema",
+        49408,
+        "5c043dc5570c4c52ad13425925711e672ec198d5910ab5c9e8c1438cb5ed8004"
+      ],
+      [
+        "tool_catalog",
+        12920,
+        "c0ed2b963dcaef8a8bd08a427687d493bb7e85f1e26076a88a04f68b2117de7e"
+      ],
+      [
+        "mcp_vectors",
+        51108,
+        "23f48e01f890b746012d3713b8ece8331b113927ca15ab72e9955cf03830387c"
+      ],
+      [
+        "interface_validation",
+        11655,
+        "7f2171bc98112a529f05b9324be20475484ec55e4ac392829109e6f94121daef"
+      ],
+      [
+        "interface_provenance",
+        17892,
+        "7284527598409b43218f99f87e8365b3382b3fae1606f9975ae9acba90108321"
+      ],
+      [
+        "governance",
+        31178,
+        "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f"
+      ]
+    ]
+  },
+  "environment": {
+    "isolation": "fresh detached LF checkout at exact candidate; product repository remained read-only",
+    "os": "win32",
+    "architecture": "x64",
+    "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+    "logical_processors": 16,
+    "node": "v24.18.0",
+    "npm_qualification": "10.9.4",
+    "host_npm": "11.16.0",
+    "typescript": "5.9.3",
+    "ajv": "8.20.0",
+    "ajv_formats": "3.0.1",
+    "sqlite": "3.53.1",
+    "installed_packages": 13,
+    "vulnerabilities": 0
+  },
+  "independent_commands": [
+    {
+      "command": "npx --yes npm@10.9.4 ci --ignore-scripts",
+      "exit": 0,
+      "result": "PASS",
+      "packages": 13,
+      "vulnerabilities": 0
+    },
+    {
+      "command": "npx --yes npm@10.9.4 run typecheck",
+      "exit": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "npx --yes npm@10.9.4 run build",
+      "exit": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "node scripts/generate-agent-identity-mcp-contract.mjs --check",
+      "exit": 0,
+      "result": "PASS",
+      "leaves": 34,
+      "manifest_hashed_leaves": 33
+    },
+    {
+      "command": "node --test test/agent-identity-mcp-contract.test.mjs",
+      "exit": 0,
+      "result": "PASS",
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "duration_ms": 2358.9695
+    },
+    {
+      "command": "npx --yes npm@10.9.4 run test:navigation",
+      "exit": 0,
+      "result": "PASS",
+      "tests": 128,
+      "pass": 127,
+      "fail": 0,
+      "skip": 1,
+      "duration_ms": 4388.0957
+    },
+    {
+      "command": "npx --yes npm@10.9.4 run test:intelligence",
+      "exit": 0,
+      "result": "PASS",
+      "tests": 4,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "command": "npx --yes npm@10.9.4 run check:license",
+      "exit": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "npx --yes npm@10.9.4 run check:nomenclature",
+      "exit": 0,
+      "result": "PASS",
+      "note": "Process-local Git safe-directory binding applied only to the disposable checkout."
+    },
+    {
+      "command": "npx --yes npm@10.9.4 run pack:check",
+      "exit": 0,
+      "result": "PASS",
+      "files": 466,
+      "bytes_lf_checkout": 3102366
+    },
+    {
+      "command": "npx --yes npm@10.9.4 test",
+      "exit": 0,
+      "result": "PASS",
+      "tests": 875,
+      "pass": 868,
+      "fail": 0,
+      "skip": 7,
+      "duration_ms": 807252.1666,
+      "note": "The additional local skip is the explicitly external provisional-standard catalog lane; no failure."
+    },
+    {
+      "command": "two independent generator roots plus raw USTAR comparison",
+      "exit": 0,
+      "result": "PASS",
+      "root_a_files": 34,
+      "root_b_files": 34,
+      "byte_mismatches": 0,
+      "archive_bytes": 350208,
+      "archive_sha256_a": "cecaba53d3940b9296e743872d972d3f2313ddfd6fb9fcda0a449678013065ac",
+      "archive_sha256_b": "cecaba53d3940b9296e743872d972d3f2313ddfd6fb9fcda0a449678013065ac"
+    },
+    {
+      "command": "git diff --check entry candidate",
+      "exit": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "git verify-commit --raw <eight entry-exclusive candidate commits>",
+      "exit": 0,
+      "result": "PASS_8_OF_8"
+    },
+    {
+      "command": "gh run download 32929771558 plus authenticated outer ZIP download",
+      "exit": 0,
+      "result": "PASS_11_OF_11"
+    },
+    {
+      "command": "independent strict receipt, evidence, TAP, terminal, raw TAR, leaf, aggregate, official MCP, closure, path/ref/dependency and secret audit",
+      "exit": 0,
+      "result": "MECHANICAL_PASS_WITH_RATIFIED_CONTRACT_DRIFT_FINDINGS"
+    }
+  ],
+  "deterministic_pack": {
+    "local_two_roots_identical": true,
+    "hosted_archive_bytes": 350208,
+    "hosted_archive_sha256": "cecaba53d3940b9296e743872d972d3f2313ddfd6fb9fcda0a449678013065ac",
+    "hosted_archive_sidecar_sha256": "c01da8653600202a3bc5d0d25616d01f0bb570331c70c01845ad3e0d259a77f7",
+    "normalized_ustar": true,
+    "sorted_entries": true,
+    "mode": "0644",
+    "uid": 0,
+    "gid": 0,
+    "owner_group_names": "empty",
+    "mtime": 0,
+    "manifest_sha256": "57086d298bff6b48a01cb32db5914e16df0482a5013505b0aded6c538b9a32ea",
+    "manifest_bytes": 5718,
+    "leaf_count": 34,
+    "manifest_hashed_leaf_count": 33,
+    "manifest_self_hashed": false,
+    "aggregate_digest": "sha256:a807a0d15cad146e833de3e7dc0fef1ed2f8b520dd6a1d3e00afa7070700c8e7",
+    "generator_digest": "sha256:7229c774ed1fc96188538f7d6e6a6114b25a00d4f16a81cb5696d1980ca5f8ab",
+    "archive_vs_committed_byte_matches": "34_OF_34",
+    "schemas": 18,
+    "strict_schema_compile_failures": 0,
+    "open_direct_object_paths": 0,
+    "operations": 32,
+    "operation_schema_definitions": 54,
+    "operation_refs_resolved": 64,
+    "public_refs": 14,
+    "authority_split": {
+      "PUBLIC_AUTHENTICATED": 7,
+      "LOCAL_BOOTSTRAP": 1,
+      "OWNER_ONLY": 24
+    },
+    "errors": 53,
+    "aliases": 34,
+    "mcp_vectors": 67,
+    "core_vectors": 8,
+    "transports": 2,
+    "tools": 7,
+    "deferred_tools": 16,
+    "tool_schema_definitions": 58,
+    "lowercase_public_refs": "14_OF_14",
+    "tool_operation_dependency_matches": "7_OF_7",
+    "secret_scan_matches": 0,
+    "official_mcp": {
+      "commit": "c4c367f9f58296a7053f5c78a52fd02bfbb56a49",
+      "source_hashes_reproduced": "5_OF_5",
+      "official_schema_sha256": "268a5f82ba70fd7e4b6dc4aa1e64f116f74b4d0edcb69dc046829c79dd4e97e7",
+      "materialized_tool_validations": "7_OF_7",
+      "success_call_tool_result_validations": "7_OF_7",
+      "error_call_tool_result_validations": "7_OF_7",
+      "local_closed_error_output_validations": "7_OF_7"
+    }
+  },
+  "mandatory_hosted_run": {
+    "run_id": 32929771558,
+    "url": "https://github.com/Odenknight/GKOS-Engine/actions/runs/32929771558",
+    "workflow": "GKOS Phase 6 identity contract qualification",
+    "head_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": 11,
+    "success": 11,
+    "failure": 0,
+    "artifact_count": 11,
+    "artifact_expiry": "2026-11-24T04:19:15Z",
+    "outer_zips_downloaded": 11,
+    "outer_zip_digest_matches": "11_OF_11",
+    "outer_artifacts": [
+      [
+        9592786070,
+        "gkos-p6-f1-adversarial-receipt",
+        2759,
+        "6e45392c87cd4198a97cb886683770ce0e6cc5b2fa0eb45d593cd72ea1cab2d0"
+      ],
+      [
+        9592787918,
+        "gkos-p6-f1-contract-pack",
+        43232,
+        "7d08de0f9f510d1afb8ddfb0736878e057a00d85e8c3eecc31d00315b4130c53"
+      ],
+      [
+        9592790446,
+        "gkos-p6-f1-linux-node22-receipt",
+        2837,
+        "fd925d4ab24c517b1f5245879e6a307493ee69517af4e68c99c877e7fb0755f8"
+      ],
+      [
+        9592791411,
+        "gkos-p6-f1-linux-node23-receipt",
+        2720,
+        "8907dd38cc36058a67ec7a55c4f33955626086098f479bf85ac87e312d5d1abc"
+      ],
+      [
+        9592995502,
+        "gkos-p6-f1-linux-node24-receipt",
+        29514,
+        "7ab24c69f27e5c0cf510baa26962d41eb6952657473ac04beeef97cea5294cf8"
+      ],
+      [
+        9592792998,
+        "gkos-p6-f1-macos-node22-receipt",
+        2805,
+        "8db0fcf8c12085e50240e8b785bba498fadee1c92c8879ff8ad8404f2509e222"
+      ],
+      [
+        9592785679,
+        "gkos-p6-f1-secret-scan-receipt",
+        2442,
+        "aebd763d4c22c89a1d7f862e342443dc83948476d414132dc11b2d087c3e2f95"
+      ],
+      [
+        9593000950,
+        "gkos-p6-f1-terminal-audit-receipt",
+        8332,
+        "c2cedd5272152c84391b39724be1d9fae45d77f25cb17cb7a5a2c16eba459f36"
+      ],
+      [
+        9592804132,
+        "gkos-p6-f1-windows-node22-receipt",
+        2827,
+        "5c4e8b7da2ff5fb98fe7cc8f79c002f14dfb6888fd241bb1af32b4546a19bc81"
+      ],
+      [
+        9592805482,
+        "gkos-p6-f1-windows-node23-receipt",
+        2721,
+        "29db529f5bc584ddb65bd4a3ad1f75a180cc26fd169425eb65c8dfab5a7eb95f"
+      ],
+      [
+        9592804682,
+        "gkos-p6-f1-windows-node24-receipt",
+        2725,
+        "6fe7c2bcaaf9d1de05bbf2606a44b9759530ea5b72d682dbd9da5f2efd0616d3"
+      ]
+    ]
+  },
+  "hosted_inner_audit": {
+    "downloaded_file_count": 35,
+    "strict_schema_valid_receipts": "11_OF_11",
+    "receipt_results": "PASS_11_OF_11",
+    "exact_cpu_and_six_semantic_tool_versions": "11_OF_11",
+    "exact_command_inventory_matches_workflow": "11_OF_11",
+    "tap_log_digest_matches": "10_OF_10",
+    "tap_count_and_positive_duration_matches": "10_OF_10",
+    "nonempty_unique_input_digest_arrays": "11_OF_11",
+    "nonempty_unique_output_digest_arrays": "11_OF_11",
+    "exact_output_digest_sets": "11_OF_11",
+    "receipts": [
+      [
+        "p6-f1-schema-adversarial",
+        "860cfdcd87dbb45d85c596886bb165f2868545f3dbaef5ba52801921616d06b2",
+        4,
+        8,
+        8,
+        0,
+        0,
+        2,
+        2
+      ],
+      [
+        "p6-f1-pack-reproducibility",
+        "b55d35f2212f0723e767ac9e79277c02dd507713bdf63b2ba7f7f2227c8b4ae9",
+        5,
+        0,
+        0,
+        0,
+        0,
+        2,
+        3
+      ],
+      [
+        "p6-f1-contract-linux-node22",
+        "8965e5227d1680ffe0a13444cc341bb82da5f2fa393c93991b5c40edae3f2df8",
+        7,
+        8,
+        8,
+        0,
+        0,
+        2,
+        2
+      ],
+      [
+        "p6-f1-contract-linux-node23",
+        "e940d922105f938824c0cf5bc1312379b9370a248ab0759f91914f42c35156cd",
+        7,
+        8,
+        8,
+        0,
+        0,
+        2,
+        2
+      ],
+      [
+        "p6-f1-contract-linux-node24",
+        "677fc1f83d5e1d8b719a6a5e7e59db9cff97a88ae24bdc7cd34c097421ee14bc",
+        9,
+        889,
+        886,
+        0,
+        3,
+        2,
+        3
+      ],
+      [
+        "p6-f1-contract-macos-node22",
+        "e87c35d9afa9f7ee862a1850c205dda26db5db227ed84a864cd062e3a23f42c4",
+        7,
+        8,
+        8,
+        0,
+        0,
+        2,
+        2
+      ],
+      [
+        "p6-f1-secret-scan",
+        "cb1a6b1fefcd582b5f2666b5b7336f17723eb39b22e76d9de0dfb220f621dc48",
+        4,
+        1,
+        1,
+        0,
+        0,
+        2,
+        2
+      ],
+      [
+        "p6-f1-artifact-audit",
+        "876595150e5e0c2a5e4b9e241e37c2fd9bafd3a5fba7dfec13d304592776f744",
+        5,
+        0,
+        0,
+        0,
+        0,
+        34,
+        2
+      ],
+      [
+        "p6-f1-contract-windows-node22",
+        "5d7d99ddaa86c35928d356336d59d1663ca62ea8e68ef546ece2c03bc7c3175d",
+        7,
+        8,
+        8,
+        0,
+        0,
+        2,
+        2
+      ],
+      [
+        "p6-f1-contract-windows-node23",
+        "a9d2ee93a6f727983fd3414167154d62cd69ed44278e8f29330e7c053a39e411",
+        7,
+        8,
+        8,
+        0,
+        0,
+        2,
+        2
+      ],
+      [
+        "p6-f1-contract-windows-node24",
+        "507d7f43170c3645aca57f0b99d4d7fdd9977e55fc618d752336304774cddad2",
+        7,
+        8,
+        8,
+        0,
+        0,
+        2,
+        2
+      ]
+    ],
+    "terminal_reconstruction": {
+      "predecessor_artifacts": 10,
+      "predecessor_files": 32,
+      "committed_input_files": 2,
+      "receipt_input_digests": 34,
+      "receipt_output_digests": 2,
+      "terminal_receipt_sha256": "876595150e5e0c2a5e4b9e241e37c2fd9bafd3a5fba7dfec13d304592776f744",
+      "terminal_receipt_bytes": 4997,
+      "terminal_evidence_sha256": "7000651c30d08bb1fbe1f4d07c3a98ddce816395b36ca9a4144eafba7a4ecf07",
+      "terminal_evidence_bytes": 8926,
+      "terminal_report_sha256": "bf12f3aac08067bdc949360d100452f207efc6042eeacb06ffe4926086673126",
+      "terminal_report_bytes": 11710,
+      "fresh_physical_extraction_reproduced": true,
+      "archive_digest_match": true,
+      "leaf_digest_matches": "33_OF_33",
+      "manifest_match": true,
+      "aggregate_match": true,
+      "non_self_manifest": true
+    },
+    "linux_node24_test_logs": {
+      "focused_tap_sha256": "172282c78c3d1ae02c0fcf6f6a4c33f7c3d7c58ccaae642b4c4863b984f0dd77",
+      "focused_tests": 8,
+      "focused_pass": 8,
+      "focused_fail": 0,
+      "focused_skip": 0,
+      "focused_duration_ms": 907.384243,
+      "full_tap_sha256": "e6f55235d426b91388d526bd0547d9b6a92684034843bcf53181b495b4003f12",
+      "full_tests": 881,
+      "full_pass": 878,
+      "full_fail": 0,
+      "full_skip": 3,
+      "full_duration_ms": 575924.402944
+    }
+  },
+  "ordinary_ci": {
+    "run_id": 32929771562,
+    "url": "https://github.com/Odenknight/GKOS-Engine/actions/runs/32929771562",
+    "head_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "status": "completed",
+    "conclusion": "success",
+    "success_jobs": 15,
+    "skipped_jobs": 1,
+    "failure_jobs": 0,
+    "expected_skipped_job": "phase4-retrieval-observation-manual",
+    "watcher_windows_node22": "success",
+    "historical_watcher_disclosure": {
+      "classification": "EXTERNAL_DISCLOSED_PHASE5_TIMING; NONCAUSAL_TO_F1; NOT_WAIVED",
+      "runs": [
+        [
+          32922436861,
+          "376431388caa7c97e178078d6a39840fd825ce44",
+          98038490758,
+          "phase5-watcher-windows (22)",
+          "GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED"
+        ],
+        [
+          32923481470,
+          "25acd484c6f804c8e4a6cfdef21849aa397cb47a",
+          98041556564,
+          "phase5-watcher-windows (22)",
+          "GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED"
+        ]
+      ],
+      "protected_watcher_or_ci_diff": 0,
+      "threshold_change_or_waiver": false,
+      "exact_candidate_recurrence": false,
+      "disposition": "Retain as a separately routed historical protected Phase-5 observation; it neither causes nor cures the F1 blockers."
+    }
+  },
+  "receipt_contract_probes": {
+    "schema_sha256": "3c459b901854758ac187de5141672e854580151ec5feada437f29a0540995d59",
+    "missing_cpu_valid": false,
+    "placeholder_npm_valid": false,
+    "placeholder_sqlite_valid": false,
+    "empty_input_digest_array_valid": false,
+    "empty_output_digest_array_valid": false,
+    "incoherent_count_arithmetic_valid": true,
+    "command_duration_field_required": false,
+    "command_duration_field_allowed": false,
+    "terminal_fail_valid": false,
+    "failed_command_exit_status_valid": false,
+    "top_result_schema": "const PASS",
+    "command_result_schema": "const PASS",
+    "command_exit_schema": "const 0",
+    "receipt_intervals_ms_range": [
+      71,
+      290
+    ],
+    "all_receipt_command_duration_field_count": 0
+  },
+  "findings": [
+    {
+      "finding_id": "F1-EVIDENCE-RECEIPT-STATUS-DURATION-CONTRACT-UNDERBOUND",
+      "severity": "HIGH",
+      "status": "BLOCKER",
+      "title": "The corrected receipt contract still cannot represent or validate the required real command duration/status/exit failure domain",
+      "requirements": [
+        "Review directive: closure of the predecessor HIGH requires exact command inventory plus real test_count/pass/fail/skip/duration/status/exit coherence and forbids synthetic counts.",
+        "Ratified D0-13 lines 1580-1586 require the qualification-receipt schema to carry the command list with exit/result/test/pass/fail/skip counts, start/end timestamps, and terminal PASS|FAIL.",
+        "Ratified D0-15 line 1686 requires corrected evidence and an entirely new terminal-green run/artifact set for an evidence/count mismatch."
+      ],
+      "affected_surfaces": [
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/qualification-receipt.schema.json 5073 bytes sha256:3c459b901854758ac187de5141672e854580151ec5feada437f29a0540995d59",
+        "scripts/generate-agent-identity-mcp-contract.mjs 91925 bytes sha256:7229c774ed1fc96188538f7d6e6a6114b25a00d4f16a81cb5696d1980ca5f8ab",
+        "test/agent-identity-mcp-contract.test.mjs 13861 bytes sha256:6afd8b9c4761202f06d12392b933a0a59824888811cc7f7ad314c0da000f8bff",
+        ".github/workflows/phase6-identity-contract.yml 28238 bytes sha256:927c9b832dee98383f020e4607a02b77783aa6c85e1004c10c7677243600361b"
+      ],
+      "observations": [
+        "The command object requires command, exit_code, result, test_count, pass_count, fail_count, and skip_count, but has no duration field; additionalProperties:false makes a duration field invalid.",
+        "All 11 hosted receipts contain zero command-duration fields. Their started_at/ended_at intervals are only 71-290 ms and measure receipt generation after the commands, not command execution. The Linux24 full TAP alone records 575924.402944 ms while its receipt interval is 76 ms.",
+        "An independently mutated receipt with incoherent test_count arithmetic still validates against the strict schema. The focused test at line 66 explicitly asserts that schema validation succeeds for this synthetic mutation and then relies on out-of-schema generator/terminal logic to notice it.",
+        "The receipt schema hard-codes top-level result=PASS, command result=PASS, exit_code=0, and fail_count=0. It rejects terminal FAIL and any failed command status/exit, contrary to the ratified PASS|FAIL receipt domain.",
+        "Non-test commands are supplied after execution as free --receipt-command strings and are emitted as synthetic PASS/0 records; no per-command durable log, duration, or captured exit record binds those assertions. Hosted job success independently shows this run passed, but does not repair the underbound receipt contract."
+      ],
+      "why_green_does_not_close": "The real TAP bytes and exact test counts reconcile and the terminal auditor enforces arithmetic for this run, but the versioned strict receipt schema and every retained receipt still omit/reject duration and failure evidence and accept an incoherent count mutation. The exact prior HIGH closure requested schema-level durable evidence, not only a green post-hoc terminal invariant.",
+      "required_disposition": "REJECT / F1_NO_GO. Align the versioned receipt contract and produced receipts with the ratified duration/status/exit and PASS|FAIL domain, make incoherent counts invalid under the authoritative validation contract, and produce an entirely new 11/11 terminal-green run/artifact set for fresh independent review."
+    },
+    {
+      "finding_id": "F1-HOSTED-CONTRACT-PACK-INNER-INVENTORY-DRIFT",
+      "severity": "HIGH",
+      "status": "BLOCKER",
+      "title": "The retained contract-pack artifact has a fourth inner file despite the ratified exact three-file inventory",
+      "requirements": [
+        "Ratified D0-13 lines 1588-1594 state that gkos-p6-f1-contract-pack contains exactly the TAR, its .sha256 sidecar, and qualification-receipt.json.",
+        "Ratified D0-15 line 1686 makes artifact mismatch non-waivable and requires an entirely new terminal-green run/artifact set."
+      ],
+      "actual_inner_inventory": [
+        "GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar",
+        "GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar.sha256",
+        "qualification-evidence.json",
+        "qualification-receipt.json"
+      ],
+      "extra_file": {
+        "path": "gkos-p6-f1-contract-pack/qualification-evidence.json",
+        "bytes": 2369,
+        "sha256": "6e30f5f05845b199fc15fd03f700a8a38d0bc59415e9562a44816f95c76c463a"
+      },
+      "observations": [
+        "The outer ZIP is byte-valid at 43232 bytes with SHA-256 7d08de0f9f510d1afb8ddfb0736878e057a00d85e8c3eecc31d00315b4130c53, so this is not a download or extraction anomaly.",
+        "The committed workflow uploads qualification-evidence.json in the contract-pack artifact, and the green terminal audit treats that extra file as mandatory predecessor evidence; the handoff therefore incorrectly reports all-and-only conformance to the ratified inner inventory.",
+        "The TAR itself, sidecar, receipt, 34/33 leaf closure, and aggregate digest are otherwise byte-correct."
+      ],
+      "why_green_does_not_close": "The terminal auditor validates the implementation-defined four-file pack artifact rather than the ratified exact three-file pack artifact. A green auditor cannot waive the frozen artifact inventory it was required to audit.",
+      "required_disposition": "REJECT / F1_NO_GO. Bring the hosted inner inventory and terminal audit back into exact agreement with the ratified artifact contract and produce an entirely new terminal-green run/artifact set for fresh independent review."
+    }
+  ],
+  "negative_search": {
+    "new_secret_exposure": false,
+    "new_product_runtime_or_watcher_change": false,
+    "new_f2_or_lite_work": false,
+    "new_pack_leaf_or_aggregate_mismatch": false,
+    "new_official_mcp_or_schema_closure_contradiction": false,
+    "new_path_ref_or_dependency_contradiction": false,
+    "new_evidence_or_topology_contradictions": true,
+    "contradiction_ids": [
+      "F1-EVIDENCE-RECEIPT-STATUS-DURATION-CONTRACT-UNDERBOUND",
+      "F1-HOSTED-CONTRACT-PACK-INNER-INVENTORY-DRIFT"
+    ]
+  },
+  "authorization": {
+    "acceptance_claim": false,
+    "f1_accepted": false,
+    "f2_started": false,
+    "f2_authorized": false,
+    "merge": false,
+    "release": false,
+    "next_state": "STOP AT F1_NO_GO PENDING D0-15 REPLACEMENT EVIDENCE AND FRESH INDEPENDENT ACCEPTANCE"
+  },
+  "record_digest_algorithm": "sha256 over UTF-8 canonical JSON with record_digest omitted; object keys code-unit sorted, arrays preserved, no whitespace",
+  "record_digest": "sha256:e13129f85e3c6a627e1f9cb7a722c77bc6505236181cccf1d1edbbd23b2851ef"
+}

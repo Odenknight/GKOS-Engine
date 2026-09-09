@@ -1,0 +1,4 @@
+COMMAND: bash scripts/check-current-release.sh
+SOURCE: 71b899473473f47172b181973027f3eb7da25104
+EXIT: 1
+expected 29 R16 allocations, found 30

@@ -1,0 +1,623 @@
+{
+  "artifact_type": "gkos-phase6-d0-15-full-contract-concurrence",
+  "schema_version": "1.0.0",
+  "package_id": "PHASE6-D0-15-FULL-CONTRACT-CONCURRENCE",
+  "repository": "Odenknight/GKOS-Engine",
+  "entry_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+  "result_sha": "07a257bc5cb37ffaa7c9fe61c1b46179fee946cc02643216aa0e0c6eb51e40b8",
+  "reviewed_at": "2026-08-26T09:58:26.537Z",
+  "reviewer_name": "fresh independent Full-contract concurrence reviewer",
+  "reviewer_task": "/root/phase6_d0_15_full_contract_concurrence",
+  "verdict": "REJECT",
+  "concurrence": "REJECT_CONCURRENCE",
+  "acceptance": false,
+  "implementation_authorization": false,
+  "product_correction_authorization": false,
+  "f2_restart_authorization": false,
+  "terminal_statement": "REJECT_CONCURRENCE. The owner-resolution and consolidated correction map are not yet a contradiction-free exact authority for successor-F1 correction. No product or proposal correction is authorized. Accepted F1 e29e04bdad1cd192a25eba2d682a4c46774def28 remains immutable historical evidence, and F2 remains stopped, uncommitted, and unqualified.",
+  "no_contribution_attestation": {
+    "attested": true,
+    "statement": "I authored no D0, accepted-F1, stopped-F2, product, proposal, schema, generator, fixture, expected-outcome, owner-resolution, attachment-assessment, handoff, or prior-review bytes. I performed a fresh read-only review and created only this detached concurrence artifact.",
+    "product_or_proposal_edits": 0,
+    "expected_outcome_edits": 0,
+    "implementation_decisions_authored": 0,
+    "handoff_evidence_authored": 0
+  },
+  "exact_inputs": [
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_ATTACHMENT_IMPACT_ASSESSMENT_2026-08-26.json",
+      "sha256": "69a6f241294a530cf7f3aa89ce7c897bcd5010d125462dfda59c2e73b9a2c014",
+      "bytes": 5596,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json",
+      "sha256": "149b1933503eb418ab8f1d37d2aa6dad19e8d18fa08ee5ce359ecea0fff9e78f",
+      "bytes": 80583,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_2026-08-26.json",
+      "sha256": "07a257bc5cb37ffaa7c9fe61c1b46179fee946cc02643216aa0e0c6eb51e40b8",
+      "bytes": 3295,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/implementer/PHASE6_F2_FULL_D0_15_STOP_2026-08-26.json",
+      "sha256": "5d192bd3cb1ddb4f0a8a0d8148d16c605ed80fe2078b5591c2a79c258dcd52ea",
+      "bytes": 6663,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_FULL_CONTRACT_STEWARD_REVIEW_2026-08-26.json",
+      "sha256": "12a37ee80c129ae016bfb330cd91621d50ad9f8f9406ab850798714adedce63c",
+      "bytes": 51789,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_MIGRATION_REVIEW_2026-08-26.json",
+      "sha256": "9534727333c2c964b4285f136ee046b823f61f100f7acff1fe520d85efd4aa57",
+      "bytes": 43945,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_SECURITY_REVIEW_2026-08-26.json",
+      "sha256": "f7d862851832ded51ec3c264beaf65b7bd5f9ad958580215f3d955546ac6d401",
+      "bytes": 50913,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+      "bytes": 117722,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_DECISION_RECORD_PROPOSAL_2026-08-25.json",
+      "sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+      "bytes": 28582,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_OPERATION_INVENTORY_PROPOSAL_2026-08-25.json",
+      "sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+      "bytes": 45471,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CLOSED_ERROR_REGISTRY_1.0.0-draft.1.json",
+      "sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+      "bytes": 17606,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PROPOSAL_VALIDATION_2026-08-25.md",
+      "sha256": "4f31f73833344b0d771775beb869f32da3404c6ef49b1c53f365e2407cd3b6b8",
+      "bytes": 21204,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/core/P6_F1_ALLOWED_PATHS_PROPOSAL.txt",
+      "sha256": "7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce",
+      "bytes": 3312,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/core/P6_F1_PROTECTED_PATHS_PROPOSAL.txt",
+      "sha256": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948",
+      "bytes": 515,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/PHASE6_D0_INTERFACE_PROPOSAL.md",
+      "sha256": "476e839fb81f2f936785a38278846d33c7a680a84069607b1188c5ca2609e427",
+      "bytes": 43542,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/MCP_TOOL_REGISTRY.schema.json",
+      "sha256": "5c043dc5570c4c52ad13425925711e672ec198d5910ab5c9e8c1438cb5ed8004",
+      "bytes": 49408,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/MCP_INITIAL_TOOL_CATALOG.proposal.json",
+      "sha256": "c0ed2b963dcaef8a8bd08a427687d493bb7e85f1e26076a88a04f68b2117de7e",
+      "bytes": 12920,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/MCP_2025_11_25_CONFORMANCE_VECTORS.proposal.json",
+      "sha256": "23f48e01f890b746012d3713b8ece8331b113927ca15ab72e9955cf03830387c",
+      "bytes": 51108,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/PROPOSAL_VALIDATION_2026-08-25.md",
+      "sha256": "7f2171bc98112a529f05b9324be20475484ec55e4ac392829109e6f94121daef",
+      "bytes": 11655,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/SOURCE_PROVENANCE_MATRIX.md",
+      "sha256": "7284527598409b43218f99f87e8365b3382b3fae1606f9975ae9acba90108321",
+      "bytes": 17892,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+      "sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+      "bytes": 31178,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/final/PHASE6_D0_OWNER_RATIFICATION_2026-08-25.json",
+      "sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929",
+      "bytes": 2842,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/final/PHASE6_D0_CROSS_REGISTER_ACCEPTANCE_V7_2026-08-25.md",
+      "sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb",
+      "bytes": 13939,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_ACCEPTANCE_GATE_2026-08-26.json",
+      "sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff",
+      "bytes": 2347,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_FULL_INDEPENDENT_REVIEW_V3_2026-08-26.json",
+      "sha256": "ee027811dd29826883f736c0f018de552979d2418762e69fa7988aff635aaa70",
+      "bytes": 33708,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/implementer/PHASE6_F1_FULL_IMPLEMENTER_HANDOFF_V3_2026-08-26.json",
+      "sha256": "a1ffcef317c3f1d7f2cac1b0748450e9e9261e65d9f181ff3df6e4cbbf0160b2",
+      "bytes": 13883,
+      "verified": true
+    },
+    {
+      "path": "future-build-phase6/reviews/f2/PHASE6_F2_OWNER_AUTHORIZATION_2026-08-26.json",
+      "sha256": "e16b351f16d8fcf98d4683429764a6009e9073408bdb73c6b36e20f82d0e2118",
+      "bytes": 2336,
+      "verified": true,
+      "disposition": "superseded by the D0-15 stop; not restart authority"
+    }
+  ],
+  "attachment_inputs": [
+    {
+      "path": "[LOCAL_PATH]",
+      "sha256": "2be0b2edaa6b0f515e8f2fbe3e38c038ca57bcf6eade2c19de7f12492ad9be27",
+      "bytes": 16750,
+      "verified": true
+    },
+    {
+      "path": "[LOCAL_PATH]",
+      "sha256": "0cd3b43e8ea2d56d928cba9700cdf09d53d7ef31e94500f8ee0ee29134147a41",
+      "bytes": 35299,
+      "verified": true
+    },
+    {
+      "path": "[LOCAL_PATH]",
+      "sha256": "0a7f5a0e2c0e439739196fdc7519434fc8b018f441822b599e423cea1527e59b",
+      "bytes": 13703,
+      "verified": true
+    }
+  ],
+  "source_integrity": {
+    "all_declared_source_hashes_and_byte_counts_match": true,
+    "declared_source_ledger_entries_verified": 24,
+    "top_level_d0_15_artifacts_verified": 3,
+    "attachments_verified": 3,
+    "accepted_f1_commit_object_present": true,
+    "accepted_f1_tree_sha": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+    "accepted_f1_pack_leaf_count": 34,
+    "accepted_f1_manifest_hashed_leaf_count": 33,
+    "accepted_f1_manifest_aggregate_digest": "sha256:e3dab5b4ee3da62a845cc92bc9dc9b831ed492f34371104b503587c566300380"
+  },
+  "mapping_audit": {
+    "source_contract_questions": 10,
+    "source_migration_questions": 3,
+    "source_security_questions": 8,
+    "source_questions_total": 21,
+    "mapping_rows": 21,
+    "unique_source_question_ids": 21,
+    "mapping_omissions": 0,
+    "mapping_duplicates": 0,
+    "consolidated_items": 15,
+    "unique_consolidated_item_ids": 15,
+    "owner_selections": 15,
+    "owner_selection_option_A_count": 15,
+    "derived_corrections": 13,
+    "unique_derived_correction_ids": 13,
+    "result": "PASS_STRUCTURAL_MAPPING_ONLY",
+    "qualification": "Structural one-to-one question coverage does not cure the substantive contradictions and under-specification recorded below."
+  },
+  "option_a_semantics_audit": [
+    {
+      "id": "D015-R01",
+      "axis": "closed anchor variants",
+      "result": "PASS",
+      "note": "The selected three-branch oneOf, last_generation naming, bootstrap-genesis null predecessor, proposed RESTORE_INTENT top-level coordinates, explicit old/proposed heads, and closed intent/committed nullability can preserve the 16/32/24/53 and public-MCP counts."
+    },
+    {
+      "id": "D015-R02",
+      "axis": "restore aggregates and head",
+      "result": "PASS",
+      "note": "Six typed count/digest aggregates plus restored_database_digest and event_digest as the sole new global head are representable in the existing restore_events table without a new operation or table."
+    },
+    {
+      "id": "D015-R03",
+      "axis": "restore plan, abort, locator and generation",
+      "result": "PASS_WITH_DOWNSTREAM_GATE_DEPENDENCY",
+      "note": "The selected relative locator, two prepublication abort states, exact safe disposition, one generation/event advance, invalidation, tombstone, and no rollback after RESTORE_INTENT are representable in existing leaves, but they trigger mandatory migration, security, and concurrency concurrence omitted by the owner gate."
+    },
+    {
+      "id": "D015-R04",
+      "axis": "restore plan discovery",
+      "result": "PASS",
+      "note": "A closed nullable authority.status restore_recovery object preserves exactly 32 operations and 24 owner-only operations and adds no restore operation or public MCP surface."
+    },
+    {
+      "id": "D015-R05",
+      "axis": "bootstrap vocabulary and pre-authority crash",
+      "result": "PASS_WITH_DOWNSTREAM_GATE_DEPENDENCY",
+      "note": "Temp-before-plan can preserve the exact eleven-state vocabulary and both terminal branches without a new operation, but it is a bootstrap/migration semantic amendment requiring the ratified migration/security concurrence sequence."
+    },
+    {
+      "id": "D015-R06",
+      "axis": "vector accounting",
+      "result": "FAIL",
+      "finding_id": "FFC-D015-003"
+    },
+    {
+      "id": "D015-R07",
+      "axis": "snapshot payload and restart",
+      "result": "FAIL",
+      "finding_id": "FFC-D015-002"
+    },
+    {
+      "id": "D015-R08",
+      "axis": "event kinds",
+      "result": "PASS",
+      "note": "The four singular kind constants can close the existing four-table global event union with no count change."
+    },
+    {
+      "id": "D015-R09",
+      "axis": "final gate",
+      "result": "PASS_WITH_DOWNSTREAM_GATE_DEPENDENCY",
+      "note": "Selective affected-principal revalidation and persisted stale/no-publication behavior match ratified D0, but the race winner requires independent authority/concurrency concurrence before correction."
+    },
+    {
+      "id": "D015-R10",
+      "axis": "credential issue epoch",
+      "result": "PASS_WITH_DOWNSTREAM_GATE_DEPENDENCY",
+      "note": "Treating auth_epoch_issued as immutable history while staling old sessions/work and preserving other active credentials for fresh authentication is coherent and count-preserving, subject to required security/concurrency concurrence."
+    },
+    {
+      "id": "D015-R11",
+      "axis": "sole-owner rotation",
+      "result": "PASS_WITH_DOWNSTREAM_GATE_DEPENDENCY",
+      "note": "A second successfully handed-off active owner credential prerequisite preserves zero grace, no re-reveal, four-active-credential capacity, and exact counts, but credential/rotation concurrence remains mandatory."
+    },
+    {
+      "id": "D015-R12",
+      "axis": "mapping availability",
+      "result": "PASS",
+      "note": "Keeping the two owner-only operations inventory-present but zero-mutation PLATFORM_UNAVAILABLE until a separately ratified adapter exists preserves 32/24 and adds no public MCP success semantic."
+    },
+    {
+      "id": "D015-R13",
+      "axis": "retention policy/history",
+      "result": "PASS_WITH_DOWNSTREAM_GATE_DEPENDENCY",
+      "note": "authority_meta current values, permanent set_retention before/after history, per-row creation-policy binding, true source sequences, and one-type batches are representable in the existing 16 tables, subject to migration/security concurrence."
+    },
+    {
+      "id": "D015-R14",
+      "axis": "activity metadata",
+      "result": "PASS_WITH_DOWNSTREAM_GATE_DEPENDENCY",
+      "note": "The six typed integer/enum base keys close the content channel without changing public MCP success semantics, subject to security/redaction concurrence."
+    },
+    {
+      "id": "D015-R15",
+      "axis": "mapping collision",
+      "result": "FAIL",
+      "finding_id": "FFC-D015-004"
+    }
+  ],
+  "derived_correction_audit": {
+    "count": 13,
+    "structural_coverage": "DC01 through DC13 collectively name error closure, stale request state, policy/dependencies, rate buckets, external bootstrap/restore records, executable scenarios, timestamp range, backup semantics, credential/handoff closure, global event union, binding/invalidation, retention execution, and deterministic regeneration/evidence.",
+    "sufficiently_bounded_items": [
+      "D015-DC01",
+      "D015-DC02",
+      "D015-DC03",
+      "D015-DC04",
+      "D015-DC05",
+      "D015-DC07",
+      "D015-DC08",
+      "D015-DC09",
+      "D015-DC10",
+      "D015-DC11",
+      "D015-DC12",
+      "D015-DC13"
+    ],
+    "blocked_item": "D015-DC06",
+    "blocked_reason": "Its per-scenario executable-vector obligation is not reconciled with the ratified exact-looking non_mcp_core_vectors=18 preservation field or an exhaustive replacement-fixture ledger.",
+    "ratification_status": "AMBIGUOUS",
+    "ratification_finding": "FFC-D015-005"
+  },
+  "attachment_impact_audit": {
+    "result": "PASS_NO_D0_15_CHANGE",
+    "assessment_conclusion_confirmed": true,
+    "findings": [
+      "The Full frontmatter scanner issue is historical and closed before current Phase-6 entry.",
+      "The legacy Lite sidecar has no MCP endpoint; this reinforces, rather than changes, the frozen F3 transport-facade dependency.",
+      "Legacy REST sensitivity labels are classification metadata and must not be claimed as Phase-6 authorization; the ratified F3 policy boundary already preserves that distinction.",
+      "The historical guide/handoff preserves Full-first then Lite sequencing, reviewer independence, and stop-on-unspecified-semantics behavior. Its embedded authority language was not used as current authorization."
+    ],
+    "successor_f1_scope_change_from_attachments": false,
+    "public_mcp_change_from_attachments": false,
+    "new_owner_question_from_attachments": false
+  },
+  "preservation_and_count_audit": {
+    "normalized_tables": {
+      "target": 16,
+      "representable": true
+    },
+    "operations": {
+      "target": 32,
+      "representable": true
+    },
+    "owner_only_operations": {
+      "target": 24,
+      "representable": true
+    },
+    "errors": {
+      "target": 53,
+      "representable": true,
+      "condition": "R15 must retain GKOS_P6_IDENTITY_COLLISION and must not add a 54th code."
+    },
+    "public_mcp_required_tools": {
+      "target": 7,
+      "representable": true
+    },
+    "public_mcp_input_or_success_semantics_changed": {
+      "claimed": false,
+      "verified": false,
+      "finding_id": "FFC-D015-002"
+    },
+    "new_restore_operation": {
+      "target": false,
+      "representable": true,
+      "method": "owner-only authority.status restore_recovery object"
+    },
+    "official_mcp_vectors": {
+      "target": 67,
+      "representable": true,
+      "method": "preserve IDs and add closed aliases without renumbering"
+    },
+    "non_mcp_core_vectors": {
+      "target_or_subtotal": 18,
+      "representable": false,
+      "finding_id": "FFC-D015-003"
+    },
+    "successor_pack_leaves": {
+      "target": 34,
+      "representable": true
+    },
+    "successor_manifest_hashed_leaves": {
+      "target": 33,
+      "representable": true
+    },
+    "allowed_paths": {
+      "target": 40,
+      "representable": true
+    },
+    "hash_consequence": "Every changed successor-F1 leaf hash, size, generation_input_digest, generator_digest, aggregate_digest, manifest, qualification run, evidence closeout, independent verdict, accepted successor SHA, and downstream consumer pin must be new. No accepted e29e04b digest or hosted result can qualify changed bytes."
+  },
+  "findings": [
+    {
+      "finding_id": "FFC-D015-001",
+      "severity": "BLOCKER",
+      "title": "The owner pre-correction gate omits mandatory concurrence roles for the selected stop classes",
+      "state": "OPEN",
+      "files": [
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_2026-08-26.json",
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json",
+        "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md"
+      ],
+      "line_or_key": [
+        "owner_resolution.required_pre_correction_gate",
+        "proposal.required_reviewers_and_sequence order 2",
+        "governance sections 5.3 and 6"
+      ],
+      "evidence": "The owner resolution names only fresh Full-contract and Lite-conformance concurrence before product correction. The exact proposal it cites requires, at the same pre-implementer order, fresh migration, fresh security, and independent authority/concurrency concurrence in addition to that pair. The owner-selected rules alter bootstrap/migration staging, abort states and generation/session invalidation, credential rotation, collision/redaction, and final-gate race winners. The ratified governance matrix assigns those stop classes to the omitted roles and says repair starts only after every required verdict accepts.",
+      "impact": "The exact authorization bytes conflict on who must concur before successor-F1 correction. Treating the two-role field as exhaustive would bypass ratified stop authority; treating the longer sequence as controlling contradicts the owner-resolution gate. Product correction cannot begin.",
+      "required_resolution": "Issue a replacement owner-resolution artifact at a new hash that explicitly preserves the serial mandatory migration, security, and authority/concurrency concurrence mini-waves, in addition to Full-contract and Lite-conformance concurrence, before any successor-F1 product correction."
+    },
+    {
+      "finding_id": "FFC-D015-002",
+      "severity": "BLOCKER",
+      "title": "R07 cursor restart success contradicts the ratified process-memory reference lifecycle",
+      "state": "OPEN",
+      "files": [
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json",
+        "future-build-phase6/proposals/core/PHASE6_D0_CORE_OPERATION_INVENTORY_PROPOSAL_2026-08-25.json",
+        "future-build-phase6/proposals/kosmos-oden/PHASE6_D0_INTERFACE_PROPOSAL.md",
+        "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md"
+      ],
+      "line_or_key": [
+        "proposal.D015-R07 option A",
+        "operation_inventory.reference_lifecycle.invalidation",
+        "interface sections 3.3 and 5.2",
+        "core sections 2.2/4.2"
+      ],
+      "evidence": "R07 says an unexpired valid cursor resumes from SQLite after process restart and claims public page semantics are unchanged. Ratified D0 makes record_ref and scope_ref resolver mappings process-memory-only and invalidates every reference on process restart. The public lineage, graph, navigation-discover continuation, and navigation-audit operations require caller-supplied live same-session references and private resolution/physical requalification; graph.temporal.read always requires a live non-null scope_ref, and navigation.discover rejects null scope with a continuation cursor. Persisting only redacted page payload and reference digests cannot perform the required live resolve/physical requalification after the resolver is gone.",
+      "impact": "The correction must either reject these cursor continuations after restart, contrary to R07, or create a new durable reference/requalification authority or continuation exception, changing ratified public success semantics and security dependencies. No operation-specific restart rule resolves this conflict.",
+      "required_resolution": "Obtain an explicit owner semantic choice and required MCP/security concurrence: either make cursor invalidation after restart normative for reference-bound public tools, or define a closed, count-preserving continuation protocol that does not persist raw paths, does not add a record/table/operation, preserves current authorization and physical requalification, and explicitly acknowledges any public-success semantic effect."
+    },
+    {
+      "finding_id": "FFC-D015-003",
+      "severity": "HIGH",
+      "title": "The exact-looking 18-vector preservation field is not reconciled with mandatory per-scenario negative families",
+      "state": "OPEN",
+      "files": [
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_2026-08-26.json",
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json",
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_FULL_CONTRACT_STEWARD_REVIEW_2026-08-26.json",
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_MIGRATION_REVIEW_2026-08-26.json",
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_SECURITY_REVIEW_2026-08-26.json"
+      ],
+      "line_or_key": [
+        "owner_resolution.ratified_preservation_targets.non_mcp_core_vectors",
+        "proposal.D015-R06",
+        "proposal.D015-DC06",
+        "proposal.aggregate_consequences.vectors",
+        "prior mandatory vector families"
+      ],
+      "evidence": "R06 freezes a subtotal of 8 existing core-operation vectors plus 10 restore/bootstrap recovery vectors, while the owner resolution labels 18 as non_mcp_core_vectors without saying subtotal/minimum. DC06 simultaneously requires every scenario to be a separate closed executable case, and the prior accepted reviews require many additional anchor, collision, non-enumeration, global-event, reference, cursor, policy, rate, retention, redaction, backup, timestamp, and race cases. ANCHOR-INTENT-001 through 009 alone consumes nine cases beyond the named 8+10 class. The proposal does not supply an exhaustive replacement_fixture_ids ledger or a count rule for these additional cases.",
+      "impact": "An implementer can preserve 18 only by collapsing or omitting mandatory scenarios, or can materialize the required cases and violate an apparent exact preservation target. Fixture counts, generated hashes, manifest bytes, and evidence assertions are indeterminate.",
+      "required_resolution": "Amend the owner-resolution/correction map to state that 18 is only the exact 8+10 named-class subtotal, freeze the additional executable-family accounting and replacement fixture IDs, and state the resulting fixture/count/hash consequences while preserving the 67 official MCP IDs."
+    },
+    {
+      "finding_id": "FFC-D015-004",
+      "severity": "HIGH",
+      "title": "R15 selects a collision guard without defining its cryptographic contract",
+      "state": "OPEN",
+      "files": [
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json",
+        "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md"
+      ],
+      "line_or_key": [
+        "proposal.D015-R12 option A",
+        "proposal.D015-R15 option A",
+        "core external_mapping record and invariant 4"
+      ],
+      "evidence": "R15 distinguishes a subject_digest collision by comparing a distinct authenticated canonical-subject collision guard/evidence digest, and says external_mapping gains or binds such a digest. R12 also calls authenticated_by a closed adapter identifier/evidence digest. Neither rule freezes the field name and separation, digest algorithm, domain separator, canonical preimage, versioning, equality rule, adapter-evidence binding, or how an authenticated adapter proves two distinct canonical subjects while raw subjects remain forbidden. Mapping remains unavailable until a separately ratified adapter, but R15 nevertheless requires exact collision vectors and a deterministic error distinction in the successor pack.",
+      "impact": "The selected 53-code outcome is clear, but the predicate selecting IDENTITY_COLLISION versus MAPPING_CONFLICT is not machine-exact or independently testable. Implementations can invent incompatible guard constructions or cannot inject the required subject-digest collision at all.",
+      "required_resolution": "Freeze a closed, versioned authenticated mapping evidence record and an independent collision-guard digest field with exact algorithm/domain/preimage/canonicalization/equality rules, or explicitly defer subject-digest collision qualification to the separately ratified adapter contract and adjust successor-F1 vectors without weakening one-shot/no-mutation collision behavior."
+    },
+    {
+      "finding_id": "FFC-D015-005",
+      "severity": "HIGH",
+      "title": "The owner resolution does not unambiguously adopt DC01 through DC13 as normative correction bytes",
+      "state": "OPEN",
+      "files": [
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_2026-08-26.json",
+        "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json"
+      ],
+      "line_or_key": [
+        "owner_resolution.owner_conditional_statement",
+        "owner_resolution.owner_selections",
+        "owner_resolution.proposal.derived_corrections",
+        "proposal.required_reviewers_and_sequence order 1"
+      ],
+      "evidence": "The proposal explicitly requires the owner to ratify the derived corrections as one bounded correction record. The owner statement says ratify all 15 D0-15 recommendations, and owner_selections enumerates only R01 through R15. The resolution references the proposal hash and reports derived_corrections=13, but it contains no normative adoption statement or ID list for DC01 through DC13. A count/reference alone does not say whether those rules are adopted authority or merely proposal metadata.",
+      "impact": "DC01 through DC13 carry essential error, stale-state, policy, rate, schema, vector, timestamp, backup, credential, event, binding, retention, and regeneration obligations. Successor-F1 correction cannot rely on them without inferring owner authority.",
+      "required_resolution": "Replace or amend the owner resolution with an explicit hash-bound normative adoption of D015-DC01 through D015-DC13, subject to correction of FFC-D015-002 through FFC-D015-004."
+    }
+  ],
+  "prior_gap_disposition": {
+    "anchor_variants": "CLOSED_IN_SELECTED_RULE",
+    "restore_aggregates": "CLOSED_IN_SELECTED_RULE",
+    "restore_plan_and_abort": "REPRESENTABLE_BUT_CONCURRENCE_GATE_BLOCKED",
+    "restore_discovery": "CLOSED_BY_AUTHORITY_STATUS_WITHOUT_NEW_OPERATION",
+    "bootstrap_state_vocabulary": "CLOSED_IN_SELECTED_RULE",
+    "bootstrap_preauthority_crash": "REPRESENTABLE_BUT_CONCURRENCE_GATE_BLOCKED",
+    "vector_count_and_executable_coverage": "OPEN_HIGH",
+    "snapshot_payload": "REPRESENTABLE",
+    "cursor_restart": "OPEN_BLOCKER",
+    "event_kind_table_mapping": "CLOSED_IN_SELECTED_RULE",
+    "global_event_union": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "final_gate": "CLOSED_RULE_BUT_CONCURRENCE_GATE_BLOCKED",
+    "credential_issue_epoch": "CLOSED_RULE_BUT_CONCURRENCE_GATE_BLOCKED",
+    "sole_owner_rotation": "CLOSED_RULE_BUT_CONCURRENCE_GATE_BLOCKED",
+    "credential_handoff": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "mapping_availability": "CLOSED_IN_SELECTED_RULE",
+    "mapping_collision": "OPEN_HIGH",
+    "retention_policy_history": "CLOSED_RULE_BUT_CONCURRENCE_GATE_BLOCKED",
+    "retention_execution": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "activity_metadata": "CLOSED_RULE_BUT_CONCURRENCE_GATE_BLOCKED",
+    "error_envelope": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "request_stale_state": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "policy_dependency_transport": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "rate_bucket_domains": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "timestamp_1970_9999": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "backup_manifest_and_physical_semantics": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "reference_session_request_idempotency_binding": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED",
+    "deterministic_regeneration_and_hashes": "CLOSED_IN_DERIVED_MAP_IF_NORMATIVELY_ADOPTED"
+  },
+  "immutable_evidence_and_stop_state": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_status": "IMMUTABLE_HISTORICAL_EVIDENCE_ONLY",
+    "accepted_f1_may_be_edited_in_place": false,
+    "accepted_f1_may_qualify_changed_bytes": false,
+    "successor_f1_requires_new_coordinate": true,
+    "f2_status": "STOPPED_UNCOMMITTED_UNQUALIFIED",
+    "f2_restart_authorized": false,
+    "f2_repair_or_grandfathering_authorized": false,
+    "f2_restart_rule": "Only after a corrected successor F1 is independently accepted at an exact new SHA and the Product Owner separately authorizes F2 against that SHA and review digest."
+  },
+  "required_before_repeat_concurrence": [
+    "Replace the owner-resolution bytes so every ratified stop-class concurrence role and serial mini-wave is explicit before product correction.",
+    "Resolve the process-restart cursor/reference contradiction without silently changing public MCP success semantics or persisting forbidden path/reference authority.",
+    "Close vector accounting: distinguish the 18 named 8+10 subtotal from all additional per-scenario executable cases and freeze replacement fixture IDs/count/hash consequences.",
+    "Freeze or explicitly defer the exact authenticated mapping collision-guard contract while preserving one-shot entropy, no retry, no overwrite, zero mutation, and the exact 53-code registry.",
+    "Explicitly ratify the corrected DC01 through DC13 set by ID and exact proposal/replacement hash.",
+    "Repeat fresh Full-contract and Lite-conformance concurrence on the replacement exact bytes; separately obtain every migration, security, and authority/concurrency concurrence required by the ratified governance matrix before successor-F1 correction."
+  ],
+  "commands": [
+    {
+      "command_id": "SOURCE-HASH-AND-BYTE-AUDIT",
+      "command_digest": "sha256:1d6fc161cb9f8c0240ca1e3557646558876d3942873422257a8c0a9167fc1f45",
+      "exit": 0,
+      "pass": 30,
+      "fail": 0,
+      "skip": 0,
+      "output_digest": "sha256:fc5e6026d4e421668f5503167c95f838780c35bad181aef4c00dca4399e98a07"
+    },
+    {
+      "command_id": "MAPPING-SELECTION-COUNT-AUDIT",
+      "command_digest": "sha256:587b866c837074e4b1107a42911b4df4282ceed48fefdaeb459aa812c1378e4d",
+      "exit": 0,
+      "pass": 9,
+      "fail": 0,
+      "skip": 0,
+      "output_digest": "sha256:34c1570d9b34e92ac7df90b73ea10dce937172150c9441fb68e38bc7c6d51606"
+    },
+    {
+      "command_id": "ACCEPTED-F1-OBJECT-AND-TREE-AUDIT",
+      "command_digest": "sha256:2fb970b8d3e11232b59d26df63f34bf99f340a22071459e3b07f0b25ec490c67",
+      "exit": 0,
+      "pass": 4,
+      "fail": 0,
+      "skip": 0,
+      "output_digest": "sha256:0bd031e10563dae5cb595d5379412e5b88edaf55031fbf2289ea6c52be377919"
+    }
+  ],
+  "command_digest_method": "command_digest is SHA-256 of the exact UTF-8 command_id; output_digest is SHA-256 of compact JSON with keys in exit,fail,pass,skip order for the recorded aggregate outcome.",
+  "hosted_runs": [],
+  "authorization_boundary": {
+    "authorized_by_this_artifact": "detached concurrence rejection only",
+    "not_authorized": [
+      "product correction",
+      "proposal correction",
+      "successor F1 implementation",
+      "F2 restart, repair, commit, signing, push, or acceptance",
+      "F3 through F5",
+      "Lite L1 through L4 or repin",
+      "merge",
+      "release",
+      "deployment",
+      "activation",
+      "publication"
+    ]
+  },
+  "record_digest_method": "SHA-256 of RFC-8785-compatible canonical JSON with record_digest omitted",
+  "record_digest": "sha256:ebc55e4cc7de53e727627b6b22184b27db1595a330e50320bfaaa5ac1302d620"
+}

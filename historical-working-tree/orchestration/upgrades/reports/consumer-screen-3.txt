@@ -1,0 +1,809 @@
+
+2026-08-31/product-audit/Kosmos-Oden/docs/SIDECAR-FORMAT.md
+1: # GKX 2.3 Sidecar Boundary
+8: .gkx/decisions/<decision-id>.yaml
+16: never write these paths. Existing migration and enrichment artifacts are
+20: A future general sidecar writer must use deterministic paths, reject absolute
+22: origin, bind the target UID and input hash, and never represent a proposal as a
+23: decision. Partial files must not survive a failed write.
+
+2026-08-31/product-audit/Kosmos-Oden/docs/STANDALONE-GKX-ENGINE-DESIGN.md
+1: # Standalone GKX Engine — Design and ADR-001
+3: **Status:** Design for the post-beta.13 cycle (adversarially verified against the
+9: ## 1. Goal
+17: ## 2. ADR-001 — Process boundary
+19: **Decision: library-first core, CLI as the standalone product, opt-in local service.
+32: ## 3. What already exists vs. what gets built
+34: | Capability | beta.12 status | Standalone work |
+51: API, never through the corpus scanner.
+53: ## 4. The vault-like contract
+58: - identity is uid-first (missing uids ⇒ path-bound + diagnostic, as in Obsidian);
+81: ## 5. Surfaces
+84: gkx validate [dir]            # schema + identity + lineage diagnostics, exit code
+94:                               # crash-safe apply, backup, decision record as the
+95:                               # plugin review UI — never hand-edit .gkx/proposals/
+103: ## 6. Security posture
+109: `proposals accept` (apply + decision record), `mv` (link rewrite), assessment-sidecar
+112: acquisition disabled by default; anything loaded from `.gkx/schema|policy` must
+115: ## 7. Phasing
+118:    exclusion + shared conformance fixtures proving plugin/CLI output identity. The
+126: ## 8. Non-goals
+
+2026-08-31/product-audit/Kosmos-Oden/docs/STORAGE-PROVIDER-STUDY.md
+1: # Storage provider and multi-target sync study
+7: ## Recommendation
+26: ## Measured `main.js` impact
+48: include provider-specific pagination, folder/file identity mapping, change
+54: ### SDK decision
+62: - The current AWS SDK requires ES2020 because of BigInt literals, while the
+70: ## Authentication and connectivity constraints
+72: ### Shared OAuth layer
+77: must never enter `data.json`, logs, conflict files, or synchronized `.obsidian`
+83: verification. Google requires platform-appropriate OAuth clients and supports
+84: PKCE for installed apps. Microsoft recommends authorization-code + PKCE for
+85: SPA/native clients. Dropbox recommends authorization-code + PKCE with refresh
+97: Large-file support must follow each provider’s rules: Google resumable upload,
+100: ## Can Kosmos sync to n+1 services?
+130: - Per-profile state keyed by `(profileId, normalizedPath)`, never one global
+138: - Bounded parallelism per target plus global bandwidth/concurrency limits.
+143: - **Backup**: receives local generations but never changes or deletes local
+145: - **Import**: pulls into staging and requires review before local application.
+147: For a replica group, conflicting versions from multiple remotes must all be
+152: ## Proposed implementation order
+167: ## Primary references
+169: - [Google installed-app OAuth and PKCE](https://developers.google.com/identity/protocols/oauth2/native-app)
+
+2026-08-31/product-audit/Kosmos-Oden/docs/SUBA-PRODUCT-LINE-BRANDING-AND-FUNCTIONALITY-HANDOFF.md
+1: # subA handoff: product-line branding and functionality alignment
+5: ## Branding baseline
+12: ## Functional parity checklist
+
+2026-08-31/product-audit/Kosmos-Oden/docs/THREAT-MODEL.md
+1: # Threat Model
+6: ## Assets
+16:   authority only after a dry-run approval; a bulk metadata defect could damage
+21: ## Trust boundaries
+23: 1. **Obsidian host ↔ renderer iframe.** The renderer is large and partly
+40: ## Adversaries & mitigations
+46: | Network eavesdropper (LAN mode) | LAN mode is off by default, requires a token, and the UI + docs warn that HTTP is unencrypted (use a VPN/SSH tunnel/TLS proxy). Not defended: passive observation of unencrypted LAN traffic — documented, not silently ignored. |
+47: | Token leakage | CSPRNG tokens; never logged; not in URLs by default; query-token auth deprecated/off/blocked-in-LAN; regeneration invalidates old clients. |
+52: | A score is mistaken for truth or authorization | Every assessment carries a policy ID/hash and the interpretation `documentation-and-support-quality-not-truth`; no score promotes epistemic state or authorizes use. |
+56: | Path traversal via renderer messages | Message paths validated: no absolute paths, no `..` segments. |
+57: | Malformed note content | Tolerant parser never throws the graph away; lineage validation degrades gracefully and reports via diagnostics. |
+61: | `internal` default is mistaken for privacy classification | Apply requires acknowledgement that defaults are not content inspection; UI/docs require confidential/PHI review before cloud routing. Connector sensitivity enforcement remains independent. |
+62: | GKX processing rewrites agent-control/generated files | Custom exclusion patterns and an opt-in developer preset are applied before migration/enrichment; previews disclose every excluded path/pattern. The preset defaults off so upgrades never silently omit user notes. |
+63: | LAN model address is public, rebound through DNS, or exposed on an untrusted network | LAN mode requires a private/link-local IP literal, rejects DNS/public/bind-all/loopback addresses, displays the exact endpoint on every run, uses a separate sensitivity ceiling, always blocks PHI, and warns that network/device/firewall/model trust remains the user's responsibility. |
+72: ## Explicitly out of scope / not claimed
+78:   attribute is what provides isolation (see `RENDERER-PROTOCOL.md`).
+
+2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/CI-CD-AND-AGENT-OPERATING-DIRECTIVE.md
+1: # Kosmos-Oden CI/CD and Agent Operating Directive
+6: **Status:** Proposed operating directive
+10: ## 1. Purpose
+20: - sandboxed renderer execution;
+21: - explicit dependency provenance;
+30: - renderer provenance checks;
+37: ## 2. Current baseline
+66: ## 3. Governing rules
+68: ### 3.1 Protected truths
+70: Every contributor and agent must preserve these unless a separately approved architecture decision explicitly changes them:
+77: 6. The stable plugin renderer remains sandboxed without `allow-same-origin`.
+78: 7. Host-to-renderer messages remain versioned and structurally validated.
+81: 10. New dependencies are exact-pinned and provenance-recorded.
+83: 12. An agent must not approve or merge its own change.
+85: ### 3.2 No direct changes to `main`
+87: All human and agent work must use a branch and pull request.
+94: renderer/<issue>-<short-name>
+103: ### 3.3 Generated artifacts
+105: Agents must edit source files, not generated files.
+116: After source changes, the implementation agent runs the official build and commits regenerated artifacts only when the repository's contribution policy continues to require committed build output. Generated diffs must not contain unexplained changes.
+120: ## 4. Agent separation of duties
+126: | Primary/Planning Agent | Read issue, inspect architecture and invariants, define scope, risks, acceptance tests, affected surfaces | Must not silently expand scope |
+127: | Implementation Agent | Change source, add tests, rebuild artifacts, document migration notes | Must not approve its own PR |
+128: | Test Agent | Independently run tests, inspect generated artifacts, add regression coverage, test failure paths | Must not modify production code merely to make a test pass without documenting why |
+129: | Renderer QA Agent | Execute browser matrix, screenshot comparisons, GPU/context-loss tests, performance checks | Must not waive visual changes |
+130: | Security/Invariant Agent | Review sandbox, network, token, dependency, provenance, offline, and read-only boundaries | Must not treat an absence of a known CVE as proof of safety |
+131: | Code Review Agent | Review architecture, maintainability, error handling, compatibility, and unnecessary complexity | Must not rely only on PR prose |
+132: | Release Agent | Verify version/changelog, prepare RC, collect CI evidence, generate release notes | Must not create or publish the production tag without human authorization |
+135: For a renderer change, the implementation agent, renderer QA agent, and final reviewer must be logically independent runs with separate prompts and evidence.
+139: ## 5. Required development workflow
+141: ### Step 1 — Open an issue
+156: Renderer issues must additionally state:
+167: ### Step 2 — Produce a change plan
+172: ## Change plan
+182: The plan is a control boundary. Scope expansion requires an issue/PR note.
+184: ### Step 3 — Implement on a branch
+197: ### Step 4 — Open a draft PR
+199: The PR must include:
+202: ## What changed
+204: ## Why
+206: ## Surfaces affected
+216: ## Risk flags
+217: - [ ] Renderer or shader change
+225: ## Evidence
+236: ### Step 5 — Run independent reviews
+238: At least one independent agent reviews ordinary code. Renderer, security, protocol, network, dependency, and release changes require human review.
+240: The reviewer must inspect:
+246: - dependency/provenance changes;
+250: ### Step 6 — Merge
+257: - stale PR branches must be updated and rerun before merge;
+262: ## 6. Recommended GitHub branch protection
+266: - require pull request before merging;
+267: - require at least one approving review;
+268: - require two approvals for `renderer`, `security`, `release`, `protocol`, or `network` labeled PRs;
+270: - require conversation resolution;
+271: - require signed commits where practical;
+272: - require linear history or squash merge;
+275: - require branches to be current before merge;
+279: Required status checks should include:
+291: Security / provenance
+292: Performance / renderer-budget        # blocking on renderer PRs
+298: ## 7. CI pipeline
+300: ### 7.1 Stage A — Source and policy validation
+319: - renderer revision policy;
+326: npm run check:renderer-provenance
+331: ### 7.2 Stage B — Build and artifact contract
+350: Proposed renderer outputs:
+360: Artifact checks must confirm:
+364: - expected renderer revision;
+365: - expected renderer backend marker;
+374: ### 7.3 Stage C — Reproducibility
+395: > Ubuntu and Windows builds of the same release inputs must produce byte-identical executable files, or the build must document and eliminate the source of variation.
+397: ### 7.4 Stage D — Browser-executed tests
+430: ### 7.5 Stage E — Visual regression
+470: - explicit approval for changed baselines.
+474: ### 7.6 Stage F — Performance and resource budgets
+478: Renderer PR budgets should track:
+499: renderer PR:
+508: ### 7.7 Stage G — Security and provenance
+518: - renderer provenance validation;
+519: - GitHub artifact attestation/SLSA provenance;
+523: For a vendored renderer, require:
+538: For an npm-bundled renderer, require:
+547: Do not claim a renderer upgrade fixes a security vulnerability unless a specific advisory, affected range, and corrected release are documented.
+551: ## 8. CD and promotion process
+553: ### 8.1 Pull-request artifacts
+561: ### 8.2 Release candidate
+573: - renderer revision/backend;
+578: - provenance attestation.
+582: ### 8.3 Soak validation
+584: For a renderer release, validate the RC on real systems:
+598: ### 8.4 Production promotion
+600: Production release requires:
+604: 3. human approval;
+609: 8. SBOM and provenance attachment;
+613: Agents may prepare the release and evidence. They must not independently authorize production promotion.
+615: ### 8.5 Rollback
+617: Every release must state:
+623: - renderer-specific rollback assets.
+629: ## 9. Renderer-upgrade special gate
+631: A renderer upgrade is a high-risk change even when it compiles.
+633: It must be separated from unrelated features.
+638: 2. Introduce module-based dependency/provenance changes without visual redesign.
+660: ## 10. Suggested workflow files
+670:   performance.yml           # graph and renderer budgets
+671:   security.yml              # CodeQL, SBOM, provenance, licenses
+678: Use path filters carefully. Policy, build, renderer, test, workflow, package, and release-document changes should always trigger the complete relevant pipeline.
+682: ## 11. Definition of done
+694: - dependency and provenance records are current;
+697: - human approval is present for high-risk changes.
+699: A green build alone is not sufficient for renderer work. The scene must execute, render, remain usable, remain offline, and remain compatible on the declared platform set.
+
+2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/HTML-RENDERER-VARIANTS.md
+1: # Kosmos-Oden HTML Renderer Variants
+7: ## 1. Core principle
+20: The stable and experimental renderers should consume the same positioned scene data while implementing backend-specific materials and renderer initialization.
+24: ## 2. Recommended artifact set
+26: | Artifact | Renderer | Status | Primary purpose |
+32: | `vault-kosmos-legacy.html` | Frozen r128 or selected WebGL1-capable renderer | Optional legacy | Older hardware/browser compatibility only |
+36: ## 3. Stable standalone: `kosmos-oden-stand-alone.html`
+38: ### Renderer
+47: ### Why this remains the default
+55: The artifact must retain:
+64: - embedded CSS, JS, Core, and renderer.
+66: ### Stable acceptance requirements
+80: ## 4. Stable plugin embed: `dist/kosmos-embed.html`
+82: ### Renderer
+91: ### Why it should match the stable standalone renderer
+93: Using the same renderer implementation provides:
+111: ### Plugin-specific requirements
+118: - no direct Obsidian API access from renderer;
+124: ## 5. Experimental standalone: `vault-kosmos-webgpu.html`
+126: ### Renderer
+135: ### Why it is separate
+148: - current Kosmos GLSL materials require a TSL/NodeMaterial rewrite.
+159: ### Startup behavior
+164: Renderer requested: WebGPU
+174: It must not silently identify fallback as native WebGPU.
+176: ### Distribution guidance
+183: - not the stable plugin renderer;
+186: Because WebGPU generally requires a secure context, documentation should recommend:
+194: The stable WebGL file must remain serverless.
+198: ## 6. Experimental plugin embed: `dist/kosmos-embed-webgpu.html`
+200: ### Purpose
+214: ### Why not bundle both stable embeds in `main.js` immediately
+216: Embedding both complete renderer bundles can:
+237: 1. one TSL renderer using WebGPU with WebGL2 backend fallback;
+240: 4. an optional renderer companion plugin.
+246: ## 7. Optional legacy: `vault-kosmos-legacy.html`
+248: ### Renderer
+255: ### Why it may exist
+271: ### Conditions for retaining it
+275: - a real supported user/platform requires it;
+276: - provenance is recorded;
+283: ### Required warning
+294: ## 8. Shared renderer architecture
+299: src/renderer/
+310:       renderer-webgl.ts
+313:       renderer-webgpu.ts
+344: ## 9. Build entry points
+361: import { createWebGLBackend } from "../renderer/backends/webgl/renderer-webgl";
+370: import { createWebGPUBackend } from "../renderer/backends/webgpu/renderer-webgpu";
+393: ## 10. Shared visual specification, separate implementations
+410: GLSL and TSL implementations may not be pixel-identical, but they must be materially equivalent.
+426: ## 11. Why different renderers should not change graph output
+428: Renderer selection must not affect:
+442: The renderer is a view, not an authority.
+448: ## 12. Release naming
+460: renderer-provenance.json
+467: ## 13. Promotion criteria for WebGPU
+
+2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/KOSMOS-ODEN-RENDERER-ASSESSMENT.md
+1: # Kosmos-Oden Renderer and Engineering Assessment
+9: ## Executive conclusion
+17: - a sandboxed renderer;
+22: - tag-built releases with checksums and provenance.
+24: The current renderer dependency, Three.js r128, is old enough to create meaningful maintenance and compatibility risk. Upgrading is warranted, but the correct strategy is **not** to replace r128 and simultaneously switch the entire project to WebGPU.
+28: 1. upgrade the stable renderer to current Three.js using **WebGLRenderer/WebGL2**;
+32: 5. retain a legacy renderer only if actual users need WebGL1-era compatibility.
+36: ## 1. Assessment of the supplied report
+38: ### What it gets right
+40: #### Vendoring was intentional
+54: #### Supply-chain surface is reduced at runtime
+58: This does not eliminate supply-chain risk. It moves the critical control point to build time, where exact source, integrity, licensing, and update policy must be governed.
+60: #### Maintenance responsibility transfers to the project
+64: > Does Kosmos-Oden have a disciplined method for discovering, testing, and adopting renderer changes that matter?
+68: #### Reproducibility, auditability, and archival use are real strengths
+75: - identical renderer revision;
+82: ### What should be corrected or softened
+84: #### Unsupported CVE claims
+96: #### “Outdated shader compiler” is imprecise
+105: - renderer-generated shader changes;
+111: #### DNS rebinding is not a renderer-version issue
+117: #### WebGPU is not a drop-in Three.js version bump
+132: ## 2. What the repository already does well
+134: ### Shared semantics reduce migration risk
+136: The renderer does not parse Markdown or reconstruct lineage. `src/core/` produces the graph, and the renderer consumes it.
+138: That separation is excellent. A renderer replacement should not change:
+149: ### Renderer isolation is meaningful
+153: A renderer defect therefore has a smaller blast radius than it would have inside the privileged Obsidian host context.
+155: ### The render implementation is already performance-conscious
+157: The renderer uses:
+172: ### Release integrity is strong for a small project
+185: This is substantially more mature than the original report's “add CI and provenance” recommendation suggests.
+189: ## 3. Material current risks
+191: ### 3.1 No automated real-browser rendering gate
+208: ### 3.2 No automated image regression
+212: A renderer upgrade needs deterministic screenshots with controlled camera, time, seed, DPR, quality tier, and browser version.
+214: ### 3.3 r128-to-current crosses major compatibility changes
+223: - renderer/shader internals;
+226: The project cannot safely replace `vendor/three.min.js` with a modern equivalent because the old global minified build no longer exists in current releases. The build architecture must switch to module import plus bundling.
+228: ### 3.4 Color management is a high-risk visual area
+238: The migration must establish one explicit owner for each operation:
+247: ### 3.5 Modern WebGLRenderer removes WebGL1
+249: A modern Three.js WebGLRenderer is effectively a WebGL2 renderer.
+253: This compatibility reduction must be intentional, documented, and tested. A frozen legacy HTML asset is preferable to weakening the primary modern build if real users still require WebGL1.
+255: ### 3.6 Renderer provenance is incomplete
+266: Moving to exact-pinned `three` in `package.json` improves provenance because `package-lock.json` records integrity, while the release can still remain fully offline at runtime.
+270: ## 4. Benefits of upgrading the stable rendering engine
+272: ### All platforms
+279: - Better context-loss, shader diagnostics, renderer fixes, and instancing maintenance from upstream.
+285: ### Windows desktop and Obsidian/Electron
+292: ### macOS desktop
+296: - More current handling of high-DPI displays and renderer internals.
+299: ### Linux desktop
+306: ### Android
+313: ### iPhone and iPad
+320: ### Standalone offline HTML
+322: An npm-based build does **not** require runtime internet access. Esbuild can inline the exact module into the final HTML just as the vendored global file is inlined today.
+334: ### Plugin embed
+336: The plugin's renderer can receive the same modern WebGL2 engine while retaining:
+341: - no renderer access to Obsidian APIs;
+347: ## 5. What an upgrade will not automatically provide
+362: Each claim must be benchmarked or tested.
+364: The current renderer is already efficient in several important ways. Performance improvements may be small unless the project also changes shaders, labels, draw topology, update scheduling, or data transfer.
+368: ## 6. Recommended target architecture
+370: ### Stable renderer
+381: ### Experimental renderer
+392: ### Optional legacy renderer
+404: ## 7. Final recommendation
+406: Proceed with an upgrade, but treat it as a controlled renderer migration rather than dependency housekeeping.
+412: 3. Add renderer provenance checks.
+415: 6. Upgrade stable WebGL renderer to r185.
+419: 10. create the WebGPU/TSL renderer as a separate project phase.
+421: This preserves what is distinctive about Kosmos-Oden—offline, deterministic, inspectable, shared semantics—while removing unnecessary dependence on a five-year-old renderer architecture.
+
+2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/README.md
+1: # Kosmos-Oden Engineering Review Package
+8: 2. **KOSMOS-ODEN-RENDERER-ASSESSMENT.md**  
+9:    Independent assessment of the supplied report and the actual repository architecture, including benefits and risks of upgrading the renderer across desktop, mobile, plugin, and standalone platforms.
+11: 3. **RENDERER-UPGRADE-BUILD-INSTRUCTIONS.md**  
+12:    Step-by-step instructions to migrate the stable renderer from Three.js r128 to r185/`three@0.185.1`, preserving offline and deterministic output, followed by a separate WebGPU phase.
+14: 4. **HTML-RENDERER-VARIANTS.md**  
+17: ## Principal recommendation
+27:     -> esbuild-inlined WebGL2 stable renderer
+
+2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/RENDERER-UPGRADE-BUILD-INSTRUCTIONS.md
+1: # Kosmos-Oden Renderer Upgrade Build Instructions
+3: **Goal:** Move the stable renderer from vendored Three.js r128 to a current module-bundled Three.js WebGL2 renderer, then prepare—but do not conflate—the separate WebGPU renderer.
+9: ## 1. Migration policy
+11: This migration must preserve:
+19: - renderer protocol behavior;
+23: - artifact checks and release provenance.
+25: Do not add new visual features during the stable renderer upgrade.
+31: ## 2. Create the migration issue and branch
+36: Renderer: migrate stable WebGL build from Three.js r128 to r185
+44: git switch -c renderer/<issue>-three-r185-webgl
+58: ## 3. Baseline the current renderer
+62: ### 3.1 Verify current source
+71: ### 3.2 Record runtime information
+88: ### 3.3 Capture deterministic fixtures
+121: ## 4. Add browser automation before the upgrade
+148:   "test:renderer": "npm run test:browser && npm run test:visual"
+156: ## 5. Replace the global vendored runtime with an exact module dependency
+180: ### 5.1 Add renderer provenance metadata
+185: renderer-provenance.json
+207: Add `scripts/check-renderer-provenance.mjs` that verifies:
+218: ## 6. Refactor renderer imports
+236: Replace it with a renderer-construction failure boundary:
+257: ### 6.1 Shader module cleanup
+277: A full type cleanup may be a follow-up PR. During the renderer migration, favor minimal behavior-preserving changes.
+281: ## 7. Update the build generator
+303:   const css = readFileSync(resolve(root, "src/renderer/kosmos.css"), "utf8");
+304:   const body = readFileSync(resolve(root, "src/renderer/kosmos-body.html"), "utf8");
+341: vendor/legacy/three-r128.PROVENANCE.json
+346: ## 8. Resolve WebGL2 and platform requirements
+362: This Kosmos build requires WebGL2.
+367: Do not silently downgrade the stable r185 renderer to an unknown implementation.
+373: - software renderer;
+379: ## 9. Migrate color management deliberately
+393: ### 9.1 Choose one output-conversion owner
+397: #### Strategy A — Preserve shader-owned output conversion
+404: #### Strategy B — Move output conversion to Three.js
+408: - use `renderer.outputColorSpace = THREE.SRGBColorSpace`;
+416: ### 9.2 Explicitly set renderer policy
+421: renderer.toneMapping = THREE.NoToneMapping;
+422: renderer.outputColorSpace = THREE.SRGBColorSpace; // only if renderer owns conversion
+435: ### 9.3 Validate `convertSRGBToLinear()`
+447: ## 10. Validate custom GLSL
+476: ## 11. Validate changed Three.js behavior
+478: ### InstancedMesh culling
+488: ### Dynamic buffers
+500: ### Context loss
+519: ### Disposal
+532: ## 12. Build and test the stable WebGL upgrade
+544: npm run check:renderer-provenance
+572: ## 13. Cross-platform validation
+574: ### Windows
+583: ### macOS
+591: ### Linux
+599: ### Android
+608: ### iPhone/iPad
+617: ### Offline
+628: ## 14. Release the stable upgrade
+636: The exact version is illustrative; use the project's chosen SemVer decision.
+638: The RC release must include:
+645: - renderer provenance;
+655: ## 15. Begin WebGPU only after stable WebGL release
+660: Renderer: implement experimental WebGPU/TSL backend
+661: renderer/<issue>-webgpu-tsl
+668: - await renderer initialization;
+682: const renderer = new THREE.WebGPURenderer({
+688: await renderer.init();
+694: const renderer = new THREE.WebGPURenderer({
+701: await renderer.init();
+708: ## 16. Rollback
+720: Because the project is read-only, rollback should not require vault-data migration.
+
+2026-08-31/product-audit/Kosmos-Oden/README.md
+1: # Kosmos-Oden — v0.8.0
+13: > **Status:** repository and plugin metadata remain at **0.8.0**. The released
+22: ## Pick a launchpad
+33: ## Open the standalone sky
+36: graph path, Three.js renderer, controls, and styles are bundled inside it.
+44: without that API can import a one-time folder snapshot instead. The status
+48: Folder and snapshot viewing do not require Node.js, Python, a web server, a
+52: ## Fly from Obsidian
+59: The same renderer works on desktop and mobile. It pauses its render loop while
+66: ## What your notes become
+87: ## Ways to explore
+100: by a folder offers **Expand Folder** instead; it never creates a fake note just
+103: ## Lineage, time, and GKX
+117: documentation/support assessment is not a truth score and never authorizes
+118: use. This is a bounded product profile, not a claim of full GKOS conformance or
+121: ### Optional read-only Navigation
+131: ### Experimental managed-MOC groundwork
+143: - status reports planner, adapter, authority provider, journal, policy, lease,
+150: - authority evaluation requires a credential-bound actor and exact grant for
+182: ## Watch authorized agent activity
+185: rocket markers, and labels. The viewer never draws a line segment between two
+189: bounded score that fades with elapsed monotonic time. It is off by default and
+195: or 2 MB, whichever comes first. Replay supports play, pause, seek, restart,
+196: stop, and 1x/2x/5x speeds. Replayed events are marked and never re-enter the
+197: live recording; live events can remain buffered while replay is active.
+202: ## Optional standalone-service client
+221: ## Obsidian Agent API and Graphiti
+236: requires a token and uses unencrypted HTTP, so use a trusted private network or
+242: ## Human-controlled GKX improvement
+246: change. Applying it requires visible acknowledgements, creates byte-exact local
+253: by default. Nothing is preselected. A reviewer must resolve every suggestion
+259: Confidence helps explain a suggestion; it never supplies approval authority.
+261: ## Optional Nextcloud WebDAV sync
+277: ## Security and privacy at a glance
+281: - The plugin renderer runs in an opaque-origin sandbox and communicates through
+285:   never logged. Query-token authentication is deprecated and off by default.
+288: - Graphs, Graphiti episodes, assessments, heat, and replay are projections;
+295: ## Roadmap and feature-branch boundary
+302: - the new immutable proposal/decision quarantine and confidence-review system;
+316: ## Build and verify from source
+323: npm run test:renderer
+333: npm run check:renderer-provenance
+352: ## Technical map
+357: - [Renderer protocol](docs/RENDERER-PROTOCOL.md)—the Obsidian host/viewer
+370: ## Origin and licensing
+375: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) for provenance and bundled
+
+2026-08-31/product-audit/Kosmos-Oden/ROADMAP.md
+1: # Kosmos Research Studio roadmap
+8: ## Current line
+14: - Preserve offline and read-only defaults; require explicit, reviewable
+18: ## Next
+30: ## Coordination gates
+39: ## Out of scope
+43: - Treating product release status as GKOS certification.
+
+2026-08-31/product-audit/Kosmos-Oden/SECURITY.md
+1: # Security Policy
+3: ## Reporting a vulnerability
+12: ## Scope
+22: - Build provenance and artifact integrity.
+26: ## Security properties (enforced, not merely intended)
+42: ## Handling of secrets
+44: The Agent API token is stored in the plugin's `data.json` (gitignored, never
+45: committed). Tokens are never logged and never placed in URLs by the default
+49: Secret Storage (Obsidian 1.11.4+), not in plugin `data.json`. Kosmos-Oden never
+
+2026-08-31/product-audit/Kosmos-Oden/TECHNICAL_README.md
+1: # Kosmos-Oden Technical README
+3: ## Scope and status vocabulary
+15: - **Authorized**: an applicable human or policy decision permits an effect.
+25: | Local Cluster renderer | Shared cosmology, hierarchical layout, WebGL2 shaders, controls, Chrono, search, playback, agent trails | Viewer starts after a graph is loaded | Visual projection only |
+27: | Obsidian plugin | Sandboxed renderer host, live vault deltas, note/folder actions, settings, explicit GKX workflows, optional sync | User installs/enables the plugin | Obsidian supplies host and Secret Storage APIs |
+29: | Standalone service client | Loopback address validation, bearer graph fetch, capability negotiation, authenticated event stream | Requires an external compatible service and viewer credential | Client validates Draft.1; service is not bundled |
+30: | Traffic and replay | Per-agent trails, recent-visit heat scalar, explicit bounded record/export/import/replay | Heat and recording off until selected | Observability only; no cost, fuel, quality, or authority meaning |
+31: | GKX maintenance | Deterministic audit/conversion, backups, guarded apply, optional bounded enrichment review | Explicit commands and acknowledgements | Not the newer immutable proposal/decision subsystem |
+33: | Navigation Effects feature branch | Operational-path exclusions, fail-closed settings/status, framework-neutral Engine adapter, policy/authority validation, injected adoption/preview components, and a C0 host-neutral adapter contract with unavailable profile descriptors | All Effects and automatic flags false by default; every C0 host operation is unavailable and no host executor is imported or wired | No durable adoption store, executable host adapter, source writer, journal/archive/lease, coordinator, recovery, reconciliation runtime, self-write suppression, complete UI, or qualification |
+35: ## Controlling architecture
+50:         +---------> shared Local Cluster renderer <---------+
+64: renderer consumes the Engine-backed graph; it does not reinterpret frontmatter
+71: ## Versions and dependency integrity
+85: 0.185.1, and renderer provenance is checked in source and generated artifacts.
+112: ## Semantic and graph behavior
+131: under a versioned policy. They are not truth, approval, operational fitness, or
+134: ## Experimental Navigation Effects reconciliation scope
+140: ### Implemented no-write boundaries
+144: | Operational exclusions | `src/operational-paths.ts` recognizes `.gkx` and `_archive/moc-runs` roots and descendants across standalone, plugin, migration, enrichment, and agent-facing corpus paths | It is an exclusion predicate, not filesystem containment or write authorization |
+147: | Independent status | Navigation 1.0, planner, host adapter, authority provider, journal, policy digest, lease, recovery, reconciliation, ownership, maintenance, and creation have independent ready/state/reason fields | Planner or adapter availability never renders as current authority or runtime safety |
+149: | Policy validator | Accepts bounded UTF-8 JSON policy bytes, closed identity fields, canonical JSON, and an exact ID/version/lowercase-SHA-256 reference | No policy is bundled, selected, ratified, or made effective by validation |
+150: | Authority boundary | Validates a credential-bound actor, explicit approving actor, exact vault/root/path, operation/object class, sensitivity ceiling, policy binding, expiry, and injected evaluation time; denies agent self-approval and inference fields | No authority provider is configured; connectivity, bearer possession, client label, confidence, approval booleans, or timestamps cannot create a grant |
+152: | Trusted adoption preview | Two-stage modal shows target/digests/ownership/marker validation/exact diff, rechecks freshness, requires an exact confirmation phrase, and reports persistence failures without claiming a source write | The modal is not registered in the plugin or standalone host; its record callback is injected and confirmation fails closed without a freshness provider |
+157: agent self-approval, and unknown runtime facts fail closed. The implemented
+162: ### Runtime and qualification blockers
+175: - trusted settings/status/recovery/rollback/audit UI and runtime registration
+181:   2.2 artifact, plus release/signing/publishing authorization.
+196: ## Local Cluster renderer
+198: `src/renderer/cosmology.ts` maps graph nodes into the cluster core, galaxies,
+200: `src/renderer/layout.ts` performs hierarchical packing, orbit placement,
+206: Neptunian, and gas-giant visual categories. Those classifications are renderer
+209: `src/renderer/renderer.ts` owns:
+223: The renderer is WebGL2-based. Its low-power path reduces detail and effects
+226: ## Offline standalone application
+229: renderer into `kosmos-oden-stand-alone.html`. All application JavaScript, CSS,
+243: changes use incremental parsing. Status distinguishes live monitoring,
+251: ## Optional standalone-service client
+256: ### Address and credential rules
+258: - Destinations must use HTTP(S) and the literal loopback hosts `127.0.0.1`,
+263: - Requests send `Authorization: Bearer ...` and `cache: no-store`.
+264: - A viewer credential does not become an MCP agent identity or write authority.
+266: ### Capability negotiation
+275: future client/runtime update requires reviewed contract alignment and live
+278: ### Authenticated traversal stream
+281: `EventSource` cannot supply the bearer header reliably. It requires the exact
+285: Reconnect is bounded. Resume sends both `Last-Event-ID` and the bound event
+291: agent identity and label, tool, authorized paths, status, and nullable
+296: ## Traffic Heatmap and session replay
+300: ### Heat
+302: `TrafficHeatmap` maintains an LRU-bounded map of recent node visits. The
+309: Only validated traversal events increment traffic. The renderer sends the
+316: ### Recording and replay
+325: Replay events are labelled and never written to the live recorder. Live events
+326: continue into a separately bounded buffer during replay; the operator decides
+329: ## Obsidian plugin host
+333: renderer runs in an opaque-origin sandboxed iframe. A closed, versioned
+339: trigger a complete rebuild. The renderer stops when its leaf is hidden and
+343: desktop-gated where their host primitives require it; the renderer itself
+346: ## Obsidian Agent API and MCP
+357: relationships, policy, and a bounded vault assessment.
+380: ## Graphiti and command-line export
+398: ## Explicit GKX maintenance workflows
+404: ### Audit, migration, and conversion
+414: ### Content-assisted enrichment
+416: The established enrichment workflow selects bounded evidence and produces
+426: targets must resolve, current bytes must still match, and the established
+436: ## Nextcloud WebDAV sync
+458: ## Read/write boundary
+462: | Renderer, search, Chrono, heat, replay | No source or sidecar write |
+467: | Navigation Effects feature-branch planner/settings/status | Pure capability, configuration, policy, and authority-validation values; no source or sidecar write |
+474: confidence value, or timestamp supplies approval authority.
+476: ## Security and privacy boundaries
+480: - The renderer iframe is sandboxed without `allow-same-origin` and accepts only
+484:   requires authentication.
+488: - Generated graphs, episodes, diagnostics, assessments, heat, and replay are
+503: ## Build, package staging, and verification
+519: | `npm run check:renderer-provenance` | Three.js pin, build marker, and no-CDN provenance |
+523: | `npm run test:renderer` | Browser plus visual suites |
+528: notarization, publication, or release authorization.
+530: CI type-checks, builds, tests, checks invariants and provenance, performs
+536: ## Explicitly excluded roadmap and release gates
+540: the current reconciliation branch and must not be described as implemented,
+543: - the new immutable proposal/decision quarantine and confidence-review system;
+556: ## Repository map
+561: | `src/navigation-effects/` | Feature-branch no-write settings/status, framework-neutral Engine boundary, policy validation, and authority validation |
+563: | `src/renderer/` | Cosmology, layout, shaders, controls, trails, heat, and renderer lifecycle |
+564: | `src/standalone/` | Folder/snapshot sources, monitoring, service client, observability, replay, and standalone UI |
+568: | `scripts/` | Deterministic builds, integrity checks, provenance, and release staging |
+573: ## Related documents
+576: - [Renderer host protocol](docs/RENDERER-PROTOCOL.md)
+592: ## Licensing
+
+2026-08-31/product-audit/Kosmos-Oden/THIRD-PARTY-NOTICES.md DUPLICATE 2026-08-31/observatory-audit/GKOS-Observatory/web/vendor/kosmos-oden/THIRD-PARTY-NOTICES.md
+
+
+2026-08-31/product-audit/theMarshal-Core-Rust/.github/pull_request_template.md
+1: ## Scope
+7: ## Evidence
+14: ## Authority
+
+2026-08-31/product-audit/theMarshal-Core-Rust/ARCHITECTURE.md
+1: # Architecture
+3: ## Governing rule
+7: status is prospective: no crate in this bootstrap has activation authority.
+10: Product repositories consume exact qualified revisions through bounded
+14: ## Crates
+28: ## EVD-002 greenfield appointment
+42: ## Prospective PostgreSQL write boundary
+50: supporting records, never canonical authority.
+54: the required owner authorization.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/CODEBASE_MAP.md
+1: # Codebase Map
+3: ## Data flow
+8: ## Hard boundaries
+10: - `marshal-core-canonical` must not depend on database, network, UI, or model SDKs.
+11: - `marshal-core-evidence` must not allocate sequences outside the authority transaction.
+12: - `marshal-core-verify` is read-only and must never acquire write credentials.
+13: - External checkpoint publication never occurs inside the authority transaction.
+19: ## First implementation lane
+21: EVD-002 cross-language equivalence is first. Other crates expose bounded
+22: interfaces and must not claim implementation completion without their own work
+25: ## Governing registration
+34: ## WP-01 candidate artifacts
+41: - `coding-agent-handoffs/WP01-*.md` — bounded standalone implementation/review assignments.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-CANONICAL-CBOR.md
+1: # Coding-agent handoff: canonical CBOR
+5: ## Mission
+8: ## Inputs
+11: ## Outputs
+14: ## Boundaries
+15: Accept typed logical values or raw bytes for verification. Return canonical bytes/digest or one stable diagnostic. No SQL, runtime state, policy, clock, network, filesystem, JSON identity, or language-default map ordering.
+17: ## Required tests
+18: Exact bytes and digest for every normative vector; all mutation twins; duplicate keys; map key length-first ordering; integer/length shortest form; definite lengths; UTF-8/NFC; null/empty distinctions; floats/tags/simple values rejected; decode-reencode equality; cross-language vectors; fuzzing never panics.
+20: ## Forbidden
+23: ## Exit report
+26: ## Repository scope
+28: Own only `crates/marshal-core-canonical/**`, canonical-specific fixtures under `fixtures/cbor/**`, and localized tests under `tests/canonical/**`. Changes to `marshal-core-contracts`, specifications, workspace dependencies, or CI require an explicit review note; do not edit authority, runtime, database, policy, secrets, SDK, or product integration code.
+30: ## Prerequisites and pinned inputs
+35: - Dependency allowlist: permissive licenses only; no copyleft/source-available dependency without owner approval.
+37: ## Implementation sequence
+40: 2. Define bounded logical value types that cannot represent floats, tags, indefinite collections, or unbounded integers.
+48: ## Required public surface
+59: ## Commands
+63: ## Evidence outputs
+67: ## Lane interactions
+69: Contracts lane owns logical meaning and diagnostic numbers. Fixture lane independently approves expected bytes. Verifier consumes only the public strict API. PostgreSQL receives opaque `CanonicalBytes`; it must not call an alternate serializer. Python comparator receives the same pinned bytes, never its own serialization authority.
+71: ## Acceptance checklist
+81: ## Strict reporting
+83: `DONE` must name exact head, changed files, APIs, commands/results, artifact digests, dependencies, residual risks and reviewer. `BLOCKED` must name the failed prerequisite, evidence, safe work completed and exact unblock action. `NEEDS_HUMAN` must present each unresolved semantic choice, alternatives, compatibility/security effects, recommendation, proposed contract text and tests that would change.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-CRASH-CONCURRENCY.md
+1: # Coding-agent handoff: crash and concurrency qualification
+5: ## Mission
+8: ## Inputs
+11: ## Outputs
+14: ## Required faults/schedules
+17: ## Assertions
+20: ## Forbidden
+23: ## Exit report
+26: ## Repository scope
+30: ## Prerequisites
+34: ## Implementation sequence
+42: 7. Run full matrices, replay every failure and package snapshots/checksums/logs.
+44: ## Required harness APIs/models
+47: - A controller API that requires an ephemeral-target token and refuses broad/unresolved database targets.
+51: ## Commands
+53: Localized commands start the pinned ephemeral PostgreSQL image, run crash matrix and concurrency matrix with explicit seed/output directory, replay a named case, and run the read-only verifier. Full verification adds workspace fmt/clippy/tests, release feature-tree inspection proving no fault hook, dependency/license/advisory scans, and complete matrix manifest verification.
+55: ## Evidence outputs
+59: ## Security/non-goals
+61: No production target, unresolved environment variable, wildcard destructive command, mock-database qualification, flaky suppression, unseeded randomized result, modified invariant, hidden failed run, or risk exception without owner approval.
+63: ## Interactions
+67: ## Acceptance checklist
+76: ## Strict reporting
+
+2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-FIXTURES-QUALIFICATION-EVIDENCE.md
+1: # Coding-agent handoff: fixtures and qualification evidence
+5: ## Mission
+8: ## Inputs
+11: ## Outputs
+12: Versioned CBOR fixtures, human projections, mutation provenance, SHA-256 manifests, coverage registry, run-bundle schema, reproducibility scripts, mismatch and clean-streak reports.
+14: ## Required coverage
+17: ## Independence
+18: Expected bytes/digests require either a separately implemented generator plus review or fixed hand-audited vectors. Fixtures generated and consumed by one code path alone are insufficient.
+20: ## Forbidden
+23: ## Exit report
+26: ## Repository scope
+30: ## Prerequisites and pinned inputs
+34: ## Implementation sequence
+39: 4. Record mutation provenance: source fixture, exact byte/logical mutation and expected diagnostic.
+42: 7. Validate clean-room replay and permanent authority-domain retention for canonical entries/metadata, genesis, appointments, receipts, and checkpoint anchors; prove external/raw projections follow separate classification retention and that secrets, PHI, and bulky content are absent.
+44: ## Required artifact models/tools
+46: - Fixture record: ID, contract/profile, logical projection, canonical bytes, digest, expected decision/code and provenance.
+49: - CLI equivalents: `fixtures verify`, `manifest create`, `manifest verify`, `qualification replay`.
+51: ## Commands
+55: ## Evidence outputs
+59: ## Security/non-goals
+63: ## Interactions
+67: ## Acceptance checklist
+70: - [ ] Every mutation has explicit provenance and diagnostic.
+79: ## Strict reporting
+
+2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-INDEPENDENT-SECURITY-REVIEW.md
+1: # Coding-agent handoff: independent security and invariant review
+3: **Candidate only. Reviewer must not merge, ratify, or activate.**
+5: ## Mission
+8: ## Inputs
+11: ## Review focus
+14: ## Outputs
+17: ## Required validation
+20: ## Forbidden
+23: ## Exit report
+26: ## Repository scope
+30: ## Prerequisites
+32: Exact commits/builds, complete diff, contracts/owner decisions, threat model, SBOM/license/advisory results, database role/config dump, test manifests and replay access to ephemeral environments. Missing evidence is reported, not assumed safe.
+34: ## Review sequence
+46: ## Required review models/outputs
+48: Finding fields: ID, severity, confidence, exact file/line or artifact, preconditions, exploit/reproduction, violated invariant, impact, remediation, required regression and status. Produce threat-boundary map, attack checklist, independent digest manifest, test transcript and residual-risk register.
+50: ## Commands
+54: ## Forbidden/non-goals
+56: No silent fix, approval of own code, production data/credentials, destructive non-ephemeral test, contract weakening, dismissed failed test, accepted risk on owner's behalf, merge/ratification/activation, or `DONE` with unresolved critical/high finding.
+58: ## Lane interactions
+62: ## Acceptance checklist
+71: ## Strict reporting
+73: `DONE` names reviewed head/builds, commands, artifacts, finding counts by severity, closed regressions and residual risks. `BLOCKED` names missing access/evidence and affected conclusions. `NEEDS_HUMAN` provides the exact risk acceptance or semantic/authority decision, exploit consequence, alternatives, reviewer recommendation and required contract/test changes.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-LIFECYCLE-AUTHORITY.md
+1: # Coding-agent handoff: lifecycle and authority
+5: ## Mission
+6: Implement pure, deterministic transition evaluators in contracts/authority/runtime crates. Checks must be deny-by-default and usable both before work and immediately before commit.
+8: ## Inputs
+11: ## Outputs
+14: ## Boundaries
+17: ## Required tests
+20: ## Forbidden
+21: No self-approval, default allow, owner bypass, audit bypass, implicit time, mutable singleton, swallowed error, direct PostgreSQL, or transition without an evidence intent.
+23: ## Exit report
+26: ## Repository scope
+30: ## Pinned prerequisites
+34: Use the state-machine and diagnostic candidates at the work-packet head, the owner appointment model, no-self-mint rule, separate state-domain decision, and canonical evidence-intent types. The component domain has five states and exactly 13 direct edges. The runtime/work domain has nine states, exactly 11 direct edges, and exactly four terminals. Use registry version `MCR-EVD-LIFECYCLE-REGISTRY-CANDIDATE-2` and derive its digest from the normative TSV bytes; do not copy the prior candidate digest. Timestamp authority and any future `IDLE` semantics remain owner/spec inputs; do not infer them.
+36: ## Implementation sequence
+46: ## Required public models/APIs
+56: ## Commands and evidence
+60: ## Security and non-goals
+62: No default allow, owner bypass, audit bypass, self-approval, implicit global clock, mutable singleton, swallowed diagnostic, dynamic string state, database transaction, execution of admitted work, or changing contract semantics to satisfy tests.
+64: ## Lane interactions
+66: Canonical lane owns evidence bytes; this lane emits logical intents only. PostgreSQL lane serializes versions/epochs and revalidates under lock. Policy lane supplies a decision, not direct state mutation. Crash lane targets the admission-to-precommit race. Independent review attempts grant escalation and kill/revoke TOCTOU.
+68: ## Acceptance checklist
+76: - [ ] Every decision has exactly one diagnostic and evidence intent.
+80: ## Strict reporting
+
+2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-POSTGRESQL-WRITER.md
+1: # Coding-agent handoff: PostgreSQL writer
+5: ## Mission
+8: ## Inputs
+11: ## Outputs
+14: ## Boundaries
+15: Store exact bytes; never reserialize them. Lock one chain head `FOR UPDATE`, re-check authority/kill/state, resolve idempotency, insert entry, update head and insert receipt/outbox in one transaction. Return only committed receipt.
+17: ## Required tests
+20: ## Forbidden
+23: ## Exit report
+26: ## Repository scope
+30: ## Prerequisites and owner-selected choices
+32: Pinned inputs are the PostgreSQL authority candidate, EVD logical record, state/authority contracts, diagnostics and canonical opaque types. Require PostgreSQL 15+. Per-chain `FOR UPDATE` plus database invariants is the normative minimum; `SERIALIZABLE` is optional defense. The sole writer mints `occurred_at`. Enforce 1 MiB admitted request, 256 KiB payload, 512 KiB record, depth 32, and text 255. Admit only u16 `1 = GENESIS` and `2 = LIFECYCLE_TRANSITION`; prohibit 0 and reject/reserve every other v1 code. Validate the exact closed nine-key genesis payload and six-required/one-optional lifecycle payload before persistence. Store Python free-form reason nowhere in canonical authority bytes; map `owner_authorization_digest` only to envelope `authority_ref`; accept only exact reviewed existing diagnostics. Permanently retain canonical authority records for the authority-domain lifetime; external/raw projections use separate classification retention and secrets/PHI/bulky content never enter the chain.
+34: ## Implementation sequence
+41: 6. Add bounded retry classification and acknowledgement-loss recovery.
+45: ## Required API/data models
+53: ## Commands
+57: ## Evidence outputs
+61: ## Forbidden/non-goals
+65: ## Lane interactions
+69: ## Acceptance checklist
+79: ## Strict reporting
+81: `DONE` includes exact head/files, migration digests, PostgreSQL/config version, isolation tested, commands/results, fault hooks and risks. `BLOCKED` identifies missing database/fault capability. `NEEDS_HUMAN` presents only remaining schema or authority ambiguities with anomalies prevented, recommendation, exact contract change and test changes; it must not reopen recorded owner defaults.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-PYTHON-COMPARATOR-SHADOW.md
+1: # Coding-agent handoff: Python comparator and shadow harness
+5: ## Mission
+8: ## Inputs
+11: ## Outputs
+14: ## Compare
+15: Acceptance/refusal, primary diagnostic, canonical bytes supplied by the fixture authority, digest, predecessor linkage and resulting logical chain state. Compare the frozen u16 event code and exact closed payload fields. Python free-form `reason` is ignored for canonical-byte identity and MUST NOT enter the logical authority input. `owner_authorization_digest` maps only to envelope `authority_ref`. Mark invalid or unmapped adapter setup as `COMPARISON_INVALID`; genuine contract ambiguity is `SPEC_AMBIGUOUS`; never conceal either as a match or mint a diagnostic.
+17: ## Required tests
+18: All disposition classes; corrupted/truncated IPC; timeout; duplicate/reordered results; deterministic replay; class-minimum enforcement; behavioral-change clean-streak reset; zero-unresolved gate.
+20: ## Forbidden
+23: ## Exit report
+26: ## Repository scope
+30: ## Prerequisites and pinned inputs
+32: Pin the Rust executable/binary digest, Python interpreter/environment lock, historical reference commit, contract/fixture/diagnostic digests, comparator protocol version, representative-data classification and required coverage minima. The v1 event registry is closed to u16 codes 1 and 2; exact payload tables are frozen. Pin the regenerated candidate-2 lifecycle registry artifact and derived digest, and compare same-domain resolution plus edge legality for both lifecycle domains. Pin an explicit reviewed mapping for each supported Python outcome to an existing diagnostic. An unmapped case blocks/classifies the comparison; it never receives a best-fit code.
+34: ## Implementation sequence
+36: 1. Define length-bounded, versioned IPC carrying fixture IDs, exact injected bytes, logical input references and results.
+44: ## Required APIs/data models
+49: - CLI commands equivalent to `compare-fixtures`, `compare-shadow`, `replay`, `summarize`, each accepting exact manifests and emitting machine-readable reports.
+51: ## Commands
+53: Localized Python lint/type/test commands must be declared in its lock/project file; run comparator protocol and malformed-IPC tests plus a deterministic replay. Run Rust-side comparator tests. Full verification includes Rust workspace gates, Python locked-environment tests, dependency/license/advisory inventories for both languages, fixture manifest verification and a scrubbed shadow smoke run.
+55: ## Evidence outputs
+57: Exact build/environment manifests, fixture and input-set digests, per-class totals, match/mismatch totals, clean-streak state, behavioral-version history, complete mismatch ledger, replay commands, logs and redaction report. Retain permanently as specified, without live secrets/PHI.
+59: ## Forbidden/non-goals
+61: No Python authority/write path, Python-created expected CBOR as sole oracle, production mutation, live unsanitized capture, mismatch suppression, automatic `SPEC_AMBIGUOUS` decision, class-count padding with identical duplicates, or eligibility claim.
+63: ## Interactions
+67: ## Acceptance checklist
+69: - [ ] IPC is versioned, bounded and adversarially tested.
+76: ## Strict reporting
+
+2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-READONLY-VERIFIER.md
+1: # Coding-agent handoff: read-only verifier
+3: **Candidate only. The verifier never writes authority.**
+5: ## Mission
+8: ## Inputs
+11: ## Outputs
+14: ## Boundaries
+15: Use read-only credentials/transactions. Recompute canonical acceptance, digest, sequence, predecessor linkage, count and head. Historical codecs are isolated and can never produce production writes.
+17: ## Required tests
+18: Valid empty/nonempty chains; each mutation; wrong head/count; gap/fork/duplicate; checkpoint corruption; unknown profile; bounded memory over 100,000 entries; database snapshot during concurrent append; deterministic report.
+20: ## Forbidden
+21: No UPDATE/DELETE/repair, no projection-derived identity, no accepting unknown version, no verifier result that grants authority, no importing JCS history into CBOR production chain.
+23: ## Exit report
+26: ## Repository scope
+30: ## Prerequisites
+32: Pinned current CBOR/EVD contracts and fixture digests, historical JCS profile/checkpoint v1 digests, PostgreSQL read schema, diagnostic registry, and genesis/checkpoint schemas. Missing historical source or ambiguous legacy behavior is `NEEDS_HUMAN`; never approximate it.
+34: ## Implementation sequence
+38: 3. For each entry, strict-decode, recompute canonical identity, sequence and predecessor linkage.
+42: 7. Add bounded-memory 100,000-entry verification and deterministic failure reports.
+44: ## Required APIs/models
+49: - `VerificationReport` with status, first failing sequence/digest, stable diagnostic, verified count/head and input manifest digests.
+52: ## Commands/evidence
+54: Localized verifier fmt/clippy/tests; read-only PostgreSQL integration test; bounded-memory 100,000-entry run; corrupted-chain fixture suite. Full workspace gates, license/advisory scan and explicit database privilege test. Emit resource measurements, profile/fixture matrix, deterministic reports, exact commands, dependency report and proof no write-capable API/credential is linked.
+56: ## Forbidden/non-goals
+58: No write SQL, repair, truncation, head advance, unknown-version acceptance, projection-derived identity, production grant/appointment, JCS-to-CBOR import, hidden best-effort success, or sharing the writer's high-level verification implementation as the sole oracle.
+60: ## Interactions
+64: ## Acceptance checklist
+73: ## Strict reporting

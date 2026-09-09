@@ -1,0 +1,14 @@
+{
+  "fixtureId": "effects-malformed-generated-markers",
+  "category": "malformed-markers",
+  "input": {
+    "targetPath": "topics/MOC.md",
+    "ownership": "region-managed",
+    "content": "<!-- gkos:moc generated:start version=1 config=sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->\n<!-- gkos:moc generated:start version=1 config=sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->\n<!-- gkos:moc generated:end -->"
+  },
+  "expected": {
+    "outcome": "review-required",
+    "sourceWrite": false,
+    "reasonCodes": ["MARKER_NESTED"]
+  }
+}

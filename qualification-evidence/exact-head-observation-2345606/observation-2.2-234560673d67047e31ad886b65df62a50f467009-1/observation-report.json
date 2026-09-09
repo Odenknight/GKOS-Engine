@@ -1,0 +1,27 @@
+{
+  "chunks_reprocessed": 1,
+  "chunks_reused": 9999,
+  "contract_version": "gkos-retrieval-evaluation-observation/1.0.0-draft.1",
+  "environment": {
+    "arch": "x64",
+    "fts5_available": true,
+    "lexical_backend": "sqlite_fts5",
+    "os": "linux",
+    "runner_class": "github_hosted",
+    "runtime": "node",
+    "runtime_version": "24.20.0",
+    "sqlite_version": "3.53.4"
+  },
+  "evaluation_digest": "sha256:0af5053fccb84ae0a9eb3b785a3760e20438300dd49d512c6ab480bfe299e433",
+  "fixed_sample_plan_digest": "sha256:fc8f3069d7161b7a31435f494f32693263b37504a94e0064adf277604d4c9f9b",
+  "index_time_micros": 3065036,
+  "observation_digest": "sha256:31adcb9c8381158c4f89fab92fcb818a6a7ce8846754e02a2f4c33e294232a9c",
+  "query_latency_micros": {
+    "p50": 149335,
+    "p95": 156238,
+    "p99": 170056
+  },
+  "sample_count": 50,
+  "update_time_micros": 3733833,
+  "warmup_count": 10
+}

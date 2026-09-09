@@ -1,0 +1,56 @@
+{
+  "sourceCommit": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "tarballSha256": "f04705280acac74deab823683193a81a7c4dbf333791b33f6189226b709d593b",
+  "platform": "win32",
+  "node": "v22.23.2",
+  "consumer": "gkos-engine-220-consumer-ea05531-windows22",
+  "status": "PASS",
+  "installedFileHashes": 595,
+  "consumerChecks": 20,
+  "durableNoChangeTests": 4,
+  "pointerRefusalTests": 4,
+  "gkosHelpCommands": [
+    "status --help",
+    "watcher journal-reset --help"
+  ],
+  "logs": [
+    {
+      "file": "consumer-windows22-install.log",
+      "sha256": "c677803a843bae11b872d5ea1cbe6cd308c7f6065c813fd0083862f18e227888"
+    },
+    {
+      "file": "consumer-windows22-smoke.log",
+      "sha256": "baf31f7786fe4f54dea2e2156e469970d82f05c98341e088e968a5b26052d2d7"
+    },
+    {
+      "file": "windows22-no-change-gaps.tap",
+      "sha256": "fa87a9729d2849ffe7549cfa037f8beab1395fb088031f302a3d7bf0c97a889b"
+    },
+    {
+      "file": "pointer-gaps-ea05531-windows22.log",
+      "sha256": "5b5eb95077b573158b2278f8df2097cf7234b27ec4def2dceb299c2b82645aa5"
+    },
+    {
+      "file": "consumer-windows22-gkos-status-help.log",
+      "sha256": "d423078a4499116ca4c6fccb3e8ba7c65f7180a33d9f450c621ccdac4d7febbe"
+    },
+    {
+      "file": "consumer-windows22-gkos-reset-help.log",
+      "sha256": "99b4771ecee8fc2dd967a572db03f90736f352523c4f018b8eee01b362757fe5"
+    },
+    {
+      "file": "consumer-windows24-gkos-status-help.log",
+      "sha256": "5dbeeb8f3720c57b4e7b97688cdb7535088be21b3a5f53bd27bdf5fade2cdc2a"
+    },
+    {
+      "file": "consumer-windows24-gkos-reset-help.log",
+      "sha256": "5dd2e81197e4e190b7fd8939532f0f9e533aba6f95638452bc89194b981b5dfe"
+    }
+  ],
+  "initialInvocation": {
+    "exitCode": 2,
+    "scope": "Unsupported root-level help correctly refused; harness invocation corrected to documented subcommands. Original log retained.",
+    "command": "gkos --help"
+  },
+  "releaseQualified": false
+}

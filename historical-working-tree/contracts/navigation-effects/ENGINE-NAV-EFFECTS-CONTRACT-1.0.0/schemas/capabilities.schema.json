@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/capabilities.schema.json",
+  "title": "Navigation Effects Capabilities",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["navigation_effects_contract", "configured", "navigation_effects"],
+  "properties": {
+    "navigation_effects_contract": { "const": "1.0.0" },
+    "configured": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter", "authority_provider", "durable_journal", "policy"],
+      "properties": {
+        "adapter": { "type": "boolean" },
+        "authority_provider": { "type": "boolean" },
+        "durable_journal": { "type": "boolean" },
+        "policy": { "type": "boolean" }
+      }
+    },
+    "navigation_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plan_moc_apply", "apply_managed_moc", "archive_previous_moc", "atomic_replace", "startup_recovery", "rollback_execution", "agent_note_create", "agent_note_update", "agent_note_archive", "arbitrary_source_write", "agent_note_delete"],
+      "properties": {
+        "plan_moc_apply": { "const": true },
+        "apply_managed_moc": { "type": "boolean" },
+        "archive_previous_moc": { "type": "boolean" },
+        "atomic_replace": { "type": "boolean" },
+        "startup_recovery": { "type": "boolean" },
+        "rollback_execution": { "type": "boolean" },
+        "agent_note_create": { "type": "boolean" },
+        "agent_note_update": { "type": "boolean" },
+        "agent_note_archive": { "type": "boolean" },
+        "arbitrary_source_write": { "const": false },
+        "agent_note_delete": { "const": false }
+      }
+    }
+  }
+}

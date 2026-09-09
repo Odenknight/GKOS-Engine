@@ -1,0 +1,560 @@
+[
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\ACKNOWLEDGMENTS.md",
+    "sha256": "24e64609ddb7c8f31649e73ae8cf59bc5a4dc583b6d16decc2cf50c31988f984",
+    "bytes": 605,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\BEGINNERS_GUIDE.md",
+    "sha256": "b57a76675a9d839dce84f803ac72b6d394fd6ba9f764801ec2b2bb8f2794b86b",
+    "bytes": 5895,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\CHANGELOG.md",
+    "sha256": "7c982ab2cc43894943f48ff1afc9914942e9df768e64b003a227c9b2b02c4350",
+    "bytes": 5184,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\COMPAT.md",
+    "sha256": "ea6567985c8610828f00e9f9f2130a9b4e60e5a7ba2513e656217e94582bdfb7",
+    "bytes": 3620,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\identity\\GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1\\README.md",
+    "sha256": "98a77be95bad3be62e95389b88fa595619090de88ca2d5f9e04feaeab2b099f8",
+    "bytes": 301,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\identity\\GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1\\TECHNICAL_README.md",
+    "sha256": "6f8da7d8b8fcce480cbd031e34ea6aafa56a8702390284f29892ee0359fa6520",
+    "bytes": 436,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\identity\\GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2\\README.md",
+    "sha256": "4d7d2c98bf73be12f9ea9dcbaf7ecc355159bfc6031844af0ff458fd5b439222",
+    "bytes": 658,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\identity\\GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2\\TECHNICAL_README.md",
+    "sha256": "00cb4c456627acaacecc3d0a1b19a4ed15ff927f3547a988afb85c4a8fdd89bb",
+    "bytes": 682,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\ingest\\gkos-ingest-validation-1.0.0-draft.1\\README.md",
+    "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+    "bytes": 17680,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\retrieval\\gkos-retrieval-1.0.0-draft.1\\README.md",
+    "sha256": "2028882032f2292bd0bbc937016a128449babf5f9adc395824029ee0047cc942",
+    "bytes": 6798,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\retrieval\\gkos-retrieval-1.0.0-draft.2\\README.md",
+    "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+    "bytes": 11601,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\retrieval\\gkos-retrieval-evaluation-1.0.0-draft.1\\README.md",
+    "sha256": "3ba1c22db835c657161d1dab6dbc3c2d7218f666ae6b981d561a7c360ad8cc20",
+    "bytes": 14561,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\service\\GKOS-LOCAL-SERVICE-1.0.0-draft.1\\README.md",
+    "sha256": "d57d7bb2ff84fd1699b8ebc8528988f8b89129d07f595882e8a16b61597b00b4",
+    "bytes": 815,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\watcher\\gkos-watcher-recovery-1.0.0-draft.1\\README.md",
+    "sha256": "4e8ffe6cc79eee0e27a3986ffc9ad8fb85814beacd561c595f04f39c4b4d5eb0",
+    "bytes": 831,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\contracts\\watcher\\gkos-watcher-recovery-1.0.0-draft.1\\TECHNICAL_README.md",
+    "sha256": "2220e9d67fe7d25d41d47113a92d766985d90b134925e28067d14a089a822de9",
+    "bytes": 8576,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\ADMISSION-POLICY-PROVIDER-V1.md",
+    "sha256": "00ae99a1d1c546ba8e9ee890cdd29acac6ef2611db07151f3f294ae4540e2604",
+    "bytes": 6842,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\citations.md",
+    "sha256": "2dc3b76b20d297d3464ebe48b4469d25db80816c09c00d00a430cf11adc1fc01",
+    "bytes": 4405,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\CURRENT_CAPABILITIES.md",
+    "sha256": "5addac17eca7ea57a6fefe8380c650a3502fd9abe9eec91ee98ccadc3660bb12",
+    "bytes": 5230,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\decisions\\0000-record-decisions-as-adrs.md",
+    "sha256": "234e1ff8fdded4f3dc67a43ddef15c5b9db1077c7e618ddb7432f17c30eafe70",
+    "bytes": 3230,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\decisions\\0001-adopt-hybrid-retrieval-with-gkx-canonical.md",
+    "sha256": "d9223239956077985e30335a47c4d012c822c472e3bc57e74d1af5b35fc7c296",
+    "bytes": 8790,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\decisions\\0002-storage-and-provider-topology.md",
+    "sha256": "37c1ab95bc2d07cf6a90c87f8158fc3639f09bc74df0fd738bd80f02999a3ee6",
+    "bytes": 7996,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\decisions\\0003-multi-agent-identity-and-authentication.md",
+    "sha256": "fcdd65342273753b6d56d8d11ca9ed1c101168382a6441f6b52327f598d3a559",
+    "bytes": 4210,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\decisions\\0004-graph-projection-sinks.md",
+    "sha256": "e7f573233a8354d70be90894e96967a3a71c24ffd070c07f6846c03a374e8469",
+    "bytes": 3632,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\decisions\\0005-lite-packaging.md",
+    "sha256": "56b98bc1cc78c9a5e48299ca81123bc32dd10a66e5b7eec221f958f7d6d99640",
+    "bytes": 6004,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\decisions\\0006-phase6-agent-identity-mcp-contract.md",
+    "sha256": "b4e675b25290f3eed2aa30564375ed49729474276a4f2af5dab7fcd73e54481b",
+    "bytes": 5347,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\decisions\\0007-activate-agent-identity-mcp-draft2.md",
+    "sha256": "117376029f3271090c94fd11471bbcf74018cfc49e9aa93ce5f9e9cebf1281b7",
+    "bytes": 748,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\GKOS-REQUIREMENT-ADAPTER.md",
+    "sha256": "a7fd9ecdd9ccf696dd15fcd8cd6a372a9689b10b2b8c30a9e036ee1f841087f9",
+    "bytes": 6283,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\HANDOFF_2026-08-27.md",
+    "sha256": "a9483aad7b5eec660b942d8aaad1cbd1d05bf18d15c086de8b2cfd2589712260",
+    "bytes": 3860,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\INGESTION-CONTRACT.md",
+    "sha256": "261b43ab5d9d830d0e74da0267fc45862d2a0c60cc9e7e7f3782150070b1a6d7",
+    "bytes": 1232,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\MCP-PARAM-ERRORS.md",
+    "sha256": "d63ee64ce1f0e539b6a7befee13c3af7fd5c1ac2e30e7f1c8d325e188059992c",
+    "bytes": 5191,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\NAVIGATION-AUTHORITY-BOUNDARY.md",
+    "sha256": "7b84e5a70983cb683eaa438f9884b91064bb93c4270620851de591ce087fa3bc",
+    "bytes": 2053,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\NAVIGATION-CONSUMER-MATRIX.md",
+    "sha256": "815e13bfdd8a6c0c96a08f08de2bb002ba4ff88fb9be60ddea12c3c5335eaf66",
+    "bytes": 1567,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\NAVIGATION-CONTRACT.md",
+    "sha256": "f2168bbe5379ca6f86da9cc692891499e8aaf79a0553f47a7a55bcfc0565451c",
+    "bytes": 2913,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\phase5-watcher-host.md",
+    "sha256": "686e40ade98a6731a079560c47d42e5ec38633401357a02f9978c935025d5167",
+    "bytes": 7650,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\phase6-agent-identity-mcp-contract.md",
+    "sha256": "1800d042319add1d070ce50e64f50e437b0179b102a6d9d5c55f40bb9d059d07",
+    "bytes": 5798,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\phase6-agent-identity-mcp-draft2.md",
+    "sha256": "b7d5da7b918270ae15aa3ce68679ecd0b25c6083b8e5e32752639252ad379f66",
+    "bytes": 907,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\SETTINGS-TOML.md",
+    "sha256": "8df8c630fd20758b2fc929e874ec7d997829929bea3669a39b53d9fc58405be9",
+    "bytes": 5994,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\SETTINGS.md",
+    "sha256": "2e483bbd9c7d830f376da730bee32063b6953574bdf85f3f5755933e22ddd056",
+    "bytes": 15189,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\docs\\VERSION-PROFILE-COMPATIBILITY.md",
+    "sha256": "c7bdfba02acaaae98be72dac5ddb03032eaa866d5f88cef86a27e7d3f4a45edb",
+    "bytes": 2336,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-05-gkx-2.0-repository-verification.md",
+    "sha256": "76e6818bf40b6f374e86d1768ce966dd3b231b5afea33a67825da7538cc1d34b",
+    "bytes": 1762,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-16-navigation-2.1.0-verification.md",
+    "sha256": "e93425e3cc325523898c158cd898fa7d5e971ce6ac379777a7d7876020fec546",
+    "bytes": 8113,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-20-functional-uplift-phase-0.md",
+    "sha256": "a7c2a130d60b3baa2b3cbe7844de2e2201b3cc40c57cb7bd2ec2ddaf69cc683e",
+    "bytes": 16911,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-20-navigation-2.1.2-corrective-verification.md",
+    "sha256": "851e0a1034adab5cc30b33b7cde19d063c68f44f56a9129fb726a85c1ed154c1",
+    "bytes": 3114,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-21-functional-uplift-phase-1.md",
+    "sha256": "f3cf09c0ab6b260bcfb22026d55f2f39a41d83a395aefdb79ea39c8c911bcbf2",
+    "bytes": 22019,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-21-functional-uplift-phase-2.md",
+    "sha256": "c2ec7b565b9aa181f1003fce5756293d6641c5f691f8b57531f72c78656e6982",
+    "bytes": 16557,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-21-functional-uplift-phase-3.md",
+    "sha256": "1cd3235f416ea3e71433fdda4c133e8322b3bda5b008a4c0748fc8d1206e71f7",
+    "bytes": 13912,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-22-functional-uplift-phase-4-slice-b.md",
+    "sha256": "69d68d5d7c6d3c0320f97b2f2678dc56e36c8dfd9629afb0e771a3c20a7c9617",
+    "bytes": 17398,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-22-functional-uplift-phase-4.md",
+    "sha256": "8aed7accdbb3f6b6c9a89110e5690d5a31e268190d4a744da6ecb9fa44d4ddf2",
+    "bytes": 30775,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-23-functional-uplift-phase-5-slice-a.md",
+    "sha256": "f8df2496977dbeaf8c5cb5dae18ec9162409292563ec991a62800972ecd3ea18",
+    "bytes": 24735,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-25-functional-uplift-phase-6-f1.md",
+    "sha256": "093063fe1491b16e6715c7f994737882bef9591b05cb382a90c1634e394c2451",
+    "bytes": 5615,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-26-admission-policy-provider-v1.md",
+    "sha256": "43809e9181bc3e1a29aa8d6df2e3ee13e5114c8afcbcf53127560968875e4eaf",
+    "bytes": 5260,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-26-agent-identity-mcp-draft2.md",
+    "sha256": "6cf7048d9e197b89a56b672b6319e0421afc30b22ad0c994b8dba9c89f9bb2cf",
+    "bytes": 956,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\evidence\\2026-08-27-sol-pr31-repair.md",
+    "sha256": "53e94dd2dea432d7d6f07825b9084b9aeab8fe95204a34120acd4845e45d65f3",
+    "bytes": 6022,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\GKX-MIGRATION.md",
+    "sha256": "b05e0f6640d6d952141ca4e077527e4b44d8024f562e9cb4eca5319d34a296ed",
+    "bytes": 472,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\README.md",
+    "sha256": "19986f2c9398ba3872078ec9d084643a08dd09a9318967873ac9d85a9314183e",
+    "bytes": 13674,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\ROADMAP.md",
+    "sha256": "e9f49be2574656a81aee1535edc36695908950922145f05b9c77dbdaa7c88896",
+    "bytes": 2596,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\services\\gkos-intelligence\\README.md",
+    "sha256": "5f26c12d0ca64533d23d6d83505a0f59d7b058ddb1236296c86f2f867e83c023",
+    "bytes": 1226,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\TECHNICAL_README.md",
+    "sha256": "19ae6e386012fda407b13df067165aa95517de312dee044cd7f63dc05e43eb29",
+    "bytes": 32066,
+    "review": "heading/status/decision screening plus detailed local-service and MCP runtime sections"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\THIRD-PARTY-NOTICES.md",
+    "sha256": "c724a164a66487cc1aa9943d4838e6de41a2f429b760b88f6317aad3584cdc0c",
+    "bytes": 565,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\TRACEABILITY.md",
+    "sha256": "3662b0fca60e468b91d6edf3b47a0aac423365dbd54b687d805d7b4d6c8d7434",
+    "bytes": 5072,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\TRADEMARKS.md",
+    "sha256": "62ab7645b8666c57c4dedb526a136353dbee978d7090c608b06bd255992c9ed2",
+    "bytes": 1644,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\UPDATE-2026-07-27.md",
+    "sha256": "3a6bc209ae202895372fe3fea1613c2009da8132d96d8917ccc3f732a413dac0",
+    "bytes": 706,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\engine\\VERSIONING.md",
+    "sha256": "84706828ac11c3c0ec532ba1f14759b6418ac44faba03aea910051b65b7a68a2",
+    "bytes": 691,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\ACKNOWLEDGMENTS.md",
+    "sha256": "24e64609ddb7c8f31649e73ae8cf59bc5a4dc583b6d16decc2cf50c31988f984",
+    "bytes": 605,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\CHANGELOG.md",
+    "sha256": "d26bab554b9e0fd2e4584d80a13e537062b527359fed7e908511e5dc37fa3cca",
+    "bytes": 4630,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\desktop\\docs\\QUICKSTART.md",
+    "sha256": "b5183da5dfa1fdfebd16a1ac50618afde0df65be0639a9ed40e2e9d3559aaf35",
+    "bytes": 3863,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\desktop\\docs\\USER-GUIDE.md",
+    "sha256": "e00f78d784c4e8ab547bbd91176fb02126205496e4ff87ad7e32b13075493694",
+    "bytes": 13044,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\citations.md",
+    "sha256": "c5a30b158160659bca0f094fcbbf888f622e33c756de36192eff269376c240c4",
+    "bytes": 4898,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\CURRENT_CAPABILITIES.md",
+    "sha256": "217876f027fcd7b40d4254ee46bf9af020f6bb2629c93fbf9a1d357139f85b9e",
+    "bytes": 4948,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\decisions\\0000-record-decisions-as-adrs.md",
+    "sha256": "95c17970c0948a675a65df491a4c5483b14010cc9968f8725d68291b09d18075",
+    "bytes": 2134,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\decisions\\0001-adopt-grooveseek-style-hybrid-retrieval-and-evaluation.md",
+    "sha256": "077e2b837b9769ac826166c8328cca4996252f9b48a2b3d5790e2e4e87df5b38",
+    "bytes": 4328,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\decisions\\0002-storage-and-provider-topology.md",
+    "sha256": "9200f7cd62c4b51e481c654ec5f433d6ebd53ebee5458330234e2276bb816bf0",
+    "bytes": 4630,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\decisions\\0003-multi-agent-identity-and-authentication.md",
+    "sha256": "c02ca31d08bcd0b879faef1d87f26ed28e1379644b2401f821e23c05a5fa8300",
+    "bytes": 3512,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\decisions\\0004-graph-projection-sinks.md",
+    "sha256": "5a7c8a12471137fb812fcd165d12355c765d00a5c6749bfe5f16ed71af8a1e9b",
+    "bytes": 2776,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\decisions\\0005-lite-packaging.md",
+    "sha256": "c171eef1b4996feb239909674aae03cf3ebba9519fe7b2d74f8445b783c6cc6e",
+    "bytes": 5361,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\evidence\\phase-0-baseline.md",
+    "sha256": "eb66b07a4b307fb314554dd192724c3b7ac872ddd693526eb85452b6eb5884e4",
+    "bytes": 15917,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\evidence\\phase-1-retrieval-core.md",
+    "sha256": "3db5d81ca4b7b47697bd65b3e48a7fecc86c9b46bc5b8d5335db82ece862b6eb",
+    "bytes": 19298,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\evidence\\phase-2-lineage-citations.md",
+    "sha256": "5351a4f4d2c926865784cee667d256973961bc6ed4f4b130c25fbb1c74bcddca",
+    "bytes": 13779,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\evidence\\phase-3-ingest-validation.md",
+    "sha256": "7168b0787c70d2c5a6e422140349476b673c4af9be3d9c2fce0dd5b385ea630b",
+    "bytes": 13181,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\docs\\HANDOFF_2026-08-27.md",
+    "sha256": "2ab021a29537e0c144cafaa5d2890badc2bb43221515753cd59ab735e772cccb",
+    "bytes": 4660,
+    "review": "detailed full-text read"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\GKX-MIGRATION.md",
+    "sha256": "9f8fbc62e5b96235b9f34b901a5f230146bc7fbd0a4df65d577bfa021b3ea7e6",
+    "bytes": 505,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\README.md",
+    "sha256": "d8e1358ab1de08cc4528240ce9d1b11b41236c1c5f77d67b8230a1ec27b32bd5",
+    "bytes": 11976,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\ROADMAP.md",
+    "sha256": "32e7e47bb6cdede1d9710ebf94f43b86d6f61583c75071a2cece52f90c4afe0f",
+    "bytes": 2019,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\rust\\contracts\\gkos-ingest-validation-1.0.0-draft.1\\README.md",
+    "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+    "bytes": 17680,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\rust\\contracts\\gkos-retrieval-1.0.0-draft.1\\README.md",
+    "sha256": "2028882032f2292bd0bbc937016a128449babf5f9adc395824029ee0047cc942",
+    "bytes": 6798,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\rust\\contracts\\gkos-retrieval-1.0.0-draft.2\\README.md",
+    "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+    "bytes": 11601,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\rust\\README.md",
+    "sha256": "ac39b12796b5f6562b368d52bd81f637b2b93cd085aab87ed2f4a379383189c1",
+    "bytes": 2233,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\test\\fixtures\\notes\\alpha.md",
+    "sha256": "037b93818481178890f91e863d4278d77337ae773de01a1c4cd8d37295d19526",
+    "bytes": 225,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\test\\fixtures\\notes\\beta.md",
+    "sha256": "a5755f2ccfb44d8dc0e411b1c9e121c67c54aab9b98b43bf178e94bd6f942f91",
+    "bytes": 195,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\THIRD-PARTY-NOTICES.md",
+    "sha256": "a87c85707e8288e21e9e5b1447c723c3b5834912aaea501b46d8b676a451c93e",
+    "bytes": 1630,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\TRADEMARKS.md",
+    "sha256": "5335d80147d2a71c325dddab75200ccc466d84c0613aeafaf5c5ada2628b6645",
+    "bytes": 608,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\UPDATE-2026-07-27.md",
+    "sha256": "3086cb38b2a48a64bcd866e6564d8f1baeb954ffeb3d39f2535aa89be33e0f30",
+    "bytes": 2897,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  },
+  {
+    "path": "orchestration\\2026-08-31\\engine-audit\\lite\\VERSIONING.md",
+    "sha256": "0ea112f3e200cbc5b022b46f916926a2dc88414c20c9981ca2bd0252909aa36c",
+    "bytes": 1502,
+    "review": "inventory and heading/status/decision excerpt screening; historical body not exhaustively re-audited"
+  }
+]

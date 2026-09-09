@@ -1,0 +1,51 @@
+
+> kosmos-oden@0.8.1 test:browser:full
+> playwright test --project=firefox --project=webkit test/browser/standalone.spec.ts test/browser/standalone-flows.spec.ts test/browser/embed.spec.ts test/browser/consumer-identity.spec.ts --workers=1
+
+[WebServer] (node:42788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 36 tests using 1 worker
+
+(node:30052) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [firefox] › test\browser\consumer-identity.spec.ts:2:1 › stable identity survives live, replay, and buffered-live adapters without label conflation (4.1s)
+  ok  2 [firefox] › test\browser\consumer-identity.spec.ts:27:1 › stable identity survives the versioned embed request-to-render adapter (2.2s)
+  ok  3 [firefox] › test\browser\embed.spec.ts:10:1 › embed renders under the plugin sandbox (no allow-same-origin) (2.5s)
+  ok  4 [firefox] › test\browser\standalone-flows.spec.ts:19:1 › Engine retrieval uses its separate credential and renders citation text safely (2.1s)
+  ok  5 [firefox] › test\browser\standalone-flows.spec.ts:55:1 › file URL imports actual Markdown and exports the displayed graph without network or source changes (1.4s)
+  ok  6 [firefox] › test\browser\standalone-flows.spec.ts:76:1 › demo exports its rendered graph and hides content exports it cannot provide (1.3s)
+  ok  7 [firefox] › test\browser\standalone-flows.spec.ts:86:3 › snapshot exports the loaded graph rather than an empty local index (1.2s)
+  ok  8 [firefox] › test\browser\standalone-flows.spec.ts:86:3 › engine exports the loaded graph rather than an empty local index (1.4s)
+  ok  9 [firefox] › test\browser\standalone-flows.spec.ts:113:1 › expanded connection form is reachable on a short viewport and folder names stay text (699ms)
+  ok 10 [firefox] › test\browser\standalone-flows.spec.ts:133:1 › local engine redirects fail visibly without contacting an external destination (1.8s)
+  ok 11 [firefox] › test\browser\standalone.spec.ts:10:1 › standalone boots the r185 WebGL2 renderer and draws the demo cosmos (944ms)
+  ok 12 [firefox] › test\browser\standalone.spec.ts:44:1 › standalone reports WebGL2 requirement message when WebGL2 is unavailable (520ms)
+  ok 13 [firefox] › test\browser\standalone.spec.ts:58:1 › agent traversal renders a breadcrumb plus bounded comet dust (874ms)
+  ok 14 [firefox] › test\browser\standalone.spec.ts:76:1 › primary controls remain inside compact-desktop and mobile viewports (1.7s)
+  ok 15 [firefox] › test\browser\standalone.spec.ts:111:1 › constellation key and minimap can be shown from the toolbar (1.4s)
+  ok 16 [firefox] › test\browser\standalone.spec.ts:124:1 › traffic heat is off by default, opt-in, bounded in the existing renderer, and truthfully labelled (954ms)
+  ok 17 [firefox] › test\browser\standalone.spec.ts:144:1 › legacy query token is ignored, removed from the URL, and never copied into password input (504ms)
+  ok 18 [firefox] › test\browser\standalone.spec.ts:151:1 › live events buffer during replay and do not interrupt it until return-live (1.3s)
+(node:33692) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 19 [webkit] › test\browser\consumer-identity.spec.ts:2:1 › stable identity survives live, replay, and buffered-live adapters without label conflation (1.6s)
+  ok 20 [webkit] › test\browser\consumer-identity.spec.ts:27:1 › stable identity survives the versioned embed request-to-render adapter (840ms)
+  ok 21 [webkit] › test\browser\embed.spec.ts:10:1 › embed renders under the plugin sandbox (no allow-same-origin) (2.0s)
+  ok 22 [webkit] › test\browser\standalone-flows.spec.ts:19:1 › Engine retrieval uses its separate credential and renders citation text safely (7.9s)
+  ok 23 [webkit] › test\browser\standalone-flows.spec.ts:55:1 › file URL imports actual Markdown and exports the displayed graph without network or source changes (2.8s)
+  ok 24 [webkit] › test\browser\standalone-flows.spec.ts:76:1 › demo exports its rendered graph and hides content exports it cannot provide (2.7s)
+  ok 25 [webkit] › test\browser\standalone-flows.spec.ts:86:3 › snapshot exports the loaded graph rather than an empty local index (1.4s)
+  ok 26 [webkit] › test\browser\standalone-flows.spec.ts:86:3 › engine exports the loaded graph rather than an empty local index (2.6s)
+  ok 27 [webkit] › test\browser\standalone-flows.spec.ts:113:1 › expanded connection form is reachable on a short viewport and folder names stay text (476ms)
+  ok 28 [webkit] › test\browser\standalone-flows.spec.ts:133:1 › local engine redirects fail visibly without contacting an external destination (1.9s)
+  ok 29 [webkit] › test\browser\standalone.spec.ts:10:1 › standalone boots the r185 WebGL2 renderer and draws the demo cosmos (797ms)
+  ok 30 [webkit] › test\browser\standalone.spec.ts:44:1 › standalone reports WebGL2 requirement message when WebGL2 is unavailable (313ms)
+  ok 31 [webkit] › test\browser\standalone.spec.ts:58:1 › agent traversal renders a breadcrumb plus bounded comet dust (604ms)
+  ok 32 [webkit] › test\browser\standalone.spec.ts:76:1 › primary controls remain inside compact-desktop and mobile viewports (1.7s)
+  ok 33 [webkit] › test\browser\standalone.spec.ts:111:1 › constellation key and minimap can be shown from the toolbar (2.2s)
+  ok 34 [webkit] › test\browser\standalone.spec.ts:124:1 › traffic heat is off by default, opt-in, bounded in the existing renderer, and truthfully labelled (712ms)
+  ok 35 [webkit] › test\browser\standalone.spec.ts:144:1 › legacy query token is ignored, removed from the URL, and never copied into password input (414ms)
+  ok 36 [webkit] › test\browser\standalone.spec.ts:151:1 › live events buffer during replay and do not interrupt it until return-live (1.4s)
+
+  36 passed (1.1m)

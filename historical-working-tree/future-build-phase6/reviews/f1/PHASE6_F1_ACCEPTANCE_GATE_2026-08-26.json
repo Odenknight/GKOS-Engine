@@ -1,0 +1,62 @@
+{
+  "record_type": "gkos-phase6-f1-acceptance-gate",
+  "record_version": "1.0.0",
+  "recorded_at_utc": "2026-08-26T06:51:32.973Z",
+  "status": "F1_ACCEPTED",
+  "repository": "Odenknight/GKOS-Engine",
+  "branch": "codex/phase6-f1-contract-pack",
+  "entry_sha": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+  "accepted_result_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+  "owner_ratification": {
+    "artifact": "future-build-phase6/reviews/final/PHASE6_D0_OWNER_RATIFICATION_2026-08-25.json",
+    "sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929"
+  },
+  "d0_acceptance": {
+    "artifact": "future-build-phase6/reviews/final/PHASE6_D0_CROSS_REGISTER_ACCEPTANCE_V7_2026-08-25.md",
+    "sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb"
+  },
+  "implementer_handoff": {
+    "artifact": "future-build-phase6/reviews/implementer/PHASE6_F1_FULL_IMPLEMENTER_HANDOFF_V3_2026-08-26.json",
+    "sha256": "a1ffcef317c3f1d7f2cac1b0748450e9e9261e65d9f181ff3df6e4cbbf0160b2"
+  },
+  "independent_review": {
+    "artifact": "future-build-phase6/reviews/f1/PHASE6_F1_FULL_INDEPENDENT_REVIEW_V3_2026-08-26.json",
+    "sha256": "ee027811dd29826883f736c0f018de552979d2418762e69fa7988aff635aaa70",
+    "internal_digest": "5594425282e20e8cee295c0fccb611cf4243ee87c92472ba3f5b6737c69130c5",
+    "verdict": "ACCEPT",
+    "findings": 0
+  },
+  "qualification": {
+    "mandatory_run": 32934951272,
+    "mandatory_jobs_successful": 11,
+    "mandatory_jobs_total": 11,
+    "ordinary_ci_run": 32934951222,
+    "ordinary_ci_successful": 15,
+    "ordinary_ci_expected_skips": 1,
+    "ordinary_ci_failures": 0,
+    "local_tests_total": 875,
+    "local_tests_passed": 869,
+    "local_tests_failed": 0,
+    "local_tests_skipped": 6,
+    "changed_paths": 40,
+    "protected_paths_changed": 0,
+    "pack_leaves": 34,
+    "manifest_hashed_leaves": 33
+  },
+  "next_gate": {
+    "state": "F2_NOT_AUTHORIZED",
+    "required_action": "Product Owner must explicitly authorize the governed F2 Full authority-engine lane against this exact accepted F1 SHA and review digest.",
+    "prohibited_until_authorized": [
+      "F2 implementation",
+      "F3 implementation",
+      "F4 execution",
+      "F5 execution",
+      "Lite L1-L4",
+      "merge",
+      "release",
+      "deployment",
+      "activation",
+      "publication"
+    ]
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "sourceCommit": "458a23f3771ae7b303cf03956727d0b0a7eed98a",
+  "node": "v24.18.0",
+  "npm": "11.16.0",
+  "os": "win32",
+  "arch": "x64",
+  "startedAt": "2026-09-08T14:27:06.369Z",
+  "status": "PASS",
+  "commands": [
+    {
+      "command": "npm ci",
+      "exitCode": 0,
+      "durationMs": 12032,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "352d2658522c653a5b21c1d1b009db33601174184984fe95ff4fc90a855d20b0",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "durationMs": 3081,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "41c041efe7d130635a0be092ae452517283d47ec2122a51227fd41954b1641cd",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "durationMs": 3666,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "b8d8229bd0fb6a08693f8f9d0b4f27d04e22b2f8ffd32fde4661e7955dc42d11",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "durationMs": 1209031,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "83436a3d1cab022edd6f7042d8d6b53e17c45ed63e8ac75680574b9cc338f449",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm run test:navigation",
+      "exitCode": 0,
+      "durationMs": 12294,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "d6111247e9fc7c98ebf85b257770a98c51a36a1bd5113c24718cfb1fa23d352a",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm run test:intelligence",
+      "exitCode": 0,
+      "durationMs": 533,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "66ffb71a84ba2fb41483b2d198bfaf697324f33a7d4af8f82ef9c9f4209aa777",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm run pack:check",
+      "exitCode": 0,
+      "durationMs": 2828,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "f0fbb9dad3232138cf5b8aa6735acfd53ad8aedd600154029a81d9bda70457c5",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm run check:license",
+      "exitCode": 0,
+      "durationMs": 241,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "d7117d532de682be97129c3eebb5c6852585f4222b933ca5f11fd0fa0fed3664",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm run check:nomenclature",
+      "exitCode": 0,
+      "durationMs": 696,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "ee84f524e0737136baf1690144b6c892befb2ae3a9c6692130720f803ee6b8bf",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm audit --json",
+      "exitCode": 0,
+      "durationMs": 732,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "76b3b98a0c4aa273023a7e83cfd78b95ec630814f51e1dab56f9c08ae72a687a",
+      "trackedChanges": ""
+    },
+    {
+      "command": "npm run qualify:current -- --output [LOCAL_PATH]",
+      "exitCode": 0,
+      "durationMs": 1309314,
+      "log": "[LOCAL_PATH]",
+      "logSha256": "5fb0d4ece55611ec588502b7ccf93c2fbab3e88d7a2713183473efbe83f03ec0",
+      "trackedChanges": ""
+    }
+  ],
+  "releaseQualified": false,
+  "finishedAt": "2026-09-08T15:09:41.733Z"
+}

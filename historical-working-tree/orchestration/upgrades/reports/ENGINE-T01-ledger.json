@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "packet": "ENGINE-T01",
+  "standing": "implementation candidate awaiting independent orchestrator verification",
+  "captured_at": "2026-08-31T22:41:36.7224435Z",
+  "baseline": {
+    "commit": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+    "tree": "4be9d9fe494523e9eac876b29c9f56944c692061",
+    "source": "orchestration/2026-08-31/engine-audit/engine",
+    "candidate": "orchestration/upgrades/engine",
+    "creation": "git clone --no-hardlinks; baseline source working tree clean"
+  },
+  "environment": {
+    "platform": "Windows",
+    "dependencies": "Copied existing audited node_modules; not fresh online install",
+    "node": "v24.18.0"
+  },
+  "reviewed_audit_markdown": {
+    "sha256": "d2fa05d4d00621f35042ec05a42fa5357f76b5110579336cacf5b3edab6bcbd1",
+    "excluded_directories": [
+      "node_modules",
+      ".git",
+      "target"
+    ],
+    "inventory": "ENGINE-T01-doc-inventory.json",
+    "detailed_count": 20,
+    "count": 93
+  },
+  "additional_review": [
+    {
+      "path": "orchestration/2026-08-31-Q-SCOPE-APPROVAL.md",
+      "sha256": "7ddb109f87c7634b6ec5d1d7b5ce79c5638603d87939d80f529dbb75181c79e8",
+      "review": "detailed"
+    },
+    {
+      "path": "orchestration/2026-08-31-Q-GUARD-APPROVAL.md",
+      "sha256": "c195aafe57801d656ca3d6dca48f6fcb6e255d22893a0771fc6a22ab59ee4168",
+      "review": "detailed"
+    },
+    {
+      "path": "orchestration/GKOS-ECOSYSTEM-TS-FIRST-RUST-ROADMAP.md",
+      "sha256": "cd7e57d93b714f481bcd3f446332abca73d93e0605af0a4351804155ef267670",
+      "review": "T00/T01/T12 detailed"
+    },
+    {
+      "path": "orchestration/2026-08-31/reports/AUDIT-ENGINE-LITE-BENCHMARK.md",
+      "sha256": "bf85c1525dca41f058eb62cce9f530abe8ad7a79f7c292ae45cbf6eff29a8a01",
+      "review": "detailed"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "src/service/mcp.ts",
+      "sha256": "a077315d40f5febcb453e2758da85edc7a437858f43a7b46cc1abaaf5a209c6d",
+      "bytes": 65524
+    },
+    {
+      "path": "src/service/server.ts",
+      "sha256": "be047a5f8d8ae6d65457c714e39e10c65b27e0bfb04296c3d31f1c7919537387",
+      "bytes": 28578
+    },
+    {
+      "path": "test/service-reference-freshness.test.mjs",
+      "sha256": "32fb64252166c099ba6027c4ca7295b4a80496da6cfdc1b5186a769a603ef761",
+      "bytes": 18060
+    }
+  ],
+  "commands": [
+    {
+      "log": "evidence/engine-t01-lazy-build.log",
+      "result": "PASS after scoped escalation",
+      "command": "node scripts/build.mjs"
+    },
+    {
+      "pass": 46,
+      "fail": 0,
+      "skip": 0,
+      "result": "PASS",
+      "command": "node --test test/service-reference-freshness.test.mjs",
+      "log": "evidence/engine-t01-final-regressions.log"
+    },
+    {
+      "pass": 103,
+      "exit": 0,
+      "fail": 0,
+      "skip": 0,
+      "result": "PASS",
+      "command": "node --test test/service-reference-freshness.test.mjs test/service-content.test.mjs test/service-runtime.test.mjs test/service-authorized-view.test.mjs test/service-secret-canary.test.mjs test/service-retrieval.test.mjs test/service-contracts.test.mjs test/service-param-errors.test.mjs test/service-multiclient.test.mjs",
+      "log": "evidence/engine-t01-lazy-focused.log"
+    },
+    {
+      "log": "evidence/engine-t01-lazy-typecheck.log",
+      "exit": 0,
+      "result": "PASS",
+      "command": "node node_modules/typescript/bin/tsc --noEmit"
+    },
+    {
+      "command": "node scripts/build.mjs",
+      "result": "PASS after scoped escalation",
+      "log": "evidence/engine-t01-eof-rework-build.log"
+    },
+    {
+      "command": "node --test test/service-reference-freshness.test.mjs test/service-content.test.mjs test/service-runtime.test.mjs test/service-authorized-view.test.mjs test/service-secret-canary.test.mjs test/service-retrieval.test.mjs test/service-contracts.test.mjs test/service-param-errors.test.mjs test/service-multiclient.test.mjs",
+      "result": "PASS",
+      "pass": 103,
+      "fail": 0,
+      "skip": 0,
+      "exit": 0,
+      "log": "evidence/engine-t01-eof-rework-focused.log"
+    },
+    {
+      "command": "node --test test/runtime-qualification.test.mjs",
+      "result": "PASS with process-local Git safe.directory",
+      "pass": 6,
+      "fail": 0,
+      "skip": 0,
+      "exit": 0,
+      "log": "evidence/engine-t01-eof-rework-runtime-gate.log"
+    }
+  ],
+  "retained_failures": [
+    {
+      "stage": "sandbox baseline build",
+      "reason": "esbuild ancestor-directory read denied; no module to test",
+      "classification": "environment"
+    },
+    {
+      "fail": 11,
+      "stage": "baseline first16 correctness regressions",
+      "classification": "expected red",
+      "skip": 0,
+      "pass": 5
+    },
+    {
+      "fail": 7,
+      "stage": "audit fixture development",
+      "reason": "one aggregate finding provided no continuation cursor; corrected to3findings",
+      "classification": "fixture setup",
+      "pass": 33
+    },
+    {
+      "fail": 1,
+      "stage": "first delivery",
+      "reason": "existing successful wire-byte golden mismatch; old preimages/prose restored, golden unchanged",
+      "classification": "substantive compatibility failure; root requested rework",
+      "pass": 96
+    },
+    {
+      "fail": 1,
+      "stage": "request index development",
+      "reason": "eager source access before semantic refusal; fixed with lazy request-local maps",
+      "classification": "intermediate implementation failure",
+      "pass": 102
+    }
+  ],
+  "performance": {
+    "global_context_node_limit": "No explicit global graph/sourceRecords ceiling in internal execution context; trusted host supplied",
+    "kind": "synthetic local direct-runtime comparison, not independent benchmark",
+    "new_lookup_memory": "linear request-local coordinate maps; no cross-request cache",
+    "page_limit": 1,
+    "after_ms": [
+      214.142,
+      195.8403,
+      188.0658,
+      195.8516,
+      198.6574
+    ],
+    "nodes": 8000,
+    "before_ms": [
+      1110.8779,
+      810.911,
+      739.0463,
+      708.2251,
+      685.1724
+    ],
+    "repetitions": 5
+  },
+  "limitations": [
+    "No live vault/provider/model/remote writes/releases/tags",
+    "Node22/23 and Linux/macOS/hosted/native/soak not qualified by this packet",
+    "No final TypeScript oracle or cutover authority selected",
+    "Historical evidence bodies screened, not exhaustively re-audited",
+    "Root final manifest may supersede capture hashes for documented CRLF-to-LF normalization",
+    "Focused/standalone runs overlap and must not be summed"
+  ],
+  "evidence_files": [
+    {
+      "path": "evidence/engine-t01-baseline-build-retry.log",
+      "sha256": "c4c90152ae0aeb07c6044d19009f20a603578a950db8796daeca5a98c2fbdb28",
+      "bytes": 629
+    },
+    {
+      "path": "evidence/engine-t01-baseline-build.log",
+      "sha256": "c514f5b8cbac46989280daedd57c45ebe6bad63a33e1fea05359f619b61595c1",
+      "bytes": 1600
+    },
+    {
+      "path": "evidence/engine-t01-baseline-tests-retry.log",
+      "sha256": "d9e465fdd14dfdee48bc078459a7b2ff751b97b45dbf42aede7e5ee96d5f13e4",
+      "bytes": 11815
+    },
+    {
+      "path": "evidence/engine-t01-baseline-tests.log",
+      "sha256": "df0a8b0189dca9ad0769b748d2ade6cdad484d6aaed7152cf100c4fba7801b55",
+      "bytes": 1628
+    },
+    {
+      "path": "evidence/engine-t01-candidate-build.log",
+      "sha256": "c4c90152ae0aeb07c6044d19009f20a603578a950db8796daeca5a98c2fbdb28",
+      "bytes": 629
+    },
+    {
+      "path": "evidence/engine-t01-candidate-tests.log",
+      "sha256": "835ebc2d6b450aa578ede18e2b102519ee78275c8431d82b41b94d092c8c61c3",
+      "bytes": 2591
+    },
+    {
+      "path": "evidence/engine-t01-expanded-tests-retry.log",
+      "sha256": "da3e83e34faf4d386501ed08ee54ac8b7eac34bb566701c08e0e0cba266f04f6",
+      "bytes": 3122
+    },
+    {
+      "path": "evidence/engine-t01-expanded-tests.log",
+      "sha256": "a0b63170576bd40ecbe281fb8bc13931cf9a77a7aafbfea0e65d040cc9934b95",
+      "bytes": 8270
+    },
+    {
+      "path": "evidence/engine-t01-final-build.log",
+      "sha256": "c4c90152ae0aeb07c6044d19009f20a603578a950db8796daeca5a98c2fbdb28",
+      "bytes": 629
+    },
+    {
+      "path": "evidence/engine-t01-final-command-exits.json",
+      "sha256": "802d94c613482c5415d04dbfd2c6cf4523eeb080968748126328b141aa7ce865",
+      "bytes": 148
+    },
+    {
+      "path": "evidence/engine-t01-final-focused.log",
+      "sha256": "7c86c9f6cb63ea2a47e5b14653b6548e7f26757f5da2887dda2d1c291d0cc70d",
+      "bytes": 9575
+    },
+    {
+      "path": "evidence/engine-t01-final-regressions.log",
+      "sha256": "7508cbdd5f79ef6e4e54a19cb7bfe3d3e75c41d2537475686cdeac49756e7ce5",
+      "bytes": 3655
+    },
+    {
+      "path": "evidence/engine-t01-final-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/engine-t01-focused.log",
+      "sha256": "848795aa1be79c407de06d6719cab12c97f5186098eac73498aa8515d54dce9a",
+      "bytes": 26659
+    },
+    {
+      "path": "evidence/engine-t01-indexed-build.log",
+      "sha256": "c4c90152ae0aeb07c6044d19009f20a603578a950db8796daeca5a98c2fbdb28",
+      "bytes": 629
+    },
+    {
+      "path": "evidence/engine-t01-indexed-focused.log",
+      "sha256": "0dab8af98feb616aa57700c450dbfe67390a41bdb41521a0a10a834d5b3d97d1",
+      "bytes": 10610
+    },
+    {
+      "path": "evidence/engine-t01-lazy-build.log",
+      "sha256": "c4c90152ae0aeb07c6044d19009f20a603578a950db8796daeca5a98c2fbdb28",
+      "bytes": 629
+    },
+    {
+      "path": "evidence/engine-t01-lazy-command-exits.json",
+      "sha256": "0fb554ba56dd6016a6bb95c4ace9904ec87302717b79e2d217574a38f966a91b",
+      "bytes": 197
+    },
+    {
+      "path": "evidence/engine-t01-lazy-focused.log",
+      "sha256": "d87b51d77da957a2693fba4b9c8f781c5fc547b271e6e8f3c85994245a0dba72",
+      "bytes": 9574
+    },
+    {
+      "path": "evidence/engine-t01-lazy-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/engine-t01-perf-after.log",
+      "sha256": "b2f25e1526315d33afee80fb8017f2b46060fd4ed51ffe8eeb8a8a23177e0b99",
+      "bytes": 246
+    },
+    {
+      "path": "evidence/engine-t01-perf-before.log",
+      "sha256": "db220d0fdc360f22c7eae85127d36e99caef10f3d0d182224b09f4535a6c84b1",
+      "bytes": 236
+    },
+    {
+      "path": "evidence/engine-t01-perf-lazy.log",
+      "sha256": "efdfc472cac6f51ab78d5c7e232ed786028b3914161947f360626abf57c56b50",
+      "bytes": 247
+    },
+    {
+      "path": "evidence/engine-t01-perf-probe.mjs",
+      "sha256": "5946f4be4519693e4177da1de16045201545e21e9830428ff2e0d0609ec9ea9c",
+      "bytes": 8117
+    },
+    {
+      "path": "evidence/engine-t01-rework-build.log",
+      "sha256": "c4c90152ae0aeb07c6044d19009f20a603578a950db8796daeca5a98c2fbdb28",
+      "bytes": 629
+    },
+    {
+      "path": "evidence/engine-t01-rework-focused.log",
+      "sha256": "2520ee0eb9b531edf4bb5fb47e8a16e3f97f66852ea55de65bf4f6d40685a2dc",
+      "bytes": 9032
+    },
+    {
+      "path": "evidence/engine-t01-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/engine-t01-eof-rework-build.log",
+      "sha256": "c4c90152ae0aeb07c6044d19009f20a603578a950db8796daeca5a98c2fbdb28",
+      "bytes": 629
+    },
+    {
+      "path": "evidence/engine-t01-eof-rework-focused.log",
+      "sha256": "1f71e724afed8925b29ac26f61c8344412351c1e41db68d6e6c78b1814f1c896",
+      "bytes": 9567
+    },
+    {
+      "path": "evidence/engine-t01-eof-rework-runtime-gate.log",
+      "sha256": "f5abff5971bec8c0342b09fbd0b51f57c59f5b37b17123677ed85ba0ea8a5ba1",
+      "bytes": 699
+    }
+  ],
+  "generated_change_inventory": {
+    "path": "engine/contracts/runtime-qualification/v1/change-inventory.json",
+    "sha256": "a31c3500579499439c24f8c4b5e6e2a16a70d9901a35c1aa7b2cea20e04bb0a8"
+  }
+}

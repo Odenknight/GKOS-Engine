@@ -1,0 +1,36 @@
+{
+  "sourceCommit": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "tarballSha256": "f04705280acac74deab823683193a81a7c4dbf333791b33f6189226b709d593b",
+  "node": "v22.23.2",
+  "platform": "linux",
+  "rows": [
+    {
+      "namespace": "outer",
+      "damage": "missing",
+      "code": "GKX_WATCHER_AUTHORITY_MISMATCH",
+      "status": "PASS",
+      "originalPointerSha256": "0feef637689bcf9a8a9eb6b2f5c32e03b1695d6dfdc30d32764e827f1976cf51"
+    },
+    {
+      "namespace": "outer",
+      "damage": "corrupt",
+      "code": "GKX_WATCHER_CONTRACT_VERSION_INVALID",
+      "status": "PASS",
+      "originalPointerSha256": "346fbd8377a4529d4a5e44ff013c54a8c653e0675b0bc93b22ec8187d14a78b4"
+    },
+    {
+      "namespace": "journal",
+      "damage": "missing",
+      "code": "GKX_WATCHER_GLOBAL_GENESIS_INVALID",
+      "status": "PASS",
+      "originalPointerSha256": "ffee2fb6cdfd9c02fabc34d56de11c43f3e81b1f4f3dc04c316331e35ab17549"
+    },
+    {
+      "namespace": "journal",
+      "damage": "corrupt",
+      "code": "GKX_WATCHER_CONTRACT_VERSION_INVALID",
+      "status": "PASS",
+      "originalPointerSha256": "9c93ca4ad4761c5c0df33366100f8672c3eee4ef37c0450ffff26e9606cefbf5"
+    }
+  ]
+}

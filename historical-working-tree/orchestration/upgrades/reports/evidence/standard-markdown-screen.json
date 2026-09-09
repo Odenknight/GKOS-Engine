@@ -1,0 +1,862 @@
+[
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\adjudication\\v1\\ADJUDICATION-CONTRACT.md",
+    "headings": "# Deterministic adjudication contract / ## Inputs and outputs / ## Monotonic decision table / ## Authority and effect boundary / ## Fail closed and replay / ## Open dependency",
+    "clauses": "status: DRAFT_UNEVALUATED\nauthority_state: NONE\nruntime_authority: false\nThis contract restates the ratified Stage 0 through Stage 3 boundary in a\nratified and pinned.\n`DRAFT_UNEVALUATED` with authority `NONE`; its exactness does not ratify or\nfrom the hash-bound Stage 1 receipt. Stage 3 must reject any mismatch between\nprojection. Implementations must additionally verify that every projected"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\adjudication\\v1\\HASH-PREIMAGES.md",
+    "headings": "# Decision-artifact hash preimages",
+    "clauses": "status: DRAFT_UNEVALUATED\nauthority_state: NONE\nThe omission is shallow and exact: only the named top-level self field is\nmaterialization authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\conformance\\v1\\CLI-PROTOCOL.md",
+    "headings": "# Language-neutral conformance CLI protocol / ## Invocation / ## Operations / ## Exit status / ## Request binding and fail-closed validation / ## Determinism and comparison / ## Replay harness and assurance limit",
+    "clauses": "status: DRAFT_UNEVALUATED\nauthority_state: NONE\nratified static schema exists, canonical-byte requirements, and processed\nJSON because this pre-ratification packet has no authority to invent or ratify\nthose contracts. Supplying them does not confer authority.\nverifier identities and time. Processed payloads must echo those exact values;\nThe response bytes must hash to the effect receipt's `response_sha256`. The\nthe pre-ratification vector remains `UNEVALUATED`; receipt presence or a"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\database\\v1\\POSTGRESQL-LEDGER-PROFILE.md",
+    "headings": "# PostgreSQL ledger, outbox, and checkpoint profile / ## Transaction boundary / ## Acyclic mutation and entry hashes / ## Outbox and dual write / ## Human review and retention / ## Checkpoints / ## Unresolved ratification gaps / ## Scope and privilege deployment denial",
+    "clauses": "status: DRAFT_UNEVALUATED\nauthority_state: NONE\nruntime_authority: false\nmaterialization authority.\nEvery accepted canonical mutation MUST run in one `SERIALIZABLE` transaction.\nduplicate object-member evidence. Every raw request therefore MUST pass a\nThe database transaction MUST NOT contain Hindsight, governed-overlay, anchor,\nthey never confer authority or alter a disposition."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\evd-002\\EVD-002-PYTHON-EVIDENCE-CHAIN-BUILD-INSTRUCTIONS.md",
+    "headings": "# EVD-002 Python Evidence Chain — Build Instructions / ## 1. Outcome / ## 2. Authority gate: stop before implementation / ## 3. Repository findings that shape the design / ## 4. Target ownership and dependency direction / ## 5. Frozen canonical-byte profile / ## 6. Chain contract / ## 7. Persistence and atomic append / ## 8. Genesis without rewritten history / ## 9. Checkpoint anchors / ## 10. Read-only verification / ## 11. Test and qualification rings / ## 12. Evidence products and activation handoff / ## 13. Rollback and incident behavior / ## 14. Explicit stop conditions",
+    "clauses": "Status: design and qualification plan only; implementation and activation blocked  \nlifecycle/evidence stream. The chain must use versioned cross-language canonical\nentry to the same SQL authority transaction as the lifecycle mutation and its\nactivation authority. Loss after the newest trusted anchor is not generally\ndetectable and must be reported as an explicit limitation.\n## 2. Authority gate: stop before implementation\nThe supplied artifacts are inputs to review, not current repository authority.\n   update the registry SHA-256 in `governance/AUTHORITY_MANIFEST.json`, and pass"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\fixtures\\v1\\PHASE-A-FIXTURE-CONTRACT.md",
+    "headings": "# Neutral Phase A fixture and lock contract / ## Locks / ## Public and confidential fixtures / ## Shadow vectors",
+    "clauses": "Status: `DRAFT_UNEVALUATED`\nAuthority state: `NONE`\nThis package defines evidence-only locks and replay inputs for the ratified Phase A\nruntime configuration, activation receipt, or qualification history.\n`component-lock.json` records exact ratified pins and preserves required but\nunratified components as `UNEVALUATED_BLOCKING`. `model-lock.json` leaves producer\nselected and ratified. `config-lock.json` binds repository contract bytes for\nreplay while giving draft contracts no authority effect."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\gkx-checkpoint\\CODEX-RUNBOOK-GKX-CHECKPOINT-CONTRACT.md",
+    "headings": "# Codex Runbook — GKX Checkpoint Contract v1.0 / ## Mission / ## Phase 0 — Authority and worktree / ## Phase 1 — Contract review / ## Phase 2 — Mechanical validation / ## Phase 3 — Negative and adversarial vectors / ## Phase 4 — Repository integration / ## Phase 5 — EVD-002 and Hindsight profiles / ## Phase 6 — Evidence and handoff",
+    "clauses": "## Phase 0 — Authority and worktree\n1. Read all applicable `AGENTS.md` files and the repository authority manifest.\n3. Confirm owner ratification is absent or present truthfully. Never fill owner\n4. Record current base SHA, branch, worktree status, and overlapping changes.\n- GKX identity, epistemic state, and authority separation;\nauthority, and unanchored tail limitation.\nThe parser must fail before canonicalization where applicable. Do not normalize\ngovernance/authority/GKX-CHECKPOINT-CONTRACT-v1-RATIFICATION.yaml"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\gkx-checkpoint\\GKX-CHECKPOINT-CONTRACT-v1.0.md",
+    "headings": "# GKX Checkpoint Contract v1.0 / ## 1. Purpose / ## 2. Normative language / ## 3. Non-claims / ## 4. Objects / ## 5. Core semantics / ### 5.1 Identity and scope / ### 5.2 Covered range / ### 5.3 Continuity / ### 5.4 Verification statement / ## 6. Canonical bytes and hash / ## 7. Time / ## 8. Signatures / ## 9. Anchor delivery / ## 10. Cadence / ## 11. Verification algorithm / ## 12. Recovery and competing heads / ## 13. Storage profiles / ### 13.1 Marshal SQLite/Python / ### 13.2 Hindsight PostgreSQL clean-room / ## 14. Security and privacy / ## 15. Conformance / ## 16. Ratification and change control",
+    "clauses": "authority_state: \"NONE\"\nruntime_authority: false\nactivation_authority: false\ncompletion_authority: false\n`MUST`, `MUST NOT`, `SHOULD`, and `MAY` are normative. A consumer MUST fail\nsigner had decision authority, that a chain is complete after the checkpoint,\nkey relationship only; authority requires a separately valid authority record.\nidentity. They MUST reference the immutable checkpoint hash."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\gkx-checkpoint\\marshal-canonical-json-v1.md",
+    "headings": "# `marshal-canonical-json/v1` / ## Data domain / ## Parsing / ## Schema normalization / ## Serialization / ## Domain separation / ## Failure behavior",
+    "clauses": "Status: proposed normative profile\nEvidence-chain entry hashing MUST use its own contract-defined domain prefix.\nfailed schema validation all fail closed. Implementations MUST NOT fall back to"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\gkx-checkpoint\\README.md",
+    "headings": "# GKX Checkpoint Contract v1.0 — Handoff Bundle / ## Contents / ## Controlling rule",
+    "clauses": "Status: proposed exact candidate; no runtime, activation, publication, or completion authority\n- `GKX-CHECKPOINT-RATIFICATION-RECORD.yaml` — owner ratification template.\n- `CODEX-RUNBOOK-GKX-CHECKPOINT-CONTRACT.md` — integration and qualification instructions.\nThe contract candidate and its files grant no authority by existing. Codex may\nvalidate and prepare a repository PR. The repository owner must ratify the exact\ndigest before they become an authority source. Activation and goal completion"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\governance\\GKOS-Hindsight-Dream-Governance-Demonstrator.md",
+    "headings": "# GKOS–Hindsight Governance Demonstrator / ## 1. Executive decision / ## 2. Why Hindsight is an unusually strong GKOS fixture / ## 3. Authority boundary / ### 3.1 Canonical responsibilities / ### 3.2 Non-negotiable invariants / ## 4. System architecture / ### 4.1 Deployment posture / ## 5. GKOS projection of Hindsight objects / ## 6. Minimum governance envelope / ## 7. Dream Adjudication Pipeline / ### 7.1 Input contract / ### 7.2 Stage 0 — validity gate / ### 7.3 Stage 1 — deterministic risk and eligibility checks / ### 7.4 Stage 2 — independent semantic review / ### 7.5 Stage 3 — deterministic adjudication / ### 7.6 The three substantive dispositions / ## 8. What “auto-approval” means / ## 9. Ledger and audit model / ## 10. Human review experience / ## 11. Audit sampling and calibration / ### Mode 0 — observe only / ### Mode 1 — shadow auto-admission / ### Mode 2 — reversible limited admission / ### Mode 3 — sampled operation / ## 12. Public demonstration experiments / ## 13. Acceptance tests / ## 14. Repository shape / ## 15. Minimal API surface / ## 16. Build sequence / ### Activation gate / ### Phase A — contracts and replayable fixtures / ### Phase B — Hindsight bridge / ### Phase C — independent Dream review / ### Phase D — shadow calibration / ### Phase E — limited auto-admission / ### Phase F — Rust qualification and Python retirement / ## 17. What to publish / ## 18. Ratified decision baseline / ## 19. References",
+    "clauses": "**Status:** Ratified build specification  \n**Primary claim:** A capable adaptive-memory system can retain its useful learning behavior while GKOS keeps evidence, inference, confidence, authority, and permission to act distinguishable and auditable.\nBuild this as a sidecar/proxy around an otherwise ordinary Hindsight deployment. Do not fork Hindsight initially and do not make Hindsight a GKOS authority.\n4. prevent memory confidence or retrieval relevance from becoming authority;\n6. auto-admit only a narrow class of reversible, non-authoritative derived memories under a human-ratified policy;\n> A reviewer agent may assess an artifact, but it may not approve it. Approval is issued either by a human or by a deterministic policy engine exercising narrowly delegated authority.\n## 3. Authority boundary\n| Component | Owns | Must not own |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\governance\\README.md",
+    "headings": "# Governance contracts",
+    "clauses": "The ratified demonstrator specification is vendored here by exact digest. Hindsight remains a non-authoritative upstream, and reviewer assessments remain evidence rather than approval."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\hindsight\\v1\\HINDSIGHT-OPERATION-COMPATIBILITY.md",
+    "headings": "# Hindsight operation-compatibility contract / ## Evidence basis / ## Operation requirement classes / ### Core required / ### Conditional required / ### Optional diagnostic / ## Semantic invariants / ## Webhook and operation identity / ## Four-stage compatibility preflight / ## Non-claims",
+    "clauses": "Status: `DRAFT_UNEVALUATED`\nAuthority: `NONE`\nThis contract defines the minimum Hindsight-shaped operation surface that the GKOS memory gateway can qualify. Compatibility is operation-based. A product name, version string, successful health check, or matching OpenAPI document does not authorize connection, processing, recall, materialization, or any governance transition.\nThe canonical machine-readable profile is `fixtures/conformance/hindsight-v1/operation-profile-v1.json`. It binds exact HTTP methods, paths, request fields, response fields, status codes, semantic invariants, and deployment security conditions. Unknown surfaces fail closed and have no authority effect.\nThe current authority pin is the LF Git-blob bytes of `hindsight-clients/go/api/openapi.yaml` from the official `vectorize-io/hindsight` `v0.9.2` tag:\nThe observed bytes match the existing authority pin. Checkout newline conversion is not an authority amendment. Any future source disagreement is candidate evidence and must not silently replace the pin.\nThe ratified boundary requires retain, recall, memory inspection/history,\n- operation list, status, retry, and cancel."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\semantic-coherence\\v1\\SEMANTIC-COHERENCE-CONTRACT.md",
+    "headings": "# Semantic Coherence Contract v1 / ## Purpose and boundary / ## Mounted inputs / ## Result precedence / ## Exact comparison semantics / ### Envelope mapping / ### Dream artifact integrity / ### Reviewer independence and assessment binding / ### Source closure and budgets / ### Validity receipt coherence / ### Disposition receipt coherence / ### Full-packet closure / ## Non-claims and unresolved activation inputs",
+    "clauses": "Status: `DRAFT_UNEVALUATED`\nAuthority state: `NONE`\ncandidate must evaluate it independently. The shared test oracle is limited to\nA semantic-coherence receipt always has `authority_state: NONE`,\nAn evaluator must mount and hash the exact bytes of:\nmust not silently substitute another registry.\napproval, authority, or permission to materialize.\nkinds. For the selected source kind, the envelope object type and authority"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\ARCHITECTURE.md",
+    "headings": "# Architecture / ## Purpose and claim boundary / ## Authority and trust boundaries / ## Canonical mutation and projection flow / ## Dream review flow / ## Non-PHI and non-production boundary / ## Contract evidence achieved so far / ## Clean-room implementation lanes / ## Blocking identities and limits / ## Service and Compose posture / ## Gate sequence",
+    "clauses": "- Status: `DRAFT_UNEVALUATED`\n- Authority effect: `NONE`\n- Runtime, activation, deployment, publication, and completion authority: `false`\nbehavior while keeping evidence, inference, confidence, authority, and permission\nstatus, lineage, authority, allowed use, review history, and reversibility of\ncontain a qualified gateway, reviewer deployment, materializer, canonical writer,\n## Authority and trust boundaries\n    HUMAN[Scoped human authority] --> PG"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\DATABASE-CONTRACT.md",
+    "headings": "# Database contract boundary",
+    "clauses": "tenant/project identity-to-scope mapping is unratified. In a future scoped\nprofile must be owner-ratified in the append-only profile registry before the\nseeded either. Exact event/mutation/canonical bytes must be independently\nquorum record binding policy and authority. Chains, events, and commands bind one\nauthority-pinned scope/RLS mapping exists.\nrequires a policy-engine actor, non-empty capability/evidence/authority fields,\nDatabase roles are NOLOGIN capability groups. A future ratified deployment must\nexplicit operational trust boundary, not a substitute for GKOS authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\OPERATIONS.md",
+    "headings": "# Operations / ## Verify the current checkout / ## Activation receipt interpretation / ## Current scaffold checks / ## Pre-ratification replay / ## PostgreSQL evidence / ## Stop and escalation conditions",
+    "clauses": "Status: `DRAFT_UNEVALUATED` / authority `NONE`\nThis runbook covers only the private pre-ratification contract foundation. It\ncontract job for that evidence. The CPython 3.12 patch release, Ubuntu runner\nsymlink creation; the hosted Linux contract job must execute those cases without\nqualification.\nimmutable record of its then-nonterminal state. The source authority subsequently\ndoes not rewrite the target receipt or grant runtime authority. An unknown\nproduction qualification remain blocked until that exception is retired, and"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-CONTRACT-CI-GATE-REPORT.md",
+    "headings": "# R2 contract CI static gate report / ## Delivered / ## Evidence boundary / ## Dependency boundary / ## Validation / ## Non-claims",
+    "clauses": "Status: `DRAFT_UNEVALUATED` / authority `NONE`\n  read-only, concurrent superseded runs are cancelled, and the job has a\n  goal-completion authority is created.\nqualification, supply-chain completeness, or production behavior.\nThe separately named PostgreSQL qualification workflow remains outside this\nexplicitly does not claim runtime security qualification.\nboth `--require-hashes` and `--only-binary=:all:`. Python patch releases, the\n  proposed R2 authority amendment."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-FAILURE-MATRIX.md",
+    "headings": "# R2 failure matrix / ## Coverage / ## Evidence semantics / ## Fail-closed interpretation",
+    "clauses": "Status: `DRAFT_UNEVALUATED` / authority `NONE`\nand do not grant policy or runtime authority.\n| Authority inflation | 6 | Provider boundary is static; Hindsight/runtime rendering remains unevaluated |\nEach case has exactly one `evidence.status`:\n  observed. It must use `BEHAVIOR_NOT_RUN` and cannot be counted as a pass.\neffect, invalid experiment, or drifted qualification from being misreported as"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-HINDSIGHT-COMPATIBILITY-REPORT.md",
+    "headings": "# R2 Hindsight operation-compatibility report / ## Result / ## Operation boundary / ## Replay evidence / ## Webhook repair / ## Source findings and unevaluated dependencies / ## Validation / ## Safe handoff",
+    "clauses": "Status: `DRAFT_UNEVALUATED`\nAuthority: `NONE`\nThe repaired shared contract now distinguishes the exact ratified bridge\nresult. It does not qualify a deployment, execute a live write, or grant runtime\nauthority.\nwhich exactly matches the existing authority manifest and work-packet pin.\nCheckout newline conversion is not an authority amendment.\n  clearing, and operation list/status/retry/cancel;"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-OPERATOR-DOCUMENTATION-REPORT.md",
+    "headings": "# R2 operator documentation report / ## Delivered / ## Explicit non-claims / ## Validation boundary / ## Material caveats",
+    "clauses": "Status: `DRAFT_UNEVALUATED` / authority `NONE`\n- Expanded the root README with purpose, authority boundaries, non-PHI and\n  validation commands, and remaining gates.\n  interpretation, pre-ratification replay, PostgreSQL evidence semantics, stop\n  no-runtime-authority, and no-merge boundaries.\n  accepted authority pins.\n  manifest. These records bind documentation bytes only and grant no authority.\n- No runtime write, Mode 2 admission, activation, deployment, merge, release,"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-OWNER-DECISION-INTAKE-2026-08-27.md",
+    "headings": "# R2 owner decision intake — 2026-08-27 / ## Key findings / ## Recommended owner choices / ## Ordered next work",
+    "clauses": "Status: **proposal only; authority `NONE`**.\nThe earlier Q1–Q6 proposal cannot safely be ratified. Its target baseline and\nnot replace or amend repository authority.\n  source authority record ratifies an exact portable receipt-contract bundle;\n   the current unmerged commit. Correct and qualify it against current main,\n6. **D6:** `KEEP_BLOCKED_PENDING_EVIDENCE_BOUND_PROFILE`. The old numeric\n   proposal is retained only as an unratified candidate; encode and qualify an\n   work remains blocked until all listed fields are supplied."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-PRE-RATIFICATION-CLI-CLEAN-ROOM-REPORT.md",
+    "headings": "# R2 pre-ratification CLI and clean-room boundary report / ## Delivered static contract surface / ## Static assurance boundary / ## Validation and current integration state / ## Open runtime qualifications",
+    "clauses": "# R2 pre-ratification CLI and clean-room boundary report\nStatus: `UNEVALUATED_RUNTIME_CANDIDATES`\nAuthority effect: `NONE`\nchecks used before Python/Rust parity qualification. It does not implement a\n- A closed `DRAFT_UNEVALUATED`, authority-`NONE` operation profile binds all\n  verifier identities/times, and processed payloads must echo them. Provider\n  The portable fixture has an explicit `SYNTHETIC`, authority-`NONE`,\n  fixture-only and cannot substitute for or ratify the separate authority-`NONE`"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-SECTION-3-REPORT.md",
+    "headings": "# R2 Section 3 implementation report / ## Delivered / ## Rewrites and review corrections / ### Structural ledger repair after the adversarial R2 audit / ## Important limitations and major issues / ## Scope integrity",
+    "clauses": "Status: `DRAFT_UNEVALUATED` / authority `NONE`\n  every event non-effectual until a verifier implementation is ratified.\n  concurrency-only rather than authority.\n  and authority fields.\n- Typed human ballot links and independently verified policy/authority-bound\n   Any permanent failure now dominates until a separately ratified new-command\nprovider-specific profiles remain explicitly unratified; a distinct verifier\nThe PostgreSQL 16.10 runtime qualification in GitHub Actions run `33026881674`"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-SECTION-4-THREAT-FAILURE-REPORT.md",
+    "headings": "# R2 Section 4 threat/failure report / ## Delivered / ## Evidence accounting / ## Validation / ## Major issues and limitations / ## Scope integrity",
+    "clauses": "Status: `DRAFT_UNEVALUATED` / authority `NONE`\n  enlarge human authority.\n  and per-case evidence status.\n- Added explicit operational cases for authority inflation, missing hashes/pins/\n  queue overload, retention/purge, drift/sampling resets, and the ratified\nrecovery, or differential qualification. Matrix validation does not upgrade\n  disposition or grant authority.\n- Queue thresholds, 299/300 and 99/100 qualification boundaries, sampling, drift,"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-SECTION-5-SEMANTIC-COHERENCE-REPORT.md",
+    "headings": "# R2 Section 5 semantic-coherence report / ## Delivered / ## Repaired audit counterexamples / ## Validation / ## Major issues and remaining ratification gaps / ## Scope integrity",
+    "clauses": "Status: `DRAFT_UNEVALUATED` / authority `NONE`\n  bounded authority semantics, exact use set, lineage cardinality, and required\n  equality, set, digest, source-closure, budget, identity, reason, authority,\n- Preserved reviewer non-authority: the receipt cannot approve, issue a\n  result/reason pairing, hash binding, and receipt authority invariant.\n6. Per-check validity reasons must belong to the named check, and global reasons\n   must equal the non-PASS union. Disposition reason sets, authority basis, lane,\n   and effects must equal their closed evidence projections."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-SECTION-6-PHASE-A-FIXTURES-REPORT.md",
+    "headings": "# R2 Section 6 — Neutral Phase A fixtures and locks / ## Result / ## Lock findings / ## Fixture coverage / ## Fail-closed schema repair / ## Validation / ## Remaining blockers",
+    "clauses": "Status: `DRAFT_UNEVALUATED`\nAuthority state: `NONE`\nconfidential local qualification manifest; and pre-ratification shadow boundary\nlive Hindsight write, runtime mode, activation, or qualification claim.\nThe following exact ratified identities are recorded:\n- GKX 2.0 as the ratified specification identity; and\n- the GKX checkpoint ratification SHA-256\n  ratified v2.0.1 pin; the observed draft candidate has `authority_state: NONE`;"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\sol-reports\\R2-ENGINE-PR31-INDEPENDENT-AUDIT-2026-08-27.md",
+    "headings": "# R2 Engine PR #31 independent audit / ## Exact observed revision state / ## Findings / ### 1. High — exact merge conflicts and obsolete baseline / ### 2. High — ratification and merge authority are absent / ### 3. High — language-neutral schemas and runtime validation diverge / ### 4. Medium — receipt verification is self-consistency only / ## Provider contract content / ## CI evidence and boundary / ## Smallest authority-safe resolution order / ## Final disposition",
+    "clauses": "Status: `READ_ONLY_EVIDENCE`\nAuthority state: `NONE`\nAuthority effect: `NONE`\nruntime, complete R2 or WP1, or grant publication authority. Remote state was\nResolution must be additive: preserve all current-main rules, exports, package\n### 2. High — ratification and merge authority are absent\n`.harnessrules`, `AUTHORITY_MANIFEST.json`, work packet, or `CODEOWNERS`. GitHub\nratification."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\sol-reports\\R2-EVD-002-INDEPENDENT-AUDIT-2026-08-27.md",
+    "headings": "# R2 EVD-002 Contract-Only Pin Independent Audit / ## Scope and non-claims / ## Finding / ## Authoritative source provenance / ## Exact EVD-002 candidate identities / ## Authority and status facts / ## Marshal-specific exclusions / ## GKX checkpoint comparison / ## Target blocker / ## Smallest owner decision / ## Critical ordering and dependency risks",
+    "clauses": "status: FINAL_READ_ONLY_EVIDENCE\nauthority: NONE\nruntime_authority: false\nactivation_authority: false\ncompletion_authority: false\npublication_authority: false\nThis is independent, read-only evidence concerning the exact EVD-002 receipt/hash-chain/checkpoint contract candidate required by the GKOS-Hindsight Governance Demonstrator. It compares committed TheMarshal-008 authority and implementation state with the target component lock and checkpoint contract.\nThis report grants no authority, changes no goal state, authorizes no runtime behavior, activation, deployment, merge, publication, or completion, and does not convert implementation evidence into ratification. Dirty or untracked working-tree material was not treated as authoritative evidence."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\sol-reports\\R2-RUNTIME-LIMITS-IMPLEMENTATION-2026-08-27.md",
+    "headings": "# R2 runtime-limits corrective implementation report — 2026-08-27 / ## Outcome and correction boundary / ## Exact profile / ## Raw JSON and ordering rules / ## Declarative fixtures / ## Digest and whitespace evidence / ## Validation commands / ## Remaining authority step",
+    "clauses": "Status: `DRAFT_UNEVALUATED` evidence for non-production R2 conformance.\nAuthority state: `NONE`\nAuthority effect: `NONE`\nRuntime, activation, merge, completion, and publication authority: `false`\nalgorithm. Any later Python and Rust enforcement must be independently built\nunder separate authority.\nmust use the grammar `0|[1-9][0-9]*` and cannot exceed\nruntime-disposition authority and shared-evaluator flags are false."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\THREAT-MODEL.md",
+    "headings": "# R2 bounded demonstrator threat model / ## Security objective / ## Assets and unacceptable consequences / ## Data classes and routing / ## Trust and capability boundaries / ## Required four-way execution separation / ## Actors and assumptions / ## Attack surfaces / ## Threat inventory / ## Lane and precedence rules / ## Mitigation and verification map / ## Residual risks and open qualifications / ## Non-claims",
+    "clauses": "Status: `DRAFT_UNEVALUATED`\nAuthority state: `NONE`\nfixtures must preserve. It is not a deployment assessment, an executable policy,\nThe normative build specification remains the exact ratified document at\nThe demonstrator must retain Hindsight's useful extraction, consolidation, and\n4. What authority, if any, issued a governed disposition?\n**authority inflation** in which a source label, score, model output, receipt,\nUnknown or incomplete evidence must remain inactive."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\WP1-COMPLETION-AUDIT-2026-08-27.md",
+    "headings": "# WP1 full-demonstrator completion audit / ## Outcome / ## Critical authority and dependency findings / ## Phase B evidence boundary / ## Smallest ordered authorized progression / ## Review and validation record / ## Code and rewrite report",
+    "clauses": "Status: `UNEVALUATED_COMPLETION_AUDIT` / authority `NONE`\nagainst the ratified GKOS-Hindsight Governance Demonstrator specification. The\n- Phase F Rust qualification/Python retirement: `NOT_AUTHORIZED`. Both lanes\n  security, dependency closure, production qualification, and retirement are\n  load metrics, video, feedback closure, and owner ratification do not.\nas unevaluated blocking. Passing static tests cannot satisfy those broader\n## Critical authority and dependency findings\n   green CI are evidence, not merge authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\WP1-REQUIREMENTS-TRACEABILITY.md",
+    "headings": "# WP1 requirements traceability / ## Authority posture / ## Coverage / ## Exact row disposition index / ## Remaining ratification and progression gates",
+    "clauses": "This report is a fail-honest, pre-ratification view of\nrequirement families enumerated below, with source, evidence paths, and a blocker\nIDs, status drift, authority inflation, unresolved local paths, count drift, and\nratified specification. In particular, architecture, human-review experience,\n## Authority posture\n- Authority effect: `NONE`.\n- Runtime, activation, deployment, publication, completion, and merge authority:\n  or owner-ratified PostgreSQL qualification."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\adversarial\\README.md",
+    "headings": "# Adversarial fixtures",
+    "clauses": "Fixtures are `UNEVALUATED` until WP1 records exact expected results and qualification evidence."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\confidential-local-manifest\\README.md",
+    "headings": "# Confidential local qualification manifest",
+    "clauses": "# Confidential local qualification manifest\nThis directory intentionally contains only a content-free manifest. It must never\nLocal qualification is permitted only through an approved local endpoint. Each\nslot remains `UNEVALUATED_BLOCKING` here. Rejected or quarantined confidential"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\conformance\\README.md",
+    "headings": "# Conformance fixtures",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\public-synthetic\\README.md",
+    "headings": "# Public synthetic demonstration fixtures",
+    "clauses": "ratified Section 12 demonstrations. Every request records a synthetic transport\npublication, or qualification authority. The secret and shell-command fixtures use"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\shadow\\README.md",
+    "headings": "# Shadow qualification fixtures / ## Epoch binding / ## Deterministic sampling preimage",
+    "clauses": "# Shadow qualification fixtures\n`qualification-boundaries-v1.json` models the ratified promotion, audit-rate,\nidempotency, and reset boundaries plus a pre-ratification deterministic-sampling\nhistory, seed qualification counters, advance runtime state, or authorize a mode\nunratified, and authority `NONE`.\nthe applicable human ratification/certification and complete durable evidence.\nThe synthetic qualification epoch binds six independent dimensions in this\nhas no runtime qualification effect. The `synthetic-*-epoch-[ab]` strings are"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\migrations\\README.md",
+    "headings": "# Migrations",
+    "clauses": "lane. They are `DRAFT_UNEVALUATED` and grant no runtime authority. The bounded\ndisposable PostgreSQL 16.10 workflow qualifies default-deny behavior only; it is\nnot a live deployment, production profile, or ratification.\nunratified, and the profile registries are empty; runtime therefore fails closed.\nacceptance and must be superseded by a new v2 verification/event pair.\nunresolved ratification gaps."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\README.md",
+    "headings": "# GKOS–Hindsight Governance Demonstrator / ## Current posture / ## What is present / ## Repository layout / ## Run the existing static checks / ## Data and safety boundary / ## Remaining gates",
+    "clauses": "came from, its epistemic and authority state, and what uses are permitted.\nThe central authority rule is simple:\nengine exercising an exact, human-ratified delegation. Model confidence,\nprovider response never creates authority.\n| Contract status | `DRAFT_UNEVALUATED` |\n| Runtime authority | `false` |\n| Deployment authority | `false` |\n| Publication authority | `false` |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\.github\\PULL_REQUEST_TEMPLATE.md",
+    "headings": "## Proposal metadata / ## Evidence and rationale / ## Checklist",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\ACKNOWLEDGMENTS.md",
+    "headings": "# Acknowledgments / ## Andrej Karpathy — LLM Wiki",
+    "clauses": "inspired Shaun “Oden” Marshall to improve the structure, accessibility, and"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\CHANGELOG_pre_gkx2.md",
+    "headings": "# Changelog / ## GKOS-2026-08-05 v0.78 / ## GKOS-2026-08-05 v0.77 / ## Unreleased — conformance-honesty remediation (implemented evidence) / ## GKOS-2026-07-20 v0.76 / ## GKOS-2026-07-17 v0.75",
+    "clauses": "- Superseded the prior machine-identifier preservation policy without altering\n  immutable historical release directories.\nhosting-provider release object.\n- Accept R13: honest `UNEVALUATED` reporting, non-qualifying catalog 0.1.1,\n- Preserve the published v0.76 release package without amendment.\n## Unreleased — conformance-honesty remediation (implemented evidence)\n- Mark unexecuted pair and graph expectations `UNEVALUATED`, block profile\n  claims, disclose limitations, and return a non-qualifying exit status."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\graphics\\README.md",
+    "headings": "# GKOS graphics / ## Version progression",
+    "clauses": "- `GKOS_OSI_Comparison.svg` — **v0.75-era** comparison of the OSI network model and GKOS knowledge-governance model. Retained as the historical baseline; superseded in presentation (not deleted) by the v0.76 graphics below.\n- `GKOS_Implementation_Dashboard_Corrected.png` — **v0.76** six-panel dashboard covering the GKOS model, OKF+ layer mapping, the OSI analogy, a Kosmos-Oden v0.6.5 implementation-status map, GCP conformance profiles, and human/agent/system responsibilities.\n`GKOS_OSI_Comparison.svg` (v0.75) → `GKOS_OSI_Comparison_3D_Corrected.png` (v0.76) documents how the OSI analogy graphic evolved between releases. Both are kept in the repository so the progression is visible rather than erasing the earlier version; the v0.75 SVG is not linked from current-state documentation but remains available as release history (added 2026-07-22, alongside the Illustrated Edition)."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\illustrated\\GKOS-v0.76-Illustrated-Edition.md",
+    "headings": "# Governed Knowledge Operations Standard (GKOS) / ## GKOS-2026-07-20 v0.76 — Complete Illustrated Edition / # How to read this document / # Part I — The idea in plain language / ### The problem GKOS solves / ### The seven layers, without jargon / ### Why the OSI comparison is more than a slogan / ### Humans, agents, and systems each keep their lane / # Part II — The standard (complete normative text, annotated) / ## §0. Development status / ## §1–§2. Purpose and core thesis / ## §3. Architecture and version relationships / ## §4. Authority / ## §5. Epistemic model / ### §5.1 Epistemic state vocabulary / ## §6. Seven layer contracts / ### §6.1 Mechanical definitions (normative) / ## §7. Specialized Agents / ## §8. Conformance / ### §8.1 Progressive disclosure / ## §9. Security, privacy, and retention / ## §10–§11. Publication, maturity, and deferred mechanisms / # Part III — Annexes (condensed) / ## Conformance profiles / ## Layer interface contracts / ## Provisional authority-receipt field list (informative, not normative) / ## Security, privacy, and retention annex / ## Specialized Agent framework annex / ## Known limitations / # Document provenance",
+    "clauses": "> **Status.** Public pre-standard and concept-refinement release. Changes in the v0.x series are developmental adoptions by the Founder and Initial Editor after documented technical review — not consensus ratifications, certifications, or accredited standards decisions. GKOS v0.76 is suitable for public review, implementation experiments, fixture development, and independent critique. It is not a certification regime, legal opinion, regulatory assurance, or guarantee of truth or safety. Normative terms: MUST, MUST NOT, SHOULD, SHOULD NOT, MAY. License: documentation CC BY 4.0; software-oriented materials Apache-2.0. Canonical repository: github.com/Odenknight/gkos-standard.\nThink of a courtroom rather than a database. Layer 1 keeps the original exhibits exactly as they arrived. Layer 2 gives every item a permanent identity so renaming a file can never orphan its history. Layer 3 records who claims what, based on which evidence, contradicted by whom, and during which period the claim held. Layer 4 is procedure: deterministic rules that either pass or block. Layer 5 is the judgment: a human (or explicitly authorized policy) records a decision that can never be silently edited. Layer 6 assembles the case file for a specific purpose — including the warnings and contradictions, not just the favorable parts. Layer 7 records what was actually done with the knowledge, under whose authority.\nAI agents extract, link, classify, detect conflicts, and draft proposals — they generate capability, never authority. Humans review consequential changes and retain final authority. The system preserves originals, records every decision, enforces permissions, and prevents silent edits. An agent's confidence, an impressive prompt, or a high similarity score authorizes exactly nothing; only an explicit, recorded grant does.\n## §0. Development status\nGKOS v0.76 remains in the pre-v1.0 testing and refinement phase. Changes recorded during the v0.x series are developmental adoptions by the Founder and Initial Editor after documented technical review. They are not consensus ratifications, independent certifications, accredited standards decisions, or claims that the complete future governance body has been seated.\nExternal reviewers are being assembled. Formal multi-stakeholder amendment authority, voting, quorum, appeal, and consensus procedures are v1.0 gates. Until then, development records MUST identify their review basis, authorizing editor, limitations, and non-consensus status.\n> Cite the exact release string (“GKOS-2026-07-20 v0.76”) in anything you build or claim. Treat every v0.x requirement as stable enough to implement against but subject to recorded, traceable change — the decision register in the repository is the change log that matters.\nA conformance claim citing a draft technical specification MUST disclose that status and identify the last ratified baseline. OKF+ 2.3 is presently a draft technical specification; OKF+ 2.2 remains the last ratified baseline. GKOS v0.76 freezes the epistemic vocabulary directly, so conformance does not depend on the continuing contents of the OKF+ 2.3 draft."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\README.md",
+    "headings": "# Historical archive",
+    "clauses": "authority. R14 and the v0.78 release package control current machine namespace"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\ROADMAP_pre_gkx2.md",
+    "headings": "# GKOS ecosystem roadmap / ## Repository responsibilities / ## Phase A — Ecosystem cohesion / ## Phase B0 — Credible entry conformance / ## Phase B1 — Core standard engineering, v0.8–v0.9 / ## Phase B2 — Interoperability by reuse / ## Phase B3 — External validation and adoption / ## Phase B4 — Governance continuity / ## Phase C — v1.0 gates / ## Evidence dashboard / ## Coordination gates",
+    "clauses": "cross-repository change rules, and release coordination.\n  lineage fields, similarity-not-authority, and path-not-identity.\n  `CONFORMANCE_STATUS.md` files only after live execution.\n- Define authority receipts, actor identity, attestation chains, Decision Record\n- Add signed release manifests, SBOMs where applicable, and persistent archival\n  release evidence.\n- Apply SLSA source/build tracks to released implementations.\n  hashes without treating protocol access as epistemic authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\standard\\00_GKOS_Master_Standard_pre_gkx2.md",
+    "headings": "# Governed Knowledge Operations Standard / ## 0. Development status / ## 1. Purpose / ## 2. Core thesis / ## 3. Architecture and version relationships / ## 4. Authority / ## 5. Epistemic model / ### 5.1 Epistemic state vocabulary / ## 6. Seven layer contracts / ### 6.1 Mechanical definitions / ## 7. Specialized Agents / ## 8. Conformance / ### 8.1 Progressive disclosure / ## 9. Security, privacy, and retention / ## 10. Publication and maturity / ## 11. Deferred mechanisms",
+    "clauses": "**Status:** Public pre-standard and concept-refinement release\n**Normative terms:** MUST, MUST NOT, SHOULD, SHOULD NOT, MAY\n> **Post-release naming note (informative):**\n> OKF+ wording below records the v0.76 release terminology; it is read as GKX for\n## 0. Development status\nGKOS v0.76 remains in the pre-v1.0 testing and refinement phase. Changes recorded during the v0.x series are developmental adoptions by the Founder and Initial Editor after documented technical review. They are not consensus ratifications, independent certifications, accredited standards decisions, or claims that the complete future governance body has been seated.\nExternal reviewers are being assembled. Formal multi-stakeholder amendment authority, voting, quorum, appeal, and consensus procedures are v1.0 gates. Until then, development records MUST identify their review basis, authorizing editor, limitations, and non-consensus status.\nA conformance claim citing a draft technical specification MUST disclose that status and identify the last ratified baseline. OKF+ 2.3 is presently a draft technical specification; OKF+ 2.2 remains the last ratified baseline. GKOS v0.76 freezes the epistemic vocabulary below directly, so conformance does not depend on the continuing contents of the OKF+ 2.3 draft."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\TECHNICAL_README_pre_gkx2.md",
+    "headings": "# GKOS Technical Orientation / ## R14 GKX 2.0 breaking boundary / ## R13 development-decision boundary / ## 1. System boundary / ## 2. Controlling principles / ## 3. Layer contracts / ## 4. Object and state separation / ## 5. Authority and precedence / ## 6. Consequential-use minimum / ## 7. Determinism and canonical semantics / ### Engine-Lite contract / ## 8. GKX identity, dialects, and migration / ## 9. Google Cloud OKF interoperability boundary / ## 10. Security, privacy, and failure behavior / ## 11. AgenticOS integration pattern / ## 12. Conformance model and current executable coverage / ### Classification defaults and read ceilings / ## 13. Independent implementation rule / ## 14. Interoperability with adjacent standards / ## 15. Normative and informative authority / ## 16. Implementation checklist / ## 17. Open gates before v1.0 / ## 18. Primary repository references",
+    "clauses": "**Status:** informative orientation; the normative standard and adopted decision\n`GKX-*`, and `gkx`. It supersedes earlier machine-identifier preservation\npolicy. Prior release packages remain immutable historical evidence; the change\nR13 makes catalog 0.1.1 explicitly non-qualifying, requires `UNEVALUATED` and\n`GKOS-<AREA>-<NNN>` for clause-stable requirements. Fixtures must eventually\nconformance result or consensus ratification. v0.77 is authorized for\ndevelopmental publication under signed tag `v0.77`; its release mechanics are\nresponsibilities, artifacts, invariants, authority boundaries, failure"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\CHANGELOG.md",
+    "headings": "# Changelog / ## Unreleased development amendments / ## GKOS-2026-08-20 v0.80 / ## GKOS-2026-08-16 v0.79 / ## GKOS-2026-08-05 v0.78",
+    "clauses": "## Unreleased development amendments\n- R17 accepts half-open authority validity intervals:\n- `GKOS-AUTHUSE-007`, its applicability overlay, authority-receipt schema,\n  unpublished development work until a later release is separately authorized.\n- v0.80, its tag, release package, schemas, applicability map, and diagnostic\n  Context Manifest assembly; GCP-7 binds the exact manifest hash, authority,\n  immutable release packages remain valid evidence and are not rewritten.\n- The active fixture catalog remains non-qualifying; this release defines the"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\CODE_OF_CONDUCT.md",
+    "headings": "# Code of Conduct",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\COMPAT.md",
+    "headings": "# GKOS ecosystem compatibility matrix / ## How to update this file",
+    "clauses": "Ratified by operator: 2026-07-23 · refreshed 2026-07-27 against the current\nOne-page train status per [VERSIONING.md](VERSIONING.md). This file is a\n`standard/`, `releases/`, or `decisions/`.\nEngine-Lite's one-minor allowance is a maximum current-release drift, not the\nnot inherit that current-release allowance. See\n| Kosmos_Research_Suite | keymap authority v1.1.3 | keymap key-surface unchanged v1.1.3→v1.2.0; refresh pending next sweep | 2026-07-27 |\n| Kosmos_Research_Studio_Lite | v0.3.2 | Independent-origin candidate; current GKOS qualification not established (audit blocked/indeterminate) | 2026-08-03 |\n`blocks`/`documents` to the 2.3 projection `RELATION_TYPES` + inverses (was"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\evidence\\gcp6-replay-v0.1\\README.md",
+    "headings": "# GCP-6 replay mechanism evidence v0.1",
+    "clauses": "- Evidence status: `mechanism_demonstrated`\n- Qualifying profiles: none\ndeclared portability limitation and must not be normalized after the fact."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-1.md",
+    "headings": "# GCP-1 — Source preservation",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-2.md",
+    "headings": "# GCP-2 — Structure and identity",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-3.md",
+    "headings": "# GCP-3 — Relationships and lineage",
+    "clauses": "Includes GCP-1 and GCP-2. Typed assertions and lineage must preserve direction, actor, provenance, evidence anchors, scope, epistemic state, temporal validity, and version. Similarity is not authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-4.md",
+    "headings": "# GCP-4 — Validation and control",
+    "clauses": "Includes GCP-1 through GCP-3. Deterministic policy, identity, permission, sensitivity, lineage, containment, and risk controls produce diagnostics and receipts. Mandatory failures block promotion."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-5.md",
+    "headings": "# GCP-5 — Review and workflow",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-6.md",
+    "headings": "# GCP-6 — Context presentation",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-7.md",
+    "headings": "# GCP-7 — Authorized use",
+    "clauses": "Includes GCP-1 through GCP-6. Consequential actions require an authorized Context Manifest and authority receipt and produce an Authorized Use Record with actor, purpose, dependencies, outcome, and compensation route."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\Viewer-Projection-Profile.md",
+    "headings": "# Viewer/Projection Profile",
+    "clauses": "A read-only viewer must not modify governed state. It must display origin, epistemic state, incompleteness, contradictions, warnings, restrictions, and conformance limitations, using defect-badge-or-refuse behavior when required information is unavailable."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\README.md",
+    "headings": "# GKOS conformance / ## Executable v0.80 evidence foundation / ## Provisional SRTP graph runner / ## Current qualification boundary",
+    "clauses": "Extension is read-only and grants no consequential-action authority. A higher\nClaims must include a machine-readable manifest\nSelf-attested and independently verified claims must be distinguished. Every\nclaim is exact-bound to its dated standard release, GKX version, implementation,\nthe missing fixtures remain missing and no qualifying profile is created.\n`mechanism_demonstrated` with no qualifying profiles or tier claim.\n## Current qualification boundary\n- Fixture catalog 0.2.0 declares no complete qualifying profile. A run therefore"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\CONTRIBUTING.md",
+    "headings": "# Contributing to GKOS / ## Pre-v1.0 development status / ## Change classes / ## Licensing and DCO",
+    "clauses": "GKOS welcomes criticism, implementation reports, examples, fixtures, and amendment proposals. Participation does not grant authority to bind the standard.\n## Pre-v1.0 development status\nGKOS v0.x is a testing and refinement series. Merged changes are development decisions by the Founder and Initial Editor after documented review. They are not consensus ratifications or independent certifications. Contributors and maintainers MUST describe them accordingly.\nA normative-compatible proposal must identify affected sections and decisions, evidence, exact language, compatibility impact, security/privacy effects, fixture implications, and rollback or supersession route.\nAll commits intended for merge MUST carry a Developer Certificate of Origin 1.1 sign-off using `git commit -s`. The sign-off certifies that the contributor has the right to submit the contribution under the applicable license. No CLA is currently required."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\GKOS_Decision_Register.md",
+    "headings": "# GKOS development decision register / ## R18 — Track A GCP-4/GCP-5 closure and authorized independent review / ## R17 — Authority validity interval semantics / ## R16 — Required profiles and GCP-6/GCP-7 enablement / ## R15 — Governed state change, re-entry, and bounded delegation / ## R14 — GKX 2.0 breaking machine namespace / ## R13 — Conformance honesty and alignment / ## R12 — Ecosystem compatibility and provenance / ## R11 — GKX naming transition / ## R10 — Schema slice, fixture catalog, and conformance runner / ## R9 — v0.76 concept refinement and publication / ## R8 — Publication administration / ## R7 — Security, publication, and maturity / ## R6 — Specialized Agents / ## R5 — Conformance and interoperability / ## R4 — Layer contracts / ## R3 — Epistemic governance / ## R2 — Authority / ## R1 — Identity and publication",
+    "clauses": "This register indexes adopted v0.x development decisions. These records document Founder/Initial Editor dispositions during testing and refinement; they are not consensus ratification, independent certification, accreditation, or regulator approval.\n- **Status:** Accepted development decision; v0.81 preparation authority\n- **Decision:** Reconstruct and replace the missing Track A authority; allocate atomic GCP-5 review requirements; require protected-disclosure control and portable mutation evidence; permit a separately authorized, different-model-family Review Agent to fulfill bounded Layer-5 review under deterministic gates and mandatory human escalation triggers; bind qualification to exact implementation and environment closure; and authorize automatic v0.81 Standard publication only after every exact-bound release gate passes.\n## R17 — Authority validity interval semantics\n- **Status:** Accepted development decision; unpublished amendment\n- **Decision:** Use the half-open authority interval `valid_from <= evaluation_time < valid_until`; bind evaluation to captured canonical time at the consequential-effect admission boundary; fail closed before validity, at or after expiry, or when required time evidence is missing or indeterminate; preserve protected state and emit a Refusal Receipt under the existing L7 authority gate.\n- **Record:** [R17_Authority_Validity_Interval_Development_Decision_Record.md](R17_Authority_Validity_Interval_Development_Decision_Record.md)\n- **Status:** Accepted development decision; v0.x non-consensus authority"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\OPEN_QUESTIONS.md",
+    "headings": "# Open publication and governance questions / ## Resolved after the v0.76 release",
+    "clauses": "7. Which release-signing and key-custody model will be used?\n12. What qualifies as an independent implementation?\n## Resolved after the v0.76 release"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R10_Schema_Fixture_Conformance_Dev_Decision_Record.md",
+    "headings": "# R10 Schema, Fixture, and Conformance-Runner Development Decision Record / ## Governance status / ## Evidence reviewed / ## Review findings / ## Dispositions (proposed) / ## Compatibility statement / ## Supersession and correction",
+    "clauses": "**Release:** GKOS-2026-07-20 v0.76 (in-series ecosystem improvement; no version bump)\n**Status:** Developmental adoption — not consensus ratification\n**Authorizing editor:** Shaun “Oden” Marshall, Founder and Initial Editor\n## Governance status\nan ecosystem improvement within the v0.76 series, not a consensus ratification,\n4. Layer artifacts with no shipped realization (L1 Source Record store, L6 Context Manifest, L7 Authorized Use Record) belong in a clearly-marked provisional directory, matching the Annex C posture; the authority-receipt schema, actor-identity model, and upward-receipt chain remain v0.8 gates and are deliberately absent.\n| R10-088 | Adopt | Release administration | Publish the GKOS-TS starter runner and informative gkos-engine adapter under `conformance/runner/`. |\n| R10-089 | Adopt | Release administration | Retire stale current-state v0.75 self-references (SECURITY, LICENSE attribution, TRADEMARKS period wording, Known Limitations annex, and the three program READMEs), leaving historical records untouched. |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R11_GKX_Naming_Transition_Development_Decision_Record.md",
+    "headings": "# R11 — GKX Naming Transition Development Decision Record / ## Decision / ## Compatibility rule / ## Required implementation work / ## Non-decision",
+    "clauses": "**Status:** Accepted development decision; compatibility migration in progress  \nrelease decisions."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R12_Ecosystem_Compatibility_Development_Decision_Record.md",
+    "headings": "# R12 — Ecosystem Compatibility Development Decision Record / ## Status limitation / ## Decision / ### R12-090 — Engine-Lite compatibility / ### R12-091 — What Lite removes / ### R12-092 — Field-test to standard loop / ### R12-093 — GKX version identity / ### R12-094 — Google OKF 0.2 interoperability / ### R12-095 — One deterministic semantics authority / ### R12-096 — Accurate interoperability provenance / ## Compatibility and security impact / ## Required evidence and follow-up",
+    "clauses": "**Status:** Accepted development decision  \n**Authority:** Founder and Initial Editor under `GOVERNANCE.md`  \n## Status limitation\nperiod. It is not a consensus ratification, independent certification,\nGKOS-Engine-Lite MUST use the implementation path of its pinned GKOS Engine for\nconfiguration, arguments, Engine version, and policy version, Lite MUST produce\nCanonical serialized result bodies MUST be byte-identical when the command and\nhost paths, and platform line endings—MUST be normalized or expressly excluded"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R13_Conformance_Honesty_and_Alignment_Development_Decision_Record.md",
+    "headings": "# R13 — Conformance honesty and alignment development decision / ## Decision / ## Identity and lineage decision control / ## Conformance and catalog boundary / ## Evidence and implementation boundary / ## Compatibility and preservation / ## Publication boundary",
+    "clauses": "**Status:** Accepted development decision; v0.x non-consensus authority\n**Release disposition:** Included in the authorized GKOS-2026-08-05 v0.77\ndecisions. This record is not a consensus ratification, independent\nrelease.\n| R13-101 | Accept | Sole controlling identity-and-lineage decision: new authored GKX note identities use lowercase UUIDv7; valid lowercase UUIDv4 identities remain permanent legacy identities; migrations never rewrite or substitute historical identities and preserve every predecessor, successor, and fork as explicit lineage. Only the earliest temporally valid direct-successor time may derive `invalid_at`; that derivation does not choose an authoritative successor. UUID, timestamp, and lexical ordering carry no authority, and no implementation tiebreak selects an authoritative successor. The permanent allocations are maintained in `requirements/REGISTRY.md`. |\nidentifier `R13-102` is retired and unallocated: it conveys no decision, MUST\n`GKOS-LINEAGE-001` through `003`; their text, status, source, and replacement\nFixture catalog 0.1.1 is a starter, non-qualifying catalog. It declares no"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R13_Conformance_Honesty_and_Alignment_Proposal.md",
+    "headings": "# R13 — Conformance honesty and documentation alignment proposal (superseded) / ## Original problem statement / ## Original proposed dispositions (superseded) / ## Evidence / ## Compatibility and security impact / ## Limitations and decision boundary / ## Rollback or supersession",
+    "clauses": "# R13 — Conformance honesty and documentation alignment proposal (superseded)\n**Status:** Superseded by accepted development decision R13 on 2026-08-05\n## Original proposed dispositions (superseded)\nprofile that the suite did not qualify. The corrected runner can emit an empty\nGCP profile becomes qualifying through this proposal.\nThe runner correction may be superseded only by a later schema-compatible claim\nproduce PASS or a profile claim. Requirement IDs and identity behavior must be\nsuperseded through recorded mappings and migration rules, never silent reuse."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R14_GKX_2_0_Breaking_Machine_Namespace_Development_Decision_Record.md",
+    "headings": "# R14 — GKX 2.0 Breaking Machine Namespace Development Decision Record / ## Decision / ## Supersession and preservation / ## Conformance boundary",
+    "clauses": "**Status:** Accepted developmental decision; non-consensus\n**Release target:** GKOS-2026-08-05 v0.78\nguidance MUST use `gkx_version`, `.gkx/`, `GKX-*` diagnostics, and the `gkx`\nMUST migrate its stored records and integrations before making a claim against\nthis release.\nThis decision supersedes the machine-identifier preservation policy in R11 and\nR12. It does not alter immutable historical release directories, prior signed\nratification, independent certification, qualifying profile result, or claim"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+    "headings": "# R15 — Governed state change, re-entry, and bounded delegation / ## 1. Decision basis / ## 2. Adopted rulings / ### R15-103 — Standard vocabulary and deployment policy / ### R15-104 — State-Change Receipt role / ### R15-105 — Durable mutation binding / ### R15-106 — Re-entry standing / ### R15-107 — Predecessor preservation / ### R15-108 — Supersession semantics / ### R15-109 — Navigation standing / ### R15-110 — Bounded supersession delegation / ### R15-111 — Fixture accounting and SRTP reconciliation / ### R15-112 — GCP applicability / ### R15-113 — Engine release split / ### R15-114 — Retention scope / ### R15-115 — Zenodo archival direction / ### R15-116 — Directive and merge process / ## 3. Permanent requirement allocations / ## 4. Profile attachment / ## 5. Non-decisions and preserved boundaries / ## 6. Future-risk controls",
+    "clauses": "**Status:** Accepted development decision; v0.x non-consensus authority  \n**Deciding authority:** Shaun “Oden” Marshall, Founder and Initial Editor  \nThe repository baseline contains three distinct evidence populations that MUST remain separately described: eight active core fixtures, twenty-two provisional SRTP fixtures, and ten pre-R15 permanent requirement IDs. Provisional SRTP evidence is not silently promoted into active conformance authority.\nGKOS owns already-adopted interoperability vocabulary. Deployments own jurisdictional or local classification criteria, predicates, thresholds, and handling policy. Deployment policy MUST NOT silently redefine standard-owned vocabulary.\nA **State-Change Receipt** is a semantic role, not necessarily a new duplicate object. An existing governed record MAY satisfy the role when it contains the required mutation, authority, actor, policy, before/after binding, and durability evidence. A dedicated receipt is required only when no existing governed artifact can satisfy the role.\nA governed state change MUST NOT be represented as committed unless the resulting governed state is durably bound to the record satisfying the State-Change Receipt role. Binding failure MUST cause fail-closed non-commit or verified rollback/compensation. The conformance manifest MUST declare the binding mechanism.\nReintroduced material enters as a new Layer-1 source. It inherits no predecessor layer standing, decision, epistemic state, authority, context authorization, or authorized-use standing. It advances only through subsequently satisfied applicable layer contracts. A profile MAY require identified contracts for a defined use case without making all seven layers a universal synchronous pipeline.\nRe-entry itself MUST NOT mutate or destroy its predecessor. Later retention, tombstoning, erasure, transfer, or disposition is a separately authorized operation."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R16_Required_Conformance_Profiles_and_GCP67_Enablement_Development_Decision_Record.md",
+    "headings": "# R16 — Required conformance profiles and GCP-6/GCP-7 enablement / ## 1. Decision basis / ## 2. Adopted rulings / ### R16-117 — Core and Advanced tiers / ### R16-118 — GCP-6/GCP-7 binding and Context-Only Extension / ### R16-119 — Behavior-based fixture coverage / ### R16-120 — Gate and refusal fixtures / ### R16-121 — Diagnostic-code registry / ### R16-122 — Assessment vocabulary / ### R16-123 — Capability scope and non-excludable gates / ### R16-124 — Viewer/Projection independence / ### R16-125 — Exact release binding and post-v1.0 policy / ## 3. Layer semantics and bindings / ## 4. Canonical serialization / ## 5. Selection and replay boundary / ## 6. Actor and effect-scope separation / ## 7. Refusal Receipt role / ## 8. Conformance and fixture standing / ## 9. Release boundary / ## 10. Preserved claim boundary",
+    "clauses": "**Status:** Accepted development decision; v0.x non-consensus authority\n**Deciding authority:** Shaun “Oden” Marshall, Founder and Initial Editor\n**Base:** GKOS-2026-08-16 v0.79 plus the post-release public-orientation\nThe fixture-coverage and conformance-evidence tracks were blocked because no\nThe owner ratified nine profile decisions on 2026-08-21 and approved the\ncanonical-serialization clarifications as one breaking pre-v1.0 release. The\npublication date and release identity are owner-selected as\nand publishes the authority; it does not manufacture the authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R17_Authority_Validity_Interval_Development_Decision_Record.md",
+    "headings": "# R17 — Authority validity interval semantics / ## 1. R17-126 — Half-open authority interval / ## 2. Captured evaluation time / ## 3. Failure and evidence behavior / ## 4. Requirement allocation / ## 5. Release and claim boundary",
+    "clauses": "# R17 — Authority validity interval semantics\n**Status:** Accepted development decision; unpublished amendment\n**Deciding authority:** Shaun “Oden” Marshall, Founder and Initial Editor\n**Publication target:** Next separately authorized GKOS release after v0.80\n## 1. R17-126 — Half-open authority interval\nAuthority validity uses a half-open interval:\nAuthority is valid exactly at `valid_from`. It is expired exactly at\nThe authority decision binds a captured canonical action-evaluation time. A"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R18_Track_A_GCP45_and_Authorized_Independent_Review_Development_Decision_Record.md",
+    "headings": "# R18 — Track A GCP-4/GCP-5 closure and authorized independent review / ## 1. Reconstruction and replacement provenance / ## 2. R18-127 — GCP-5 permanent requirements / ## 3. R18-128 — Authorized independent-agent Layer-5 review / ## 4. R18-129 — Protected disclosure and noninterference / ## 5. R18-130 — Evidence and qualification / ## 6. R18-131 — Automatic v0.81 publication / ## 7. Scope exclusions",
+    "clauses": "**Status:** Accepted development decision; v0.81 preparation authority\n**Deciding authority:** Shaun “Oden” Marshall, Founder and Initial Editor\n**Publication target:** GKOS-2026-08-29 v0.81 after the exact-bound release gate passes\nauthority for v0.81 Track A. The reconstruction is disclosed; it does not\nv0.81 release-base mappings, and establishes bounded independent-agent review.\n- `GKOS-REVIEW-001`: every governed proposal entering GCP-5 must enter an\n- `GKOS-REVIEW-002`: the disposition must be an authorized, append-only\n  must remain distinct as applicable; no actor may approve or certify its own"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R9_V0.76_Development_Decision_Record.md",
+    "headings": "# R9 v0.76 Development Decision Record / ## Governance status / ## Evidence reviewed / ## Review findings / ## Dispositions / ## Authority basis / ## Conflict and independence disclosure / ## Compatibility and security impact / ## Rollback and supersession / ## Release authorization",
+    "clauses": "**Release:** GKOS-2026-07-20 v0.76  \n**Status:** Developmental adoption — not consensus ratification  \n**Authorizing editor:** Shaun “Oden” Marshall, Founder and Initial Editor  \n## Governance status\nThis record governs a pre-v1.0 concept-testing and refinement release. It does not claim independent approval, consensus ratification, accredited standards status, certification, or regulator recognition.\n- Superseded Kosmos-Oden and standalone-engine implementation directives.\n- Current repository governance, contribution, decision, release, and conformance materials.\n1. The epistemic-vocabulary gap and four undefined mechanical terms were valid implementation blockers appropriate for a v0.76 clarification release."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\ratification-questionnaires\\GKOS_2026-07-17_v0.75_Ratification_Questionnaire.md",
+    "headings": "# GKOS-2026-07-17 v0.75 ratification questionnaire",
+    "clauses": "# GKOS-2026-07-17 v0.75 ratification questionnaire\nAll selections were ratified as option A except R8-071, which selected the copyright identity “Shaun ‘Oden’ Marshall,” and R8-074, which selected mandatory Developer Certificate of Origin 1.1 sign-off.\nThe authoritative disposition is the `GKOS_Decision_Register.md`; this questionnaire is procedural history, not an independent source of authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\ECOSYSTEM-ORGANIZATION_pre_gkx2.md",
+    "headings": "# GKOS ecosystem organization / ## Operating model / ## Decision rights / ## Cross-repository change protocol / ## Lifecycle policy / ## Documentation minimum",
+    "clauses": "**Status:** Informative ecosystem policy\n**Authority:** subordinate to the normative GKOS standard and its decision records\n3. Publish a versioned contract, release, or decision reference.\nfinal public record must still identify the authoritative contract and affected\n- **Thin distribution:** new work must remain packaging, usability, or integration\n  data-integrity, compatibility, build/release hygiene, and clarifying\n`Kosmos-Oden-Lite` remains maintained but frozen. It must not be used as the second\necosystem status index; product roadmaps remain local."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md",
+    "headings": "# GKOS-Engine → gkos-standard reconciliation record v0.2 / ## Authority and source lineage / ## Accepted v0.77 development allocations / ## Fixture and adapter disposition / ## Preserved open graph and temporal topics / ## Evidence limits and publication boundary",
+    "clauses": "**Status:** Accepted reconciliation record; not itself a normative amendment\n**Standard release:** GKOS v0.77 authorized developmental publication —\n## Authority and source lineage\nThis v0.2 record supersedes the v0.1 reconciliation for current-facing\nR13 proposal remains superseded history; the accepted R13 decision record is\n| `GKOS-CONFORMANCE-001..003` | Required unexecuted checks are `UNEVALUATED`; incomplete evidence blocks profile claims; fixtures cite GKOS IDs while diagnostics remain adapter observations. | Catalog 0.1.1 remains non-qualifying. |\n| `GKOS-IDENTITY-001..004` | New authored GKX 2.3 IDs are lowercase UUIDv7; legacy lowercase UUIDv4 persists; migrations do not rewrite historical identity; UUID order creates no authority. | Authored-note schema split enforces the accepted reader/writer boundary. |\nThe authoritative text, status, source, and replacement mappings are in"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\GKX_REBRAND_REASSESSMENT_2026-08-02.md",
+    "headings": "# GKX Rebrand and KRS Reassessment — 2026-08-02 / ## Finding / ## Coordinated update / ## Reassessment / ## Next required work",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\README.md",
+    "headings": "# Historical documentation archive",
+    "clauses": "These records are preserved evidence of prior analysis. They are superseded by"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\directives\\GKOS-DIRECTIVE-STD-079-r4.md",
+    "headings": "# GKOS-DIRECTIVE-STD-079 r4 / ## 0. Controlling invariants / ## 1. Universal versus deployment-bound semantics / ## 2. State-change receipting / ## 3. Retention / ## 4. Re-entry and supersession / ## 5. Bounded delegation hierarchy / ## 6. Navigation / ## 7. Fixture standing / ## 8. Permanent requirements / ## 9. Deferred matters",
+    "clauses": "**Status:** Owner-approved development directive  \n**Supersedes for current development:** STD-079 r3; r3 remains historical evidence\n1. Capability is not authority.\n2. Confidence, similarity, retrieval rank, model agreement, timestamps, UUID order, lexical order, and graph position do not create authority.\n7. Bounded delegation attenuates authority and cannot become general write authority.\nGKOS owns universal interoperability semantics and already-adopted exchange vocabulary. Deployments own versioned jurisdictional/domain criteria, thresholds, hold predicates, classification rules, and handling policy. Deployment policy MUST NOT silently redefine standard-owned vocabulary.\nState-Change Receipt is a semantic role. Existing governed artifacts may satisfy it when they bind actor, authority, policy/predicate, operation, before/after state, outcome, and durability evidence. Duplicate receipt objects are not required when an existing artifact fully satisfies the role.\nBefore governed deletion/disposition, consult the applicable versioned hold predicate. Unavailable, indeterminate, or conflicting mandatory hold evaluation fails closed to authorized human disposition. GKOS records the decision path; it does not manufacture legal authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\ECOSYSTEM-ORGANIZATION.md",
+    "headings": "# Ecosystem organization",
+    "clauses": "Active products adopt GKX 2.0 only through their own authorized releases.\nrelationships are controlled by the current draft registry pending ratification."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\GKOS_LEGAL_AND_PROFESSIONAL_ORIENTATION.md",
+    "headings": "# GKOS for legal and non-technical professionals / ## The short version / ## The seven layers in plain language / ## What v0.80 adds / ## Why attorneys and reviewers should care / ## What this release does not prove / ## Primary reading",
+    "clauses": "**Status:** Informative orientation; the normative standard and annexes govern\nGKOS is a chain-of-custody and authority model for knowledge. It separates the\n2. Who had authority to approve or perform the action?\nconfidence score as authority.\n| **7. Authorized Use** | Bind the exact context to the authority, actors, permitted scope, action, outcome, and recovery route. | The authority and execution receipt | Authorized Use Record or Refusal Receipt |\nExtension may add reproducible context to Core, but it grants no authority to\nno decision or action authority.\ncanonical bytes remain the authority. A verifier must show every field and"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+    "headings": "# GKOS and the Provenance Landscape: A Claim-Limited Crosswalk / ## 1. Short answer / ## 2. Scope comparison / ## 3. Layer mapping / ## 4. Proposed interoperability work / ### XW-P1 — PROV export profile / ### XW-P2 — in-toto statement envelope / ### XW-P3 — governed signing profiles / ### XW-P4 — C2PA evidence intake / ### XW-P5 — MCP authorization binding / ## 5. Claims that must not be made yet / ## 6. Verification requirements for each mapping / ## 7. Evaluation conclusion",
+    "clauses": "**Status:** informative; mappings are proposed interoperability directions, not\n| [W3C PROV](https://www.w3.org/TR/prov-o/) | Provenance interchange using entities, activities, agents, and qualified relations | Source identity, derivation, revision, invalidation, actors | Epistemic vocabulary, promotion authority, review disposition, Context Manifest, use authorization |\n| [in-toto](https://in-toto.io/docs/specs/) | Integrity of software supply-chain steps and signed attestations | Statement envelopes, subjects/digests, step evidence, test/release attestations | Knowledge semantics, contradictions, review and promotion, purpose-bound context |\n| [Sigstore](https://docs.sigstore.dev/cosign/signing/overview/) | Identity-bound artifact signing and transparency | Public release/attestation signing and auditable signing events | Authority semantics, confidential/offline trust profiles, knowledge lifecycle |\n| [C2PA 2.4](https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html) | Content credentials, assertions, asset binding, validation, and media provenance | Media-source evidence, asset identity, action history, signature validation | Accepted-knowledge promotion, organizational decision authority, purpose-bound use |\n| L1 Original Sources | PROV Entity; C2PA asset/manifest; in-toto subject/material | Strong overlap | A source format or valid signature is evidence, not automatic truth or authority |\n| L3 Relationships and Lineage | PROV derivation/revision/invalidation; C2PA ingredient/action history | Strong overlap with extensions | Direction, scope, epistemic state, evidence anchors, and authority must survive or be marked lost |\n| L4 Validation and Control | in-toto test statements; Sigstore verification; SLSA verification; policy-engine decision logs | Complementary | External verification results are inputs; GKOS still determines applicable policy and blocking behavior |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\archive\\OKF-Plus-2.3-Specialist-Reviewer-Role.md",
+    "headings": "# OKF+ 2.3 Specialist Reviewer Role / ## Assignment requirement / ## Required conduct / ## Prohibited conduct / ## Permitted advisory actions / ## Required output / ## Competence declaration / ## Instruction precedence / ## Related role family / ## Source relationship",
+    "clauses": "**Status:** Informative role and execution-contract design  \n**Normative authority:** None  \nA Specialist Reviewer is a human or computational actor assigned to evaluate material within a declared field of competence. Its output is advisory unless a separate authenticated grant provides decision authority.\nA reviewer must not infer its own role from note content or apparent expertise. Each run should receive a machine-readable assignment identifying:\n- assigning actor, delegation, and authority source.\nThe Specialist Reviewer MUST:\nThe Specialist Reviewer MUST NOT:\n- fabricate citations, sources, results, consensus, or qualifications."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\archive\\README.md",
+    "headings": "# Historical implementation material",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+    "headings": "# GCP-6/GCP-7 executable evidence status / ## Implemented / ## Open evidence deficits / ## Governed decision docket / ## Claim boundary",
+    "clauses": "# GCP-6/GCP-7 executable evidence status\n- Versioned coverage-status and assessment-type vocabulary.\n- Non-normative NAV-002 draft subordinate to the ratified Layer-6 boundary.\n- GCP-7 exact authority-time boundary evidence is present under the unpublished\n- No profile or named tier qualifies.\n  in a separately authorized post-v0.80 release.\nThe replay output reports `mechanism_demonstrated`, empty qualifying profiles,"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\GKOS-DIRECTIVE-ENG-210-r4.md",
+    "headings": "# GKOS-DIRECTIVE-ENG-210 r4 — Engine 2.1 Navigation build contract / ## 1. Release contract / ## 2. Architecture / ## 3. Canonical-five and flag-and-promote / ## 4. Determinism / ## 5. Re-entry / ## 6. Bounded delegation / ## 7. Governance Store / ## 8. Public API and capability honesty / ## 9. Fixtures and evidence / ## 10. Versioning and release / ## 11. Stop-the-line conditions",
+    "clauses": "**Status:** Owner-approved implementation directive; informative with respect to GKOS conformance  \n## 1. Release contract\nIt MUST NOT rewrite, delete, replace, archive, or otherwise mutate source vault content. Source-content writing, managed MOC replacement, archive deletion, locks/leases, stale-plan enforcement, rollback execution, and general governed writing are reserved for a later 2.2 write executor.\nAn architecture test MUST fail if `src/navigation/**` imports source-filesystem mutation primitives.\nFor identical source snapshot, configuration, policy version, and Engine version, candidate bytes, diffs, classifications, audit findings, and context-pack canonical bytes MUST be identical.\n`planReentry()` MUST create a new-source plan. It MUST NOT merge in place or copy predecessor standing. It records predecessor linkage as evidence only.\nProvide an explicit interface with append-only semantics, optimistic digest/version preconditions, idempotency keys, and declared binding/atomicity behavior. Failure MUST NOT leave a successful state-change claim.\nDo not advertise a persisted re-entry record unless a Governance Store and valid authority path are actually active."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\GKOS-Engine-Implementation-Guide.md",
+    "headings": "# GKOS-Engine implementation guide",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\README.md",
+    "headings": "# Implementation references",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\V081_RATIFIED_BASELINE.md",
+    "headings": "# GKOS v0.81 ratified baseline / ## Release gate / ## Scope boundaries",
+    "clauses": "# GKOS v0.81 ratified baseline\n**Authority:** R18 and the owner dispositions recorded 2026-08-29\n## Release gate\n  v0.81 release-base files and parity checks pass;\n- Full Engine release identity is internally consistent;\n- the release closure binds exact source, dependency, toolchain, environment,\n  capable PASS, blocked, held, unevaluated, waived, or unexplained.\nGKOS Standard v0.81 automatically. This authority is not reusable for another"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\VERSION_COMPATIBILITY_MATRIX.md",
+    "headings": "# GKOS/GKX implementation version compatibility matrix",
+    "clauses": "**Status:** developmental orientation; informative, not normative\n| Canonical artifact profile | `GKX-CBOR-1` | Deterministic CBOR and SHA-256 identity for applicable canonical artifacts | Required by the v0.80 canonicalization annex; JSON/YAML renderings do not carry canonical authority |\n| GKOS-Engine package | `2.0.1` | Reference implementation release | Reviewed at commit `7c742436d50b34f6dda66976212a672fb51f7c21` |\n| SRTP application profile | `SRTP-DRAFT-0.1` | Provisional scientific trace experiment | Requires its explicitly listed compatibility coordinates; never a qualifying profile |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\NAMING.md",
+    "headings": "# GKX 2.0 naming policy",
+    "clauses": "Prior release directories and superseded decision/review records are preserved"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+    "headings": "# GKOS-DOCSTD-001 — Documentation and engineering alignment proposal / ## 1. Prohibited failure modes / ## 2. Requirement identity and adapter boundary / ## 3. Controlled derivation and comparison / ## 4. Intent review / ## 5. Synchronization gates / ## 6. First application",
+    "clauses": "**Status:** Proposed; non-normative until adopted through `GOVERNANCE.md`  \nthe reference implementation the specification authority.\ncodes, fields, exit status, graph structure, or canonical bytes. A diagnostic\nfixture diagnostics must remain visibly non-qualifying until it is adopted;\nthey must not be mechanically relabeled as GKOS requirements.\nindependence. Shared authorship must still be disclosed.\n| Authority derives from receipts/grants, not authored fields or model signals | R2; master standard §4 | Frontmatter, confidence, similarity, rank, or model agreement creates authority |\n| Agent specialization grants capability, not authority | R6; master standard §7 | A projector, agent, or convenience surface acquires semantic authority |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\NAV-002_SELECTION_DISCOVERY_CONTRACT_DRAFT.md",
+    "headings": "# NAV-002 selection and discovery contract — draft / ## Proposed contract / ## Promotion gates",
+    "clauses": "**Status:** Non-normative proposal; not qualifying\n**Boundary:** Subordinate to the ratified Layer-6 phase split in R16 and the\ndoes not create semantic or action authority and cannot suppress a mandatory\n- incomplete, indeterminate, truncated, or heuristic status.\nor authority. Its contribution must remain visible in the captured selection"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\SRTP_DRAFT_PROFILE.md",
+    "headings": "# Scientific Research Trace Profile (SRTP) draft",
+    "clauses": "**Status:** build proposal; provisional, informative, non-normative\ntestable trace. It does not add a layer and is not a qualifying GCP profile.\nnot supported by this draft. Any future reproducibility statement must name the\nprofile, suite, evidence, tolerances, exceptions, and verification status.\nresolution of provisional L1/L6/L7 and authority dependencies, complete"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\SRTP_DRAFT_TRACEABILITY.md",
+    "headings": "# SRTP draft field and fixture traceability",
+    "clauses": "**Status:** proposal handles only; no requirement identifier below is allocated"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\reviews\\2026-08-04_CRITIQUE_ASSESSMENT_AND_REMEDIATION.md",
+    "headings": "# GKOS Critique Assessment and Remediation Record / ## 1. Executive disposition / ## 2. Claim-by-claim assessment / ## 3. Assessment of the draft solution documents / ### 3.1 Draft conformance profiles / ### 3.2 Draft provenance landscape crosswalk / ### 3.3 Draft KRS-Lite implementation-independence attestation / ## 4. Solutions designed for industry scrutiny / ### A. Public orientation and stable terminology — immediate / ### B. Executable conformance before promotion — P0 technical gate / ### C. Honest implementation evidence — P0 claim gate / ### D. Governance continuity and legitimacy — P0 governance gate / ### E. Interoperability by reuse — P1 / ### F. External validation and adoption — P1 / ## 5. Changes enacted by this remediation / ## 6. Remaining decisions requiring explicit governance action",
+    "clauses": "**Status:** advisory standards-committee assessment; not independent\ncertification or consensus ratification\nthat claims must be narrowed to what is executable today, adoption must become\nan explicit workstream, and the project must reuse adjacent standards where\nrejected for the current phase; public evidence must come from public artifacts\n| “Governance is a monarchy in procedural clothing” | **Verify the structure; oppose the rhetoric as formal terminology** | `GOVERNANCE.md` explicitly assigns v0.x authority to the Founder and Initial Editor and bars consensus/certification claims. That is a disclosed founder-led development process, not multi-stakeholder governance. The material risks are single-person amendment authority, continuity, succession, dominance, and bus factor; those should be stated directly. |\n| “Crowded space, weak positioning” | **Verify** | W3C PROV, in-toto, SLSA, Sigstore, C2PA, and MCP cover adjacent provenance, supply-chain, signing, media, and authorization responsibilities. GKOS must map and reuse them, then limit its differentiator to the combined governance of epistemic state, decision, context, authority, and use. |\n| “Publish a Marshal case study” | **Conditionally oppose for the current phase** | A receipted public case study is valuable, but private agent platforms are outside the authorized public evidence boundary. Use a public reference implementation, synthetic demonstrator, or separately approved disclosure. Private code and deployment claims must not leak into the standard repository. |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\reviews\\2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+    "headings": "# Independent assessment — Engine graph semantics and standard drift / ## Executive disposition / ## Finding-by-finding assessment / ## Executed evidence / ## Controlled graph-clause derivation / ## Remaining decision gates",
+    "clauses": "**Status:** Technical assessment; corrections in the accompanying pull request\n| D-03 | **Verify; critical** | The pre-fix runner ignored `pair` and `graph_expect`; its schema could not represent `unevaluated`; `profiles_claimed` was derived from labels present in the manifest. It could therefore claim GCP-3 with no graph evaluation. | Catalog 0.1.1 declares no qualifying profile; the runner emits `unevaluated`, an empty profile list, limitations, and non-zero exit status. A regression test enforces this boundary. |\n| D-07 | **Verify** | Engine lineage comments cite internal Kosmos sections, not stable GKOS requirements. No bidirectional requirement/source/test trace exists. | Add code trace comments and generated traceability only after GKOS requirement IDs are adopted; otherwise comments would manufacture authority. |\n| D-09 | **Mostly remediated; oppose indefinite machine freeze** | R11/R12 and the post-release note already make GKX current while preserving historical text and compatibility identifiers. The proposal to freeze machine identifiers “indefinitely” exceeds R11, which permits a separately versioned migration. | `docs/NAMING.md` records the current vocabulary and preserves the governed migration route. No archive rewrite or permanent freeze is adopted. |\nprove GKOS conformance because the qualifying, clause-traceable graph suite does\nnon-qualifying result. This is remediation evidence, not a GCP claim.\n   decisions, and the last ratified GKX baseline. Exclude Engine source, tests,\n5. Apply the ratified intent invariants: authority separation (R2), visible and"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\examples\\minimal-governed-lifecycle.md",
+    "headings": "# Minimal governed lifecycle",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\examples\\README.md",
+    "headings": "# GKOS examples",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\archive\\DIVERGENCES.md",
+    "headings": "# Historical divergences — fixture catalog 0.1.0 vs gkos-engine v1.0.5 / ## DIV-001 — Naive wall-clock timestamps pass projection silently / ## DIV-002 — Missing sensitivity defaults to `internal`, not a restricted value / ## DIV-003 — Invalid epistemic state flows into effective state as-authored",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\archive\\README.md",
+    "headings": "# Historical fixture evidence",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-b01-missing-sensitivity.md",
+    "headings": "# GCP1-B01",
+    "clauses": "Boundary fixture: no sensitivity declared. Projection must fail closed, not open."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-n01-missing-required.md",
+    "headings": "# GCP1-N01",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-n02-invalid-epistemic.md",
+    "headings": "# GCP1-N02",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-n03-naive-timestamp.md",
+    "headings": "# GCP1-N03",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-p01-agent-ready-minimal.md",
+    "headings": "# GCP1-P01",
+    "clauses": "supersedes: []\nsuperseded_by: []"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-c01-claim.md",
+    "headings": "# GCP3-C01",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-c02-counter.md",
+    "headings": "# GCP3-C02",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-l01-superseded.md",
+    "headings": "# GCP3-L01",
+    "clauses": "title: GCP3-L01 Superseded original\nepistemic_state: superseded\nsuperseded_by:\nLineage fixture: superseded original pointing at its successor by uid (rename-proof)."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-l02-successor.md",
+    "headings": "# GCP3-L02",
+    "clauses": "supersedes:\nLineage fixture: successor via uid-valued supersedes. `accepted` without a Decision"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\provisional\\science\\R15_OVERLAP_TRACEABILITY.md",
+    "headings": "# R15 overlap traceability for provisional SRTP fixtures",
+    "clauses": "**Status:** Informative traceability only. SRTP remains provisional, informative, non-normative, and non-qualifying.\n| `srtp-n07-model-conflicts-deterministic` | `GKOS-DELEGATION-003` — non-deterministic checker may increase restriction only | SRTP provisional; retain identity; separate domain-neutral core fixture required for qualification |\nAdditional overlaps MUST be added explicitly rather than inferred from similar names or outcomes.\nFixture accounting must continue to report active core, provisional SRTP, and implementation-only tests separately."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\provisional\\science\\README.md",
+    "headings": "# SRTP draft graph fixtures",
+    "clauses": "**Status:** provisional, informative, non-qualifying\n`qualifying_profiles: []`. Fixture PASS means\nor conformant to a ratified GKOS profile."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\README.md",
+    "headings": "# GKOS fixture catalog",
+    "clauses": "non-qualifying because its pair/graph expectations are not fully executable and\nthe remaining graph topics have not been allocated. `fixtures.manifest.json` is the\nCatalog 0.2.0 explicitly declares `qualifying_profiles: []`. Unexecuted pair or\ngraph expectations produce `UNEVALUATED`, block profile claims, and make the\nThe active qualifying catalog still lacks complete sensitivity, delegation,\nconformance claim must disclose which fixtures were executed, catalog and\nauthority-window boundary cases. These catalogs increase executable evidence\nbut declare no complete requirement or qualifying profile."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\GOVERNANCE.md",
+    "headings": "# GKOS governance / ## Purpose / ## Development-phase authority / ## v0.x amendment path / ## Non-self-certification / ## v1.0 governance gate / ## Canonical publication",
+    "clauses": "This document governs amendment, review, publication, and repository authority during the pre-v1.0 development period and identifies the governance work required before GKOS v1.0.\n## Development-phase authority\nShaun “Oden” Marshall serves as Founder and Initial Editor during the v0.x concept-testing and refinement phase.\nA v0.x change may be adopted by the Founder and Initial Editor after documented technical review, compatibility analysis, and repository validation. Such an adoption is a **development decision**, not a consensus ratification, independent certification, accredited standards decision, or proof that the future v1.0 governance body has approved it.\nnon-consensus and does not retroactively alter immutable release artifacts.\nThe editor MUST disclose:\n- the release or rollback route;\nExternal reviewers are being assembled. Their findings SHOULD be preserved and dispositioned, but a complete multi-stakeholder body is not a v0.x release prerequisite."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\FINAL-ACCEPTANCE-MATRIX.md",
+    "headings": "# Final acceptance matrix",
+    "clauses": "**Status:** working record  \n| Authority | pass | authority index; Shaun alone |\n| Fixture integrity | blocked | catalog 0.1.0 incomplete; clause-traceable required profile not frozen |\n| KRR independence | blocked | audit rule proposed; full history/dependency audit pending |\n| KRR semantic coverage | blocked | no matrix before rule ratification |\n| KRR conformance | blocked | no frozen required profile; no run |\n| Second implementation | blocked | no qualifying independent implementation |\n| KRP name | blocked | reserved pending owned platform capability evidence |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\GKX-ADAPTER-LIMITS.md",
+    "headings": "# GKX adapter limits / ## Allowed adapter scope / ## Prohibited adapter scope / ## Size and responsibility limit / ## Result rule / ## Change control",
+    "clauses": "**Status:** proposed development rule — requires Shaun’s acceptance before discovery results are evaluated  \nAn adapter may normalize transport encoding, field spelling, deterministic serialization, documented legacy labels, and explicit one-to-one syntax aliases. It must be separately versioned, deterministic, testable, reversible where applicable, and unable to add, discard, infer, promote, authorize, validate, or alter semantic meaning.\nAn adapter must not synthesize required objects, invent provenance or authority, repair missing evidence, upgrade epistemic state, create decisions or receipts, bypass mandatory controls, hide divergence, call the Engine as an oracle, or map materially different lifecycle/governance semantics.\nThe adapter must be a narrow translation boundary, not a shadow implementation: its code and tests must be independently reviewable, operate only at import/export boundaries, and have no persistence side effects. Each mapping needs a clause citation, source/target schema evidence, and declared losslessness status.\nA candidate that needs semantic transformation is not native conformance. It may only be considered rule-qualified mappable compatibility after this rule is accepted before execution, the matrix identifies every delta, and the frozen full profile passes."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\GKX-INDEPENDENT-IMPLEMENTATION-RULE.md",
+    "headings": "# GKX independent-implementation rule / ## Qualification / ## Independence criteria / ## Evidence procedure / ## Closure authority / ## What this rule does not permit",
+    "clauses": "**Status:** proposed development rule — requires Shaun’s acceptance before a qualifying result is evaluated  \n**Disposition:** P1.4 proposed; P2/P3 blocked pending ratification\n## Qualification\nA second implementation qualifies only when it is implementation-independent of GKOS Engine’s implementation path and passes the frozen required profile. Operator attestation is evidence of origin, not code-level independence.\nRecord commit SHAs, dependency manifests and locks, source-path comparisons, commit-history findings, provenance, generated-output origin, commands, and limitations. Every criterion receives pass, fail, or indeterminate; one indeterminate criterion prevents qualification.\n## Closure authority\nShaun may accept a disclosed v0.x development disposition but must not describe it as independent certification or consensus ratification. A qualifying second implementation remains a future v1.0 governance claim."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\PORTFOLIO-ACCEPTANCE-TRACKS.md",
+    "headings": "# Portfolio acceptance tracks / ## Normative GKX release track / ## Portfolio-publication alignment track / ## Decision rule",
+    "clauses": "**Status:** proposed development record — requires Shaun’s acceptance  \n**Disposition:** P1.1 proposed; not yet ratified\n## Normative GKX release track\nRequired evidence: the current standard, Engine, a versioned standard-derived fixture profile, and a qualifying second independent implementation. Engine-Lite is compatibility-tested only and cannot establish independence.\nThis track blocks only a GKX/GKOS v1.0 conformance claim or ratification. Suite S0 does not block it unless a specific standard claim depends on Suite.\nThis track blocks publication of an aligned portfolio narrative. It does not itself authorize a normative GKX release claim.\nA pass or failure on one track must be reported separately and must not be used to imply a disposition on the other. This document does not make either track pass."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\PORTFOLIO-AUTHORITY-INDEX.md",
+    "headings": "# Portfolio authority index / ## Controlling record / ## Amendment path / ## Supersession and conflict check / ## Assumptions and unresolved items",
+    "clauses": "# Portfolio authority index\n**Status:** proposed development record — awaiting Shaun “Oden” Marshall’s acceptance of the associated draft pull request  \n| Precedence | Record | Location | Status | Effect |\n| 1 | Kosmos Portfolio Final Assessment and Terra Execution Directive v1.0 | ChatGPT Library `libfile_230efd96678481918066b02904f5ec81` | operator-ratified direction | Controls this portfolio execution |\n2. Shaun “Oden” Marshall records acceptance, rejection, or amendment in the PR or a successor development decision.\n3. A v0.x adoption must remain labeled a development decision, not independent approval, consensus ratification, certification, or accreditation.\nNo later operator-signed portfolio authority record was available in the inspected sources. No conflict was found between the controlling assessment and the current `GOVERNANCE.md`: the assessment names the operator, and the repository governance supplies the development-decision process.\n- “Shaun alone” is an operator-attested execution authority, not evidence of a future v1.0 multi-stakeholder governance body."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\REPOSITORY-EVIDENCE-BASELINE.md",
+    "headings": "# Repository evidence baseline / ## Observations material to later gates / ## What this evidence does not prove",
+    "clauses": "**Status:** inspection record  \n| Repository | URL / visibility | Default / HEAD | Latest observed release or identity | License / relationship | Inspection limits |\n| GKOS-Engine | [repository](https://github.com/Odenknight/GKOS-Engine) — public | main / `d73e86816df1b800dd9286459722f047266f1cc2` | tag `v1.2.0` | Apache-2.0; implementation, not standard authority | local clone clean; README, roadmap, workflows inspected |\n- KRR documents self-attested, provisional GKOS v0.76 GCP-3 coverage; that is not an audit-verified GKX qualification.\nIt does not prove a clean private working tree, release/tag absence in private repositories, code-level implementation independence, fixture completeness, conformance, or public-claim alignment."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\graphics\\README.md",
+    "headings": "# Informative graphics",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\graphics\\social\\README.md",
+    "headings": "# Social-preview graphics",
+    "clauses": "| File | Source filename | Purpose | First reviewed release |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\LICENSE.md",
+    "headings": "# Licensing / ## Documentation / ## Software-oriented materials / ## Attribution",
+    "clauses": "> Governed Knowledge Operations Standard (GKOS), GKOS-2026-07-20 v0.76, by Shaun “Oden” Marshall, licensed under CC BY 4.0. Changes, if any, are identified by the modifier."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\LICENSES\\DOCUMENTATION-LICENSE.md",
+    "headings": "# Creative Commons Attribution 4.0 International",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\LICENSES\\SOFTWARE-LICENSE.md",
+    "headings": "# Apache License 2.0",
+    "clauses": "Copyright 2026 Shaun “Oden” Marshall"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\NOTICE.md",
+    "headings": "# Notice and attribution",
+    "clauses": "Release: GKOS-2026-08-05 v0.77\nCopyright © 2026 Shaun “Oden” Marshall. Copyright registrations, where pursued, are pending.\n> Governed Knowledge Operations Standard (GKOS), GKOS-2026-08-05 v0.77, by Shaun “Oden” Marshall, licensed under CC BY 4.0. Changes, if any, are identified by the modifier.\nThe v0.x series is a public pre-standard development and concept-refinement series. It is not a consensus-ratified, accredited, certified, or regulator-approved standard."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\README.md",
+    "headings": "# Governed Knowledge Operations Standard (GKOS) / ## Where GKOS helps / ## Why GKOS exists / ## The model in one minute / ## Seven cumulative responsibilities / ## A control plane—not another runtime / ## Required tiers and adoption paths / ## Four names are enough to get started / ## Implementations in the GKOS ecosystem / ## GKOS and ordinary RAG / ## Five rules to remember / ## Current maturity and claim boundary / ## Start here / ## Repository map / ## Publication, citation, and licensing",
+    "clauses": "> authority is applied, and how consequential actions remain accountable.\n**Evidence is not truth. Confidence is not authority.**\nagents. It keeps evidence, claims, decisions, context, authority, and actions\n- **Current release:** GKOS-2026-08-20 v0.80\n| **Enterprises and corporations** | Connects evidence, roles, restrictions, review, context, and consequential actions across teams and systems while keeping authority explicit. |\n| **Government and public institutions** | Helps preserve the record behind policy, administrative decisions, delegated authority, public accountability, and later review without itself granting legal or regulatory standing. |\n| **AI and agentic systems** | Prevents retrieval rank, model confidence, tool access, or technical capability from being mistaken for permission, approval, or authority. |\nneeds its own qualified authorities, controls, validation, and applicable"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-17-v0.75\\README.md",
+    "headings": "# GKOS-2026-07-17 v0.75",
+    "clauses": "This directory identifies the immutable public pre-standard release snapshot. The canonical normative content is the repository state tagged `2026-07-17-v0.75`.\nRelease status: public pre-standard and implementation draft. Documentation is CC BY 4.0; software-oriented materials are Apache-2.0. Trademark and certification rights are separate.\nNo pre-v0.75 or draft artifacts are part of this release."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-17-v0.75\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-07-17 v0.75",
+    "clauses": "# Release notes — GKOS-2026-07-17 v0.75\nInitial public release of the Governed Knowledge Operations Standard.\nThe release includes the seven-layer reference model, authority and epistemic rules, layer interface contracts, Specialized Agent Framework, provisional GCP profiles, Viewer/Projection Profile, security/privacy/retention requirements, governance, dual licensing, contribution DCO, graphics, known limitations, and decisions R1-001 through R8-075."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-20-v0.76\\README.md",
+    "headings": "# GKOS-2026-07-20 v0.76",
+    "clauses": "This directory identifies the public pre-standard concept-refinement release snapshot. The canonical content is the repository state associated with the v0.76 release commit or later immutable tag.\nRelease status: public pre-standard and developmental adoption. It is not a consensus ratification, accredited standard, certification, legal opinion, or regulatory assurance."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-20-v0.76\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-07-20 v0.76",
+    "clauses": "# Release notes — GKOS-2026-07-20 v0.76\nGKOS v0.76 is a concept-refinement and documentation-clarification release.\n- defines the v0.x series as developmental testing and refinement rather than formal consensus ratification;\n- publishes informative layer-artifact and authority-receipt annexes;\n- separates implementation version claims from GKOS release claims;\nThe release does not complete the authority-receipt mechanism, actor-identity model, upward attestation chain, decision-record integrity scheme, executable conformance suite, second implementation, signed publication, DOI, or v1.0 consensus governance."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.77\\README.md",
+    "headings": "# GKOS-2026-08-05 v0.77",
+    "clauses": "release snapshot for GKOS v0.77. It is not a consensus ratification,\ndoes not create the tag, push it, or create a hosting-provider release object."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.77\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-08-05 v0.77",
+    "clauses": "# Release notes — GKOS-2026-08-05 v0.77\ntag, push, and hosting-provider release object are deliberately not created by\n- keeps fixture catalog 0.1.1 as a starter, non-qualifying catalog;\nIt does not qualify any implementation, make the reference Engine normative,"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.78\\README.md",
+    "headings": "# GKOS-2026-08-05 v0.78",
+    "clauses": "This immutable release package records the owner-authorized, non-consensus\nIt supersedes the prior identifier-preservation policy for current work. New\nOlder release packages, including v0.77, are preserved unchanged as historical"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.78\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-08-05 v0.78 / ## Breaking change / ## Status and boundary",
+    "clauses": "# Release notes — GKOS-2026-08-05 v0.78\n## Status and boundary\nThis is an owner-authorized developmental v0.x release. It is non-consensus,\nfrozen repositories. Active consumers must migrate through their own authorized\nreleases. Prior release packages are immutable historical evidence."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-16-v0.79\\README.md",
+    "headings": "# GKOS-2026-08-16 v0.79",
+    "clauses": "This immutable release package records the owner-authorized, non-consensus\nThe release publishes seventeen permanent requirement allocations and their\nprofile applicability without claiming a complete qualifying GCP profile.\nprovisional, informative, and non-qualifying."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-16-v0.79\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-08-16 v0.79 / ## Normative development changes / ## Preserved boundaries / ## Status",
+    "clauses": "# Release notes — GKOS-2026-08-16 v0.79\nThis release does not settle canonical GKX edge direction, inverse vocabulary,\nnormative, draft NAV-002, promote SRTP, establish a complete qualifying GCP\nspecification authority.\n## Status\nThis is an owner-authorized developmental v0.x release under the disclosed\nconformance. Prior release packages remain immutable historical evidence."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-20-v0.80\\README.md",
+    "headings": "# GKOS-2026-08-20 v0.80",
+    "clauses": "This immutable release package records the owner-authorized, non-consensus\nThe release publishes twenty-nine new permanent requirements and initial\nschemas without claiming a complete qualifying GCP profile. Claims against\nv0.79 and earlier do not carry forward, but prior release packages, artifacts,"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-20-v0.80\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-08-20 v0.80 / ## Breaking normative development changes / ## Impact and preservation / ## Preserved boundaries / ## Status",
+    "clauses": "# Release notes — GKOS-2026-08-20 v0.80\n- the GCP-6 Context-Only Extension is read-only and grants no action authority;\n- Layer 7 binds the exact manifest, valid authority, distinct actors, typed\nNo historical artifact or release is erased or retroactively rewritten. Prior\ntags, release packages, records, hashes, decisions, and claim evidence remain\nvalid evidence of what existed and was evaluated under their exact release.\nThe active fixture catalog still declares no qualifying profile. This release\nNAV-002, promote SRTP, grant general agent authority, establish legal or"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\requirements\\PROFILE_APPLICABILITY.md",
+    "headings": "# GKOS requirement profile applicability / ## 1. Required tiers / ## 2. Applicability / ## 3. Interpretation rules",
+    "clauses": "**Status:** Normative companion mapping for the GKOS v0.81 development line\n**Authority:** R15 through R18\n**Qualification boundary:** This mapping does not declare a GCP profile\ncomplete. The active fixture catalog remains the qualification authority and\ncurrently declares no qualifying profiles.\n| GKOS-DELEGATION-004 | Historical human-only review wording superseded on the v0.81 development line by GKOS-REVIEW-001..003 |\nclaim. A mandatory block, refusal, fail-closed, rollback-before-commit, or\nauthority-freeze gate can never be excluded."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\requirements\\REGISTRY.md",
+    "headings": "# GKOS requirement registry / ## Active allocations / ## Accepted unpublished allocations / ## Append-only status and replacement ledger / ## Profile applicability for R15 allocations / ## Allocation boundary",
+    "clauses": "**Authority:** owner-accepted permanent allocations, 2026-08-05, 2026-08-15,\n**Controlling decisions:** `decisions/R13_Conformance_Honesty_and_Alignment_Development_Decision_Record.md`; `decisions/R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md`; `decisions/R16_Required_Conformance_Profiles_and_GCP67_Enablement_Development_Decision_Record.md`; `decisions/R17_Authority_Validity_Interval_Development_Decision_Record.md`; `decisions/R18_Track_A_GCP45_and_Authorized_Independent_Review_Development_Decision_Record.md`\n**Current release baseline:** GKOS-2026-08-20 v0.80; R16 allocations are published under the owner-authorized, non-consensus v0.x development model.\nThis registry is authoritative for allocated GKOS requirement identifiers. It is append-only: an allocated ID is never deleted, renumbered, or reused. Later changes add dated status/source/replacement mappings; they do not rewrite an allocation's original text. `R13-102` is never allocated and cannot be reused.\n| ID | Original requirement text | Status | Source | Replacement mapping |\n| `GKOS-CONFORMANCE-001` | If a required fixture expectation is not executed, the fixture outcome MUST be `UNEVALUATED`, not PASS. | Active — GKOS v0.77 | R13-097 | None |\n| `GKOS-CONFORMANCE-002` | A profile claim MAY appear only for a catalog-declared complete profile whose required fixtures all PASS. Failed, partial, skipped, divergent, or unevaluated required checks block that claim; a non-qualifying run exits non-zero. | Active — GKOS v0.77 | R13-097 | None |\n| `GKOS-CONFORMANCE-003` | A fixture MUST cite GKOS requirement IDs. Implementation diagnostics, output observations, and tests belong in non-normative adapter maps and MUST NOT define the requirement. | Active — GKOS v0.77 | R13-098 | None |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\ROADMAP.md",
+    "headings": "# GKOS roadmap",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\schemas\\provisional\\README.md",
+    "headings": "# Provisional schemas (informative, not normative)",
+    "clauses": "as GKOS v0.76 Annex C for authority receipts. No conformance claim may cite\nDeliberately absent, per the v0.76 deferral list: the authority-receipt schema\ndeferred authority receipt or attestation chain. It remains non-normative and\nnon-qualifying."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\schemas\\provisional\\science\\README.md",
+    "headings": "# Scientific Research Trace Profile draft schemas",
+    "clauses": "**Status:** provisional draft, informative, non-normative\nsupersede the deferred GKOS authority-receipt, actor-identity, or upward"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\schemas\\README.md",
+    "headings": "# GKOS schemas / ## Canonicalization / ## Claim boundary",
+    "clauses": "| Schema | Layer | Status |\n| authority-receipt.schema.json | L7 | accepted unpublished R17 development schema |\n| provisional/science/*.draft.schema.json | cross-layer SRTP | provisional, informative, and non-qualifying |\nThe active fixture catalog declares no qualifying profile. Publication of these"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\SECURITY.md",
+    "headings": "# Security policy",
+    "clauses": "Include the affected release or component, impact, reproduction conditions, evidence, and any known mitigations. Do not include unrelated sensitive payloads."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\00_GKOS_Master_Standard.md",
+    "headings": "# GKOS master standard / ## Normative surface / ## Current claim boundary",
+    "clauses": "GKOS governs evidence, authority, context, validation, review, and authorized\nconsensus ratification, independent certification, accreditation, or\nregulatory approval. Prior master texts and release packages remain immutable\n- [Authority and refusal receipt fields](annexes/Authority_and_Refusal_Receipt_Fields.md)\nconsequential-action authority. Viewer/Projection remains independently\nThe active fixture catalog declares no qualifying profile. Publication of\nNAV-001 remains informative and non-qualifying. NAV-002 remains eligible for\ndrafting but is not made qualifying by R16. SRTP remains provisional,"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Authority_and_Refusal_Receipt_Fields.md",
+    "headings": "# Annex — Authority, authorized-use, and refusal receipt fields / ## 1. Semantic roles / ## 2. Authority Receipt / ## 3. Authorized Use Record / ## 4. Refusal Receipt / ## 5. Effect scope / ## 6. Existing security foundations / ## 7. Accepted post-v0.80 authority-interval amendment",
+    "clauses": "# Annex — Authority, authorized-use, and refusal receipt fields\n**Status:** Normative development annex adopted by R16 for\nAn Authority Receipt records a grant or delegation. An Authorized Use Record\nrecords a consequential action under asserted authority. A Refusal Receipt\nauthority, decision, action, and outcome semantics.\n## 2. Authority Receipt\nAn Authority Receipt MUST identify:\n- authority source and immutable reference where available;"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Canonical_Serialization.md",
+    "headings": "# Annex — Canonical serialization / ## 1. Purpose and scope / ## 2. Canonical encoding profile / ## 3. Canonical payload identity / ## 4. Map key ordering, duplicates, arrays, and sets / ## 5. Numbers / ## 6. Timestamps and ordering / ### 6.1 Ordering / ## 7. Text and source preservation / ## 8. Artifact hash construction / ## 9. Human auditability and verifier obligation / ## 10. Layer-6 phase split / ### 10.1 Captured selection envelope / ### 10.2 Deterministic assembly / ## 11. Layer-5 and Layer-7 binding / ## 12. Required refusal diagnostics / ## 13. Conformance",
+    "clauses": "**Status:** Normative development annex adopted by R16 for\n**Depends on:** R16 required-profile ratification\n**Supersedes:** the deferred “GKX serialization questions” open item recorded\n  declared ordering authority exists.\nA canonical encoding MUST use:\nThe older length-first map-key ordering described in RFC 8949 §4.2.3 MUST NOT\nsignatures, authority receipts, and transport attestations retain their\nEvery canonical payload MUST contain:"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Conformance_Profiles.md",
+    "headings": "# Annex — Conformance profiles / ## Required adoption tiers / ## Profiles / ## Claim evidence",
+    "clauses": "| GCP-6 Context-Only Extension | GKOS Core plus GCP-6 | Read-only context compilation/reproduction; no consequential action authority |\nthe sole named exception and grants no authority for consequential action.\nThe Viewer/Projection Profile is independently claimable. It MUST display\ndecision, or authorization authority.\nClaims MUST identify:\n- exact dated GKOS release and GKX version;\nApplicable required capabilities cannot be excluded. Mandatory block, refusal,\nfail-closed, rollback-before-commit, and authority-freeze gates can never be"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Diagnostic_Code_Registry.md",
+    "headings": "# Annex — Diagnostic-code registry / ## 1. Rules / ## 2. Active codes / ## 3. Retirement ledger / ## 4. R17 consolidation",
+    "clauses": "**Status:** Normative development annex adopted by R16 and extended by R18 for\nemit additional GKX diagnostics, but its conformance adapter must map the\n| GKOS-GATE-L7-001 | L7 | Authority basis absent, expired, not yet valid, revoked, or indeterminate | GKOS-AUTHUSE-003; GKOS-AUTHUSE-007 |\nNo codes are retired in registry version 1.0.0. A future retirement entry must\nauthority-window boundary to `GKOS-AUTHUSE-007`. The mapping is consolidated"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Governed_State_Change_Reentry_and_Bounded_Delegation.md",
+    "headings": "# Annex — Governed state change, re-entry, retention, and bounded delegation / ## 1. Universal state-change receipting / ## 2. Standard-owned vocabulary and deployment-owned policy / ## 3. Retention and disposition / ## 4. Re-entry / ## 5. Explicit semantic supersession / ## 6. Bounded supersession delegation / ## 7. Navigation standing / ## 8. Conformance and fixture standing",
+    "clauses": "**Status:** Normative development annex adopted by R15 for the v0.79 development line.\nA committed governed state change MUST be durably bound to a governed record satisfying the **State-Change Receipt role**.\nThe State-Change Receipt is a semantic role. A Source Record ingestion receipt, Control Receipt, Decision Record, Authorized Use Record, disposition record, configuration record, or other governed artifact MAY satisfy the role when it records the required actor, authority, policy, operation, before/after state binding, outcome, and durability evidence. A dedicated receipt object is required only when no existing artifact can satisfy the role.\nA state change MUST NOT be represented as committed when required receipt binding fails. The implementation MUST fail closed or verifiably roll back or compensate before reporting commit success. The conformance manifest MUST declare the binding mechanism used, such as an atomic transaction, journaled/two-phase filesystem protocol, or deterministic compensation mechanism.\nThe record satisfying this role MUST identify the actor class and, where consulted, the deterministic predicate identity/version and whether a non-deterministic checker increased restrictiveness.\nA deployment-supplied policy or predicate required by GKOS MUST have explicit identity and version and MUST NOT be silently substituted by model inference, undeclared defaults, or implementation-private behavior.\nBefore deletion or disposition of an archived governed artifact is committed, the implementation MUST consult the applicable deployment-declared hold predicate.\nThe deletion/disposition record satisfying the State-Change Receipt role MUST bind the hold-predicate identity/version and result."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Known_Limitations_and_Open_Issues.md",
+    "headings": "# Annex — Known limitations and open issues",
+    "clauses": "- verified DOI archival closure bound to this exact release.\nThe active fixture catalog declares no qualifying profile. Passing available\ntests MUST NOT be represented as full-profile conformance while applicable\nAccordingly, no implementation can presently establish a qualifying GCP-6 or\nadjudication authority.\nlegal, organizational, clinical, scientific, or regulatory authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Layer_Artifact_Mapping.md",
+    "headings": "# Annex — Layer-to-artifact mapping (informative)",
+    "clauses": "| 7 Authorized Use | Authorized Use Record or Refusal Receipt role | Manifest identity/hash, authority, proposer/reviewer/authorizer/executor, delegation, effect scope, action, outcome, and recovery route |\nparallel authority. A receipt is a semantic role; an existing governed record"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Layer_Interface_Contracts.md",
+    "headings": "# Annex — Layer interface contracts",
+    "clauses": "outputs, preserved invariants, authority boundary, prohibited behavior, failure\n| Layer | Required result | Blocking invariant |\n| L4 Validation and Control | Diagnostics and control receipts | Every mandatory failure blocks, refuses, rolls back, or freezes as specified |\n| L7 Authorized Use | Authorized Use Record or Refusal Receipt role | Exact context, valid authority, distinct actors, delegation, effect scope, outcome, and recovery route bound |\nEvery normative block, refusal, fail-closed, rollback-before-commit, or\nauthority-freeze condition emits the registered gate code and a record\nUpper-layer results returning to the corpus MUST enter as new Layer-1 sources"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Provisional_Authority_Receipt_Fields.md",
+    "headings": "# Annex — Provisional authority-receipt field list",
+    "clauses": "# Annex — Provisional authority-receipt field list\n**Status:** Informative and not yet normative\nThis annex does not amend the Authority requirements or bind a conformance claim. It narrows the design space for a future normative authority-receipt schema while GKOS remains in pre-v1.0 development.\nA future authority receipt is expected, at minimum, to carry:\n`receipt_id`, `issuer`, `subject`, `actor_identity`, `authority_source`, `permitted_actions`, `resource_scope`, `purpose_scope`, `tenant_scope`, `sensitivity_ceiling`, `delegation_allowed`, `issued_at`, `not_before`, `expires_at`, `policy_version`, `revocation_locator`, `nonce_or_replay_binding`, `signature_or_attestation`.\n- **Revocation:** the issuer or a higher-precedence authority can revoke the receipt before expiry."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Security_Privacy_Retention.md",
+    "headings": "# Annex — Security, privacy, and retention",
+    "clauses": "- Restrictions may be elevated immediately; reductions require authenticated authority."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Specialized_Agent_Framework.md",
+    "headings": "# Annex — Specialized Agent Framework",
+    "clauses": "Agents may span layers, but each operation MUST identify the layer contract it satisfies. Domain expertise may affect evidentiary relevance only as policy permits and never grants acceptance, sensitivity reduction, epistemic promotion, or use authorization.\nOrchestrators may schedule, pause, retry, throttle, quarantine, route, and record work but may not bypass controls or acquire semantic authority. Subdelegation must be expressly permitted, narrower than the originating grant, provenance-preserving, and no longer-lived than the original grant."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\TECHNICAL_README.md",
+    "headings": "# GKOS technical orientation / ## Vocabulary and authority / ## Standard, exchange contract, and implementations / ## Layer contracts / ## Control-plane placement / ## Governed retrieval and context / ## Canonical serialization / ## Core records and receipts / ## Profiles and conformance / ## Provisional domain work / ## Implementation boundaries / ### GKOS Engine / ### Lite distributions / ### Kosmos-Oden and other viewers / ## Interoperability / ## Implementer path / ## Technical map / ## Claim boundary",
+    "clauses": "## Vocabulary and authority\n| Category | Canonical name | Authority boundary |\n| Standard | **GKOS** | Defines responsibilities, lifecycle, authority, controls, and conformance |\n| Profile | **GCP-1 through GCP-7** and Viewer/Projection Profile | Defines the exact responsibilities a claimant must demonstrate |\n| Domain draft | **Scientific Research Trace Profile (SRTP)** | Informative and provisional; currently establishes no qualifying profile |\n- **GKOS** defines what must remain distinguishable, governed, and auditable.\n`gkx`. Earlier release directories remain historical evidence; they are not\ndelegation. It does not create general agent write authority or change the GKX"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\THIRD-PARTY-NOTICES.md",
+    "headings": "# Third-party notices",
+    "clauses": ""
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\TRADEMARKS.md",
+    "headings": "# Trademark policy",
+    "clauses": "**Status:** Applications and registrations are pending.\nThe names **GKOS**, **Governed Knowledge Operations Standard**, the tagline **How knowledge becomes trustworthy**, and official project logos are claimed project marks of Shaun “Oden” Marshall, subject to applicable law and pending filings.\nTruthful nominative use, criticism, education, research, interoperability discussion, and accurate references to specific releases are permitted. Written permission is required to use an official logo as another product or organization brand, imply endorsement or certification, or name an incompatible modified standard “GKOS” without a clear modifier."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\VERSIONING.md",
+    "headings": "# GKOS ecosystem versioning policy — \"one train, four cars\" / ## Purpose / ## The model: one train, four cars / ## SemVer, sharpened / ## HEAD and tagging discipline / ## CI gates / ## Per-repository rules / ### GKOS-Engine-Lite (CLI) / ### Kosmos-Oden / ### Kosmos-Oden-Lite / ## Downstream consumers / ## Precedence / ## GKOS standard claim versions",
+    "clauses": "Ratified by operator: 2026-07-23\n`releases/`, or `decisions/`, and it does not itself constitute a governance\n> and MUST carry a `BREAKING:` changelog marker.**\n- `HEAD` on `main` MUST equal the newest tag, except during an active,\n  in-progress release (tag-repair, pin-bump, or cut in flight).\n- Every version-bump commit MUST be tagged the same day it is merged. A\n  version bump without a same-day tag is a policy violation and blocks the\n  next release until corrected."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\ZENODO.md",
+    "headings": "# Zenodo Release and DOI Policy / ## Release sequence / ## DOI use / ## Licensing",
+    "clauses": "# Zenodo Release and DOI Policy\nZenodo archives **tagged GitHub Releases**, not ordinary commits. After this repository is enabled in Zenodo, each eligible GitHub Release produces an immutable version record and a version-specific DOI. Zenodo also maintains a concept DOI representing GKOS across releases.\n## Release sequence\n2. Confirm `CITATION.cff`, `.zenodo.json`, release notes, decisions, schemas, fixtures, conformance boundaries, and license routing match the intended version.\n3. Complete the release gate and preserve its results.\n4. Create the signed/annotated tag and GitHub Release for the authorized version.\n5. Wait for Zenodo to ingest the release archive.\n7. Add the version DOI and concept DOI to citation and release metadata in a follow-up change."
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\GKOS_Decision_Register.md",
+    "headings": "# GKOS development decision register / ## R17 — Authority validity interval semantics / ## R16 — Required profiles and GCP-6/GCP-7 enablement / ## R15 — Governed state change, re-entry, and bounded delegation / ## R14 — GKX 2.0 breaking machine namespace / ## R13 — Conformance honesty and alignment / ## R12 — Ecosystem compatibility and provenance / ## R11 — GKX naming transition / ## R10 — Schema slice, fixture catalog, and conformance runner / ## R9 — v0.76 concept refinement and publication / ## R8 — Publication administration / ## R7 — Security, publication, and maturity / ## R6 — Specialized Agents / ## R5 — Conformance and interoperability / ## R4 — Layer contracts / ## R3 — Epistemic governance / ## R2 — Authority / ## R1 — Identity and publication",
+    "clauses": "This register indexes adopted v0.x development decisions. These records document Founder/Initial Editor dispositions during testing and refinement; they are not consensus ratification, independent certification, accreditation, or regulator approval.\n## R17 — Authority validity interval semantics\n- **Status:** Accepted development decision; unpublished amendment\n- **Decision:** Use the half-open authority interval `valid_from <= evaluation_time < valid_until`; bind evaluation to captured canonical time at the consequential-effect admission boundary; fail closed before validity, at or after expiry, or when required time evidence is missing or indeterminate; preserve protected state and emit a Refusal Receipt under the existing L7 authority gate.\n- **Record:** [R17_Authority_Validity_Interval_Development_Decision_Record.md](R17_Authority_Validity_Interval_Development_Decision_Record.md)\n- **Status:** Accepted development decision; v0.x non-consensus authority\n- **Decision:** Establish GKOS Core at GCP-1 through GCP-5 and GKOS Advanced at GCP-1 through GCP-7; bind GCP-6 and GCP-7 except for a named read-only Context-Only Extension; require behavior-based coverage and executable refusal evidence for every mandatory gate; establish stable gate codes; preserve exact-release and assessment-type claim binding; adopt deterministic GKX-CBOR-1 serialization, captured selection and deterministic assembly, Layer-5/6/7 manifest hash binding, distinct actor roles, typed effect scope, and the Refusal Receipt semantic role; publish all changes together as the breaking pre-v1.0 v0.80 release while keeping every profile non-qualifying until the active catalog is complete and passing.\n- **Status:** Accepted development decision; v0.x non-consensus authority"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\README.md",
+    "headings": "# Governed Knowledge Operations Standard (GKOS) / ## Where GKOS helps / ## Why GKOS exists / ## The model in one minute / ## Seven cumulative responsibilities / ## A control plane—not another runtime / ## Use the tools you already have / ## Required tiers and adoption paths / ## Four names are enough to get started / ## Implementations in the GKOS ecosystem / ## GKOS and ordinary RAG / ## Five rules to remember / ## Current maturity and claim boundary / ## Start here / ## Repository map / ## Publication, citation, and licensing",
+    "clauses": "> authority is applied, and how consequential actions remain accountable.\n**Evidence is not truth. Confidence is not authority.**\nagents. It keeps evidence, claims, decisions, context, authority, and actions\n- **Current release:** GKOS-2026-08-20 v0.80\n- **Development line:** v0.81 preparation; no v0.81 release or qualifying\n| **Enterprises and corporations** | Connects evidence, roles, restrictions, review, context, and consequential actions across teams and systems while keeping authority explicit. |\n| **Government and public institutions** | Helps preserve the record behind policy, administrative decisions, delegated authority, public accountability, and later review without itself granting legal or regulatory standing. |\n| **AI and agentic systems** | Prevents retrieval rank, model confidence, tool access, or technical capability from being mistaken for permission, approval, or authority. |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\requirements\\PROFILE_APPLICABILITY.md",
+    "headings": "# GKOS requirement profile applicability / ## 1. Required tiers / ## 2. Applicability / ## 3. Interpretation rules",
+    "clauses": "**Status:** Normative companion mapping for GKOS-2026-08-20 v0.80\n**Authority:** R15 and R16\n**Qualification boundary:** This mapping does not declare a GCP profile\ncomplete. The active fixture catalog remains the qualification authority and\ncurrently declares no qualifying profiles.\nclaim. A mandatory block, refusal, fail-closed, rollback-before-commit, or\nauthority-freeze gate can never be excluded.\nA Context-Only Extension grants no action authority. If its manifest governs a"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\requirements\\REGISTRY.md",
+    "headings": "# GKOS requirement registry / ## Active allocations / ## Accepted unpublished allocations / ## Append-only status and replacement ledger / ## Profile applicability for R15 allocations / ## Allocation boundary",
+    "clauses": "**Authority:** owner-accepted permanent allocations, 2026-08-05, 2026-08-15,\n**Current release baseline:** GKOS-2026-08-20 v0.80; R16 allocations are published under the owner-authorized, non-consensus v0.x development model.\nThis registry is authoritative for allocated GKOS requirement identifiers. It is append-only: an allocated ID is never deleted, renumbered, or reused. Later changes add dated status/source/replacement mappings; they do not rewrite an allocation's original text. `R13-102` is never allocated and cannot be reused.\n| ID | Original requirement text | Status | Source | Replacement mapping |\n| `GKOS-CONFORMANCE-001` | If a required fixture expectation is not executed, the fixture outcome MUST be `UNEVALUATED`, not PASS. | Active — GKOS v0.77 | R13-097 | None |\n| `GKOS-CONFORMANCE-002` | A profile claim MAY appear only for a catalog-declared complete profile whose required fixtures all PASS. Failed, partial, skipped, divergent, or unevaluated required checks block that claim; a non-qualifying run exits non-zero. | Active — GKOS v0.77 | R13-097 | None |\n| `GKOS-CONFORMANCE-003` | A fixture MUST cite GKOS requirement IDs. Implementation diagnostics, output observations, and tests belong in non-normative adapter maps and MUST NOT define the requirement. | Active — GKOS v0.77 | R13-098 | None |\n| `GKOS-IDENTITY-001` | A newly authored GKX 2.3 note `uid` MUST be a lowercase RFC 9562 UUIDv7. | Active — GKOS v0.77 | R13-101; owner allocation | None |"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Diagnostic_Code_Registry.md",
+    "headings": "# Annex — Diagnostic-code registry / ## 1. Rules / ## 2. Active codes / ## 3. Retirement ledger / ## 4. Accepted unpublished R17 mapping overlay",
+    "clauses": "**Status:** Normative development annex adopted by R16 for\nemit additional GKX diagnostics, but its conformance adapter must map the\n| GKOS-GATE-L7-001 | L7 | Authority basis absent, expired, not yet valid, revoked, or indeterminate | GKOS-AUTHUSE-003 |\nNo codes are retired in registry version 1.0.0. A future retirement entry must\nauthority-window boundary to `GKOS-AUTHUSE-007`. This is registry candidate"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\TECHNICAL_README.md",
+    "headings": "# GKOS technical orientation / ## Vocabulary and authority / ## Standard, exchange contract, and implementations / ## Layer contracts / ## Control-plane placement / ## Open-source and product ecosystem mapping / ### Layer-by-layer component mapping / ### Product and vendor coverage snapshot / ### What changed in 2026 / ### Adapter priorities / ### Data-science review path / ## Governed retrieval and context / ## Canonical serialization / ## Core records and receipts / ## Profiles and conformance / ## Provisional domain work / ## Implementation boundaries / ### GKOS Engine / ### Lite distributions / ### Kosmos-Oden and other viewers / ## Interoperability / ## Implementer path / ## Technical map / ## Claim boundary",
+    "clauses": "## Vocabulary and authority\n| Category | Canonical name | Authority boundary |\n| Standard | **GKOS** | Defines responsibilities, lifecycle, authority, controls, and conformance |\n| Profile | **GCP-1 through GCP-7** and Viewer/Projection Profile | Defines the exact responsibilities a claimant must demonstrate |\n| Domain draft | **Scientific Research Trace Profile (SRTP)** | Informative and provisional; currently establishes no qualifying profile |\n- **GKOS** defines what must remain distinguishable, governed, and auditable.\n`gkx`. Earlier release directories remain historical evidence; they are not\ndelegation. It does not create general agent write authority or change the GKX"
+  }
+]

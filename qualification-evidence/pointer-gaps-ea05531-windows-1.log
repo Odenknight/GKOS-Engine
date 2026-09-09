@@ -1,0 +1,48 @@
+✔ outer missing pointer refuses restart without canonical promotion (2730.7478ms)
+✖ outer corrupt pointer refuses restart without canonical promotion (1958.6182ms)
+✔ journal missing pointer refuses restart without canonical promotion (2290.2177ms)
+✖ journal corrupt pointer refuses restart without canonical promotion (1897.3937ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8882.9269
+
+✖ failing tests:
+
+test at ..\GKOS-Engine-release-220-evidence\qualify-pointer-gaps.mjs:17:86
+✖ outer corrupt pointer refuses restart without canonical promotion (1958.6182ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+  
+  'UNEXPECTED_ERROR'
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'UNEXPECTED_ERROR',
+    expected: 'UNEXPECTED_ERROR',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }
+
+test at ..\GKOS-Engine-release-220-evidence\qualify-pointer-gaps.mjs:17:86
+✖ journal corrupt pointer refuses restart without canonical promotion (1897.3937ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+  
+  'UNEXPECTED_ERROR'
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'UNEXPECTED_ERROR',
+    expected: 'UNEXPECTED_ERROR',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }

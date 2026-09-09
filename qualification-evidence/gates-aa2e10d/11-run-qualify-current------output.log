@@ -1,0 +1,5 @@
+
+> gkos-engine@2.2.0 qualify:current
+> node scripts/runtime-qualification.mjs --output [LOCAL_PATH]
+
+{"status":"PASS","commands":[{"executable":"C:\\Program Files\\nodejs\\node.exe","args":["scripts/build.mjs"],"exit_code":0,"duration_ms":4952.5158,"log":"current-runtime-0.log","log_sha256":"380790783a0d7fab9129ffc20f41474a537920886874e47db1ca596850cf25a1"},{"executable":"C:\\Program Files\\nodejs\\node.exe","args":["scripts/run-current-tests.mjs"],"exit_code":0,"duration_ms":1542610.3688,"log":"current-runtime-1.log","log_sha256":"1f9092db2b9d6cf3387473cae3023ddf799d27431f12c69a9b64d8675809033d","counts":{"tests":1092,"pass":1092,"fail":0,"cancelled":0,"skipped":0,"todo":0}}]}

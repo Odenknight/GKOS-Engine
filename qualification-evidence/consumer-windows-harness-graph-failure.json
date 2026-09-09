@@ -1,0 +1,80 @@
+{
+  "sourceCommit": "458a23f3771ae7b303cf03956727d0b0a7eed98a",
+  "tarballSha256": "6753634f281ecbb6276f0eb0c9e1760692d978122515ccd74c1115c580b7e108",
+  "tarballIntegrity": "sha512-y5NkrW4dvXzhIkLbBZLeiOoEwEFw3g/2zoe0N01K5ILdKHXKJG1YHbDAehu/CfVS0Ac/MGVm5U4guIu5CW+d6A==",
+  "node": "v24.18.0",
+  "platform": "win32",
+  "checks": [
+    {
+      "name": "import .",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./gkx",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./graphiti",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./navigation",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./navigation-effects",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./navigation-effects/node",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./governance",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./retrieval",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./admission-policy",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI --help",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI validate",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI graph",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI index",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI search",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI source-write refusal",
+      "status": "PASS"
+    },
+    {
+      "name": "real FTS5 citation search",
+      "status": "PASS"
+    }
+  ],
+  "status": "FAIL",
+  "registryArtifact": false,
+  "failure": "Expected values to be strictly equal:\n\n0 !== 1\n"
+}

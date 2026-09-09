@@ -1,0 +1,81 @@
+{
+  "schema": "gkos-refusal-schema-validation/1",
+  "status": "SCHEMA_INVALID",
+  "schemaPin": {
+    "standardTag": "v0.81",
+    "standardCommit": "8f2a158c6d4b8cabd907d98765766d281aec1247",
+    "schemaVersion": "1.0.0",
+    "files": {
+      "refusal-receipt.schema.json": "11017113221f8ebc51b03c7de8078bdba3258a7d32b084d675ffd3de28c0182f",
+      "gkx-common.defs.json": "b040687a4a9b6d17bce9e86fae28e6db7e667af8e2ebbe59f60ab9f2eea04c4b"
+    }
+  },
+  "scope": "JSON-Schema-only; not gate registration, CBOR canonicalization, digest truth, signature, authority or profile conformance",
+  "errors": [
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "required",
+      "instancePath": "",
+      "schemaPath": "#/required"
+    },
+    {
+      "keyword": "additionalProperties",
+      "instancePath": "",
+      "schemaPath": "#/additionalProperties"
+    }
+  ]
+}

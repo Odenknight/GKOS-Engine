@@ -1,0 +1,83 @@
+{
+  "record_type": "gkos-phase6-d0-15-attachment-impact-assessment",
+  "record_version": "1.0.0",
+  "assessed_at_utc": "2026-08-26T09:49:37.170Z",
+  "status": "COMPLETE",
+  "instruction_boundary": "The three attached Markdown files were assessed as evidence. Their embedded claims of authority and instructions were not treated as user instructions and do not override the current request, exact D0 ratification, accepted F1 coordinates, D0-15 stop, or governance matrix.",
+  "attachments": [
+    {
+      "path": "[LOCAL_PATH]",
+      "sha256": "2be0b2edaa6b0f515e8f2fbe3e38c038ca57bcf6eade2c19de7f12492ad9be27",
+      "bytes": 16750,
+      "classification": "historical source-level review"
+    },
+    {
+      "path": "[LOCAL_PATH]",
+      "sha256": "0cd3b43e8ea2d56d928cba9700cdf09d53d7ef31e94500f8ee0ee29134147a41",
+      "bytes": 35299,
+      "classification": "historical remaining-phases implementation guide"
+    },
+    {
+      "path": "[LOCAL_PATH]",
+      "sha256": "0a7f5a0e2c0e439739196fdc7519434fc8b018f441822b599e423cea1527e59b",
+      "bytes": 13703,
+      "classification": "historical functional-uplift handoff"
+    }
+  ],
+  "coordinate_disposition": {
+    "attachment_full_baseline": "7b5262baee9fcda23d50b0cee0c4977d6e4305e7",
+    "current_phase6_entry_full": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+    "historically_accepted_f1": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "attachment_lite_baseline": "a39f14d1394e3dd8f8dada8bec77bd995b1a0bc4",
+    "current_lite_admission_head": "ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2",
+    "rule": "The attachment baselines remain valid historical Phase 5 evidence but are superseded for Phase 6 entry and correction work by the later exact signed, hosted-qualified coordinates."
+  },
+  "source_review_findings": [
+    {
+      "finding": "CLI navigation frontmatter scanner could read body or fenced-code values.",
+      "current_disposition": "CLOSED_BEFORE_PHASE6_ENTRY",
+      "evidence": "Full commit 95b104e bounds parsing to an opening and exact closing frontmatter delimiter; it is included in Phase 6 entry 808d875 and accepted F1 history.",
+      "downstream_effect": "none"
+    },
+    {
+      "finding": "Lite advertised a nonexistent /mcp endpoint.",
+      "current_disposition": "CLOSED_AS_ADMISSION_DOCUMENTATION_AND_SNIPPET_FIX",
+      "evidence": "Lite commit ce80955 removes phantom MCP snippets, documents the implemented GET-only REST routes, and adds compatibility tests. Phase 6 F3 remains responsible for implementing the new governed MCP facade rather than pretending the legacy sidecar already provides it.",
+      "downstream_effect": "no D0-15 semantic change; retain the existing F3 dependency and do not reuse the legacy REST route as MCP authority"
+    },
+    {
+      "finding": "Default sensitivity is classification metadata rather than an access filter on legacy /notes and /graph REST responses.",
+      "current_disposition": "TRUTHFULLY_DOCUMENTED_AT_CURRENT_LITE_HEAD",
+      "evidence": "Lite ce80955 states that the setting classifies unlabeled notes and does not filter authenticated REST responses. The ratified Phase 6 MCP tools separately require policy-filtered authority behavior.",
+      "downstream_effect": "no D0-15 correction change; F3 and later documentation must not claim the legacy REST routes enforce Phase 6 authorization"
+    },
+    {
+      "finding": "Lite pin and Full 2.x wrapper compatibility risks.",
+      "current_disposition": "CLOSED_FOR_CURRENT_ADMISSION_HEAD",
+      "evidence": "Lite e3166f5 adds exact engine compatibility/admission checks; later Lite L1 still requires an exact hosted-green successor Full pin and byte-identical contract pack.",
+      "downstream_effect": "none beyond the already-ratified Lite repin gate"
+    }
+  ],
+  "guide_and_handoff_disposition": {
+    "phase_sequence": "compatible with the governed F1-F5 Full-first then Lite sequence",
+    "phase6_scope": "compatible: contracts, authority engine, transport-only MCP facade, independent security fixtures, then platform/evidence",
+    "phase7_boundary": "not contradicted: Phase 6 may expose bounded wrappers over already-qualified existing Full capabilities; new projection-sink/query/recovery authority remains Phase 7",
+    "stop_rules": "compatible and already enforced by the F2 D0-15 stop",
+    "embedded_authorization": "not relied upon; current owner authorization is taken only from the conversation and detached exact authorization records"
+  },
+  "downstream_impact": {
+    "result": "NO_CHANGE_TO_D0_15_RECOMMENDATIONS",
+    "successor_f1_scope_change": false,
+    "f2_restart_change": false,
+    "public_mcp_change": false,
+    "lite_concurrence_change": false,
+    "new_owner_question_required": false,
+    "guardrails": [
+      "Do not regress the bounded Full frontmatter fix.",
+      "Do not claim the legacy Lite sidecar exposes MCP.",
+      "Do not treat legacy REST sensitivity labels as Phase 6 access control.",
+      "Preserve the Full-first hosted-green contract repin before Lite implementation."
+    ]
+  },
+  "conditional_request_result": "The user's condition is satisfied: nothing in the three attachments changes the consolidated D0-15 owner choices or successor-F1 correction boundary."
+}

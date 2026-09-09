@@ -1,0 +1,407 @@
+diff --git a/conformance/runner/authority-window.mjs b/conformance/runner/authority-window.mjs
+index 1739cd8..3a127e3 100644
+--- a/conformance/runner/authority-window.mjs
++++ b/conformance/runner/authority-window.mjs
+@@ -1,19 +1,4 @@
+-const canonicalTimestamp = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.(\d{6})Z$/;
+-
+-const isCanonicalTimestamp = (value) => {
+-  const match = canonicalTimestamp.exec(value ?? "");
+-  if (!match) return false;
+-  const [, year, month, day, hour, minute, second] = match.map((item, index) => index === 0 ? item : Number(item));
+-  const date = new Date(0);
+-  date.setUTCFullYear(year, month - 1, day);
+-  date.setUTCHours(hour, minute, second, 0);
+-  return date.getUTCFullYear() === year
+-    && date.getUTCMonth() === month - 1
+-    && date.getUTCDate() === day
+-    && date.getUTCHours() === hour
+-    && date.getUTCMinutes() === minute
+-    && date.getUTCSeconds() === second;
+-};
++import { isCanonicalTimestamp } from "./canonical-time.mjs";
+ 
+ const refusal = (reason) => ({
+   allowed: false,
+@@ -22,7 +7,9 @@ const refusal = (reason) => ({
+   requirement_ids: ["GKOS-AUTHUSE-003", "GKOS-AUTHUSE-007"],
+ });
+ 
+-export const evaluateAuthorityWindow = ({ valid_from, valid_until, evaluation_time }) => {
++export const evaluateAuthorityWindow = (record) => {
++  if (!record || typeof record !== "object" || Array.isArray(record)) return refusal("invalid-or-indeterminate-time-evidence");
++  const { valid_from, valid_until, evaluation_time } = record;
+   if (![valid_from, valid_until, evaluation_time].every(isCanonicalTimestamp)) return refusal("invalid-or-indeterminate-time-evidence");
+   if (valid_from >= valid_until) return refusal("invalid-or-indeterminate-authority-window");
+   if (evaluation_time < valid_from) return refusal("authority-not-yet-valid");
+diff --git a/conformance/runner/canonical-time.mjs b/conformance/runner/canonical-time.mjs
+new file mode 100644
+index 0000000..d4412c5
+--- /dev/null
++++ b/conformance/runner/canonical-time.mjs
+@@ -0,0 +1,11 @@
++// Canonical Serialization §6: Gregorian RFC3339, exact UTC microseconds, no leap seconds.
++export const isCanonicalTimestamp = (value) => {
++  if (typeof value !== "string") return false;
++  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.(\d{6})Z$/.exec(value);
++  if (!match || match[0] !== value) return false;
++  const [, year, month, day, hour, minute, second] = match.map(Number);
++  const leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
++  const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
++  return month >= 1 && month <= 12 && day >= 1 && day <= days[month - 1]
++    && hour <= 23 && minute <= 59 && second <= 59;
++};
+diff --git a/conformance/runner/canonical.mjs b/conformance/runner/canonical.mjs
+index 517dee6..0a87ab0 100644
+--- a/conformance/runner/canonical.mjs
++++ b/conformance/runner/canonical.mjs
+@@ -1,16 +1,17 @@
+ import { createHash } from "node:crypto";
+ import cbor from "cbor";
++import { isCanonicalTimestamp } from "./canonical-time.mjs";
+ 
+ const { encodeCanonical, decodeFirstSync } = cbor;
+ 
+-const canonicalTimestamp = /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d\.\d{6}Z$/;
+ const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex");
+ const clone = (value) => structuredClone(value);
+ 
+ const inspectCanonicalValue = (value, path = "$") => {
+   if (typeof value === "string") {
++    if (!value.isWellFormed()) throw new Error(`GKOS-GATE-L6-005 invalid Unicode text at ${path}`);
+     if (value !== value.normalize("NFC")) throw new Error(`GKOS-GATE-L6-005 non-NFC text at ${path}`);
+-    if ((path.endsWith("_at") || path.endsWith("_from") || path.endsWith("_until")) && !canonicalTimestamp.test(value)) {
++    if ((path.endsWith("_at") || path.endsWith("_from") || path.endsWith("_until")) && !isCanonicalTimestamp(value)) {
+       throw new Error(`GKOS-GATE-L6-004 invalid canonical timestamp at ${path}`);
+     }
+     return;
+@@ -22,7 +23,10 @@ const inspectCanonicalValue = (value, path = "$") => {
+   if (value === undefined) throw new Error(`GKOS-GATE-L6-006 undefined is not a canonical artifact value at ${path}`);
+   if (value === null || typeof value === "boolean" || typeof value === "bigint") return;
+   if (Array.isArray(value)) {
+-    value.forEach((item, index) => inspectCanonicalValue(item, `${path}[${index}]`));
++    for (let index = 0; index < value.length; index++) {
++      if (!Object.hasOwn(value, index)) throw new Error(`GKOS-GATE-L6-006 sparse array at ${path}[${index}]`);
++      inspectCanonicalValue(value[index], `${path}[${index}]`);
++    }
+     return;
+   }
+   if (Object.getPrototypeOf(value) !== Object.prototype) throw new Error(`unsupported canonical value at ${path}`);
+@@ -40,7 +44,13 @@ export const canonicalEncode = (value) => {
+ export const canonicalHash = (value) => sha256(canonicalEncode(value));
+ 
+ export const verifyCanonicalBytes = (bytes) => {
+-  const decoded = decodeFirstSync(bytes, { required: true, preventDuplicateKeys: true });
++  let decoded;
++  try {
++    decoded = decodeFirstSync(bytes, { required: true, preventDuplicateKeys: true, preferMap: false });
++  } catch (error) {
++    if (error.code === "ERR_ENCODING_INVALID_ENCODED_DATA") throw new Error("GKOS-GATE-L6-005 invalid UTF-8", { cause: error });
++    throw new Error("GKOS-GATE-L6-001 invalid canonical CBOR", { cause: error });
++  }
+   const reencoded = canonicalEncode(decoded);
+   if (!Buffer.from(bytes).equals(reencoded)) throw new Error("GKOS-GATE-L6-001 non-canonical CBOR encoding");
+   return decoded;
+diff --git a/conformance/runner/gate-evaluator.mjs b/conformance/runner/gate-evaluator.mjs
+index 30a783f..ba4aa94 100644
+--- a/conformance/runner/gate-evaluator.mjs
++++ b/conformance/runner/gate-evaluator.mjs
+@@ -1,6 +1,54 @@
+-const missing = (value) => value === undefined || value === null || value === "";
++import { isCanonicalTimestamp } from "./canonical-time.mjs";
++import { evaluateAuthorityWindow } from "./authority-window.mjs";
++
++const bool = value => typeof value === "boolean";
++const text = value => typeof value === "string" && value.trim().length > 0 && value.isWellFormed();
++const level = value => typeof value === "number" && Number.isFinite(value) && value >= 0;
++const texts = value => Array.isArray(value) && Array.from(value).every(text);
++// This is the portable predicate fixture interface, not an artifact/admission schema.
++// Digest labels here remain opaque fixture references; full digest validation belongs
++// to the schema-owned executor, which these synthetic predicates do not replace.
++const shapes = {
++  reentry: ["L1-001", {mutates_predecessor:bool}],
++  supersession: ["L3-001", {inferred:bool, authorized_declaration:bool}],
++  hold: ["L4-001", {evaluation:v => ["clear", "unavailable", "indeterminate"].includes(v), hold_required:bool, erasure_required:bool}],
++  "delegation-predicate": ["L4-003", {classification:text}],
++  restrictiveness: ["L4-004", {checker_level:level, deterministic_level:level}],
++  "deferred-review": ["L5-001", {overdue:bool, valid_exception:bool}],
++  "context-binding": ["L5-002", {reviewed_manifest_hash:text, decision_manifest_hash:text}],
++  "review-entry": ["L5-003", {governed_acceptance:bool, review_lifecycle_id:text}],
++  "decision-record": ["L5-004", {authorized:bool, append_only:bool, proposal_digest:text, bound_proposal_digest:text, evidence_digest:text, bound_evidence_digest:text}],
++  "review-independence": ["L5-005", {proposer_id:text, reviewer_id:text, reviewer_type:v => ["human", "agent"].includes(v)}],
++  "decision-history": ["L5-006", {deleted_prior:bool, rewritten_prior:bool, traceable:bool}],
++  "canonical-encoding": ["L6-001", {profile:text, indefinite_length:bool}],
++  "canonical-map": ["L6-002", {duplicate_keys:bool, keys_bytewise_sorted:bool}],
++  "canonical-number": ["L6-003", {negative_zero:bool, nan:bool, infinity:bool, schema_type_preserved:bool}],
++  "canonical-time": ["L6-004", {value:isCanonicalTimestamp}],
++  "canonical-text": ["L6-005", {valid_utf8:bool, nfc:bool}],
++  "canonical-state": ["L6-006", {absent_null_empty_conflated:bool}],
++  "digest-binding": ["L6-007", {expected_digest:text, actual_digest:text}],
++  rendering: ["L6-008", {complete:bool, round_trip_hash:text, canonical_hash:text}],
++  "context-closure": ["L6-009", {required_items:texts, included_items:texts}],
++  authority: ["L7-001", {valid:bool, valid_from:isCanonicalTimestamp, valid_until:isCanonicalTimestamp, evaluation_time:isCanonicalTimestamp}],
++  "effect-containment": ["L7-002", {actor_contains:bool, delegation_contains:bool}],
++  "effect-dimensions": ["L7-003", {dimensions:v => texts(v) && v.length > 0 && v.every(x => ["bounded", "reversible"].includes(x))}],
++  "authorization-manifest": ["L7-004", {authorized_hash:text, action_hash:text}],
++  "receipt-binding": ["L7-005", {reported_committed:bool, durable_receipt:bool}],
++  recovery: ["L7-006", {applicable_route:bool, route_usable:bool}],
++  "protected-disclosure": ["L7-007", {authorized:bool, exposed:bool, influenced_unauthorized_surface:bool}],
++};
++const agentShape = {proposer_model_family:text, reviewer_model_family:text, separate_authority:bool, sealed_evidence:bool, deterministic_gates:bool, gate_override:bool, human_escalation_required:bool, human_escalated:bool};
+ 
+ export function evaluateGate(record) {
++  if (!record || typeof record !== "object" || Array.isArray(record) || !Object.hasOwn(shapes, record.kind)) {
++    // No registered gate exists for an unknown fixture kind. Reject deterministically;
++    // never manufacture a normative diagnostic or return the open sentinel.
++    throw new TypeError("invalid or unknown gate fixture kind");
++  }
++  const [suffix, shape] = shapes[record.kind];
++  if (!Object.entries(shape).every(([key, valid]) => Object.hasOwn(record, key) && valid(record[key]))) return `GKOS-GATE-${suffix}`;
++  if (record.kind === "review-independence" && record.reviewer_type === "agent"
++    && !Object.entries(agentShape).every(([key, valid]) => Object.hasOwn(record, key) && valid(record[key]))) return "GKOS-GATE-L5-005";
+   switch (record.kind) {
+     case "reentry":
+       return record.mutates_predecessor ? "GKOS-GATE-L1-001" : null;
+@@ -40,7 +88,7 @@ export function evaluateGate(record) {
+     case "canonical-number":
+       return record.negative_zero || record.nan || record.infinity || !record.schema_type_preserved ? "GKOS-GATE-L6-003" : null;
+     case "canonical-time":
+-      return !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z$/.test(record.value ?? "") ? "GKOS-GATE-L6-004" : null;
++      return !isCanonicalTimestamp(record.value) ? "GKOS-GATE-L6-004" : null;
+     case "canonical-text":
+       return !record.valid_utf8 || !record.nfc ? "GKOS-GATE-L6-005" : null;
+     case "canonical-state":
+@@ -52,7 +100,7 @@ export function evaluateGate(record) {
+     case "context-closure":
+       return record.required_items.some((item) => !record.included_items.includes(item)) ? "GKOS-GATE-L6-009" : null;
+     case "authority":
+-      return !record.valid || missing(record.evaluation_time) || record.evaluation_time < record.valid_from || record.evaluation_time >= record.valid_until
++      return !record.valid || !evaluateAuthorityWindow(record).allowed
+         ? "GKOS-GATE-L7-001" : null;
+     case "effect-containment":
+       return !record.actor_contains || !record.delegation_contains ? "GKOS-GATE-L7-002" : null;
+@@ -70,4 +118,3 @@ export function evaluateGate(record) {
+       throw new Error(`unknown gate fixture kind: ${record.kind}`);
+   }
+ }
+-
+diff --git a/conformance/runner/registry-lint.mjs b/conformance/runner/registry-lint.mjs
+index e907517..8764ca3 100644
+--- a/conformance/runner/registry-lint.mjs
++++ b/conformance/runner/registry-lint.mjs
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env node
+ import { readFileSync, writeFileSync } from "node:fs";
+ import { resolve } from "node:path";
++import { evaluateTrackATwins } from "./track-a-evidence.mjs";
+ 
+ const root = resolve(import.meta.dirname, "..", "..");
+ const args = new Set(process.argv.slice(2));
+@@ -26,6 +27,8 @@ const registeredCodesInMarkdown = new Set(
+ );
+ const registeredCodesInJson = new Set(Object.keys(diagnostics.codes));
+ const errors = [];
++const executedTwins = evaluateTrackATwins(catalogs[3], readJson("fixtures/track-a/cases.json"));
++errors.push(...executedTwins.errors);
+ const warnings = [];
+ const mutationCoverage = new Map([...registeredCodesInJson].map((code) => [code, []]));
+ 
+@@ -74,6 +77,8 @@ if (uncoveredCodes.length) warnings.push(`${uncoveredCodes.length} registered ga
+ if (args.has("--require-mutation-coverage") && uncoveredCodes.length) {
+   errors.push(`mutation coverage incomplete: ${uncoveredCodes.join(", ")}`);
+ }
++const executableUncovered = [...registeredCodesInJson].filter(code => !executedTwins.coverage[code]?.length);
++if (args.has("--require-mutation-coverage") && executableUncovered.length) errors.push(`executed predicate mutation coverage incomplete: ${executableUncovered.join(", ")}`);
+ 
+ const report = {
+   result: errors.length ? "FAIL" : "PASS",
+@@ -84,6 +89,9 @@ const report = {
+   gate_code_count: registeredCodesInJson.size,
+   covered_gate_codes: Object.fromEntries([...mutationCoverage].filter(([, fixtures]) => fixtures.length)),
+   uncovered_gate_codes: uncoveredCodes,
++  executed_predicate_gate_codes: executedTwins.coverage,
++  executable_uncovered_gate_codes: executableUncovered,
++  coverage_scope: "portable-predicate-twins-only; not cumulative profile qualification",
+   errors,
+   warnings,
+ };
+diff --git a/conformance/runner/test/canonical-replay.test.mjs b/conformance/runner/test/canonical-replay.test.mjs
+index d993e1d..aa726a0 100644
+--- a/conformance/runner/test/canonical-replay.test.mjs
++++ b/conformance/runner/test/canonical-replay.test.mjs
+@@ -15,6 +15,7 @@ test("clean-process replay produces identical canonical bytes and hash", () => {
+   const firstBytes = readFileSync(join(first, "context-manifest.cbor"));
+   const secondBytes = readFileSync(join(second, "context-manifest.cbor"));
+   assert.deepEqual(firstBytes, secondBytes);
++  assert.deepEqual(firstBytes, readFileSync(new URL("../../evidence/gcp6-replay-v0.1/context-manifest.cbor", import.meta.url)), "preserved baseline canonical bytes must not change");
+   assert.deepEqual(JSON.parse(readFileSync(join(first, "result.json"))), JSON.parse(readFileSync(join(second, "result.json"))));
+   assert.deepEqual(parseDiagnosticJson(readFileSync(join(first, "context-manifest.rendering.json"), "utf8")), firstBytes);
+   const result = JSON.parse(readFileSync(join(first, "result.json"), "utf8"));
+diff --git a/conformance/runner/test/fail-closed-inputs.test.mjs b/conformance/runner/test/fail-closed-inputs.test.mjs
+new file mode 100644
+index 0000000..adb387c
+--- /dev/null
++++ b/conformance/runner/test/fail-closed-inputs.test.mjs
+@@ -0,0 +1,86 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { readFileSync } from "node:fs";
++import { pathToFileURL } from "node:url";
++import { resolve } from "node:path";
++// Optional immutable checkout for running this exact regression suite red without
++// copying tests into (or changing) preserved audit evidence.
++const moduleURL = name => process.env.GKOS_TEST_BASELINE
++  ? pathToFileURL(resolve(process.env.GKOS_TEST_BASELINE, "conformance/runner", name))
++  : new URL(`../${name}`, import.meta.url);
++const { evaluateGate } = await import(moduleURL("gate-evaluator.mjs"));
++const { canonicalEncode, verifyCanonicalBytes } = await import(moduleURL("canonical.mjs"));
++const { evaluateAuthorityWindow } = await import(moduleURL("authority-window.mjs"));
++import cbor from "cbor";
++
++const cases = JSON.parse(readFileSync(new URL("../../../fixtures/track-a/cases.json", import.meta.url))).cases;
++
++test("known gate missing and mistyped required evidence always refuses without throwing", async t => {
++  for (const fixture of cases) {
++    await t.test(fixture.id, () => {
++      for (const [field, value] of Object.entries(fixture.baseline)) {
++        if (field === "kind") continue;
++        const invalid = [undefined, null, {}, ...(Array.isArray(value) ? [[null], [""]] : [[]]), ...(typeof value === "boolean" ? [0, 1, "false", "true"] : typeof value === "number" ? [false, "2", NaN, Infinity, -1] : [false, 17, ""])];
++        for (const replacement of invalid) {
++          const input = { ...fixture.baseline, [field]: replacement };
++          // HOLD validity evidence uses L4-001 before retention-conflict L4-002.
++          const expected = input.kind === "hold" ? "GKOS-GATE-L4-001" : fixture.expected;
++          assert.equal(evaluateGate(input), expected, `${field}=${String(replacement)}`);
++          assert.equal(evaluateGate(input), expected, "repeat must be deterministic");
++        }
++      }
++    });
++  }
++});
++
++const invalidTimes = ["2026-99-99T12:00:00.000000Z", "2026-02-29T12:00:00.000000Z", "1900-02-29T12:00:00.000000Z", "2026-04-31T12:00:00.000000Z", "2026-01-00T12:00:00.000000Z", "2026-01-01T24:00:00.000000Z", "2026-01-01T12:00:60.000000Z", "2026-01-01T12:00:00.000000Z\n"];
++test("impossible timestamps refuse in encoder, verifier, gate and authority window", () => {
++  for (const value of invalidTimes) {
++    assert.equal(evaluateGate({kind:"canonical-time", value}), "GKOS-GATE-L6-004");
++    assert.throws(() => canonicalEncode({compiled_at:value}), /GKOS-GATE-L6-004/);
++    assert.throws(() => verifyCanonicalBytes(cbor.encodeCanonical({compiled_at:value})), /GKOS-GATE-L6-004/);
++    for (const field of ["valid_from", "valid_until", "evaluation_time"]) {
++      const input = {...cases.find(c => c.baseline.kind === "authority").baseline, [field]:value};
++      assert.equal(evaluateGate(input), "GKOS-GATE-L7-001");
++      assert.equal(evaluateAuthorityWindow(input).allowed, false);
++    }
++  }
++});
++
++test("lone UTF-16 surrogates refuse instead of replacement encoding, including keys", () => {
++  for (const value of ["\ud800", "\udfff", "a\ud800b", "\ud800\ud800", "\udfff\ud800"]) {
++    assert.throws(() => canonicalEncode({text:value}), /GKOS-GATE-L6-005/);
++    assert.throws(() => canonicalEncode({[value]:true}), /GKOS-GATE-L6-005/);
++  }
++  // Invalid UTF-8 bytes for a lone surrogate must not decode to accepted replacement text.
++  assert.throws(() => verifyCanonicalBytes(Buffer.from("63eda080", "hex")), /GKOS-GATE-L6-005/);
++});
++
++test("valid leap dates, microsecond boundaries and Unicode preserve exact positive bytes", () => {
++  for (const compiled_at of ["2000-02-29T00:00:00.000000Z", "2024-02-29T23:59:59.999999Z", "0096-02-29T12:00:00.000001Z"]) {
++    const input = {compiled_at, text:"é😀�"};
++    const expected = cbor.encodeCanonical(input);
++    assert.deepEqual(canonicalEncode(input), expected);
++    assert.deepEqual(verifyCanonicalBytes(expected), input);
++  }
++  const baseline = cases.find(c => c.baseline.kind === "authority").baseline;
++  assert.equal(evaluateGate({...baseline,evaluation_time:baseline.valid_from}), null);
++  assert.equal(evaluateGate({...baseline,evaluation_time:baseline.valid_until}), "GKOS-GATE-L7-001");
++});
++
++test("direct authority evaluation refuses absent records and coerced time evidence", () => {
++  for (const input of [undefined, null, false, [], {}, {valid_from:{toString(){return "2026-08-29T12:00:00.000000Z";}}}]) {
++    assert.equal(evaluateAuthorityWindow(input).allowed, false);
++  }
++});
++
++test("sparse canonical arrays refuse without silently encoding undefined", () => {
++  assert.throws(() => canonicalEncode({items:new Array(1)}), /GKOS-GATE-L6-006/);
++  assert.deepEqual(verifyCanonicalBytes(canonicalEncode({items:[null, "", []]})), {items:[null, "", []]});
++});
++
++test("unregistered or absent fixture kinds cannot return the open sentinel", () => {
++  for (const record of [undefined, null, [], {}, {kind:"invented"}, {kind:"constructor"}]) {
++    assert.throws(() => evaluateGate(record), {name:"TypeError",message:"invalid or unknown gate fixture kind"});
++  }
++});
+diff --git a/conformance/runner/test/track-a-evidence.test.mjs b/conformance/runner/test/track-a-evidence.test.mjs
+new file mode 100644
+index 0000000..778eae0
+--- /dev/null
++++ b/conformance/runner/test/track-a-evidence.test.mjs
+@@ -0,0 +1,28 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { readFileSync } from "node:fs";
++import { evaluateTrackATwins } from "../track-a-evidence.mjs";
++const read = name => JSON.parse(readFileSync(new URL(`../../../fixtures/track-a/${name}`, import.meta.url)));
++test("declared expected codes cannot substitute for an executed rejecting mutation", () => {
++  const catalog = read("fixtures.manifest.json");
++  const suite = read("cases.json");
++  assert.deepEqual(evaluateTrackATwins(catalog, suite).errors, []);
++  suite.cases[0].mutation = suite.cases[0].baseline;
++  const result = evaluateTrackATwins(catalog, suite);
++  assert.equal(result.errors.length, 1);
++  assert.equal(result.coverage["GKOS-GATE-L1-001"], undefined);
++});
++test("missing, duplicate and falsely bound case declarations fail execution coverage", () => {
++  for (const mutate of [
++    suite => suite.cases.shift(),
++    suite => suite.cases.push(suite.cases[0]),
++    suite => {suite.cases[0].expected = "GKOS-GATE-L7-007";},
++    suite => {suite.cases[0].mutation.kind = "invented";},
++  ]) {
++    const suite = read("cases.json");
++    mutate(suite);
++    const result = evaluateTrackATwins(read("fixtures.manifest.json"), suite);
++    assert.ok(result.errors.length > 0);
++    assert.equal(result.coverage["GKOS-GATE-L1-001"], undefined);
++  }
++});
+diff --git a/conformance/runner/track-a-evidence.mjs b/conformance/runner/track-a-evidence.mjs
+new file mode 100644
+index 0000000..6771057
+--- /dev/null
++++ b/conformance/runner/track-a-evidence.mjs
+@@ -0,0 +1,36 @@
++import { evaluateGate } from "./gate-evaluator.mjs";
++
++// Execute catalog-bound predicate twins. This establishes predicate coverage only,
++// not receipts, protected-state preservation or cumulative profile qualification.
++export function evaluateTrackATwins(catalog, suite) {
++  const errors = [];
++  const coverage = {};
++  const ids = new Set();
++  for (const fixture of catalog.fixtures) {
++    const matches = suite.cases.filter(item => item.id === fixture.case_id);
++    if (ids.has(fixture.fixture_id) || matches.length !== 1 || fixture.file !== "track-a/cases.json") {
++      errors.push(`${fixture.fixture_id}: missing, duplicate or unsupported executable binding`);
++      continue;
++    }
++    ids.add(fixture.fixture_id);
++    const twin = matches[0];
++    const expected = fixture.gate_expectation?.expected_codes;
++    if (!Array.isArray(expected) || expected.length !== 1 || expected[0] !== twin.expected || fixture.class !== "mutation") {
++      errors.push(`${fixture.fixture_id}: executable expectation differs from catalog`);
++      continue;
++    }
++    try {
++      if (evaluateGate(twin.baseline) !== null || evaluateGate(twin.mutation) !== twin.expected) {
++        errors.push(`${fixture.fixture_id}: executed baseline/mutation mismatch`);
++        continue;
++      }
++      (coverage[twin.expected] ??= []).push(fixture.fixture_id);
++    } catch {
++      errors.push(`${fixture.fixture_id}: executable evaluation failed`);
++    }
++  }
++  for (const twin of suite.cases) {
++    if (!catalog.fixtures.some(fixture => fixture.case_id === twin.id)) errors.push(`${twin.id}: case has no catalog binding`);
++  }
++  return {errors, coverage};
++}

@@ -1,0 +1,16 @@
+{
+  "suite": "ENGINE-NAV-EFFECTS-CONTRACT-1.0.0",
+  "standing": "integration-only",
+  "gkos_conformance": false,
+  "fixtures": [
+    { "id": "effects-managed-moc-success", "file": "fixtures/success.json", "expected": "planned" },
+    { "id": "effects-byte-identical-no-op", "file": "fixtures/no-op.json", "expected": "no-op" },
+    { "id": "effects-precondition-stale", "file": "fixtures/stale.json", "expected": "stale" },
+    { "id": "effects-authority-denied", "file": "fixtures/denied.json", "expected": "denied" },
+    { "id": "effects-agent-cas-conflict", "file": "fixtures/conflict.json", "expected": "conflict" },
+    { "id": "effects-startup-recovery", "file": "fixtures/recovery.json", "expected": "effect-present-verified" },
+    { "id": "effects-malformed-generated-markers", "file": "fixtures/malformed-markers.json", "expected": "review-required" },
+    { "id": "effects-path-escape-denied", "file": "fixtures/path-escape.json", "expected": "denied" },
+    { "id": "effects-ambiguous-lineage-preserved", "file": "fixtures/ambiguous-lineage.json", "expected": "review-required" }
+  ]
+}

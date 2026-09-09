@@ -1,0 +1,358 @@
+{
+  "record_type": "gkos-phase6-d0-core-decision-proposal",
+  "record_version": "1.0.0",
+  "proposal_date": "2026-08-25",
+  "status": "PROPOSED_NOT_RATIFIED",
+  "authority_notice": "This record is a review proposal. It does not authorize F1, product implementation, merge, release, deployment, activation, or publication.",
+  "architecture": {
+    "semantic_authority": "GKOS-Engine Full TypeScript",
+    "conformance_implementation": "GKOS-Engine-Lite Rust frontend-adapter",
+    "lite_rule": "Lite copies the hosted-green Full pack byte-for-byte, pins the exact Full commit, and may neither add semantics nor weaken a denial."
+  },
+  "entry_coordinates": {
+    "full": {
+      "commit": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+      "hosted_run": 32881187799,
+      "qualification_state": "owner-approved-hosted-green"
+    },
+    "lite": {
+      "commit": "ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2",
+      "admission_predecessor_short": "a39f14d",
+      "draft_pr": 21,
+      "hosted_run": 32888245801,
+      "hosted_jobs": 8,
+      "hosted_jobs_successful": 8,
+      "qualification_state": "owner-approved-hosted-green",
+      "blocking_rule": "Lite L1 still waits for the future hosted-green Full F5 pin and frozen pack; admission qualification alone does not authorize conformance implementation."
+    }
+  },
+  "core_decisions": {
+    "D0-1": {
+      "status": "closed",
+      "full_commit": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+      "full_hosted_run": 32881187799,
+      "lite_commit": "ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2",
+      "lite_hosted_run": 32888245801,
+      "lite_hosted_result": "SUCCESS_8_OF_8",
+      "lite_draft_pr": 21
+    },
+    "D0-2": {
+      "status": "proposed",
+      "pack_name": "GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1",
+      "pack_version": "1.0.0-draft.1",
+      "pack_root": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/",
+      "allowed_path_count": 40,
+      "maximum_changed_path_count": 40,
+      "pack_leaf_count": 34,
+      "manifest_hashed_leaf_count": 33,
+      "allowed_path_proposal": "future-build-phase6/proposals/core/P6_F1_ALLOWED_PATHS_PROPOSAL.txt",
+      "allowed_path_proposal_sha256": "sha256:7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce",
+      "protected_path_count": 22,
+      "protected_path_proposal": "future-build-phase6/proposals/core/P6_F1_PROTECTED_PATHS_PROPOSAL.txt",
+      "protected_path_proposal_sha256": "sha256:f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948"
+    },
+    "D0-3": {
+      "status": "proposed",
+      "credential_wire": "gkos1.gkc1_<26 lowercase RFC4648 base32 characters>.<43 unpadded base64url characters>",
+      "secret_bytes": 32,
+      "digest": "SHA-256(domain separator plus the decoded 32 secret bytes)",
+      "kdf": "none-random-256",
+      "credential_id": "gkc1_ plus the first 130 digest bits in lowercase unpadded RFC4648 base32",
+      "reveal": "exactly one server-side handoff; bootstrap owner credential is atomically written to the protected persistent client locator, while later non-bootstrap issue/rotate may use a verified inherited anonymous pipe/handle or locator; no ordinary JSON/protocol output and no API re-reveal",
+      "credential_result": "credential.issue and credential.rotate use the strict credential_mutation_result: target_id is the newly active credential; first completed success sets secret_revealed true only after the out-of-band handoff succeeds; failed/lost handoff and exact idempotent replay return the same target/receipt with secret_revealed false; no credential bytes are JSON fields; rotation atomically revokes the old credential with zero grace",
+      "post_bootstrap_owner_auth": "every repeat administration command reads the protected owner-controlled client locator once per client invocation through a no-follow handle; the server stores neither plaintext nor locator path",
+      "rotation_grace_ms": 0
+    },
+    "D0-4": {
+      "status": "proposed",
+      "normalized_table_count": 16,
+      "normalized_tables": [
+        "authority_meta",
+        "agent_identities",
+        "credentials",
+        "external_mappings",
+        "sessions",
+        "requests",
+        "activities",
+        "policy_decisions",
+        "identity_audit_receipts",
+        "retention_batches",
+        "rate_buckets",
+        "bootstrap_migrations",
+        "page_snapshots",
+        "page_cursors",
+        "effect_outbox_events",
+        "restore_events"
+      ],
+      "external_protected_records": [
+        "authority_anchor",
+        "authority_backup_manifest"
+      ],
+      "common_binding": "every table row binds contract_version, vault_id, authority_instance_id and restore_epoch; agent-scoped rows bind agent_id/auth_epoch; credentials, sessions, requests, activities, policy, audit/event records, snapshots/cursors, outbox, restore and backups additionally bind the applicable global generation and transport/state coordinates specified in core section 4.2",
+      "transport_enum": [
+        "owner_cli",
+        "native_stdio",
+        "loopback_streamable_http",
+        "private_authority",
+        "effect_bridge",
+        "migration_recovery"
+      ],
+      "authored_uid_rule": "authority IDs are lowercase UUIDv7; source GKX authored UIDs preserve Full 808d875 UUID versions 1 through 8 including legacy lowercase UUIDv4 and may not silently reuse the authority UUIDv7 scalar",
+      "timestamp_rule": "real Gregorian UTC instant exactly YYYY-MM-DDTHH:mm:ss.sssZ, years 1970 through 9999; missing milliseconds, offsets, impossible dates and date-only forms rejected",
+      "global_authority_event_chain": "one globally monotonic global_event_seq interleaves bootstrap, identity, retention, effect outbox/bridge and restore events; same-transaction meta head advance; startup rejects duplicates, aliases, forks and gaps inside the active segment; only an explicit restore event may start a new active segment at old_anchor_seq+1 with predecessor equal to the protected old anchor head",
+      "restore_event_binding": "one discriminated restore_events table: authority_restore targets a new authority_instance and binds pre-restore actor, backup, old/new authority chain, replacement owner and revoked/closed/invalidated aggregates; authority_restore_abort targets restore_plan in the unchanged old authority and binds plan/candidate/abandoned credential/temp disposition, false activation/publication proofs, abort intent and tombstone; the variants reject each other's fields",
+      "opaque_reference_binding": "navigation.discover with scope_ref null and cursor null is the only initial issuer of authorized root scope_ref, record_ref and child scope_ref; later reuse is same-session only; graph.temporal.read requires and resolves a non-null live same-session scope_ref and may issue only in-scope record_ref values; mappings are process-memory-only and bind session/agent/auth_epoch/generation/policy/filter/physical identity/expiry; page_snapshot stores only issued_reference_count and issued_reference_set_digest",
+      "anchor_filename": "gka1_ plus lowercase unpadded base32 of first 130 bits of SHA-256(GKOS-AUTHORITY-ANCHOR-NAME-V1 NUL vault_id), then .json",
+      "anchor_root_cap": 256,
+      "anchor_update": "fsynced MUTATION_INTENT -> one SQLite event/meta transaction and flush -> atomically replaced COMMITTED anchor and verified intent removal",
+      "canonical_json": "record digest bytes use recursive UTF-16 code-unit key order, semantic array order, JSON safe integers only, and UTF-8 without BOM or terminal LF; contract files add exactly one terminal LF",
+      "default_activity_retention_days": 90
+    },
+    "D0-5": {
+      "status": "proposed",
+      "disable_distinct_from_revoke": true,
+      "ordering": "vault authority_generation plus per-agent auth_epoch",
+      "race_rule": "read results linearize at the final authority gate; irreversible effects linearize through the A-to-E bridge and immutable Effects terminal, never a cross-store SQLite/result transaction; stale work may publish neither result nor effect"
+      ,
+      "cross_store_order": "persistent authority lease A is the authoritative cross-process synchronization domain; acquire A then effects lease E, never E then A; SQLite transactions are short mutation transactions under A and never wait for E or span Effects/filesystem work",
+      "effect_bridge": "append-only globally sequenced authority events PREPARED -> EFFECT_TERMINAL_OBSERVED -> AUDIT_PUBLISHED -> optional RECOVERED, with exact anchor update for each authority event, A->E restart reconciliation and success only after audit publication"
+    },
+    "D0-6": {
+      "status": "proposed",
+      "bootstrap_owner_proof": "local nonredirected owner CLI, verified vault owner UID/SID, exclusive authority lease, and retyped random 128-bit vault-bound challenge; no listener or existing credential",
+      "bootstrap_source": "explicit bootstrap.initialize after owner proof always creates one owner identity and gkos1 owner credential; its required legacy_source field is absent or desktop_agent_token and must exactly match the physically qualified canonical .gkx/desktop-agent.token state; a valid present owner-protected regular non-link 64-lowercase-hex file creates a distinct legacy agent",
+      "bootstrap_source_errors": "omitted legacy_source is GKOS_P6_INVALID_PARAMS; declaration/observed-state mismatch is GKOS_P6_MIGRATION_CONFLICT; declared-present malformed source is GKOS_P6_MIGRATION_MALFORMED; no alternate path or caller suppression of a present source",
+      "default_identity": "no anonymous/default caller identity; explicit secure bootstrap creates exactly one service-generated owner identity",
+      "bootstrap_owner_credential": "credential_role owner_admin, gkos1, atomically staged in the persistent protected default client locator before database publication; repeat owner administration requires that locator",
+      "legacy_credential_id": "gkc0_ plus first 130 bits of the legacy domain-separated digest in lowercase RFC4648 base32",
+      "idempotency": "SHA-256 of canonical vault_id, legacy secret digest, target schema version, and bootstrap purpose",
+      "terminal_legacy_state": "OWNER_ACTIVE then COMPLETE when no legacy token exists; otherwise LEGACY_ACTIVE until authenticated owner rotation/revocation retires and removes the legacy token"
+      ,
+      "restore": "standard authority.restore is initiated by an owner authenticated against the current pre-restore authority; it rotates authority_instance_id/restore_epoch, advances generation, revokes all restored credentials, closes sessions, invalidates cursors/idempotency, inserts one fresh active owner_admin credential, and uses RESTORE_PLAN_STAGED -> RESTORE_OWNER_LOCATOR_STAGED -> RESTORE_INTENT -> COMMITTED",
+      "restore_replacement_owner_credential": "fresh D0-3 gkos1 credential for the one restored owner identity, bound to new authority_instance_id/restore_epoch/generation/auth_epoch and atomically written once to a protected no-replace persistent client locator; after commit only this replacement owner credential authorizes administration",
+      "restore_plan_temporary": "before RESTORE_PLAN_STAGED fsync, atomically create/fsync an owner-protected no-replace temporary containing the 81 credential bytes plus LF; the staged plan binds its exact path, physical identity, content digest, protection descriptor, owner, regular-file/no-link status, plan/credential IDs, backup/candidate digests, and new authority coordinates",
+      "restore_plan_recovery": "after RESTORE_PLAN_STAGED fsync and before locator rename, an exact matching temporary is never deleted: startup validates every bound path/identity/content/ACL/no-link field, resumes only the no-replace atomic rename to the absent final locator, fsyncs the parent, and advances to RESTORE_OWNER_LOCATOR_STAGED without regeneration or re-reveal; missing/corrupt/aliased mismatch returns GKOS_P6_AUTHORITY_CORRUPT, disables writes, and deletes nothing",
+      "restore_abort": "the authenticated pre-restore owner may invoke local owner-only authority.restore.abort only before candidate DB/anchor publication; a durable RESTORE_ABORT_INTENT drives idempotent cleanup, deletes only an exact safe temporary, preserves missing/unsafe disposition, appends one globally sequenced closed receipt, and tombstones the plan before a new plan/credential is allowed; replay never regenerates under the old plan or reveals twice",
+      "restore_abort_receipt": "action authority_restore_abort, target restore_plan ID, predecessor current pre-restore event head; binds authenticated actor and old authority coordinates, plan/backup/candidate digests, proposed authority coordinates, abandoned credential ID/digest, expected temp identity/digests/protection, observed deleted_exact|absent|preserved_unsafe disposition, replacement_credential_active false, database_publication_started false, anchor_publication_started false, abort intent/tombstone digests and new event head",
+      "restore_abort_errors": "missing/corrupt/aliased planned temporary at startup is GKOS_P6_AUTHORITY_CORRUPT; abort outside the exact uncommitted state is GKOS_P6_STATE_CONFLICT; existing authentication codes are unchanged",
+      "restore_crash_rule": "after durable final locator staging, retry remains RESTORE_OWNER_LOCATOR_STAGED and revalidates/reuses the exact locator; it never generates a second credential, overwrites, regresses, or re-reveals",
+      "bootstrap_db_rollback": "after durable bootstrap locator staging, SQLite rollback remains OWNER_LOCATOR_STAGED and retries DB publication only after exact locator/plan/credential revalidation; never PLAN_STAGED",
+      "bootstrap_sequence": "UNINITIALIZED -> OWNER_PROVED -> PLAN_STAGED -> OWNER_LOCATOR_STAGED -> DB_COMMITTED -> ANCHOR_COMMITTED -> OWNER_ACTIVE, then exactly OWNER_ACTIVE -> COMPLETE when legacy_source=absent or OWNER_ACTIVE -> LEGACY_ACTIVE -> LEGACY_REVOKED -> COMPLETE when the valid legacy source was bound; no transition skips OWNER_LOCATOR_STAGED or OWNER_ACTIVE",
+      "restore_receipt": "actor local_owner_recovery, action authority_restore, target new authority_instance_id, predecessor equal to prior committed global event head; never genesis; binds pre-restore actor agent/credential/request/authority coordinates plus replacement owner agent/credential/auth_epoch and domain-separated locator binding digest",
+      "restore_vectors": [
+        "RESTORE-OWNER-001",
+        "RESTORE-OWNER-002",
+        "RESTORE-OWNER-003",
+        "RESTORE-OWNER-004",
+        "RESTORE-OWNER-005",
+        "RESTORE-OWNER-006",
+        "RESTORE-OWNER-007",
+        "RESTORE-OWNER-008",
+        "RESTORE-OWNER-009",
+        "BOOTSTRAP-LOCATOR-ROLLBACK-001"
+      ]
+    },
+    "D0-7": {
+      "status": "coordinated-proposal-pending-cross-review",
+      "proposal_source": "future-build-phase6/proposals/core/PHASE6_D0_CORE_OPERATION_INVENTORY_PROPOSAL_2026-08-25.json",
+      "proposal_source_sha256": "sha256:d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+      "operation_inventory": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+      "operation_inventory_schema": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.schema.json",
+      "operation_count": 32,
+      "public_authenticated_count": 7,
+      "local_bootstrap_count": 1,
+      "owner_only_count": 24,
+      "schema_definition_count": 54,
+      "authority_classes": ["PUBLIC_AUTHENTICATED", "LOCAL_BOOTSTRAP", "OWNER_ONLY"],
+      "scope_reference_issuance": "navigation.discover with scope_ref null and cursor null authorizes and physically qualifies configured roots, then returns root scope_ref, record_ref and child scope_ref; later reuse is same-session only; capability.list_effective issues none; all are 128-bit opaque runtime references with durable aggregate authorization evidence in page_snapshot",
+      "graph_temporal_scope": "request requires non-null live canonical scope_ref plus at/state/cursor/limit; scope_ref.resolve and physical requalification precede policy/projectAtTime; filter and snapshot bind scope digest, session, agent, auth_epoch, generation, policy decision, physical identity, at, state and ordering; result echoes scope_ref and may issue only in-scope record_ref, never scope_ref",
+      "cursor_wire": "^gkcur1_[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$; exactly 32 decoded bytes and byte-identical unpadded re-encoding; final-E positive and final-B/final-D pad-bit aliases are frozen",
+      "private_dependency_rule": "record.validate and record.assess resolve/requalify input refs and mint none; record.lineage.read resolves/requalifies, snapshots/pages, and record_ref.issue mints related refs without physical discovery; graph.temporal.read, navigation.discover, and navigation.audit declare record_ref.discover before record_ref.issue plus their exact scope/path/snapshot/cursor dependencies",
+      "f1_core_operation_vector_count": 8,
+      "f1_core_operation_vectors": ["BOOTSTRAP-SOURCE-001", "BOOTSTRAP-SOURCE-002", "BOOTSTRAP-SOURCE-003", "BOOTSTRAP-SOURCE-004", "CREDENTIAL-RESULT-001", "CREDENTIAL-RESULT-002", "CREDENTIAL-RESULT-003", "CREDENTIAL-RESULT-004"],
+      "unknown_operation_rule": "any operation absent from the exact 32-entry inventory is unavailable and closes through the boundary-specific unknown-method or unknown-tool projection"
+    },
+    "D0-8": {
+      "status": "coordinated-proposal-pending-cross-review",
+      "transport_instance": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.json",
+      "mcp_protocol_version": "2025-11-25",
+      "required_at_F3": ["native stdio", "loopback Streamable HTTP"]
+    },
+    "D0-9": {
+      "status": "coordinated-proposal-pending-cross-review",
+      "tool_registry_schema": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.schema.json",
+      "tool_registry_instance": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.json",
+      "mcp_conformance_fixture": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/mcp-conformance-fixture.json",
+      "required_tools": 7,
+      "optional_adapter_tools": 0,
+      "deferred_tools": 16,
+      "official_mcp_vectors": 67,
+      "nonexistent_uri_leaves": 0,
+      "cross_register_rule": "Core freezes paths/layout/counts without embedding interface proposal hashes; interface binds final core hashes; an independent later attestation hashes both sets."
+    },
+    "D0-10": {
+      "status": "proposed",
+      "registry": "future-build-phase6/proposals/core/PHASE6_D0_CLOSED_ERROR_REGISTRY_1.0.0-draft.1.json",
+      "registry_sha256": "sha256:5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+      "unknown_behavior": "GKOS_P6_INTERNAL_ERROR with no native detail",
+      "registry_size": 53,
+      "pre_dispatch_order": ["peer", "host", "origin", "method", "content_type", "protocol_version", "accept", "session", "authentication"],
+      "projection": "peer GKOS_P6_PEER_FORBIDDEN/403/-32003; Host GKOS_P6_HOST_FORBIDDEN/403/-32003; Origin GKOS_P6_ORIGIN_FORBIDDEN/403/-32003; stage4 exact POST/DELETE pass and every other method category is GKOS_P6_METHOD_NOT_ALLOWED/405/-32600 with Allow POST, DELETE; stage5 DELETE body/framing/Content-Type group is GKOS_P6_DELETE_INVALID/400/-32600 and POST Content-Type group is GKOS_P6_UNSUPPORTED_MEDIA_TYPE/415/-32600; protocol-version group GKOS_P6_PROTOCOL_VERSION_INVALID/400/-32600; Accept GKOS_P6_NOT_ACCEPTABLE/406/-32600; session group GKOS_P6_SESSION_UNKNOWN/404/-32004 with required-missing session GKOS_P6_INVALID_REQUEST/400/-32600; auth group GKOS_P6_AUTH_FAILED/401/-32001. First failure wins; every stage 1-9 rejection uses the canonical envelope with null request_id even if an internal identifier exists. JSON-RPC unknown method remains HTTP 200/-32601; unknown tool remains -32602.",
+      "pre_dispatch_vector_count": 22,
+      "graph_scope_vector_count": 3,
+      "projection_vectors": ["ERROR-HTTP-PEER-NONLOOPBACK-001", "ERROR-HTTP-PEER-INVALID-002", "ERROR-HTTP-HOST-001", "ERROR-HTTP-ORIGIN-001", "ERROR-HTTP-GET-001", "ERROR-HTTP-METHOD-EXTENSION-002", "ERROR-HTTP-METHOD-INVALID-003", "ERROR-HTTP-DELETE-BODY-001", "ERROR-HTTP-DELETE-CONTENT-TYPE-002", "ERROR-HTTP-DELETE-BODY-CONTENT-TYPE-003", "ERROR-HTTP-CONTENT-TYPE-MISSING-001", "ERROR-HTTP-CONTENT-TYPE-INVALID-002", "ERROR-HTTP-CONTENT-TYPE-UNSUPPORTED-003", "ERROR-HTTP-PROTOCOL-MISSING-001", "ERROR-HTTP-PROTOCOL-INVALID-002", "ERROR-HTTP-PROTOCOL-UNSUPPORTED-003", "ERROR-HTTP-ACCEPT-001", "ERROR-HTTP-SESSION-INVALID-001", "ERROR-HTTP-SESSION-EXPIRED-002", "ERROR-HTTP-SESSION-UNKNOWN-003", "ERROR-HTTP-AUTH-MISSING-001", "ERROR-HTTP-AUTH-INVALID-002", "ERROR-JSONRPC-METHOD-001", "ERROR-JSONRPC-TOOL-001"],
+      "unauthenticated_non_enumeration": "all missing/malformed/unknown/disabled/revoked/expired/mismatched credential presentations coalesce to GKOS_P6_AUTH_FAILED; unknown/expired/closed/terminated MCP session IDs separately coalesce to one content-free GKOS_P6_SESSION_UNKNOWN HTTP 404"
+    },
+    "D0-11": {
+      "status": "proposed",
+      "global_concurrent_requests": 32,
+      "per_agent_concurrent_requests": 4,
+      "request_body_bytes": 393216,
+      "operation_input_bytes": 262144,
+      "operation_output_bytes": 1048576,
+      "request_timeout_ms": 30000,
+      "session_idle_ms": 900000,
+      "session_absolute_ms": 28800000,
+      "cursor_ascii_bytes": 50,
+      "cursor_wire": "gkcur1_ plus 42 base64url characters and final [AEIMQUYcgkosw048]; strict 32-byte decode and byte-identical unpadded re-encode",
+      "cursor_snapshot_ttl_ms": 900000,
+      "live_reference_per_session": 2048,
+      "live_reference_per_process_vault": 32768,
+      "page_snapshot_entries": 2000,
+      "page_snapshot_bytes": 524288,
+      "page_snapshots_per_agent": 8,
+      "page_snapshots_per_vault": 128,
+      "navigation_snapshot_bytes": 16777216,
+      "navigation_snapshots_per_vault": 8,
+      "external_anchor_files_per_root": 256,
+      "anchor_or_intent_bytes": 16384,
+      "authority_backup_manifest_bytes": 16384,
+      "activity_rows": 1000000,
+      "database_bytes": 536870912,
+      "retention_override_days": {
+        "minimum": 7,
+        "maximum": 365
+      }
+    },
+    "D0-12": {
+      "status": "proposed",
+      "full_node_range": ">=22 <25",
+      "workflow_node_selectors": [
+        "22",
+        "23",
+        "24"
+      ],
+      "npm": "10.9.4",
+      "typescript": "5.9.3",
+      "ajv": "8.20.0",
+      "ajv_formats": "3.0.1",
+      "lite_msrv": "1.85.0",
+      "lite_current": "1.98.0"
+      ,
+      "macos_runner_policy": "owner-verified maintained named arm64 image, initially proposed macos-15; quarterly/retirement review; no macos-latest or silent substitution",
+      "windows_acl_boundary": "exact SDDL requires reviewed GetNamedSecurityInfoW/SetNamedSecurityInfoW adapter; otherwise platform unavailable"
+    },
+    "D0-13": {
+      "status": "proposed",
+      "full_workflow": ".github/workflows/phase6-identity-contract.yml",
+      "full_hosted_jobs": 11,
+      "full_artifacts": 11,
+      "evidence_path": "evidence/2026-08-25-functional-uplift-phase-6-f1.md",
+      "digest": "raw SHA-256 per 33 non-manifest leaves plus a non-self-listing aggregate manifest",
+      "acyclic_protocol": "signed input commit C_in -> hosted qualification R_q -> distinct signed evidence-only closeout C_att; pack contains no resulting SHA/run/timestamp; tar mtime 0",
+      "stage_split": {
+        "F1": "contract/schema/meta-schema/canonical vectors/deterministic pack/inventory/archive only; general suites are regression gates, not Phase-6 runtime proof",
+        "F2": "reference authority runtime semantics only; no cross-platform support claim",
+        "F4": "independent runtime adversarial fixtures against accepted F2/F3; no product repair or expected-outcome edit",
+        "F5": "all required Full platforms, native ACL/path/SQLite/crash/transport/effect integration, and final artifact evidence; first Full platform claim"
+      }
+    },
+    "D0-14": {
+      "status": "coordinated-proposal-pending-independent-governance-review",
+      "matrix": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+      "matrix_sha256": "sha256:6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+      "revision": "governance-correction.3"
+    },
+    "D0-15": {
+      "status": "proposed",
+      "stop_classes": [
+        "credential",
+        "revocation",
+        "bootstrap",
+        "collision",
+        "MCP error",
+        "redaction",
+        "race winner",
+        "migration",
+        "secret exposure",
+        "evidence mismatch"
+      ],
+      "resolution_artifact": "docs/decisions/0006-phase6-agent-identity-mcp-contract.md plus the affected qualification receipt and evidence record"
+      ,
+      "governance_matrix": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+      "governance_matrix_sha256": "sha256:6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+      "governance_revision": "governance-correction.3",
+      "reserved_roles": {
+        "L1_acceptance": "/root/phase6_full_conformance_reviewer",
+        "bootstrap_and_migration": "/root/phase6_migration_reviewer",
+        "credential_and_security": "/root/phase6_security_reviewer",
+        "Full_protocol_contract": "/root/phase6_full_contract_steward",
+        "Lite_protocol_conformance": "/root/phase6_lite_conformance_reviewer"
+      }
+    }
+  },
+  "stop_authority": {
+    "semantic_owner": "Product Owner",
+    "process_stop_and_resume_coordinator": "Orchestrator",
+    "credential": "Product Owner plus fresh /root/phase6_security_reviewer concurrence",
+    "revocation": "Product Owner plus independent authority/concurrency reviewer concurrence",
+    "bootstrap": "Product Owner plus fresh /root/phase6_migration_reviewer concurrence",
+    "collision": "Product Owner plus fresh /root/phase6_security_reviewer concurrence",
+    "MCP_error": "Product Owner plus fresh /root/phase6_full_contract_steward and /root/phase6_lite_conformance_reviewer concurrence",
+    "redaction": "Product Owner and fresh /root/phase6_security_reviewer jointly; no suppression waiver",
+    "race_winner": "Product Owner plus independent concurrency reviewer concurrence",
+    "migration": "Product Owner plus separate fresh /root/phase6_migration_reviewer and /root/phase6_security_reviewer concurrence",
+    "secret_exposure": "Product Owner and fresh /root/phase6_security_reviewer jointly; immediate halt and out-of-repository containment; no waiver",
+    "evidence_mismatch": "Evidence Auditor determines mismatch; only a corrected record and new terminal-green run resolve it",
+    "resolution_record_fields": [
+      "decision_id",
+      "stop_class",
+      "raised_at",
+      "raised_by_role",
+      "affected_full_commit",
+      "affected_lite_commit",
+      "observed_code",
+      "redacted_evidence_digests",
+      "options_considered",
+      "selected_rule",
+      "contract_version_before",
+      "contract_version_after",
+      "owner_decided_at",
+      "owner_decision_digest",
+      "required_concurrence_roles",
+      "concurrence_receipt_digests",
+      "replacement_fixture_ids",
+      "replacement_hosted_run",
+      "resolution_state",
+      "record_digest"
+    ]
+  },
+  "unresolved_dependencies": [
+    {
+      "id": "D0-7-TO-D0-9-CROSS-REVIEW",
+      "owner_needed": "independent interface and core reviewers, then product owner",
+      "reason": "the exact operation, transport, and self-contained registry/catalog instances are coordinated proposal artifacts but are not ratified"
+    },
+    {
+      "id": "D0-14-INDEPENDENT-REVIEW",
+      "owner_needed": "independent governance reviewer, then product owner",
+      "reason": "governance-correction.3 is bound by exact hash but remains a proposal"
+    },
+    {
+      "id": "FULL-F5-PIN-FOR-LITE",
+      "owner_needed": "future Full F5 lane and independent evidence reviewer",
+      "reason": "Lite L1 cannot start until the future Full Phase-6 contract/authority state has its own hosted-green F5 pin; this is a dependency, not an admission defect"
+    }
+  ],
+  "freeze_recommendation": "REVIEW_READY_NO_GO: D0-1 is closed; corrected D0-2 through D0-15 proposals require independent cross-review, coherent owner ratification, and regenerated cross-hashes before assigning F1."
+}

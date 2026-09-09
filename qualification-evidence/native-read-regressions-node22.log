@@ -1,0 +1,551 @@
+TAP version 13
+# (node:35180) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Decision-A predecessor/successor boundaries bind scoped chunks, provenance, and exact citations
+ok 1 - Decision-A predecessor/successor boundaries bind scoped chunks, provenance, and exact citations
+  ---
+  duration_ms: 154.0743
+  type: 'test'
+  ...
+# Subtest: Decision-A hidden and future successors are byte-equivalent to physical absence
+ok 2 - Decision-A hidden and future successors are byte-equivalent to physical absence
+  ---
+  duration_ms: 217.4232
+  type: 'test'
+  ...
+# Subtest: Decision-A all-visible lineage branch returns one generic conflict before live/query/rerank work
+ok 3 - Decision-A all-visible lineage branch returns one generic conflict before live/query/rerank work
+  ---
+  duration_ms: 79.4779
+  type: 'test'
+  ...
+# Subtest: Decision-A all-visible identity, endpoint, declaration, and topology classes share one conflict
+    # Subtest: identity
+    ok 1 - identity
+      ---
+      duration_ms: 76.7968
+      type: 'test'
+      ...
+    # Subtest: endpoint-resolution
+    ok 2 - endpoint-resolution
+      ---
+      duration_ms: 73.0971
+      type: 'test'
+      ...
+    # Subtest: declaration-self
+    ok 3 - declaration-self
+      ---
+      duration_ms: 68.1528
+      type: 'test'
+      ...
+    # Subtest: topology-cycle
+    ok 4 - topology-cycle
+      ---
+      duration_ms: 68.3325
+      type: 'test'
+      ...
+    # Subtest: topology-order
+    ok 5 - topology-order
+      ---
+      duration_ms: 72.2085
+      type: 'test'
+      ...
+    1..5
+ok 4 - Decision-A all-visible identity, endpoint, declaration, and topology classes share one conflict
+  ---
+  duration_ms: 359.6721
+  type: 'test'
+  ...
+# Subtest: Decision-A governed unresolved relationships conflict while ordinary broken links remain non-conflicting
+ok 5 - Decision-A governed unresolved relationships conflict while ordinary broken links remain non-conflicting
+  ---
+  duration_ms: 134.3014
+  type: 'test'
+  ...
+# Subtest: Decision-A hidden/future candidates equal absence across all four cross-record classes
+    # Subtest: identity
+    ok 1 - identity
+      ---
+      duration_ms: 200.5464
+      type: 'test'
+      ...
+    # Subtest: endpoint-resolution
+    ok 2 - endpoint-resolution
+      ---
+      duration_ms: 214.2928
+      type: 'test'
+      ...
+    # Subtest: declaration-reconciliation
+    ok 3 - declaration-reconciliation
+      ---
+      duration_ms: 209.7912
+      type: 'test'
+      ...
+    # Subtest: topology
+    ok 4 - topology
+      ---
+      duration_ms: 208.0054
+      type: 'test'
+      ...
+    1..4
+ok 6 - Decision-A hidden/future candidates equal absence across all four cross-record classes
+  ---
+  duration_ms: 833.4819
+  type: 'test'
+  ...
+# Subtest: Decision-A resolver falls through hidden/future preferred UID tiers and classifies scoped self
+ok 7 - Decision-A resolver falls through hidden/future preferred UID tiers and classifies scoped self
+  ---
+  duration_ms: 421.8456
+  type: 'test'
+  ...
+# Subtest: Decision-A scoped parser-fingerprint collisions ignore hidden/future rows
+ok 8 - Decision-A scoped parser-fingerprint collisions ignore hidden/future rows
+  ---
+  duration_ms: 286.5347
+  type: 'test'
+  ...
+# Subtest: Decision-A public chunk collisions remain physical candidates and conflict only in the scoped view
+ok 9 - Decision-A public chunk collisions remain physical candidates and conflict only in the scoped view
+  ---
+  duration_ms: 185.9276
+  type: 'test'
+  ...
+# Subtest: Decision-A duplicate portable paths are scoped after policy/time partition
+ok 10 - Decision-A duplicate portable paths are scoped after policy/time partition
+  ---
+  duration_ms: 270.5377
+  type: 'test'
+  ...
+# Subtest: Decision-A known-created conflict wins over unknown temporal coverage with zero work
+ok 11 - Decision-A known-created conflict wins over unknown temporal coverage with zero work
+  ---
+  duration_ms: 155.7009
+  type: 'test'
+  ...
+# Subtest: Decision-A candidate-key SQL gates vector/rerank inputs before host scoring
+ok 12 - Decision-A candidate-key SQL gates vector/rerank inputs before host scoring
+  ---
+  duration_ms: 133.8071
+  type: 'test'
+  ...
+# Subtest: Decision-A gate order is source policy, typed filters, then whole-source chunk policy
+ok 13 - Decision-A gate order is source policy, typed filters, then whole-source chunk policy
+  ---
+  duration_ms: 202.7862
+  type: 'test'
+  ...
+# Subtest: schema-3 runtime policy identity fails before policy, live-source, or query-provider work
+ok 14 - schema-3 runtime policy identity fails before policy, live-source, or query-provider work
+  ---
+  duration_ms: 67.9806
+  type: 'test'
+  ...
+# Subtest: schema-3 policy-bound vector eligibility mismatch fails before live/query work
+ok 15 - schema-3 policy-bound vector eligibility mismatch fails before live/query work
+  ---
+  duration_ms: 61.8871
+  type: 'test'
+  ...
+# Subtest: Decision-A zero-chunk successors participate in scoped time without fabricating hits
+ok 16 - Decision-A zero-chunk successors participate in scoped time without fabricating hits
+  ---
+  duration_ms: 198.7306
+  type: 'test'
+  ...
+# Subtest: Decision-A source/chunk policy throws and non-allow values fail closed as physical absence
+ok 17 - Decision-A source/chunk policy throws and non-allow values fail closed as physical absence
+  ---
+  duration_ms: 135.4523
+  type: 'test'
+  ...
+# Subtest: Decision-A unknown candidates cannot create any cross-record conflict class
+    # Subtest: identity
+    ok 1 - identity
+      ---
+      duration_ms: 64.2913
+      type: 'test'
+      ...
+    # Subtest: endpoint-resolution
+    ok 2 - endpoint-resolution
+      ---
+      duration_ms: 69.8642
+      type: 'test'
+      ...
+    # Subtest: declaration-reconciliation
+    ok 3 - declaration-reconciliation
+      ---
+      duration_ms: 74.0064
+      type: 'test'
+      ...
+    # Subtest: topology
+    ok 4 - topology
+      ---
+      duration_ms: 71.5998
+      type: 'test'
+      ...
+    1..4
+ok 18 - Decision-A unknown candidates cannot create any cross-record conflict class
+  ---
+  duration_ms: 280.5924
+  type: 'test'
+  ...
+# Subtest: Decision-A unknown duplicate UID/path rows remain only a coverage bit in the complete envelope
+ok 19 - Decision-A unknown duplicate UID/path rows remain only a coverage bit in the complete envelope
+  ---
+  duration_ms: 275.4963
+  type: 'test'
+  ...
+# Subtest: Decision-A scoped coordinate binds safe validity provenance while hidden/future origins do not interfere
+ok 20 - Decision-A scoped coordinate binds safe validity provenance while hidden/future origins do not interfere
+  ---
+  duration_ms: 396.7652
+  type: 'test'
+  ...
+# (node:34312) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Phase-1 retrieval contract coordinates retain the exact qualified public shape
+ok 21 - Phase-1 retrieval contract coordinates retain the exact qualified public shape
+  ---
+  duration_ms: 17.1646
+  type: 'test'
+  ...
+# Subtest: cross-language chunk, RRF, duplicate-collapse, and MMR fixture is exact
+ok 22 - cross-language chunk, RRF, duplicate-collapse, and MMR fixture is exact
+  ---
+  duration_ms: 15.9216
+  type: 'test'
+  ...
+# Subtest: canonical JSON, portable path, and timestamp filter fixtures are exact
+ok 23 - canonical JSON, portable path, and timestamp filter fixtures are exact
+  ---
+  duration_ms: 7.0548
+  type: 'test'
+  ...
+# Subtest: a one-section edit preserves every unaffected stable chunk identity
+ok 24 - a one-section edit preserves every unaffected stable chunk identity
+  ---
+  duration_ms: 1.1054
+  type: 'test'
+  ...
+# Subtest: typed filters fail closed for invalid sensitivity and enforce vault/date/quality
+ok 25 - typed filters fail closed for invalid sensitivity and enforce vault/date/quality
+  ---
+  duration_ms: 0.488
+  type: 'test'
+  ...
+# Subtest: malformed authored metadata is ignored until a date filter is active
+ok 26 - malformed authored metadata is ignored until a date filter is active
+  ---
+  duration_ms: 0.4166
+  type: 'test'
+  ...
+# Subtest: provider factory requires trusted provenance and strictly validates local responses
+ok 27 - provider factory requires trusted provenance and strictly validates local responses
+  ---
+  duration_ms: 1.468
+  type: 'test'
+  ...
+# Subtest: OpenAI-compatible embedding accepts absent correlation echo but rejects malformed indexes
+ok 28 - OpenAI-compatible embedding accepts absent correlation echo but rejects malformed indexes
+  ---
+  duration_ms: 34.2276
+  type: 'test'
+  ...
+# Subtest: OpenAI-compatible adapters enforce their own deadline when injected fetch ignores abort
+ok 29 - OpenAI-compatible adapters enforce their own deadline when injected fetch ignores abort
+  ---
+  duration_ms: 33.6873
+  type: 'test'
+  ...
+# (node:30900) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: native batch starts at most four reads and preserves input order despite out-of-order completion
+ok 30 - native batch starts at most four reads and preserves input order despite out-of-order completion
+  ---
+  duration_ms: 4.2395
+  type: 'test'
+  ...
+# Subtest: failed native reads remain refusal values and outstanding work drains before completion
+ok 31 - failed native reads remain refusal values and outstanding work drains before completion
+  ---
+  duration_ms: 1.1085
+  type: 'test'
+  ...
+# Subtest: native and custom readers preserve exact search results; custom callbacks remain serial
+ok 32 - native and custom readers preserve exact search results; custom callbacks remain serial
+  ---
+  duration_ms: 122.2312
+  type: 'test'
+  ...
+# (node:33640) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: draft.2 executable as_of matrix matches the exact current Engine/GKX timestamp validator
+ok 33 - draft.2 executable as_of matrix matches the exact current Engine/GKX timestamp validator
+  ---
+  duration_ms: 2.1318
+  type: 'test'
+  ...
+# Subtest: draft.2 schemas strictly bind the executable manifest, provenance, and result envelopes
+ok 34 - draft.2 schemas strictly bind the executable manifest, provenance, and result envelopes
+  ---
+  duration_ms: 87.3342
+  type: 'test'
+  ...
+# Subtest: draft.2 freezes Decision-A hidden-absence and all-authorized conflict outcomes for every cross-record class
+ok 35 - draft.2 freezes Decision-A hidden-absence and all-authorized conflict outcomes for every cross-record class
+  ---
+  duration_ms: 33.6038
+  type: 'test'
+  ...
+# Subtest: draft.2 public declarations discriminate exact Phase-1 and Phase-2 result envelopes
+ok 36 - draft.2 public declarations discriminate exact Phase-1 and Phase-2 result envelopes
+  ---
+  duration_ms: 1908.2742
+  type: 'test'
+  ...
+# Subtest: draft.2 executable projection fixture locks exact scan and FTS5 generation/result envelopes
+ok 37 - draft.2 executable projection fixture locks exact scan and FTS5 generation/result envelopes
+  ---
+  duration_ms: 262.5305
+  type: 'test'
+  ...
+# Subtest: one GkxIndex projection binds canonical uid, local validity, and exact title-resolution receipts
+ok 38 - one GkxIndex projection binds canonical uid, local validity, and exact title-resolution receipts
+  ---
+  duration_ms: 2.0915
+  type: 'test'
+  ...
+# Subtest: point-in-time selection delegates half-open boundaries and permits empty intervals
+ok 39 - point-in-time selection delegates half-open boundaries and permits empty intervals
+  ---
+  duration_ms: 76.0111
+  type: 'test'
+  ...
+# Subtest: missing source stats reject only that intrinsic candidate unless a manifest reference is supplied
+ok 40 - missing source stats reject only that intrinsic candidate unless a manifest reference is supplied
+  ---
+  duration_ms: 3.4416
+  type: 'test'
+  ...
+# Subtest: nonportable authored time cannot diverge from canonical node.validAt
+ok 41 - nonportable authored time cannot diverge from canonical node.validAt
+  ---
+  duration_ms: 0.9683
+  type: 'test'
+  ...
+# Subtest: descriptor-safe source preflight rejects accessors and out-of-range dates before a read
+ok 42 - descriptor-safe source preflight rejects accessors and out-of-range dates before a read
+  ---
+  duration_ms: 0.5031
+  type: 'test'
+  ...
+# Subtest: canonical path collisions retain every physical candidate without cross-binding bytes
+ok 43 - canonical path collisions retain every physical candidate without cross-binding bytes
+  ---
+  duration_ms: 1.7486
+  type: 'test'
+  ...
+# Subtest: canonical resolver receipts are frozen for paths, wikilinks, ambiguity, and unresolved refs
+ok 44 - canonical resolver receipts are frozen for paths, wikilinks, ambiguity, and unresolved refs
+  ---
+  duration_ms: 6.1854
+  type: 'test'
+  ...
+# Subtest: a rejected successor cannot poison a valid predecessor's accepted temporal projection
+ok 45 - a rejected successor cannot poison a valid predecessor's accepted temporal projection
+  ---
+  duration_ms: 1.8581
+  type: 'test'
+  ...
+# Subtest: cross-record lineage conflicts remain physical candidates for the authorized-view decision
+ok 46 - cross-record lineage conflicts remain physical candidates for the authorized-view decision
+  ---
+  duration_ms: 2.5615
+  type: 'test'
+  ...
+# Subtest: canonical declaration receipts preserve aliases without raw-count rejection
+ok 47 - canonical declaration receipts preserve aliases without raw-count rejection
+  ---
+  duration_ms: 1.8737
+  type: 'test'
+  ...
+# Subtest: authored resolution failure receipts cannot be masked by a derived edge
+ok 48 - authored resolution failure receipts cannot be masked by a derived edge
+  ---
+  duration_ms: 1.6075
+  type: 'test'
+  ...
+# Subtest: an unresolved derived-only receipt remains local and does not poison an unrelated valid source
+ok 49 - an unresolved derived-only receipt remains local and does not poison an unrelated valid source
+  ---
+  duration_ms: 1.4732
+  type: 'test'
+  ...
+# Subtest: candidate receipts retain canonical origins while physical sources mint no effective edge
+ok 50 - candidate receipts retain canonical origins while physical sources mint no effective edge
+  ---
+  duration_ms: 5.4488
+  type: 'test'
+  ...
+# (node:32432) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Phase-2 is additive: schema-3 lineage search retains Phase-1 coordinates separately
+ok 51 - Phase-2 is additive: schema-3 lineage search retains Phase-1 coordinates separately
+  ---
+  duration_ms: 128.7807
+  type: 'test'
+  ...
+# Subtest: schema-3 freshness is scoped, validated, and defaults to unverified
+ok 52 - schema-3 freshness is scoped, validated, and defaults to unverified
+  ---
+  duration_ms: 89.4046
+  type: 'test'
+  ...
+# Subtest: schema-3 indexing degrades only provider failures and never retries publication failures as FTS
+ok 53 - schema-3 indexing degrades only provider failures and never retries publication failures as FTS
+  ---
+  duration_ms: 80.5029
+  type: 'test'
+  ...
+# Subtest: schema-3 vector eligibility is policy-bound before provider and fails closed on runtime-policy drift
+ok 54 - schema-3 vector eligibility is policy-bound before provider and fails closed on runtime-policy drift
+  ---
+  duration_ms: 104.6069
+  type: 'test'
+  ...
+# Subtest: hidden successor is noninterfering in chunk, provenance, count, confidence, and policy input
+ok 55 - hidden successor is noninterfering in chunk, provenance, count, confidence, and policy input
+  ---
+  duration_ms: 156.239
+  type: 'test'
+  ...
+# Subtest: schema-3 requires source and sanitized chunk policy gates before temporal projection
+ok 56 - schema-3 requires source and sanitized chunk policy gates before temporal projection
+  ---
+  duration_ms: 153.9266
+  type: 'test'
+  ...
+# Subtest: hidden agent, MOC, and extension metadata are noninterfering at both policy gates
+ok 57 - hidden agent, MOC, and extension metadata are noninterfering at both policy gates
+  ---
+  duration_ms: 133.1877
+  type: 'test'
+  ...
+# Subtest: zero-chunk successor participates in temporal projection without fabricating a hit
+ok 58 - zero-chunk successor participates in temporal projection without fabricating a hit
+  ---
+  duration_ms: 70.6954
+  type: 'test'
+  ...
+# Subtest: schema-3 store reopens zero-chunk candidates, retains collisions for scoped conflict, and rejects tampering
+ok 59 - schema-3 store reopens zero-chunk candidates, retains collisions for scoped conflict, and rejects tampering
+  ---
+  duration_ms: 142.4243
+  type: 'test'
+  ...
+# Subtest: schema-3 manifests bind and verify the pinned Standard and projection profile
+ok 60 - schema-3 manifests bind and verify the pinned Standard and projection profile
+  ---
+  duration_ms: 139.5791
+  type: 'test'
+  ...
+# Subtest: persisted schema-3 declaration tampering cannot disappear during reopen
+ok 61 - persisted schema-3 declaration tampering cannot disappear during reopen
+  ---
+  duration_ms: 71.6568
+  type: 'test'
+  ...
+# Subtest: unknown authorized validity and an empty temporal interval fail before source/provider work
+ok 62 - unknown authorized validity and an empty temporal interval fail before source/provider work
+  ---
+  duration_ms: 63.5611
+  type: 'test'
+  ...
+# Subtest: source policy mutation and errors fail closed without changing the verified projection
+ok 63 - source policy mutation and errors fail closed without changing the verified projection
+  ---
+  duration_ms: 66.3332
+  type: 'test'
+  ...
+# Subtest: no-as-of empty and stale views retain not_requested temporal coverage
+ok 64 - no-as-of empty and stale views retain not_requested temporal coverage
+  ---
+  duration_ms: 138.29
+  type: 'test'
+  ...
+# Subtest: complete provenance-bearing results and parent assertions obey the serialized byte budget
+ok 65 - complete provenance-bearing results and parent assertions obey the serialized byte budget
+  ---
+  duration_ms: 242.9033
+  type: 'test'
+  ...
+# Subtest: schema-3 candidate envelopes reject accessors, proxies, exotic JSON, and forged invariants before state
+ok 66 - schema-3 candidate envelopes reject accessors, proxies, exotic JSON, and forged invariants before state
+  ---
+  duration_ms: 15.325
+  type: 'test'
+  ...
+# (node:40024) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ordinary Windows temp spelling, including 8.3 expansion, is not an alias
+ok 67 - ordinary Windows temp spelling, including 8.3 expansion, is not an alias
+  ---
+  duration_ms: 137.089
+  type: 'test'
+  ...
+# lexical temp root: [LOCAL_PATH]
+# canonical temp root: [LOCAL_PATH]
+# Subtest: Windows junction components and source hard links remain fail-closed
+ok 68 - Windows junction components and source hard links remain fail-closed
+  ---
+  duration_ms: 15.4804
+  type: 'test'
+  ...
+# (node:35808) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: native RetrievalCoordinator executes runtime-selected lexical ranking and verified byte citations for internal-visible source
+ok 69 - native RetrievalCoordinator executes runtime-selected lexical ranking and verified byte citations for internal-visible source
+  ---
+  duration_ms: 121.1403
+  type: 'test'
+  ...
+# Subtest: native policy excludes hidden-only query from candidates/counts/citations and preserves allowed source relevance
+ok 70 - native policy excludes hidden-only query from candidates/counts/citations and preserves allowed source relevance
+  ---
+  duration_ms: 106.2351
+  type: 'test'
+  ...
+# Subtest: MCP delegates to the actual native lexical pipeline, preserves ranked verified citations and internal visibility
+ok 71 - MCP delegates to the actual native lexical pipeline, preserves ranked verified citations and internal visibility
+  ---
+  duration_ms: 193.9397
+  type: 'test'
+  ...
+# Subtest: native MCP paging preserves rank and refuses changed-query and changed-source cursors
+ok 72 - native MCP paging preserves rank and refuses changed-query and changed-source cursors
+  ---
+  duration_ms: 179.5297
+  type: 'test'
+  ...
+# Subtest: explicit native path scope can avoid authored conflicts without changing whole-vault behavior or exposing hidden sources
+ok 73 - explicit native path scope can avoid authored conflicts without changing whole-vault behavior or exposing hidden sources
+  ---
+  duration_ms: 336.6706
+  type: 'test'
+  ...
+# Subtest: explicit secret-ceiling MCP identity can search and read synthetic secret content while internal remains withheld
+ok 74 - explicit secret-ceiling MCP identity can search and read synthetic secret content while internal remains withheld
+  ---
+  duration_ms: 272.067
+  type: 'test'
+  ...
+1..74
+# tests 87
+# suites 0
+# pass 87
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11700.0497

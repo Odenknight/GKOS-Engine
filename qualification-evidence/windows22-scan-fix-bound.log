@@ -1,0 +1,42 @@
+TAP version 13
+# (node:22448) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: secure scan retains ordinary archives and excludes only exact automatic namespaces
+ok 1 - secure scan retains ordinary archives and excludes only exact automatic namespaces
+  ---
+  duration_ms: 77.9629
+  type: 'test'
+  ...
+# Subtest: secure scan keeps fatal UTF-8 unstable and projects deterministic size rejection into exact Phase3 rows
+ok 2 - secure scan keeps fatal UTF-8 unstable and projects deterministic size rejection into exact Phase3 rows
+  ---
+  duration_ms: 51.5801
+  type: 'test'
+  ...
+# Subtest: watch hints are advisory and unsafe names force unscoped reconciliation
+ok 3 - watch hints are advisory and unsafe names force unscoped reconciliation
+  ---
+  duration_ms: 0.4156
+  type: 'test'
+  ...
+# Subtest: secure scans bound concurrent opens across nested directories and preserve ordered evidence
+ok 4 - secure scans bound concurrent opens across nested directories and preserve ordered evidence
+  ---
+  duration_ms: 170.6195
+  type: 'test'
+  ...
+# Subtest: a failed concurrent secure scan drains file work before returning refusal
+ok 5 - a failed concurrent secure scan drains file work before returning refusal
+  ---
+  duration_ms: 45.5988
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 493.9197

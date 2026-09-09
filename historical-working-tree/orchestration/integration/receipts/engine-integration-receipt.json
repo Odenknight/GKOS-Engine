@@ -1,0 +1,383 @@
+{
+  "version": "gkos-engine-local-integration/1",
+  "generated_at_utc": "2026-08-31T23:19:29.549Z",
+  "overall_status": "PASS_WITH_INCOMPLETE_PLATFORM_COVERAGE",
+  "release_qualified": false,
+  "scope": "Authorized local Engine integration verification only",
+  "git": {
+    "branch": "codex/integrate-engine-stability-20260831",
+    "base": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+    "commit": "1c59a992bafd6815ae9837bb3910084d4aea9972",
+    "tree": "54f68ff48294c87ac2d528b3464eede3c96facf6",
+    "parent": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+    "patch_sha256": "1f06667fea932638b0136e56ecb3a9b546579dece660ef07ffda65a632a64cef",
+    "patch_path": "orchestration/upgrades/deliverables/engine.patch",
+    "status_clean": true,
+    "remote_branch_present": false
+  },
+  "superseded_seal": {
+    "base": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+    "commit": "e22281550ccde13bb45e73116743cde1c17f227d",
+    "tree": "0188f8e92ed6c34e33c199510968bb678494586b",
+    "patch_sha256": "93b84f41eb2a076ac1946755339ea89c6186f3e6ac67f9629ddf985205a0522d",
+    "disposition": "REJECTED: sealed patch normalized one mixed-EOL test to LF but retained its raw candidate CRLF digest"
+  },
+  "repaired_candidate": {
+    "audited_head": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+    "inventory_sha256": "55b3cd9a861b99a5be893425cf1914445364dda4942fced1a07863b665476812",
+    "candidate_source_snapshot_sha256": "97964ba665a1ae114d31059d2f5a5acb8d40e6eef007cf0d8ffce57ad0a5edff",
+    "sealed_patch_sha256": "1f06667fea932638b0136e56ecb3a9b546579dece660ef07ffda65a632a64cef",
+    "deliverables_manifest_sha256": "10a70209862bea2549edef8006d66a4d140e9a1ac250d29c53eaccfea819f706",
+    "atomic_seal_verification": "PASS: 5 repositories, 42 files, 0 errors",
+    "unaffected_patch_hashes_unchanged": true,
+    "generator": {
+      "path": "orchestration/upgrades/scripts/prepare-engine-inventory.py",
+      "sha256": "505a034652b38093fd4a098281635bb05b46dddcd44e45cc1bdee333bc09d382",
+      "pre_fix_manifest_sha256": "126482cea77691d249e1c848872ca4319851c87f3518b70f196d2de0ac2394e0",
+      "post_fix_manifest_sha256": "55b3cd9a861b99a5be893425cf1914445364dda4942fced1a07863b665476812",
+      "post_fix_line_endings": {
+        "lf": 441,
+        "crlf": 0
+      }
+    }
+  },
+  "defect_repair": {
+    "status": "FIXED_AND_RESEALED",
+    "affected_path": "test/service-reference-freshness.test.mjs",
+    "candidate_before": {
+      "bytes": 18060,
+      "lf": 239,
+      "crlf": 52,
+      "sha256": "32fb64252166c099ba6027c4ca7295b4a80496da6cfdc1b5186a769a603ef761"
+    },
+    "sealed_before": {
+      "bytes": 18008,
+      "lf": 239,
+      "crlf": 0,
+      "sha256": "f4c45d6c1085acd0bc6743a1161c8b0615c0e74507acf0a01c048fcf3c66484c"
+    },
+    "cause": "The Windows candidate carried mixed raw line endings; isolated-index sealing normalized them to LF while the runtime inventory retained the raw candidate digest.",
+    "correction": "Normalized the candidate test to LF, added a CRLF adversarial assertion inside the existing six-test gate, forced the inventory generator to emit LF bytes, regenerated inventory, resealed atomically, and reconstructed from the exact base.",
+    "qualifier_semantics_changed": false
+  },
+  "qualification": {
+    "inventory_check": {
+      "status": "PASS",
+      "log": {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/inventory-check.log",
+        "bytes": 69210,
+        "sha256": "07adfe255928cf299315ac930a9053d504d5d22bc43f7562e32759d8a65a7dec"
+      }
+    },
+    "runtime_gate": {
+      "status": "PASS",
+      "counts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "log": {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/runtime-gate-six-tests.log",
+        "bytes": 699,
+        "sha256": "688e523bbd4c28cdf22cc6f448a7c8e06bf88805940afc5cab3ec91011385ffc"
+      }
+    },
+    "current_runtime": {
+      "status": "INCOMPLETE_PLATFORM_COVERAGE",
+      "release_qualified": false,
+      "started_at": "2026-08-31T23:06:25.533Z",
+      "ended_at": "2026-08-31T23:15:14.867Z",
+      "source": {
+        "head": "1c59a992bafd6815ae9837bb3910084d4aea9972",
+        "tree": "54f68ff48294c87ac2d528b3464eede3c96facf6",
+        "sha256": "034f16d47b6187f80daf2dbd96d84981dd95225c6e44b4b091b99c63603438f2",
+        "file_count": 505
+      },
+      "build": {
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "scripts/build.mjs"
+        ],
+        "exit_code": 0,
+        "duration_ms": 3703.2305000000006,
+        "log": "current-runtime-0.log",
+        "log_sha256": "5118b345554727a2b98fe8568ad4a86e9209b6b33a9379d90dd8fc6e5e43af50"
+      },
+      "tests": {
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "scripts/run-current-tests.mjs"
+        ],
+        "exit_code": 0,
+        "duration_ms": 520561.5612,
+        "log": "current-runtime-1.log",
+        "log_sha256": "8470722d4a7e95ebb496dea3d61a2cb7a893994843b95ab94a16ff4e4db1bf96",
+        "counts": {
+          "tests": 951,
+          "pass": 944,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 7,
+          "todo": 0
+        }
+      },
+      "receipt": {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/current/current-runtime.json",
+        "bytes": 87281,
+        "sha256": "139e722973b714f1668f179d4ef5943e8df0a4cadd58948869d992549ce6f9c5"
+      },
+      "skips": [
+        "External provisional Standard SRTP fixture catalog unavailable at the configured path",
+        "Actual in-process ONNX model test skipped on this host",
+        "Coherent publication owner/mode drift POSIX case skipped on Windows",
+        "POSIX transitions sibling-alias/owner-change case skipped on Windows",
+        "Private-file ordinary read/cleanup/link/unlink/replacement case skipped on Windows",
+        "File-transition sibling/target/link/parent race case skipped on Windows",
+        "Linux native-watcher shutdown/reopen regression skipped on Windows"
+      ]
+    },
+    "historical_replay": {
+      "status": "PASS",
+      "release_qualified": false,
+      "started_at": "2026-08-31T23:15:34.429Z",
+      "ended_at": "2026-08-31T23:17:07.073Z",
+      "source": {
+        "head": "97ae3560a4fa2e771b60fa63d6dc0349d0b4c864",
+        "tree": "8095b0e164239e20b29707277eab84335605dbf8",
+        "sha256": "7515a55f7a26b908e78b7ddebd8c0aa9772eba66697f255fe0fac64458ac18e3",
+        "file_count": 476
+      },
+      "tests": {
+        "executable": "C:\\Program Files\\nodejs\\node.exe",
+        "args": [
+          "--test",
+          "--test-concurrency=1",
+          "test/agent-identity-mcp-contract.test.mjs"
+        ],
+        "exit_code": 0,
+        "duration_ms": 92140.7325,
+        "log": "historical-contract-replay-0.log",
+        "log_sha256": "6aa709f6f846df217364a0d2dd40f31dd5e4c7197ec3141d981eb3978166d191",
+        "counts": {
+          "tests": 35,
+          "pass": 35,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      "receipt": {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/historical/historical-contract-replay.json",
+        "bytes": 82540,
+        "sha256": "4256c2c58d597f4588f13f8d4385a381a12d02f21e63b64e2f37a4f6aa9f35b4"
+      }
+    }
+  },
+  "workflows": {
+    "legacy_ci": {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 19638,
+      "base_sha256": "de781ef5ea035e1abbeb7624743e0892a32f2fbc291ef3c03dbd5e4e126ecd8b",
+      "head_sha256": "de781ef5ea035e1abbeb7624743e0892a32f2fbc291ef3c03dbd5e4e126ecd8b",
+      "byte_identical": true
+    },
+    "runtime_qualification": {
+      "path": ".github/workflows/runtime-qualification.yml",
+      "bytes": 2512,
+      "sha256": "abb770b174118a299689b156e6b025c9f30906e516ae6a5d5f41a7ad07ebe01b",
+      "separate_from_legacy_ci": true
+    }
+  },
+  "effects_decision_packet": {
+    "path": "orchestration/integration/receipts/NODE-LINUX-EFFECTS-DECISION-PACKET.md",
+    "sha256": "ba49a5530cd140a939f0021a3b9d2eebf212e7ee7bf12929524cd5137ab78355",
+    "review": "PASS_NO_DEFECT",
+    "selected_host": "Node.js on Linux",
+    "writes_enabled": false,
+    "effects_mode": "off for Stage 0",
+    "durability_qualified": false,
+    "local_windows_run_qualifies_linux_effects": false,
+    "authority_note": "The packet selects a future host family and writes-disabled stage only; it grants no writer, vault, MOC adoption, MCP write endpoint, auto-apply authority, or release qualification."
+  },
+  "platform": {
+    "node": "v24.18.0",
+    "npm": "10.9.4",
+    "platform": "win32",
+    "arch": "x64",
+    "os": "Microsoft Windows NT 10.0.26200.0",
+    "powershell": "7.6.5"
+  },
+  "final_evidence": {
+    "directory": "orchestration/integration/receipts/engine-final-local-20260831T233500Z",
+    "files": [
+      {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/current-driver.log",
+        "bytes": 617,
+        "sha256": "d9817c5e4bae3308529daffcca1c51e1e3eb3ec189ae9c18387d9cbd1bff679f"
+      },
+      {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/current/current-runtime-0.log",
+        "bytes": 608,
+        "sha256": "5118b345554727a2b98fe8568ad4a86e9209b6b33a9379d90dd8fc6e5e43af50"
+      },
+      {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/current/current-runtime-1.log",
+        "bytes": 82017,
+        "sha256": "8470722d4a7e95ebb496dea3d61a2cb7a893994843b95ab94a16ff4e4db1bf96"
+      },
+      {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/current/current-runtime.json",
+        "bytes": 87281,
+        "sha256": "139e722973b714f1668f179d4ef5943e8df0a4cadd58948869d992549ce6f9c5"
+      },
+      {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/historical-driver.log",
+        "bytes": 406,
+        "sha256": "de1daaad6866b845cec88eb6ab9b93628212228950aa7295d9a71af350a6654f"
+      },
+      {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/historical/historical-contract-replay-0.log",
+        "bytes": 3796,
+        "sha256": "6aa709f6f846df217364a0d2dd40f31dd5e4c7197ec3141d981eb3978166d191"
+      },
+      {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/historical/historical-contract-replay.json",
+        "bytes": 82540,
+        "sha256": "4256c2c58d597f4588f13f8d4385a381a12d02f21e63b64e2f37a4f6aa9f35b4"
+      },
+      {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/inventory-check.log",
+        "bytes": 69210,
+        "sha256": "07adfe255928cf299315ac930a9053d504d5d22bc43f7562e32759d8a65a7dec"
+      },
+      {
+        "path": "orchestration/integration/receipts/engine-final-local-20260831T233500Z/runtime-gate-six-tests.log",
+        "bytes": 699,
+        "sha256": "688e523bbd4c28cdf22cc6f448a7c8e06bf88805940afc5cab3ec91011385ffc"
+      }
+    ]
+  },
+  "rejected_evidence": {
+    "directory": "orchestration/integration/receipts/rejected-seal/engine",
+    "file_count": 18,
+    "total_bytes": 379464,
+    "inventory_sha256": "bd79355d832d4c64c3a1332a19d474c17e2e310470b4e95f6b3832d706b5a4c1",
+    "files": [
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-engine-corrected-native-test-pass.log",
+        "bytes": 75908,
+        "sha256": "6c6a7a344390fd63e63d3790c8b7f500409809f74854cb8589bb6a87078773cb"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-engine-corrected-native-test-safe.log",
+        "bytes": 42013,
+        "sha256": "a3b857ebe09dbdb3e3c27a63b6743459e0a3af68eb3aea3c3231bc2ed940fffa"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-engine-corrected-native-test.log",
+        "bytes": 42523,
+        "sha256": "c7ca6e87dab44b190b0c4da0ebb3f3a2ec593e022d38de50717adb95b1d828d0"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-engine-corrected-npm-ci.log",
+        "bytes": 835,
+        "sha256": "3cbf1d8c8387c1181ab5e1f9aa33ba67adf36df59cb5c7c248e8a8b8ccfdcff2"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-engine-corrected-typecheck.log",
+        "bytes": 51,
+        "sha256": "c488b68ba3182301d8f759d23fad9fc77427c6214ae666ce71a6d24a12009144"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-engine-current-check.log",
+        "bytes": 3835,
+        "sha256": "bbd755b8f8202e78ba3c9510bcaf3a15f6d0cdf238cff6ca3355974c97ffe769"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-engine-inventory-check.json",
+        "bytes": 69210,
+        "sha256": "efde6481a803c67631392ac6649ecca46c9ddd64ff6c19c44a092681410feb03"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-engine-npm-ci.log",
+        "bytes": 147,
+        "sha256": "af8d6239aa2130ea269dd789caf4ca1a6214f26b9bbc250fdee64e3604b9f715"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-engine-typecheck.log",
+        "bytes": 51,
+        "sha256": "c488b68ba3182301d8f759d23fad9fc77427c6214ae666ce71a6d24a12009144"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/aborted-20260831T225722Z-process-and-files.json",
+        "bytes": 3245,
+        "sha256": "ffc73328617d89b6e31bb4d81c2c14590dcc2799ef3ff4726c63158ae7b64fbc"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/engine-inventory-check.json",
+        "bytes": 69210,
+        "sha256": "efde6481a803c67631392ac6649ecca46c9ddd64ff6c19c44a092681410feb03"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/engine-npm-ci.log",
+        "bytes": 147,
+        "sha256": "af8d6239aa2130ea269dd789caf4ca1a6214f26b9bbc250fdee64e3604b9f715"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/engine-typecheck.log",
+        "bytes": 51,
+        "sha256": "c488b68ba3182301d8f759d23fad9fc77427c6214ae666ce71a6d24a12009144"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/failed-final-preflight-20260831T225800Z/inventory-check.log",
+        "bytes": 1081,
+        "sha256": "f35971ce87d820f0d04337f85744f61be29a2d70bb0311efd5d1c2c6d0fe09a7"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/failed-final-preflight-20260831T225800Z/rejection-receipt.json",
+        "bytes": 659,
+        "sha256": "e1a07b189176c93d31610bd82f10c95731d797ec3509f2a1895079387b9b63e3"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/rejected-seal-receipt.json",
+        "bytes": 859,
+        "sha256": "dd3d9c6a29c1c1fd361fcbedbe5ef47e755375d4603457bc6f37fb8ebabcd044"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/superseded-preflight-20260831T230100Z/inventory-check.log",
+        "bytes": 69210,
+        "sha256": "da1fc4b718f3fec93cb250772d37326c389572f9e62716f3bd60cd458ef9fd1c"
+      },
+      {
+        "path": "orchestration/integration/receipts/rejected-seal/engine/superseded-preflight-20260831T230100Z/rejection-receipt.json",
+        "bytes": 429,
+        "sha256": "0dc842320c8fc3fa6c48befb6443b8587bcdec858cb7611e8fe00b5781549b7e"
+      }
+    ],
+    "abandoned_controller_pid": 12644,
+    "abandoned_test_runner_pid": 23820,
+    "stopped_process_tree": [
+      24696,
+      24380,
+      21776,
+      23820,
+      10580,
+      9776,
+      24072,
+      12644
+    ],
+    "managed_review_rejection": "git reset --hard was rejected as destructive; the superseded branch and worktree were preserved and the final branch was created non-destructively from the exact base.",
+    "preserved_superseded_branch": "codex/integrate-engine-stability-superseded-20260831",
+    "preserved_superseded_worktree": "orchestration/integration/engine-superseded-20260831"
+  },
+  "limitations": [
+    "Local Windows evidence cannot close Linux, macOS, Node 22, Node 23, hosted capability, ONNX, external Standard fixture, POSIX, or Linux native-watcher lanes.",
+    "Seven intentional/unavailable-platform skips make the current local runtime status INCOMPLETE_PLATFORM_COVERAGE even though every executed test passed.",
+    "Historical replay and current runtime receipts explicitly set release_qualified=false.",
+    "No Q-ORACLE selection, release, push, merge, deployment, tag movement, credential use, Effects write enablement, or vault access occurred."
+  ]
+}

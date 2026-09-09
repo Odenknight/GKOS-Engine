@@ -1,0 +1,51 @@
+{
+  "record_type": "gkos-phase6-f2-owner-authorization",
+  "record_version": "1.0.0",
+  "authorized_at_utc": "2026-08-26T07:23:59.528Z",
+  "owner_statement": "Authorize F2 against accepted F1 SHA e29e04bdad1cd192a25eba2d682a4c46774def28.",
+  "repository": "Odenknight/GKOS-Engine",
+  "accepted_f1": {
+    "sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "acceptance_gate": "future-build-phase6/reviews/f1/PHASE6_F1_ACCEPTANCE_GATE_2026-08-26.json",
+    "acceptance_gate_sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff",
+    "independent_review_sha256": "ee027811dd29826883f736c0f018de552979d2418762e69fa7988aff635aaa70"
+  },
+  "authorized_work_package": {
+    "id": "F2",
+    "name": "Full reference authority engine",
+    "scope": [
+      "identity and external mapping state",
+      "credential issue, authentication, rotation, disablement and revocation",
+      "session lifecycle",
+      "authorization and policy decisions",
+      "activity and identity audit receipts",
+      "retention and rate bounds",
+      "bootstrap and legacy migration state machine",
+      "request replay and idempotency",
+      "authority backup and authenticated restore state machine",
+      "owner-only local administration operations",
+      "reference authority event, anchor, cursor and opaque-reference semantics required by accepted F1"
+    ],
+    "implementation_rule": "Implement the accepted F1 schemas, registries, vectors and denial semantics exactly; do not change the accepted contract to accommodate implementation.",
+    "platform_claim": "Reference runtime semantics only; no F5 cross-platform support claim."
+  },
+  "governed_roles": {
+    "implementer": "Peirce",
+    "independent_reviewer": "Beauvoir",
+    "orchestrator": "/root"
+  },
+  "not_authorized": [
+    "F3 MCP facade implementation",
+    "F4 adversarial execution against F2 or F3",
+    "F5 platform or evidence closeout",
+    "Lite L1-L4",
+    "contract drift or expected-outcome changes",
+    "protected Phase 0-5 semantic changes",
+    "merge",
+    "release",
+    "deployment",
+    "activation",
+    "publication"
+  ],
+  "gate_rule": "Peirce must stop after an immutable signed F2 handoff. Beauvoir may review only after implementer slot release. F2 is accepted only by an independent zero-blocker verdict against this exact F1 SHA."
+}

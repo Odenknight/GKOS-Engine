@@ -1,0 +1,91 @@
+{
+  "sourceCommit": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+  "tarballSha256": "8b4cc0eb16be7c07b61f66d684e4b50810f94dd4a766b7a82195d48baed6c48a",
+  "tarballIntegrity": "sha512-DAENDXUDfl33QM9uVs52iQy8j+os0aVSzSEquA0tZottmPAuWX1EUeQPWJO9Y9LQaB82QbqSEl8NIm371NCiDQ==",
+  "node": "v22.23.2",
+  "platform": "linux",
+  "checks": [
+    {
+      "name": "import .",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./gkx",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./graphiti",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./navigation",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./navigation-effects",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./navigation-effects/node",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./governance",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./retrieval",
+      "status": "PASS"
+    },
+    {
+      "name": "import ./admission-policy",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI --help",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI validate",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI graph",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI index",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI search",
+      "status": "PASS"
+    },
+    {
+      "name": "CLI source-write refusal",
+      "status": "PASS"
+    },
+    {
+      "name": "real FTS5 citation search",
+      "status": "PASS"
+    },
+    {
+      "name": "public graph API",
+      "status": "PASS"
+    },
+    {
+      "name": "authenticated loopback service",
+      "status": "PASS"
+    },
+    {
+      "name": "stdio MCP and ten read-only tools",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "registryArtifact": false
+}

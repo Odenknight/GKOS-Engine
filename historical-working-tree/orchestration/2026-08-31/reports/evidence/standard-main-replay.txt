@@ -1,0 +1,4 @@
+COMMAND: node replay-fixture.mjs --out-dir gcp6-replay-evidence
+SOURCE: 71b899473473f47172b181973027f3eb7da25104
+EXIT: 0
+

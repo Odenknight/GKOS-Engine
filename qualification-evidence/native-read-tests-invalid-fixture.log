@@ -1,0 +1,25 @@
+✔ native batch starts at most four reads and preserves input order despite out-of-order completion (3.0143ms)
+✔ failed native reads remain refusal values and outstanding work drains before completion (1.1442ms)
+✖ native and custom readers preserve exact search results; custom callbacks remain serial (3.0309ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 147.6421
+
+✖ failing tests:
+
+test at test\retrieval-native-read.test.mjs:39:1
+✖ native and custom readers preserve exact search results; custom callbacks remain serial (3.0309ms)
+  TypeError: source_id must be a valid canonical GKX authored uid.
+      at chunkMarkdown (file:///[LOCAL_PATH]
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7)

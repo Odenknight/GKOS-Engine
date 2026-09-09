@@ -1,0 +1,82 @@
+{
+  "source_commit": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+  "status": "PARTIAL",
+  "nativeAudit": [
+    {
+      "source_commit": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+      "node": "v22.23.2",
+      "platform": "linux",
+      "arch": "x64",
+      "filesystem_type": 61267,
+      "host_type": "github_hosted",
+      "physical_power_loss_qualified": false,
+      "pass": 86,
+      "fail": 0,
+      "tests_sha256": "7d26370e742cd2f9628e20788744f0691a6b855b0196742700492820c9f2f302",
+      "path": "exact-native-audit-aa2e10d/moc-audit-ubuntu-24.04-node-22-aa2e10d16983b6cbd4107464f376d87d3c546db3"
+    },
+    {
+      "source_commit": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+      "node": "v24.20.0",
+      "platform": "linux",
+      "arch": "x64",
+      "filesystem_type": 61267,
+      "host_type": "github_hosted",
+      "physical_power_loss_qualified": false,
+      "pass": 86,
+      "fail": 0,
+      "tests_sha256": "dc44ffb388616dd314468c4eeb9bdfd8ea03d450382f3ec221d7325c3d5c17bf",
+      "path": "exact-native-audit-aa2e10d/moc-audit-ubuntu-24.04-node-24-aa2e10d16983b6cbd4107464f376d87d3c546db3"
+    },
+    {
+      "source_commit": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+      "node": "v22.23.2",
+      "platform": "win32",
+      "arch": "x64",
+      "filesystem_type": 0,
+      "host_type": "github_hosted",
+      "physical_power_loss_qualified": false,
+      "pass": 86,
+      "fail": 0,
+      "tests_sha256": "2de3432f6d1cddefb40ebf7387ca108d63c5e96760fa1f71fe10689d81c5197f",
+      "path": "exact-native-audit-aa2e10d/moc-audit-windows-latest-node-22-aa2e10d16983b6cbd4107464f376d87d3c546db3"
+    },
+    {
+      "source_commit": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+      "node": "v24.19.0",
+      "platform": "win32",
+      "arch": "x64",
+      "filesystem_type": 0,
+      "host_type": "github_hosted",
+      "physical_power_loss_qualified": false,
+      "pass": 86,
+      "fail": 0,
+      "tests_sha256": "015a89cdbb6e45a2452742d4dc38bb6f6e691c4ca1b7a5eb347ce55e901220f0",
+      "path": "exact-native-audit-aa2e10d/moc-audit-windows-latest-node-24-aa2e10d16983b6cbd4107464f376d87d3c546db3"
+    }
+  ],
+  "pending": [
+    "exact-head full watcher journal/pointer matrix",
+    "missing current-pointer recovery coverage review",
+    "24-hour soak"
+  ],
+  "limits": [
+    "Windows hosted statfs reports 0; filesystem not identified by that receipt",
+    "ENOSPC uses injected error; native ENOTDIR/EEXIST write failure tested",
+    "Process termination and file sync do not establish physical power-loss safety"
+  ],
+  "additionalInstalledArtifactChecks": {
+    "windows": {
+      "pass": 4,
+      "fail": 0,
+      "path": "artifact-aa2e10d/windows-no-change-gaps.tap"
+    },
+    "linux": {
+      "pass": 4,
+      "fail": 0,
+      "path": "artifact-aa2e10d/linux-no-change-gaps.tap"
+    },
+    "artifactSha256": "8b4cc0eb16be7c07b61f66d684e4b50810f94dd4a766b7a82195d48baed6c48a",
+    "installedContentVerification": "594 files and hidden lockfile integrity match on both native hosts"
+  }
+}

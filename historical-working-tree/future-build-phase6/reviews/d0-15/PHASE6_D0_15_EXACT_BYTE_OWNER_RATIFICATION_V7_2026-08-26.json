@@ -1,0 +1,148 @@
+{
+  "record_type": "gkos-phase6-d0-15-exact-byte-owner-ratification",
+  "record_version": "7.0.0",
+  "ratified_at_utc": "2026-08-26T13:06:10.4373148Z",
+  "status": "EXACT_EXPANDED_BYTES_OWNER_RATIFIED_FRESH_C1_ONLY",
+  "owner_statement": "Ratify the exact expanded D0-15 evidence coordinate at V6 a01c440b7c6bfbab7e983d09e764a8655090125de89e5ab77414882bfe746e3c, Registry V3 a53aff0c61ab116fa12c47e37963871bf438ae7e977c59b134399cb1dbb710f6, and Map V3 ab6c6f65d2103d6308df4cc70a891e85c3af63a106e70566cf5db71663274458; authorize fresh C1 concurrence only.",
+  "ratification_effect": "The Product Owner ratifies exactly the three existing expanded artifacts, raw hashes, byte lengths, internal record digests, Q1 through Q16 semantic basis, fully expanded fixture registry, correction map, counts, and evidence-only boundary listed below. No prior coordinate, draft, later artifact, or product work is ratified by implication.",
+  "exact_ratified_coordinate": [
+    {
+      "coordinate": "V6",
+      "role": "Q14-Q16 owner resolution and inherited Q1-Q13 semantic basis",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V6_2026-08-26.json",
+      "sha256": "a01c440b7c6bfbab7e983d09e764a8655090125de89e5ab77414882bfe746e3c",
+      "bytes": 14322,
+      "record_digest": "f6b6f0379e92da0aff943a447ef5bedb62051dddd8f379adb7b57033c626847a"
+    },
+    {
+      "coordinate": "Registry V3",
+      "role": "fully expanded corrected non-MCP fixture registry",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V3_2026-08-26.json",
+      "sha256": "a53aff0c61ab116fa12c47e37963871bf438ae7e977c59b134399cb1dbb710f6",
+      "bytes": 163799,
+      "record_digest": "4007918ead1cbf241c2b89518f25eabd7ff485f9fd72aa619a45930f8c7aa075"
+    },
+    {
+      "coordinate": "Map V3",
+      "role": "corrected Q1-Q16 decision and correction map",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V3_2026-08-26.json",
+      "sha256": "ab6c6f65d2103d6308df4cc70a891e85c3af63a106e70566cf5db71663274458",
+      "bytes": 21898,
+      "record_digest": "a7793998ddbae2a224ad0b15fe1d584bbc688f97ba2ff601df3d088b58b8ddfd"
+    }
+  ],
+  "ratified_semantic_and_count_summary": {
+    "owner_questions": "Q1 through Q16 exactly as bound by V6 and Map V3",
+    "corrected_recommendations": "D015-R01 through D015-R15 exactly as bound by Map V3, including R06 clarified, R07 owner-amended, R15 owner-amended, Q14 handoff result, Q15 expansion, and Q16 rerun rule",
+    "derived_corrections": "D015-DC01 through D015-DC13 exactly as bound by Map V3",
+    "normalized_authority_tables": 16,
+    "operations": 32,
+    "owner_only_operations": 24,
+    "error_registry_codes": 53,
+    "per_registered_code_executable_error_envelope_leaves": 53,
+    "official_mcp_vectors": 67,
+    "official_mcp_ids_or_valid_wire_semantics_changed": false,
+    "named_non_mcp_subtotal": 18,
+    "named_non_mcp_subtotal_is_overall_total": false,
+    "additional_canonical_non_mcp_fixtures": 354,
+    "overall_canonical_non_mcp_fixtures": 372,
+    "aliases": 12,
+    "coverage_families": 16,
+    "accounting_formula": "18 + 354 = 372 canonical non-MCP fixtures; 12 aliases do not add executable cases"
+  },
+  "exact_coordinate_verification": {
+    "method": "For each ratified artifact, parse JSON, verify raw SHA-256 and byte length, recompute the declared canonical internal record digest, and cross-check Registry V3 and Map V3 accounting and source bindings.",
+    "results": [
+      "V6 raw SHA-256, byte length, and internal record digest match",
+      "Registry V3 raw SHA-256, byte length, and internal record digest match",
+      "Map V3 raw SHA-256, byte length, and internal record digest match",
+      "Registry V3 contains exactly 372 unique lexicographically sorted canonical fixture IDs",
+      "Registry V3 contains exactly 12 unique aliases and every alias target exists",
+      "Registry V3 contains exactly 16 family totals and their sum is 372",
+      "Registry V3 materializes exactly 53 per-registered-code executable ERROR-ENVELOPE leaves for the exact 53-code registry",
+      "Registry V3 and Map V3 agree on 18 named subtotal, 354 additional canonical cases, 372 overall canonical cases, 12 aliases, 16 families, and 67 unchanged official MCP vectors",
+      "Map V3 binds the exact existing owner chain, V5, both historical C1 V2 verdicts, V6, and Registry V3"
+    ],
+    "overall": "PASS"
+  },
+  "historical_noncarrying_chain": [
+    {
+      "role": "V5 owner ratification of superseded Registry V2 and Map V2 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_BYTE_OWNER_RATIFICATION_V5_2026-08-26.json",
+      "sha256": "f54db22232586f0b6bff80097b03d55b98808d8db4b9d5c9fbdd5aa37e3a5ea2",
+      "bytes": 10102,
+      "record_digest": "e79523eb606f67869018f33fea0097bf1379f227f7b894ea606614d010b5cdbd",
+      "disposition": "immutable historical owner receipt for superseded bytes only"
+    },
+    {
+      "role": "C1 V2 migration acceptance of superseded V5 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V2_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "1ee844ba4a3a8bc3f1b7451c3a161b0c802497464e2d5ff0f7f567eff110baef",
+      "bytes": 18122,
+      "record_digest": "f7b0b4de8a6e94df374c5a9036dc193750757600b0b358f8128b6b5a25f67b04",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "disposition": "immutable historical and noncarrying"
+    },
+    {
+      "role": "C1 V2 security rejection of superseded V5 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V2_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "b69e578c54f8779eedfcfb329f8859820e0d656e116cc646a1dcfb9cd174f350",
+      "bytes": 29000,
+      "record_digest": "17187cb3c65cfe9ae203f47ab243cc8dda420cb512bbf6a824c9021c491888f4",
+      "verdict": "REJECT_CONCURRENCE",
+      "disposition": "immutable historical defect evidence; corrections are embodied in the new ratified coordinate"
+    }
+  ],
+  "historical_chain_rule": "Neither prior C1 V2 verdict carries into the new expanded coordinate. Migration acceptance does not count as a new acceptance, and security rejection does not become or imply acceptance. Both roles must perform fresh zero-contribution review of the exact V7-ratified coordinate.",
+  "fresh_c1_authorization": {
+    "authorized": true,
+    "wave": "C1",
+    "roles": ["migration", "security"],
+    "fresh": true,
+    "zero_contribution": true,
+    "independent": true,
+    "same_exact_coordinate_required": true,
+    "required_inputs": [
+      "the exact V6, Registry V3, and Map V3 artifacts and coordinates in this receipt",
+      "this exact V7 owner-ratification receipt as an additional immutable authority input",
+      "V5 and both C1 V2 receipts as historical noncarrying chain evidence",
+      "all immutable D0, accepted-F1, governance, proposal, source-review, and owner parents already bound by the ratified coordinate"
+    ],
+    "migration_scope": "acyclic provenance, original named restore/bootstrap meanings, mechanically expanded crash and recovery leaves, exact physical disposition, retention history, rollback, count and family closure, and noncarry of the old acceptance",
+    "security_scope": "Q14 ordinary-failure and proven-exposure separation, exact error projections, handoff and credential boundaries, non-enumeration, collision, cursor/reference precedence, policy, redaction, every BCI-MECH expansion, 53 code leaves, and count/family closure",
+    "acceptance_rule": "Both fresh roles must independently return unconditional acceptance of the same exact coordinate with matching inputs and no contribution to ratified semantics, registry rows, fixture IDs, expected outcomes, correction-map bytes, implementation, or evidence.",
+    "failure_rule": "Any rejection, conditional acceptance, ambiguity, independence defect, input mismatch, source-trace mismatch, or byte drift stops C1 and returns to the Product Owner.",
+    "success_effect": "Two fresh C1 acceptances establish C1 completion evidence only. They do not authorize C2, C3, product work, or successor-F1 correction."
+  },
+  "authority_boundary": {
+    "preserve_v7_ratification_evidence_authorized": true,
+    "fresh_c1_migration_concurrence_authorized": true,
+    "fresh_c1_security_concurrence_authorized": true,
+    "c2_authority_concurrency_concurrence_authorized": false,
+    "c3_full_contract_concurrence_authorized": false,
+    "c3_lite_conformance_concurrence_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "product_contract_or_fixture_regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_push_workflow_pr_merge_release_deploy_activate_publish_authorized": false,
+    "rule": "This V7 authorizes fresh C1 migration and security concurrence records only. C2, C3, successor-F1 correction, F2, and every product or repository mutation remain outside authority."
+  },
+  "post_c1_boundary": {
+    "if_either_c1_rejects": "Remain stopped and return to the Product Owner with exact new findings.",
+    "if_both_c1_accept": "Preserve the two new acceptance receipts and return for an explicit next-wave authorization. Do not automatically start C2.",
+    "c2_requires_new_explicit_authority": true,
+    "c3_requires_later_explicit_authority": true,
+    "product_correction_requires_later_explicit_authority": true
+  },
+  "preservation": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_disposition": "immutable historical evidence only",
+    "stopped_f2_disposition": "uncommitted, unqualified, preserved exactly, and not authorized for reset, discard, repair, grandfathering, qualification, commit, push, or restart",
+    "prior_d0_15_records": "immutable historical evidence"
+  },
+  "terminal_statement": "THE PRODUCT OWNER RATIFIES THE EXACT EXPANDED V6, REGISTRY V3, AND MAP V3 D0-15 EVIDENCE COORDINATE AND AUTHORIZES FRESH ZERO-CONTRIBUTION C1 MIGRATION AND SECURITY CONCURRENCE ONLY. V5 AND BOTH C1 V2 VERDICTS ARE HISTORICAL AND NONCARRYING. NO C2, C3, PRODUCT OR PROPOSAL EDIT, SUCCESSOR-F1 CORRECTION OR PRODUCT REGENERATION, F2 RESTART, IMPLEMENTATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, OR PUBLICATION IS AUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "5e6965b59e02295f733b3a7215e30ec9a6a6cff435269cc0f547a73d5d34be77"
+}

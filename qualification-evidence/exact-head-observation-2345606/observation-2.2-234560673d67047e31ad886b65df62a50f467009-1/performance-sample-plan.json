@@ -1,0 +1,305 @@
+{
+  "contract_version": "gkos-retrieval-evaluation-performance-sample-plan/2.2.0",
+  "convergence": {
+    "database_bytes_compared": false,
+    "manifest_comparison": "canonical_stable_json_byte_equality",
+    "result_comparison_query_count": 10,
+    "result_set_contract_version": "gkos-retrieval-evaluation-performance-result-set/1.0.0"
+  },
+  "embedding_provider": {
+    "dimensions": 4,
+    "model_id": "phase4-observation-constant-v1",
+    "provider_id": "phase4-observation-local",
+    "provider_kind": "local_onnx",
+    "response_vector": [
+      1,
+      0,
+      0,
+      0
+    ],
+    "timeout_ms": 30000
+  },
+  "execution": {
+    "clean_rebuild_comparison_round_count": 1,
+    "clean_rebuild_query_work": {
+      "attempt_count": 10,
+      "contract_version": "gkos-retrieval-evaluation-performance-query-work/1.0.0",
+      "cycle_repeat_count": 1,
+      "embedding_call_count": 10,
+      "embedding_item_count": 10,
+      "fts_query_stage_count": 10,
+      "phase": "clean_rebuild_comparison",
+      "query_cache_hit_count": 0,
+      "query_cycle_digest": "sha256:25672a55ebd688cfc2d35680376a352ac2504734af7ebdf40bb9971307bc8a03",
+      "query_work_digest": "sha256:139557a622cf31cb08af1b2339a509d39e69f7a265ea9147248335e8a580973e",
+      "request_id_sequence_digest": "sha256:c0e95ed6ee5752401913cc3ed1cb3bcdf85b29f942870acee20d5621ed14a812",
+      "reranker_call_count": 0,
+      "reranker_item_count": 0,
+      "result_stage_expectation": {
+        "lexical": {
+          "kind": "sqlite_fts5",
+          "reason_codes": [],
+          "state": "active"
+        },
+        "reranker": {
+          "kind": "none",
+          "reason_codes": [
+            "RERANKER_NOT_CONFIGURED"
+          ],
+          "state": "skipped"
+        },
+        "result_contract_version": "gkos-retrieval/1.0.0-draft.1",
+        "vector": {
+          "kind": "local_onnx",
+          "model_id": "phase4-observation-constant-v1",
+          "provider_id": "phase4-observation-local",
+          "reason_codes": [],
+          "state": "active"
+        }
+      }
+    },
+    "incremental_query_work": {
+      "attempt_count": 60,
+      "contract_version": "gkos-retrieval-evaluation-performance-query-work/1.0.0",
+      "cycle_repeat_count": 6,
+      "embedding_call_count": 60,
+      "embedding_item_count": 60,
+      "fts_query_stage_count": 60,
+      "phase": "incremental_observation",
+      "query_cache_hit_count": 0,
+      "query_cycle_digest": "sha256:25672a55ebd688cfc2d35680376a352ac2504734af7ebdf40bb9971307bc8a03",
+      "query_work_digest": "sha256:4ced5909b5031871b9d4155cf9a691ae92dc3033a59efa973fbbd08757086905",
+      "request_id_sequence_digest": "sha256:ee1ab2d1307bb1789a4aeecc54c40eefc9f8dab25184068dd9e96a4fc01ed7cc",
+      "reranker_call_count": 0,
+      "reranker_item_count": 0,
+      "result_stage_expectation": {
+        "lexical": {
+          "kind": "sqlite_fts5",
+          "reason_codes": [],
+          "state": "active"
+        },
+        "reranker": {
+          "kind": "none",
+          "reason_codes": [
+            "RERANKER_NOT_CONFIGURED"
+          ],
+          "state": "skipped"
+        },
+        "result_contract_version": "gkos-retrieval/1.0.0-draft.1",
+        "vector": {
+          "kind": "local_onnx",
+          "model_id": "phase4-observation-constant-v1",
+          "provider_id": "phase4-observation-local",
+          "reason_codes": [],
+          "state": "active"
+        }
+      }
+    },
+    "measured_round_count": 5,
+    "sample_count": 50,
+    "total_fts_query_stage_count": 70,
+    "total_query_cache_hit_count": 0,
+    "total_query_embedding_call_count": 70,
+    "total_query_embedding_item_count": 70,
+    "total_reranker_call_count": 0,
+    "total_reranker_item_count": 0,
+    "warmup_count": 10,
+    "warmup_round_count": 1
+  },
+  "fixture": {
+    "chunk_count": 10000,
+    "fixture_contract_version": "gkos-retrieval-evaluation-performance-fixture/2.2.0",
+    "fixture_digest": "sha256:77a44ecebbe910d5ad0b5f96586f26b4519a23ab1b25e2e63650bd7b2e226134",
+    "generator_contract_version": "gkos-retrieval-evaluation-performance-generator/2.2.0",
+    "initial": {
+      "chunk_set_digest": "sha256:321962e7dd2345895365db35b50ecf5478c169c489f1a92d9cd6647301d66e8a",
+      "source_snapshot_digest": "sha256:d87568bc14830e0646057690b2db23df07c437048a153c086a81dbb804fc98ce"
+    },
+    "mutation": {
+      "changed_content_digest_count": 1,
+      "changed_source_chunk_record_count": 10,
+      "from": "revisionalpha",
+      "global_chunk_ordinal": 5555,
+      "section_ordinal": 5,
+      "source_ordinal": 555,
+      "to": "revisionomega"
+    },
+    "sections_per_source": 10,
+    "source_count": 1000,
+    "updated": {
+      "chunk_set_digest": "sha256:9563bfeb50827dd4d68242cdf73b992904aff7f3e429d29b7038155a3f5de1eb",
+      "source_snapshot_digest": "sha256:fef6de2b266428a70e1d3668c0cbbb7f0f99ac4841f02b663ead77eeadb44128"
+    },
+    "vault_id": "phase4-performance-v1"
+  },
+  "indexing": {
+    "batching": {
+      "content_digest_deduplication": true,
+      "max_items": 32,
+      "max_utf8_bytes": 262144
+    },
+    "chunker_version": "gkos-heading-chunker/1",
+    "clean_rebuild": {
+      "chunk_set_digest": "sha256:9563bfeb50827dd4d68242cdf73b992904aff7f3e429d29b7038155a3f5de1eb",
+      "expected_projection_digest": "sha256:f325bf421c63be624c5c33bdba9d5d98f62f76c996d1b529d2558ab5345ccb17",
+      "expected_projection_id": "retrieval:f325bf421c63be624c5c33bd",
+      "index_request_sequence_digest": "sha256:d76bfae77f73bace73bde6d305b6103479093145d8283528721b5929cb32fcbb",
+      "prior_projection_digest": null,
+      "provider_call_count": 313,
+      "provider_item_count": 10000,
+      "source_snapshot_digest": "sha256:fef6de2b266428a70e1d3668c0cbbb7f0f99ac4841f02b663ead77eeadb44128"
+    },
+    "configuration_digest": "sha256:4a10839a307698bc010d55b6a05fce087970258e9e219cc5207c2f77fb4be9b0",
+    "configuration_preimage": {
+      "chunker": {
+        "max_tokens": 16,
+        "overlap_tokens": 0,
+        "version": "gkos-heading-chunker/1"
+      },
+      "contract_version": "gkos-retrieval-evaluation-performance-index-configuration/1.0.0",
+      "embedding": {
+        "dimensions": 4,
+        "model_id": "phase4-observation-constant-v1",
+        "provider_id": "phase4-observation-local",
+        "provider_kind": "local_onnx",
+        "timeout_ms": 30000
+      },
+      "engine_version": "2.2.0",
+      "lexical_backend": "sqlite_fts5",
+      "projection_schema_version": 2,
+      "retrieval_contract_version": "gkos-retrieval/1.0.0-draft.1",
+      "tokenizer_version": "gkos-ascii-whitespace/1"
+    },
+    "engine_version": "2.2.0",
+    "incremental_update": {
+      "chunk_set_digest": "sha256:9563bfeb50827dd4d68242cdf73b992904aff7f3e429d29b7038155a3f5de1eb",
+      "chunks_reprocessed": 1,
+      "chunks_reused": 9999,
+      "expected_projection_digest": "sha256:f325bf421c63be624c5c33bdba9d5d98f62f76c996d1b529d2558ab5345ccb17",
+      "expected_projection_id": "retrieval:f325bf421c63be624c5c33bd",
+      "index_request_sequence_digest": "sha256:531d5ad686a8ce5b49b2884a9b0f5ed500de4a6a72f5493759f65a5bc4967965",
+      "prior_projection_digest": "sha256:07115aadce8907fbb5829bc7ec6927c458f4a7df0facd6d9f85a711c84c97cec",
+      "provider_call_count": 1,
+      "provider_item_count": 1,
+      "source_snapshot_digest": "sha256:fef6de2b266428a70e1d3668c0cbbb7f0f99ac4841f02b663ead77eeadb44128"
+    },
+    "index_coordinate_contract_version": "gkos-retrieval-evaluation-performance-index-coordinate/1.0.0",
+    "initial": {
+      "chunk_set_digest": "sha256:321962e7dd2345895365db35b50ecf5478c169c489f1a92d9cd6647301d66e8a",
+      "expected_projection_digest": "sha256:07115aadce8907fbb5829bc7ec6927c458f4a7df0facd6d9f85a711c84c97cec",
+      "expected_projection_id": "retrieval:07115aadce8907fbb5829bc7",
+      "index_request_sequence_digest": "sha256:972275154f0526defa4afd300d0acfd310a488efe074750b7e08bf7e5d9ef4d5",
+      "provider_call_count": 313,
+      "provider_item_count": 10000,
+      "source_snapshot_digest": "sha256:d87568bc14830e0646057690b2db23df07c437048a153c086a81dbb804fc98ce"
+    },
+    "lexical_backend": "sqlite_fts5",
+    "policy_digest": "sha256:615a92c8db758934c63e8671ee953989e9734c7085f4b066ddc2948368ae22f6",
+    "policy_preimage": {
+      "authorization": {
+        "chunk_scope": "all_generated_chunks",
+        "discoverability": "allow",
+        "sensitivity": [
+          "public"
+        ],
+        "source_scope": "all_generated_sources"
+      },
+      "chunk_count": 10000,
+      "contract_version": "gkos-retrieval-evaluation-performance-index-policy/1.0.0",
+      "query_filters": null,
+      "source_count": 1000,
+      "source_snapshot_contract_version": "gkos-retrieval-evaluation-performance-source-snapshot/1.0.0",
+      "vault_id": "phase4-performance-v1"
+    },
+    "projection_schema_version": 2,
+    "retrieval_contract_version": "gkos-retrieval/1.0.0-draft.1",
+    "tokenizer_version": "gkos-ascii-whitespace/1",
+    "vault_id": "phase4-performance-v1"
+  },
+  "percentile": {
+    "method": "nearest_rank",
+    "p50": {
+      "index": 24,
+      "percentile_micros": 500000,
+      "rank": 25
+    },
+    "p95": {
+      "index": 47,
+      "percentile_micros": 950000,
+      "rank": 48
+    },
+    "p95_strict_upper_bound_micros": 500000,
+    "p99": {
+      "index": 49,
+      "percentile_micros": 990000,
+      "rank": 50
+    },
+    "sort": "ascending_integer_micros"
+  },
+  "query_cycle": {
+    "contract_version": "gkos-retrieval-evaluation-performance-query-cycle/1.0.0",
+    "queries": [
+      {
+        "query_id": "phase4-perf-q-00000",
+        "query_text": "phasefourtoken00000",
+        "request_id": "sha256:5494cadb061b10a6efcb1d2ff428f986f518e9d09c7b30008921dd38ec016910"
+      },
+      {
+        "query_id": "phase4-perf-q-01111",
+        "query_text": "phasefourtoken01111",
+        "request_id": "sha256:d461f1fb46a6ff15ec23475c3a4ba013bc8b8025192b40b4f8f35fd6cc428d46"
+      },
+      {
+        "query_id": "phase4-perf-q-02222",
+        "query_text": "phasefourtoken02222",
+        "request_id": "sha256:105fbabd4c33691664a75562122b6bdc1d7c6a7dff5844f4edf2909798f8e39a"
+      },
+      {
+        "query_id": "phase4-perf-q-03333",
+        "query_text": "phasefourtoken03333",
+        "request_id": "sha256:db7f922a7f0eb71d7731c8f81dabed20ac0b6197d46ce11d91f1848f9c65c037"
+      },
+      {
+        "query_id": "phase4-perf-q-04444",
+        "query_text": "phasefourtoken04444",
+        "request_id": "sha256:3e2aec8616e09444e31ec8cc5caf87742f2454b573dedd0d4ef8ca7535d6f868"
+      },
+      {
+        "query_id": "phase4-perf-q-05555",
+        "query_text": "phasefourtoken05555",
+        "request_id": "sha256:4acfb789dfda5fc6193da4cb229466581c9d6d12c26a05f3da723ce89fa333d7"
+      },
+      {
+        "query_id": "phase4-perf-q-06666",
+        "query_text": "phasefourtoken06666",
+        "request_id": "sha256:47ae7e0858ae11c0808fc292eb754734017679d9c81f42b3641afd8b3e271cc2"
+      },
+      {
+        "query_id": "phase4-perf-q-07777",
+        "query_text": "phasefourtoken07777",
+        "request_id": "sha256:0e853d9f7fc6a5de4b3b31c298fc90f3e3acb6c60a4d82c2568e91202e08d2b6"
+      },
+      {
+        "query_id": "phase4-perf-q-08888",
+        "query_text": "phasefourtoken08888",
+        "request_id": "sha256:1c22acdd71a49beac425e618a87fd268371cdd706dd9bfd79bb60348d8e133ec"
+      },
+      {
+        "query_id": "phase4-perf-q-09999",
+        "query_text": "phasefourtoken09999",
+        "request_id": "sha256:0d8e9d40fc02c549bae6ccdd14789df56ffb262102fc6922deb8a309213748e7"
+      }
+    ],
+    "query_cycle_digest": "sha256:25672a55ebd688cfc2d35680376a352ac2504734af7ebdf40bb9971307bc8a03",
+    "request": {
+      "lexical_top_k": 5,
+      "limit": 5,
+      "mmr": false,
+      "mmr_lambda": 0.7,
+      "parent_expansion": false,
+      "rrf_k": 60,
+      "semantic_top_k": 5
+    }
+  },
+  "sample_plan_digest": "sha256:fc8f3069d7161b7a31435f494f32693263b37504a94e0064adf277604d4c9f9b"
+}

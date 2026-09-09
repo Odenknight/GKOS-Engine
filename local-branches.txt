@@ -1,0 +1,25 @@
+agent/admission-policy-provider-v1 4ee4ad7ca742b2eb16a158bea0d20d8682a9c30d origin/agent/admission-policy-provider-v1
+codex/docs-current-main-capabilities 7bf14b481e78c5ae9d1e14661602be4f24559d0e origin/main
+codex/navigation-effects-current-main-20260904 d19ccfee1d971f1e282f886562a3809924a8a8a2 origin/codex/navigation-effects-current-main-20260904
+codex/navigation-effects-post-phase5 808d875b557f4cfd2bb0addccba44d70c9748f35 origin/codex/navigation-effects-post-phase5
+codex/node-runtime-modernization 6bb1ccec0ea3bde6cb654ef0f26f54576a30a8b7 origin/codex/node-runtime-modernization
+codex/phase-0-recon-adrs ba918e6617ece6bb1392f6768b69d4913818035d origin/codex/phase-0-recon-adrs
+codex/phase-1-retrieval-core 0164f3d5b2c698cbf048c8e0e53323def80eb251 origin/codex/phase-1-retrieval-core
+codex/phase-2-lineage-citations 63ae89ce699187326419b45d3d92f93ff5836f1e origin/codex/phase-2-lineage-citations
+codex/phase-3-ingest-validation 228adc461def56639fb58d4029b5b84a8b7f5cba origin/codex/phase-3-ingest-validation
+codex/phase-4-retrieval-evaluation 98f4faf227320852006f5e1e9e01eb41f5fdff7b origin/codex/phase-4-retrieval-evaluation
+codex/phase-5-watcher-recovery 7b5262baee9fcda23d50b0cee0c4977d6e4305e7 origin/codex/phase-5-watcher-recovery
+codex/phase6-f1-contract-pack e29e04bdad1cd192a25eba2d682a4c46774def28 origin/codex/phase6-f1-contract-pack
+codex/phase6-f2-authority-engine e29e04bdad1cd192a25eba2d682a4c46774def28 
+codex/phase6-successor-f1-correction a2afc88ee8fae893d6582804b7b19f09135bd2a0 origin/codex/phase6-successor-f1-correction
+codex/recover-engine-hosted-ci-20260901 331f9337eed5afc44cfe7b30b0a88b8845a985bc origin/pr/39
+codex/windows-watcher-p95-stability f4380af147cdb728f253522d7b37097ff6ff010e origin/codex/windows-watcher-p95-stability
+docs/current-capabilities-github-20260906 190d37b473902fe15da0289ce51136f911050b1c origin/docs/current-capabilities-github-20260906
+docs/modernize-readmes-20260826 c0eac9351b73bfa4b93b2c0cb752fd55c0b88933 origin/docs/modernize-readmes-20260826
+feature/deterministic-moc-assistance-20260905 d19ccfee1d971f1e282f886562a3809924a8a8a2 
+feature/engine-2.2-managed-mocs fe575cd7f2e5f841256551e73ffb1c09a242aa8d origin/feature/engine-2.2-managed-mocs
+feature/gkos-local-service-qualified b45674c117809c978a55ff7ad7d236eb739fd0e2 origin/feature/gkos-local-service-qualified
+feature/navigation-effects-contract-v1 2fbd4ec68ec825b09e5194c9878a7ae90a281392 
+integration/kosmos-standalone-20260826 d88c639d155e0ec291f6c2bb18cbec3f9e672553 origin/integration/kosmos-standalone-20260826
+integration/navigation-effects-reconciliation-20260827 e4f00b3a9289c1d35d1a02e50dcdc266945fe015 origin/integration/navigation-effects-reconciliation-20260827
+main 650eab4a6752227cae336d7556a57826c22a0d5a origin/main

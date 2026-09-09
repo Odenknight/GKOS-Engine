@@ -1,0 +1,65 @@
+{
+  "version": "gkos-ct210-node-linux-effects-host-assessment/1",
+  "observed_at_utc": "2026-09-01T02:37:57Z",
+  "host": {
+    "name": "KnightsAI",
+    "address": "192.168.5.10",
+    "platform": "Proxmox VE 9.2.11",
+    "kernel": "7.0.14-14-pve"
+  },
+  "guest": {
+    "id": 210,
+    "hostname": "gkos-observatory",
+    "state": "running",
+    "isolation": "privileged LXC, nesting disabled",
+    "os": "Debian GNU/Linux 13.6 (trixie)",
+    "systemd": "257.13-1~deb13u1",
+    "allocated_cores": 4,
+    "memory_mib": 4096,
+    "swap_mib": 1024,
+    "node": "22.23.2",
+    "npm": "10.9.8",
+    "node_sqlite": "3.51.3",
+    "git": "2.47.3"
+  },
+  "storage": {
+    "root": "rpool/data/subvol-210-disk-0 (ZFS, 16G)",
+    "private_data": "rpool/data/subvol-210-disk-1 mounted at /mnt/data (ZFS, 32G, backup=1)",
+    "live_owner_data": "rpool/data[/Oden] bind-mounted at /mnt/data/Oden (ZFS)",
+    "zfs_sync": "standard",
+    "pool_topology": "single NVMe vdev",
+    "pool_state": "ONLINE, no known data errors",
+    "directory_fsync_qualified": false,
+    "crash_power_loss_qualified": false
+  },
+  "runtime": {
+    "gkos_engine_service": "enabled_active",
+    "observatory_service": "enabled_active",
+    "caddy_service": "enabled_active",
+    "gkos_engine_identity": "gkos-engine:gkos-engine",
+    "state_root": "/var/lib/gkos-engine (0700 gkos-engine:gkos-engine)",
+    "systemd_path_allowlists": false,
+    "github_dns": "PASS",
+    "github_https": "PASS_200_TLS_VALID",
+    "github_actions_runner": "ABSENT"
+  },
+  "decision": {
+    "concrete_node_linux_host": "KnightsAI CT210",
+    "nl_e0_writes_disabled": "ACCEPTED",
+    "effects_execution": "DENIED_UNQUALIFIED",
+    "hosted_ci_runner": "NOT_PRESENT_NOT_QUALIFIED",
+    "effects_mode": "off",
+    "writes_enabled": false,
+    "mcp_write_surface": false,
+    "durability_qualified": false,
+    "live_vault_enrolled_for_effects": false
+  },
+  "inspection": {
+    "mutations": 0,
+    "vault_contents_read": false,
+    "credentials_accessed": false,
+    "services_changed": false,
+    "packages_changed": false
+  },
+  "primary_receipt": "orchestration/integration/receipts/CT210-NODE-LINUX-EFFECTS-HOST-ASSESSMENT.md"
+}

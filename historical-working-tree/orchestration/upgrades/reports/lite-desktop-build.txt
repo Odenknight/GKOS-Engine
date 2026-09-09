@@ -1,0 +1,14 @@
+
+> gkos-engine-desktop@0.2.0 build
+> vite build
+
+vite v8.1.5 building client environment for production...
+[2K
+transforming...✓ 15 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                  0.60 kB │ gzip: 0.37 kB
+dist/assets/index-ic8l7Gpr.css   3.79 kB │ gzip: 1.33 kB
+dist/assets/index-Bz8rxVw9.js   30.71 kB │ gzip: 9.21 kB
+
+✓ built in 86ms

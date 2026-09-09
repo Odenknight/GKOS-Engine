@@ -1,0 +1,284 @@
+
+2026-08-31/product-audit/theMarshal-Core-Rust/COMMERCIAL-LICENSING.md
+1: # Commercial licensing
+8: Prospective users must obtain written permission from the copyright owner before
+12: The following must be settled in each agreement: licensed product and version,
+
+2026-08-31/product-audit/theMarshal-Core-Rust/conformance/README.md
+1: # Conformance harness
+5: reports. It must distinguish `UNEVALUATED`, `PASS`, and `FAIL`; absence of
+6: evidence is never a pass.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/conformance/WP01-ACCEPTANCE-MATRIX.md
+1: # WP-01 acceptance and qualification matrix
+3: **Status:** candidate planning matrix; passing it does not activate Rust.
+26: ## Exact payload acceptance tests
+28: - Genesis accepts exactly keys 1..9 with seven 32-byte digests, exact v1 writer generation, and bounded NFC chain domain; every missing, unknown, reordered-semantic, wrong-type, wrong-length, array, or nested-map twin is covered.
+29: - Lifecycle transition accepts exactly required keys 1..6 and optionally key 7, verifies the candidate registry version and derived digest, requires both states to resolve uniquely within the same component or runtime/work domain, enforces the registered direct edge, requires `committed_revision = expected_revision + 1` without overflow, and distinguishes absent key 7 from prohibited null.
+32: - Python free-form `reason` never changes canonical bytes or digests. Only exact reviewed source mappings may populate the existing envelope diagnostic. Unmapped adapter cases exercise `COMPARISON_INVALID` or `SPEC_AMBIGUOUS` without minting codes.
+35: ## Required shadow classes
+37: The matrix MUST allocate nonzero minimums for: accepted genesis/append; each event class; each outcome; canonical refusal classes; schema refusal classes; component/runtime lifecycle accepted edges; lifecycle invalid/stale/terminal/cross-domain/ambiguous-registry cases; authority absent/expired/revoked; kill active; policy refusal; predecessor/sequence mismatch; identical idempotent retry; conflicting key reuse; database retry; lost acknowledgement; restart recovery; and historical read-only verification. Counts must sum to at least 10,000 and no class may be satisfied only by synthetic duplicates.
+39: ## Mismatch record
+43: ## Reset rules
+45: Any change to canonical bytes, digest, acceptance/refusal, diagnostic identity/precedence, state transition, transaction outcome, retry semantics, or observable chain state resets the 1,000-clean counter. Documentation-only changes that provably cannot affect behavior do not.
+47: ## Authority boundary
+
+2026-08-31/product-audit/theMarshal-Core-Rust/CONTRIBUTING.md
+1: # Contributing
+5: A contributor must sign the then-current Contributor License Agreement before a
+10: All commits must include a Developer Certificate of Origin sign-off (`git commit
+14: the repository license. Third-party material must be identified with its source,
+
+2026-08-31/product-audit/theMarshal-Core-Rust/CONTRIBUTOR_LICENSE_AGREEMENT.md
+1: # Contributor License Agreement — review draft
+4: must be reviewed by qualified intellectual-property counsel before contributors
+7: The intended agreement must, at minimum:
+17: 7. require disclosure of third-party or employer rights;
+20: 10. record signature, date, and contribution identity.
+22: Until an approved agreement is executed, contributions must not be merged.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/docs/coding-agent-handoffs/WP01-CANONICAL-EVD-PRIMITIVES.md
+1: # WP-01 canonical/EVD primitives — coding-agent handoff
+3: ## Governed baseline
+13: ## Scope delivered
+21: ## Security and authority properties
+25: - Raw noncanonical input is rejected, never repaired.
+32:   must report `17.0.0`.
+35:   bytes for identity/action/schema text.
+39: ## Exact digest formula
+44: `digest_evd_entry` function owns this domain. Additional artifact domains must
+47: ## Fixture status
+54: These tests are not the ratified fixture corpus. Follow-up work must create
+61: ## Open decisions requiring contract/owner review
+74: ## Required continuation
+
+2026-08-31/product-audit/theMarshal-Core-Rust/docs/coding-agent-handoffs/WP01-STATE-AUTHORITY-CONTRACTS.md
+1: # WP-01 state and authority candidate handoff
+3: **Status:** non-authoritative candidate; no activation, cutover, persistence, or writer  
+6: ## Source pins
+27: ## Separate candidate domains
+45: ## Authority boundary
+47: Shadow comparison posture is a separate operational value and never represents
+52: ## Explicit non-goals
+
+2026-08-31/product-audit/theMarshal-Core-Rust/docs/DOWNSTREAM-CONSUMERS.md
+1: # Downstream consumers
+3: ## Registered private Alpha consumer
+25: Consumer registration is informational. Admission still requires the gates in
+
+2026-08-31/product-audit/theMarshal-Core-Rust/docs/UPSTREAM-CONSUMER-MODEL.md
+1: # Upstream consumer model
+3: ## Decision
+13: ## Consumer requirements
+15: A consumer integration must:
+17: 1. pin the repository, full commit identity, contract identities, license and
+18:    qualification status;
+30: surfaces must not silently fork canonicalization, lifecycle, evidence,
+33: ## Private licensing posture
+38: grant requires a separate owner-reviewed license decision attached to an exact
+43: ## Release gate
+45: Before a release is admitted by a consumer, upstream must provide:
+51: - ABI identity and authority flags;
+54: - an owner-reviewed consumer and licensing decision.
+57: shadow qualification, but must not ship or activate it as runtime authority.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/evidence/README.md
+1: # Evidence
+3: Only reproducible qualification outputs belong here. Generated evidence must
+5: command, exit status, timestamps, and content digests. No bootstrap document is
+
+2026-08-31/product-audit/theMarshal-Core-Rust/fixtures/continuity/v1/README.md
+1: # Durable continuity v1 fixtures
+3: `guard-cases.tsv` is a language-neutral decision fixture consumed independently
+
+2026-08-31/product-audit/theMarshal-Core-Rust/fixtures/README.md
+1: # Shared fixture corpus
+3: Fixtures must be language-neutral and consumed unchanged by Python and Rust.
+25: genesis and lifecycle payload maps. The lifecycle vector runner requires an
+
+2026-08-31/product-audit/theMarshal-Core-Rust/governance/APPOINTMENT-AUTHORIZATION-TEMPLATE.md
+1: # EVD-002 greenfield sole-writer appointment
+3: This template is not an authorization until every field is populated and Shaun
+16: - Unresolved mismatches: **must be zero**
+17: - Owner decision:
+18: - Owner signature/approval reference:
+
+2026-08-31/product-audit/theMarshal-Core-Rust/governance/decisions/ADR-0001-GREENFIELD-CBOR.md
+1: # ADR-0001 — Greenfield CBOR authority
+3: **Status:** accepted by owner  
+7: ## Decision
+10: evidence, receipt, approval, checkpoint, and governed interchange artifacts use
+23: a separately versioned CBOR checkpoint v2. Historical hashes are never rewritten.
+25: ## Consequences
+34:   clients never submit authoritative canonical bytes.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/governance/DECISIONS.md
+1: # Ratified owner decisions
+3: ## 2026-08-23 — Rust Core and EVD-002
+14: ## 2026-08-23 — Greenfield canonical authority
+21: - New GKX checkpoints require a separately qualified CBOR v2 contract.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/README.md
+1: # theMarshal-Core-Rust
+7: ## Current status
+16: ## Ownership boundaries
+30: must not silently fork shared Core semantics.
+35: and activation decision; this upstream repository remains the semantic source.
+38: ## License
+42: and commercial use require written permission except where an executed license
+
+2026-08-31/product-audit/theMarshal-Core-Rust/SECURITY.md
+1: # Security policy
+3: This repository is pre-release and must not be used as an authoritative writer
+7: Security-sensitive changes require negative tests. No profile may disable audit,
+
+2026-08-31/product-audit/theMarshal-Core-Rust/specifications/DIAGNOSTIC-REGISTRY-CANDIDATE.md
+1: # Stable diagnostic registry candidate
+3: **Status:** candidate only; non-authoritative; unratified; unactivated.
+5: Diagnostics are unsigned integers. Numeric identity is stable; names and messages are projections. Once ratified, a code is never reused.
+7: ## Ranges
+24: ## Initial codes
+73: ## Precedence
+89: ## Adapter closure
+91: No diagnostic codes are added by this owner decision. Adapters may emit only codes already present in the reviewed registry and only through exact, reviewed source-to-code mappings. Python free-form `reason` text is non-authoritative and MUST NOT enter canonical authority bytes. An unmapped, contradictory, or insufficiently specified case is not assigned a best-fit code: comparison setup defects become `COMPARISON_INVALID`, while genuine contract ambiguity becomes `SPEC_AMBIGUOUS` for owner adjudication. These two mismatch dispositions classify qualification results; they do not allocate new EVD diagnostic numbers.
+93: ## Change control
+95: Adding a code requires normative positive and negative fixtures. Renaming a symbolic name does not change the numeric code. Changing precedence, meaning, or retryability is a behavioral contract change and resets the required final 1,000-clean shadow counter.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/specifications/DURABLE-CONTINUITY-v1-CANDIDATE.md
+1: # Durable Continuity v1 candidate
+3: **Status:** candidate only; non-authoritative; unratified; unactivated.
+10: ## Identities and binding
+12: - Contract identity: `DURABLE-CONTINUITY-v1`.
+16: - Python ABI identity: `marshal-core-python/2`.
+20: The contract identity is never accepted where an envelope or receipt schema is
+30: ## Authority and root ownership
+40: a root must preexist, must use `verify_only`, and must forbid all four
+45: Path ownership is lexical. Paths must be normalized absolute POSIX-style facts
+51: ## State classes
+58:   verified as supplied; this candidate never writes or promotes them.
+59: - Project artifacts require a lowercase `sha256:` digest over supplied bytes.
+61:   never rebuilds them.
+62: - Resume requires a caller-supplied compatibility result.
+71: ## Deterministic precedence
+80: artifact digest, resumable compatibility, and projection status findings. Its
+84: ## Stable diagnostics
+91: Rendered refusal identity is exactly `NNNN:SYMBOL`.
+93: ## Effect boundary
+
+2026-08-31/product-audit/theMarshal-Core-Rust/specifications/EVD-002-LOGICAL-RECORD-CANDIDATE.md
+1: # EVD-002 logical record candidate
+3: **Status:** candidate only; non-authoritative; unratified; unactivated  
+7: This document defines the logical record presented to the canonical encoder. PostgreSQL, JSON renderers, and language-specific object layouts MUST NOT alter these semantics. Python `ModuleService` remains the sole authoritative lifecycle writer. This candidate adds no Rust writer, appointment, activation, or cutover.
+9: ## Record
+31: | 17 | `correlation_id` | 16-byte bytestring | traces a logical operation, not an authority identity |
+33: Unknown top-level keys, missing keys, alternate key types, duplicate keys, floats, tags, and indefinite lengths MUST be refused before semantic processing. Null, absent, empty text, empty bytes, empty array, and empty map remain distinct.
+35: ## V1 event-class and payload-schema registry
+44: Event-class code `0` is prohibited. Every code other than `1` and `2` is rejected and reserved in v1. Implementations MUST NOT allocate codes locally. A code, once assigned, is never reused for another meaning. Adding or changing a code requires a separately reviewed new registry/contract version and new fixtures; it MUST NOT silently expand v1.
+46: ### `marshal/evd/genesis/v1`
+64: ### `marshal/evd/lifecycle-transition/v1`
+78: The map contains exactly six or seven pairs. Unknown keys, arrays, and nested maps are prohibited. Both states must resolve unambiguously to the same component or runtime/work domain, and the ordered pair must be one of that domain's registered direct edges. Unknown, ambiguous, cross-domain, or illegal-edge pairs are refused with existing diagnostics according to precedence. The registry artifact/version/digest are derived exactly as specified in `MARSHAL-STATE-MACHINE-CANDIDATE.md`; a stale digest is never copied forward when that artifact changes. Both payload schemas remain subject to the 256 KiB canonical-payload ceiling and depth-32 complete-record ceiling.
+80: ## Outcomes
+87: An event whose outcome is not success MUST carry a nonzero diagnostic. A success MUST carry diagnostic zero. Diagnostics are stable facts; prose is a non-authoritative projection.
+89: Python free-form `reason` text is excluded from canonical authority bytes. Reviewed adapters map only exact known Python outcomes to existing approved diagnostics in envelope key 13. `owner_authorization_digest`, when present in the reviewed source contract, maps to envelope `authority_ref`; it is not duplicated in either payload. An input or comparison that cannot be mapped exactly is refused/classified as `COMPARISON_INVALID` or escalated as `SPEC_AMBIGUOUS`; adapters MUST NOT invent a diagnostic or serialize free-form reason text.
+91: ## Time authorship
+93: The sole authoritative writer mints `occurred_at` at commit preparation from its approved clock source. A caller-supplied or source-system time, when schema-permitted, is separate admitted-request metadata. It MUST NOT populate or override `occurred_at`, define ordering, or acquire authority merely by being recorded. Its field name, format, and bounds belong to the applicable payload schema.
+95: ## Genesis and linkage
+97: Sequence 1 MUST have a null predecessor and the registered `GENESIS` event class. Every later record MUST name the digest of sequence `n-1`. A `LIFECYCLE_TRANSITION` entry cannot substitute for genesis.
+99: ## Canonical bytes and identity
+102: 2. Validate the logical record, its registered payload schema, 256 KiB canonical-payload ceiling, 512 KiB complete-record ceiling, depth 32 including map keys, and 255-byte identity/action/schema text ceilings.
+107: The eight-byte unsigned big-endian length is always present. Profile and Unicode changes require a new versioned canonical profile and new cross-language fixtures; they MUST NOT silently alter `MARSHAL-CBOR-1`.
+109: Re-encoding database projections is prohibited for identity. A decoder accepting bytes that are semantically equivalent but noncanonical MUST return a canonicality diagnostic, not silently normalize them.
+111: ## Retention and content boundary
+113: Canonical EVD entries and chain metadata, genesis records, authority appointment records, committed receipts, and checkpoint anchors are retained permanently for the lifetime of the authority domain. They are append-only or immutable according to their governing table and MUST NOT be deleted by ordinary projection-retention jobs.
+115: External payloads, raw source material, logs, and human-readable projections follow a separate data-classification and retention policy. Secrets, PHI, PII requiring erasure, transcripts, and bulky or opaque content MUST NOT enter canonical chain bytes. Where a registered schema permits, the chain stores only a schema-approved immutable digest or reference with no embedded sensitive content. Permanent authority retention is not authorization to retain external content indefinitely.
+117: ## PostgreSQL serialization and invariants
+121: ## Required fixture classes
+123: Normative fixtures MUST cover both event classes, both payload schemas, each outcome, minimum/maximum integers, Unicode 17.0.0 normalization, exact size/depth boundaries, empty-versus-null distinctions, and multi-key payloads. Mutation twins MUST cover every missing key, unknown key, wrong type, duplicate key, reordered/non-shortest encoding, indefinite length, tags, floats, invalid UTF-8/NFC, bad or caller-overridden authoritative timestamps, sequence/link errors, unregistered codes/schemas, schema mismatch, and payload-schema violations.
+125: ## Remaining qualification work
+127: The owner choices above are recorded but remain candidate contract text. Qualification still requires the regenerated candidate-2 lifecycle registry artifact/digest, independent file-backed golden vectors and mutation twins for both domains and every edge, cross-language equality, exact reviewed adapter mappings, contract/fixture digests, independent review, and exact-head owner ratification. No implementation may claim writer authority, activation, or cutover from this document.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/specifications/EVD-002-RUST-EQUIVALENCE.md
+1: # EVD-002 Rust equivalence qualification
+3: **Status:** implementation contract candidate; no activation authority.
+5: Rust must receive identical injected input bytes and agree with the Python
+17: must provide the triggering input, both behaviors, ambiguity, effects, historical
+20: ## Appointment eligibility
+22: Appointment eligibility requires:
+30: 7. explicit owner authorization naming the exact Rust build, contract and
+
+2026-08-31/product-audit/theMarshal-Core-Rust/specifications/GKX-CHECKPOINT-v2-CANDIDATE.md
+1: # GKX Checkpoint Contract v2 — CBOR candidate
+3: **Status:** candidate; not ratified, implemented, published, or activated
+8: ## Locked direction
+18: ## Required contract work
+20: The checkpoint engineer must carry forward or deliberately amend every v1
+23: Every difference from v1 requires a requirement ID and owner-visible rationale.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/specifications/MARSHAL-CBOR-1.md
+1: # MARSHAL-CBOR-1
+3: **Status:** implementation candidate; owner-selected profile  
+12: ## Required encoding
+21: - UTF-8 text normalized to NFC using `unicode-normalization` `0.1.25`, whose generated tables are Unicode `17.0.0`; compiled `UNICODE_VERSION` must equal `(17, 0, 0)`.
+26: - SHA-256 provides canonical artifact identity with an artifact-specific domain
+29: ## Conservative v1 resource bounds
+35: - Identity, action, and schema text fields: at most 255 UTF-8 bytes each.
+38: These are byte ceilings, not authority grants. A future writer must enforce the admitted-request bound before parsing. The canonical layer enforces the complete-record bound; schema validators enforce payload and field-specific bounds. Any change requires a versioned contract amendment and new fixtures.
+40: ## Prohibited values
+47: - Values outside the bounded integer domain declared by the artifact schema.
+50: ## Human rendering
+53: hashed as authority. A deterministic parser/render round-trip test must prove
+57: ## EVD-002 entry digest candidate
+73: exclusive to EVD-002 entry identity. Genesis, checkpoints, appointments,
+74: fixtures, shadow records, and qualification reports require their own reviewed
+77: ## Profile versioning
+82: bytes requires a new canonical-profile version and complete cross-language
+85: ## Open qualification work
+87: This candidate requires normative vectors, mutation twins, cross-language
+
+2026-08-31/product-audit/theMarshal-Core-Rust/specifications/MARSHAL-STATE-MACHINE-CANDIDATE.md
+1: # Marshal lifecycle and authority state-machine candidate
+3: **Status:** candidate only; non-authoritative; unratified; unactivated.
+5: ## Separate domains
+7: Component lifecycle, runtime/work lifecycle, authority, kill state, and evidence persistence are separate state domains. Implementations MUST NOT substitute one domain for another or validate a transition against a union of state names.
+9: ## Component lifecycle
+29: The component domain has no terminal-state predicate. Desired component state is separate from observed lifecycle truth. `SUSPENDED -> READY` additionally requires the persisted and current activation-context fingerprints to match, live authority, and successful preflight. Component revision advancement is checked and must equal expected revision plus one.
+31: ## Runtime/work lifecycle
+51: ## Lifecycle registry and digest derivation
+63: For state, terminal, and result rows, the value occupies `source` and `target` is empty. The registry digest is lowercase hexadecimal SHA-256 of the complete raw TSV bytes. The generated artifact, its version, and its digest are recorded together in the fixture manifest. This specification defines the derivation and deliberately does not pin a digest from a prior or independently changing PR. Any byte, row, state, edge, terminal, result, order, or version change produces a new digest and requires review and regenerated fixtures.
+65: For each lifecycle payload, `prior_state` and `resulting_state` must each resolve to exactly one state domain in the digest-bound registry, must resolve to the same domain, and must name one of that domain's registered direct edges. A missing, unknown, multiply resolved, cross-domain, or illegal-edge pair is refused. A validator MUST NOT guess the domain or accept an edge merely because both names exist somewhere in the registry.
+67: ## Authority
+71: Only a valid owner-appointed authority path may produce `GRANTED`. Production self-minting or self-approval is prohibited. Revocation and expiry are terminal for a grant identifier; restoration requires a new grant. Authority MUST be checked at admission, before every consequential boundary, and immediately before commit.
+73: ## Kill state
+75: States: `CLEAR`, `HOLD`, `KILLED`. `CLEAR -> HOLD -> KILLED` and `CLEAR -> KILLED` are permitted. Clearing HOLD or KILLED requires a separately governed owner action and creates a new epoch; historical state is immutable. Work admitted under an older epoch cannot commit after the effective kill boundary.
+77: ## Append state
+83: - Recovery MUST NOT invent a result.
+85: ## Transition algorithm
+99: ## Concurrency invariants
+105: - Independent chain domains do not require a global mutex.
+107: ## Idle
+109: `IDLE` is not a persisted terminal state in this candidate. Operator-facing idle is a projection of no active runtime. If a future normative contract needs IDLE, it requires a versioned change and fixtures.
+111: ## Tests
+113: Exhaustively classify all 25 component pairs and all 81 runtime pairs; prove exactly 13 and 11 allowed edges respectively; prove exactly four runtime terminals; and test unknown, ambiguous, cross-domain, illegal-edge, stale-version, revision-overflow, repeated-transition, revocation/kill-race, commit-ack-loss, and restart-recovery cases. Model-based tests MUST compare implementations to the digest-bound registry and these transition tables.
+
+2026-08-31/product-audit/theMarshal-Core-Rust/specifications/POSTGRESQL-AUTHORITY-CANDIDATE.md
+1: # PostgreSQL authority persistence candidate
+3: **Status:** candidate only; non-authoritative; unratified; unactivated.  
+8: ## Tables
+16: Application roles MUST lack UPDATE/DELETE on evidence entries and immutable authority records. Defensive triggers reject mutation. Database constraints enforce digest and UUID byte lengths, positive sequence bounds, event class registry membership, canonical byte ceilings, valid empty/populated head combinations, `head_sequence = entry_count` for contiguous chains, genesis/null-predecessor rules, non-genesis predecessor presence, receipt-to-entry referential identity, and idempotency-key/request-fingerprint consistency. Foreign keys and uniqueness MUST make orphaned receipts, heads, appointments, or checkpoints unrepresentable.
+18: ## Normative serialization boundary
+20: Per-chain row locking with `SELECT ... FOR UPDATE`, plus the stated database invariants, is the normative minimum. `SERIALIZABLE` may be used as a defensive or measured profile, but it does not replace the per-chain lock and invariants. Independent chains MUST NOT be globally serialized. Revocation and kill changes use the same authority-domain serialization boundary so an append cannot commit across an effective boundary.
+22: ## Append transaction
+28: 5. The sole writer mints authoritative `occurred_at`; source-system time remains separately schema-bounded metadata and cannot override ordering or authority.
+35: A crash before commit leaves no append. A lost response after commit is recovered by idempotent lookup. Retries are bounded to deadlock, serialization, and explicitly classified transient connection failures. Semantic refusals are never retried under a new key automatically.
+37: ## Startup/recovery
+39: A future write service starts only after verifying database version/settings, migration digests, active appointment versus binary/contract/profile/fixture digests, and every active head against its last entry. A full verifier checks genesis, contiguity, predecessor links, digests, and canonical bytes. Inconsistency forces read-only forensic mode or shutdown. Recovery may rebuild disposable projections; it MUST NOT rewrite authority. Until a separate exact-head appointment and cutover, no Rust write service may start.
+41: ## Retention and content boundary
+43: Canonical EVD entries and chain metadata, genesis records, authority appointment records, committed receipts, and checkpoint anchors are retained permanently for the lifetime of their authority domain. Ordinary retention, compaction, archival, or projection jobs MUST NOT delete or rewrite them.
+45: External/raw payloads, logs, telemetry, outbox delivery bodies, and human-readable projections follow a separate classification and retention policy. Secrets, PHI, PII requiring erasure, transcripts, and bulky content MUST NOT enter canonical chain bytes or permanent authority tables. A registered schema may store only an approved immutable digest/reference whose target is managed under the separate policy.
+47: ## Crash matrix
+49: Inject process kill, backend termination, connection reset, database immediate restart, WAL recovery, timeout, and disk/quota faults before/after lock, idempotency lookup, authoritative timestamp minting, entry insert, head update, receipt/outbox insert, commit, and acknowledgement. Every run proves zero-or-one append, head agreement, retry identity, no duplicate side effect, and complete verification.
+51: ## Concurrency matrix
+55: ## Observability/evidence
+
+2026-08-31/product-audit/theMarshal-Core-Rust/THIRD-PARTY-NOTICES.md
+1: # Third-party notices

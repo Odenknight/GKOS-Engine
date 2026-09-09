@@ -1,0 +1,259 @@
+{
+  "artifact_type": "gkos-phase6-d0-15-c1-migration-concurrence",
+  "schema_version": "1.0.0",
+  "recorded_at_utc": "2026-08-26T10:59:08.8286756Z",
+  "wave": "C1",
+  "review_role": "migration",
+  "verdict": "REJECT_CONCURRENCE",
+  "concurrence": false,
+  "status": "OWNER_CORRECTION_REQUIRED_C1_RESTART_REQUIRED",
+  "review_scope": [
+    "bootstrap staging and exact eleven-state vocabulary",
+    "legacy-source qualification and physical disposition",
+    "restore plan discovery, publication, abort, rollback, and recovery",
+    "authority generation and old-binding invalidation",
+    "retention policy history, replay minima, complete-day deletion, and restore preservation",
+    "backup publication, replay, and restored event floor",
+    "crash and process-restart outcomes",
+    "real Gregorian UTC millisecond timestamp bounds",
+    "migration-related fixture completeness, aliases, IDs, counts, and expected semantics",
+    "decision-only authorization boundary"
+  ],
+  "zero_contribution_attestation": {
+    "fresh_review": true,
+    "zero_contribution": true,
+    "statement": "I authored and changed none of the replacement decision, owner-resolution, closed-registry, D0 source, prior-review, product, accepted-F1, stopped-F2, schema, fixture, generator, expected-outcome, or implementation bytes. I performed a fresh read-only migration concurrence and created only this detached review artifact.",
+    "reviewed_bytes_modified": false,
+    "product_repository_access_or_edit": false,
+    "accepted_f1_access_or_edit": false,
+    "stopped_f2_access_or_edit": false,
+    "commit_push_workflow_pr_merge_release_deploy_activate_publish": false
+  },
+  "exact_input_ledger": [
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_2026-08-26.json",
+      "sha256": "87da54d22f72e27625144143e15dcc6a38264b856af51bdaf5d26055a92c2a29",
+      "bytes": 21418,
+      "role": "normative replacement correction map"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V2_2026-08-26.json",
+      "sha256": "95b8bc0b7fdb646a8a40f244526df5d8ac6a34384124a40c338366d843f62d84",
+      "bytes": 8395,
+      "role": "normative owner resolution"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_2026-08-26.json",
+      "sha256": "e878b6906559e91a7d4acf34d375b8de43b140549c673f50f8e164b5a333bd90",
+      "bytes": 90098,
+      "role": "normative closed non-MCP fixture registry"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+      "bytes": 117722,
+      "role": "ratified D0 semantic source"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_DECISION_RECORD_PROPOSAL_2026-08-25.json",
+      "sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+      "bytes": 28582,
+      "role": "ratified D0 decision source"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json",
+      "sha256": "149b1933503eb418ab8f1d37d2aa6dad19e8d18fa08ee5ce359ecea0fff9e78f",
+      "bytes": 80583,
+      "role": "historical proposal and R01-R15 source"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_MIGRATION_REVIEW_2026-08-26.json",
+      "sha256": "9534727333c2c964b4285f136ee046b823f61f100f7acff1fe520d85efd4aa57",
+      "bytes": 43945,
+      "role": "prior migration gap evidence"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_SECURITY_REVIEW_2026-08-26.json",
+      "sha256": "f7d862851832ded51ec3c264beaf65b7bd5f9ad958580215f3d955546ac6d401",
+      "bytes": 50913,
+      "role": "prior security concurrence evidence"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_FULL_CONTRACT_STEWARD_REVIEW_2026-08-26.json",
+      "sha256": "12a37ee80c129ae016bfb330cd91621d50ad9f8f9406ab850798714adedce63c",
+      "bytes": 51789,
+      "role": "prior contract-steward evidence"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_FULL_CONTRACT_CONCURRENCE_2026-08-26.json",
+      "sha256": "62e26bc062243968fe3bf083443819d2bfab61ec69fc5c7e8d9444eceb1727b1",
+      "bytes": 34666,
+      "role": "prior Full rejection and correction requirements"
+    },
+    {
+      "path": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+      "sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+      "bytes": 31178,
+      "role": "ratified independence, stop, and reviewer-sequence governance"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_ATTACHMENT_IMPACT_ASSESSMENT_2026-08-26.json",
+      "sha256": "69a6f241294a530cf7f3aa89ce7c897bcd5010d125462dfda59c2e73b9a2c014",
+      "bytes": 5596,
+      "role": "attachment-impact evidence"
+    }
+  ],
+  "input_integrity": {
+    "all_ledgered_raw_hashes_and_byte_lengths_match": true,
+    "normative_internal_digests": [
+      {
+        "input": "correction_map",
+        "claimed": "fe8809604c862a7fbf4d2638802ac6eb6157c920407efbc5998f3b7e6adbc338",
+        "recomputed": "fe8809604c862a7fbf4d2638802ac6eb6157c920407efbc5998f3b7e6adbc338",
+        "match": true
+      },
+      {
+        "input": "owner_resolution_v2",
+        "claimed": "7271bdbe92e4ae634bd03d33bb2532c52dfc495f972910fc3ffa81b5284ea441",
+        "recomputed": "7271bdbe92e4ae634bd03d33bb2532c52dfc495f972910fc3ffa81b5284ea441",
+        "match": true
+      },
+      {
+        "input": "closed_non_mcp_fixture_registry",
+        "claimed": "e65c98badb2fcb8399149034edacc40c15d5a6b6d58df86af60229c06f2af732",
+        "recomputed": "e65c98badb2fcb8399149034edacc40c15d5a6b6d58df86af60229c06f2af732",
+        "match": true
+      }
+    ],
+    "digest_method_verified": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member"
+  },
+  "passed_audits": {
+    "q2_restart_invalidation": {
+      "status": "PASS",
+      "evidence": "SNAPSHOT-RESTART-001 evaluates the process-restart marker before reference or snapshot existence lookup, returns CURSOR_STALE/GKOS_P6_REQUEST_STALE_AUTHORITY with existence-independent bytes, requires fresh reference rediscovery and a new pagination sequence, and forbids continuation, physical lookup, durable resolver state, raw paths, new tables, and new operations. REFERENCE-PROCESS-RESTART-001 independently closes old-reference use after the process-memory resolver is cleared."
+    },
+    "q3_arithmetic_and_structure": {
+      "status": "PASS_COUNTS_ONLY",
+      "evidence": "The registry parses as 237 unique canonical fixture IDs: 8 named core-operation, 10 named restore/bootstrap recovery, and 219 additional. It contains 12 unique non-counting aliases targeting existing canonical IDs, 16 declared families, and per-family totals summing to 237. No alias collides with a canonical fixture ID. The 67 official MCP count is stated unchanged. Semantic acceptance fails separately in findings MIG-C1-002 and MIG-C1-003."
+    },
+    "bootstrap_staging_vocabulary": {
+      "status": "PASS_AT_DECISION_LEVEL",
+      "evidence": "R05 and DC05 preserve the exact eleven-state vocabulary and both terminal branches, use temp-before-plan without a new authority or operation, clean only an exact verified unreferenced pre-plan temporary, and require exact bound-temp reuse after PLAN_STAGED. BOOTSTRAP-STATE-001 through 011 and BOOTSTRAP-PLAN-CRASH-001 enumerate those states and the corrected pre-plan crash boundary."
+    },
+    "restore_plan_discovery_and_abort": {
+      "status": "PASS_AT_DECISION_LEVEL",
+      "evidence": "R03 and R04 close relative locator storage, two-state prepublication abort, no rollback after publication begins, exact safe/absent/unsafe physical disposition, one generation/event advance, old-binding invalidation, old active credential fresh-auth behavior, and owner_cli authority.status discovery without adding an operation."
+    },
+    "retention_history_and_execution": {
+      "status": "PASS_AT_DECISION_LEVEL",
+      "evidence": "R13 plus DC12 close current policy state, permanent before/after history, creation-time policy binding, true sequences, complete UTC-day batches, active-row and 24-hour replay protection, mutation-intent/global-event evidence, crash replay, backup/restore preservation, and the exact 16-table boundary."
+    },
+    "backup_and_timestamps": {
+      "status": "PASS_AT_DECISION_LEVEL",
+      "evidence": "DC07 and DC08 close real Gregorian UTC millisecond years 1970 through 9999, reject year 10000 and malformed calendar encodings, and preserve the protected external backup manifest, SQLite backup API, checked integrity/foreign keys, no-follow/no-replace publication, fsync order, exact replay, and source authority coordinates."
+    },
+    "preservation_counts": {
+      "status": "PASS_AT_DECISION_LEVEL",
+      "tables": 16,
+      "operations": 32,
+      "public_authenticated_operations": 7,
+      "local_bootstrap_operations": 1,
+      "owner_only_operations": 24,
+      "error_codes": 53,
+      "required_public_mcp_tools": 7,
+      "official_mcp_vector_ids": 67,
+      "pack_files": 34,
+      "manifest_hashed_leaves": 33,
+      "allowed_paths": 40,
+      "new_product_paths": 0
+    },
+    "decision_only_boundary": {
+      "status": "PASS",
+      "evidence": "The correction map and owner resolution authorize detached decision and concurrence evidence only. They do not authorize successor-F1 correction, product edits, regeneration, F2 restart, commit, push, hosted workflow, PR, merge, release, deployment, activation, or publication."
+    }
+  },
+  "findings": [
+    {
+      "id": "MIG-C1-001",
+      "severity": "BLOCKER",
+      "title": "The frozen registry source trace names mutable paths at hashes and byte lengths that do not match the frozen review inputs",
+      "evidence": [
+        "The registry source_trace identifies PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_2026-08-26.json as sha256 d6f2a803452206001fc10d65c64e79996fa91c6604ddb7658cb67aefd65d01ac and 22841 bytes, but the exact C1 input at that same path is sha256 87da54d22f72e27625144143e15dcc6a38264b856af51bdaf5d26055a92c2a29 and 21418 bytes.",
+        "The registry source_trace identifies PHASE6_D0_15_OWNER_RESOLUTION_V2_2026-08-26.json as sha256 de6a4b034bec87e7819d674abbdf4bd2ebd73529d0caf7bec14e62431712bc14 and 6548 bytes, but the exact C1 input at that same path is sha256 95b8bc0b7fdb646a8a40f244526df5d8ac6a34384124a40c338366d843f62d84 and 8395 bytes.",
+        "Neither mismatched byte sequence is preserved at a distinct immutable ledger path in the reviewed evidence. The registry nevertheless declares its source trace frozen, while owner-resolution V2 states that any source-trace change invalidates dependent receipts."
+      ],
+      "impact": "The three normative records are individually hash-valid but do not form one reproducible exact-input graph. A migration reviewer cannot prove which correction-map and owner-resolution semantics generated the exact registry bytes, and accepting would silently reinterpret frozen provenance.",
+      "required_resolution": "Return to the Product Owner. Prepare a new acyclic evidence chain whose registry source trace names immutable distinct source paths and exact existing hashes/bytes, or explicitly ratify a corrected trace. Hash-bind the replacement registry, correction map, and owner resolution at their final bytes, then restart C1. Do not edit this reviewed registry in place or carry this rejection forward as acceptance."
+    },
+    {
+      "id": "MIG-C1-002",
+      "severity": "BLOCKER",
+      "title": "The closed registry reassigns the already-frozen RESTORE-OWNER-001 through 009 semantics",
+      "evidence": [
+        "Ratified D0 section 0.5 assigns RESTORE-OWNER-001 through 005 to normal replacement success, old-credential denial/new-credential success, crash after locator staging, no-replace locator conflict, and crash after candidate/intent; 006 to crash after plan fsync before rename; 007 to referenced-temp removal plus corrupt startup and absent abort disposition; 008 to corrupt/aliased temp plus unsafe preservation and abort; and 009 to the abort event/external-tombstone split crash.",
+        "The registry instead assigns 002 to crash after RESTORE_PLAN_STAGED, 003 to crash after RESTORE_OWNER_LOCATOR_STAGED, 004 to crash before database publication, 005 to crash after database publication, 006 to post-committed-anchor finalization, 007 to a generic digest/coordinate mismatch, 008 to a bundled locator-invalidity case, and 009 to successful aggregate invalidation.",
+        "The consolidated R06 selection preserves the named ten-ID recovery class and calls for adding those missing named vectors as closed scenarios; it does not disclose or authorize a wholesale reassignment of their already-ratified meanings. Q3 distinguishes the 18 named subtotal from additional fixtures and freezes IDs/counts; it does not resolve this semantic collision."
+      ],
+      "impact": "Existing semantic coordinates no longer identify the outcomes ratified by D0. The original old/new credential, locator-conflict, referenced-temp removal, unsafe-temp abort, and split-tombstone cases may exist under other new IDs, but moving them changes evidence joins and permits a fixture consumer to qualify the wrong case under a preserved name.",
+      "required_resolution": "Restore the exact D0 semantics to RESTORE-OWNER-001 through 009 and place newly separated publication/recovery cases under unique additional IDs, or obtain a new explicit owner decision that lists each old-to-new semantic mapping and its compatibility consequences. Recompute registry counts/hashes and restart C1."
+    },
+    {
+      "id": "MIG-C1-003",
+      "severity": "HIGH",
+      "title": "Several named recovery leaves remain non-deterministic or weaker than their frozen crash boundary",
+      "evidence": [
+        "Registry closed_fixture_semantics says one canonical fixture ID identifies exactly one executable scenario and that the schedule and expected result freeze exact canonical bytes and durable/physical post-state.",
+        "RESTORE-OWNER-002 expects recovery of the same plan/temp/credential or exposure of abort through status, and RESTORE-OWNER-003 expects recovery or exact abort. Those alternatives do not choose one request after restart, one response, or one exhaustive post-state.",
+        "RESTORE-OWNER-008 combines absent, linked, unsafe, identity-mismatched, content-mismatched, protection-mismatched, and owner-mismatched locator states in one leaf even though absence and unsafe preservation have different physical disposition evidence.",
+        "BOOTSTRAP-LOCATOR-ROLLBACK-001 is frozen by D0 specifically at SQLite transaction rollback after durable OWNER_LOCATOR_STAGED publication, but the registry reduces its schedule to crash before next state and does not state that rollback leaves OWNER_LOCATOR_STAGED before exact retry."
+      ],
+      "impact": "An implementer can select different legal-looking branches and still claim the same fixture ID. Exact canonical expected bytes, mutation counts, crash/restart state, and manifest consequences are therefore not closed for these named migration coordinates.",
+      "required_resolution": "Make every named ID one deterministic leaf with one injected boundary, one post-restart request sequence, one expected canonical response/error, and one exhaustive durable/physical post-state. Split alternative branches and single-field physical negatives into additional canonical IDs without changing the preserved named meanings; update exact accounting and hashes; restart C1."
+    }
+  ],
+  "migration_concurrence_summary": {
+    "bootstrap_and_retention_decision_semantics_representable": true,
+    "q2_restart_rule_closed": true,
+    "q3_numeric_accounting_recomputed": true,
+    "q3_registry_semantics_accepted": false,
+    "source_graph_reproducible": false,
+    "named_recovery_semantics_preserved": false,
+    "all_migration_fixture_leaves_deterministic": false,
+    "ambiguity_present": true,
+    "acceptance_permitted": false
+  },
+  "exact_required_correction_inventory": [
+    {
+      "order": 1,
+      "correction": "Replace the registry's stale correction-map source_trace binding d6f2a803452206001fc10d65c64e79996fa91c6604ddb7658cb67aefd65d01ac/22841 with an immutable, actually present source coordinate, or explicitly preserve that historical byte sequence at a distinct immutable path. Do not point two different byte sequences at the same path."
+    },
+    {
+      "order": 2,
+      "correction": "Replace the registry's stale owner-resolution source_trace binding de6a4b034bec87e7819d674abbdf4bd2ebd73529d0caf7bec14e62431712bc14/6548 with an immutable, actually present source coordinate, or explicitly preserve that historical byte sequence at a distinct immutable path. Rebuild the final acyclic correction-map, registry, and owner-resolution hash graph and obtain fresh owner ratification."
+    },
+    {
+      "order": 3,
+      "correction": "Restore the D0-frozen semantic assignment of RESTORE-OWNER-001 through RESTORE-OWNER-009 exactly: 001 normal success; 002 old-credential denial/new-credential success; 003 crash after locator staging; 004 no-replace locator conflict; 005 crash after candidate/intent; 006 crash after plan fsync before rename; 007 referenced-temp removal plus corrupt startup and absent abort disposition; 008 corrupt/aliased temp plus unsafe preservation and abort; 009 restore-event/external-ABORTED split crash. Assign every newly separated recovery/publication case a new additional canonical ID rather than reusing these names."
+    },
+    {
+      "order": 4,
+      "correction": "Make each recovery ID deterministic: split recovery-versus-abort alternatives and distinct locator dispositions into one-input/one-schedule/one-result leaves; freeze one exact post-restart request sequence, response or error, mutation set, physical disposition, and durable post-state for each. Restore BOOTSTRAP-LOCATOR-ROLLBACK-001 specifically to SQLite transaction rollback after durable OWNER_LOCATOR_STAGED, with state remaining OWNER_LOCATOR_STAGED and exact same-locator/credential retry without regeneration, overwrite, entropy, or reveal."
+    },
+    {
+      "order": 5,
+      "correction": "Recompute the 8+10 named subtotal, additional canonical count, family totals, alias table, internal digests, raw hashes, and byte lengths after the corrections. Return the exact replacement bytes to the Product Owner and restart C1; no current concurrence may be carried forward."
+    }
+  ],
+  "authorization_boundary": {
+    "this_artifact_authorizes_product_work": false,
+    "successor_f1_product_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "product_edit_or_regeneration_authorized": false,
+    "commit_push_workflow_pr_merge_release_deploy_activate_publish_authorized": false,
+    "required_next_authority": "Product Owner correction of the exact registry/provenance and named migration-vector semantics, followed by a new hash-bound C1 wave."
+  },
+  "artifact_raw_receipt_rule": "The artifact's raw SHA-256 and byte length are emitted by the Orchestrator's external evidence ledger after final serialization; embedding either value here would be self-referential. The internal record_digest below is computed over this exact semantic record with only the top-level record_digest member omitted.",
+  "terminal_statement": "REJECT_CONCURRENCE. Q2 RESTART INVALIDATION AND Q3 ARITHMETIC PASS, BUT THE EXACT CLOSED REGISTRY HAS NONREPRODUCIBLE SOURCE-TRACE HASHES, REASSIGNS RATIFIED RESTORE-OWNER-001 THROUGH 009 SEMANTICS, AND LEAVES NAMED RECOVERY CASES NONDETERMINISTIC. C1 DOES NOT PASS. SUCCESSOR F1 AND F2 REMAIN STOPPED. NO PRODUCT EDIT, REGENERATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, OR PUBLICATION IS AUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "58c90b6e44f2d35ca634964e56bceb7ffa98ddd02a86977001a7d90901679cb3"
+}

@@ -1,0 +1,166 @@
+{
+  "version": "gkos-hosted-ci-qualification/1",
+  "generated_at_utc": "2026-09-01T02:51:16.7739757Z",
+  "status": "COMPLETE_WITH_ENGINE_FAILURES_AND_UNTRIGGERED_REPOSITORIES",
+  "release_qualified": false,
+  "authorization": {
+    "authorized_action": "Push the five exact review branches solely to run hosted CI.",
+    "merge": false,
+    "tag": false,
+    "release": false,
+    "deploy": false,
+    "production_credentials": false,
+    "effects_writes": false,
+    "vault_mutation": false,
+    "oracle_selection": false,
+    "rust_cutover": false
+  },
+  "push_attempts": {
+    "initial_attempt": "PREFLIGHT_REFUSED",
+    "initial_attempt_detail": "The elevated Windows identity rejected the sandbox-owned integration repositories as dubious. No ref was pushed in that attempt.",
+    "corrected_attempt": "PASS",
+    "corrected_attempt_detail": "The retry used process-local safe.directory values and exact commit-to-ref refspecs. No global Git configuration or integration remote was changed."
+  },
+  "repositories": {
+    "engine": {
+      "repository": "Odenknight/GKOS-Engine",
+      "branch": "codex/integrate-engine-stability-20260831",
+      "commit": "1c59a992bafd6815ae9837bb3910084d4aea9972",
+      "remote_ref_verified": true,
+      "local_tree_clean_after_push": true,
+      "status": "FAIL",
+      "runs": [
+        {
+          "id": 33463234367,
+          "name": "CI",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Odenknight/GKOS-Engine/actions/runs/33463234367",
+          "jobs": {
+            "success": 10,
+            "failure": 2,
+            "skipped": 2,
+            "failures": [
+              {
+                "id": 99717671918,
+                "name": "phase5-watcher-windows (22)",
+                "failed_step": "Exact watcher observation qualification",
+                "url": "https://github.com/Odenknight/GKOS-Engine/actions/runs/33463234367/job/99717671918",
+                "annotation": "Process completed with exit code 1; the expected watcher observation measurement did not exist for upload."
+              },
+              {
+                "id": 99717672168,
+                "name": "build (23)",
+                "failed_step": "Tests",
+                "url": "https://github.com/Odenknight/GKOS-Engine/actions/runs/33463234367/job/99717672168",
+                "annotation": "Process completed with exit code 1; the dependent Phase 4 qualification artifact did not exist for upload."
+              }
+            ],
+            "notable_successes": [
+              "build (22)",
+              "build (24)",
+              "phase5-watcher-linux (22)",
+              "phase5-watcher-linux (23)",
+              "phase5-watcher-linux (24)",
+              "phase5-watcher-windows (23)",
+              "phase5-watcher-windows (24)",
+              "windows-retrieval-path-security (22)",
+              "windows-retrieval-path-security (23)",
+              "windows-retrieval-path-security (24)"
+            ]
+          }
+        },
+        {
+          "id": 33463234430,
+          "name": "Historical and current runtime qualification",
+          "event": "push",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Odenknight/GKOS-Engine/actions/runs/33463234430",
+          "jobs": {
+            "success": 9,
+            "failure": 3,
+            "skipped": 0,
+            "historical_replay": {
+              "status": "PASS",
+              "matrix": "ubuntu-24.04, windows-latest, macos-14 x Node 22, 23, 24",
+              "passed_jobs": 9,
+              "failed_jobs": 0
+            },
+            "current_runtime": {
+              "status": "FAIL",
+              "matrix": "ubuntu-24.04 x Node 22, 23, 24",
+              "passed_jobs": 0,
+              "failed_jobs": 3,
+              "failed_step": "Current runtime qualification (source inventory and executed tests)",
+              "job_urls": [
+                "https://github.com/Odenknight/GKOS-Engine/actions/runs/33463234430/job/99718269097",
+                "https://github.com/Odenknight/GKOS-Engine/actions/runs/33463234430/job/99718269123",
+                "https://github.com/Odenknight/GKOS-Engine/actions/runs/33463234430/job/99718269141"
+              ],
+              "annotation": "Each matrix job completed the qualification step with exit code 1 and successfully uploaded its evidence artifact."
+            }
+          }
+        }
+      ],
+      "diagnostic_boundary": "The public Actions API exposed job, step, annotation, and artifact metadata. GitHub returned 403 for unauthenticated job-log download and 401 for unauthenticated artifact download, so this receipt does not infer a root cause beyond the recorded failed steps and annotations."
+    },
+    "standard_r18": {
+      "repository": "Odenknight/gkos-standard",
+      "branch": "codex/integrate-standard-r18-20260831",
+      "commit": "9f47ecf8fefb87810cd44bd03fa8e82eb321fd4a",
+      "remote_ref_verified": true,
+      "local_tree_clean_after_push": true,
+      "status": "PASS",
+      "runs": [
+        {"id": 33463236743, "name": "Markdown lint", "conclusion": "success", "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33463236743"},
+        {"id": 33463236777, "name": "Release checksums", "conclusion": "success", "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33463236777"},
+        {"id": 33463236783, "name": "Release validation", "conclusion": "success", "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33463236783"},
+        {"id": 33463236720, "name": "Conformance runner", "conclusion": "success", "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33463236720"},
+        {"id": 33463236873, "name": "Link check", "conclusion": "success", "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33463236873"}
+      ]
+    },
+    "kosmos": {
+      "repository": "Odenknight/Kosmos-Oden",
+      "branch": "codex/integrate-kosmos-identity-20260831",
+      "commit": "52b843c50a9e810bf8ad7ac7de8e4505a44b6baa",
+      "remote_ref_verified": true,
+      "local_tree_clean_after_push": true,
+      "status": "PASS",
+      "push_warning": "GitHub reported that repository rules were bypassed for the review branch because existing history contains merge commit 6486035... and the review commit is not verified-signed. The server accepted the exact branch; no history was rewritten.",
+      "runs": [
+        {"id": 33463237973, "name": "CI", "conclusion": "success", "url": "https://github.com/Odenknight/Kosmos-Oden/actions/runs/33463237973"},
+        {"id": 33463238032, "name": "Browser", "conclusion": "success", "url": "https://github.com/Odenknight/Kosmos-Oden/actions/runs/33463238032"}
+      ]
+    },
+    "observatory": {
+      "repository": "Odenknight/GKOS-Observatory",
+      "branch": "codex/integrate-observatory-identity-20260831",
+      "commit": "2c01d9ea1263db2e4d7f438c2955cbc481c69f6e",
+      "remote_ref_verified": true,
+      "local_tree_clean_after_push": true,
+      "status": "NOT_RUN_NO_WORKFLOW",
+      "reason": "The exact review commit contains no .github/workflows directory. The unauthenticated public Actions API also returned 404 for this repository. No hosted workflow was available to trigger."
+    },
+    "lite": {
+      "repository": "Odenknight/GKOS-Engine-Lite",
+      "branch": "codex/integrate-lite-quick-connect-20260831",
+      "commit": "f5b06b4a4ea5020d62824ceffc51622269a52f19",
+      "remote_ref_verified": true,
+      "local_tree_clean_after_push": true,
+      "status": "NOT_RUN_BRANCH_FILTER",
+      "reason": "The CI workflow accepts push only on main and the other workflows accept tags or workflow_dispatch. The review-branch push produced zero workflow runs at the exact SHA. No PR, tag, or manual workflow dispatch was improvised."
+    }
+  },
+  "remote_authority_after_operation": {
+    "review_branches_created": 5,
+    "other_remote_refs_changed": false,
+    "pull_requests_created": false,
+    "merged": false,
+    "tags_created_or_moved": false,
+    "releases_created": false,
+    "deployments_started": false
+  },
+  "conclusion": "The authorized push operation completed, but hosted qualification did not pass overall. Standard R18 and Kosmos passed every workflow triggered by their review-branch pushes. Engine has two failed workflow runs with five failed jobs. Observatory and Lite have no branch-push qualification result at these exact SHAs."
+}

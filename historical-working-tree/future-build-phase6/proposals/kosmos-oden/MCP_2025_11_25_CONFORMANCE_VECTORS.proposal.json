@@ -1,0 +1,570 @@
+{
+  "vector_set_version": "1.0.0-draft.8",
+  "protocol_version": "2025-11-25",
+  "status": "proposal_only",
+  "core_projection_dependency": {
+    "path": "future-build-phase6/proposals/core/PHASE6_D0_CLOSED_ERROR_REGISTRY_1.0.0-draft.1.json",
+    "sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+    "rule": "Every core_alias or core_aliases value below resolves only through this registry's sole closed pre-dispatch HTTP and JSON-RPC projection; this vector set defines no competing status, code, envelope, or alias. Every rejection at pre-dispatch stages 1 through 9 projects canonical request_id:null, including grouped session and authentication failures."
+  },
+  "core_operation_inventory_dependency": {
+    "proposal_path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_OPERATION_INVENTORY_PROPOSAL_2026-08-25.json",
+    "proposal_sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+    "proposal_bytes": 45471,
+    "operation_count": 32,
+    "schema_definition_count": 54,
+    "public_schema_ref_count": 14,
+    "product_schema_path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.schema.json",
+    "product_instance_path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+    "rule": "The seven advertised tools map exactly to the inventory's seven PUBLIC_AUTHENTICATED operations, exact lowercase product-relative tool-registry request/result refs, and exact private-dependency arrays (inventory absence is the empty array). capability.list_effective issues no references; navigation.discover null/null is the only initial scope issuance path; lineage, graph, Navigation discovery, and Navigation audit issue record_ref values only through their frozen dependency sets and authorized scopes."
+  },
+  "product_provenance": {
+    "repository": "Odenknight/GKOS-Engine",
+    "commit": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+    "path": "src/gkx23.ts",
+    "git_blob": "368fa9bb5e5d4a8a32bccd8ceb9058932b33f387",
+    "url": "https://github.com/Odenknight/GKOS-Engine/blob/808d875b557f4cfd2bb0addccba44d70c9748f35/src/gkx23.ts",
+    "use": "Exact case-insensitive authored UUID versions 1-8 contract for record_summary.uid vectors."
+  },
+  "official_provenance": [
+    {
+      "path": "schema/2025-11-25/schema.json",
+      "commit": "c4c367f9f58296a7053f5c78a52fd02bfbb56a49",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/c4c367f9f58296a7053f5c78a52fd02bfbb56a49/schema/2025-11-25/schema.json",
+      "raw_sha256": "268a5f82ba70fd7e4b6dc4aa1e64f116f74b4d0edcb69dc046829c79dd4e97e7"
+    },
+    {
+      "path": "docs/specification/2025-11-25/basic/lifecycle.mdx",
+      "commit": "c4c367f9f58296a7053f5c78a52fd02bfbb56a49",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/c4c367f9f58296a7053f5c78a52fd02bfbb56a49/docs/specification/2025-11-25/basic/lifecycle.mdx",
+      "raw_sha256": "45a6e8b7fb8c96e7b9ba1b0a3c727e8451c1e55bf56bb62f3ab63fddc365b919"
+    },
+    {
+      "path": "docs/specification/2025-11-25/basic/transports.mdx",
+      "commit": "c4c367f9f58296a7053f5c78a52fd02bfbb56a49",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/c4c367f9f58296a7053f5c78a52fd02bfbb56a49/docs/specification/2025-11-25/basic/transports.mdx",
+      "raw_sha256": "a247fdbb3cc25c805ef43124db18d9b60a56669b3e65bd163dffb76f4129dfc0"
+    },
+    {
+      "path": "docs/specification/2025-11-25/basic/utilities/cancellation.mdx",
+      "commit": "c4c367f9f58296a7053f5c78a52fd02bfbb56a49",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/c4c367f9f58296a7053f5c78a52fd02bfbb56a49/docs/specification/2025-11-25/basic/utilities/cancellation.mdx",
+      "raw_sha256": "9bd2a4422cf22b003621b0da0b812cb7b85c00e2feee1e6847a9d2f4837343d4"
+    },
+    {
+      "path": "docs/specification/2025-11-25/server/tools.mdx",
+      "commit": "c4c367f9f58296a7053f5c78a52fd02bfbb56a49",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/c4c367f9f58296a7053f5c78a52fd02bfbb56a49/docs/specification/2025-11-25/server/tools.mdx",
+      "raw_sha256": "39e56ad4f3d1ff1cb28ee62283e02947cd97db8aa6190782d629f4562a0f354c"
+    }
+  ],
+  "vectors": [
+    {
+      "id": "MCP-INIT-001",
+      "channel": "both",
+      "precondition": "authenticated transport session in PRE_INITIALIZE",
+      "input": {
+        "jsonrpc": "2.0",
+        "id": "init-1",
+        "method": "initialize",
+        "params": {
+          "protocolVersion": "2025-11-25",
+          "capabilities": { "experimental": { "client.example/feature": {} } },
+          "clientInfo": {
+            "name": "example-client",
+            "title": "Example Client",
+            "version": "1.2.3",
+            "description": "Permitted standard implementation metadata",
+            "icons": [{ "src": "https://example.invalid/icon.png", "mimeType": "image/png", "sizes": ["48x48"] }],
+            "websiteUrl": "https://example.invalid"
+          },
+          "_meta": { "progressToken": "init-progress", "client.example/value": true }
+        }
+      },
+      "expected": {
+        "jsonrpc": "2.0",
+        "id": "init-1",
+        "result_required": ["protocolVersion", "capabilities", "serverInfo"],
+        "protocolVersion": "2025-11-25",
+        "serverInfo_required": ["name", "version"],
+        "server_capabilities": { "tools": { "listChanged": false } },
+        "note": "Standard optional fields and namespaced _meta are accepted but never establish identity or authority. Unsupported client capabilities are not echoed as negotiated server capabilities."
+      }
+    },
+    {
+      "id": "MCP-INIT-002",
+      "channel": "both",
+      "precondition": "authenticated transport session in PRE_INITIALIZE",
+      "input": { "jsonrpc": "2.0", "id": 2, "method": "initialize", "params": { "protocolVersion": "2099-01-01", "capabilities": {}, "clientInfo": { "name": "future-client", "version": "1" } } },
+      "expected": { "jsonrpc": "2.0", "id": 2, "result_protocolVersion": "2025-11-25", "client_action_if_unsupported": "disconnect" }
+    },
+    {
+      "id": "MCP-INIT-003",
+      "channel": "both",
+      "precondition": "initialize response sent; initialized notification not yet received",
+      "input": { "jsonrpc": "2.0", "method": "notifications/initialized" },
+      "expected": { "state": "INITIALIZED", "response": null }
+    },
+    {
+      "id": "MCP-PING-001",
+      "channel": "both",
+      "precondition": "initialize was already the first interaction and is in progress, or its response has been sent, or the session is INITIALIZED",
+      "input": { "jsonrpc": "2.0", "id": "ping-1", "method": "ping" },
+      "expected": { "jsonrpc": "2.0", "id": "ping-1", "result": {} }
+    },
+    {
+      "id": "MCP-BARRIER-001",
+      "channel": "both",
+      "precondition": "authenticated transport session before successful initialize response",
+      "input": { "jsonrpc": "2.0", "id": "list-early", "method": "tools/list", "params": {} },
+      "expected": { "jsonrpc_error": -32600, "core_error_code": "GKOS_P6_INVALID_REQUEST", "enumerates_tools": false }
+    },
+    {
+      "id": "MCP-HTTP-001",
+      "channel": "loopback_http",
+      "precondition": "POST /mcp",
+      "input": { "peer": "127.0.0.1", "method": "POST", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "Accept": "application/json, text/event-stream", "Authorization": "Bearer valid-core-credential" }, "body_kind": "initialize_jsonrpc_request" },
+      "additional_input": { "description": "no-session/no-version request is not initialize", "peer": "127.0.0.1", "method": "POST", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "Accept": "application/json, text/event-stream", "Authorization": "Bearer valid-core-credential" }, "body_kind": "tools_list_jsonrpc_request" },
+      "expected": { "accepted": true, "response_content_type": "application/json", "server_sse_choice": false, "additional_core_alias": "MCP_NOT_INITIALIZED", "additional_core_error_code": "GKOS_P6_INVALID_REQUEST", "additional_http_status": 400, "additional_core_mcp_code": -32600, "additional_request_id": null, "additional_tool_enumeration": false, "note": "The profile chooses JSON while clients remain required by MCP to advertise and support both JSON and SSE. Missing protocol/session is admitted through stage 6 only for initialize; another no-session request fails after bounded parse as not initialized." }
+    },
+    {
+      "id": "MCP-HTTP-002",
+      "channel": "loopback_http",
+      "precondition": "peer through protocol-version checks pass for an initialized session; Accept is incomplete while session and authentication are also invalid",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json", "Mcp-Session-Id": "bad session", "Authorization": "Bearer invalid" }, "body_kind": "jsonrpc_request" },
+      "expected": { "precedence_stage": 7, "core_alias": "MCP_ACCEPT_NOT_NEGOTIABLE", "core_error_code": "GKOS_P6_NOT_ACCEPTABLE", "http_status": 406, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "dispatch": false, "session_or_auth_evaluated": false, "interface_local_status": false }
+    },
+    {
+      "id": "MCP-HTTP-003",
+      "channel": "loopback_http",
+      "precondition": "POST /mcp from a verified loopback peer with valid bound Host/Origin, media negotiation, protocol version, live initialized session, and valid bearer; body is an accepted JSON-RPC notification",
+      "input": { "peer": "127.0.0.1", "method": "POST", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "018f47a3-7b5e-7c9d-8a1b-123456789abc", "Authorization": "Bearer valid-core-credential" }, "body": { "jsonrpc": "2.0", "method": "notifications/initialized" } },
+      "expected": { "http_status": 202, "content_length": 0, "body": null }
+    },
+    {
+      "id": "MCP-HTTP-004",
+      "channel": "loopback_http",
+      "precondition": "POST /mcp from a verified loopback peer with valid bound Host/Origin, media negotiation, protocol version, live initialized session, and valid bearer; body is an accepted JSON-RPC response message",
+      "input": { "peer": "127.0.0.1", "method": "POST", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "018f47a3-7b5e-7c9d-8a1b-123456789abc", "Authorization": "Bearer valid-core-credential" }, "body": { "jsonrpc": "2.0", "id": "server-request-1", "result": {} } },
+      "expected": { "http_status": 202, "content_length": 0, "body": null, "note": "This profile emits no server requests, but transport parsing remains conformant." }
+    },
+    {
+      "id": "MCP-HTTP-005",
+      "channel": "loopback_http",
+      "precondition": "GET /mcp with valid loopback peer, Host, and Origin",
+      "input": { "peer": "127.0.0.1", "method": "GET", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "text/plain", "Accept": "application/json" } },
+      "expected": { "precedence_stage": 4, "core_alias": "MCP_HTTP_GET_METHOD_NOT_ALLOWED", "core_error_code": "GKOS_P6_METHOD_NOT_ALLOWED", "http_status": 405, "core_mcp_code": -32600, "headers": { "Allow": "POST, DELETE" }, "canonical_core_envelope": true, "request_id": null, "grouped_method_failures_byte_identical": true, "dispatch": false, "content_type_evaluated": false, "sse_channel": false }
+    },
+    {
+      "id": "MCP-HTTP-006",
+      "channel": "loopback_http",
+      "precondition": "POST /mcp passes peer through Content-Type, presents a session header, omits MCP-Protocol-Version, and also carries invalid later-stage Accept/session/auth values",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "Accept": "application/json", "Mcp-Session-Id": "bad session", "Authorization": "Bearer invalid" }, "headers_omitted": ["MCP-Protocol-Version"] },
+      "expected": { "precedence_stage": 6, "core_alias": "MCP_HTTP_PROTOCOL_VERSION_MISSING", "core_error_code": "GKOS_P6_PROTOCOL_VERSION_INVALID", "http_status": 400, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "dispatch": false, "later_stage_detail_disclosed": false, "note": "Absence is allowed only for initialize; an established/presented session requires the exact negotiated 2025-11-25 header and never assumes 2025-03-26." }
+    },
+    {
+      "id": "MCP-HTTP-007",
+      "channel": "loopback_http",
+      "precondition": "unknown or terminated Mcp-Session-Id",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "unknown", "Authorization": "Bearer invalid" } },
+      "expected": { "precedence_stage": 8, "core_aliases": ["MCP_SESSION_NOT_FOUND", "MCP_SESSION_TERMINATED"], "core_error_code": "GKOS_P6_SESSION_UNKNOWN", "http_status": 404, "core_mcp_code": -32004, "canonical_core_envelope": true, "request_id": null, "coalesced_projection": "exact same sole core mapping and content-free envelope", "grouped_responses_byte_identical": true, "client_action": "initialize a new session", "session_adoption": false, "session_state_disclosed": false, "authentication_evaluated": false, "interface_local_status": false }
+    },
+    {
+      "id": "MCP-HTTP-008",
+      "channel": "loopback_http",
+      "precondition": "GET /mcp from a verified loopback peer with valid bound Host and a present non-loopback or unapproved Origin; method and authentication are also invalid but are not evaluated",
+      "input": { "peer": "127.0.0.1", "method": "GET", "headers": { "Host": "127.0.0.1:32123", "Origin": "https://attacker.example", "Content-Type": "text/plain", "Accept": "application/json", "Authorization": "Bearer invalid" } },
+      "expected": { "precedence_stage": 3, "core_alias": "MCP_HTTP_ORIGIN_FORBIDDEN", "core_error_code": "GKOS_P6_ORIGIN_FORBIDDEN", "http_status": 403, "core_mcp_code": -32003, "canonical_core_envelope": true, "request_id": null, "checked_before_method_or_auth": true, "method_or_later_evaluated": false, "dispatch": false, "origin_detail_disclosed": false }
+    },
+    {
+      "id": "MCP-HTTP-009",
+      "channel": "loopback_http",
+      "precondition": "physical TCP peer is neither 127.0.0.1 nor ::1; all later-stage request metadata is also invalid",
+      "input": { "peer": "192.0.2.10", "method": "GET", "headers": { "Host": "attacker.example", "Origin": "https://attacker.example", "Content-Type": "text/plain", "Accept": "application/json", "Authorization": "Bearer invalid" } },
+      "expected": { "precedence_stage": 1, "core_alias": "MCP_HTTP_PEER_FORBIDDEN", "core_error_code": "GKOS_P6_PEER_FORBIDDEN", "http_status": 403, "core_mcp_code": -32003, "canonical_core_envelope": true, "request_id": null, "dispatch": false, "later_stage_detail_disclosed": false }
+    },
+    {
+      "id": "MCP-HTTP-010",
+      "channel": "loopback_http",
+      "precondition": "server cannot obtain or parse authoritative physical peer metadata; forwarded headers claim loopback and superficially valid Host/Origin/Content-Type/Accept cannot repair the stage-1 failure",
+      "input": { "peer_metadata": "unavailable_or_malformed", "method": "POST", "headers": { "Forwarded": "for=127.0.0.1", "X-Forwarded-For": "127.0.0.1", "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "Accept": "application/json, text/event-stream" } },
+      "expected": { "precedence_stage": 1, "core_alias": "MCP_HTTP_PEER_FORBIDDEN", "core_error_code": "GKOS_P6_PEER_FORBIDDEN", "http_status": 403, "core_mcp_code": -32003, "canonical_core_envelope": true, "forwarded_headers_trusted": false, "request_id": null, "dispatch": false }
+    },
+    {
+      "id": "MCP-HTTP-011",
+      "channel": "loopback_http",
+      "precondition": "physical peer is verified loopback but Host is absent, malformed, non-loopback, contains userinfo, or uses an unbound authority; Origin and all later stages are also invalid",
+      "input": { "peer": "127.0.0.1", "method": "GET", "headers": { "Host": "attacker.example", "Origin": "https://attacker.example", "Content-Type": "text/plain", "Accept": "application/json" } },
+      "expected": { "precedence_stage": 2, "core_alias": "MCP_HTTP_HOST_FORBIDDEN", "core_error_code": "GKOS_P6_HOST_FORBIDDEN", "http_status": 403, "core_mcp_code": -32003, "canonical_core_envelope": true, "request_id": null, "dispatch": false, "origin_evaluated": false, "later_stage_detail_disclosed": false }
+    },
+    {
+      "id": "MCP-HTTP-012",
+      "channel": "loopback_http",
+      "precondition": "peer, Host, Origin, and POST method pass; Content-Type is missing while protocol, Accept, session, and authentication are also invalid",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "MCP-Protocol-Version": "bad", "Accept": "application/json", "Mcp-Session-Id": "bad session", "Authorization": "Bearer invalid" } },
+      "expected": { "precedence_stage": 5, "core_alias": "MCP_HTTP_CONTENT_TYPE_MISSING", "core_error_code": "GKOS_P6_UNSUPPORTED_MEDIA_TYPE", "http_status": 415, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "dispatch": false, "later_stage_detail_disclosed": false }
+    },
+    {
+      "id": "MCP-HTTP-013",
+      "channel": "loopback_http",
+      "precondition": "peer, Host, Origin, and POST method pass; Content-Type syntax is malformed or conflicting",
+      "input": { "peer": "::1", "method": "POST", "headers": { "Host": "[::1]:32123", "Origin": "http://[::1]:32123", "Content-Type": "application/json, text/plain", "MCP-Protocol-Version": "bad", "Accept": "application/json" } },
+      "expected": { "precedence_stage": 5, "core_alias": "MCP_HTTP_CONTENT_TYPE_INVALID", "core_error_code": "GKOS_P6_UNSUPPORTED_MEDIA_TYPE", "http_status": 415, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "dispatch": false }
+    },
+    {
+      "id": "MCP-HTTP-014",
+      "channel": "loopback_http",
+      "precondition": "peer, Host, Origin, and POST method pass; Content-Type is syntactically valid but unsupported",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "text/plain; charset=utf-8", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream" } },
+      "expected": { "precedence_stage": 5, "core_alias": "MCP_HTTP_CONTENT_TYPE_UNSUPPORTED", "core_error_code": "GKOS_P6_UNSUPPORTED_MEDIA_TYPE", "http_status": 415, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "dispatch": false }
+    },
+    {
+      "id": "MCP-HTTP-015",
+      "channel": "loopback_http",
+      "precondition": "peer through Content-Type pass and a session header is present; MCP-Protocol-Version syntax is malformed while Accept/session/auth also fail",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025/11/25", "Accept": "application/json", "Mcp-Session-Id": "bad session", "Authorization": "Bearer invalid" } },
+      "expected": { "precedence_stage": 6, "core_alias": "MCP_HTTP_PROTOCOL_VERSION_INVALID", "core_error_code": "GKOS_P6_PROTOCOL_VERSION_INVALID", "http_status": 400, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "dispatch": false, "later_stage_detail_disclosed": false }
+    },
+    {
+      "id": "MCP-HTTP-016",
+      "channel": "loopback_http",
+      "precondition": "peer through Content-Type pass and a session header is present; MCP-Protocol-Version is syntactically valid but unsupported",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-03-26", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "018f47a3-7b5e-7c9d-8a1b-123456789abc" } },
+      "expected": { "precedence_stage": 6, "core_alias": "MCP_HTTP_PROTOCOL_VERSION_UNSUPPORTED", "core_error_code": "GKOS_P6_PROTOCOL_VERSION_INVALID", "http_status": 400, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "dispatch": false }
+    },
+    {
+      "id": "MCP-HTTP-017",
+      "channel": "loopback_http",
+      "precondition": "peer through Accept pass; Mcp-Session-Id has invalid syntax and authentication is also invalid",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "bad session", "Authorization": "Bearer invalid" } },
+      "additional_input": { "description": "required session header missing on a non-initialize request", "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Authorization": "Bearer invalid" } },
+      "expected": { "precedence_stage": 8, "core_alias": "MCP_SESSION_INVALID", "core_error_code": "GKOS_P6_SESSION_UNKNOWN", "http_status": 404, "core_mcp_code": -32004, "canonical_core_envelope": true, "request_id": null, "grouped_presented_session_failures_byte_identical": true, "dispatch": false, "authentication_evaluated": false, "additional_core_alias": "MCP_SESSION_REQUIRED", "additional_core_error_code": "GKOS_P6_INVALID_REQUEST", "additional_http_status": 400, "additional_core_mcp_code": -32600, "additional_request_id": null }
+    },
+    {
+      "id": "MCP-HTTP-018",
+      "channel": "loopback_http",
+      "precondition": "peer through Accept pass; presented syntactically valid session is expired and authentication is also invalid",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "018f47a3-7b5e-7c9d-8a1b-123456789abc", "Authorization": "Bearer invalid" } },
+      "expected": { "precedence_stage": 8, "core_alias": "MCP_SESSION_EXPIRED", "core_error_code": "GKOS_P6_SESSION_UNKNOWN", "http_status": 404, "core_mcp_code": -32004, "canonical_core_envelope": true, "request_id": null, "grouped_presented_session_failures_byte_identical": true, "expired_or_unknown_disclosed": false, "dispatch": false, "authentication_evaluated": false }
+    },
+    {
+      "id": "MCP-HTTP-019",
+      "channel": "loopback_http",
+      "precondition": "peer through session checks pass; Authorization is missing",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "018f47a3-7b5e-7c9d-8a1b-123456789abc" } },
+      "expected": { "precedence_stage": 9, "core_alias": "AUTH_REQUIRED", "core_error_code": "GKOS_P6_AUTH_FAILED", "http_status": 401, "core_mcp_code": -32001, "canonical_core_envelope": true, "request_id": null, "grouped_auth_failures_byte_identical": true, "dispatch": false }
+    },
+    {
+      "id": "MCP-HTTP-020",
+      "channel": "loopback_http",
+      "precondition": "peer through session checks pass; bearer is malformed, unknown, mismatched, or belongs to a disabled agent or revoked credential",
+      "input": { "peer": "127.0.0.1", "method": "POST", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "018f47a3-7b5e-7c9d-8a1b-123456789abc", "Authorization": "Bearer invalid" } },
+      "expected": { "precedence_stage": 9, "core_aliases": ["AUTH_INVALID", "IDENTITY_DISABLED_UNAUTHENTICATED", "CREDENTIAL_REVOKED_UNAUTHENTICATED"], "core_error_code": "GKOS_P6_AUTH_FAILED", "http_status": 401, "core_mcp_code": -32001, "canonical_core_envelope": true, "request_id": null, "grouped_auth_failures_byte_identical": true, "lifecycle_state_disclosed": false, "dispatch": false }
+    },
+    {
+      "id": "MCP-HTTP-021",
+      "channel": "loopback_http",
+      "precondition": "verified loopback peer and valid bound Host/Origin present a syntactically valid extension method other than uppercase POST or DELETE; all later-stage metadata is also invalid",
+      "input": { "peer": "127.0.0.1", "method": "PROPFIND", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "text/plain", "MCP-Protocol-Version": "bad", "Accept": "application/json", "Mcp-Session-Id": "bad session", "Authorization": "Bearer invalid" } },
+      "expected": { "precedence_stage": 4, "core_alias": "MCP_HTTP_METHOD_NOT_ALLOWED", "core_error_code": "GKOS_P6_METHOD_NOT_ALLOWED", "http_status": 405, "core_mcp_code": -32600, "headers": { "Allow": "POST, DELETE" }, "canonical_core_envelope": true, "request_id": null, "grouped_method_failures_byte_identical": true, "dispatch": false, "content_type_or_later_evaluated": false }
+    },
+    {
+      "id": "MCP-HTTP-022",
+      "channel": "loopback_http",
+      "precondition": "verified loopback peer and valid bound Host/Origin have unavailable, unparseable, empty, lowercase, or otherwise malformed method metadata",
+      "input": { "peer": "127.0.0.1", "method_metadata": "unavailable_or_malformed", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "text/plain", "MCP-Protocol-Version": "bad", "Accept": "application/json" } },
+      "expected": { "precedence_stage": 4, "core_alias": "MCP_HTTP_METHOD_INVALID", "core_error_code": "GKOS_P6_METHOD_NOT_ALLOWED", "http_status": 405, "core_mcp_code": -32600, "headers": { "Allow": "POST, DELETE" }, "canonical_core_envelope": true, "request_id": null, "grouped_method_failures_byte_identical": true, "dispatch": false, "malformed_method_detail_disclosed": false, "content_type_or_later_evaluated": false }
+    },
+    {
+      "id": "MCP-HTTP-023",
+      "channel": "loopback_http",
+      "precondition": "uppercase DELETE passes peer/Host/Origin/method and carries a body without Content-Type; protocol, Accept, session, and auth are also invalid",
+      "input": { "peer": "127.0.0.1", "method": "DELETE", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "MCP-Protocol-Version": "bad", "Accept": "application/json", "Mcp-Session-Id": "bad session", "Authorization": "Bearer invalid" }, "body": { "unexpected": true } },
+      "expected": { "precedence_stage": 5, "core_alias": "MCP_HTTP_DELETE_BODY_FORBIDDEN", "core_error_code": "GKOS_P6_DELETE_INVALID", "http_status": 400, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "grouped_delete_failures_byte_identical": true, "dispatch": false, "protocol_or_later_evaluated": false }
+    },
+    {
+      "id": "MCP-HTTP-024",
+      "channel": "loopback_http",
+      "precondition": "uppercase bodyless DELETE passes peer/Host/Origin/method but presents any Content-Type; later-stage metadata is also invalid",
+      "input": { "peer": "127.0.0.1", "method": "DELETE", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "bad", "Accept": "application/json", "Mcp-Session-Id": "bad session", "Authorization": "Bearer invalid" }, "body": null },
+      "expected": { "precedence_stage": 5, "core_alias": "MCP_HTTP_DELETE_CONTENT_TYPE_FORBIDDEN", "core_error_code": "GKOS_P6_DELETE_INVALID", "http_status": 400, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "grouped_delete_failures_byte_identical": true, "dispatch": false, "protocol_or_later_evaluated": false }
+    },
+    {
+      "id": "MCP-HTTP-025",
+      "channel": "loopback_http",
+      "precondition": "uppercase DELETE passes peer/Host/Origin/method but combines a body with Content-Type or invalid transfer framing",
+      "input": { "peer": "127.0.0.1", "method": "DELETE", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "Transfer-Encoding": "chunked", "MCP-Protocol-Version": "bad", "Accept": "application/json", "Mcp-Session-Id": "bad session", "Authorization": "Bearer invalid" }, "body": { "unexpected": true } },
+      "expected": { "precedence_stage": 5, "core_alias": "MCP_HTTP_DELETE_FRAMING_INVALID", "core_error_code": "GKOS_P6_DELETE_INVALID", "http_status": 400, "core_mcp_code": -32600, "canonical_core_envelope": true, "request_id": null, "grouped_delete_failures_byte_identical": true, "dispatch": false, "protocol_or_later_evaluated": false }
+    },
+    {
+      "id": "MCP-METHOD-001",
+      "channel": "both",
+      "precondition": "initialized authenticated session receives a valid JSON-RPC request with an unknown method",
+      "input": { "jsonrpc": "2.0", "id": "unknown-method-1", "method": "gkos/unknown", "params": {} },
+      "expected": { "core_alias": "MCP_JSONRPC_METHOD_NOT_FOUND", "core_error_code": "GKOS_P6_JSONRPC_METHOD_NOT_FOUND", "transport_http_status": 200, "jsonrpc_error": -32601, "data": "exact canonical core envelope", "tool_result": false }
+    },
+    {
+      "id": "MCP-CANCEL-001",
+      "channel": "both",
+      "precondition": "request req-7 is in flight in the same client-to-server direction and has not crossed the final publication gate",
+      "input": { "jsonrpc": "2.0", "method": "notifications/cancelled", "params": { "requestId": "req-7", "reason": "caller stopped waiting" } },
+      "expected": { "cancellation_notification_response": null, "original_request_response": null, "stop_processing": "best effort within the core cancellation bound", "publication": false }
+    },
+    {
+      "id": "MCP-CANCEL-002",
+      "channel": "loopback_http",
+      "precondition": "POST /mcp from verified loopback peer with valid bound Host/Origin, Content-Type, protocol, Accept, live initialized session, and valid bearer contains an accepted cancellation notification",
+      "input": { "peer": "127.0.0.1", "method": "POST", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "Content-Type": "application/json", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "018f47a3-7b5e-7c9d-8a1b-123456789abc", "Authorization": "Bearer valid-core-credential" }, "body": { "jsonrpc": "2.0", "method": "notifications/cancelled", "params": { "requestId": "req-7" } } },
+      "expected": { "ordered_admission_stages_passed": [1, 2, 3, 4, 5, 6, 7, 8, 9], "cancellation_notification_response": null, "http_status": 202, "content_length": 0, "body": null }
+    },
+    {
+      "id": "MCP-CANCEL-003",
+      "channel": "both",
+      "precondition": "initialize request is in progress",
+      "input": { "jsonrpc": "2.0", "method": "notifications/cancelled", "params": { "requestId": "init-1" } },
+      "expected": { "ignored": true, "initialize_cancelled": false, "response": null }
+    },
+    {
+      "id": "MCP-CANCEL-004",
+      "channel": "both",
+      "precondition": "unknown, completed, opposite-direction, or malformed cancellation target",
+      "input": { "jsonrpc": "2.0", "method": "notifications/cancelled", "params": { "requestId": "not-in-flight" } },
+      "expected": { "ignored": true, "response": null, "oracle_detail": false }
+    },
+    {
+      "id": "MCP-TOOL-001",
+      "channel": "both_and_schema",
+      "precondition": "tools/list after initialization; materialize each of the seven catalog rows as a standard MCP Tool by resolving its exact input/output schema refs",
+      "input": { "jsonrpc": "2.0", "id": "tools-1", "method": "tools/list", "params": { "_meta": { "progressToken": "p-1", "client.example/value": 7 } } },
+      "expected": { "official_schema_commit": "c4c367f9f58296a7053f5c78a52fd02bfbb56a49", "official_schema_raw_sha256": "268a5f82ba70fd7e4b6dc4aa1e64f116f74b4d0edcb69dc046829c79dd4e97e7", "official_definition": "#/$defs/Tool", "materialized_tools_checked": 7, "all_official_tool_schema_valid": true, "inputSchema_root_type": "object", "outputSchema_root_type": "object", "tool_required_fields": ["name", "description", "inputSchema"], "tool_outputSchema_present": true, "tool__meta_present": true, "annotation_openWorldHint": false, "execution_taskSupport": "forbidden_or_absent" }
+    },
+    {
+      "id": "MCP-TOOL-002",
+      "channel": "both",
+      "precondition": "successful tools/call",
+      "input": { "jsonrpc": "2.0", "id": "call-1", "method": "tools/call", "params": { "name": "gkos_capabilities", "arguments": {}, "_meta": { "progressToken": "p-2" } } },
+      "expected": { "result_required": ["content", "structuredContent", "isError"], "isError": false, "structuredContent_conforms_to_outputSchema": true, "result__meta_standard": true, "capability_items_only_effective": true, "capability_items_available_const": true, "capability_reason_code_const": null, "capability_names_unique": true, "capability_runtime_order": "capability_name:asc", "additional_result_negatives": [ { "description": "hidden or owner-only capability with unavailable status and reason", "capabilities": [ { "capability_name": "owner.agent.list", "available": false, "reason_code": "POLICY_DENIED" } ], "schema_valid": false, "hidden_name_disclosed": false }, { "description": "safe name marked unavailable", "capabilities": [ { "capability_name": "record.validate", "available": false, "reason_code": null } ], "schema_valid": false }, { "description": "unique safe names returned out of canonical order", "capabilities": [ { "capability_name": "record.validate", "available": true, "reason_code": null }, { "capability_name": "navigation.audit", "available": true, "reason_code": null } ], "schema_valid": true, "runtime_canonical_order_valid": false } ] }
+    },
+    {
+      "id": "MCP-TOOL-003",
+      "channel": "both",
+      "precondition": "CallToolRequest is valid and record_ref has 22 base64url suffix characters decoding to 16 bytes, but final E contains nonzero discarded bits and fails canonical decode/re-encode identity",
+      "input": { "jsonrpc": "2.0", "id": "call-2", "method": "tools/call", "params": { "name": "gkos_record_validate", "arguments": { "record_ref": "gkrec1_AAAAAAAAAAAAAAAAAAAAAE" } } },
+      "expected": { "record_ref_schema_valid": false, "record_ref_decoded_bytes": 16, "record_ref_runtime_decode_reencode_equal": false, "core_alias": "MCP_TOOL_INPUT_INVALID", "jsonrpc_result": true, "isError": true, "structuredContent_error": "exact core closed error envelope", "free_form_error_fields": false, "jsonrpc_protocol_error": false }
+    },
+    {
+      "id": "MCP-TOOL-004",
+      "channel": "both",
+      "precondition": "CallToolRequest is structurally valid but names an unknown tool",
+      "input": { "jsonrpc": "2.0", "id": "call-3", "method": "tools/call", "params": { "name": "gkos_unknown", "arguments": {} } },
+      "expected": { "core_alias": "MCP_UNKNOWN_TOOL", "jsonrpc_error": -32602, "projection": "exact sole core JSON-RPC invalid-params mapping", "tool_result": false, "tool_catalog_enumeration": false }
+    },
+    {
+      "id": "MCP-TOOL-005",
+      "channel": "both",
+      "precondition": "tools/call request params are malformed as a CallToolRequest",
+      "input": { "jsonrpc": "2.0", "id": "call-4", "method": "tools/call", "params": { "arguments": {} } },
+      "expected": { "core_alias": "MCP_CALL_MALFORMED", "jsonrpc_error": -32602, "projection": "exact sole core JSON-RPC invalid-params mapping", "tool_result": false }
+    },
+    {
+      "id": "MCP-TOOL-006",
+      "channel": "both",
+      "precondition": "valid tool arguments reach a non-protocol domain failure",
+      "input": { "jsonrpc": "2.0", "id": "call-5", "method": "tools/call", "params": { "name": "gkos_record_validate", "arguments": { "record_ref": "gkrec1_AAAAAAAAAAAAAAAAAAAAAA" } } },
+      "expected": { "record_ref_schema_valid": true, "record_ref_decoded_bytes": 16, "record_ref_runtime_decode_reencode_equal": true, "lookup_only_after_runtime_canonicality": true, "jsonrpc_result": true, "isError": true, "structuredContent_error": "exact core closed error envelope", "free_form_error_fields": false }
+    },
+    {
+      "id": "MCP-TOOL-007",
+      "channel": "schema",
+      "precondition": "materialize every advertised output_schema_ref from catalog.required_tools",
+      "input": {
+        "error": {
+          "contract_version": "1.0.0-draft.1",
+          "error_code": "GKOS_P6_INVALID_PARAMS",
+          "request_id": "018f47a3-7b5e-7c9d-8a1b-123456789abc",
+          "retryable": false,
+          "retry_after_ms": null,
+          "error_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      },
+      "expected": { "for_each_output_schema_ref": "valid", "advertised_tools_checked": 7, "call_tool_result_isError": true, "structuredContent_conforms_to_outputSchema": true, "free_form_error_fields": false }
+    },
+    {
+      "id": "SCHEMA-TIME-001",
+      "channel": "schema",
+      "precondition": "validate against MCP_TOOL_REGISTRY.schema.json#/$defs/utc_timestamp",
+      "input": "2026-08-25T12:34:56Z",
+      "expected": { "valid": false, "reason": "milliseconds are mandatory" }
+    },
+    {
+      "id": "SCHEMA-TIME-002",
+      "channel": "schema",
+      "precondition": "validate against MCP_TOOL_REGISTRY.schema.json#/$defs/utc_timestamp",
+      "input": "1969-12-31T23:59:59.999Z",
+      "expected": { "valid": false, "reason": "pre-1970 instant" }
+    },
+    {
+      "id": "SCHEMA-TIME-003",
+      "channel": "schema",
+      "precondition": "validate against MCP_TOOL_REGISTRY.schema.json#/$defs/utc_timestamp",
+      "input": "0000-01-01T00:00:00.000Z",
+      "expected": { "valid": false, "reason": "year 0000" }
+    },
+    {
+      "id": "SCHEMA-TIME-004",
+      "channel": "schema",
+      "precondition": "validate against MCP_TOOL_REGISTRY.schema.json#/$defs/utc_timestamp with date-time format assertion enabled",
+      "input": "2026-02-31T00:00:00.000Z",
+      "expected": { "valid": false, "reason": "not a real calendar instant" }
+    },
+    {
+      "id": "SCHEMA-UID-001",
+      "channel": "schema",
+      "precondition": "validate against the authored UID branch at MCP_TOOL_REGISTRY.schema.json#/$defs/record_summary/properties/uid",
+      "input": "550e8400-e29b-41d4-a716-446655440000",
+      "expected": { "valid": true, "reason": "legacy lowercase UUIDv4 accepted losslessly" }
+    },
+    {
+      "id": "SCHEMA-UID-002",
+      "channel": "schema",
+      "precondition": "validate against the authored UID branch at MCP_TOOL_REGISTRY.schema.json#/$defs/record_summary/properties/uid",
+      "input": "550E8400-E29B-81D4-A716-446655440000",
+      "expected": { "valid": true, "reason": "authored UID is case-insensitive and permits version 8" }
+    },
+    {
+      "id": "SCHEMA-UID-003",
+      "channel": "schema",
+      "precondition": "validate the same legacy authored UID against MCP_TOOL_REGISTRY.schema.json#/$defs/uuidv7",
+      "input": "550e8400-e29b-41d4-a716-446655440000",
+      "expected": { "valid": false, "reason": "agent/session/request identifiers remain strict lowercase UUIDv7" }
+    },
+    {
+      "id": "SCHEMA-CURSOR-001",
+      "channel": "schema_and_runtime",
+      "precondition": "validate against $defs.cursor, then decode the 43-character payload as unpadded base64url and re-encode it",
+      "input": "gkcur1_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expected": { "schema_valid": true, "decoded_bytes": 32, "runtime_decode_reencode_equal": true, "valid": true }
+    },
+    {
+      "id": "SCHEMA-CURSOR-002",
+      "channel": "schema_and_runtime",
+      "precondition": "payload is padded even though the canonical form is exactly 43 unpadded base64url characters",
+      "input": "gkcur1_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      "expected": { "schema_valid": false, "runtime_decode_reencode_equal": false, "valid": false }
+    },
+    {
+      "id": "SCHEMA-CURSOR-003",
+      "channel": "schema_and_runtime",
+      "precondition": "canonical 32-byte payload ends in E, a permitted canonical final sextet outside the 16-byte AQgw set",
+      "input": "gkcur1_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE",
+      "expected": { "schema_valid": true, "decoded_bytes": 32, "runtime_decode_reencode_equal": true, "valid": true }
+    },
+    {
+      "id": "SCHEMA-CURSOR-004",
+      "channel": "schema_and_runtime",
+      "precondition": "same decoded bytes as canonical final A are presented through noncanonical alias final B",
+      "input": "gkcur1_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB",
+      "expected": { "schema_valid": false, "decoded_bytes": 32, "runtime_decode_reencode_equal": false, "canonical_reencoding": "gkcur1_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "valid": false }
+    },
+    {
+      "id": "SCHEMA-CURSOR-005",
+      "channel": "schema_and_runtime",
+      "precondition": "same decoded bytes as canonical final A are presented through noncanonical alias final D",
+      "input": "gkcur1_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD",
+      "expected": { "schema_valid": false, "decoded_bytes": 32, "runtime_decode_reencode_equal": false, "canonical_reencoding": "gkcur1_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "valid": false }
+    },
+    {
+      "id": "SCHEMA-PATH-001",
+      "channel": "schema_and_runtime",
+      "precondition": "validate against $defs.canonical_vault_relative_path",
+      "input": "notes/\u0085control.md",
+      "expected": { "valid": false, "reason": "C1 control U+0085" }
+    },
+    {
+      "id": "SCHEMA-PATH-002",
+      "channel": "schema_and_runtime",
+      "precondition": "materialize the deterministic string by repeating U+00E9 257 times, then validate UTF-8 bytes",
+      "input_generation": { "scalar": "\u00e9", "repeat": 257 },
+      "expected": { "code_points": 257, "utf8_bytes": 514, "schema_length_valid": true, "runtime_byte_length_valid": false, "valid": false }
+    },
+    {
+      "id": "SCHEMA-PATH-003",
+      "channel": "schema_and_runtime",
+      "precondition": "validate exact NFC identity before accepting a returned canonical path",
+      "input": "notes/e\u0301.md",
+      "expected": { "schema_valid": true, "runtime_nfc_identity": false, "valid": false }
+    },
+    {
+      "id": "SCHEMA-PATH-004",
+      "channel": "schema_and_runtime",
+      "precondition": "validate lexical canonical path rules",
+      "input": "notes//entry.md",
+      "expected": { "schema_valid": false, "runtime_normalize_identity": false, "valid": false }
+    },
+    {
+      "id": "MCP-SCOPE-001",
+      "channel": "both",
+      "precondition": "initialized authenticated session has no issued scope_ref and calls navigation.discover with the unique initial-issuance arguments",
+      "input": { "jsonrpc": "2.0", "id": "scope-1", "method": "tools/call", "params": { "name": "gkos_navigation_discover", "arguments": { "scope_ref": null, "cursor": null, "limit": 20 } } },
+      "expected": { "input_schema_valid": true, "policy_before_discovery": true, "physical_vault_qualification": true, "root_scope_ref_issued": true, "scope_suffix_decoded_bytes": 16, "record_ref_outputs_authorized": true, "child_scope_ref_outputs_authorized": true, "isError": false, "caller_path_or_vault_selector": false }
+    },
+    {
+      "id": "MCP-GRAPH-001",
+      "channel": "both",
+      "precondition": "initialized authenticated caller attempts a fresh graph.temporal.read without a previously issued scope_ref",
+      "input": { "jsonrpc": "2.0", "id": "graph-1", "method": "tools/call", "params": { "name": "gkos_graph_at_time", "arguments": { "at": "2026-08-25T12:00:00.000Z", "state": "all", "cursor": null, "limit": 20 } } },
+      "expected": { "input_schema_valid": false, "jsonrpc_result": true, "isError": true, "structuredContent_error": "exact core invalid-tool-input envelope", "scope_or_record_ref_issued": false, "unrestricted_graph_scan": false, "path_fallback": false }
+    },
+    {
+      "id": "MCP-GRAPH-002",
+      "channel": "both",
+      "precondition": "same session/agent/auth_epoch holds a live scope_ref issued by MCP-SCOPE-001 and current policy/physical identity still match",
+      "input": { "jsonrpc": "2.0", "id": "graph-2", "method": "tools/call", "params": { "name": "gkos_graph_at_time", "arguments": { "scope_ref": "gkscp1_AAAAAAAAAAAAAAAAAAAAAA", "at": "2026-08-25T12:00:00.000Z", "state": "all", "cursor": null, "limit": 20 } } },
+      "expected": { "input_schema_valid": true, "scope_ref_resolved_before_projection": true, "physical_root_requalified": true, "snapshot_binds": ["scope_ref_digest", "session_id", "agent_id", "auth_epoch", "authority_generation", "policy_decision_id", "physical_identity", "at", "state", "ordering", "limit"], "record_refs_only_inside_scope": true, "isError": false }
+    },
+    {
+      "id": "MCP-GRAPH-003",
+      "channel": "both",
+      "precondition": "scope_ref is expired or stale by auth_epoch/generation/policy/physical identity; the additional case reuses a live token from another session",
+      "input": { "jsonrpc": "2.0", "id": "graph-3a", "method": "tools/call", "params": { "name": "gkos_graph_at_time", "arguments": { "scope_ref": "gkscp1_AAAAAAAAAAAAAAAAAAAAAA", "at": "2026-08-25T12:00:00.000Z", "state": "all", "cursor": null, "limit": 20 } } },
+      "additional_input": { "description": "cross-session/cross-agent scope reuse", "jsonrpc": "2.0", "id": "graph-3b", "method": "tools/call", "params": { "name": "gkos_graph_at_time", "arguments": { "scope_ref": "gkscp1_AAAAAAAAAAAAAAAAAAAAAA", "at": "2026-08-25T12:00:00.000Z", "state": "all", "cursor": null, "limit": 20 } } },
+      "expected": { "jsonrpc_result": true, "isError": true, "projection": "exact core non-enumerating reference failure envelope selected by state", "which_binding_or_expiry_failed_disclosed": false, "projection_started": false, "scope_or_record_ref_issued": false }
+    },
+    {
+      "id": "MCP-SCOPE-002",
+      "channel": "both",
+      "precondition": "same authenticated agent/auth_epoch/session consumes the live root or child scope issued by MCP-SCOPE-001",
+      "input": { "jsonrpc": "2.0", "id": "scope-2", "method": "tools/call", "params": { "name": "gkos_navigation_discover", "arguments": { "scope_ref": "gkscp1_AAAAAAAAAAAAAAAAAAAAAA", "cursor": null, "limit": 20 } } },
+      "expected": { "scope_ref_schema_valid": true, "scope_ref_decoded_bytes": 16, "scope_ref_runtime_decode_reencode_equal": true, "lookup_only_after_runtime_canonicality": true, "scope_binding_verified_before_discovery": true, "isError": false, "same_scope_ref_returned": true, "record_ref_outputs_authorized": true, "child_scope_ref_outputs_authorized": true }
+    },
+    {
+      "id": "MCP-SCOPE-003",
+      "channel": "both",
+      "precondition": "scope_ref is absent, older than 900000 ms, stale, cross-agent, cross-auth_epoch, cross-generation, cross-session, cross-process-vault, or policy/filter/physical-identity-bound elsewhere",
+      "input": { "jsonrpc": "2.0", "id": "scope-3", "method": "tools/call", "params": { "name": "gkos_navigation_discover", "arguments": { "scope_ref": "gkscp1_AAAAAAAAAAAAAAAAAAAAAA", "cursor": null, "limit": 20 } } },
+      "expected": { "jsonrpc_result": true, "isError": true, "projection": "exact core non-enumerating reference failure envelope", "which_binding_failed_disclosed": false }
+    },
+    {
+      "id": "MCP-SCOPE-004",
+      "channel": "both",
+      "precondition": "caller combines the initial-issuance null scope_ref with a continuation cursor",
+      "input": { "jsonrpc": "2.0", "id": "scope-4", "method": "tools/call", "params": { "name": "gkos_navigation_discover", "arguments": { "scope_ref": null, "cursor": "gkcur1_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "limit": 20 } } },
+      "additional_input": { "description": "same-length noncanonical scope_ref negative", "jsonrpc": "2.0", "id": "scope-4b", "method": "tools/call", "params": { "name": "gkos_navigation_discover", "arguments": { "scope_ref": "gkscp1_AAAAAAAAAAAAAAAAAAAAAE", "cursor": null, "limit": 20 } } },
+      "expected": { "input_schema_valid": false, "jsonrpc_result": true, "isError": true, "structuredContent_error": "exact core invalid-tool-input envelope", "scope_issued": false, "caller_path_fallback": false, "additional_scope_ref_schema_valid": false, "additional_scope_ref_decoded_bytes": 16, "additional_scope_ref_runtime_decode_reencode_equal": false, "lookup_attempted_for_noncanonical_ref": false }
+    },
+    {
+      "id": "MCP-SHUTDOWN-001",
+      "channel": "stdio",
+      "precondition": "initialized stdio session",
+      "input": { "event": "stdin_eof" },
+      "expected": { "state": "CLOSING_then_CLOSED", "new_requests": "GKOS_P6_SHUTTING_DOWN", "settle_or_cancel_ms": 10000, "protocol_shutdown_message": null }
+    },
+    {
+      "id": "MCP-SHUTDOWN-002",
+      "channel": "loopback_http",
+      "precondition": "bodyless DELETE /mcp from verified loopback peer with valid bound Host/Origin, exact protocol version, acceptable response media, live initialized session, and valid bearer",
+      "input": { "peer": "127.0.0.1", "method": "DELETE", "path": "/mcp", "headers": { "Host": "127.0.0.1:32123", "Origin": "http://127.0.0.1:32123", "MCP-Protocol-Version": "2025-11-25", "Accept": "application/json, text/event-stream", "Mcp-Session-Id": "018f47a3-7b5e-7c9d-8a1b-123456789abc", "Authorization": "Bearer valid-core-credential" }, "body": null },
+      "expected": { "ordered_admission_stages_passed": [1, 2, 3, 4, 5, 6, 7, 8, 9], "delete_stage_5": "body_absent_framing_absent_Content-Type_absent", "session_closed": true, "other_sessions_closed": false, "reconnect_action": "authenticate and initialize a new session" }
+    }
+  ]
+}

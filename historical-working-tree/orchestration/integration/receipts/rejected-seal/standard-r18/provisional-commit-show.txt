@@ -1,0 +1,20 @@
+commit db1f4d7e3fccfa5a9afa907e5dc28c770e5f8509
+Author:     Shaun "Oden" Marshall <40664141+Odenknight@users.noreply.github.com>
+AuthorDate: Mon Aug 31 18:33:32 2026 -0400
+Commit:     Shaun "Oden" Marshall <40664141+Odenknight@users.noreply.github.com>
+CommitDate: Mon Aug 31 18:33:32 2026 -0400
+
+    fix: fail closed Standard boundary evidence
+    
+    Signed-off-by: Shaun "Oden" Marshall <40664141+Odenknight@users.noreply.github.com>
+
+ conformance/runner/authority-window.mjs            | 21 +-----
+ conformance/runner/canonical-time.mjs              | 11 +++
+ conformance/runner/canonical.mjs                   | 18 ++++-
+ conformance/runner/gate-evaluator.mjs              | 55 +++++++++++++-
+ conformance/runner/registry-lint.mjs               |  8 ++
+ conformance/runner/test/canonical-replay.test.mjs  |  1 +
+ .../runner/test/fail-closed-inputs.test.mjs        | 86 ++++++++++++++++++++++
+ conformance/runner/test/track-a-evidence.test.mjs  | 28 +++++++
+ conformance/runner/track-a-evidence.mjs            | 36 +++++++++
+ 9 files changed, 239 insertions(+), 25 deletions(-)

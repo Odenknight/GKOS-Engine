@@ -1,0 +1,32 @@
+*** Begin Patch
+*** Update File: README.md
+@@
+ ## Desktop agent
++
++### Professional connectivity and content-management options
++
++The Engine exposes the service-level equivalents of the Kosmos-Oden settings
++panels. Host applications may present different controls, but they must retain
++the same security boundaries and report unavailable capabilities truthfully.
++
++| Option family | Engine capability | Current status |
++| --- | --- | --- |
++| Agent API (HTTP + MCP) | Authenticated, sensitivity-filtered local graph, notes, Graphiti, health, capability, event, and MCP surfaces | Implemented incrementally; the released desktop-agent endpoints listed below remain the conservative public baseline |
++| Quick Connect MCP | Stable endpoint and credential contract suitable for vendor-neutral Streamable HTTP and first-party stdio adapters | Protocol foundation implemented; polished Anthropic, OpenAI, and universal configuration generators are a host/product responsibility until separately shipped and tested |
++| GKOS note formatting | GKX 2.2/2.3 parsing, validation, safe migration plans, timestamp validation, exclusions, hash-bound preview, backup/apply boundaries, and proposal-only enrichment | Implemented library and CLI primitives; automatic host-file stamping requires an authorized host adapter |
++| Vault synchronization | Provider-neutral synchronization must preserve source bytes, serialize runs, use per-replica checkpoints, detect conflicts, and make deletion propagation explicit | Nextcloud/WebDAV transport, startup scheduling, multi-provider fan-out, and production conflict recovery are not Engine capabilities today |
++
++A professional host must additionally provide secret-store integration,
++loopback-by-default binding, explicit LAN disclosure, credential rotation,
++connection testing, health reporting, bounded retries, redacted diagnostics,
++and truthful capability discovery. A bearer token proves possession only; it
++does not establish agent identity, user identity, approval, or write authority.
++
++The Engine will not silently emulate synchronization by copying directories.
++Any future sync provider must define replica identity, conflict and deletion
++semantics, crash recovery, credential handling, checkpoints, and auditable
++receipts before it is advertised as available.
+ 
+ `src/desktop-agent.ts` is built to `dist/gkos-desktop-agent.mjs` and compiled
+ per platform into the `gkos-agent` Node SEA binary. It watches a records folder
+*** End Patch

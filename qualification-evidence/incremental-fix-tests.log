@@ -1,0 +1,43 @@
+✔ parser receipts cover projectionless notes, structured locations, and attachment non-applicability (33.5765ms)
+✔ parser receipts survive metadata-only reuse, rename reuse, and transactional rollback (5.8163ms)
+✔ note and attachment kind transitions reparse and converge with clean authority (3.2197ms)
+✔ candidate ledger captures path multiplicity before compatibility maps and is permutation-stable (4.2297ms)
+✔ candidate descriptors use parser-effective fields, SHA-256, and strict numeric preflight (1.8098ms)
+✔ candidate authority is an immutable parse-time snapshot, not the compatibility record (1.1439ms)
+✔ scoped resolver uses exact frozen precedence, fallthrough, ambiguity stop, and scoped self (8.1763ms)
+✔ future/unknown removal causes remain distinct and ordinary links remain evidence-only (1.8019ms)
+✔ hidden candidates never alter future/unknown removal causes at any tier (0.4616ms)
+✔ clean and incremental candidate ledgers converge across metadata changes and rename edge cases (4.2934ms)
+✔ same-extension rename rebases every path-bound projection byte and extension changes require reparse (6.396ms)
+✔ public parseSourceFile -> assembleGraph remains compatible and buildGraph shares duplicate representatives (10.3938ms)
+✔ incremental active-set rejection is transactional across every observable surface (1.2811ms)
+✔ full replacement rejection is transactional across every observable surface (1.3873ms)
+✔ candidate receipts and scoped resolver capability are absent from ordinary public subpaths (9.953ms)
+✔ codeUnitCompare is locale-independent: 'z' sorts before 'ä' (2.4806ms)
+✔ emitted graph node order is code-unit order ('z.md' before 'ä.md') (10.8046ms)
+✔ uniq'd aggregate tag list is code-unit ordered (ASCII tags before non-ASCII) (1.4048ms)
+✔ two consecutive full builds of the same fixture are byte-identical (4.4415ms)
+✔ full load parses everything once (14.244ms)
+✔ edit one note -> exactly one reparse, unaffected notes untouched (5.7447ms)
+✔ touch without content change -> zero reparses (hash gate) (3.8188ms)
+✔ add one note -> one reparse + added node in delta (2.5349ms)
+✔ delete one note -> removed node, zero reparses (2.644ms)
+✔ rename moves the cached record without reparsing (3.3146ms)
+✔ batch rename that swaps two paths preserves both records (no clobber) (1.5088ms)
+✔ rename onto an existing out-of-batch path replaces the target (rename wins) (0.6054ms)
+✔ add folder -> folder node appears (new galaxy candidate), no note reparses (1.9361ms)
+✔ remove folder -> folder node disappears (2.6007ms)
+✔ add/delete attachment updates diagnostics without reparsing (4.0311ms)
+✔ lineage change in ONE note re-derives temporal state for its partner (5.0891ms)
+✔ Related footer change retags the link kind (2.7472ms)
+✔ human edits to flat GKX labels and wikilinks update every graph projection incrementally (3.0975ms)
+✔ structural threshold reports full rebuild for bulk changes (§10.2) (106.9502ms)
+✔ watcher consumes the exact one-pass Phase3 accepted/rejection outcome (28.8679ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 285.3479

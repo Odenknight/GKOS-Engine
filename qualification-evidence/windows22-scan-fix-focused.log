@@ -1,0 +1,51 @@
+TAP version 13
+# (node:34772) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority
+ok 1 - restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority
+  ---
+  duration_ms: 113480.2109
+  type: 'test'
+  ...
+# {"topology_bytes":1552042,"graph_bytes":30764374}
+# (node:2744) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: secure scan retains ordinary archives and excludes only exact automatic namespaces
+ok 2 - secure scan retains ordinary archives and excludes only exact automatic namespaces
+  ---
+  duration_ms: 499.5958
+  type: 'test'
+  ...
+# Subtest: secure scan keeps fatal UTF-8 unstable and projects deterministic size rejection into exact Phase3 rows
+ok 3 - secure scan keeps fatal UTF-8 unstable and projects deterministic size rejection into exact Phase3 rows
+  ---
+  duration_ms: 170.3269
+  type: 'test'
+  ...
+# Subtest: watch hints are advisory and unsafe names force unscoped reconciliation
+ok 4 - watch hints are advisory and unsafe names force unscoped reconciliation
+  ---
+  duration_ms: 1.579
+  type: 'test'
+  ...
+# Subtest: secure scans bound concurrent opens across nested directories and preserve ordered evidence
+ok 5 - secure scans bound concurrent opens across nested directories and preserve ordered evidence
+  ---
+  duration_ms: 1072.4957
+  type: 'test'
+  ...
+# Subtest: a failed concurrent secure scan drains file work before returning refusal
+ok 6 - a failed concurrent secure scan drains file work before returning refusal
+  ---
+  duration_ms: 39.6437
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 113929.5605

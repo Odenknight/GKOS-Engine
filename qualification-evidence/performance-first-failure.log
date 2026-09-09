@@ -1,0 +1,20 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'sha256:6dd0f97b0f1e2a64177fc06ae20dcec8a24e2fcdb771e3c739a42069d8e22803'
+- 'sha256:8dad90909d221419a745be63178af9c2c9bf16cabdb267f5026e9d3750ca846f'
+
+    at file:///[LOCAL_PATH] {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 'sha256:6dd0f97b0f1e2a64177fc06ae20dcec8a24e2fcdb771e3c739a42069d8e22803',
+  expected: 'sha256:8dad90909d221419a745be63178af9c2c9bf16cabdb267f5026e9d3750ca846f',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.18.0

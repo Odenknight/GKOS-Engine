@@ -1,0 +1,12 @@
+{
+  "fixture_root": "[LOCAL_PATH]",
+  "source_identity_drift": {
+    "first_head": "631276885fc4ae4df8fac3257e2f4d7f3c922b1a",
+    "second_head": "254188137c82bbf8d6014715cdad2d7acb0c2499",
+    "heads_differ": true,
+    "snapshot_digests_equal": false
+  },
+  "preflight_failure": {
+    "old_receipt_preserved": false
+  }
+}

@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 23, 24]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install (clean, from lockfile)
+        run: npm ci
+
+      - name: License metadata consistency
+        run: npm run check:license
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build (dist/gkos-engine.mjs)
+        run: npm run build
+
+      - name: Legacy nomenclature gate (tracked and generated release content)
+        run: npm run check:nomenclature
+
+      - name: Navigation architecture and contract gates
+        run: npm run test:navigation
+
+      - name: Tests
+        run: npm test
+
+      - name: Intelligence contract tests
+        env:
+          PYTHONPATH: services/gkos-intelligence/src
+        run: npm run test:intelligence
+
+      - name: Package contents smoke test
+        run: |
+          npm run pack:check
+          python -m pip install --no-deps ./services/gkos-intelligence
+          gkos-intelligence --help
+
+      - name: CLI smoke test (validate + assess)
+        run: |
+          node bin/gkx.mjs --help
+          node bin/gkx.mjs assess . --json >/dev/null
+
+      - name: Clean tracked tree after release checks
+        run: git diff --exit-code
+
+  navigation-effects-platform:
+    name: Navigation Effects — ${{ matrix.os }} / Node 22
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install (clean, from lockfile)
+        run: npm ci
+
+      - name: Type check and build
+        run: |
+          npm run typecheck
+          npm run build
+
+      - name: Navigation purity, effects, crash, recovery, and platform tests
+        run: npm run test:navigation
+
+      - name: Package contents
+        run: npm run pack:check

@@ -1,0 +1,261 @@
+{
+  "record_type": "gkos-phase6-d0-15-corrected-decision-and-correction-map",
+  "record_version": "2.0.0",
+  "recorded_at_utc": "2026-08-26T12:04:15.6941411Z",
+  "status": "AWAITING_EXACT_BYTE_OWNER_RATIFICATION",
+  "purpose": "Consolidate the owner-ratified Q1 through Q13 semantic basis, corrected R01 through R15 selections, D015-DC01 through D015-DC13, and the exact corrected fixture registry into one immutable evidence-only correction map. This record is not an owner exact-byte ratification receipt, concurrence acceptance, product-correction authorization, or F2 restart authorization.",
+  "authority_boundary": {
+    "detached_evidence_preparation_authorized": true,
+    "validation_and_owner_ratification_request_preparation_authorized": true,
+    "exact_byte_owner_ratification_complete": false,
+    "c1_concurrence_restart_authorized": false,
+    "c2_or_c3_concurrence_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "contract_or_fixture_regeneration_authorized": false,
+    "commit_push_workflow_pr_merge_release_deploy_activate_publish_authorized": false,
+    "rule": "Preserve and validate this evidence coordinate, then present its exact existing bytes and the exact existing registry V2 bytes to the Product Owner for a separate ratification decision. No concurrence restarts and no product work begins from this map."
+  },
+  "exact_parent_ledger": [
+    {
+      "role": "Q1-Q6 owner decision basis and C1 rejection status parent",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_DECISION_BASIS_V3_2026-08-26.json",
+      "sha256": "e282fa0c2c378b9716302d49738f50f93f158da344df3c693e39e992d09e3d0d",
+      "bytes": 21782,
+      "record_digest": "f3b00953902a5e38bd6c118991b862b4539d493bd517f1254346f12955728e73"
+    },
+    {
+      "role": "Q7-Q13 authoritative projection resolution",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_PROJECTION_RESOLUTION_V4_2026-08-26.json",
+      "sha256": "256bbc19b4418c155726e514d1cff9c10dce17914b72040b147176d856b32efb",
+      "bytes": 16576,
+      "record_digest": "83ae66b748ecf85ae42951e777659aefb6d402a9165ea6b01db4daba91a2e82b"
+    },
+    {
+      "role": "corrected exhaustive non-MCP fixture registry",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V2_2026-08-26.json",
+      "sha256": "6eeb65ccb6750538bd3ad5ceb85a66095d6bd350895e244ebb49f3eb03a6dee0",
+      "bytes": 111226,
+      "record_digest": "12bcf45edd4faf5c352d0975dcbb1a927638b25595852d843cbeea2f71f3e938",
+      "status": "CORRECTED_CLOSED_EVIDENCE_DESCENDANT_AWAITING_CORRECTION_MAP_AND_EXACT_BYTE_OWNER_RATIFICATION"
+    },
+    {
+      "role": "historical C1 migration rejection of prior bytes",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "167a0ed6f5098daa26ea230805941a245725efb6f6ac636e5945af523b9b0b25",
+      "bytes": 20565,
+      "record_digest": "58c90b6e44f2d35ca634964e56bceb7ffa98ddd02a86977001a7d90901679cb3",
+      "verdict": "REJECT_CONCURRENCE"
+    },
+    {
+      "role": "historical C1 security rejection of prior bytes",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "2ff2035b102caf69127719313e223e590ad8959df98fe9fec2b482631cbe47f8",
+      "bytes": 33807,
+      "record_digest": "a89c23269ca373ac4fdc72fab7a7842a0838e4ad93f832b00b48222c82cac1ff",
+      "verdict": "REJECT_CONCURRENCE"
+    }
+  ],
+  "immutable_historical_disposition": {
+    "prior_correction_map": {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_2026-08-26.json",
+      "sha256": "87da54d22f72e27625144143e15dcc6a38264b856af51bdaf5d26055a92c2a29",
+      "bytes": 21418,
+      "record_digest": "fe8809604c862a7fbf4d2638802ac6eb6157c920407efbc5998f3b7e6adbc338",
+      "disposition": "immutable historical rejected coordinate; superseded by this distinct-path map only for operational evidence authority"
+    },
+    "prior_fixture_registry": {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_2026-08-26.json",
+      "sha256": "e878b6906559e91a7d4acf34d375b8de43b140549c673f50f8e164b5a333bd90",
+      "bytes": 90098,
+      "record_digest": "e65c98badb2fcb8399149034edacc40c15d5a6b6d58df86af60229c06f2af732",
+      "disposition": "immutable historical rejected coordinate; no count, ID, alias, semantic, or source-trace authority carries forward"
+    },
+    "c1_receipt_rule": "The exact migration and security C1 receipts rejected only the prior exact-byte coordinate. They remain immutable rejection evidence and cannot be converted, waived, inherited, or carried forward as acceptance of this V2 map, registry V2, or any later bytes.",
+    "accepted_f1": "e29e04bdad1cd192a25eba2d682a4c46774def28 remains immutable historical evidence and cannot qualify changed successor bytes.",
+    "stopped_f2": "The existing uncommitted and unqualified F2 draft remains preserved exactly and is not restarted, repaired, reset, discarded, grandfathered, committed, pushed, or qualified."
+  },
+  "q1_q13_correction_basis": [
+    {
+      "id": "Q1",
+      "rule": "Require five fresh, independent, zero-contribution concurrences in serial waves: C1 migration plus security; C2 authority/concurrency; C3 Full-contract plus Lite-conformance. Every role in a wave must accept the same exact immutable ratified coordinate before advancement."
+    },
+    {
+      "id": "Q2",
+      "rule": "Every reference-bound cursor fails closed after process restart with CURSOR_STALE projected as GKOS_P6_REQUEST_STALE_AUTHORITY before dead or invalid reference lookup and requires fresh live opaque-reference rediscovery. No durable resolver, raw path, new table, new operation, public tool, or continuation exception is permitted."
+    },
+    {
+      "id": "Q3",
+      "rule": "Eighteen is exactly the named 8+10 non-MCP subtotal, not the overall total. Preserve all 67 official MCP IDs and valid wire semantics. Every additional executable leaf has one closed unique ID, exact deterministic semantics, one family, exact accounting, and non-counting aliases."
+    },
+    {
+      "id": "Q4",
+      "rule": "Defer the mapping evidence record, collision-guard construction, adapter binding, and executable subject-digest-collision qualification together to a separately ratified authenticated adapter contract. Preserve exactly 53 errors including GKOS_P6_IDENTITY_COLLISION, one entropy use where already governed, zero mutation, no retry or overwrite, content-free evidence, and pre-adapter GKOS_P6_PLATFORM_UNAVAILABLE mapping behavior."
+    },
+    {
+      "id": "Q5",
+      "rule": "Normatively adopt corrected D015-DC01 through D015-DC13, subject to the owner amendments, the C1 rejection corrections, exact registry V2 bytes, and separate exact-byte owner ratification."
+    },
+    {
+      "id": "Q6",
+      "rule": "Authorize evidence and ratification/concurrence record preparation only. No product, proposal, successor-F1, F2, regeneration, commit, push, workflow, pull request, merge, release, deployment, activation, or publication authority follows."
+    },
+    {
+      "id": "Q7",
+      "rule": "Backup integrity-check, foreign-key-check, and pragma-check failures project GKOS_P6_AUTHORITY_CORRUPT. Snapshot byte-length and manifest-digest mismatch project GKOS_P6_EVIDENCE_MISMATCH. Every leaf has zero accepted result, publication, authority mutation, event, and success activity."
+    },
+    {
+      "id": "Q8",
+      "rule": "Global-event coordinate mismatch, duplicate global_event_seq, and kind-to-table mismatch at insertion project GKOS_P6_STATE_CONFLICT with full rollback and zero committed mutation. The corresponding startup corruptions project GKOS_P6_AUTHORITY_CORRUPT with blocked gate. Duplicate event_id at insertion projects GKOS_P6_IDENTITY_COLLISION with one entropy use where generated, zero mutation, no retry, and no overwrite."
+    },
+    {
+      "id": "Q9",
+      "rule": "Post-resolution physical drift projects authenticated-redacted GKOS_P6_RESOURCE_NOT_FOUND with zero replacement-object access and zero mutation. A process-restarted reference-bound cursor remains GKOS_P6_REQUEST_STALE_AUTHORITY under the Q2 precedence rule."
+    },
+    {
+      "id": "Q10",
+      "rule": "An initially clean preexisting final locator, including RESTORE-OWNER-004, projects GKOS_P6_STATE_CONFLICT. A post-qualification identity or existence race projects GKOS_P6_MIGRATION_RECOVERY_REQUIRED. Both forbid overwrite, deletion, hybrid publication, and secret re-reveal and preserve exact recovery evidence."
+    },
+    {
+      "id": "Q11",
+      "rule": "Restart at request admission, final gate without committed effect, effect-prepared with no terminal effect, or uncommitted anchor-intent cuts persists request state stale and projects GKOS_P6_REQUEST_STALE_AUTHORITY with no result, externally committed effect, or success activity. Later committed cuts use their source-controlled deterministic recovery or replay rule with no duplicate outcome."
+    },
+    {
+      "id": "Q12",
+      "rule": "RESTORE-OWNER-001 through RESTORE-OWNER-009 retain their original exact D0 meanings; valid staged restore evidence auto-resumes without re-reveal; abort is only a separate authenticated operation; BOOTSTRAP-LOCATOR-ROLLBACK-001 is the same-locator rollback and retry case. Exact accounting is 18 named subtotal plus 247 additional canonical fixtures equals 265 overall canonical non-MCP fixtures, with 12 non-counting aliases and 67 unchanged official MCP vectors."
+    },
+    {
+      "id": "Q13",
+      "rule": "The acyclic sequence is V3, V4, completed registry V2, this completed correction map V2, a separate exact-byte Product Owner ratification receipt, then fresh C1 only after that receipt accepts the exact existing registry and map coordinates. C2 and C3 remain serial successors, and successor-F1 authority remains a later separate owner decision."
+    }
+  ],
+  "r01_r15_corrected_selections": [
+    {"id": "D015-R01", "selection": "A", "correction_binding": "closed three-variant authority anchor with exact proposed coordinates and genesis nullability"},
+    {"id": "D015-R02", "selection": "A", "correction_binding": "six disjoint restore invalidation aggregates and event_digest as the global head"},
+    {"id": "D015-R03", "selection": "A", "correction_binding": "closed restore plan, abort states, locator dispositions, generation and recovery; Q10 exact locator-conflict projections apply"},
+    {"id": "D015-R04", "selection": "A", "correction_binding": "authenticated authority.status recovery object with no new operation"},
+    {"id": "D015-R05", "selection": "A", "correction_binding": "closed bootstrap vocabulary and pre-authority crash recovery without new authority or operation"},
+    {"id": "D015-R06", "selection": "A_CLARIFIED_BY_Q3_AND_Q12", "correction_binding": "18 is only 8+10; registry V2 freezes 247 additional and 265 overall canonical non-MCP fixtures, 12 aliases, and 67 unchanged MCP vectors"},
+    {"id": "D015-R07", "selection": "OWNER_AMENDED_BY_Q2_AND_Q9", "correction_binding": "persist bounded snapshot bytes but invalidate every reference-bound cursor on restart as GKOS_P6_REQUEST_STALE_AUTHORITY before dead-reference resolution"},
+    {"id": "D015-R08", "selection": "A_WITH_Q8_PROJECTIONS", "correction_binding": "exact event kind-to-table constants; insertion mismatches use STATE_CONFLICT, startup uses AUTHORITY_CORRUPT, duplicate generated event ID uses IDENTITY_COLLISION"},
+    {"id": "D015-R09", "selection": "A_WITH_Q11_RESTART_CUTS", "correction_binding": "selective final gate plus deterministic precommit stale and later committed recovery/replay cuts"},
+    {"id": "D015-R10", "selection": "A", "correction_binding": "credential issuance advances the target epoch without implicitly revoking other active credentials"},
+    {"id": "D015-R11", "selection": "A", "correction_binding": "sole-owner rotation requires a second active owner credential before zero-grace rotation"},
+    {"id": "D015-R12", "selection": "A", "correction_binding": "external mapping remains GKOS_P6_PLATFORM_UNAVAILABLE before a separately ratified authenticated adapter"},
+    {"id": "D015-R13", "selection": "A", "correction_binding": "prospective retention policy, permanent history, and source sequences remain in the exact 16-table design"},
+    {"id": "D015-R14", "selection": "A", "correction_binding": "closed typed non-content activity metadata domains"},
+    {"id": "D015-R15", "selection": "OWNER_AMENDED_BY_Q4", "correction_binding": "preserve exact 53-code collision behavior and defer adapter-dependent mapping collision predicate and qualification"}
+  ],
+  "normatively_adopted_corrected_derived_corrections": [
+    {"id": "D015-DC01", "correction": "Use one six-field additionalProperties:false error envelope: contract_version, one of exactly 53 error_code values, request_id, retryable, retry_after_ms, and error_digest. Remove arbitrary code, message, details, and content fields."},
+    {"id": "D015-DC02", "correction": "Add durable request state stale; close operation, capability, and namespace identifier grammar and size; lifecycle loss before the final gate persists no result, effect, or success activity."},
+    {"id": "D015-DC03", "correction": "Close ordered policy-operation and private-dependency arrays, separate transport from authority, cap reason codes, and fail closed on deny, indeterminate, timeout, or unmapped dependency."},
+    {"id": "D015-DC04", "correction": "Close rate-bucket classes and bindings, domain-separated IDs, persisted integer-microtoken refill, effective time, restart, clock divergence, and unknown-selector cap semantics."},
+    {"id": "D015-DC05", "correction": "Place reachable closed bootstrap owner-proof and plan, restore plan, and restore abort intent definitions in existing leaves without a new table, operation, pack leaf, or raw path."},
+    {"id": "D015-DC06", "correction": "Use registry V2 as the exact executable fixture coordinate: 265 unique canonical non-MCP cases across 16 families, including the exact 18 named subtotal and 247 additional cases, plus 12 non-counting aliases. One ID has one deterministic initial state, schedule, response or error, allowed and forbidden mutations, restart sequence, and exhaustive post-state. Preserve all 67 official MCP IDs and valid wire semantics."},
+    {"id": "D015-DC07", "correction": "Accept real Gregorian UTC millisecond timestamps for years 1970 through 9999; reject missing milliseconds, offsets, impossible dates, date-only values, and year 10000."},
+    {"id": "D015-DC08", "correction": "Close external protected backup source coordinates, SQLite snapshot bytes and digest, no-follow/no-replace publication, checkpoint, integrity and foreign-key checks, fsync order, and replay. Apply Q7 exact codes and zero-publication, zero-mutation, zero-event, zero-success disposition."},
+    {"id": "D015-DC09", "correction": "Close credential format and digest coupling, lifecycle nullability, one-time handoff evidence, locator and pipe physical/content binding, delivery/replay outcomes, canonical encoding, one-shot entropy, no retry/overwrite, and byte-identical unauthenticated non-enumeration."},
+    {"id": "D015-DC10", "correction": "Enforce one global event union across four existing event tables with unique contiguous IDs and sequences, exact predecessor and coordinates, one genesis, restore floor, kind-to-table constants, integrity and foreign keys, and committed-only receipt digests. Apply Q8 insertion, startup, and collision projections."},
+    {"id": "D015-DC11", "correction": "Bind references, sessions, cursors, snapshots, requests, and idempotency to identity, authority, policy, physical, and recovery coordinates; enforce expiry and lifecycle invalidation; apply Q2 and Q9 restart/reference precedence plus Q11 deterministic restart cuts."},
+    {"id": "D015-DC12", "correction": "Keep retention owner-or-trusted-scheduler only, require gate rules, delete complete eligible UTC days in foreign-key-safe order, preserve active rows and replay minima, and bind true sequence and digest evidence."},
+    {"id": "D015-DC13", "correction": "Only after later separate product authorization, deterministically regenerate changed successor-F1 leaves, regenerate the non-self-listing manifest last, recompute all sizes and digests, and form a new acyclic input-to-run-to-closeout chain. Accepted F1 remains immutable historical evidence and cannot qualify changed bytes."}
+  ],
+  "exact_preservation_and_accounting": {
+    "normalized_authority_tables": 16,
+    "operations": 32,
+    "public_authenticated_operations": 7,
+    "local_bootstrap_operations": 1,
+    "owner_only_operations": 24,
+    "error_codes": 53,
+    "required_public_mcp_tools": 7,
+    "official_mcp_vectors": 67,
+    "official_mcp_ids_or_valid_wire_semantics_changed": false,
+    "named_core_operation_subtotal": 8,
+    "named_restore_bootstrap_recovery_subtotal": 10,
+    "named_non_mcp_subtotal": 18,
+    "named_non_mcp_subtotal_is_overall_total": false,
+    "additional_canonical_non_mcp_fixtures": 247,
+    "overall_canonical_non_mcp_fixtures": 265,
+    "aliases": 12,
+    "coverage_families": 16,
+    "formula": "18 + 247 = 265 canonical non-MCP fixtures; aliases do not count",
+    "new_table_operation_error_or_public_tool": false,
+    "public_mcp_tool_name_catalog_input_or_success_semantic_change": false
+  },
+  "registry_v2_binding": {
+    "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V2_2026-08-26.json",
+    "sha256": "6eeb65ccb6750538bd3ad5ceb85a66095d6bd350895e244ebb49f3eb03a6dee0",
+    "bytes": 111226,
+    "record_digest": "12bcf45edd4faf5c352d0975dcbb1a927638b25595852d843cbeea2f71f3e938",
+    "validation": {
+      "json_parse": "PASS",
+      "internal_record_digest_recomputation": "PASS",
+      "canonical_fixture_rows": 265,
+      "unique_canonical_ids": 265,
+      "canonical_ids_lexicographically_sorted": true,
+      "alias_rows": 12,
+      "unique_aliases": 12,
+      "alias_targets_exist": true,
+      "per_family_count_rows": 16,
+      "coverage_family_rows": 16,
+      "family_sum": 265,
+      "fixed_count_arithmetic": "18 + 247 = 265"
+    }
+  },
+  "source_and_cross_binding_verification": {
+    "performed_at_utc": "2026-08-26T12:04:15.6941411Z",
+    "algorithm": "SHA-256 over raw file bytes plus the declared canonical internal record-digest method where present",
+    "results": [
+      "V3 raw SHA-256, byte length, and internal digest match the exact existing file",
+      "V4 raw SHA-256, byte length, and internal digest match the exact existing file",
+      "registry V2 raw SHA-256, byte length, and internal digest match the exact existing file",
+      "both historical C1 rejection raw SHA-256 values, byte lengths, verdicts, and internal digests match the exact existing files",
+      "registry V2 binds the exact existing V3 and V4 parents and both C1 rejection receipts in its source trace",
+      "all registry V2 fixed counts, unique IDs, aliases, targets, families, and arithmetic match this correction map"
+    ],
+    "overall": "PASS"
+  },
+  "required_next_sequence": [
+    {
+      "order": 1,
+      "gate": "SEPARATE_EXACT_BYTE_OWNER_RATIFICATION",
+      "requirement": "The Product Owner must separately ratify the exact existing bytes, hashes, internal digests, accounting, and evidence-only authority boundary of registry V2 and this correction map V2. This map does not pre-bind the later receipt."
+    },
+    {
+      "order": 2,
+      "gate": "FRESH_C1",
+      "requirement": "Only after exact-byte owner ratification may fresh zero-contribution migration and security reviewers assess the newly ratified coordinate. The old rejection receipts do not carry as acceptance."
+    },
+    {
+      "order": 3,
+      "gate": "FRESH_C2",
+      "requirement": "Only after both C1 roles accept may a fresh zero-contribution authority/concurrency reviewer assess the same exact coordinate."
+    },
+    {
+      "order": 4,
+      "gate": "FRESH_C3",
+      "requirement": "Only after C2 accepts may fresh zero-contribution Full-contract and Lite-conformance reviewers assess the same exact coordinate."
+    },
+    {
+      "order": 5,
+      "gate": "SEPARATE_SUCCESSOR_F1_AUTHORIZATION_REQUEST",
+      "requirement": "Only after all five reviewers accept may the Orchestrator return to the Product Owner for a separate successor-F1 correction authorization."
+    }
+  ],
+  "fresh_concurrence_rules": {
+    "waves": {
+      "C1": ["migration", "security"],
+      "C2": ["authority/concurrency"],
+      "C3": ["Full-contract", "Lite-conformance"]
+    },
+    "fresh_zero_contribution": true,
+    "same_exact_coordinate": true,
+    "byte_drift_effect": "Any change to a ratified input invalidates all dependent receipts and requires a new exact-byte owner decision before concurrence resumes.",
+    "current_state": "NOT_AUTHORIZED_TO_RESTART"
+  },
+  "terminal_statement": "CORRECTED DECISION AND CORRECTION MAP V2 IS COMPLETE AS EVIDENCE AND AWAITS SEPARATE EXACT-BYTE PRODUCT OWNER RATIFICATION. THE PRIOR C1 REJECTIONS APPLY TO PRIOR BYTES AND CANNOT CARRY AS ACCEPTANCE. NO C1, C2, OR C3 RESTART, PRODUCT OR PROPOSAL EDIT, SUCCESSOR-F1 CORRECTION OR REGENERATION, F2 RESTART, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, OR PUBLICATION IS AUTHORIZED BY THIS RECORD.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "0db57dd45f82fc720ac5fb3a0dbc08465f4d056fcff0ecff77343d52f5b356b4"
+}

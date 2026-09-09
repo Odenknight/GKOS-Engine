@@ -1,0 +1,15 @@
+import {mkdirSync,readFileSync,writeFileSync,copyFileSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+const root=resolve(import.meta.dirname,'..'),web=resolve(root,'web'),out=resolve(web,'dist'),vendor=resolve(web,'vendor/kosmos-oden');
+const provenance=JSON.parse(readFileSync(resolve(vendor,'PROVENANCE.json'),'utf8'));
+const hash=createHash('sha256').update(readFileSync(resolve(vendor,'renderer.mjs'))).digest('hex');
+if(hash!==provenance.bundle_sha256)throw new Error('Vendored renderer digest mismatch');
+mkdirSync(resolve(out,'vendor'),{recursive:true});
+for(const file of ['index.html','app.css','app.mjs','frame.mjs','frame.css','adapter.mjs','live.html','live.css','live.mjs','live-client.mjs','live-frame.mjs'])copyFileSync(resolve(web,file),resolve(out,file));
+for(const file of ['renderer.mjs','PROVENANCE.json','LICENSE','THIRD-PARTY-NOTICES.md','APACHE-2.0.txt','VAULT-KOSMOS-LICENSE.txt'])copyFileSync(resolve(vendor,file),resolve(out,'vendor',file));
+copyFileSync(resolve(vendor,'src/renderer/kosmos.css'),resolve(out,'vendor/kosmos.css'));
+writeFileSync(resolve(out,'frame.html'),`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kosmos-Oden record projection</title><link rel="stylesheet" href="/vendor/kosmos.css"><link rel="stylesheet" href="/frame.css"><script type="module" src="/frame.mjs"></script></head><body>${readFileSync(resolve(vendor,'src/renderer/kosmos-body.html'),'utf8')}</body></html>`);
+writeFileSync(resolve(out,'live-frame.html'),`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kosmos-Oden live Engine graph</title><link rel="stylesheet" href="/vendor/kosmos.css"><link rel="stylesheet" href="/frame.css"><script type="module" src="/live-frame.mjs"></script></head><body>${readFileSync(resolve(vendor,'src/renderer/kosmos-body.html'),'utf8')}</body></html>`);
+writeFileSync(resolve(out,'viewer-build.json'),JSON.stringify({schema_id:'observatory.viewer-build.v0',upstream_commit:provenance.commit,renderer_sha256:hash,files:Object.fromEntries(['app.mjs','adapter.mjs','frame.mjs','app.css','index.html','live.html','live.css','live.mjs','live-frame.mjs','live-client.mjs'].map(f=>[f,createHash('sha256').update(readFileSync(resolve(web,f))).digest('hex')]))},null,2)+'\n');
+console.log('Built static Kosmos-Oden observer with verified renderer bytes; consult PROVENANCE.json for historical upstream and local patch standing.');

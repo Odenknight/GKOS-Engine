@@ -1,0 +1,10 @@
+{
+  "repository": "lite",
+  "disposition": "REJECTED_BEFORE_COMMIT",
+  "base": "4027bfc4499ad0a2f3e753401f1320468e283823",
+  "branch": "codex/integrate-lite-quick-connect-20260831",
+  "rejected_patch_sha256": "3c5b7ef50b239d2ea377237b1b395b5bb9d931e78607c4769a91d33499245b09",
+  "reason": "The old packer emitted CRLF-bearing index content, producing a line-ending rewrite and 1770 whitespace errors during application. Normalized preflight also found a surplus blank line at EOF in the new packaged runtime test.",
+  "source_preserved": true,
+  "remote_write": false
+}

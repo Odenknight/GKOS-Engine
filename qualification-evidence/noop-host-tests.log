@@ -1,0 +1,141 @@
+✔ host creates, advances ownership, archives replacements and restarts as a no-op (350.3573ms)
+✔ host recovers an effect committed before ownership metadata persisted (154.6368ms)
+✔ host refuses external edits and current authority revocation (129.6243ms)
+✔ host state tampering blocks startup and preserves evidence (89.7524ms)
+✔ runtime observes file edits and closes resources within shutdown budget (1062.3609ms)
+✔ host preserves human bytes through successive region-managed updates (159.0844ms)
+✔ missing ownership state alongside an existing effect journal fails closed (92.9136ms)
+✖ periodic and startup reconciliation repair changes with no delivered event (206.7155ms)
+✔ cross-folder rename reconciles both scopes and leaves an unrelated MOC untouched (321.3749ms)
+✔ shutdown waits for an active commit and preserves newer admitted work for restart (267.4295ms)
+✔ failed graph publication replays the same committed effect before ownership advancement (143.5543ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3073.0744
+
+✖ failing tests:
+
+test at test\navigation-effects-host.test.mjs:135:1
+✖ periodic and startup reconciliation repair changes with no delivered event (206.7155ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      {
+        artifactKind: 'engine.effect-journal-entry',
+        effectId: 'effect:0cae4aa8436127cf7034176db752a682',
+        effectsContract: '1.0.0',
+  ...
+      },
+  +   {
+  +     artifactKind: 'engine.effect-journal-entry',
+  +     effectId: 'effect:f3f2b5c0ce131ebeb51652524561c6a9',
+  +     effectsContract: '1.0.0',
+  +     entryDigest: 'sha256:64deb9b4154a92d587253c7bc59f7a39f1cf3db12e6aecc4f348ba07b8d423c5',
+  +     occurredAt: '2026-09-06T12:00:00Z',
+  +     plan: {
+  +       artifactKind: 'engine.navigation-effect-plan',
+  +       authority: {
+  +         actor: {
+  +           actorId: 'owner',
+  +           actorType: 'human'
+  +         },
+  +         allowedRoot: 'topics',
+  +         capability: 'moc:apply',
+  +         grantId: 'grant',
+  +         policyRef: {
+  +           digest: 'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+  +           id: 'policy',
+  +           version: '1'
+  +         },
+  +         sensitivityCeiling: 'public'
+  +       },
+  +       configDigest: 'sha256:2504d1fa73c9c6d6eba78dd170104a87f67b6d5d92be62cb47de7b36c997cd91',
+  +       corpusDigest: 'sha256:321fe0a8e73d838d0a516b8f0e2a260ff4b9046e93cca9c0c1b9f08833e2e58d',
+  +       effectId: 'effect:f3f2b5c0ce131ebeb51652524561c6a9',
+  +       effectsContract: '1.0.0',
+  +       idempotencyKey: 'moc-no-change:d7f8e20cc371c7683ff86707a9c38188db012af4542b281c44912e150d825843:f3f2b5c0ce131ebeb51652524561c6a944193f2c0f050e4176c4fb92bac92ce4',
+  +       operation: 'moc:replace',
+  +       ownership: {
+  +         adoptedDigest: 'sha256:2f431b6cd735eec9f8be2fe5cb48de44475983e46740d429df41edc7bdd6de9a',
+  +         creationAuthorized: true,
+  +         generatedRegion: undefined,
+  +         ownership: 'fully-managed',
+  +         targetPath: 'topics/index.md'
+  +       },
+  +       policyRef: {
+  +         digest: 'sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+  +         id: 'policy',
+  +         version: '1'
+  +       },
+  +       precondition: {
+  +         authorityDigest: 'sha256:0a9cd1c8c2badf25289a673b48ef53ba3121727c2fb916533eb0132770fbf18f',
+  +         authorityEvaluatedAt: '2026-09-06T12:00:00Z',
+  +         configDigest: 'sha256:2504d1fa73c9c6d6eba78dd170104a87f67b6d5d92be62cb47de7b36c997cd91',
+  +         priorDigest: 'sha256:2f431b6cd735eec9f8be2fe5cb48de44475983e46740d429df41edc7bdd6de9a',
+  +         retentionHold: 'clear',
+  +         target: 'present'
+  +       },
+  +       proposedDigest: 'sha256:2f431b6cd735eec9f8be2fe5cb48de44475983e46740d429df41edc7bdd6de9a',
+  +       sourceSnapshotDigest: 'sha256:658a1c246b60895698f1d390893b65627a8ed55d127f28fb399783493fa7476d',
+  +       targetPath: 'topics/index.md',
+  +       vaultId: 'vault'
+  +     },
+  +     planDigest: 'sha256:98fc9387ca7c6aa6c6dfbf148bdad9648365493ac2c59e70e06db7b35a2d90fc',
+  +     predecessorDigest: 'sha256:7e2c0e78bab205a424c03b27fc52885c2010939ea791202b838c05cc5ce74c5c',
+  +     sequence: 12,
+  +     state: 'RECEIVED'
+  +   },
+  +   {
+  +     artifactKind: 'engine.effect-journal-entry',
+  +     effectId: 'effect:f3f2b5c0ce131ebeb51652524561c6a9',
+  +     effectsContract: '1.0.0',
+  +     entryDigest: 'sha256:c27906f4f838759cff0b2576ef9e8014217eb49f7c4053fbc67c7dfa1189ebab',
+  +     occurredAt: '2026-09-06T12:00:00Z',
+  +     planDigest: 'sha256:98fc9387ca7c6aa6c6dfbf148bdad9648365493ac2c59e70e06db7b35a2d90fc',
+  +     predecessorDigest: 'sha256:64deb9b4154a92d587253c7bc59f7a39f1cf3db12e6aecc4f348ba07b8d423c5',
+  +     sequence: 13,
+  +     state: 'PLANNED'
+  +   },
+  +   {
+  +     artifactKind: 'engine.effect-journal-entry',
+  +     effectId: 'effect:f3f2b5c0ce131ebeb51652524561c6a9',
+  +     effectsContract: '1.0.0',
+  +     entryDigest: 'sha256:5ecd3d8ff306c05eea83575872458f9f620b192fe75e87132ce083884de37875',
+  +     occurredAt: '2026-09-06T12:00:00Z',
+  +     planDigest: 'sha256:98fc9387ca7c6aa6c6dfbf148bdad9648365493ac2c59e70e06db7b35a2d90fc',
+  +     predecessorDigest: 'sha256:c27906f4f838759cff0b2576ef9e8014217eb49f7c4053fbc67c7dfa1189ebab',
+  +     sequence: 14,
+  +     state: 'PREPARED'
+  +   },
+  +   {
+  +     artifactKind: 'engine.effect-journal-entry',
+  +     effectId: 'effect:f3f2b5c0ce131ebeb51652524561c6a9',
+  +     effectsContract: '1.0.0',
+  +     entryDigest: 'sha256:78f7d89fdc412d7bacc05829d8b76411a04a4804737ff94b51797d51280b5eaa',
+  +     occurredAt: '2026-09-06T12:00:00Z',
+  +     planDigest: 'sha256:98fc9387ca7c6aa6c6dfbf148bdad9648365493ac2c59e70e06db7b35a2d90fc',
+  +     predecessorDigest: 'sha256:5ecd3d8ff306c05eea83575872458f9f620b192fe75e87132ce083884de37875',
+  +     reasonCode: 'BYTE_IDENTICAL',
+  +     receiptDigest: 'sha256:4e0f478503be950b3216cc63587fd0102b8d128d934fe5b3a2e43c3e41de7bf1',
+  +     sequence: 15,
+  +     state: 'COMMITTED'
+  +   }
+    ]
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 0, effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'RECEIVED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', plan: [Object], entryDigest: 'sha256:d560ca2d6f28d9114a598f7bd619c944f2ccbf030b344875c3c346105ac26052' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 1, predecessorDigest: 'sha256:d560ca2d6f28d9114a598f7bd619c944f2ccbf030b344875c3c346105ac26052', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'PLANNED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:8d8fa09350658001be91f26690c1b2997e47d780967d41784ca93053cb5fb027' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 2, predecessorDigest: 'sha256:8d8fa09350658001be91f26690c1b2997e47d780967d41784ca93053cb5fb027', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'PREPARED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:21f3ac0e0d35960c59b6c82f77d874e38ee360b14f3ae1abc1b6d7db47457795' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 3, predecessorDigest: 'sha256:21f3ac0e0d35960c59b6c82f77d874e38ee360b14f3ae1abc1b6d7db47457795', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'APPLYING', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', temporaryPath: 'topics/.gkx-effect-effect_0cae4aa8436127cf7034176db752a682.tmp', entryDigest: 'sha256:dbe0698ea4b80a3dabc6d990a8fee2113eb0663c801710235a7821cd04e980f6' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 4, predecessorDigest: 'sha256:dbe0698ea4b80a3dabc6d990a8fee2113eb0663c801710235a7821cd04e980f6', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'VERIFIED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:adb80df48ca98d745a9c7f539563acdd7e5b21892e3f53417023bba04069a8d2' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 5, predecessorDigest: 'sha256:adb80df48ca98d745a9c7f539563acdd7e5b21892e3f53417023bba04069a8d2', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'COMMITTED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', receiptDigest: 'sha256:20b8c8d78ff355d780e4782946e26cca7b879f31f29e4e203507487a31b238ef', entryDigest: 'sha256:3567b99fac67e4d0af297e12069ba2d74c172d77b1fe2bb628565bb6fc9903df' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 6, predecessorDigest: 'sha256:3567b99fac67e4d0af297e12069ba2d74c172d77b1fe2bb628565bb6fc9903df', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'RECEIVED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', plan: [Object], entryDigest: 'sha256:53c2bf882d6639ecc715e17682ee807699f7098664facdb37489396017aec515' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 7, predecessorDigest: 'sha256:53c2bf882d6639ecc715e17682ee807699f7098664facdb37489396017aec515', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'PLANNED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:bb0fa0bf04105e77bf2442bfe3a3f3a7090849bc53b6d148ba4ca5108256cb96' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 8, predecessorDigest: 'sha256:bb0fa0bf04105e77bf2442bfe3a3f3a7090849bc53b6d148ba4ca5108256cb96', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'PREPARED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:244343efcd1f0eb27f66e48c0d2b78d6c6d4faaacd8873865614ca147d415d08' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 9, predecessorDigest: 'sha256:244343efcd1f0eb27f66e48c0d2b78d6c6d4faaacd8873865614ca147d415d08', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'APPLYING', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', temporaryPath: 'topics/.gkx-effect-effect_ccc7796510dad7c177a34306e5de5e78.tmp', entryDigest: 'sha256:5358ec2c9817fa2db05d407d3c398f74c5c479c8ba6730f99e8ce155a707cfc8' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 10, predecessorDigest: 'sha256:5358ec2c9817fa2db05d407d3c398f74c5c479c8ba6730f99e8ce155a707cfc8', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'VERIFIED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:87ba099177e94ef6259b17831bfec1b767e3ff28cedd031ff3755c6b756ac15e' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 11, predecessorDigest: 'sha256:87ba099177e94ef6259b17831bfec1b767e3ff28cedd031ff3755c6b756ac15e', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'COMMITTED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', receiptDigest: 'sha256:7e9733a43683c79ca22b9938fc63be5c22582d8c251c8478199e773e21c7762d', entryDigest: 'sha256:7e2c0e78bab205a424c03b27fc52885c2010939ea791202b838c05cc5ce74c5c' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 12, predecessorDigest: 'sha256:7e2c0e78bab205a424c03b27fc52885c2010939ea791202b838c05cc5ce74c5c', effectId: 'effect:f3f2b5c0ce131ebeb51652524561c6a9', state: 'RECEIVED', planDigest: 'sha256:98fc9387ca7c6aa6c6dfbf148bdad9648365493ac2c59e70e06db7b35a2d90fc', occurredAt: '2026-09-06T12:00:00Z', plan: [Object], entryDigest: 'sha256:64deb9b4154a92d587253c7bc59f7a39f1cf3db12e6aecc4f348ba07b8d423c5' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 13, predecessorDigest: 'sha256:64deb9b4154a92d587253c7bc59f7a39f1cf3db12e6aecc4f348ba07b8d423c5', effectId: 'effect:f3f2b5c0ce131ebeb51652524561c6a9', state: 'PLANNED', planDigest: 'sha256:98fc9387ca7c6aa6c6dfbf148bdad9648365493ac2c59e70e06db7b35a2d90fc', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:c27906f4f838759cff0b2576ef9e8014217eb49f7c4053fbc67c7dfa1189ebab' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 14, predecessorDigest: 'sha256:c27906f4f838759cff0b2576ef9e8014217eb49f7c4053fbc67c7dfa1189ebab', effectId: 'effect:f3f2b5c0ce131ebeb51652524561c6a9', state: 'PREPARED', planDigest: 'sha256:98fc9387ca7c6aa6c6dfbf148bdad9648365493ac2c59e70e06db7b35a2d90fc', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:5ecd3d8ff306c05eea83575872458f9f620b192fe75e87132ce083884de37875' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 15, predecessorDigest: 'sha256:5ecd3d8ff306c05eea83575872458f9f620b192fe75e87132ce083884de37875', effectId: 'effect:f3f2b5c0ce131ebeb51652524561c6a9', state: 'COMMITTED', planDigest: 'sha256:98fc9387ca7c6aa6c6dfbf148bdad9648365493ac2c59e70e06db7b35a2d90fc', occurredAt: '2026-09-06T12:00:00Z', reasonCode: 'BYTE_IDENTICAL', receiptDigest: 'sha256:4e0f478503be950b3216cc63587fd0102b8d128d934fe5b3a2e43c3e41de7bf1', entryDigest: 'sha256:78f7d89fdc412d7bacc05829d8b76411a04a4804737ff94b51797d51280b5eaa' } ],
+    expected: [ { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 0, effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'RECEIVED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', plan: [Object], entryDigest: 'sha256:d560ca2d6f28d9114a598f7bd619c944f2ccbf030b344875c3c346105ac26052' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 1, predecessorDigest: 'sha256:d560ca2d6f28d9114a598f7bd619c944f2ccbf030b344875c3c346105ac26052', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'PLANNED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:8d8fa09350658001be91f26690c1b2997e47d780967d41784ca93053cb5fb027' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 2, predecessorDigest: 'sha256:8d8fa09350658001be91f26690c1b2997e47d780967d41784ca93053cb5fb027', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'PREPARED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:21f3ac0e0d35960c59b6c82f77d874e38ee360b14f3ae1abc1b6d7db47457795' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 3, predecessorDigest: 'sha256:21f3ac0e0d35960c59b6c82f77d874e38ee360b14f3ae1abc1b6d7db47457795', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'APPLYING', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', temporaryPath: 'topics/.gkx-effect-effect_0cae4aa8436127cf7034176db752a682.tmp', entryDigest: 'sha256:dbe0698ea4b80a3dabc6d990a8fee2113eb0663c801710235a7821cd04e980f6' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 4, predecessorDigest: 'sha256:dbe0698ea4b80a3dabc6d990a8fee2113eb0663c801710235a7821cd04e980f6', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'VERIFIED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:adb80df48ca98d745a9c7f539563acdd7e5b21892e3f53417023bba04069a8d2' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 5, predecessorDigest: 'sha256:adb80df48ca98d745a9c7f539563acdd7e5b21892e3f53417023bba04069a8d2', effectId: 'effect:0cae4aa8436127cf7034176db752a682', state: 'COMMITTED', planDigest: 'sha256:9945bceef67210a3f6115abe64cc2d93cff1a255fa0f48ffcb8a3f977ba09b30', occurredAt: '2026-09-06T12:00:00Z', receiptDigest: 'sha256:20b8c8d78ff355d780e4782946e26cca7b879f31f29e4e203507487a31b238ef', entryDigest: 'sha256:3567b99fac67e4d0af297e12069ba2d74c172d77b1fe2bb628565bb6fc9903df' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 6, predecessorDigest: 'sha256:3567b99fac67e4d0af297e12069ba2d74c172d77b1fe2bb628565bb6fc9903df', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'RECEIVED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', plan: [Object], entryDigest: 'sha256:53c2bf882d6639ecc715e17682ee807699f7098664facdb37489396017aec515' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 7, predecessorDigest: 'sha256:53c2bf882d6639ecc715e17682ee807699f7098664facdb37489396017aec515', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'PLANNED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:bb0fa0bf04105e77bf2442bfe3a3f3a7090849bc53b6d148ba4ca5108256cb96' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 8, predecessorDigest: 'sha256:bb0fa0bf04105e77bf2442bfe3a3f3a7090849bc53b6d148ba4ca5108256cb96', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'PREPARED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:244343efcd1f0eb27f66e48c0d2b78d6c6d4faaacd8873865614ca147d415d08' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 9, predecessorDigest: 'sha256:244343efcd1f0eb27f66e48c0d2b78d6c6d4faaacd8873865614ca147d415d08', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'APPLYING', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', temporaryPath: 'topics/.gkx-effect-effect_ccc7796510dad7c177a34306e5de5e78.tmp', entryDigest: 'sha256:5358ec2c9817fa2db05d407d3c398f74c5c479c8ba6730f99e8ce155a707cfc8' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 10, predecessorDigest: 'sha256:5358ec2c9817fa2db05d407d3c398f74c5c479c8ba6730f99e8ce155a707cfc8', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'VERIFIED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', entryDigest: 'sha256:87ba099177e94ef6259b17831bfec1b767e3ff28cedd031ff3755c6b756ac15e' }, { artifactKind: 'engine.effect-journal-entry', effectsContract: '1.0.0', sequence: 11, predecessorDigest: 'sha256:87ba099177e94ef6259b17831bfec1b767e3ff28cedd031ff3755c6b756ac15e', effectId: 'effect:ccc7796510dad7c177a34306e5de5e78', state: 'COMMITTED', planDigest: 'sha256:40060bd2c141833c2436ebe17e1612ab25202f8c245f412f80b10fcbc9099278', occurredAt: '2026-09-06T12:00:00Z', receiptDigest: 'sha256:7e9733a43683c79ca22b9938fc63be5c22582d8c251c8478199e773e21c7762d', entryDigest: 'sha256:7e2c0e78bab205a424c03b27fc52885c2010939ea791202b838c05cc5ce74c5c' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

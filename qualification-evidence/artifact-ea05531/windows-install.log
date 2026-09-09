@@ -1,0 +1,21 @@
+Wrote to [LOCAL_PATH]
+
+{
+  "name": "gkos-engine-220-consumer-ea05531-windows",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+
+
+
+
+added 1 package, and audited 2 packages in 3s
+
+found 0 vulnerabilities

@@ -1,0 +1,51 @@
+✖ unchanged execution stores fully bound NO_CHANGE and exact retries preserve receipt/sequence/source bytes (202.187ms)
+✔ native process exit during no-change after-received recovers one verified receipt (237.5935ms)
+✔ native process exit during no-change after-planned recovers one verified receipt (249.9748ms)
+✔ native process exit during no-change after-prepared recovers one verified receipt (256.415ms)
+✔ native process exit during no-change after-receipt recovers one verified receipt (233.096ms)
+✔ missing or corrupt no-change audit blocks startup rather than reconstructing historical success (140.3545ms)
+✔ host creates, advances ownership, archives replacements and restarts as a no-op (405.4317ms)
+✔ host recovers an effect committed before ownership metadata persisted (169.0556ms)
+✔ host refuses external edits and current authority revocation (169.4735ms)
+✔ host state tampering blocks startup and preserves evidence (102.0359ms)
+✔ runtime observes file edits and closes resources within shutdown budget (965.5311ms)
+✔ host preserves human bytes through successive region-managed updates (152.5032ms)
+✔ missing ownership state alongside an existing effect journal fails closed (86.368ms)
+✔ periodic and startup reconciliation repair changes with no delivered event (300.5668ms)
+✔ cross-folder rename reconciles both scopes and leaves an unrelated MOC untouched (321.5826ms)
+✔ shutdown waits for an active commit and preserves newer admitted work for restart (260.7768ms)
+✔ failed graph publication replays the same committed effect before ownership advancement (138.7114ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 16
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3170.6662
+
+✖ failing tests:
+
+test at test\managed-moc-no-change.test.mjs:36:1
+✖ unchanged execution stores fully bound NO_CHANGE and exact retries preserve receipt/sequence/source bytes (202.187ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      adoptedDigest: 'sha256:0df844e690381b4a39f42c6e1a14806cf261e52508d96d21c0dbe29b1a5ec406',
+      creationAuthorized: true,
+  -   generatedRegion: undefined,
+      ownership: 'fully-managed',
+      targetPath: 'topics/index.md'
+    }
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { adoptedDigest: 'sha256:0df844e690381b4a39f42c6e1a14806cf261e52508d96d21c0dbe29b1a5ec406', creationAuthorized: true, ownership: 'fully-managed', targetPath: 'topics/index.md' },
+    expected: { adoptedDigest: 'sha256:0df844e690381b4a39f42c6e1a14806cf261e52508d96d21c0dbe29b1a5ec406', creationAuthorized: true, ownership: 'fully-managed', targetPath: 'topics/index.md', generatedRegion: undefined },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

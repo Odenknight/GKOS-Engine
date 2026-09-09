@@ -1,0 +1,307 @@
+TAP version 13
+# (node:33496) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Phase-3 argument normalization is unambiguous and leaves legacy positional validate unchanged
+ok 1 - Phase-3 argument normalization is unambiguous and leaves legacy positional validate unchanged
+  ---
+  duration_ms: 818.4951
+  type: 'test'
+  ...
+# Subtest: Phase-3 knowledge-base paths are local pre-I/O and canonical root spellings converge
+ok 2 - Phase-3 knowledge-base paths are local pre-I/O and canonical root spellings converge
+  ---
+  duration_ms: 3973.6411
+  type: 'test'
+  ...
+# Subtest: Phase-3 validate is deterministic, selector-parity exact, and source/state read-only
+ok 3 - Phase-3 validate is deterministic, selector-parity exact, and source/state read-only
+  ---
+  duration_ms: 702.792
+  type: 'test'
+  ...
+# Subtest: Phase-3 index renders every status as exact deterministic path-free bytes
+ok 4 - Phase-3 index renders every status as exact deterministic path-free bytes
+  ---
+  duration_ms: 5590.1197
+  type: 'test'
+  ...
+# Subtest: profile selection is completed before corpus/state I/O and preserves the exit-2/exit-3 authority split
+ok 5 - profile selection is completed before corpus/state I/O and preserves the exit-2/exit-3 authority split
+  ---
+  duration_ms: 1337.4339
+  type: 'test'
+  ...
+# Subtest: ingest scan receipts distinguish UTF-8, size, read, race, alias, and retain multi-reason rows
+ok 6 - ingest scan receipts distinguish UTF-8, size, read, race, alias, and retain multi-reason rows
+  ---
+  duration_ms: 271.4266
+  type: 'test'
+  ...
+# Subtest: a first strict block over legacy state preserves the exact prior search generation
+ok 7 - a first strict block over legacy state preserves the exact prior search generation
+  ---
+  duration_ms: 882.2349
+  type: 'test'
+  ...
+# Subtest: a strict CLI block over an active Phase-3 owner preserves every ordinary-search authority byte
+ok 8 - a strict CLI block over an active Phase-3 owner preserves every ordinary-search authority byte
+  ---
+  duration_ms: 1875.3005
+  type: 'test'
+  ...
+# Subtest: strict-block routing uses status metadata only, ignores its JSON bytes, and rejects aliases/case variants
+ok 9 - strict-block routing uses status metadata only, ignores its JSON bytes, and rejects aliases/case variants
+  ---
+  duration_ms: 1496.5317
+  type: 'test'
+  ...
+# GKOS_SETTING_IGNORED:retrieval.mode
+# GKOS_SETTING_IGNORED:retrieval.mode
+# GKOS_SETTING_IGNORED:retrieval.mode
+# Subtest: route-to-open and route-to-legacy-writer races are typed operational failures before providers
+ok 10 - route-to-open and route-to-legacy-writer races are typed operational failures before providers
+  ---
+  duration_ms: 1286.9653
+  type: 'test'
+  ...
+# Subtest: non-strict CLI publication retains N-1 and all-invalid observations without exposing them in IndexResult
+ok 11 - non-strict CLI publication retains N-1 and all-invalid observations without exposing them in IndexResult
+  ---
+  duration_ms: 1858.2186
+  type: 'test'
+  ...
+# Subtest: configured provider failure sees accepted public text only and degrades to one lexical publication
+ok 12 - configured provider failure sees accepted public text only and degrades to one lexical publication
+  ---
+  duration_ms: 1237.2205
+  type: 'test'
+  ...
+# Subtest: post-activation ordinary search fails closed with safe exit 3 for missing, corrupt, or case-aliased authority
+ok 13 - post-activation ordinary search fails closed with safe exit 3 for missing, corrupt, or case-aliased authority
+  ---
+  duration_ms: 1650.6636
+  type: 'test'
+  ...
+# Subtest: ordinary search holds the verified active store before config or provider discovery
+ok 14 - ordinary search holds the verified active store before config or provider discovery
+  ---
+  duration_ms: 1556.572
+  type: 'test'
+  ...
+# (node:32624) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ordinary Windows temp spelling, including 8.3 expansion, is not an alias
+ok 15 - ordinary Windows temp spelling, including 8.3 expansion, is not an alias
+  ---
+  duration_ms: 158.8966
+  type: 'test'
+  ...
+# lexical temp root: [LOCAL_PATH]
+# canonical temp root: [LOCAL_PATH]
+# Subtest: Windows junction components and source hard links remain fail-closed
+ok 16 - Windows junction components and source hard links remain fail-closed
+  ---
+  duration_ms: 18.2313
+  type: 'test'
+  ...
+# Subtest: versioned current inventory binds actual candidate and unchanged historical artifacts
+ok 17 - versioned current inventory binds actual candidate and unchanged historical artifacts
+  ---
+  duration_ms: 2439.4082
+  type: 'test'
+  ...
+# Subtest: an unlisted new source or edited reviewed bytes fails the current gate
+ok 18 - an unlisted new source or edited reviewed bytes fails the current gate
+  ---
+  duration_ms: 5770.697
+  type: 'test'
+  ...
+# Subtest: frozen evidence cannot be edited or omitted from the versioned inventory
+ok 19 - frozen evidence cannot be edited or omitted from the versioned inventory
+  ---
+  duration_ms: 3137.5386
+  type: 'test'
+  ...
+# Subtest: test receipt counts refuse missing, duplicate, empty and incoherent execution summaries
+ok 20 - test receipt counts refuse missing, duplicate, empty and incoherent execution summaries
+  ---
+  duration_ms: 1.6788
+  type: 'test'
+  ...
+# Subtest: current test selection exposes only the owner-supplied local-model observation exemption
+ok 21 - current test selection exposes only the owner-supplied local-model observation exemption
+  ---
+  duration_ms: 0.4898
+  type: 'test'
+  ...
+# Subtest: strict timing and shutdown oracles run before exhaustive suite load without changing coverage
+ok 22 - strict timing and shutdown oracles run before exhaustive suite load without changing coverage
+  ---
+  duration_ms: 0.2169
+  type: 'test'
+  ...
+# Subtest: current qualification retries only the first isolated watcher latency failure
+ok 23 - current qualification retries only the first isolated watcher latency failure
+  ---
+  duration_ms: 0.4081
+  type: 'test'
+  ...
+# Subtest: dedicated watcher retry requires an empty artifact root and one normal latency failure
+ok 24 - dedicated watcher retry requires an empty artifact root and one normal latency failure
+  ---
+  duration_ms: 0.3535
+  type: 'test'
+  ...
+# Subtest: hosted current qualification restores canonical Engine and Standard bytes
+ok 25 - hosted current qualification restores canonical Engine and Standard bytes
+  ---
+  duration_ms: 0.6291
+  type: 'test'
+  ...
+# Subtest: runtime policy admits maintained even releases and preserves the historical matrix
+ok 26 - runtime policy admits maintained even releases and preserves the historical matrix
+  ---
+  duration_ms: 0.758
+  type: 'test'
+  ...
+# Subtest: command-scope Git configuration overrides autocrlf before checkout
+ok 27 - command-scope Git configuration overrides autocrlf before checkout
+  ---
+  duration_ms: 328.0749
+  type: 'test'
+  ...
+# Subtest: preflight rejection replaces a stale PASS receipt with a bound FAIL receipt
+ok 28 - preflight rejection replaces a stale PASS receipt with a bound FAIL receipt
+  ---
+  duration_ms: 242.368
+  type: 'test'
+  ...
+# Subtest: source identity changes when HEAD changes even if file bytes are identical
+ok 29 - source identity changes when HEAD changes even if file bytes are identical
+  ---
+  duration_ms: 608.5572
+  type: 'test'
+  ...
+# (node:34464) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority
+ok 30 - restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority
+  ---
+  duration_ms: 113056.483
+  type: 'test'
+  ...
+# {"topology_bytes":1552042,"graph_bytes":30764374}
+# {"phase":"failed-reconciliation-shutdown","elapsed_ms":3039.9729000000007}
+# (node:37680) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Windows scoped polling admits only the governed bounded leaf set
+ok 31 - Windows scoped polling admits only the governed bounded leaf set
+  ---
+  duration_ms: 1.7591
+  type: 'test'
+  ...
+# Subtest: loopback watcher service publishes a sealed locator, serves status, and removes only its locator on shared shutdown
+ok 32 - loopback watcher service publishes a sealed locator, serves status, and removes only its locator on shared shutdown
+  ---
+  duration_ms: 208.4652
+  type: 'test'
+  ...
+# Subtest: desktop main delegates legacy routes to one coherent watcher host and shared shutdown
+ok 33 - desktop main delegates legacy routes to one coherent watcher host and shared shutdown
+  ---
+  duration_ms: 2358.7027
+  type: 'test'
+  ...
+# Subtest: desktop rejects an unsafe custom S before token or status mutation
+ok 34 - desktop rejects an unsafe custom S before token or status mutation
+  ---
+  duration_ms: 6.8209
+  type: 'test'
+  ...
+# Subtest: configured removal adapter is process-verified and receives one durable idempotent occurrence
+ok 35 - configured removal adapter is process-verified and receives one durable idempotent occurrence
+  ---
+  duration_ms: 3414.2226
+  type: 'test'
+  ...
+# Subtest: reset carry reopens the immediate historical membership and delivers the same occurrence once
+ok 36 - reset carry reopens the immediate historical membership and delivers the same occurrence once
+  ---
+  duration_ms: 7704.4812
+  type: 'test'
+  ...
+# Subtest: host startup publishes one coherent generation, serves it through status/search, and checkpoints before releasing its lock
+ok 37 - host startup publishes one coherent generation, serves it through status/search, and checkpoints before releasing its lock
+  ---
+  duration_ms: 3210.4549
+  type: 'test'
+  ...
+# Subtest: periodic reconciliation is re-armed only after an intervening ordinary reconciliation completes
+ok 38 - periodic reconciliation is re-armed only after an intervening ordinary reconciliation completes
+  ---
+  duration_ms: 1636.8111
+  type: 'test'
+  ...
+# Subtest: deterministic oversized scanner rejection publishes one coherent N-1 topology
+ok 39 - deterministic oversized scanner rejection publishes one coherent N-1 topology
+  ---
+  duration_ms: 1825.8455
+  type: 'test'
+  ...
+# Subtest: durable failure retry uses exact backoff and unchanged success clears restart authority
+ok 40 - durable failure retry uses exact backoff and unchanged success clears restart authority
+  ---
+  duration_ms: 3900.8593
+  type: 'test'
+  ...
+# Subtest: external search never falls back after watcher authority is missing or corrupt
+ok 41 - external search never falls back after watcher authority is missing or corrupt
+  ---
+  duration_ms: 1371.617
+  type: 'test'
+  ...
+# Subtest: production external search rejects configuration, policy, and effective-profile coordinate drift
+ok 42 - production external search rejects configuration, policy, and effective-profile coordinate drift
+  ---
+  duration_ms: 4581.2801
+  type: 'test'
+  ...
+# Subtest: watcher excludes a live legacy writer and admits an exact empty W/J genesis contender
+ok 43 - watcher excludes a live legacy writer and admits an exact empty W/J genesis contender
+  ---
+  duration_ms: 1419.7763
+  type: 'test'
+  ...
+# Subtest: local_onnx watcher staging embeds only changed public content and reuses the stable chunk
+ok 44 - local_onnx watcher staging embeds only changed public content and reuses the stable chunk
+  ---
+  duration_ms: 2894.7084
+  type: 'test'
+  ...
+# Subtest: host restart reclaims a dead normal service lock without changing the coherent generation
+ok 45 - host restart reclaims a dead normal service lock without changing the coherent generation
+  ---
+  duration_ms: 2522.4526
+  type: 'test'
+  ...
+# Subtest: host startup automatically completes a dead first-process journal bootstrap
+ok 46 - host startup automatically completes a dead first-process journal bootstrap
+  ---
+  duration_ms: 2725.019
+  type: 'test'
+  ...
+# Subtest: first reset archives the immutable null-anchor genesis journal and anchors its replacement to the current outer generation
+ok 47 - first reset archives the immutable null-anchor genesis journal and anchors its replacement to the current outer generation
+  ---
+  duration_ms: 18242.2273
+  type: 'test'
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 212739.657

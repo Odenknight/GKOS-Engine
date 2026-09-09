@@ -1,0 +1,78 @@
+{
+  "version": "gkos-local-integration-receipt/1",
+  "repository": "lite",
+  "status": "PASS_LOCAL_WINDOWS",
+  "base": "4027bfc4499ad0a2f3e753401f1320468e283823",
+  "branch": "codex/integrate-lite-quick-connect-20260831",
+  "commit": "f5b06b4a4ea5020d62824ceffc51622269a52f19",
+  "tree": "8b655d225a400127ac0bd90090663f09b32c7fa8",
+  "patch_sha256": "8bea6d258452552086ea410ec831c9afcdcbc8465728ecec5c76e523f8606d97",
+  "commit_diff_sha256": "8bea6d258452552086ea410ec831c9afcdcbc8465728ecec5c76e523f8606d97",
+  "seal_checks": {
+    "forward_index_apply": "PASS",
+    "normalized_diff": "PASS",
+    "reverse_apply": "PASS",
+    "post_commit_status": "CLEAN"
+  },
+  "inputs": {
+    "npm_install": "npm ci --offline",
+    "sidecar_sha256": "29ab43c9ce79b8c14978594a18523a04e3f7518d87560f1e4c17744da08f12c2",
+    "viewer_sha256": "11e004a5e500f5bb196ec321eefd0cd7f9dd332715edc4b1b71f286a10e768dd"
+  },
+  "commands": [
+    {
+      "command": "npm test",
+      "status": "PASS",
+      "tests": 17,
+      "pass": 17,
+      "fail": 0,
+      "skipped": 0,
+      "log": "lite/npm-test.log",
+      "log_sha256": "25ab4bb5847642bdc197d6cab7463685e0318a964225acfc960c2bea2f23fc7a"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "PASS",
+      "log": "lite/npm-typecheck.log",
+      "log_sha256": "df364fcfb0d733c27a940501cef729f3a7804c8ae342622da51a7ff06c8dfa56"
+    },
+    {
+      "command": "npm run build",
+      "status": "PASS",
+      "log": "lite/npm-build.log",
+      "log_sha256": "f86c6c88274da3f0ee60e7a1d20b627956315c3b9c267130b8706f9af86c5410"
+    },
+    {
+      "command": "cargo test --manifest-path desktop/src-tauri/Cargo.toml --locked --offline",
+      "status": "PASS",
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "log": "lite/cargo-test-final.log",
+      "log_sha256": "1fccb9bc57d449e203eb49e4a9a2fb52b562066990145245db64e4337f95b9fe"
+    }
+  ],
+  "preserved_attempts": [
+    {
+      "status": "REJECTED_SEAL",
+      "receipt": "rejected-seal/lite/rejected-seal.json"
+    },
+    {
+      "status": "ENVIRONMENT_SETUP_FAILURE",
+      "reason": "The first native run lacked the checksum-pinned ignored viewer resource; no source assertion failed.",
+      "log": "lite/cargo-test.log",
+      "log_sha256": "558223785b9e3195826b4efe3996212f7f6cd3e7ee56c9cd18442585de7ac180"
+    }
+  ],
+  "coverage": {
+    "windows": "EXECUTED",
+    "linux": "NOT_EXECUTED",
+    "macos": "NOT_EXECUTED",
+    "release_qualified": false
+  },
+  "remote_branch_present": false,
+  "pushed": false,
+  "merged": false,
+  "released": false,
+  "deployed": false
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "roadmap-publication-receipt/v1",
+  "audit_date": "2026-08-31",
+  "result": "PASS",
+  "repository": "Odenknight/theMarshal-Core-Rust",
+  "branch": "codex/gkos-ecosystem-ts-first-roadmap-20260831",
+  "commit": "553627924ef527650b59f49b767caaf404e0e2b2",
+  "tree": "b779aa87a37e4d84238154db33e73ee5e1b2e1fc",
+  "parent": "a5f1d0d6975e25748d72d073cfb61858bc93297a",
+  "added_files": 31,
+  "verified_blob_identities": 31,
+  "existing_files_unchanged": 102,
+  "main_unchanged": true,
+  "exact_roadmap_and_manifest_content": true,
+  "dco_signoff": true,
+  "scope": "documentation_and_evidence_only",
+  "roadmap_url": "https://github.com/Odenknight/theMarshal-Core-Rust/blob/553627924ef527650b59f49b767caaf404e0e2b2/docs/plans/2026-08-31/GKOS-ECOSYSTEM-TS-FIRST-RUST-ROADMAP.md",
+  "roadmap_sha256": "cd7e57d93b714f481bcd3f446332abca73d93e0605af0a4351804155ef267670",
+  "manifest_git_blob_sha1": "0a552509788a72a4d867c89ee681439c08f06f5f",
+  "local_bundle_validation": {
+    "result": "PASS",
+    "inventoried_files": 30,
+    "payload_bytes": 477823,
+    "local_links_checked": 24,
+    "r4_phases": 13,
+    "ts_packets": 13,
+    "requested_repository_references": 8
+  },
+  "audit_limits": {
+    "accessible_repositories": 7,
+    "benchmark_access": "unresolved",
+    "application_fixes": "not_performed",
+    "production_deployment": "not_performed",
+    "release_or_cutover": "not_authorized_by_this_publication"
+  },
+  "note": "This local post-publication receipt is outside the immutable published bundle inventory."
+}

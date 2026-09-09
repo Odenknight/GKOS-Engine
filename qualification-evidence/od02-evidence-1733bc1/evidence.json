@@ -1,0 +1,40 @@
+{
+  "implementationCommit": "1733bc1e2fec4b3f661c65dd59502cfc63c4fd3f",
+  "baseCommit": "650eab4a6752227cae336d7556a57826c22a0d5a",
+  "status": "EXECUTED_FOR_REVIEW",
+  "supersedes": "none",
+  "releaseCandidateUnchanged": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "schemaPin": {
+    "standardTag": "v0.81",
+    "standardCommit": "8f2a158c6d4b8cabd907d98765766d281aec1247",
+    "schemaVersion": "1.0.0",
+    "files": {
+      "refusal-receipt.schema.json": "11017113221f8ebc51b03c7de8078bdba3258a7d32b084d675ffd3de28c0182f",
+      "gkx-common.defs.json": "b040687a4a9b6d17bce9e86fae28e6db7e667af8e2ebbe59f60ab9f2eea04c4b"
+    }
+  },
+  "windows": {
+    "node": "v24.18.0",
+    "tests": 11
+  },
+  "linux": {
+    "node": "v22.23.2",
+    "tests": 11,
+    "archiveSha256": "1ceb5dd9119155d02a816c35f846848eed1af954ad7ebfc9d967095b683ec60a"
+  },
+  "scope": "Exact-file digest comparison and JSON schema validation only; no live standard RefusalReceipt, gate registration, profile/release qualification or publication.",
+  "sourceFiles": [
+    {
+      "path": "scripts/verify-documentation-artifact.mjs",
+      "sha256": "c435f54358692b11401e0036078ddc44c99c7d66f85a047953acdd27b814d3ea"
+    },
+    {
+      "path": "scripts/validate-refusal-receipt-v081.mjs",
+      "sha256": "9648040266e7fe6fea8814b5e41e33aa467e4408a0b0c4ef59ccd6e9e57039e6"
+    },
+    {
+      "path": "test/documentation-verifier.test.mjs",
+      "sha256": "f937bb84caa8c2c6d07738f46ef02a46fdf9b2e3829337642568a85983511ed7"
+    }
+  ]
+}

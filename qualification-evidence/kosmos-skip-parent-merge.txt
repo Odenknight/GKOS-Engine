@@ -1,0 +1,30 @@
+4f801fa85b498a26fac2caa273fbfbb9d4b39306
+100644 73f75517aa7c45b57583335d1ae15a9fa3c6c836 1	CHANGELOG.md
+100644 20b7e4c462ee9d2c350765f8a9765465bba512b3 2	CHANGELOG.md
+100644 8835329ede7429d0db1754607c3528d1eab669d3 3	CHANGELOG.md
+100644 0c70bd40d74d4508d54397b32ad7e813adfff08f 1	README.md
+100644 fc32d90f2ad8c569cefd4b9dca0458c8b9dc79d4 2	README.md
+100644 8955e7d9a06753d410d84e038b5d320ccb59fccc 3	README.md
+100644 e1dcf6dcb6c76bb25c889b240c8b21a91a8fbd45 1	TECHNICAL_README.md
+100644 d350409e162502fa2cc133bb75c155ecaab26c68 2	TECHNICAL_README.md
+100644 5176a5e64ddd770354b34f735d6d5ac4a82020fe 3	TECHNICAL_README.md
+100644 316fa718cccc0866dbad33929d816c1107ecf077 1	docs/WIRED-CAPABILITIES.md
+100644 3a4e92ad054cc639acef1f6a9d52b89551e24391 3	docs/WIRED-CAPABILITIES.md
+100644 f3427d3cb84ac5014bfba75d7aa17bfe9ec4b19e 1	src/standalone/standalone.ts
+100644 5af166680effaf1246b3a68d19d5e2623c55afb1 2	src/standalone/standalone.ts
+100644 805902ae1aea9dafb6adb5424bdeb274744e9e98 3	src/standalone/standalone.ts
+100644 391b6d17979a414f928c212f9508f520c7649d8c 1	test/browser/standalone-flows.spec.ts
+100644 0397b4d9c9c6fe7514056e1242eade273ac73830 3	test/browser/standalone-flows.spec.ts
+
+Auto-merging CHANGELOG.md
+CONFLICT (content): Merge conflict in CHANGELOG.md
+Auto-merging README.md
+CONFLICT (content): Merge conflict in README.md
+Auto-merging TECHNICAL_README.md
+CONFLICT (content): Merge conflict in TECHNICAL_README.md
+CONFLICT (modify/delete): docs/WIRED-CAPABILITIES.md deleted in 3aab1e3 and modified in 35644f1.  Version 35644f1 of docs/WIRED-CAPABILITIES.md left in tree.
+Auto-merging package.json
+Auto-merging scripts/build.mjs
+Auto-merging src/standalone/standalone.ts
+CONFLICT (content): Merge conflict in src/standalone/standalone.ts
+CONFLICT (modify/delete): test/browser/standalone-flows.spec.ts deleted in 3aab1e3 and modified in 35644f1.  Version 35644f1 of test/browser/standalone-flows.spec.ts left in tree.

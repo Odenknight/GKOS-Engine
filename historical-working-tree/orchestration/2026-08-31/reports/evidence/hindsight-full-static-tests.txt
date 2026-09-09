@@ -1,0 +1,48 @@
+SOURCE: 59af4d1080efb0eae147d2aec0c0b1b75461b761
+SNAPSHOT: 257 Git-blob-verified files; synthetic local staged index, no original Git history
+ENVIRONMENT: Python 3.14.2 Windows x64, declared version pins plus diagnostic-only PyYAML6.0.3
+COMMAND: python -m unittest discover -s contracts/tests -p 'test_*.py' -q
+EXIT: 1
+======================================================================
+ERROR: test_prior_rust_and_postgres_success_requires_exact_unchanged_input_closure (test_r2_merge_authority_closure.R2MergeAuthorityClosureTests.test_prior_rust_and_postgres_success_requires_exact_unchanged_input_closure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_PATH]", line 293, in test_prior_rust_and_postgres_success_requires_exact_unchanged_input_closure
+    source = subprocess.run(
+             ~~~~~~~~~~~~~~^
+        ["git", "rev-parse", f"{source_commit}:{relative}"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        encoding="utf-8",
+        ^^^^^^^^^^^^^^^^^
+    ).stdout.strip()
+    ^
+  File "C:\Program Files\Python314\Lib\subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['git', 'rev-parse', 'f63c87feea1e405b6ecb9c526fa82e98c636f4f1:.github/workflows/rust.yml']' returned non-zero exit status 128.
+
+======================================================================
+ERROR: test_ratification_digest_closure_matches_exact_repository_bytes (test_r2_merge_authority_closure.R2MergeAuthorityClosureTests.test_ratification_digest_closure_matches_exact_repository_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "[LOCAL_PATH]", line 114, in test_ratification_digest_closure_matches_exact_repository_bytes
+    candidate_bytes = subprocess.run(
+                      ~~~~~~~~~~~~~~^
+        ["git", "show", f"{candidate}:{entry['path']}"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        capture_output=True,
+        ^^^^^^^^^^^^^^^^^^^^
+    ).stdout
+    ^
+  File "C:\Program Files\Python314\Lib\subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['git', 'show', '8ea9bb7b763130041aaeb1c29d73d3667b37dbba:governance/work-packets/WP1-TRACK2-CONTRACT-FOUNDATION.yaml']' returned non-zero exit status 128.
+
+----------------------------------------------------------------------
+Ran 206 tests in 64.832s
+
+FAILED (errors=2, skipped=3)
+bootstrap-security: PASS (scaffold integrity only; not runtime security qualification)

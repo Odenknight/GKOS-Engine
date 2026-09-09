@@ -1,0 +1,167 @@
+{
+  "record_type": "gkos-phase6-d0-15-owner-resolution",
+  "record_version": "6.0.0",
+  "resolved_at_utc": "2026-08-26T12:37:01.6299416Z",
+  "status": "AUTHORITATIVE_SEMANTIC_BASIS_AWAITING_EXPANDED_DESCENDANTS",
+  "owner_statement": "Ratify Q14–Q16 as proposed.",
+  "purpose": "Resolve the post-V5 C1 security handoff projection and authorize bounded evidence-only mechanical expansion after the mixed C1 V2 result. This V6 is an authoritative semantic basis for later acyclic evidence descendants; it is not an expanded registry, correction map, exact-byte owner ratification, concurrence acceptance, product authorization, or fixture implementation.",
+  "exact_existing_inputs": [
+    {
+      "role": "V5 exact-byte owner ratification and C1-only authorization",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_BYTE_OWNER_RATIFICATION_V5_2026-08-26.json",
+      "sha256": "f54db22232586f0b6bff80097b03d55b98808d8db4b9d5c9fbdd5aa37e3a5ea2",
+      "bytes": 10102,
+      "record_digest": "e79523eb606f67869018f33fea0097bf1379f227f7b894ea606614d010b5cdbd",
+      "status": "EXACT_BYTES_OWNER_RATIFIED_FRESH_C1_ONLY"
+    },
+    {
+      "role": "C1 V2 migration acceptance of the V5 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V2_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "1ee844ba4a3a8bc3f1b7451c3a161b0c802497464e2d5ff0f7f567eff110baef",
+      "bytes": 18122,
+      "record_digest": "f7b0b4de8a6e94df374c5a9036dc193750757600b0b358f8128b6b5a25f67b04",
+      "verdict": "ACCEPT_CONCURRENCE"
+    },
+    {
+      "role": "C1 V2 security rejection of the V5 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V2_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "b69e578c54f8779eedfcfb329f8859820e0d656e116cc646a1dcfb9cd174f350",
+      "bytes": 29000,
+      "record_digest": "17187cb3c65cfe9ae203f47ab243cc8dda420cb512bbf6a824c9021c491888f4",
+      "verdict": "REJECT_CONCURRENCE"
+    }
+  ],
+  "mixed_c1_v2_disposition": {
+    "migration": "The exact C1 V2 migration acceptance remains immutable historical evidence for the V5 coordinate but does not carry forward as acceptance of any expanded registry, later correction map, later owner receipt, or rerun C1 coordinate.",
+    "security": "The exact C1 V2 security rejection remains immutable defect evidence and stops C1. It cannot be waived, edited into acceptance, or treated as acceptance of later descendants.",
+    "c1_completed": false,
+    "c2_or_c3_eligible": false,
+    "rule": "Because one required C1 role rejected and the descendant bytes and counts must change, both migration and security must rerun fresh after new descendants receive a separate exact-byte Product Owner ratification."
+  },
+  "ratified_q14_q16_decisions": [
+    {
+      "id": "Q14",
+      "title": "Ordinary post-commit handoff transport failure projection",
+      "decision": "When the credential mutation is already committed but the one-time handoff transport fails ordinarily, return the existing committed nonsecret mutation and result coordinates with secret_revealed=false. Do not return an error envelope for the ordinary transport failure.",
+      "mandatory_disposition": [
+        "discard and never serialize, log, persist, echo, hash into content-bearing evidence, or rethrow any transport exception text containing secret, locator, path, pipe, native message, stack, SQL, or implementation detail",
+        "persist only content-free failed or ambiguous handoff evidence bound to the already-committed mutation and result coordinates",
+        "erase the secret bytes after the one permitted delivery attempt",
+        "do not retry delivery",
+        "do not overwrite the committed credential or locator",
+        "do not perform a second credential mutation",
+        "do not re-reveal the secret through result replay, evidence, logs, diagnostics, or artifacts",
+        "ordinary delivery or transport failure is not GKOS_P6_SECRET_EXPOSURE"
+      ],
+      "separate_exposure_rule": "Only an independently proven actual exposure uses a distinct deterministic GKOS_P6_SECRET_EXPOSURE leaf and the existing six-field content-free error envelope. The ordinary-failure leaf and proven-exposure leaf are separate canonical cases and may not be alternatives under one ID.",
+      "affected_prior_fixture": "REDACTION-HANDOFF-ERROR-001 must be replaced or narrowed in later evidence so its ordinary-failure case has exactly this committed nonsecret result and its actual-exposure case is separate."
+    },
+    {
+      "id": "Q15",
+      "title": "Evidence-only mechanical expansion authority",
+      "decision": "Authorize the bounded source-controlled evidence expansion BCI-MECH-001 through BCI-MECH-006. This authority applies only to new detached registry, correction-map, validation, and exact-byte owner-ratification evidence descendants; it does not authorize product contract or fixture regeneration or implementation.",
+      "mechanical_inventory": [
+        {
+          "id": "BCI-MECH-001",
+          "rule": "Remove modal may language. A positively qualified handoff completes exactly once under the existing nonsecret result rule. A request whose final gate wins publishes its already-authorized result; later disable or revoke governs only later work. Preserve each existing ID where no split is required."
+        },
+        {
+          "id": "BCI-MECH-002",
+          "rule": "Materialize locator and pipe handoff schedules separately where physical schedules differ, and materialize credential.issue and credential.rotate replay and failure schedules separately. Preserve a current canonical ID for exactly one source-controlled branch and allocate distinct additional IDs for every other branch without changing the named eight-ID subtotal."
+        },
+        {
+          "id": "BCI-MECH-003",
+          "rule": "Materialize backward and forward clock divergence separately; principal, session, policy, and recovery binding loss separately; and every claimed former reference or snapshot state separately while preserving Q2 restart precedence and byte-identical GKOS_P6_REQUEST_STALE_AUTHORITY."
+        },
+        {
+          "id": "BCI-MECH-004",
+          "rule": "Materialize every error-code instance as its own executable leaf or an explicitly closed parameterization counted as separate executable cases; materialize precommit and postcommit retention crashes separately; and materialize every named retention anchor crash cut separately."
+        },
+        {
+          "id": "BCI-MECH-005",
+          "rule": "Expand every omitted-versus-null, field-specific, physical-protection, malformed-token, and noncanonical-encoding negative so one executable leaf changes exactly one named field or physical condition and has one exact schedule and result."
+        },
+        {
+          "id": "BCI-MECH-006",
+          "rule": "After Q14 and BCI-MECH-001 through BCI-MECH-005 are materialized, recompute canonical IDs, additional and overall counts, all 16 family totals, aliases, raw hashes, byte lengths, and internal digests; regenerate only later acyclic evidence descendants and obtain a new exact-byte owner ratification before C1 reruns."
+        }
+      ],
+      "count_rule": {
+        "v5_reviewed_overall_count": 265,
+        "v5_reviewed_additional_count": 247,
+        "v5_counts_remain_valid_for_expanded_descendants": false,
+        "named_non_mcp_subtotal_preserved": 18,
+        "official_mcp_vectors_preserved": 67,
+        "coverage_families_preserved": 16,
+        "expanded_additional_count": "DERIVE_AFTER_MATERIALIZATION",
+        "expanded_overall_count": "DERIVE_AFTER_MATERIALIZATION",
+        "expanded_alias_count": "RECOMPUTE_AFTER_MATERIALIZATION",
+        "rule": "Do not predetermine, target-fit, or preserve 265 by collapsing cases. The actual final counts are the mechanically derived totals after every authorized leaf is materialized, deduplicated, sorted, family-counted, and validated."
+      }
+    },
+    {
+      "id": "Q16",
+      "title": "Noncarrying migration acceptance and fresh C1 rerun",
+      "decision": "The C1 V2 migration acceptance is historical and noncarrying because the registry and later evidence coordinate must change. After the expanded evidence descendants are complete and a separate Product Owner receipt ratifies their exact existing bytes, rerun both fresh zero-contribution C1 roles: migration and security.",
+      "required_sequence": [
+        "this immutable V6 semantic basis",
+        "new mechanically expanded registry evidence descendant implementing Q14 and BCI-MECH-001 through BCI-MECH-005 with BCI-MECH-006 exact accounting",
+        "new correction-map evidence descendant binding only already-existing immutable parents",
+        "separate exact-byte Product Owner ratification receipt for the completed descendant coordinate",
+        "fresh independent zero-contribution C1 migration review",
+        "fresh independent zero-contribution C1 security review"
+      ],
+      "c1_acceptance_rule": "Both fresh roles must unconditionally accept the same exact newly ratified coordinate. Neither the old migration acceptance nor old security rejection carries as a new verdict.",
+      "post_c1_rule": "This V6 does not authorize C2 or C3. After both fresh C1 roles accept, preserve their receipts and return for an explicit next-wave authorization."
+    }
+  ],
+  "source_controlled_semantics_preserved": {
+    "q1_q13": "All Q1 through Q13 decisions ratified through V3, V4, and V5 remain unchanged except that the reviewed 265-case fixture coordinate is historical and its descendant counts must be mechanically recomputed under Q15.",
+    "r01_r15": "All corrected R01 through R15 semantic selections remain unchanged, including R06 as an 18-case subtotal rather than an overall total, R07 restart cursor invalidation, and R15 adapter-dependent mapping deferral.",
+    "dc01_dc13": "All D015-DC01 through D015-DC13 semantic corrections remain; DC06 accounting is recomputed from expanded deterministic leaves rather than preserving the invalid 265 total.",
+    "public_surface": "The mechanical expansion does not change the 67 official MCP vector IDs or valid wire semantics, 53-code registry membership, seven required public tools, 16 tables, 32 operations, or 24 owner-only operations."
+  },
+  "acyclic_descendant_rule": {
+    "rule": "Every new evidence descendant binds only exact immutable parent files that already exist when the descendant is created. This V6 intentionally does not identify, reserve, predict, or bind any later registry, map, ratification-receipt, or concurrence hash or byte length.",
+    "prior_bytes": "V5, C1 V2 migration, C1 V2 security, and every earlier D0-15 record remain immutable historical inputs and must not be edited in place.",
+    "byte_change_effect": "Any changed descendant byte invalidates only dependent later receipts; it does not rewrite or mutate an ancestor."
+  },
+  "authority_boundary": {
+    "preserve_v6_evidence_authorized": true,
+    "detached_registry_expansion_evidence_authorized": true,
+    "detached_correction_map_evidence_authorized": true,
+    "validation_and_owner_ratification_request_preparation_authorized": true,
+    "expanded_registry_or_map_complete": false,
+    "exact_byte_owner_ratification_complete": false,
+    "fresh_c1_rerun_authorized_now": false,
+    "c2_authorized": false,
+    "c3_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "product_contract_or_fixture_regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_push_workflow_pr_merge_release_deploy_activate_publish_authorized": false,
+    "rule": "Authority is limited to detached evidence-only mechanical expansion and preparation of later exact-byte owner-ratification evidence. No review wave restarts and no product or repository mutation occurs from this V6."
+  },
+  "required_descendant_validation": [
+    "Q14 ordinary post-commit transport failure returns only the existing committed nonsecret result with secret_revealed=false and no error envelope",
+    "actual proven exposure is a distinct GKOS_P6_SECRET_EXPOSURE leaf",
+    "BCI-MECH-001 through BCI-MECH-005 are fully materialized as deterministic leaves without semantic invention",
+    "BCI-MECH-006 derives and verifies actual canonical, additional, overall, alias, and 16-family counts",
+    "the named 18-case subtotal and 67 official MCP IDs remain exact",
+    "every canonical ID is unique and lexicographically sorted, every alias is unique with an existing target, and every family total sums to the actual overall count",
+    "all new source traces, raw SHA-256 values, byte lengths, and canonical internal digests match exact existing immutable parents",
+    "no product, accepted-F1, stopped-F2, proposal, workflow, or repository bytes are changed"
+  ],
+  "preservation": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_disposition": "immutable historical evidence only",
+    "stopped_f2_disposition": "uncommitted, unqualified, preserved exactly, and not authorized for reset, discard, repair, grandfathering, qualification, commit, push, or restart",
+    "v5_and_c1_v2_receipts": "immutable exact historical parents",
+    "prior_d0_15_artifacts": "immutable historical evidence"
+  },
+  "terminal_statement": "Q14 THROUGH Q16 ARE RATIFIED AS PROPOSED. V6 IS THE AUTHORITATIVE SEMANTIC BASIS AWAITING MECHANICALLY EXPANDED EVIDENCE DESCENDANTS. THE C1 V2 MIGRATION ACCEPTANCE IS HISTORICAL AND NONCARRYING; BOTH C1 ROLES MUST RERUN AFTER NEW DESCENDANTS RECEIVE SEPARATE EXACT-BYTE OWNER RATIFICATION. NO C1 RERUN NOW, C2, C3, PRODUCT OR PROPOSAL EDIT, SUCCESSOR-F1 CORRECTION OR PRODUCT REGENERATION, F2 RESTART, IMPLEMENTATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, OR PUBLICATION IS AUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "f6b6f0379e92da0aff943a447ef5bedb62051dddd8f379adb7b57033c626847a"
+}

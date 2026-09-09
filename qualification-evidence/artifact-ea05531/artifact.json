@@ -1,0 +1,11 @@
+{
+  "sourceCommit": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "node": "v24.18.0",
+  "npm": "12.0.2",
+  "command": "npm pack --ignore-scripts --json",
+  "tarball": "gkos-engine-2.2.0.tgz",
+  "sha256": "f04705280acac74deab823683193a81a7c4dbf333791b33f6189226b709d593b",
+  "integrity": "sha512-nLcN76J69KYDBWY/N9eW44TMur2zWY/swopWgxDSnvreFf59SaBos+bx8UEvERfYRiQI+GJSDtW/D107fl3N6A==",
+  "qualificationStatus": "PENDING",
+  "releaseQualified": false
+}

@@ -1,0 +1,398 @@
+{
+  "artifact_type": "gkos-phase6-d0-15-c1-v2-security-concurrence",
+  "schema_version": "2.0.0",
+  "review_id": "PHASE6-D0-15-C1-V2-SECURITY-2026-08-26",
+  "reviewed_at_utc": "2026-08-26T12:27:42.6409581Z",
+  "reviewer_role": "fresh independent zero-contribution C1 security reviewer",
+  "reviewer_task": "/root/d015_c1_v2_security_concurrence",
+  "wave": "C1",
+  "verdict": "REJECT_CONCURRENCE",
+  "concurrence": false,
+  "severity": "HIGH",
+  "terminal_statement": "REJECT_CONCURRENCE. The exact owner-ratified V3, V4, Registry V2, Map V2, and V5 coordinate is byte-consistent, acyclic, correctly counted, and closes the historical C1 security review's twenty-item correction inventory. Fresh semantic review nevertheless finds residual open projections and prose-bundled executable cases in Registry V2 that violate its own one-ID/one-deterministic-leaf rule and the owner-ratified no-alternative requirement. No C1 completion, C2, C3, successor-F1 correction, F2 restart, product or proposal edit, regeneration, commit, push, workflow, pull request, merge, release, deployment, activation, or publication is authorized.",
+  "no_contribution_attestation": {
+    "attested": true,
+    "statement": "I did not author, edit, reinterpret, repair, regenerate, or contribute any owner decision, proposal, correction map, registry, fixture ID, expected outcome, reviewed evidence, accepted-F1 byte, stopped-F2 byte, product byte, or implementation decision. I performed a fresh read-only security assessment and created only this distinctly named detached concurrence artifact.",
+    "reviewed_or_parent_bytes_edited": 0,
+    "product_or_proposal_bytes_edited": 0,
+    "fixture_or_expected_outcome_bytes_edited": 0,
+    "implementation_decisions_authored": 0
+  },
+  "scope": [
+    "exact V5 owner-ratification receipt and V3/V4/Registry-V2/Map-V2 coordinate bindings",
+    "historical C1 security rejection as noncarrying defect evidence only",
+    "Q7 backup integrity, pragma, byte-length, and digest projections",
+    "Q8 global-event insertion, startup-corruption, and generated-ID collision projections",
+    "Q9 authenticated-redacted physical drift and restart-cursor precedence",
+    "Q10 restore-locator initial conflict and publication-race projections",
+    "Q11 request, final-gate, effect, anchor, database, audit, and replay restart cuts",
+    "credential authentication, issuance, rotation, handoff, non-enumeration, and redaction",
+    "policy, private-dependency, transport, rate, and reference boundaries",
+    "mapping adapter deferral, pre-adapter GKOS_P6_PLATFORM_UNAVAILABLE, and collision behavior",
+    "exact 53-code registry, 67 official MCP vectors, 265 canonical non-MCP IDs, 12 aliases, and 16 family totals",
+    "original RESTORE-OWNER-001 through RESTORE-OWNER-009 meanings",
+    "one-ID/one-deterministic-leaf and no open, alternative, unnamed, or prose-bundled outcome rules",
+    "acyclic evidence, source traces, decision-only authority, accepted-F1 preservation, and stopped-F2 preservation"
+  ],
+  "exact_ratified_input_ledger": [
+    {
+      "coordinate": "V5 owner ratification",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_BYTE_OWNER_RATIFICATION_V5_2026-08-26.json",
+      "sha256": "f54db22232586f0b6bff80097b03d55b98808d8db4b9d5c9fbdd5aa37e3a5ea2",
+      "bytes": 10102,
+      "record_digest": "e79523eb606f67869018f33fea0097bf1379f227f7b894ea606614d010b5cdbd",
+      "verification": "PASS"
+    },
+    {
+      "coordinate": "V3",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_DECISION_BASIS_V3_2026-08-26.json",
+      "sha256": "e282fa0c2c378b9716302d49738f50f93f158da344df3c693e39e992d09e3d0d",
+      "bytes": 21782,
+      "record_digest": "f3b00953902a5e38bd6c118991b862b4539d493bd517f1254346f12955728e73",
+      "verification": "PASS"
+    },
+    {
+      "coordinate": "V4",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_PROJECTION_RESOLUTION_V4_2026-08-26.json",
+      "sha256": "256bbc19b4418c155726e514d1cff9c10dce17914b72040b147176d856b32efb",
+      "bytes": 16576,
+      "record_digest": "83ae66b748ecf85ae42951e777659aefb6d402a9165ea6b01db4daba91a2e82b",
+      "verification": "PASS"
+    },
+    {
+      "coordinate": "Registry V2",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V2_2026-08-26.json",
+      "sha256": "6eeb65ccb6750538bd3ad5ceb85a66095d6bd350895e244ebb49f3eb03a6dee0",
+      "bytes": 111226,
+      "record_digest": "12bcf45edd4faf5c352d0975dcbb1a927638b25595852d843cbeea2f71f3e938",
+      "verification": "PASS"
+    },
+    {
+      "coordinate": "Map V2",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V2_2026-08-26.json",
+      "sha256": "6ac29a9b524c0080162d39d4c482a11e0db4ecb3b534839e8928786253b47f47",
+      "bytes": 21924,
+      "record_digest": "0db57dd45f82fc720ac5fb3a0dbc08465f4d056fcff0ecff77343d52f5b356b4",
+      "verification": "PASS"
+    },
+    {
+      "coordinate": "historical C1 security rejection",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "2ff2035b102caf69127719313e223e590ad8959df98fe9fec2b482631cbe47f8",
+      "bytes": 33807,
+      "record_digest": "a89c23269ca373ac4fdc72fab7a7842a0838e4ad93f832b00b48222c82cac1ff",
+      "verification": "PASS_NONCARRYING_EVIDENCE"
+    },
+    {
+      "coordinate": "historical C1 migration rejection",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "167a0ed6f5098daa26ea230805941a245725efb6f6ac636e5945af523b9b0b25",
+      "bytes": 20565,
+      "record_digest": "58c90b6e44f2d35ca634964e56bceb7ffa98ddd02a86977001a7d90901679cb3",
+      "verification": "PASS_NONCARRYING_EVIDENCE"
+    }
+  ],
+  "integrity_and_source_trace_audit": {
+    "raw_sha256_and_byte_length_method": "SHA-256 over exact raw file bytes and filesystem byte length",
+    "internal_record_digest_method": "For each record with record_digest, SHA-256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+    "all_seven_ledger_raw_hashes_and_byte_lengths_match": true,
+    "all_seven_ledger_internal_record_digests_match": true,
+    "registry_v2_source_trace_entries": 12,
+    "map_v2_exact_parent_entries": 5,
+    "v5_exact_coordinate_entries": 4,
+    "v5_historical_c1_entries": 2,
+    "distinct_source_and_parent_paths_checked": 14,
+    "distinct_source_and_parent_paths_matching_hash_and_length": 14,
+    "stale_path_count": 0,
+    "missing_path_count": 0,
+    "hash_or_length_mismatch_count": 0,
+    "cycle_found": false,
+    "acyclic_order": [
+      "V3 owner basis",
+      "V4 projection resolution",
+      "Registry V2",
+      "Map V2",
+      "V5 exact-byte owner ratification",
+      "fresh C1 concurrence"
+    ],
+    "overall": "PASS"
+  },
+  "closed_registry_and_count_audit": {
+    "error_registry_source": {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CLOSED_ERROR_REGISTRY_1.0.0-draft.1.json",
+      "sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+      "bytes": 17606,
+      "declared_codes": 53,
+      "actual_codes": 53,
+      "unique_codes": 53,
+      "contains_GKOS_P6_IDENTITY_COLLISION": true,
+      "contains_GKOS_P6_PLATFORM_UNAVAILABLE": true
+    },
+    "registry_v2_used_error_codes": 25,
+    "registry_v2_used_codes_outside_exact_53": 0,
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_error_fixture_rows": 53,
+    "accepted_f1_unique_error_codes": 53,
+    "accepted_f1_and_d0_error_code_set_differences": 0,
+    "accepted_f1_official_mcp_vector_rows": 67,
+    "accepted_f1_unique_official_mcp_vector_ids": 67,
+    "registry_v2_changes_official_mcp_ids_or_valid_wire_semantics": false,
+    "canonical_non_mcp_fixture_rows": 265,
+    "unique_canonical_non_mcp_ids": 265,
+    "canonical_ids_lexicographically_sorted": true,
+    "fixture_rows_with_missing_or_extra_core_fields": 0,
+    "fixture_rows_with_empty_core_fields": 0,
+    "named_core_subtotal": 8,
+    "named_restore_bootstrap_subtotal": 10,
+    "named_subtotal": 18,
+    "additional_canonical_fixtures": 247,
+    "accounting_formula": "18 + 247 = 265",
+    "aliases": 12,
+    "unique_aliases": 12,
+    "alias_names_colliding_with_canonical_ids": 0,
+    "aliases_with_missing_target": 0,
+    "families": 16,
+    "family_count_sum": 265,
+    "family_count_mismatches": 0,
+    "structural_and_count_result": "PASS",
+    "one_id_one_closed_deterministic_semantic_result": "FAIL"
+  },
+  "historical_twenty_item_correction_closure": {
+    "historical_inventory_items": 20,
+    "closed_or_authoritatively_superseded_items": 20,
+    "remaining_items_from_historical_inventory": 0,
+    "rule": "The historical receipt is used only as a defect checklist. Its verdict does not carry forward, and its one erroneous RESTORE-OWNER-002 reinterpretation is superseded by owner Q12, which restores the original D0 meanings.",
+    "items": [
+      {"item": 1, "class": "backup verification split and exact errors", "status": "CLOSED_BY_Q7_AND_FIVE_DISTINCT_V2_LEAVES"},
+      {"item": 2, "class": "bootstrap handoff physical failures", "status": "CLOSED_TO_GKOS_P6_STORAGE_PERMISSION_INVALID"},
+      {"item": 3, "class": "derived identity collision versus idempotency conflict", "status": "CLOSED_BY_TWO_DISTINCT_V2_LEAVES"},
+      {"item": 4, "class": "global-event coordinate insertion versus startup", "status": "CLOSED_BY_Q8_AND_DISTINCT_V2_LEAVES"},
+      {"item": 5, "class": "duplicate event ID insertion versus startup", "status": "CLOSED_BY_Q8_AND_DISTINCT_V2_LEAVES"},
+      {"item": 6, "class": "duplicate global sequence insertion versus startup", "status": "CLOSED_BY_Q8_AND_DISTINCT_V2_LEAVES"},
+      {"item": 7, "class": "event kind/table insertion versus startup", "status": "CLOSED_BY_Q8_AND_DISTINCT_V2_LEAVES"},
+      {"item": 8, "class": "policy deny, indeterminate, timeout, and multi-operation projections", "status": "CLOSED_TO_EXACT_EXISTING_CODES"},
+      {"item": 9, "class": "restart durable cuts", "status": "CLOSED_BY_Q11_AND_EIGHT_DISTINCT_V2_LEAVES"},
+      {"item": 10, "class": "real versus synthetic redaction fixture inputs", "status": "CLOSED_BY_TWO_DISTINCT_V2_LEAVES"},
+      {"item": 11, "class": "path, SQL, and stack redaction", "status": "CLOSED_TO_GKOS_P6_INTERNAL_ERROR"},
+      {"item": 12, "class": "cross-session and process-restart references", "status": "CLOSED_TO_AUTHENTICATED_REDACTED_GKOS_P6_RESOURCE_NOT_FOUND"},
+      {"item": 13, "class": "post-resolution physical drift", "status": "CLOSED_BY_Q9_TO_AUTHENTICATED_REDACTED_GKOS_P6_RESOURCE_NOT_FOUND"},
+      {"item": 14, "class": "auth-epoch admission versus final gate", "status": "CLOSED_BY_TWO_DISTINCT_V2_LEAVES"},
+      {"item": 15, "class": "restore-abort tombstone precommit versus postcommit", "status": "CLOSED_BY_TWO_DISTINCT_V2_LEAVES"},
+      {"item": 16, "class": "unsafe restore abort", "status": "CLOSED_TO_ABORTED_PRESERVED_UNSAFE"},
+      {"item": 17, "class": "initial restore locator conflict versus publication race", "status": "CLOSED_BY_Q10_AND_TWO_DISTINCT_V2_LEAVES"},
+      {"item": 18, "class": "old authority credential, session, reference, and request denial", "status": "CLOSED_BY_FOUR_DISTINCT_V2_LEAVES"},
+      {"item": 19, "class": "RESTORE-OWNER-002 and RESTORE-OWNER-003", "status": "CLOSED_BY_Q12_ORIGINAL_D0_MEANINGS;_RESTORE_OWNER_002_IS_OLD_VERSUS_REPLACEMENT_CREDENTIAL_AND_RESTORE_OWNER_003_AUTO_RESUMES_VALID_LOCATOR_STAGING"},
+      {"item": 20, "class": "RESTORE-OWNER-008 physical-negative branches", "status": "CLOSED_BY_ORIGINAL_ID_PLUS_SIX_DISTINCT_V2_NEGATIVE_LEAVES"}
+    ],
+    "overall": "PASS"
+  },
+  "security_semantics_audit": [
+    {
+      "area": "Q7 backup verification",
+      "result": "PASS_DECISION_ONLY",
+      "basis": "Integrity, foreign-key, and required-pragma failures use GKOS_P6_AUTHORITY_CORRUPT; byte-length and manifest-digest mismatches use GKOS_P6_EVIDENCE_MISMATCH. All five leaves forbid accepted result, publication, authority mutation, event, and success activity."
+    },
+    {
+      "area": "Q8 global events",
+      "result": "PASS_DECISION_ONLY",
+      "basis": "Insertion coordinate, duplicate-sequence, and kind/table mismatches use GKOS_P6_STATE_CONFLICT with full rollback; startup corruption uses GKOS_P6_AUTHORITY_CORRUPT and blocks the gate; generated duplicate event_id uses GKOS_P6_IDENTITY_COLLISION with one entropy call, no retry, no overwrite, and zero mutation."
+    },
+    {
+      "area": "Q9 references and cursor precedence",
+      "result": "PASS_DECISION_ONLY",
+      "basis": "Live-resolution physical drift uses authenticated-redacted GKOS_P6_RESOURCE_NOT_FOUND with zero replacement-object access. Restart-invalidated reference-bound cursors use GKOS_P6_REQUEST_STALE_AUTHORITY before any reference or snapshot lookup and require rediscovery."
+    },
+    {
+      "area": "Q10 restore locator conflicts",
+      "result": "PASS_DECISION_ONLY",
+      "basis": "A clean initially preexisting final locator, including RESTORE-OWNER-004, uses GKOS_P6_STATE_CONFLICT; post-qualification identity or existence change uses GKOS_P6_MIGRATION_RECOVERY_REQUIRED. Both forbid overwrite, deletion, hybrid publication, and secret re-reveal."
+    },
+    {
+      "area": "Q11 restart races",
+      "result": "PASS_DECISION_ONLY",
+      "basis": "Precommit admitted, final-gate, prepared-effect, and uncommitted-anchor cuts become durable stale with GKOS_P6_REQUEST_STALE_AUTHORITY. Later source-controlled durable cuts have distinct deterministic replay or recovery leaves without duplicate results or effects."
+    },
+    {
+      "area": "credentials and unauthenticated non-enumeration",
+      "result": "RULE_PASS_FIXTURE_CLOSURE_FAIL",
+      "basis": "Seven malformed, absent, unknown, mismatch, disabled, and revoked credential leaves are byte-identical GKOS_P6_AUTH_FAILED; sole-owner rotation, zero grace, issuance epoch, one-time handoff, and no re-reveal rules are present. Residual open and bundled credential fixtures are findings below."
+    },
+    {
+      "area": "policy, transport, and rate",
+      "result": "RULE_PASS_FIXTURE_CLOSURE_FAIL",
+      "basis": "Deny, indeterminate, timeout, missing or reordered private dependencies, public invocation of private dependencies, bounded reason codes, persisted microtokens, and unknown-selector caps fail closed. Residual modal and bundled race/rate fixtures are findings below."
+    },
+    {
+      "area": "redaction and content-free evidence",
+      "result": "RULE_PASS_FIXTURE_CLOSURE_FAIL",
+      "basis": "The exact six-field additionalProperties:false error envelope, 53-code membership, INTERNAL_ERROR path/SQL/stack projection, and real-input fixture rejection are closed. REDACTION-HANDOFF-ERROR-001 still has an unnamed conditional public outcome."
+    },
+    {
+      "area": "mapping adapter deferral",
+      "result": "PASS_DECISION_ONLY",
+      "basis": "Mapping add and revoke remain GKOS_P6_PLATFORM_UNAVAILABLE without mapping-existence disclosure before a separately ratified authenticated adapter. The mapping evidence record, collision-guard field/domain/preimage/algorithm/equality, adapter binding, and executable subject-digest-collision qualification are deferred together."
+    },
+    {
+      "area": "original restore IDs",
+      "result": "PASS_DECISION_ONLY",
+      "basis": "RESTORE-OWNER-001 through RESTORE-OWNER-009 match the original D0 meanings: success, old/new credential behavior, locator-stage recovery, initial conflict, candidate/intent recovery, plan-stage temp recovery, absent temp, unsafe/aliased temp, and abort-event/external-plan reconciliation. Valid staged evidence auto-resumes; abort remains a separate authenticated operation."
+    },
+    {
+      "area": "decision-only authority",
+      "result": "PASS",
+      "basis": "V5 authorizes fresh zero-contribution C1 migration and security concurrence records only. It does not authorize C2, C3, product work, successor-F1 correction, F2 restart, or repository publication activity."
+    }
+  ],
+  "findings": [
+    {
+      "id": "C1-V2-SEC-001",
+      "severity": "HIGH",
+      "title": "Registry V2 still contains open or unnamed security projections",
+      "evidence": [
+        "REDACTION-HANDOFF-ERROR-001 expects an 'ordinary content-free failed-delivery outcome' without selecting an exact success result or one of the existing 53 error codes, and then adds 'unless actual exposure rule independently fires', leaving two possible public projections under one ID.",
+        "CREDENTIAL-LOCATOR-BINDING-001 says delivery 'may succeed exactly once'; it does not freeze whether delivery succeeds in this schedule or the exact result/error bytes.",
+        "RACE-DISABLE-AFTER-GATE-001 and RACE-REVOKE-AFTER-GATE-001 say the already-final-gated request 'may publish' rather than freezing publication or nonpublication and one exact result.",
+        "These modal and conditional outcomes conflict with Registry V2 closed_fixture_semantics.expected, V4 descendant_acceptance_requirements, Map V2 Q3/DC06, and V5 acceptance_rule, all of which require one deterministic response or error per canonical ID with no alternative outcome."
+      ],
+      "impact": "A successor-F1 author would have to choose public result/error semantics and publication behavior. That is a security-semantic contribution and prevents proof of byte-identical redaction, exact final-gate behavior, and deterministic handoff handling.",
+      "required_disposition": "Remain stopped and return to the Product Owner. A new owner-ratified descendant must select an exact result or existing 53-code projection for each case and replace every modal 'may' outcome with one mandatory deterministic outcome before fresh C1 review."
+    },
+    {
+      "id": "C1-V2-SEC-002",
+      "severity": "HIGH",
+      "title": "Several canonical IDs still bundle multiple executable security leaves",
+      "evidence": [
+        "CREDENTIAL-RESULT-002 combines idempotent replay of credential.issue and credential.rotate under one ID; CREDENTIAL-RESULT-004 combines issue and rotate plus failed and acknowledgement-lost delivery states under one ID.",
+        "RATE-AUTH-FAILURE-004 combines backward and forward wall-clock divergence in one input even though those are distinct injected schedules and cap behaviors.",
+        "REQUEST-STALE-001 ranges across loss of principal, session, policy, and recovery bindings in one ID rather than one binding loss per executable leaf.",
+        "SNAPSHOT-RESTART-001 claims byte identity across former reference/snapshot states described as live, dead, absent, and corrupted, but defines only one canonical ID and no closed parameterization that materializes those distinct initial states.",
+        "ERROR-ENVELOPE-001 places one instance of each of 53 error codes under one canonical ID; RETENTION-CRASH-001 explicitly requires separate precommit and postcommit runs; RETENTION-ANCHOR-INTENT-001 injects a crash at each of several durable boundaries under one ID.",
+        "ANCHOR-INTENT-007 ranges across omitted and null forms of four digest fields; ANCHOR-PHYSICAL-PROTECTION-001, BOOTSTRAP-SOURCE-MALFORMED-001, BOOTSTRAP-SOURCE-MALFORMED-003, COLLISION-ENCODING-BASE64URL-001, COLLISION-ENCODING-DIGEST-001, and COLLISION-ENCODING-UUID-001 each aggregate multiple independently testable malformed or physical-negative inputs despite the registry rule that a negative input changes only the field named by that leaf.",
+        "The registry declares that ranges and prose bundles are expanded and that one ID has one deterministic initial state, schedule, response or error, allowed/forbidden mutation set, restart sequence, and exhaustive post-state. These rows do not satisfy that declared rule."
+      ],
+      "impact": "The structurally correct count of 265 IDs is not an exact count of 265 one-leaf executable cases. Splitting or formally parameterizing these cases changes fixture bytes and may change canonical counts, aliases, family totals, Map V2 bindings, and the V5 ratified coordinate.",
+      "required_disposition": "Remain stopped and return to the Product Owner. Produce a closed replacement registry with one executable initial state and schedule per ID, recompute exact counts and hashes, regenerate only later acyclic descendants, obtain a new exact-byte owner ratification, and restart C1."
+    }
+  ],
+  "bounded_correction_inventory": {
+    "purpose": "This inventory distinguishes the one genuine unresolved owner selection from source-controlled mechanical closure. It is defect evidence only and does not contribute replacement fixture IDs, expected bytes, registry bytes, or product semantics.",
+    "genuine_owner_choices": [
+      {
+        "id": "BCI-OWNER-001",
+        "affected_fixture": "REDACTION-HANDOFF-ERROR-001",
+        "choice_required": "Select the exact already-existing public result shape or one exact member of the 53-code error registry for an ordinary post-commit handoff transport failure whose thrown text contains secret/path material but whose output, log, evidence, and artifact channels do not expose that material.",
+        "fixed_constraints": [
+          "ordinary delivery failure is not GKOS_P6_SECRET_EXPOSURE",
+          "secret bytes are erased and never re-revealed",
+          "failed or ambiguous handoff evidence is content-free",
+          "no new error code, retry, overwrite, or second credential mutation",
+          "an actual independently proven exposure remains a separate GKOS_P6_SECRET_EXPOSURE leaf"
+        ],
+        "reason_owner_choice_is_required": "The ratified sources distinguish ordinary delivery failure from actual exposure but do not freeze one exact public error code or success-result projection for this redaction leaf."
+      }
+    ],
+    "source_controlled_mechanical_corrections": [
+      {
+        "id": "BCI-MECH-001",
+        "affected_fixtures": [
+          "CREDENTIAL-LOCATOR-BINDING-001",
+          "RACE-DISABLE-AFTER-GATE-001",
+          "RACE-REVOKE-AFTER-GATE-001"
+        ],
+        "required_action": "Remove modal 'may' language. The positive qualified handoff deterministically completes exactly once with the existing one-time nonsecret result rule. A request whose final gate wins deterministically publishes its already-authorized result, after which disable or revoke governs only later work.",
+        "owner_choice_required": false,
+        "count_change_required": false
+      },
+      {
+        "id": "BCI-MECH-002",
+        "affected_fixtures": [
+          "CREDENTIAL-LOCATOR-BINDING-001",
+          "CREDENTIAL-RESULT-002",
+          "CREDENTIAL-RESULT-004"
+        ],
+        "required_action": "Materialize locator and pipe handoff qualification separately where their physical schedules differ; materialize credential.issue and credential.rotate replay/failure schedules separately. Preserve the current canonical ID for exactly one source-controlled branch and allocate distinct additional IDs for every other branch without changing the named eight-ID subtotal.",
+        "owner_choice_required": false,
+        "count_change_required": true
+      },
+      {
+        "id": "BCI-MECH-003",
+        "affected_fixtures": [
+          "RATE-AUTH-FAILURE-004",
+          "REQUEST-STALE-001",
+          "SNAPSHOT-RESTART-001"
+        ],
+        "required_action": "Materialize backward and forward clock divergence separately; materialize principal, session, policy, and recovery binding loss separately; materialize each claimed former reference/snapshot condition separately while preserving Q2 restart precedence and byte-identical GKOS_P6_REQUEST_STALE_AUTHORITY.",
+        "owner_choice_required": false,
+        "count_change_required": true
+      },
+      {
+        "id": "BCI-MECH-004",
+        "affected_fixtures": [
+          "ERROR-ENVELOPE-001",
+          "RETENTION-CRASH-001",
+          "RETENTION-ANCHOR-INTENT-001"
+        ],
+        "required_action": "Materialize each error-code instance as its own executable leaf or bind an owner-ratified closed parameterization that is explicitly counted as separate executable cases; materialize precommit and postcommit retention crashes separately; materialize each named retention anchor crash cut separately.",
+        "owner_choice_required": false,
+        "count_change_required": true
+      },
+      {
+        "id": "BCI-MECH-005",
+        "affected_fixtures": [
+          "ANCHOR-INTENT-007",
+          "ANCHOR-PHYSICAL-PROTECTION-001",
+          "BOOTSTRAP-SOURCE-MALFORMED-001",
+          "BOOTSTRAP-SOURCE-MALFORMED-003",
+          "COLLISION-ENCODING-BASE64URL-001",
+          "COLLISION-ENCODING-DIGEST-001",
+          "COLLISION-ENCODING-UUID-001"
+        ],
+        "required_action": "Expand every omitted-versus-null, field-specific, physical-protection, malformed-token, and noncanonical-encoding negative so each executable leaf changes exactly one named field or one named physical condition and has one exact schedule and result.",
+        "owner_choice_required": false,
+        "count_change_required": true
+      },
+      {
+        "id": "BCI-MECH-006",
+        "affected_artifacts": [
+          "Registry descendant",
+          "correction-map descendant",
+          "exact-byte owner-ratification receipt",
+          "fresh C1 receipts"
+        ],
+        "required_action": "After BCI-OWNER-001 is decided and BCI-MECH-001 through BCI-MECH-005 are materialized, recompute the canonical-ID total, additional-fixture count, all 16 family totals, aliases, raw hashes, byte lengths, and internal digests; regenerate only later acyclic descendants and restart fresh C1.",
+        "owner_choice_required": false,
+        "count_change_required": true
+      }
+    ],
+    "current_ratified_count_remains_valid": false,
+    "replacement_count_can_be_frozen_before_owner_choice_and_mechanical_expansion": false,
+    "minimum_safe_disposition": "No implementer or reviewer may silently reinterpret, parameterize, split, rename, or select outcomes under the V5 coordinate. Return to the Product Owner with BCI-OWNER-001 and preserve all reviewed bytes."
+  },
+  "positive_observations_not_acceptance": [
+    "All exact V5, V3, V4, Registry V2, Map V2, and historical C1 raw hashes, byte lengths, and internal record digests match.",
+    "All 14 distinct source and parent paths referenced across Registry V2, Map V2, and V5 exist and match their declared raw hashes and byte lengths; no stale path or cycle was found.",
+    "Registry V2 contains exactly 265 unique lexicographically sorted canonical IDs, 12 unique aliases with valid targets, and 16 exact family counts summing to 265.",
+    "The 18 + 247 = 265 accounting is arithmetically correct, and all 67 accepted-F1 official MCP vector IDs remain outside the non-MCP registry and unchanged by the ratified records.",
+    "The D0 and accepted-F1 error registries each contain the same exact 53 unique codes, including GKOS_P6_IDENTITY_COLLISION and GKOS_P6_PLATFORM_UNAVAILABLE; every GKOS_P6 code named by Registry V2 belongs to that set.",
+    "Every class in the historical twenty-item C1 security correction inventory is closed or explicitly superseded by an owner decision. This fresh rejection is based only on newly observed residual V2 ambiguity.",
+    "No reviewed evidence, product, proposal, accepted-F1, or stopped-F2 byte was changed by this review."
+  ],
+  "authorization_boundary": {
+    "authorized_by_this_artifact": "detached fresh C1 V2 security concurrence rejection evidence only",
+    "c1_complete": false,
+    "c2_authorized": false,
+    "c3_authorized": false,
+    "successor_f1_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "commit_push_workflow_pr_merge_release_deploy_activate_publish_authorized": false,
+    "preservation": {
+      "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+      "accepted_f1": "immutable historical evidence only",
+      "stopped_f2": "preserved uncommitted, unqualified, and not authorized for reset, discard, repair, qualification, commit, push, or restart"
+    }
+  },
+  "self_raw_coordinate_rule": "The artifact cannot embed its own final raw SHA-256 or byte length without changing those bytes. Its final raw SHA-256 and byte length are reported externally after write and verification; the internal record_digest below is self-verifying under the declared omission rule.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "17187cb3c65cfe9ae203f47ab243cc8dda420cb512bbf6a824c9021c491888f4"
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "gkos-soak-latency-diagnosis/1",
+  "sourceCommit": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "tarballSha256": "f04705280acac74deab823683193a81a7c4dbf333791b33f6189226b709d593b",
+  "qualificationStatus": "BLOCKED",
+  "failedWindowsP95Ms": 534.4491,
+  "thresholdMs": 500,
+  "failedSamplesAboveThreshold": 7,
+  "sampleCount": 50,
+  "diagnosticStatus": "PILOT_PASS",
+  "diagnosticCycles": 11,
+  "rootCause": "UNRESOLVED",
+  "diagnosticRows": [
+    {
+      "cycle": 1,
+      "p95Ms": 250.10859999999957,
+      "meanMs": 235.39454199999977,
+      "meanSecureReadMs": 162.62309599999944,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 2,
+      "p95Ms": 259.1303999999982,
+      "meanMs": 236.56953199999975,
+      "meanSecureReadMs": 164.552919999999,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 3,
+      "p95Ms": 264.49269999999524,
+      "meanMs": 233.8211440000005,
+      "meanSecureReadMs": 163.03616000000156,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 4,
+      "p95Ms": 300.40419999999995,
+      "meanMs": 248.08059200000002,
+      "meanSecureReadMs": 171.21567600000023,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 5,
+      "p95Ms": 315.1883999999991,
+      "meanMs": 241.50314200000008,
+      "meanSecureReadMs": 166.56739199999822,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 6,
+      "p95Ms": 266.32360000000335,
+      "meanMs": 235.70573600000063,
+      "meanSecureReadMs": 163.62206400000213,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 7,
+      "p95Ms": 269.90810000000056,
+      "meanMs": 242.00181599999988,
+      "meanSecureReadMs": 165.98803400000006,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 8,
+      "p95Ms": 256.60339999999997,
+      "meanMs": 238.14542199999968,
+      "meanSecureReadMs": 163.47893000000434,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 9,
+      "p95Ms": 253.09389999999985,
+      "meanMs": 234.2762020000005,
+      "meanSecureReadMs": 161.5964340000016,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 10,
+      "p95Ms": 266.02520000000004,
+      "meanMs": 237.8667380000002,
+      "meanSecureReadMs": 162.6780879999989,
+      "sourceReadsPerQuery": 128
+    },
+    {
+      "cycle": 11,
+      "p95Ms": 270.19690000000264,
+      "meanMs": 237.56392199999993,
+      "meanSecureReadMs": 163.31106199999812,
+      "sourceReadsPerQuery": 128
+    }
+  ],
+  "limitations": "Instrumented follow-up passed but cannot invalidate the earlier failure. No 24h qualification pass. No claim that filesystem reads alone caused the failed tail. No source security checks removed."
+}

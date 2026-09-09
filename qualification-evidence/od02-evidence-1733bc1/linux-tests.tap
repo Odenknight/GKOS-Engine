@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: exact six historical raw blobs reproduce independently pinned annex manifest
+ok 1 - exact six historical raw blobs reproduce independently pinned annex manifest
+  ---
+  duration_ms: 1.561108
+  type: 'test'
+  ...
+# Subtest: one deliberate byte alteration matches independent annex negative digests
+ok 2 - one deliberate byte alteration matches independent annex negative digests
+  ---
+  duration_ms: 0.399802
+  type: 'test'
+  ...
+# Subtest: newline conversion is an alteration; inputs are never normalized
+ok 3 - newline conversion is an alteration; inputs are never normalized
+  ---
+  duration_ms: 0.302071
+  type: 'test'
+  ...
+# Subtest: reject missing, substituted, string-valued and oversized byte inputs
+ok 4 - reject missing, substituted, string-valued and oversized byte inputs
+  ---
+  duration_ms: 0.932181
+  type: 'test'
+  ...
+# Subtest: invalid declarations fail before reads, including traversal and self-inconsistent manifest
+ok 5 - invalid declarations fail before reads, including traversal and self-inconsistent manifest
+  ---
+  duration_ms: 0.963759
+  type: 'test'
+  ...
+# Subtest: CLI returns bounded match/mismatch/error JSON and correct exit codes
+ok 6 - CLI returns bounded match/mismatch/error JSON and correct exit codes
+  ---
+  duration_ms: 70.312267
+  type: 'test'
+  ...
+# Subtest: file loader rejects hard-linked source bytes
+ok 7 - file loader rejects hard-linked source bytes
+  ---
+  duration_ms: 0.547135
+  type: 'test'
+  ...
+# Subtest: synthetic receipt validates only against exact pinned v0.81 schema
+ok 8 - synthetic receipt validates only against exact pinned v0.81 schema
+  ---
+  duration_ms: 36.242259
+  type: 'test'
+  ...
+# Subtest: confidence NO_ELIGIBLE_RESULTS is not a RefusalReceipt
+ok 9 - confidence NO_ELIGIBLE_RESULTS is not a RefusalReceipt
+  ---
+  duration_ms: 0.271755
+  type: 'test'
+  ...
+# Subtest: reject annex draft structural errors and each missing required receipt field
+ok 10 - reject annex draft structural errors and each missing required receipt field
+  ---
+  duration_ms: 0.926911
+  type: 'test'
+  ...
+# Subtest: schema pin rejects altered bytes and unknown schema names before compilation
+ok 11 - schema pin rejects altered bytes and unknown schema names before compilation
+  ---
+  duration_ms: 0.45191
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 176.388635

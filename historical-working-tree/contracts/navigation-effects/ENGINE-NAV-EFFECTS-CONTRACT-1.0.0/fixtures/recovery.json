@@ -1,0 +1,16 @@
+{
+  "fixtureId": "effects-startup-recovery",
+  "category": "recovery",
+  "input": {
+    "journalState": "VERIFIED",
+    "proposedDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "targetDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "archiveBeforeDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "receiptPresent": false
+  },
+  "expected": {
+    "outcome": "effect-present-verified",
+    "sourceWrite": false,
+    "reasonCodes": ["FINISH_RECEIPT_AND_COMMIT"]
+  }
+}

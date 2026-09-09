@@ -1,0 +1,74 @@
+COMMAND: node standard-boundary-probes.mjs
+CWD: [LOCAL_PATH]
+EXIT: 0
+{
+  "source": {
+    "main": "71b899473473f47172b181973027f3eb7da25104",
+    "r18": "aa9a05315a9a767bd672aa2bb5179c963d9d66ca"
+  },
+  "gate_probes": [
+    {
+      "input": {
+        "kind": "authority",
+        "valid": true,
+        "evaluation_time": "2026-08-31T00:00:00.000000Z"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "context-binding"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "digest-binding"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "restrictiveness"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "canonical-time",
+        "value": "2026-99-99T99:99:99.000000Z"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "authorization-manifest"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    }
+  ],
+  "canonical_probes": [
+    {
+      "input": {
+        "compiled_at": "2026-99-99T12:00:00.000000Z"
+      },
+      "expected": "refuse malformed time or lone surrogate",
+      "observed": "ACCEPTED",
+      "hex": "a16b636f6d70696c65645f6174781b323032362d39392d39395431323a30303a30302e3030303030305a"
+    },
+    {
+      "input": {
+        "text": "\ud800"
+      },
+      "expected": "refuse malformed time or lone surrogate",
+      "observed": "ACCEPTED",
+      "hex": "a1647465787463efbfbd"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+✔ outer missing pointer refuses restart without canonical promotion (2629.0316ms)
+✔ outer corrupt pointer refuses restart without canonical promotion (1898.2537ms)
+✔ journal missing pointer refuses restart without canonical promotion (2212.6331ms)
+✔ journal corrupt pointer refuses restart without canonical promotion (1966.4762ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8712.6795

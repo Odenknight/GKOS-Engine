@@ -1,0 +1,13 @@
+{
+  "fixture_root": "[LOCAL_PATH]",
+  "source_identity_drift": {
+    "first_head": "793c2826109e0faae2ff4dd2e323553d864e39d0",
+    "second_head": "f7fc9de602b9d47e8b131800970a0dc1e6c90290",
+    "heads_differ": true,
+    "snapshot_digests_equal": true
+  },
+  "preflight_failure": {
+    "thrown": "ENOENT: no such file or directory, open '[LOCAL_PATH]'",
+    "old_receipt_preserved": true
+  }
+}

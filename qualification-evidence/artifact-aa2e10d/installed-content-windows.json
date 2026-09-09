@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "sourceCommit": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+  "tarballSha256": "8b4cc0eb16be7c07b61f66d684e4b50810f94dd4a766b7a82195d48baed6c48a",
+  "integrity": "sha512-DAENDXUDfl33QM9uVs52iQy8j+os0aVSzSEquA0tZottmPAuWX1EUeQPWJO9Y9LQaB82QbqSEl8NIm371NCiDQ==",
+  "checkedFiles": 594,
+  "platform": "win32",
+  "node": "v24.18.0"
+}

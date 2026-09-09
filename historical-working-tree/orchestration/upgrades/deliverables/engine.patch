@@ -1,0 +1,1378 @@
+diff --git a/.github/workflows/runtime-qualification.yml b/.github/workflows/runtime-qualification.yml
+new file mode 100644
+index 0000000..08bad07
+--- /dev/null
++++ b/.github/workflows/runtime-qualification.yml
+@@ -0,0 +1,71 @@
++name: Historical and current runtime qualification
++
++on:
++  push:
++  pull_request:
++  workflow_dispatch:
++
++permissions:
++  contents: read
++
++jobs:
++  historical-contract-replay:
++    runs-on: ${{ matrix.os }}
++    strategy:
++      fail-fast: false
++      matrix:
++        os: [ubuntu-24.04, windows-latest, macos-14]
++        node: [22, 23, 24]
++    steps:
++      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
++        with:
++          path: candidate
++          fetch-depth: 0
++      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
++        with:
++          path: historical
++          ref: 97ae3560a4fa2e771b60fa63d6dc0349d0b4c864
++          fetch-depth: 0
++      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
++        with:
++          node-version: ${{ matrix.node }}
++          cache: npm
++          cache-dependency-path: historical/package-lock.json
++      - name: Install exact historical dependencies
++        working-directory: historical
++        run: npm ci --ignore-scripts
++      - name: Replay unchanged historical assertions and record actual commands
++        shell: bash
++        run: node candidate/scripts/runtime-qualification.mjs --historical-checkout historical --output "$RUNNER_TEMP/historical-receipt"
++      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
++        if: always()
++        with:
++          name: historical-contract-${{ matrix.os }}-node-${{ matrix.node }}
++          path: ${{ runner.temp }}/historical-receipt/
++          if-no-files-found: error
++
++  current-runtime:
++    needs: historical-contract-replay
++    runs-on: ubuntu-24.04
++    strategy:
++      fail-fast: false
++      matrix:
++        node: [22, 23, 24]
++    steps:
++      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
++        with:
++          fetch-depth: 0
++      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
++        with:
++          node-version: ${{ matrix.node }}
++          cache: npm
++      - run: npm ci --ignore-scripts
++      - name: Current runtime qualification (source inventory and executed tests)
++        run: node scripts/runtime-qualification.mjs --output "$RUNNER_TEMP/current-runtime-receipt"
++      - name: Upload evidence even when qualification fails
++        if: always()
++        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
++        with:
++          name: current-runtime-node-${{ matrix.node }}
++          path: ${{ runner.temp }}/current-runtime-receipt/
++          if-no-files-found: error
+diff --git a/contracts/runtime-qualification/v1/change-inventory.json b/contracts/runtime-qualification/v1/change-inventory.json
+new file mode 100644
+index 0000000..5cf6d7d
+--- /dev/null
++++ b/contracts/runtime-qualification/v1/change-inventory.json
+@@ -0,0 +1,441 @@
++{
++  "version": "gkos-current-runtime-qualification/1",
++  "historical": "97ae3560a4fa2e771b60fa63d6dc0349d0b4c864",
++  "audited": "8207958047b3361ae21ac07c5a2abbd26a42a684",
++  "historical_changes": [
++    {
++      "path": "README.md",
++      "before": "d8ef6444bc1ab4a3c4f5246d7da833c508c4f960",
++      "after": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "bin/gkx.mjs",
++      "before": "bf6272218c685ce52acd8a471d7912078c0064d6",
++      "after": "4c385833b14a76be61f8523258c30a9f7350b715",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "bin/settings-inventory.mjs",
++      "before": null,
++      "after": "64b9c9d2d2cdb2a0e36359301a07fb8376e0e746",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "docs/CURRENT_CAPABILITIES.md",
++      "before": null,
++      "after": "154d01ab1328d6f7a8cc10974cde6d8651402357",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "docs/HANDOFF_2026-08-27.md",
++      "before": null,
++      "after": "fa71613f2efc29daed7d25b4e614cfcfba67d922",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "docs/MCP-PARAM-ERRORS.md",
++      "before": null,
++      "after": "1a204eabe98a24c89b9b2208a55039b91c4f0d22",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "docs/SETTINGS-TOML.md",
++      "before": null,
++      "after": "6418ebdf4fd9c9c30e42daa6ba49fc02acb78ec5",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "docs/SETTINGS.md",
++      "before": null,
++      "after": "3ce48def5cdf6b8ac2fd7b287973f90c7c2d4a77",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "docs/mcp-invalid-params-draft3.schema.json",
++      "before": null,
++      "after": "47d1b5fdd8d839274e32ae6af5f3ca3f82c3eff8",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "services/gkos-intelligence/src/gkos_intelligence/server.py",
++      "before": "9a78e05c771f8a92c3e69c3397a12954bd237669",
++      "after": "050a2ff80f62d6b5327a99b02c61bbcd66c5f960",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "services/gkos-intelligence/tests/test_settings.py",
++      "before": null,
++      "after": "7a8f179ce7db731456c2ef310bf4408bf2407820",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/desktop-agent.ts",
++      "before": "e3dfd8799f79ffeb9fd338d87cffe54bfde3d27b",
++      "after": "5e6dd0ae5885d4107ef7218fbedee0164a940ce1",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/ingest/storage.ts",
++      "before": "c79964715436e4fdb93d39ef7bd41c159ef5fe3b",
++      "after": "7745f7157191d77277bd659b192d95247a42ccc0",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/service/local-embedding.ts",
++      "before": null,
++      "after": "f9fdb8bfb6d90055b0e169d5d362d0f2b12b44d3",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/service/mcp.ts",
++      "before": "0005428444d3586e7ac47f926d3f59a9a23a4e72",
++      "after": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/service/node.ts",
++      "before": "5fbc2814f108df967ae74d352fe8d349c6fa8086",
++      "after": "a66997dc3e0248ddd9988149a224ec462ce74f57",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/service/retrieval.ts",
++      "before": null,
++      "after": "45311d7ca3fe7aac49b3357395397f49c972bf29",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/service/server.ts",
++      "before": "c11f44fe4c95ad9a7eb6326c6be17ee0e3b80ec0",
++      "after": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/service/work-scheduler.ts",
++      "before": null,
++      "after": "9555150e982b90512784d402bfb4f44c52f05212",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/watcher/coordinator.ts",
++      "before": "f301c2af507d39eb5a8fbdd17925113b00a8b40c",
++      "after": "4c2d09a947f81fc28e3ccf3806b348fcaff672ec",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/watcher/host.ts",
++      "before": "a97f16ee888103a765b64ec79b841e7a6bcbff1c",
++      "after": "552145be95b14ac22a07760c7922a85d038b225c",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "src/watcher/journal.ts",
++      "before": "7d698f2ed49fcf821271ba1f883e128d956622b2",
++      "after": "b7edbbf108b52baba29035d09ec2e244498bd265",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/compatibility-baseline.test.mjs",
++      "before": "8cb3f98bdd44e943a1b054ed0bb8a93388ca8b4b",
++      "after": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/desktop-agent.test.mjs",
++      "before": "751e328ff7b9af3752feecb940303496f6d0ea4e",
++      "after": "a015957c17cab453b0c1a0ed8a733bf7b6aee028",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/fixtures/param-errors-before.json",
++      "before": null,
++      "after": "6b4c9c5401ca4d3b76e2a4c86923d892bf9cb969",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/service-content.test.mjs",
++      "before": null,
++      "after": "c8278965df5ea133fee06bd0907ec8e92ad6311b",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/service-multiclient.test.mjs",
++      "before": null,
++      "after": "087c9efca8e7622df56870f6aeb42781ef1e3542",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/service-param-errors.test.mjs",
++      "before": null,
++      "after": "0c353318addae9d8d496ddadd85f9cf52776acb8",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/service-retrieval.test.mjs",
++      "before": null,
++      "after": "83f14477ca28e80cfc990f603e19b73251b6aec6",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/service-runtime.test.mjs",
++      "before": "03bfda24636f4cecf194876aa80fdcd73e520404",
++      "after": "c3ad015d1e157f57cfc7b4f9d99a5e9601ae33bc",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/service-scheduling.test.mjs",
++      "before": null,
++      "after": "973b3bd6921ebcd747297085fc419882f7c1b25a",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/service-secret-canary.test.mjs",
++      "before": "32b9e416539390bd4c60b97a46b6b54d67c93644",
++      "after": "60107beecdd93a66ffebf5bb667a86aea5ec7220",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/service-vector-real.test.mjs",
++      "before": null,
++      "after": "8c495c4f77d9592e905c5bd2b211b8226d9c878d",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/settings-inventory.test.mjs",
++      "before": null,
++      "after": "1c898da5109eb51d7d443835179af0aa88cd5077",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/support/param-fixture.mjs",
++      "before": null,
++      "after": "d03197327839542ebba3b852e0d2a214f6354997",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/watcher-coordinator.test.mjs",
++      "before": "5996ed147e2168a0cb3227790faecc92e1f82e58",
++      "after": "ce95634d71454e60ab43d1f0cb33551aac392aa8",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/watcher-fast-path.test.mjs",
++      "before": null,
++      "after": "0b6bfb8c8d0ba9d8df25322b5314a3d79ce08f54",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    },
++    {
++      "path": "test/watcher-large-restart.test.mjs",
++      "before": null,
++      "after": "6645c5680b85689548f07963fe596e05e12e03ef",
++      "rationale": "Existing audited main change, preserved as historical provenance; current behavior requires runtime tests."
++    }
++  ],
++  "frozen": [
++    {
++      "path": ".github/workflows/phase6-identity-contract.yml",
++      "sha256": "385c137613af0bee7fae6125fcaec0faf64f1a10533d3477acce67ab1fe26ab6"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/README.md",
++      "sha256": "98a77be95bad3be62e95389b88fa595619090de88ca2d5f9e04feaeab2b099f8"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/TECHNICAL_README.md",
++      "sha256": "6f8da7d8b8fcce480cbd031e34ea6aafa56a8702390284f29892ee0359fa6520"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/activity.schema.json",
++      "sha256": "2f6bdf0621b3b2b12b16a97d9f1e40d485839a7c92b24f7b59bb2f5843e7835f"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/agent-identity.schema.json",
++      "sha256": "c6a7fc8cc654022b5d639fb7234cbeae2dc2a17f0d63ea128030b8900c10b63d"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/allowed-paths.txt",
++      "sha256": "79e454975e981e59b53b9ddca672bb113d9762cbe2fe81a5c04f7498514f0c5f"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/audit-receipt.schema.json",
++      "sha256": "49bdd99a2415ab14c067f6dfe1a07e971b69e76316bfa85785651c87f572650c"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/bootstrap-migration.schema.json",
++      "sha256": "64b9a5572e53d3b8135b7b77ee358f6ee4d8ca8024bad32fe0333b0d26002bc3"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/canonical-fixture.json",
++      "sha256": "643fd0f1860a19a04ff9da27e28539e34b6979346bcdcee0ba5033fab2d9d976"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/conformance.schema.json",
++      "sha256": "f3cf04a75745460c8a743d0524e5e37806434e616360064602cc6e5394c3944c"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/credential.schema.json",
++      "sha256": "0cb96e6cb1bb7950751b5daaae61bb0a4da73689ba8c5d3257127ce719ac468c"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error-fixture.json",
++      "sha256": "94ae8850e7b6feb6899e6574612c87dc81a8d1a87a9b568a2554c7c8a193ecad"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error.schema.json",
++      "sha256": "60790458e9ee7872e23e3d5d234d67e3f6456ddab00305bb0d2c20fbddd7c657"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/external-mapping.schema.json",
++      "sha256": "0b74d9a9385f7511e42c37da2b4c258edd3f9c2ecf92351767ca4180639fd019"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/hosted-artifact-inventory.json",
++      "sha256": "1a1ac34857c4a0e08408670e3d4858e9dea8368b9b14966fb5cc83edaefcc37f"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/lifecycle.schema.json",
++      "sha256": "1865446cb023a43668f930947f69532b4a072c8bbd35f530edc9692ad5803b1a"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/limits.schema.json",
++      "sha256": "b2f8276b05707d5b61e51fb57ae551425baa0ca936e64f29e5f913bafa1d3059"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/mcp-conformance-fixture.json",
++      "sha256": "f3dde86c43973a55c72d804ab46bbcbca96d5431da4824243614415467dc7f23"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration-fixture.json",
++      "sha256": "8907862bf250726990577a86b9d5ae07385b953ab3b3d22c57ce367f0ee7fc96"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration.schema.json",
++      "sha256": "8cdc0ccc0fb1cb2b7ae2cc4d7439c233499bf9a2a562ded476663765c4b4eaa5"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
++      "sha256": "9d9436b31a5ee84cea972b07fccac0b442179ad7b3847e30bd35c459bbb2abec"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.schema.json",
++      "sha256": "e6a710af7c64b3617cc4b9d0a6e8e193b45937b1e8da4d43347d2d04a5781229"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
++      "sha256": "c60e34cc0e0ef10bd82b0c819ab2b6dc7d2bd6967400d9f062373bd2624071da"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/platform-matrix.json",
++      "sha256": "16928aa94d9369f1e231467749b9eefb2f6ad079626eff86ca698e6c68dc4e81"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/platform-matrix.schema.json",
++      "sha256": "f99aefdf82ffe833fcfa851cd238d151ee42c79b0ee7e44920d47c3f33b3079d"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/protected-paths.txt",
++      "sha256": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/qualification-receipt.schema.json",
++      "sha256": "e1129ba01e666a9d5c21599b8754195b8a4ae3b4abae8d643debb19a8aa6e916"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/race-fixture.json",
++      "sha256": "35f960cb2bce43624f4fb0334e4d3b4ec4a731c59e6b9c346e162de0fa768e22"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/request.schema.json",
++      "sha256": "0b71e24f0aeb9b6c4b7482a0c45b30349a1ba2f62f9e2992b65f8848eb29dc77"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/security-fixture.json",
++      "sha256": "d0a870439d2a3cef2dc05a484b07f728241c0e4fd49cbd6ddc5f62e0b78becbf"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/session.schema.json",
++      "sha256": "fef93d873b8211284304be7f3e68df566ba0deb9e04c46f6a6a949a151f9c8a5"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.json",
++      "sha256": "433d3e9881833b15dbb72b40accaa9591f8b022149148dc5962d501a3d61cea5"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.schema.json",
++      "sha256": "b41530d92655f52634584db0436b6e3d9bd55aece72bb6ae48cc05878db50087"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.json",
++      "sha256": "01067e32bc3df781744309429c8d0b174ab711aa39ff8daa48f5a03aad881276"
++    },
++    {
++      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.schema.json",
++      "sha256": "c9a824276a569acdd9f2229964f19e4c9f4ca0a99de1ae443d8e9bac514509f1"
++    },
++    {
++      "path": "scripts/generate-agent-identity-mcp-contract-draft1.mjs",
++      "sha256": "d8f1a8827c482a9f60852be6df2cb4a9e1a5ff02b2378edf3f82aed70ce219e8"
++    },
++    {
++      "path": "test/agent-identity-mcp-contract.test.mjs",
++      "sha256": "9440d2f8f8c1de4cd11d1416de2bb342921ff6cd1cc9d4d97f05f3321e67066a"
++    }
++  ],
++  "candidate_changes": [
++    {
++      "path": ".github/workflows/runtime-qualification.yml",
++      "before": null,
++      "after": "abb770b174118a299689b156e6b025c9f30906e516ae6a5d5f41a7ad07ebe01b",
++      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
++    },
++    {
++      "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
++      "before": null,
++      "after": "bd5332cc6c1a7b75ef2be0084a05337eaf1ee596b4e6cfaf3406ce19afc296ad",
++      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
++    },
++    {
++      "path": "package.json",
++      "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
++      "after": "528d9621ba8c1e06ed22ba4b7e561fbc99e7d832ebc5ab00b5dcc1e4a95dae87",
++      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
++    },
++    {
++      "path": "scripts/run-current-tests.mjs",
++      "before": null,
++      "after": "0232a38dfcb04e10e9201abbc09b01439d681d82d1280c9704cb1e2220f6b77c",
++      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
++    },
++    {
++      "path": "scripts/runtime-qualification.mjs",
++      "before": null,
++      "after": "ce02c3ab309ae4e1c4d48b27451c9b90e4b06f202096087b7c670b7a7f119b97",
++      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
++    },
++    {
++      "path": "src/service/mcp.ts",
++      "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
++      "after": "a077315d40f5febcb453e2758da85edc7a437858f43a7b46cc1abaaf5a209c6d",
++      "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
++    },
++    {
++      "path": "src/service/server.ts",
++      "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
++      "after": "be047a5f8d8ae6d65457c714e39e10c65b27e0bfb04296c3d31f1c7919537387",
++      "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
++    },
++    {
++      "path": "test/runtime-qualification.test.mjs",
++      "before": null,
++      "after": "a899295d59d5c129af37053235df103d5d97aeb7bdd4d0d7500b6258532d9974",
++      "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
++    },
++    {
++      "path": "test/service-reference-freshness.test.mjs",
++      "before": null,
++      "after": "f4c45d6c1085acd0bc6743a1161c8b0615c0e74507acf0a01c048fcf3c66484c",
++      "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
++    }
++  ]
++}
+diff --git a/docs/CURRENT-RUNTIME-QUALIFICATION.md b/docs/CURRENT-RUNTIME-QUALIFICATION.md
+new file mode 100644
+index 0000000..7e3c4ba
+--- /dev/null
++++ b/docs/CURRENT-RUNTIME-QUALIFICATION.md
+@@ -0,0 +1,44 @@
++# Historical and current runtime qualification
++
++Owner decision Q-GUARD (2026-08-31) separates historical contract evidence from
++current implementation qualification. This v1 gate does not select the final
++TypeScript oracle, authorize a release, or certify all platforms.
++
++The original identity contract pack, generator, 35-test file and eleven-job
++workflow remain byte-identical. The unchanged historical test runs at commit
++`97ae3560a4fa2e771b60fa63d6dc0349d0b4c864`, where the integration assertion was
++last changed and the protected paths still match its fixed `7bf14b4` reference.
++No original assertion is deleted, skipped within that test, or rebound to HEAD.
++
++`npm test` runs every current test file except that one historical test. Its
++replacement current integrity gate checks every original frozen file, the exact
++historical-to-audited change inventory, and each reviewed candidate file/hash.
++Adding or changing code requires a reviewed update of
++`contracts/runtime-qualification/v1/change-inventory.json`; the runtime command
++never regenerates that inventory. The source snapshot records every tracked
++and unignored untracked source file, its bytes, HEAD and tree. A dirty local
++candidate is identified by its full snapshot digest, not mislabeled as HEAD.
++
++After lockfile installation, use:
++
++```text
++npm run qualify:current -- --check
++npm run qualify:current -- --output /absolute/path/outside-checkout
++npm run qualify:current -- --historical-checkout /absolute/path/to/97ae356-checkout --output /absolute/path/outside-checkout
++```
++
++The current runner actually builds and executes the current suite. The historical
++runner requires an exact clean checkout with its own dependencies. Both record
++real command arguments, platform, Node version, durations, counts and log hashes.
++Failed commands, changed source or missing/ambiguous test counts cannot pass.
++Any skipped test yields `INCOMPLETE_PLATFORM_COVERAGE` and a nonzero exit: this
++first gate intentionally cannot manufacture alternate-platform qualification.
++Hosted capability evidence and receipt aggregation remain required before full
++CI qualification; a local pass is not a substitute. The pre-existing retrieval,
++watcher and downstream qualification lanes are retained.
++
++The source-control diff of the manifest itself is an explicit review boundary;
++the manifest cannot cryptographically approve itself. Final acceptance must bind
++its hash and the full candidate snapshot digest in the orchestrator's external
++verification record. This is engineering evidence, not independently enrolled
++Standard conformance review.
+diff --git a/package.json b/package.json
+index cd207b9..fb67ced 100644
+--- a/package.json
++++ b/package.json
+@@ -86,7 +86,8 @@
+     "build": "node scripts/build.mjs",
+     "prepare": "node scripts/build.mjs",
+     "pretest": "node scripts/build.mjs",
+-    "test": "node --test \"test/*.test.mjs\"",
++    "test": "node scripts/run-current-tests.mjs",
++    "qualify:current": "node scripts/runtime-qualification.mjs",
+     "pretest:navigation": "node scripts/build.mjs",
+     "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
+     "test:intelligence": "node scripts/test-intelligence.mjs",
+diff --git a/scripts/run-current-tests.mjs b/scripts/run-current-tests.mjs
+new file mode 100644
+index 0000000..a21e257
+--- /dev/null
++++ b/scripts/run-current-tests.mjs
+@@ -0,0 +1,14 @@
++import { readdirSync } from 'node:fs';
++import { spawnSync } from 'node:child_process';
++import { fileURLToPath } from 'node:url';
++import { join } from 'node:path';
++
++const root = fileURLToPath(new URL('../', import.meta.url));
++// Q-GUARD: the unchanged historical test executes at its fixed checkout in
++// the separate historical lane. Current integrity is tested by qualification.
++const historical = 'agent-identity-mcp-contract.test.mjs';
++const files = readdirSync(join(root, 'test')).filter(name => name.endsWith('.test.mjs') && name !== historical).sort();
++if (!files.length) throw new Error('Current test inventory is empty');
++const result = spawnSync(process.execPath, ['--test', ...files.map(name => join(root, 'test', name))], { cwd: root, stdio: 'inherit' });
++if (result.error) throw result.error;
++process.exitCode = result.status ?? 1;
+diff --git a/scripts/runtime-qualification.mjs b/scripts/runtime-qualification.mjs
+new file mode 100644
+index 0000000..a7c6b43
+--- /dev/null
++++ b/scripts/runtime-qualification.mjs
+@@ -0,0 +1,122 @@
++import { createHash, randomUUID } from 'node:crypto';
++import { execFileSync, spawnSync } from 'node:child_process';
++import { existsSync, lstatSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
++import { dirname, join, resolve } from 'node:path';
++import { fileURLToPath } from 'node:url';
++
++export const HISTORICAL = '97ae3560a4fa2e771b60fa63d6dc0349d0b4c864';
++export const AUDITED = '8207958047b3361ae21ac07c5a2abbd26a42a684';
++export const VERSION = 'gkos-current-runtime-qualification/1';
++export const MANIFEST = 'contracts/runtime-qualification/v1/change-inventory.json';
++const ROOT = fileURLToPath(new URL('../', import.meta.url));
++export const sha = bytes => createHash('sha256').update(bytes).digest('hex');
++const git = (root, ...args) => execFileSync('git', args, { cwd: root, maxBuffer: 128 * 1024 * 1024 });
++const gitText = (root, ...args) => git(root, ...args).toString('utf8').trim();
++const paths = (root, ...args) => git(root, ...args).toString('utf8').split('\0').filter(Boolean).sort();
++export const treeEntries = (root, ref) => new Map(paths(root, 'ls-tree', '-r', '-z', ref).map(line => {
++  const [header, path] = line.split('\t'); return [path, header.split(' ')[2]];
++}));
++const blob = (root, ref, path) => {
++  try { return sha(git(root, 'show', `${ref}:${path}`)); } catch { return null; }
++};
++const current = (root, path) => {
++  const target = join(root, path);
++  if (!existsSync(target)) return null;
++  if (!lstatSync(target).isFile() || lstatSync(target).isSymbolicLink()) throw new Error(`Non-regular qualification input: ${path}`);
++  return sha(readFileSync(target));
++};
++const currentBlob = (root, path) => {
++  if (current(root, path) === null) return null;
++  const data = readFileSync(join(root, path));
++  return createHash('sha1').update(`blob ${data.length}\0`).update(data).digest('hex');
++};
++
++export function sourceSnapshot(root = ROOT) {
++  const files = [...new Set(paths(root, 'ls-files', '-z', '--cached', '--others', '--exclude-standard'))];
++  const inventory = files.map(path => ({ path, sha256: current(root, path) }));
++  const source = { head: gitText(root, 'rev-parse', 'HEAD'), tree: gitText(root, 'rev-parse', 'HEAD^{tree}'), files: inventory };
++  return { ...source, sha256: sha(JSON.stringify(source)) };
++}
++
++export function checkInventory(root = ROOT) {
++  const manifest = JSON.parse(readFileSync(join(root, MANIFEST), 'utf8'));
++  if (manifest.version !== VERSION || manifest.historical !== HISTORICAL || manifest.audited !== AUDITED) throw new Error('Qualification coordinates changed');
++  if (gitText(root, 'merge-base', '--is-ancestor', AUDITED, 'HEAD') !== '') throw new Error('Unrelated candidate');
++  const historicalTree = treeEntries(root, HISTORICAL), auditedTree = treeEntries(root, AUDITED);
++  const expectedHistorical = paths(root, 'diff', '--name-only', '-z', HISTORICAL, AUDITED);
++  if (JSON.stringify(manifest.historical_changes.map(x => x.path)) !== JSON.stringify(expectedHistorical)) throw new Error('Historical change inventory differs');
++  for (const entry of manifest.historical_changes) {
++    if (!entry.rationale || entry.before !== (historicalTree.get(entry.path) ?? null) || entry.after !== (auditedTree.get(entry.path) ?? null)) throw new Error(`Historical change not bound: ${entry.path}`);
++  }
++  // Freeze the entire original pack, generator, test and eleven-job workflow.
++  for (const entry of manifest.frozen) {
++    if (entry.sha256 !== blob(root, HISTORICAL, entry.path) || current(root, entry.path) !== entry.sha256) throw new Error(`Frozen evidence changed: ${entry.path}`);
++  }
++  const frozenExpected = paths(root, 'ls-tree', '-r', '--name-only', '-z', HISTORICAL, 'contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1', 'scripts/generate-agent-identity-mcp-contract-draft1.mjs', 'test/agent-identity-mcp-contract.test.mjs', '.github/workflows/phase6-identity-contract.yml');
++  if (JSON.stringify(manifest.frozen.map(x => x.path)) !== JSON.stringify(frozenExpected)) throw new Error('Frozen inventory omitted an input');
++  const all = [...new Set([...paths(root, 'ls-tree', '-r', '--name-only', '-z', AUDITED), ...paths(root, 'ls-files', '-z', '--cached', '--others', '--exclude-standard')])].sort();
++  const changes = all.filter(path => path !== MANIFEST && (auditedTree.get(path) ?? null) !== currentBlob(root, path));
++  if (JSON.stringify(changes) !== JSON.stringify(manifest.candidate_changes.map(x => x.path))) throw new Error('Unreviewed candidate change inventory');
++  for (const entry of manifest.candidate_changes) {
++    if (!entry.rationale || entry.before !== (auditedTree.get(entry.path) ?? null) || entry.after !== current(root, entry.path)) throw new Error(`Unreviewed candidate bytes: ${entry.path}`);
++  }
++  return { version: VERSION, historical: HISTORICAL, audited: AUDITED, manifest_sha256: sha(readFileSync(join(root, MANIFEST))), source: sourceSnapshot(root) };
++}
++
++export function counts(output) {
++  const values = {};
++  for (const key of ['tests', 'pass', 'fail', 'cancelled', 'skipped', 'todo']) {
++    const matches = [...output.matchAll(new RegExp(`^(?:#|ℹ)\\s+${key}\\s+(\\d+)\\s*$`, 'gmu'))];
++    if (matches.length !== 1) throw new Error(`Missing/ambiguous test count: ${key}`);
++    values[key] = Number(matches[0][1]);
++  }
++  if (!values.tests || values.tests !== values.pass + values.fail + values.cancelled + values.skipped + values.todo) throw new Error('Incoherent test counts');
++  return values;
++}
++
++export function executeQualification({ root = ROOT, output, historical = false }) {
++  if (!output) throw new Error('An output directory outside the checkout is required');
++  const out = resolve(output), checkout = resolve(root);
++  if (out === checkout || out.startsWith(checkout + '/') || out.startsWith(checkout + '\\')) throw new Error('Receipt output must be outside source checkout');
++  mkdirSync(out, { recursive: true });
++  const receipt = { version: VERSION, lane: historical ? 'historical-contract-replay' : 'current-runtime', source: null, node: process.version, platform: process.platform, arch: process.arch, started_at: new Date().toISOString(), commands: [], status: 'FAIL', release_qualified: false };
++  try {
++    const initial = sourceSnapshot(root);
++    receipt.source = initial;
++    if (historical && (initial.head !== HISTORICAL || gitText(root, 'status', '--porcelain', '--untracked-files=all'))) throw new Error('Historical checkout must be exact and clean');
++    if (!historical) checkInventory(root);
++    const plan = historical
++      ? [['--test', '--test-concurrency=1', 'test/agent-identity-mcp-contract.test.mjs']]
++      : [['scripts/build.mjs'], ['scripts/run-current-tests.mjs']];
++    for (const [index, args] of plan.entries()) {
++      const start = performance.now();
++      const run = spawnSync(process.execPath, args, { cwd: root, encoding: 'utf8', maxBuffer: 128 * 1024 * 1024, timeout: 20 * 60 * 1000 });
++      const text = (run.stdout || '') + (run.stderr || '');
++      const log = `${receipt.lane}-${index}.log`;
++      writeFileSync(join(out, log), text);
++      const command = { executable: process.execPath, args, exit_code: run.status, duration_ms: performance.now() - start, log, log_sha256: sha(text) };
++      receipt.commands.push(command);
++      if (args.includes('--test') || args.includes('scripts/run-current-tests.mjs')) command.counts = counts(text);
++      if (run.error || run.status !== 0 || (command.counts && (command.counts.fail || command.counts.cancelled || command.counts.todo))) throw new Error(`Qualification command failed: ${args.join(' ')}`);
++    }
++    if (sourceSnapshot(root).sha256 !== initial.sha256) throw new Error('Source changed during qualification');
++    if (historical && (gitText(root, 'rev-parse', 'HEAD') !== HISTORICAL || gitText(root, 'status', '--porcelain', '--untracked-files=all'))) throw new Error('Historical checkout changed during qualification');
++    if (!historical) checkInventory(root);
++    receipt.status = receipt.commands.some(x => x.counts?.skipped) ? 'INCOMPLETE_PLATFORM_COVERAGE' : 'PASS';
++  } catch (error) { receipt.error = error.message; }
++  receipt.ended_at = new Date().toISOString();
++  const temporaryReceipt = join(out, `.${receipt.lane}-${randomUUID()}.tmp`);
++  writeFileSync(temporaryReceipt, JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx' });
++  renameSync(temporaryReceipt, join(out, `${receipt.lane}.json`));
++  return receipt;
++}
++
++if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
++  const args = process.argv.slice(2);
++  if (args.length === 1 && args[0] === '--check') console.log(JSON.stringify(checkInventory()));
++  else if (args.length === 2 && args[0] === '--output') {
++    const result = executeQualification({ output: args[1] }); console.log(JSON.stringify({ status: result.status, commands: result.commands })); process.exitCode = result.status === 'PASS' ? 0 : 1;
++  } else if (args.length === 4 && args[0] === '--historical-checkout' && args[2] === '--output') {
++    const result = executeQualification({ root: resolve(args[1]), output: args[3], historical: true }); console.log(JSON.stringify({ status: result.status, commands: result.commands })); process.exitCode = result.status === 'PASS' ? 0 : 1;
++  } else throw new Error('Usage: --check | --output DIR | --historical-checkout CHECKOUT --output DIR');
++}
+diff --git a/src/service/mcp.ts b/src/service/mcp.ts
+index 337c8dd..60a0987 100644
+--- a/src/service/mcp.ts
++++ b/src/service/mcp.ts
+@@ -111,9 +111,9 @@ interface McpSession {
+   lastUsedAt: number;
+   secret: Buffer;
+   records: Map<string, string>;
+-  recordBindings: Map<string, { generation: number; sourceDigest: string | null }>;
++  recordBindings: Map<string, { generation: number; sourceDigest: string | null; identityDigest: string }>;
+   scopes: Map<string, string>;
+-  cursors: Map<string, { kind: string; scopeRef: string; offset: number; generation: number; snapshotId: string; queryKey: string }>;
++  cursors: Map<string, { kind: string; scopeRef: string; offset: number; generation: number; snapshotId: string; queryKey: string; snapshotBinding: string }>;
+ }
+ 
+ export interface ServiceMcpExecutionContext {
+@@ -121,6 +121,8 @@ export interface ServiceMcpExecutionContext {
+   view: GkosAuthorizedView;
+   generation: number;
+   policyDecisionId: string;
++  /** Actual host policy coordinate; decision IDs alone need not change with policy. */
++  policyDigest?: string;
+   sourceRecords?: readonly SourceFile[];
+   retrievalSearch?: ServiceRetrievalSearch;
+   navigationConfig?: VaultNavigationConfig;
+@@ -252,44 +254,112 @@ function authorizedNavigationSnapshot(context: ServiceMcpExecutionContext): Navi
+   };
+ }
+ 
+-function issuedCursor(session: McpSession, kind: string, scopeRef: string, offset: number, generation: number, snapshotId: string, queryKey = ""): string {
++function issuedCursor(session: McpSession, kind: string, scopeRef: string, offset: number, generation: number, snapshotId: string, queryKey = "", snapshotBinding = ""): string {
+   const payload = createHmac("sha256", session.secret).update(`cursor\0${kind}\0${scopeRef}\0${offset}\0${generation}\0${snapshotId}\0${queryKey}`, "utf8").digest().toString("base64url");
+   const cursor = `gkcur1_${payload}`;
+   if (!session.cursors.has(cursor) && session.cursors.size >= SESSION_REFERENCE_LIMIT) throw new Error("GKOS_OBS_CONTENT_LIMIT");
+-  session.cursors.set(cursor, { kind, scopeRef, offset, generation, snapshotId, queryKey });
++  session.cursors.set(cursor, { kind, scopeRef, offset, generation, snapshotId, queryKey, snapshotBinding });
+   return cursor;
+ }
+ 
+-function page(limit: number, generation: number, snapshotId: string, session?: McpSession, kind?: string, scopeRef?: string, nextOffset?: number, queryKey = ""): Record<string, unknown> {
++function page(limit: number, generation: number, snapshotId: string, session?: McpSession, kind?: string, scopeRef?: string, nextOffset?: number, queryKey = "", snapshotBinding = ""): Record<string, unknown> {
+   const hasMore = session !== undefined && kind !== undefined && scopeRef !== undefined && nextOffset !== undefined;
+-  return { limit, has_more: hasMore, next_cursor: hasMore ? issuedCursor(session, kind, scopeRef, nextOffset, generation, snapshotId, queryKey) : null, snapshot_id: snapshotId };
++  return { limit, has_more: hasMore, next_cursor: hasMore ? issuedCursor(session, kind, scopeRef, nextOffset, generation, snapshotId, queryKey, snapshotBinding) : null, snapshot_id: snapshotId };
+ }
+ 
+-function paginationStart(session: McpSession, cursorValue: unknown, kind: string, scopeRef: string, generation: number): { offset: number; snapshotId: string } | null {
++function paginationStart(session: McpSession, cursorValue: unknown, kind: string, scopeRef: string, generation: number, snapshotBinding = ""): { offset: number; snapshotId: string } | null {
+   if (cursorValue === null) return { offset: 0, snapshotId: uuidV7() };
+   if (typeof cursorValue !== "string") return null;
+   const cursor = session.cursors.get(cursorValue);
+-  if (!cursor || cursor.kind !== kind || cursor.scopeRef !== scopeRef || cursor.generation !== generation) return null;
++  if (!cursor || cursor.kind !== kind || cursor.scopeRef !== scopeRef || cursor.generation !== generation || cursor.snapshotBinding !== snapshotBinding) return null;
+   return { offset: cursor.offset, snapshotId: cursor.snapshotId };
+ }
+ 
+ function sourceDigest(content: string): string { return `sha256:${createHash("sha256").update(content, "utf8").digest("hex")}`; }
+ 
+-function issueRecord(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext): string {
++function authorityBinding(context: ServiceMcpExecutionContext): unknown {
++  return { vault: context.vaultId, policy: context.policyDecisionId, policyDigest: context.policyDigest ?? null,
++    credential: context.identity.credentialId, agent: context.identity.agentId, ceiling: context.identity.sensitivityCeiling,
++    capabilities: [...context.identity.capabilities].sort() };
++}
++
++interface ReferenceBindings {
++  notes: Map<string, GkosAuthorizedView["notes"][number]>;
++  sources: Map<string, SourceFile | null>;
++}
++
++function referenceBindings(context: ServiceMcpExecutionContext): ReferenceBindings {
++  let notes: ReferenceBindings["notes"], sources: ReferenceBindings["sources"];
++  // Request-local and lazy: parameter/refusal paths must not access source state.
++  return {
++    get notes() {
++      if (!notes) {
++        notes = new Map();
++        for (const note of context.view.notes) notes.set(`${note.id}\0${note.path}`, note);
++      }
++      return notes;
++    },
++    get sources() {
++      if (!sources) {
++        sources = new Map();
++        for (const source of context.sourceRecords ?? []) {
++          // Null preserves duplicate-source refusal without retaining duplicate arrays.
++          sources.set(source.relativePath, sources.has(source.relativePath) ? null : source);
++        }
++      }
++      return sources;
++    },
++  };
++}
++
++function recordIdentity(node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): string {
++  // Source-backed hosts may reconstruct generic filesystem times on every scan.
++  // Bind authored/projection identity and source bytes, not that scan clock.
++  const { createdAt: _createdAt, updatedAt: _updatedAt, ...projection } = node;
++  return digest({ authority: authorityBinding(context), node: context.sourceRecords ? projection : node,
++    admission: bindings.notes.get(`${node.id}\0${node.path}`) ?? null,
++    sourceAdapter: context.sourceRecords !== undefined });
++}
++
++function boundSourceDigest(node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): string | null {
++  if (!context.sourceRecords) return null;
++  const source = bindings.sources.get(node.path);
++  if (!source || typeof source.content !== "string") return null;
++  const content = source.content;
++  if (Buffer.byteLength(content, "utf8") > CONTENT_MAX_READ_BYTES) return null;
++  if (Buffer.from(content, "utf8").toString("utf8") !== content) return null;
++  return sourceDigest(content);
++}
++
++function candidateSnapshot(context: ServiceMcpExecutionContext, nodes: readonly GkxNode[], bindings: ReferenceBindings): string {
++  // Store only a digest in each bounded cursor; retain the exact authorized order.
++  // Hidden sources never enter the binding or invalidation diagnostics.
++  return digest({ authority: authorityBinding(context), records: nodes.map(node => {
++    const source = boundSourceDigest(node, context, bindings);
++    if (context.sourceRecords && source === null) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
++    return [recordIdentity(node, context, bindings), source];
++  }) });
++}
++
++function issueRecord(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): string {
+   // Callers supply only a node already inside the authorized view. Never read
+   // content for a source that does not match that authorized canonical path.
+-  const sources = context.sourceRecords?.filter((source) => source.relativePath === node.path) ?? [];
+-  const content = sources.length === 1 && typeof sources[0].content === "string" ? sources[0].content : null;
+-  const boundDigest = content !== null && Buffer.byteLength(content, "utf8") <= CONTENT_MAX_READ_BYTES ? sourceDigest(content) : null;
+-  const recordRef = issuedRef(session, "gkrec1", `${node.id}\0${context.generation}\0${boundDigest ?? "unavailable"}`);
++  const boundDigest = boundSourceDigest(node, context, bindings);
++  const identityDigest = recordIdentity(node, context, bindings);
++  const coordinate = `${node.id}\0${context.generation}\0${boundDigest ?? "unavailable"}`;
++  let recordRef = issuedRef(session, "gkrec1", coordinate);
++  // Preserve existing stable-state wire bytes. A changed identity/policy must
++  // get a distinct ref rather than overwrite the binding of an issued ref.
++  const prior = session.recordBindings.get(recordRef);
++  if (prior && prior.identityDigest !== identityDigest) recordRef = issuedRef(session, "gkrec1", `${coordinate}\0${identityDigest}`);
+   if (!session.records.has(recordRef) && session.records.size >= SESSION_REFERENCE_LIMIT) throw new Error("GKOS_OBS_CONTENT_LIMIT");
+   session.records.set(recordRef, node.id);
+-  session.recordBindings.set(recordRef, { generation: context.generation, sourceDigest: boundDigest });
++  session.recordBindings.set(recordRef, { generation: context.generation, sourceDigest: boundDigest, identityDigest });
+   return recordRef;
+ }
+ 
+-function recordSummary(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext): Record<string, unknown> {
+-  const recordRef = issueRecord(session, node, context);
++function recordSummary(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): Record<string, unknown> {
++  const recordRef = issueRecord(session, node, context, bindings);
+   return {
+     record_ref: recordRef,
+     uid: typeof node.gkx?.uid === "string" ? node.gkx.uid : null,
+@@ -488,6 +558,7 @@ export class ServiceMcpRuntime {
+     if (!UUID_V7.test(context.identity.agentId) || !UUID_V7.test(context.policyDecisionId)) return fail("GKOS_P6_AUTH_FAILED");
+     const issues = parameterIssues(tool, args);
+     if (issues.length) return fail("GKOS_P6_INVALID_PARAMS", issues);
++    const bindings = referenceBindings(context);
+     if (tool === "gkos_capabilities") {
+       if (!exactObject(args, [])) return fail("GKOS_P6_INVALID_PARAMS");
+       const navigationReady = !!context.navigationConfig && !!context.sourceRecords;
+@@ -521,6 +592,7 @@ export class ServiceMcpRuntime {
+       const snapshot = authorizedNavigationSnapshot(context);
+       const artifactDigest = await navigationSnapshotDigest(snapshot);
+       const queryKey = digest({ artifactDigest, config: context.navigationConfig.digest, detail, prefix, terms });
++      const snapshotBinding = digest({ authority: authorityBinding(context), config: context.navigationConfig });
+       let scopeRef: string;
+       let offset = 0;
+       let snapshotId = uuidV7();
+@@ -537,7 +609,7 @@ export class ServiceMcpRuntime {
+       else return fail("GKOS_P6_REFERENCE_UNKNOWN");
+       if (typeof input.cursor === "string") {
+         const cursor = session.cursors.get(input.cursor);
+-        if (!cursor || cursor.kind !== "navigation_discover" || cursor.scopeRef !== scopeRef || cursor.generation !== context.generation || cursor.queryKey !== queryKey) return fail("GKOS_P6_REFERENCE_UNKNOWN");
++        if (!cursor || cursor.kind !== "navigation_discover" || cursor.scopeRef !== scopeRef || cursor.generation !== context.generation || cursor.queryKey !== queryKey || cursor.snapshotBinding !== snapshotBinding) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+         offset = cursor.offset;
+         snapshotId = cursor.snapshotId;
+       }
+@@ -548,12 +620,12 @@ export class ServiceMcpRuntime {
+       const items = entries.slice(offset, offset + limit).map((entry) => {
+         const node = context.view.graph.nodes.find((candidate) => candidate.kind === "file" && candidate.path === entry.path);
+         if (!node) throw new Error("GKOS_SERVICE_NAVIGATION_VIEW_MISMATCH");
+-        const recordRef = issueRecord(session, node, context);
++        const recordRef = issueRecord(session, node, context, bindings);
+         if (detail === "compact") return { record_ref: recordRef, canonical_path: entry.path };
+         return { record_ref: recordRef, child_scope_ref: null, canonical_path: entry.path, classification: entry.classification, management: entry.management, name_standing: entry.nameStanding, recognized_moc_name: entry.recognizedMocName, evidence_codes: entry.evidence.map((item) => item.code).sort() };
+       });
+       const nextOffset = offset + items.length < entries.length ? offset + items.length : undefined;
+-      return { result: seal({ ...common(context, requestId), scope_ref: scopeRef, artifact_digest: artifactDigest, items, page: page(limit, context.generation, snapshotId, session, "navigation_discover", scopeRef, nextOffset, queryKey) }), paths: items.map((item) => item.canonical_path), isError: false };
++      return { result: seal({ ...common(context, requestId), scope_ref: scopeRef, artifact_digest: artifactDigest, items, page: page(limit, context.generation, snapshotId, session, "navigation_discover", scopeRef, nextOffset, queryKey, snapshotBinding) }), paths: items.map((item) => item.canonical_path), isError: false };
+     }
+     const input = args as Record<string, unknown>;
+     if (tool === "gkos_record_resolve") {
+@@ -565,13 +637,21 @@ export class ServiceMcpRuntime {
+       const record = authorizedContent(context, node).find(item => item.node.id === node.id);
+       if (!record) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+       return { result: seal({ ...common(context, requestId), extension_version: CONTENT_EXTENSION_VERSION,
+-        ...recordSummary(session, node, context), source_digest: record.sourceDigest }), paths: [node.path], isError: false };
++        ...recordSummary(session, node, context, bindings), source_digest: record.sourceDigest }), paths: [node.path], isError: false };
+     }
+     const recordNode = (value: unknown): GkxNode | null => {
+       if (typeof value !== "string" || !REF.test(value)) return null;
+-      if (session.recordBindings.get(value)?.generation !== context.generation) return null;
++      const binding = session.recordBindings.get(value);
++      if (!binding || binding.generation !== context.generation) return null;
+       const nodeId = session.records.get(value);
+-      return nodeId ? context.view.graph.nodes.find((node) => node.id === nodeId && node.kind === "file") ?? null : null;
++      const nodes = context.view.graph.nodes.filter(node => node.id === nodeId && node.kind === "file");
++      if (nodes.length !== 1) return null;
++      const node = nodes[0];
++      if (context.view.notes.filter(note => note.id === node.id && note.path === node.path).length !== 1 ||
++          binding.identityDigest !== recordIdentity(node, context, bindings)) return null;
++      const currentDigest = boundSourceDigest(node, context, bindings);
++      if (context.sourceRecords && currentDigest === null || binding.sourceDigest !== currentDigest) return null;
++      return node;
+     };
+     if (tool === "gkos_note_read") {
+       if (!exactObject(args, ["record_ref", "cursor", "limit_bytes"]) || !(input.cursor === null || typeof input.cursor === "string") || !Number.isInteger(input.limit_bytes) || Number(input.limit_bytes) < 4 || Number(input.limit_bytes) > 16384) return fail("GKOS_P6_INVALID_PARAMS");
+@@ -640,7 +720,7 @@ export class ServiceMcpRuntime {
+             hit.chunk.source_path !== record.node.path || hit.chunk.source_digest !== record.sourceDigest) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
+       }
+       const selected = native.hits.slice(pagination.offset, pagination.offset + Number(input.limit));
+-      const items = selected.map((hit) => ({ ...hit, record_ref: issueRecord(session, byPath.get(hit.citation.path)!.node, context), canonical_path: hit.citation.path }));
++      const items = selected.map((hit) => ({ ...hit, record_ref: issueRecord(session, byPath.get(hit.citation.path)!.node, context, bindings), canonical_path: hit.citation.path }));
+       const nextOffset = pagination.offset + items.length < native.hits.length ? pagination.offset + items.length : undefined;
+       const { hits: _hits, ...retrieval } = native;
+       return { result: seal({ ...common(context, requestId), extension_version: "observatory.mcp-retrieval.v0",
+@@ -666,22 +746,21 @@ export class ServiceMcpRuntime {
+       if (!exactObject(args, ["cursor", "limit", "record_ref"]) || !(input.cursor === null || typeof input.cursor === "string") || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 100) return fail("GKOS_P6_INVALID_PARAMS");
+       const root = recordNode(input.record_ref);
+       if (!root) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+-      const pagination = paginationStart(session, input.cursor, "lineage", String(input.record_ref), context.generation);
+-      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+       const ids = new Set([root.id]);
+       for (const link of context.view.graph.links) if (link.kind === "lineage" && (link.source === root.id || link.target === root.id)) { ids.add(link.source); ids.add(link.target); }
+       const candidates = context.view.graph.nodes.filter((node) => ids.has(node.id) && node.kind === "file");
+-      const items = candidates.slice(pagination.offset, pagination.offset + Number(input.limit)).map((node) => recordSummary(session, node, context));
++      const paginationScope = String(input.record_ref);
++      const snapshotBinding = candidateSnapshot(context, candidates, bindings);
++      const pagination = paginationStart(session, input.cursor, "lineage", paginationScope, context.generation, snapshotBinding);
++      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
++      const items = candidates.slice(pagination.offset, pagination.offset + Number(input.limit)).map((node) => recordSummary(session, node, context, bindings));
+       const nextOffset = pagination.offset + items.length < candidates.length ? pagination.offset + items.length : undefined;
+-      return { result: seal({ ...common(context, requestId), root_record_ref: input.record_ref, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "lineage", String(input.record_ref), nextOffset) }), paths: items.map((item) => String(item.canonical_path)), isError: false };
++      return { result: seal({ ...common(context, requestId), root_record_ref: input.record_ref, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "lineage", paginationScope, nextOffset, "", snapshotBinding) }), paths: items.map((item) => String(item.canonical_path)), isError: false };
+     }
+     if (tool === "gkos_graph_at_time") {
+       if (!exactObject(args, ["at", "cursor", "limit", "scope_ref", "state"]) || !(input.cursor === null || typeof input.cursor === "string") || typeof input.scope_ref !== "string" || !session.scopes.has(input.scope_ref) || typeof input.at !== "string" || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 100 || !["valid", "superseded", "not_yet_created", "all"].includes(String(input.state))) return fail("GKOS_P6_INVALID_PARAMS");
+       const at = queryInstant(input.at);
+       if (!at) return fail("GKOS_P6_INVALID_PARAMS", [{ field: "at", code: "INVALID_TIMESTAMP" }]);
+-      const paginationScope = `${input.scope_ref}\0${at.toISOString()}\0${input.state}`;
+-      const pagination = paginationStart(session, input.cursor, "graph_at_time", paginationScope, context.generation);
+-      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+       const temporalInputs = context.view.graph.nodes.filter((node) => node.kind === "file" && typeof node.validAt === "string").map((node) => {
+         const validAt = new Date(node.validAt!);
+         const invalidAt = typeof node.gkx?.invalidAt === "string" ? new Date(node.gkx.invalidAt) : null;
+@@ -693,26 +772,32 @@ export class ServiceMcpRuntime {
+       const projection = projectAtTime(temporalInputs, at.getTime());
+       const selected = input.state === "all" ? [...projection.notYetCreated, ...projection.valid, ...projection.superseded] : input.state === "not_yet_created" ? projection.notYetCreated : input.state === "valid" ? projection.valid : projection.superseded;
+       const candidates = context.view.graph.nodes.filter((node) => selected.includes(node.id));
+-      const items = candidates.slice(pagination.offset, pagination.offset + Number(input.limit)).map((node) => recordSummary(session, node, context));
++      const paginationScope = `${input.scope_ref}\0${at.toISOString()}\0${input.state}`;
++      const snapshotBinding = candidateSnapshot(context, candidates, bindings);
++      const pagination = paginationStart(session, input.cursor, "graph_at_time", paginationScope, context.generation, snapshotBinding);
++      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
++      const items = candidates.slice(pagination.offset, pagination.offset + Number(input.limit)).map((node) => recordSummary(session, node, context, bindings));
+       const nextOffset = pagination.offset + items.length < candidates.length ? pagination.offset + items.length : undefined;
+-      return { result: seal({ ...common(context, requestId), scope_ref: input.scope_ref, at: input.at, state: input.state, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "graph_at_time", paginationScope, nextOffset) }), paths: items.map((item) => String(item.canonical_path)), isError: false };
++      return { result: seal({ ...common(context, requestId), scope_ref: input.scope_ref, at: input.at, state: input.state, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "graph_at_time", paginationScope, nextOffset, "", snapshotBinding) }), paths: items.map((item) => String(item.canonical_path)), isError: false };
+     }
+     if (tool === "gkos_navigation_audit") {
+       if (!exactObject(args, ["cursor", "limit", "scope_ref", "severity_at_least"]) || !(input.cursor === null || typeof input.cursor === "string") || typeof input.scope_ref !== "string" || !session.scopes.has(input.scope_ref) || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 100 || !["info", "warning", "error"].includes(String(input.severity_at_least))) return fail("GKOS_P6_INVALID_PARAMS");
+       if (!context.navigationConfig || !context.sourceRecords) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
+-      const paginationScope = `${input.scope_ref}\0${input.severity_at_least}`;
+-      const pagination = paginationStart(session, input.cursor, "navigation_audit", paginationScope, context.generation);
+-      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+       const snapshot = authorizedNavigationSnapshot(context);
+       const ranks = { info: 0, warning: 1, error: 2 } as const;
+       const candidates = (await auditNavigation(snapshot, context.navigationConfig)).filter((finding) => ranks[finding.severity] >= ranks[input.severity_at_least as keyof typeof ranks]);
++      const artifactDigest = await navigationSnapshotDigest(snapshot);
++      const paginationScope = `${input.scope_ref}\0${input.severity_at_least}`;
++      const snapshotBinding = digest({ artifactDigest, authority: authorityBinding(context), config: context.navigationConfig, candidates });
++      const pagination = paginationStart(session, input.cursor, "navigation_audit", paginationScope, context.generation, snapshotBinding);
++      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+       const findings = candidates.slice(pagination.offset, pagination.offset + Number(input.limit));
+       const items = findings.map((finding) => {
+         const node = context.view.graph.nodes.find(node => node.kind === "file" && node.path === finding.path);
+-        return { code: finding.code.replace(/-/gu, "_"), severity: finding.severity, record_ref: node ? issueRecord(session, node, context) : null };
++        return { code: finding.code.replace(/-/gu, "_"), severity: finding.severity, record_ref: node ? issueRecord(session, node, context, bindings) : null };
+       });
+       const nextOffset = pagination.offset + items.length < candidates.length ? pagination.offset + items.length : undefined;
+-      return { result: seal({ ...common(context, requestId), scope_ref: input.scope_ref, artifact_digest: await navigationSnapshotDigest(snapshot), items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "navigation_audit", paginationScope, nextOffset) }), paths: findings.map((finding) => finding.path).filter(Boolean), isError: false };
++      return { result: seal({ ...common(context, requestId), scope_ref: input.scope_ref, artifact_digest: artifactDigest, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "navigation_audit", paginationScope, nextOffset, "", snapshotBinding) }), paths: findings.map((finding) => finding.path).filter(Boolean), isError: false };
+     }
+     return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
+   }
+diff --git a/src/service/server.ts b/src/service/server.ts
+index d98402f..34432d8 100644
+--- a/src/service/server.ts
++++ b/src/service/server.ts
+@@ -354,7 +354,7 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
+           if (!checkedIdentity || checkedIdentity.revoked || checkedIdentity.credentialId !== currentIdentity.credentialId || checkedIdentity.agentId !== currentIdentity.agentId || checkedIdentity.sensitivityCeiling !== currentIdentity.sensitivityCeiling || JSON.stringify(checkedIdentity.capabilities) !== JSON.stringify(currentIdentity.capabilities)) { send(response, 401, GENERIC_DENIAL, requestOrigin); return; }
+           const reply = await mcp.handle(body, sessionId, {
+             identity: checkedIdentity, view: authorized.view, generation: Math.max(1, Number(authorized.authorization.generation)),
+-            policyDecisionId: POLICY_DECISION_ID, sourceRecords: snapshot.sourceRecords,
++            policyDecisionId: POLICY_DECISION_ID, policyDigest: authorized.authorization.policyDigest, sourceRecords: snapshot.sourceRecords,
+             retrievalSearch: options.retrievalSearch ? async (request, guards) => {
+               const before = await options.snapshot();
+               if (before.generation !== snapshot.generation) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+diff --git a/test/runtime-qualification.test.mjs b/test/runtime-qualification.test.mjs
+new file mode 100644
+index 0000000..d41f2c3
+--- /dev/null
++++ b/test/runtime-qualification.test.mjs
+@@ -0,0 +1,83 @@
++import assert from 'node:assert/strict';
++import { execFileSync } from 'node:child_process';
++import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
++import { tmpdir } from 'node:os';
++import { dirname, join } from 'node:path';
++import { fileURLToPath } from 'node:url';
++import { after, before, test } from 'node:test';
++import { checkInventory, counts, sourceSnapshot, executeQualification, MANIFEST } from '../scripts/runtime-qualification.mjs';
++
++const root = fileURLToPath(new URL('../', import.meta.url));
++let fixture;
++before(() => {
++  fixture = mkdtempSync(join(tmpdir(), 'gkos-runtime-qualification-'));
++  execFileSync('git', ['clone', '--shared', '--no-checkout', root, fixture], { stdio: 'pipe' });
++  execFileSync('git', ['-c', 'core.autocrlf=false', 'checkout', '--detach', 'HEAD'], { cwd: fixture, stdio: 'pipe' });
++  for (const file of sourceSnapshot(root).files) {
++    const dest = join(fixture, file.path);
++    if (file.sha256 === null) { rmSync(dest, { force: true }); continue; }
++    mkdirSync(dirname(dest), { recursive: true }); writeFileSync(dest, readFileSync(join(root, file.path)));
++  }
++});
++after(() => { if (fixture) rmSync(fixture, { recursive: true, force: true }); });
++
++test('versioned current inventory binds actual candidate and unchanged historical artifacts', () => {
++  const reviewed = readFileSync(join(fixture, 'test', 'service-reference-freshness.test.mjs'));
++  assert.equal(reviewed.includes(Buffer.from('\r\n')), false, 'reviewed source must retain canonical LF bytes');
++  assert.equal(checkInventory(fixture).source.sha256, sourceSnapshot(root).sha256);
++});
++test('an unlisted new source or edited reviewed bytes fails the current gate', () => {
++  const extra = join(fixture, 'src', 'unreviewed-probe.ts');
++  writeFileSync(extra, 'export const unreviewed = true;\n');
++  try { assert.throws(() => checkInventory(fixture), /Unreviewed candidate change inventory/); }
++  finally { rmSync(extra); }
++  const target = join(fixture, 'src', 'service', 'mcp.ts'), old = readFileSync(target);
++  writeFileSync(target, Buffer.concat([old, Buffer.from('\n// unreviewed change\n')]));
++  try { assert.throws(() => checkInventory(fixture), /Unreviewed candidate bytes/); }
++  finally { writeFileSync(target, old); }
++  const reviewed = join(fixture, 'test', 'service-reference-freshness.test.mjs'), lf = readFileSync(reviewed);
++  writeFileSync(reviewed, Buffer.from(lf.toString('utf8').replaceAll('\n', '\r\n')));
++  try { assert.throws(() => checkInventory(fixture), /Unreviewed candidate bytes/); }
++  finally { writeFileSync(reviewed, lf); }
++});
++test('frozen evidence cannot be edited or omitted from the versioned inventory', () => {
++  const target = join(fixture, 'test', 'agent-identity-mcp-contract.test.mjs'), old = readFileSync(target);
++  writeFileSync(target, Buffer.concat([old, Buffer.from('\n// changed historical assertion\n')]));
++  try { assert.throws(() => checkInventory(fixture), /Frozen evidence changed/); }
++  finally { writeFileSync(target, old); }
++  const manifestPath = join(fixture, MANIFEST), original = readFileSync(manifestPath), manifest = JSON.parse(original);
++  manifest.frozen.pop(); writeFileSync(manifestPath, JSON.stringify(manifest));
++  try { assert.throws(() => checkInventory(fixture), /Frozen inventory omitted/); }
++  finally { writeFileSync(manifestPath, original); }
++});
++test('test receipt counts refuse missing, duplicate, empty and incoherent execution summaries', () => {
++  const valid = '# tests 3\n# pass 2\n# fail 0\n# cancelled 0\n# skipped 1\n# todo 0\n';
++  assert.deepEqual(counts(valid), { tests: 3, pass: 2, fail: 0, cancelled: 0, skipped: 1, todo: 0 });
++  assert.throws(() => counts(valid.replace('# pass 2\n', '')), /Missing/);
++  assert.throws(() => counts(valid + '# tests 3\n'), /ambiguous/);
++  assert.throws(() => counts(valid.replace('# tests 3', '# tests 4')), /Incoherent/);
++  assert.throws(() => counts(valid.replace('# tests 3', '# tests 0')), /Incoherent/);
++});
++test('preflight rejection replaces a stale PASS receipt with a bound FAIL receipt', () => {
++  const out = mkdtempSync(join(tmpdir(), 'gkos-receipt-failure-'));
++  const target = join(fixture, MANIFEST), original = readFileSync(target), manifest = JSON.parse(original);
++  manifest.audited = '0000000000000000000000000000000000000000';
++  writeFileSync(target, JSON.stringify(manifest));
++  writeFileSync(join(out, 'current-runtime.json'), JSON.stringify({ status: 'PASS', stale: true }));
++  try {
++    const receipt = executeQualification({ root: fixture, output: out });
++    assert.equal(receipt.status, 'FAIL'); assert.match(receipt.error, /coordinates changed/);
++    assert.equal(receipt.commands.length, 0); assert.ok(receipt.source.sha256);
++    assert.deepEqual(JSON.parse(readFileSync(join(out, 'current-runtime.json'))), receipt);
++  } finally { writeFileSync(target, original); rmSync(out, { recursive: true, force: true }); }
++});
++test('source identity changes when HEAD changes even if file bytes are identical', () => {
++  const before = sourceSnapshot(fixture);
++  const tree = execFileSync('git', ['rev-parse', 'HEAD^{tree}'], { cwd: fixture, encoding: 'utf8' }).trim();
++  const commit = execFileSync('git', ['-c', 'user.name=Qualification fixture', '-c', 'user.email=fixture@example.invalid', 'commit-tree', tree, '-p', before.head, '-m', 'Disposable identity probe'], { cwd: fixture, encoding: 'utf8' }).trim();
++  execFileSync('git', ['update-ref', 'HEAD', commit], { cwd: fixture });
++  try {
++    const after = sourceSnapshot(fixture); assert.deepEqual(after.files, before.files);
++    assert.equal(after.tree, before.tree); assert.notEqual(after.head, before.head); assert.notEqual(after.sha256, before.sha256);
++  } finally { execFileSync('git', ['update-ref', 'HEAD', before.head], { cwd: fixture }); }
++});
+diff --git a/test/service-reference-freshness.test.mjs b/test/service-reference-freshness.test.mjs
+new file mode 100644
+index 0000000..2ab40f2
+--- /dev/null
++++ b/test/service-reference-freshness.test.mjs
+@@ -0,0 +1,239 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {once} from 'node:events';
++import http from 'node:http';
++import {GkxIndex} from '../dist/gkos-engine.mjs';
++import {buildVaultNavigationConfig} from '../dist/navigation.mjs';
++import {createLocalServiceServer,defaultMcpAgentBinding,ServiceCredentialRegistry,MCP_PROTOCOL_VERSION} from '../dist/service-node.mjs';
++import {ServiceMcpRuntime} from '../dist/service-node.mjs';
++import {buildAuthorizedView,ServiceTraversalEventRing} from '../dist/service.mjs';
++const AT='2026-08-30T12:00:00.000Z';
++const TOKEN='content-test.'+'a'.repeat(52);
++const HIDDEN='CONTENT-SECRET-CANARY-b953';
++const BODY='bodyonlyneedle';
++const LARGE='😀é漢字'.repeat(20000);
++const note=(uid,title,sensitivity,body)=>'---\ngkx_version: "2.3"\nuid: "'+uid+'"\ntitle: "'+title+'"\ntype: note\ncreated_at: '+AT+'\nepistemic_state: observation\nsensitivity: '+sensitivity+'\n---\n'+body;
++async function fixture({discoverFirst=true}={}) {
++ let generation=1, policyDigest="sha256:"+"b".repeat(64);
++ const sources=[
++  {relativePath:'index.md',kind:'note',content:note('550e8400-e29b-41d4-a716-446655449101','Index','public','[[Measurement]]')},
++  {relativePath:'Measurement.md',kind:'note',content:note('550e8400-e29b-41d4-a716-446655449102','Measurement','public',BODY+' '+LARGE)},
++  {relativePath:'Second.md',kind:'note',content:note('550e8400-e29b-41d4-a716-446655449103','Second','public',BODY+' second result')},
++  {relativePath:'Hidden-'+HIDDEN+'.md',kind:'note',content:note('550e8400-e29b-41d4-a716-446655449199',HIDDEN,'secret',HIDDEN+' '+BODY)}
++ ];
++ const config=await buildVaultNavigationConfig({configId:'018f47a3-7b5e-7c9d-8a1b-123456789abf',version:1,vaultId:'vault:content-test',promotedMocNames:[],createdAt:AT,createdBy:'system:test',policy:{id:'policy:test',version:'1.0.0',digest:'sha256:'+'b'.repeat(64)}});
++ const credentials=new ServiceCredentialRegistry([defaultMcpAgentBinding(TOKEN,{credentialId:'credential:content',agentId:'018f47a3-7b5e-7c9d-8a1b-123456789abe',agentLabel:'Content test',sensitivityCeiling:'public',revoked:false,limits:{concurrentRequests:4,bucketCapacity:100,refillMs:10}})]);
++ const server=createLocalServiceServer({credentials,navigationConfig:config,vaultId:'vault:content-test',status:()=>({state:'serving'}),authorization:async snapshot=>({configured:true,generation:snapshot.generation,policyDigest}),snapshot:async()=>{
++  const index=new GkxIndex({defaultSensitivity:'secret'});index.setFiles(sources,[]);index.graph.stats.indexedAt=AT;
++  return {graph:structuredClone(index.graph),sourceRecords:structuredClone(sources),generation,evaluationTime:AT};
++ }});
++ server.listen(0,'127.0.0.1');await once(server,'listening');
++ const url='http://127.0.0.1:'+server.address().port+'/mcp';
++ let session,id=0;
++ async function rpc(method,params,notification=false) {
++  const response=await fetch(url,{method:'POST',headers:{authorization:'Bearer '+TOKEN,'content-type':'application/json',...(session?{'mcp-session-id':session,'mcp-protocol-version':MCP_PROTOCOL_VERSION}:{})},body:JSON.stringify({jsonrpc:'2.0',...(!notification?{id:++id}:{}),method,...(params?{params}:{})})});
++  assert.equal(response.status,notification?202:200);
++  if(notification)return;
++  const raw=await response.text();
++  if(params?.arguments?.query!==HIDDEN) assert.equal(raw.includes(HIDDEN),false,'secret never appears in raw MCP response');
++  const body=JSON.parse(raw);assert.equal(body.error,undefined);
++  if(method==='initialize')session=response.headers.get('mcp-session-id');
++  return body.result;
++ }
++ await rpc('initialize',{protocolVersion:MCP_PROTOCOL_VERSION,capabilities:{},clientInfo:{name:'content-test',version:'1'}});
++ await rpc('notifications/initialized',undefined,true);
++ const call=(name,args)=>rpc('tools/call',{name,arguments:args});
++ let ref,scope;
++ if(discoverFirst) {
++ const discover=await call('gkos_navigation_discover',{scope_ref:null,cursor:null,limit:100});
++ assert.equal(discover.isError,false);
++ const graph=await call('gkos_graph_at_time',{scope_ref:discover.structuredContent.scope_ref,at:AT,state:'all',cursor:null,limit:100});
++ assert.equal(graph.isError,false);
++ ref=graph.structuredContent.items.find(x=>x.canonical_path==='Measurement.md').record_ref;
++ scope=discover.structuredContent.scope_ref;
++ }
++ return {call,url,session,credentials,ref,scope,sources,changePolicy(){policyDigest="sha256:"+"c".repeat(64);},advance(){generation++;},async close(){server.close();await once(server,'close');}};
++}
++
++const consumers = [
++ ['gkos_note_read',{cursor:null,limit_bytes:100}],
++ ['gkos_record_validate',{}], ['gkos_record_assess',{}],
++ ['gkos_lineage_get',{cursor:null,limit:100}],
++];
++const mutations = {
++ content:f=>{f.sources[1].content+='changed bytes';},
++ title:f=>{f.sources[1].content=f.sources[1].content.replace('title: "Measurement"','title: "Changed"');},
++ deletion:f=>{f.sources.splice(1,1);},
++ rename:f=>{f.sources[1].relativePath='Renamed.md';},
++ uid:f=>{f.sources[1].content=f.sources[1].content.replace('446655449102','446655449112');},
++ hidden:f=>{f.sources[1].content=f.sources[1].content.replace('sensitivity: public','sensitivity: secret');},
++ policy:f=>f.changePolicy(),
++ generation:f=>f.advance(),
++};
++function refused(result) {
++ assert.equal(result.isError,true);
++ assert.equal(result.structuredContent.error_code,'GKOS_P6_REFERENCE_UNKNOWN');
++ assert.doesNotMatch(JSON.stringify(result),/Measurement|Renamed|Second|CONTENT-SECRET|changed bytes/);
++}
++for(const [mutation,change] of Object.entries(mutations)) test(`all record consumers refuse stale ${mutation} references`,async()=>{
++ const f=await fixture();
++ try {
++  for(const [tool,args] of consumers) assert.equal((await f.call(tool,{record_ref:f.ref,...args})).isError,false,tool);
++  change(f);
++  for(const [tool,args] of consumers) refused(await f.call(tool,{record_ref:f.ref,...args}));
++  if(['content','title','uid','policy','generation'].includes(mutation)) {
++   const fresh=await f.call('gkos_record_resolve',{canonical_path:'Measurement.md'});
++   assert.equal(fresh.isError,false);
++   assert.notEqual(fresh.structuredContent.record_ref,f.ref);
++   for(const [tool,args] of consumers) assert.equal((await f.call(tool,{record_ref:fresh.structuredContent.record_ref,...args})).isError,false,tool);
++   for(const [tool,args] of consumers) refused(await f.call(tool,{record_ref:f.ref,...args}));
++  }
++ } finally {await f.close();}
++});
++const temporalArgs=f=>({scope_ref:f.scope,at:AT,state:'all',cursor:null,limit:1});
++const cursorMutations={
++ content:f=>{f.sources[2].content+='changed bytes';},
++ deletion:f=>{f.sources.splice(f.sources.findIndex(s=>s.relativePath==='Measurement.md'),1);},
++ insertion:f=>{f.sources.push({relativePath:'Added.md',kind:'note',content:note('550e8400-e29b-41d4-a716-446655449120','Added','public','new')});},
++ rename:f=>{f.sources[2].relativePath='AAA.md';},
++ uid:f=>{f.sources[2].content=f.sources[2].content.replace('446655449103','446655449113');},
++ hidden:f=>{f.sources[2].content=f.sources[2].content.replace('sensitivity: public','sensitivity: secret');},
++ policy:f=>f.changePolicy(), generation:f=>f.advance(),
++};
++for(const [mutation,change] of Object.entries(cursorMutations)) test(`temporal continuation refuses changed ${mutation} snapshot`,async()=>{
++ const f=await fixture();
++ try {
++  const args=temporalArgs(f),first=await f.call('gkos_graph_at_time',args);
++  assert.equal(first.isError,false);assert.ok(first.structuredContent.page.next_cursor);
++  change(f);
++  refused(await f.call('gkos_graph_at_time',{...args,cursor:first.structuredContent.page.next_cursor,limit:100}));
++  assert.equal((await f.call('gkos_graph_at_time',{...args,limit:100})).isError,false);
++ } finally {await f.close();}
++});
++
++async function directFixture() {
++ const identity=defaultMcpAgentBinding(TOKEN,{credentialId:'credential:direct',agentId:'018f47a3-7b5e-7c9d-8a1b-123456789abe',agentLabel:'Direct',sensitivityCeiling:'public',revoked:false}).identity;
++ const sources=['A','B','C'].map((name,i)=>({relativePath:name+'.md',kind:'note',content:note('550e8400-e29b-41d4-a716-44665544910'+i,name,'public','body '+name)}));
++ const index=new GkxIndex({defaultSensitivity:'secret'});index.setFiles(sources,[]);
++ const view=buildAuthorizedView({identity,sensitivityCeiling:'public',corpus:{graph:index.graph,sourceRecords:sources,generation:1},authorization:{configured:true,generation:1,policyDigest:'sha256:'+'b'.repeat(64)},operation:'mcp',evaluationTime:AT});
++ // Explicit synthetic authorized direct-neighbor topology; never inferred from proximity.
++ view.graph.links.push({id:'lineage:test',source:view.graph.nodes[0].id,target:view.graph.nodes[1].id,kind:'lineage'});
++ const config=await buildVaultNavigationConfig({configId:'018f47a3-7b5e-7c9d-8a1b-123456789abf',version:1,vaultId:'direct',promotedMocNames:[],createdAt:AT,createdBy:'system:test',policy:{id:'policy:test',version:'1.0.0',digest:'sha256:'+'b'.repeat(64)}});
++ const context={identity,view,generation:1,policyDecisionId:'018f47a3-7b5e-7c9d-8a1b-123456789abf',policyDigest:'sha256:'+'b'.repeat(64),sourceRecords:sources,navigationConfig:config,vaultId:'direct'};
++ const ring=new ServiceTraversalEventRing();let clock=1000,id=0;
++ const runtime=new ServiceMcpRuntime(ring,8,1000,()=>clock);
++ async function session(ctx=context) {
++  const init=await runtime.handle({jsonrpc:'2.0',id:++id,method:'initialize',params:{protocolVersion:MCP_PROTOCOL_VERSION,capabilities:{},clientInfo:{name:'direct',version:'1'}}},null,ctx);
++  await runtime.handle({jsonrpc:'2.0',method:'notifications/initialized'},init.sessionId,ctx);
++  return init.sessionId;
++ }
++ const sid=await session();
++ const call=async(name,args,sessionId=sid,ctx=context)=>(await runtime.handle({jsonrpc:'2.0',id:++id,method:'tools/call',params:{name,arguments:args}},sessionId,ctx)).body;
++ const discover=(await call('gkos_navigation_discover',{cursor:null,limit:100})).result;
++ assert.equal(discover.isError,false);
++ const scope=discover.structuredContent.scope_ref;
++ const graph=(await call('gkos_graph_at_time',{scope_ref:scope,at:AT,state:'all',cursor:null,limit:100})).result;
++ assert.equal(graph.isError,false);
++ return {context,ring,call:async(...args)=>(await call(...args)).result,rawCall:call,session,sid,scope,ref:graph.structuredContent.items[0].record_ref,expire(){clock=2001;}};
++}
++
++const directMutations={
++ content:f=>{f.context.sourceRecords[1].content+='different';},
++ deletion:f=>{f.context.sourceRecords.splice(1,1);f.context.view.graph.nodes.splice(1,1);f.context.view.notes.splice(1,1);},
++ insertion:f=>{const node=structuredClone(f.context.view.graph.nodes[2]);node.id='inserted';node.path='Inserted.md';f.context.view.graph.nodes.push(node);f.context.view.notes.push({...f.context.view.notes[2],id:node.id,path:node.path});f.context.sourceRecords.push({relativePath:node.path,kind:'note',content:'inserted'});f.context.view.graph.links.push({id:'added',source:f.context.view.graph.nodes[0].id,target:node.id,kind:'lineage'});},
++ reorder:f=>{f.context.view.graph.nodes.reverse();},
++ uid:f=>{f.context.view.graph.nodes[1].gkx.uid='550e8400-e29b-41d4-a716-446655449199';f.context.view.notes[1].uid=f.context.view.graph.nodes[1].gkx.uid;},
++ rename:f=>{f.context.sourceRecords[1].relativePath='Renamed.md';f.context.view.graph.nodes[1].path='Renamed.md';f.context.view.notes[1].path='Renamed.md';},
++ policy:f=>{f.context.policyDigest='sha256:'+'c'.repeat(64);},
++};
++for(const tool of ['gkos_lineage_get','gkos_graph_at_time']) for(const [mutation,change] of Object.entries(directMutations)) test(`${tool} binds authorized ${mutation} and ordered snapshot`,async()=>{
++ const f=await directFixture();
++ const args=tool==='gkos_lineage_get'?{record_ref:f.ref,cursor:null,limit:1}:{scope_ref:f.scope,at:AT,state:'all',cursor:null,limit:1};
++ const first=await f.call(tool,args);assert.equal(first.isError,false);assert.ok(first.structuredContent.page.next_cursor);
++ const continuation={...args,cursor:first.structuredContent.page.next_cursor};
++ assert.equal((await f.call(tool,continuation)).isError,false);
++ change(f);refused(await f.call(tool,continuation));
++});
++
++for(const mutation of ['content','deletion','insertion','uid','rename','policy','config']) test(`audit continuation binds ${mutation} snapshot`,async()=>{
++ const f=await directFixture();
++ // Missing admitted stable IDs generate one audit row per source.
++ for(const note of f.context.view.notes) note.uid=null;
++ const args={scope_ref:f.scope,severity_at_least:'info',cursor:null,limit:1};
++ const first=await f.call('gkos_navigation_audit',args);assert.equal(first.isError,false);assert.ok(first.structuredContent.page.next_cursor);
++ const next={...args,cursor:first.structuredContent.page.next_cursor};
++ assert.equal((await f.call('gkos_navigation_audit',next)).isError,false);
++ if(mutation==='config') f.context.navigationConfig={...f.context.navigationConfig,version:2};
++ else directMutations[mutation](f);
++ refused(await f.call('gkos_navigation_audit',next));
++});
++
++test('graph-only hosts retain unchanged record consumers and refuse changed graph identity',async()=>{
++ const f=await directFixture();delete f.context.sourceRecords;
++ const graph=await f.call('gkos_graph_at_time',{scope_ref:f.scope,at:AT,state:'all',cursor:null,limit:100});
++ assert.equal(graph.isError,false);const ref=graph.structuredContent.items[0].record_ref;
++ for(const [tool,args] of consumers.slice(1)) assert.equal((await f.call(tool,{record_ref:ref,...args})).isError,false,tool);
++ assert.equal((await f.call('gkos_note_read',{record_ref:ref,cursor:null,limit_bytes:100})).structuredContent.error_code,'GKOS_P6_CAPABILITY_UNAVAILABLE');
++ f.context.view.graph.nodes[0].gkx.title='Changed';
++ for(const [tool,args] of consumers) refused(await f.call(tool,{record_ref:ref,...args}));
++});
++
++test('foreign sessions, cross-agent sessions and expired sessions never consume issued records or cursors',async()=>{
++ const f=await directFixture();
++ const first=await f.call('gkos_graph_at_time',{scope_ref:f.scope,at:AT,state:'all',cursor:null,limit:1});
++ const next=first.structuredContent.page.next_cursor;
++ for(const foreignAgent of [false,true]) {
++  const ctx=structuredClone(f.context);
++  if(foreignAgent){ctx.identity.agentId='018f47a3-7b5e-7c9d-8a1b-123456789ab1';ctx.view.agent_id=ctx.identity.agentId;}
++  const session=await f.session(ctx);
++  for(const [tool,args] of consumers) refused(await f.call(tool,{record_ref:f.ref,...args},session,ctx));
++  const discover=await f.call('gkos_navigation_discover',{cursor:null,limit:100},session,ctx);
++  refused(await f.call('gkos_graph_at_time',{scope_ref:discover.structuredContent.scope_ref,at:AT,state:'all',cursor:next,limit:1},session,ctx));
++ }
++ f.expire();assert.ok((await f.rawCall('gkos_record_validate',{record_ref:f.ref})).error);
++});
++
++test('stable pages reassemble in order; hidden and raw-source order changes do not invalidate authorized snapshots',async()=>{
++ const f=await directFixture(),args={scope_ref:f.scope,at:AT,state:'all',cursor:null,limit:1};
++ const full=await f.call('gkos_graph_at_time',{...args,limit:100});let result=await f.call('gkos_graph_at_time',args),items=[...result.structuredContent.items];
++ const snapshot=result.structuredContent.page.snapshot_id;
++ f.context.sourceRecords.reverse();f.context.sourceRecords.push({relativePath:'Hidden-'+HIDDEN+'.md',kind:'note',content:HIDDEN});
++ while(result.structuredContent.page.next_cursor){result=await f.call('gkos_graph_at_time',{...args,cursor:result.structuredContent.page.next_cursor});assert.equal(result.isError,false);assert.equal(result.structuredContent.page.snapshot_id,snapshot);items.push(...result.structuredContent.items);}
++ assert.deepEqual(items,full.structuredContent.items);
++ for(const limit of [0,101,1.5])assert.equal((await f.call('gkos_graph_at_time',{...args,limit})).structuredContent.error_code,'GKOS_P6_INVALID_PARAMS');
++});
++
++test('path reuse and repeated policy changes issue fresh bindings without reviving older refs',async()=>{
++ const f=await directFixture(),old=[f.ref];
++ for(let i=0;i<3;i++){
++  f.context.policyDigest='sha256:'+String(i+1).repeat(64);
++  f.context.view.graph.nodes[0].gkx.uid='550e8400-e29b-41d4-a716-44665544912'+i;
++  f.context.view.notes[0].uid=f.context.view.graph.nodes[0].gkx.uid;
++  const fresh=await f.call('gkos_record_resolve',{canonical_path:'A.md'});assert.equal(fresh.isError,false);
++  assert.ok(!old.includes(fresh.structuredContent.record_ref));
++  for(const ref of old)for(const [tool,args] of consumers){refused(await f.call(tool,{record_ref:ref,...args}));assert.deepEqual(f.ring.after(0).at(-1).paths,[]);}
++  old.push(fresh.structuredContent.record_ref);
++  for(const [tool,args] of consumers)assert.equal((await f.call(tool,{record_ref:old.at(-1),...args})).isError,false);
++ }
++});
++
++for(const corruption of ['missing','duplicate','malformed_unicode','admission_uid']) test(`all record consumers refuse ${corruption} source/identity binding`,async()=>{
++ const f=await directFixture();
++ if(corruption==='missing')f.context.sourceRecords.splice(0,1);
++ if(corruption==='duplicate')f.context.sourceRecords.push(structuredClone(f.context.sourceRecords[0]));
++ if(corruption==='malformed_unicode')f.context.sourceRecords[0].content+='\ud800';
++ if(corruption==='admission_uid')f.context.view.notes[0].uid='different';
++ for(const [tool,args] of consumers){refused(await f.call(tool,{record_ref:f.ref,...args}));assert.deepEqual(f.ring.after(0).at(-1).paths,[]);}
++});
++
++test('binding storage retains the existing session record limit and does not evict accepted refs',async()=>{
++ const f=await directFixture();let blocked=false;
++ for(let i=0;i<8192;i++) {
++  f.context.sourceRecords[2].content='bounded variant '+i;
++  const result=await f.call('gkos_record_resolve',{canonical_path:'C.md'});
++  if(result.isError){assert.equal(result.structuredContent.error_code,'GKOS_OBS_CONTENT_LIMIT');blocked=true;break;}
++ }
++ assert.equal(blocked,true);
++ assert.equal((await f.call('gkos_record_validate',{record_ref:f.ref})).isError,false);
++ assert.deepEqual(f.ring.after(0).at(-2).paths,[]);
++});

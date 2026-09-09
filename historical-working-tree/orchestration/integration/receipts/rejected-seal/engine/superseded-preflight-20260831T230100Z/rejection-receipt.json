@@ -1,0 +1,8 @@
+{
+  "status": "REJECTED_SUPERSEDED",
+  "reason": "Preflight passed only after a direct integration-branch digest edit; orchestrator required audited-candidate repair, reseal, and exact branch reconstruction",
+  "superseded_commit": "413ffdddd14deb0284d02baf44a7e02814941ee5",
+  "superseded_tree": "2d2c320cefc009e73d4f036dbadcf66f85e44f91",
+  "suite_started": false,
+  "rejected_at_utc": "2026-08-31T23:03:31.6928873Z"
+}

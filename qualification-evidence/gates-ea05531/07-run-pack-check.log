@@ -1,0 +1,5 @@
+
+> gkos-engine@2.2.0 pack:check
+> node scripts/check-pack.mjs
+
+package contents verified: 595 files, 6684898 bytes

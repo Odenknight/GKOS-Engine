@@ -1,0 +1,77 @@
+{
+  "kosmos": {
+    "git_base": "6486035dfc2e42173b1158b8007c9bab35aa7dc9",
+    "changed": [
+      {
+        "path": "docs/RENDERER-PROTOCOL.md",
+        "before": "9bcfbb58b98931512d42091e5fda97e47767b607bfc178a653e0b8fbe233df6d",
+        "after": "6464dfddd5ec04d468ba217e91b0bc03ae58f6784e50f62a3619ce83d411b74c"
+      },
+      {
+        "path": "src/renderer/renderer.ts",
+        "before": "f451426c51cbe19653a58ac476f9f618fa324f591b81270f53636cf9a86cc4ca",
+        "after": "838de450b4e1ae1004027c8e1afbbf99975d09129fbd3c0446b983369cb8d91a"
+      },
+      {
+        "path": "src/standalone/standalone.ts",
+        "before": "15cf0f78a73f224e9179b33f149ff3dcf51cacb909aed49346325677d93cf126",
+        "after": "91772a7e0b715d2e1e3de748280aef8554604c482765923cd093c02bdc4d77df"
+      },
+      {
+        "path": "test/browser/consumer-identity.spec.ts",
+        "before": null,
+        "after": "18d15621dd839b245de9c0bcb8b92a1686ac4807b767030001cf8dd589a6d1c8"
+      }
+    ]
+  },
+  "observatory": {
+    "git_base": "2a7b66fc6a33076fdcf29574cf2e31082c1b6e2a",
+    "changed": [
+      {
+        "path": "docs/VIEWER.md",
+        "before": "20598af3ee64fb030312d566176721e4d2faa05afc8f9236b36ca5087f91b914",
+        "after": "2ba9c80c08afd02087f806fd5fec39dadb30e278ea94e4769de4f721e5eaefb5"
+      },
+      {
+        "path": "scripts/build-web.mjs",
+        "before": "54f5c7d95a8af48130506fe1f1b7306b6f7219a62c7c66cb5c29b82f5242d735",
+        "after": "047841ae9e34fb08b87fd7962a79c3f12f943683a295ab55f88bdafe6b1db91d"
+      },
+      {
+        "path": "tests/viewer.test.mjs",
+        "before": "9867ae7e58e4c7dd1151f586f6e343bf3207303f880803352a80065809a9b072",
+        "after": "a1e04bd36193e2e6e476bed4d7013c6aa18b41fa30b75c09652abce74842e1e6"
+      },
+      {
+        "path": "web/live-frame.mjs",
+        "before": "138ba012aaae3c41343ff16def63c35ac45e3248f19a1ff1f752cfc2962c829f",
+        "after": "73c30d7de159f0216f3d5c1053cdf51ce86a09ce37db318dc53f76918e8b8d74"
+      },
+      {
+        "path": "web/vendor/kosmos-oden/PROVENANCE.json",
+        "before": "3f5614eb4c59c8fbd985af97ac24aae40a447b7510af9c4440aa16d7866e0e9c",
+        "after": "04a3f493f0b33a834cb827bad4d840bf1b7bedb61b744ea5190b11f018cd401b"
+      },
+      {
+        "path": "web/vendor/kosmos-oden/renderer.mjs",
+        "before": "c656bfe86a59c0bdc5f9c13b55d6fbda5a7f19cc2ef863880306b777dcb8b86c",
+        "after": "1773879574377fbda32a95612aba2783c54cf30955776fe94294043a9dadfbc9"
+      },
+      {
+        "path": "web/vendor/kosmos-oden/source/src/renderer/renderer.ts",
+        "before": "f451426c51cbe19653a58ac476f9f618fa324f591b81270f53636cf9a86cc4ca",
+        "after": "838de450b4e1ae1004027c8e1afbbf99975d09129fbd3c0446b983369cb8d91a"
+      },
+      {
+        "path": "tests/consumer-identity-browser.mjs",
+        "before": null,
+        "after": "60ed9b50be1066f245d630f74b98124b6c727f83e3a4faa57233017a54f8f6e6"
+      },
+      {
+        "path": "web/vendor/kosmos-oden/LOCAL-PATCH.md",
+        "before": null,
+        "after": "49a8c9fa8ecf628e40cc337d12a77b769fc333ab54cc87e96ccb7d8ab42b38ff"
+      }
+    ]
+  }
+}

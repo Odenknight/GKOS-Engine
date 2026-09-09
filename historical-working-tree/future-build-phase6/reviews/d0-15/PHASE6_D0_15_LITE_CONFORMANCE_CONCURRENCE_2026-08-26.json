@@ -1,0 +1,626 @@
+{
+  "record_type": "gkos-phase6-d0-15-lite-conformance-concurrence",
+  "record_version": "1.0.0",
+  "review_id": "PHASE6-D0-15-LITE-CONFORMANCE-CONCURRENCE-2026-08-26",
+  "reviewed_at_utc": "2026-08-26T10:00:32.5517250Z",
+  "reviewer_role": "fresh independent D0-15 Lite-conformance concurrence reviewer",
+  "verdict": "ACCEPT_CONCURRENCE",
+  "terminal_statement": "ACCEPT_CONCURRENCE. All fifteen owner selections A and all thirteen bounded derived corrections preserve the seven required and sixteen deferred public MCP catalog entries, the seven public authenticated operations, the 67 official MCP vector IDs, the exact 53-code registry, the 32-operation/24-owner-operation inventory, and every successful public tool input/result semantic. Corrected Full bytes do change the embedded MCP error meta-schema from a pattern-open code field to the already-ratified exact 53-code domain, and change MCP fixture aliases and executable expected-byte metadata, but these close accepted-F1 underbinding rather than select new public behavior. No new public error, envelope field, projection, HTTP admission order, transport behavior, tool name, tool input, or successful result is introduced. A separate MCP reviewer is therefore not required before the bounded successor-F1 correction; the governed independent MCP reviews at Full F3 and Lite L2 remain mandatory. Lite admission ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2 is clean and correctly states that the legacy GET-only sidecar has no /mcp route and that sensitivity is classification metadata rather than an access filter. It must not be edited, given a Phase-6 pack, or pinned to corrected Full bytes until the successor Full path is independently accepted through hosted-green F5. This concurrence authorizes no implementation, F2 restart, Lite work, commit, push, merge, release, deployment, activation, or publication.",
+  "independence_and_no_contribution_attestation": {
+    "fresh_reviewer": true,
+    "zero_contribution_to_affected_full_rules": true,
+    "zero_contribution_to_owner_resolution": true,
+    "zero_contribution_to_full_pack_bytes_or_expected_outcomes": true,
+    "zero_contribution_to_lite_admission_or_future_lite_bytes": true,
+    "review_mode": "READ_ONLY_FULL_LITE_PROPOSALS_AND_PRIOR_REVIEWS",
+    "only_authored_artifact": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_LITE_CONFORMANCE_CONCURRENCE_2026-08-26.json",
+    "full_repository_edits": [],
+    "lite_repository_edits": [],
+    "proposal_or_owner_record_edits": [],
+    "commits_signatures_pushes_or_pr_actions": [],
+    "implementation_authorization": false
+  },
+  "authority_boundary": {
+    "authorized": "Detached Lite-conformance concurrence record only.",
+    "not_authorized": [
+      "successor F1 implementation or deterministic generation",
+      "F2 restart, repair, commit, or acceptance",
+      "Full F3 through F5 implementation or acceptance",
+      "Lite L1 through L4 implementation, copy, pin, wrapper, or evidence work",
+      "changes to public MCP semantics",
+      "commit, signature, push, PR mutation, merge, release, deployment, activation, or publication"
+    ]
+  },
+  "exact_inputs": [
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_ATTACHMENT_IMPACT_ASSESSMENT_2026-08-26.json",
+      "bytes": 5596,
+      "sha256": "69a6f241294a530cf7f3aa89ce7c897bcd5010d125462dfda59c2e73b9a2c014",
+      "required_hash_match": true
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json",
+      "bytes": 80583,
+      "sha256": "149b1933503eb418ab8f1d37d2aa6dad19e8d18fa08ee5ce359ecea0fff9e78f",
+      "required_hash_match": true
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_2026-08-26.json",
+      "bytes": 3295,
+      "sha256": "07a257bc5cb37ffaa7c9fe61c1b46179fee946cc02643216aa0e0c6eb51e40b8",
+      "required_hash_match": true
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_FULL_CONTRACT_STEWARD_REVIEW_2026-08-26.json",
+      "bytes": 51789,
+      "sha256": "12a37ee80c129ae016bfb330cd91621d50ad9f8f9406ab850798714adedce63c"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_MIGRATION_REVIEW_2026-08-26.json",
+      "bytes": 43945,
+      "sha256": "9534727333c2c964b4285f136ee046b823f61f100f7acff1fe520d85efd4aa57"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_SECURITY_REVIEW_2026-08-26.json",
+      "bytes": 50913,
+      "sha256": "f7d862851832ded51ec3c264beaf65b7bd5f9ad958580215f3d955546ac6d401"
+    },
+    {
+      "path": "future-build-phase6/reviews/implementer/PHASE6_F2_FULL_D0_15_STOP_2026-08-26.json",
+      "bytes": 6663,
+      "sha256": "5d192bd3cb1ddb4f0a8a0d8148d16c605ed80fe2078b5591c2a79c258dcd52ea"
+    },
+    {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_FULL_INDEPENDENT_REVIEW_V3_2026-08-26.json",
+      "bytes": 33708,
+      "sha256": "ee027811dd29826883f736c0f018de552979d2418762e69fa7988aff635aaa70"
+    },
+    {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_ACCEPTANCE_GATE_2026-08-26.json",
+      "bytes": 2347,
+      "sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff"
+    },
+    {
+      "path": "future-build-phase6/reviews/implementer/PHASE6_F1_FULL_IMPLEMENTER_HANDOFF_V3_2026-08-26.json",
+      "bytes": 13883,
+      "sha256": "a1ffcef317c3f1d7f2cac1b0748450e9e9261e65d9f181ff3df6e4cbbf0160b2"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "bytes": 117722,
+      "sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_DECISION_RECORD_PROPOSAL_2026-08-25.json",
+      "bytes": 28582,
+      "sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_OPERATION_INVENTORY_PROPOSAL_2026-08-25.json",
+      "bytes": 45471,
+      "sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CLOSED_ERROR_REGISTRY_1.0.0-draft.1.json",
+      "bytes": 17606,
+      "sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5"
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/MCP_INITIAL_TOOL_CATALOG.proposal.json",
+      "bytes": 12920,
+      "sha256": "c0ed2b963dcaef8a8bd08a427687d493bb7e85f1e26076a88a04f68b2117de7e"
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/MCP_TOOL_REGISTRY.schema.json",
+      "bytes": 49408,
+      "sha256": "5c043dc5570c4c52ad13425925711e672ec198d5910ab5c9e8c1438cb5ed8004"
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/MCP_2025_11_25_CONFORMANCE_VECTORS.proposal.json",
+      "bytes": 51108,
+      "sha256": "23f48e01f890b746012d3713b8ece8331b113927ca15ab72e9955cf03830387c"
+    },
+    {
+      "path": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+      "bytes": 31178,
+      "sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f"
+    },
+    {
+      "path": "future-build-phase6/reviews/final/PHASE6_D0_OWNER_RATIFICATION_2026-08-25.json",
+      "bytes": 2842,
+      "sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929"
+    },
+    {
+      "path": "future-build-phase6/reviews/final/PHASE6_D0_CROSS_REGISTER_ACCEPTANCE_V7_2026-08-25.md",
+      "bytes": 13939,
+      "sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb"
+    }
+  ],
+  "exact_coordinates": {
+    "historically_accepted_full_f1": {
+      "commit": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+      "tree": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+      "status": "immutable_historical_evidence_not_a_successor_qualification",
+      "pack_manifest": {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
+        "git_blob": "b6eb69ee18b8432794904f7bfb3bf225ec345e48",
+        "bytes": 5719,
+        "sha256": "e6e045abe5ec77d96f747c5358dca62deca212940f3b32a170099dcddf321463",
+        "hashed_leaf_count": 33,
+        "total_pack_files_including_manifest": 34
+      }
+    },
+    "current_lite_admission": {
+      "repository": "[LOCAL_PATH]",
+      "commit": "ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2",
+      "tree": "95dfaaca2f92e33a3def629ed78590119667a68d",
+      "worktree_clean_at_review": true,
+      "phase6_identity_pack_present": false,
+      "phase6_full_pin_present": false,
+      "disposition": "PRESERVE_UNEDITED_UNPINNED_UNTIL_ACCEPTED_SUCCESSOR_FULL_F5"
+    }
+  },
+  "mechanical_verification": {
+    "owner_resolution": {
+      "all_fifteen_ids_present_once": true,
+      "all_fifteen_selected_option_A": true,
+      "derived_correction_count": 13,
+      "attachment_condition_satisfied": true
+    },
+    "historical_full_pack": {
+      "operation_count": 32,
+      "unique_operation_count": 32,
+      "public_authenticated_operations": 7,
+      "owner_only_operations": 24,
+      "local_bootstrap_operations": 1,
+      "required_mcp_tools": 7,
+      "unique_required_mcp_tool_names": 7,
+      "deferred_mcp_entries": 16,
+      "official_mcp_vectors": 67,
+      "unique_official_mcp_vector_ids": 67,
+      "closed_error_codes": 53,
+      "unique_closed_error_codes": 53,
+      "interface_error_aliases": 34
+    },
+    "required_mcp_tool_names_preserved": [
+      "gkos_capabilities",
+      "gkos_record_validate",
+      "gkos_record_assess",
+      "gkos_lineage_get",
+      "gkos_graph_at_time",
+      "gkos_navigation_discover",
+      "gkos_navigation_audit"
+    ],
+    "public_operation_names_preserved": [
+      "capability.list_effective",
+      "record.validate",
+      "record.assess",
+      "record.lineage.read",
+      "graph.temporal.read",
+      "navigation.discover",
+      "navigation.audit"
+    ]
+  },
+  "owner_selection_lite_and_public_mcp_impact": [
+    {
+      "id": "D015-R01",
+      "selection": "A",
+      "public_mcp_impact": "NONE; authority-anchor variants and last_generation naming are owner/private durability records.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "canonical-fixture.json", "conformance.schema.json", "security-fixture.json", "README.md", "TECHNICAL_README.md"]
+    },
+    {
+      "id": "D015-R02",
+      "selection": "A",
+      "public_mcp_impact": "NONE; six restore invalidation aggregates and event head binding are owner-only restore evidence.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "migration-fixture.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R03",
+      "selection": "A",
+      "public_mcp_impact": "NONE; restore plan/abort, staged locator disposition, generation, and invalidation are owner-only/private recovery behavior.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "operation-inventory.json", "operation-inventory.schema.json", "migration-fixture.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R04",
+      "selection": "A",
+      "public_mcp_impact": "NONE; authority.status remains OWNER_ONLY and no restore-inspect operation or MCP tool is added.",
+      "copied_full_byte_impact": ["operation-inventory.json", "operation-inventory.schema.json", "migration-fixture.json", "security-fixture.json"]
+    },
+    {
+      "id": "D015-R05",
+      "selection": "A",
+      "public_mcp_impact": "NONE; bootstrap is the existing single LOCAL_BOOTSTRAP operation and has no MCP surface.",
+      "copied_full_byte_impact": ["bootstrap-migration.schema.json", "migration.schema.json", "audit-receipt.schema.json", "migration-fixture.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R06",
+      "selection": "A",
+      "public_mcp_impact": "NO WIRE CHANGE; preserve all 67 official MCP IDs and add closed aliases rather than renumbering. Keep eight core-operation and ten restore/bootstrap-recovery vectors as separate classes, combined 18.",
+      "copied_full_byte_impact": ["conformance.schema.json", "mcp-conformance-fixture.json", "migration-fixture.json", "README.md", "TECHNICAL_README.md"]
+    },
+    {
+      "id": "D015-R07",
+      "selection": "A",
+      "public_mcp_impact": "NO INPUT OR SUCCESS CHANGE; the ratified stateful-snapshot cursor remains resumable after restart. Exact redacted page bytes and authorization bindings are private durable representation.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "canonical-fixture.json", "mcp-conformance-fixture.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R08",
+      "selection": "A",
+      "public_mcp_impact": "NONE; exact kind-to-table constants govern private global audit events.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R09",
+      "selection": "A",
+      "public_mcp_impact": "NO NEW ERROR OR SUCCESS SEMANTIC; GKOS_P6_REQUEST_STALE_AUTHORITY and selective affected-binding revalidation were already ratified. The correction adds the missing durable stale request state and executable race proof.",
+      "copied_full_byte_impact": ["request.schema.json", "race-fixture.json", "security-fixture.json", "mcp-conformance-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R10",
+      "selection": "A",
+      "public_mcp_impact": "NONE; credential issue/reconnect/epoch rules are owner authentication and authority-engine behavior, with no public administration tool.",
+      "copied_full_byte_impact": ["credential.schema.json", "operation-inventory.schema.json", "security-fixture.json", "race-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R11",
+      "selection": "A",
+      "public_mcp_impact": "NONE; sole-owner rotation precondition uses the existing owner-only GKOS_P6_STATE_CONFLICT projection and adds no tool or code.",
+      "copied_full_byte_impact": ["credential.schema.json", "operation-inventory.schema.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R12",
+      "selection": "A",
+      "public_mcp_impact": "NONE; mapping.add and mapping.revoke remain owner-only inventory entries and fail with existing GKOS_P6_PLATFORM_UNAVAILABLE until a separately ratified adapter exists.",
+      "copied_full_byte_impact": ["external-mapping.schema.json", "operation-inventory.json", "operation-inventory.schema.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R13",
+      "selection": "A",
+      "public_mcp_impact": "NONE; retention.get/set and sweeps remain owner-only and the table count stays sixteen.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "session.schema.json", "request.schema.json", "activity.schema.json", "operation-inventory.schema.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R14",
+      "selection": "A",
+      "public_mcp_impact": "NO CATALOG OR SUCCESS CHANGE; the existing public values read, compute_only, and proposal_only remain. authority_mutation and qualified_external_effect are confined to owner/effect activity.",
+      "copied_full_byte_impact": ["activity.schema.json", "audit-receipt.schema.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-R15",
+      "selection": "A",
+      "public_mcp_impact": "NONE; GKOS_P6_IDENTITY_COLLISION and GKOS_P6_MAPPING_CONFLICT remain existing owner-only codes and the registry remains exactly 53.",
+      "copied_full_byte_impact": ["external-mapping.schema.json", "operation-inventory.schema.json", "security-fixture.json", "README.md", "TECHNICAL_README.md"]
+    }
+  ],
+  "derived_correction_lite_and_public_mcp_impact": [
+    {
+      "id": "D015-DC01",
+      "public_mcp_impact": "PUBLIC SCHEMA BYTES TIGHTEN, VALID PUBLIC SEMANTICS DO NOT CHANGE. error.schema.json must adopt the same six fields already used by the MCP tool schema, and the duplicated tool error_code constraint must be closed from a GKOS_P6_* pattern to the exact 53-code domain. No field, valid code, projection, retry rule, HTTP status, MCP code, or canonical valid envelope changes.",
+      "copied_full_byte_impact": ["error.schema.json", "tool-registry.schema.json", "canonical-fixture.json", "security-fixture.json", "conformance.schema.json", "mcp-conformance-fixture.json"]
+    },
+    {
+      "id": "D015-DC02",
+      "public_mcp_impact": "NO TOOL INPUT/RESULT CHANGE; adds private durable request state stale and closes internal operation/capability/namespace identifiers to the already-ratified 64-byte ASCII domain.",
+      "copied_full_byte_impact": ["request.schema.json", "audit-receipt.schema.json", "operation-inventory.schema.json", "race-fixture.json", "security-fixture.json"]
+    },
+    {
+      "id": "D015-DC03",
+      "public_mcp_impact": "NO WIRE CHANGE; public tools already carry the exact ordered policy-operation/private-dependency declarations. The operation inventory and its schema must stop collapsing those declarations to one policy_capability and must keep transport distinct from authority.",
+      "copied_full_byte_impact": ["operation-inventory.json", "operation-inventory.schema.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-DC04",
+      "public_mcp_impact": "NO TOOL SCHEMA CHANGE; closes internal rate-bucket records, refill/restart rules, clock handling, and selector caps using the already-ratified GKOS_P6_RATE_LIMITED behavior.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "security-fixture.json", "race-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-DC05",
+      "public_mcp_impact": "NONE; external bootstrap/restore plans and abort intent are private/owner definitions placed under existing leaves, with no new table, operation, pack leaf, or path.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "bootstrap-migration.schema.json", "migration.schema.json", "migration-fixture.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-DC06",
+      "public_mcp_impact": "NO OFFICIAL-ID OR EXPECTED-WIRE SEMANTIC CHANGE; the 67 official IDs remain unique and fixed. Per-kind executable schemas, exact canonical expected bytes, cursor aliases, and core_vector_id aliases make existing behavior testable.",
+      "copied_full_byte_impact": ["conformance.schema.json", "canonical-fixture.json", "race-fixture.json", "migration-fixture.json", "security-fixture.json", "mcp-conformance-fixture.json"]
+    },
+    {
+      "id": "D015-DC07",
+      "public_mcp_impact": "NO PUBLIC INPUT CHANGE; tool-registry.schema.json already accepts exact UTC millisecond years 1970 through 9999. The duplicate Full record/owner schemas that currently stop at 2999 must be aligned.",
+      "copied_full_byte_impact": ["activity.schema.json", "agent-identity.schema.json", "audit-receipt.schema.json", "credential.schema.json", "external-mapping.schema.json", "lifecycle.schema.json", "migration.schema.json", "operation-inventory.schema.json", "qualification-receipt.schema.json", "request.schema.json", "session.schema.json", "canonical-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-DC08",
+      "public_mcp_impact": "NONE; backup-manifest and SQLite snapshot publication are owner/private recovery records.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "migration-fixture.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-DC09",
+      "public_mcp_impact": "NO PUBLIC ENUMERATION CHANGE; credential/handoff/locator coupling and delivery outcomes are owner/private. Ordinary delivery failure remains distinct from existing GKOS_P6_SECRET_EXPOSURE.",
+      "copied_full_byte_impact": ["credential.schema.json", "external-mapping.schema.json", "operation-inventory.schema.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-DC10",
+      "public_mcp_impact": "NONE; global event union, table kind constants, committed receipt digests, and restore floor are internal durable evidence.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "migration-fixture.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-DC11",
+      "public_mcp_impact": "NO PUBLIC RESULT CHANGE; enforces the already-ratified binding, expiry, invalidation, and resealing behind references, sessions, cursors, snapshots, requests, and idempotency.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "session.schema.json", "request.schema.json", "canonical-fixture.json", "race-fixture.json", "security-fixture.json", "mcp-conformance-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-DC12",
+      "public_mcp_impact": "NONE; retention authorization and purge evidence remain owner/trusted-scheduler internal behavior.",
+      "copied_full_byte_impact": ["audit-receipt.schema.json", "session.schema.json", "request.schema.json", "activity.schema.json", "operation-inventory.schema.json", "security-fixture.json", "conformance.schema.json"]
+    },
+    {
+      "id": "D015-DC13",
+      "public_mcp_impact": "NO SEMANTIC CHANGE; every changed byte receives a new deterministic hash and hosted evidence coordinate. Historical e29e04b bytes remain immutable and cannot qualify the successor.",
+      "copied_full_byte_impact": ["README.md", "TECHNICAL_README.md", "pack-manifest.json", "every directly changed schema and fixture hash", "generation_input_digest", "generator_digest", "aggregate_digest", "deterministic archive digest", "hosted artifact and receipt digests"]
+    }
+  ],
+  "exact_successor_full_pack_byte_impact_inventory": {
+    "basis": "The successor bytes do not yet exist, so no future byte count or SHA is invented. This inventory distinguishes leaves whose content is required to change by the ratified corrections from leaves whose accepted content has no selected semantic reason to change. Every future value must be measured from the independently accepted successor pack.",
+    "required_changed_hashed_leaves_count": 23,
+    "required_changed_hashed_leaves": [
+      {"path": "README.md", "reason": "corrected counts, lifecycle, envelope, and fixture documentation"},
+      {"path": "TECHNICAL_README.md", "reason": "corrected private/owner schema and conformance details"},
+      {"path": "activity.schema.json", "reason": "typed closed metadata, retention bindings, identifier and timestamp closure"},
+      {"path": "agent-identity.schema.json", "reason": "1970-through-9999 timestamp closure"},
+      {"path": "audit-receipt.schema.json", "reason": "anchor, restore, plan/abort, backup, snapshot/cursor, policy, rate, event, retention, and activity corrections"},
+      {"path": "bootstrap-migration.schema.json", "reason": "ratified bootstrap vocabulary and external durable plan staging"},
+      {"path": "canonical-fixture.json", "reason": "executable canonical bytes, cursor aliases, envelope and timestamp boundaries"},
+      {"path": "conformance.schema.json", "reason": "per-kind closed executable scenarios instead of assertion shells"},
+      {"path": "credential.schema.json", "reason": "credential coupling, status nullability, epoch/handoff rules, and timestamp closure"},
+      {"path": "error.schema.json", "reason": "replace code/message/details with the exact six-field closed envelope and exact 53-code domain"},
+      {"path": "external-mapping.schema.json", "reason": "authenticated adapter evidence, collision guard, availability, status, and timestamp closure"},
+      {"path": "lifecycle.schema.json", "reason": "closed lifecycle vocabulary and 1970-through-9999 timestamp closure"},
+      {"path": "mcp-conformance-fixture.json", "reason": "closed core/cursor aliases and executable canonical expected-byte metadata while preserving all 67 official IDs"},
+      {"path": "migration-fixture.json", "reason": "ten required restore/bootstrap recovery cases and exact crash/post-state evidence"},
+      {"path": "migration.schema.json", "reason": "exact bootstrap/restore lifecycle, external plan records, and timestamp closure"},
+      {"path": "operation-inventory.json", "reason": "owner-only status discovery, mapping unavailability, exact policy/dependency/transport declarations; counts remain 32/24"},
+      {"path": "operation-inventory.schema.json", "reason": "closed request/result variants, policy/dependency arrays, owner recovery, credential/mapping/retention rules, and timestamp closure"},
+      {"path": "qualification-receipt.schema.json", "reason": "1970-through-9999 timestamp closure and successor evidence-coordinate validation"},
+      {"path": "race-fixture.json", "reason": "selective final-gate, stale-state, A-to-E, multiprocess, restart, and effect race scenarios"},
+      {"path": "request.schema.json", "reason": "durable stale state, identifier closure, retention/binding fields, and timestamp closure"},
+      {"path": "security-fixture.json", "reason": "credential, collision, redaction, non-enumeration, mapping, restore, retention, policy, and error negatives"},
+      {"path": "session.schema.json", "reason": "retention sequence/policy and invalidation/resealing bindings plus timestamp closure"},
+      {"path": "tool-registry.schema.json", "reason": "duplicate public error envelope must enforce exactly the 53 registered codes; no valid public tool schema or success shape changes"}
+    ],
+    "required_unchanged_hashed_leaves_count": 10,
+    "required_unchanged_hashed_leaves_absent_separately_ratified_drift": [
+      {"path": "allowed-paths.txt", "reason": "no new path; exact allowed-path count remains 40"},
+      {"path": "error-fixture.json", "reason": "same 53 codes, 34 aliases, projections, retry flags, and visibility values; R15 narrows owner-only meaning without changing these stored registry tuples"},
+      {"path": "hosted-artifact-inventory.json", "reason": "same eleven mandatory artifact names and retention contract"},
+      {"path": "limits.schema.json", "reason": "existing frozen numeric ceilings already contain the retained 16 policy reasons, 64-byte identifiers, bucket capacities/refills, 4096 selector cap, 24-hour idempotency, snapshot and retention limits"},
+      {"path": "platform-matrix.json", "reason": "no platform claim or required/optional lane selection changes"},
+      {"path": "platform-matrix.schema.json", "reason": "no platform schema change"},
+      {"path": "protected-paths.txt", "reason": "zero protected-path change remains required"},
+      {"path": "tool-registry.json", "reason": "the exact seven required tool entries, sixteen deferred entries, ordered public policy/dependency arrays, public schemas, tool names, and success semantics remain unchanged"},
+      {"path": "transport.json", "reason": "MCP 2025-11-25, native stdio, loopback Streamable HTTP, and nine-stage admission declarations remain unchanged"},
+      {"path": "transport.schema.json", "reason": "no transport, admission-order, method, status, or projection decision changes"}
+    ],
+    "manifest_not_self_hashed_but_required_to_change": {
+      "path": "pack-manifest.json",
+      "reason": "regenerate last, keep non-self-listing, retain 33 hashed leaves/34 total files, and replace every affected size/hash plus generation_input_digest, generator_digest, and aggregate_digest"
+    },
+    "transitive_hash_changes": [
+      "all 23 changed leaf SHA-256 and size entries",
+      "pack-manifest.json SHA-256 and byte length",
+      "generation_input_digest",
+      "generator_digest",
+      "aggregate_digest",
+      "deterministic USTAR archive SHA-256 and byte length",
+      "successor input commit and hosted run coordinates",
+      "qualification receipt and terminal audit digests",
+      "every Full consumer hash and the future Lite FULL-PIN/pack hash ledger"
+    ],
+    "count_invariants": {
+      "total_pack_files": 34,
+      "manifest_hashed_leaves": 33,
+      "allowed_paths": 40,
+      "new_product_paths": 0,
+      "normalized_tables": 16,
+      "operations": 32,
+      "owner_only_operations": 24,
+      "public_authenticated_operations": 7,
+      "local_bootstrap_operations": 1,
+      "errors": 53,
+      "required_mcp_tools": 7,
+      "deferred_mcp_entries": 16,
+      "official_mcp_vectors": 67,
+      "core_operation_vectors": 8,
+      "restore_bootstrap_recovery_vectors": 10,
+      "combined_non_mcp_core_vectors": 18
+    }
+  },
+  "public_mcp_determination": {
+    "public_mcp_tool_name_change": false,
+    "public_mcp_catalog_membership_change": false,
+    "public_mcp_required_or_deferred_count_change": false,
+    "public_mcp_input_semantic_change": false,
+    "public_mcp_success_result_semantic_change": false,
+    "public_mcp_transport_or_admission_change": false,
+    "public_error_registry_count_or_valid_code_change": false,
+    "public_error_projection_change": false,
+    "public_error_envelope_field_change": false,
+    "public_schema_bytes_change": true,
+    "public_fixture_bytes_change": true,
+    "exact_public_schema_correction": "tool-registry.schema.json#/$defs/error_envelope currently has the correct six fields but admits any pattern-matching GKOS_P6_* error_code. D015-DC01 requires it to admit exactly the same 53 codes as the closed registry. This rejects contract-invalid codes; it does not remove or alter any valid public behavior.",
+    "exact_public_fixture_correction": "mcp-conformance-fixture.json preserves all 67 official IDs and their wire semantics while adding closed core_vector_id/cursor aliases and exact executable expected-byte evidence.",
+    "six_field_public_envelope_preserved": [
+      "contract_version",
+      "error_code",
+      "request_id",
+      "retryable",
+      "retry_after_ms",
+      "error_digest"
+    ],
+    "transport_preserved": [
+      "native_stdio",
+      "loopback_streamable_http",
+      "MCP protocol 2025-11-25",
+      "nine ordered HTTP predispatch stages",
+      "null public request_id for all predispatch stages 1 through 9"
+    ],
+    "separate_mcp_reviewer_required_before_successor_f1_correction": false,
+    "reason_no_pre_correction_mcp_reviewer": "The owner resolution and already-ratified D0 close the public envelope and registry exactly; this review resolves the only public schema seam as enforcement of existing semantics. There is no unresolved public choice.",
+    "separate_mcp_reviewers_still_required_later": [
+      "fresh independent MCP reviewer for governed Full F3",
+      "fresh independent MCP reviewer for governed Lite L2"
+    ],
+    "automatic_stop_and_new_mcp_decision_trigger": "Any successor correction that changes a required/deferred name or count, tool input, successful result, valid error code/projection/envelope, MCP expected wire bytes, protocol version, HTTP admission ordering/status, stdio/HTTP availability, or the official 67 IDs is outside this concurrence and requires stop, owner resolution, and a separate independent MCP review."
+  },
+  "current_lite_admission_verification": {
+    "commit": "ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2",
+    "clean_exact_head": true,
+    "phantom_mcp_claim_removed": true,
+    "current_generated_snippets": [
+      "/health",
+      "/notes",
+      "/graph",
+      "/graphiti/episodes"
+    ],
+    "current_snippet_transport": "authenticated GET-only legacy REST examples",
+    "current_mcp_route_claim": "The sidecar does not expose MCP and /mcp returns 404.",
+    "sensitivity_access_claim_removed": true,
+    "current_sensitivity_claim": "Sensitivity classifies records and fails closed when missing or invalid, but does not filter bearer-authenticated legacy REST responses.",
+    "permitted_mcp_mentions": "Negative truth statements and the historical Phase-0 compatibility fixture/evidence remain; current generated snippets and current instructions do not advertise /mcp.",
+    "phase6_boundary": "The legacy REST API is not Phase-6 authority and must not be reused or relabeled as the governed MCP facade. Full F3 owns the new facade after its accepted predecessors.",
+    "required_disposition": "Do not edit, copy a Phase-6 pack, or create/replace a Phase-6 Full pin at ce809 before the successor Full contract/authority/facade/adversarial/evidence path is accepted through hosted-green F5."
+  },
+  "required_future_lite_gates": [
+    {
+      "order": 1,
+      "gate": "SUCCESSOR_FULL_PRECORRECTION_CONCURRENCE",
+      "requirements": [
+        "owner resolution SHA 07a257bc5cb37ffaa7c9fe61c1b46179fee946cc02643216aa0e0c6eb51e40b8 remains exact",
+        "fresh Full-contract, Lite-conformance, migration, security, and authority/concurrency concurrences accept the same correction boundary",
+        "no implementation begins from this concurrence alone"
+      ]
+    },
+    {
+      "order": 2,
+      "gate": "SUCCESSOR_FULL_F1",
+      "requirements": [
+        "generate the corrected 34-file/33-hashed-leaf pack from ratified sources",
+        "strict schema and meta-schema compile/validation",
+        "all 67 official MCP vectors retain their IDs and valid expected semantics",
+        "eight core-operation plus ten restore/bootstrap recovery vectors are executable",
+        "deterministic reproduction and exact manifest/hash verification",
+        "new acyclic input-commit to hosted-run to evidence-closeout chain",
+        "all eleven mandatory hosted artifacts and ordinary CI green",
+        "fresh zero-contribution F1 independent acceptance and Product Owner acceptance of one exact successor SHA"
+      ]
+    },
+    {
+      "order": 3,
+      "gate": "FULL_F2_THROUGH_F5",
+      "requirements": [
+        "new explicit F2 authorization against the accepted successor F1 SHA and review digest",
+        "independently accepted Full F2 authority engine",
+        "independently reviewed Full F3 MCP facade",
+        "accepted Full F4 adversarial/security qualification",
+        "hosted-green, independently accepted Full F5 with exact reciprocal Lite handoff"
+      ]
+    },
+    {
+      "order": 4,
+      "gate": "LITE_L1_COPY_AND_PIN",
+      "requirements": [
+        "start from exact clean Lite admission ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2 or an explicitly owner-adopted successor admission coordinate",
+        "copy the entire accepted Full contract pack byte-for-byte, including all 33 hashed leaves and pack-manifest.json",
+        "create the exact FULL-PIN binding the accepted Full F5 SHA plus the accepted F1 pack manifest, run, artifact ledger, and verdict digest",
+        "verify every file name, byte count, SHA-256, manifest aggregate/generation/generator digest, and deterministic archive digest",
+        "keep the verifier crate-private, inert, and non-authoritative",
+        "add no service, filesystem writer, provider authority, effect authority, or ordinary dependency drift",
+        "obtain fresh zero-contribution Full-conformance review of exact L1 bytes and pin"
+      ]
+    },
+    {
+      "order": 5,
+      "gate": "LITE_L2_PUBLIC_WRAPPER",
+      "requirements": [
+        "expose only the seven required public tools and identical Full public states/errors/denials",
+        "preserve sixteen deferred entries and all successful input/result semantics",
+        "do not reuse legacy /notes or /graph sensitivity metadata as Phase-6 access control",
+        "fresh independent MCP reviewer accepts exact Full/Lite behavior"
+      ]
+    },
+    {
+      "order": 6,
+      "gate": "LITE_L3_ADVERSARIAL_PARITY",
+      "requirements": [
+        "replay Full negatives, exact error bytes, aliases, bounds, races, redaction, migration/restore, restart, collision, and pin-failure behavior",
+        "prove 67 official MCP vector identity and eight-plus-ten non-MCP vector coverage",
+        "no weakened denial, schema acceptance, or secret/non-enumeration behavior"
+      ]
+    },
+    {
+      "order": 7,
+      "gate": "LITE_L4_PLATFORM_AND_EVIDENCE",
+      "requirements": [
+        "run the frozen Lite Rust/Node/desktop/platform/linkage/package matrices",
+        "verify all-and-only artifacts and exact Full reciprocal review",
+        "signed+DCO clean closeout",
+        "fresh independent evidence review and Product Owner acceptance before any later integration authority"
+      ]
+    }
+  ],
+  "attachment_guide_and_handoff_disposition": {
+    "attachment_hashes_verified": [
+      {"path_label": "1-Untitled.md", "bytes": 16750, "sha256": "2be0b2edaa6b0f515e8f2fbe3e38c038ca57bcf6eade2c19de7f12492ad9be27"},
+      {"path_label": "2-Untitled-2.md", "bytes": 35299, "sha256": "0cd3b43e8ea2d56d928cba9700cdf09d53d7ef31e94500f8ee0ee29134147a41"},
+      {"path_label": "3-Untitled-1.md", "bytes": 13703, "sha256": "0a7f5a0e2c0e439739196fdc7519434fc8b018f441822b599e423cea1527e59b"}
+    ],
+    "historical_coordinates": {
+      "full": "7b5262baee9fcda23d50b0cee0c4977d6e4305e7",
+      "lite": "a39f14d1394e3dd8f8dada8bec77bd995b1a0bc4"
+    },
+    "current_coordinates": {
+      "phase6_entry_full": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+      "historically_accepted_f1": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+      "lite_admission": "ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2"
+    },
+    "assessment": "The attachments correctly identify the historical phantom /mcp and sensitivity/access-claim defects and prescribe Full-first then Lite conformance, but their Phase-5 baselines and embedded authorization language are historical evidence only. They do not change the D0-15 selections, successor-F1 correction map, F2 stop, Full F3 dependency, Full-F5-before-L1 rule, or later independent gates.",
+    "downstream_gate_change": false
+  },
+  "findings": [
+    {
+      "id": "LITE-CONCURRENCE-INFO-001",
+      "severity": "INFO",
+      "status": "RESOLVED_BY_RATIFIED_CORRECTION",
+      "finding": "The accepted embedded MCP error schema is six-field but pattern-open for error_code; D015-DC01 must make it exact-53. This is a public schema-byte change but not a new valid public semantic or unresolved MCP decision."
+    },
+    {
+      "id": "LITE-CONCURRENCE-INFO-002",
+      "severity": "INFO",
+      "status": "PRESERVATION_GATE",
+      "finding": "The 67-ID MCP fixture must change bytes for aliases and executable expected-byte evidence without renumbering or altering valid wire expectations."
+    },
+    {
+      "id": "LITE-CONCURRENCE-INFO-003",
+      "severity": "INFO",
+      "status": "PRESERVATION_GATE",
+      "finding": "Lite ce809 is an admission coordinate, contains no Phase-6 identity pack or pin, and must remain untouched until accepted hosted-green Full F5 hands off the corrected pack."
+    }
+  ],
+  "severity_summary": {
+    "blocker": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "info": 3,
+    "unresolved_public_behavior": 0
+  },
+  "final_gate": {
+    "concurrence": "ACCEPT_CONCURRENCE",
+    "successor_f1_correction_may_begin_from_this_record_alone": false,
+    "f2_may_restart": false,
+    "lite_may_start_l1": false,
+    "separate_pre_correction_mcp_reviewer_required": false,
+    "historical_f1_may_be_reused_to_qualify_changed_bytes": false,
+    "current_lite_may_be_edited_or_repinned_now": false
+  }
+}

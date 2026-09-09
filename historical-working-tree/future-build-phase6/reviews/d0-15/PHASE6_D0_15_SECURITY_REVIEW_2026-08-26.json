@@ -1,0 +1,672 @@
+{
+  "artifact_type": "phase6_d0_15_independent_security_concurrence_review",
+  "schema_version": "1.0.0",
+  "review_id": "PHASE6-D0-15-SECURITY-REVIEW-2026-08-26",
+  "reviewed_at_utc": "2026-08-26T08:37:34.290Z",
+  "reviewer": {
+    "identity": "/root/phase6_security_reviewer",
+    "role": "fresh_independent_d0_15_credential_security_reviewer",
+    "review_mode": "READ_ONLY_PRODUCT_AND_PROPOSALS",
+    "separation": "zero_contribution"
+  },
+  "no_contribution_attestation": {
+    "value": true,
+    "statement": "I authored no accepted F1 bytes, ratified D0 proposal or decision bytes, F2 product bytes, expected outcomes, implementation decisions, test evidence, or handoff evidence. I made no edit or commit in the product repository or proposal tree. This detached review artifact is the sole byte set authored by this reviewer. Findings and bounded correction conditions do not select any unresolved owner semantic option.",
+    "recusal": "This artifact is a required specialist review, not later package acceptance. If its recommendations are incorporated as expected outcomes, this reviewer must not be treated as the fresh independent downstream acceptor of those contributed outcomes."
+  },
+  "scope": {
+    "product_repository": "[LOCAL_PATH]",
+    "accepted_f1_commit_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "f2_stop_artifact": "[LOCAL_PATH]",
+    "f2_stop_artifact_sha256": "5d192bd3cb1ddb4f0a8a0d8148d16c605ed80fe2078b5591c2a79c258dcd52ea",
+    "reviewed_topics": [
+      "mutation intent, anchor atomicity, and predecessor bindings",
+      "owner credential one-time handoff and failed or lost handoff",
+      "locator and temporary-file physical identity and protection",
+      "restore replacement owner, abort, tombstone, and plan discovery",
+      "authentication non-enumeration, disable, revoke, rotation, and zero grace",
+      "canonical identifiers and collision handling",
+      "session, generation, auth_epoch, replay, idempotency, reference, and cursor invalidation",
+      "secret redaction and prohibition on secret-bearing JSON",
+      "global event chain and race final gate",
+      "policy and public-private dependency enforcement",
+      "retention authorization and reconstructible evidence"
+    ]
+  },
+  "input_evidence": [
+    {
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+      "bytes": 117722
+    },
+    {
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_DECISION_2026-08-25.json",
+      "sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+      "bytes": 28582
+    },
+    {
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_OPERATION_CATALOG_PROPOSAL_2026-08-25.json",
+      "sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+      "bytes": 45471
+    },
+    {
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_ERROR_REGISTRY_PROPOSAL_2026-08-25.json",
+      "sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+      "bytes": 17606
+    },
+    {
+      "path": "future-build-phase6/proposals/interface/GKOS_PHASE6_D0_INTERFACE_PROPOSAL_2026-08-25.md",
+      "sha256": "476e839fb81f2f936785a38278846d33c7a680a84069607b1188c5ca2609e427",
+      "bytes": 43542
+    },
+    {
+      "path": "future-build-phase6/proposals/interface/GKOS_PHASE6_D0_MCP_TOOL_CATALOG_PROPOSAL_2026-08-25.json",
+      "sha256": "c0ed2b963dcaef8a8bd08a427687d493bb7e85f1e26076a88a04f68b2117de7e",
+      "bytes": 12920
+    },
+    {
+      "path": "future-build-phase6/proposals/interface/GKOS_PHASE6_D0_MCP_CONFORMANCE_VECTORS_PROPOSAL_2026-08-25.json",
+      "sha256": "23f48e01f890b746012d3713b8ece8331b113927ca15ab72e9955cf03830387c",
+      "bytes": 51108
+    },
+    {
+      "path": "future-build-phase6/proposals/governance/GKOS_PHASE6_D0_GOVERNANCE_PROPOSAL_2026-08-25.md",
+      "sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+      "bytes": 31178
+    },
+    {
+      "path": "future-build-phase6/proposals/owner/GKOS_PHASE6_D0_OWNER_RATIFICATION_2026-08-25.json",
+      "sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929",
+      "bytes": 2842
+    },
+    {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_CROSS_ACCEPTANCE_2026-08-26.json",
+      "sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb",
+      "bytes": 13939
+    },
+    {
+      "path": "future-build-phase6/reviews/final/PHASE6_F1_ACCEPTANCE_GATE_2026-08-26.json",
+      "sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff",
+      "bytes": 2347
+    },
+    {
+      "path": "future-build-phase6/reviews/f2/PHASE6_F2_OWNER_AUTHORIZATION_2026-08-26.json",
+      "sha256": "e16b351f16d8fcf98d4683429764a6009e9073408bdb73c6b36e20f82d0e2118",
+      "bytes": 2336
+    },
+    {
+      "path": "future-build-phase6/reviews/implementer/PHASE6_F2_FULL_D0_15_STOP_2026-08-26.json",
+      "sha256": "5d192bd3cb1ddb4f0a8a0d8148d16c605ed80fe2078b5591c2a79c258dcd52ea",
+      "bytes": 6663
+    }
+  ],
+  "accepted_f1_schema_evidence": {
+    "mechanical_ajv_probes": [
+      {
+        "probe": "legacy_selector_gkos1_schema_valid",
+        "observed": true,
+        "security_meaning": "A noncanonical legacy selector spelling remains schema-valid."
+      },
+      {
+        "probe": "content_bearing_error_schema_valid",
+        "observed": true,
+        "security_meaning": "The accepted error schema permits free content in message and details."
+      },
+      {
+        "probe": "unknown_tool_error_code_schema_valid",
+        "observed": true,
+        "security_meaning": "The self-contained tool error envelope permits codes outside the ratified exact registry."
+      },
+      {
+        "probe": "ratified_stale_request_state_valid",
+        "observed": false,
+        "security_meaning": "The request schema cannot represent the ratified stale state."
+      },
+      {
+        "probe": "anchor_predecessor_field_representable",
+        "observed": false,
+        "security_meaning": "The closed anchor schema cannot bind the predecessor anchor required by mutation intent recovery."
+      },
+      {
+        "probe": "arbitrary_bootstrap_state_schema_valid",
+        "observed": true,
+        "security_meaning": "Bootstrap lifecycle is not a closed state machine."
+      },
+      {
+        "probe": "policy_32_reason_codes_schema_valid",
+        "observed": true,
+        "security_meaning": "The accepted schema exceeds the ratified maximum of 16 reason codes."
+      }
+    ],
+    "notable_accepted_artifacts": [
+      {
+        "path": "contracts/phase6/audit-receipt.schema.json",
+        "sha256": "d1967a7b49129774ccd15e2122da328d2a8a8da4bb82b861fe5f560ab4e9187d",
+        "bytes": 45913
+      },
+      {
+        "path": "contracts/phase6/operation-inventory.json",
+        "sha256": "2b021e831a53384e551b5719e06c469ed349a8e4888099024fa580caec58c5fc",
+        "bytes": 23609
+      },
+      {
+        "path": "contracts/phase6/error.schema.json",
+        "sha256": "9cbbd1d83decfc59859e3d6ac541e7d3ecfae25a51f21d2b2a5a31bdce832d70",
+        "bytes": 3238
+      },
+      {
+        "path": "contracts/phase6/credential-record.schema.json",
+        "sha256": "f7bfbf1ad4887e3429e96e3238c77504cada1389d798a4d6b543ac92b87227e8",
+        "bytes": 3862
+      },
+      {
+        "path": "contracts/phase6/request-record.schema.json",
+        "sha256": "71daa507a5942bce57fd02a4dc2d38044a339d45827f573829c8a7467c5b7959",
+        "bytes": 6877
+      },
+      {
+        "path": "contracts/phase6/migration-record.schema.json",
+        "sha256": "b3763d21252af01cc49d1e23fdddcaae642d97b3970b7e7923d2b6dd601fe7da",
+        "bytes": 3600
+      },
+      {
+        "path": "contracts/phase6/bootstrap-migration.schema.json",
+        "sha256": "e4962ba09df469091bf8e66067c44dbab353ca4a64318264d2b337c5bb3cd15d",
+        "bytes": 897
+      }
+    ]
+  },
+  "verdict": {
+    "value": "CONCUR_CORRECTION_REQUIRED",
+    "severity": "BLOCKER",
+    "concurrence_scope": "Concur only that the F2 stop is necessary. Do not concur with the accepted F1 security completeness, current F2 implementation, F2 resumption, or any later acceptance.",
+    "implementation_authorized": false,
+    "f2_resume_authorized": false,
+    "basis": "Ratified D0 semantics are materially unrepresentable in accepted F1 schemas and vectors, and the stopped F2 draft contains independent implementation-only P0 security failures. The stop artifact is directionally correct but incomplete."
+  },
+  "accepted_f1_contract_findings": [
+    {
+      "id": "F1-SEC-001",
+      "severity": "BLOCKER",
+      "title": "Anchor and mutation-intent protocol is not representable",
+      "evidence": [
+        "Ratified core sections defining common events, anchor fields, exact mutation intent, and startup recovery: lines 210-278, especially 218-242 and 262-278.",
+        "Accepted audit-receipt.schema.json defines one closed authority_anchor object without predecessor anchor, old and proposed heads, expected committed anchor digest, proposed event or database digests, database header/candidates, or state-discriminated intent fields.",
+        "Mechanical probe anchor_predecessor_field_representable=false."
+      ],
+      "impact": "A conforming implementation cannot prove the three durable points, decide exact old/new/intent startup cases, or reject a forked predecessor without inventing off-contract data.",
+      "bounded_contract_correction": "Version the F1 contract and define separate closed schemas for committed anchor, mutation intent, and startup reconciliation evidence. Bind old and proposed authority generations, sequence heads, event IDs/digests, database digest/header, predecessor anchor digest, expected committed anchor digest, canonical filename, physical identity and protection evidence, and exact publication booleans. Use oneOf by durable state and forbid unknown properties.",
+      "mandatory_vectors": [
+        "ANCHOR-INTENT-001 through ANCHOR-INTENT-009 covering every crash point and old/new/intent combination",
+        "predecessor mismatch and simultaneous database/event/anchor drift",
+        "noncanonical filename, duplicate or extra intent, symlink or hardlink alias, and protection mismatch"
+      ]
+    },
+    {
+      "id": "F1-SEC-002",
+      "severity": "BLOCKER",
+      "title": "Restore replacement-owner, abort, tombstone, and recovery discovery are underbound",
+      "evidence": [
+        "Ratified standard restore, plan, temporary file, recovery, abort, and vectors: core lines 280-407.",
+        "Accepted restore_event is a flat object, not a state-discriminated oneOf, and omits pre-restore credential and request coordinates, backup identifier and candidate digest, replacement owner agent/credential/auth_epoch/locator binding, invalidated aggregates, and restored database digest.",
+        "Accepted restore-abort result lacks abandoned credential identity/digest, exact temp physical identity/content/protection/owner/type/no-link, disposition, abort intent, and exact false publication flags.",
+        "The exact 32-operation inventory requires a server-generated restore_plan_id for abort but exposes no restore-plan inspect, status, or discovery result after a lost response."
+      ],
+      "impact": "A client cannot recover a plan identifier after an ambiguous failure, and receipts cannot prove that a restore replaced all authority rather than producing a hybrid or falsely publishing an abort.",
+      "bounded_contract_correction": "Add closed PREPARED, PUBLISHED, ABORT_INTENT, ABORTED, and recovery schemas with the ratified before/after coordinates and exact physical evidence. Add a bounded, authenticated plan-discovery mechanism without silently expanding the 32-operation surface; the owner must select whether an existing status result is extended, a new operation is ratified, or the plan identifier becomes client-known before effects. Pair every abandoned plan with durable abort intent and externally discoverable tombstone evidence.",
+      "mandatory_vectors": [
+        "RESTORE-OWNER-001 through RESTORE-OWNER-009",
+        "lost prepare response followed by plan discovery and safe abort or continuation",
+        "exactly one replacement owner and denial of all old credentials, sessions, references, and idempotency replays",
+        "temp absent, corrupt, wrong physical identity, alias, unsafe preservation, exact deletion, and tombstone crash recovery"
+      ],
+      "owner_decision_required": "Choose the plan-discovery mechanism and the exact states in which abort remains callable, including locator disposition after staging."
+    },
+    {
+      "id": "F1-SEC-003",
+      "severity": "BLOCKER",
+      "title": "Prospective retention policy and purge evidence are not reconstructible",
+      "evidence": [
+        "Ratified retention requirements: core lines 970-988.",
+        "Accepted authority_meta has no current retention days or effective_from fields; set-retention receipts expose only an opaque after digest.",
+        "Sessions, requests, and policy records have no source event sequence, yet purge evidence requires truthful first and last deleted sequence."
+      ],
+      "impact": "An auditor cannot determine which prospective retention rule applied or verify the deletion sequence range; implementations are pushed toward retroactive deletion or fabricated sequence evidence.",
+      "bounded_contract_correction": "Without adding a seventeenth table, add current retention values and effective_from to authority_meta; put explicit before/after retention values and effective time in the setting receipt; add a monotonic retention_sequence to each purgeable record class, with activity_seq serving activity; specify owner or trusted-scheduler authorization and anchor-intent atomicity for every purge batch.",
+      "mandatory_vectors": [
+        "owner and trusted-scheduler authorization and denial",
+        "prospective policy changes across UTC-day boundaries",
+        "complete UTC-day deletion only and active-record protection",
+        "true first/last sequence and digest, 24-hour idempotency minimum, and crash recovery"
+      ],
+      "owner_decision_required": "Approve the source-sequence and policy-history representation while retaining exactly sixteen authority tables."
+    },
+    {
+      "id": "F1-SEC-004",
+      "severity": "BLOCKER",
+      "title": "Accepted error schemas contradict the exact closed, non-content-bearing envelope",
+      "evidence": [
+        "Ratified exact envelope and credential non-enumeration: core lines 52-125, especially 54-57 and 81-84.",
+        "Accepted error.schema.json requires code, message, and details and omits error_code and error_digest; a content-bearing instance validates.",
+        "The self-contained tool-registry error schema uses a pattern rather than the exact 53-code registry; an unknown code validates."
+      ],
+      "impact": "Paths, SQL, stack fragments, handoff errors, credentials, or subject data can cross a public boundary, and Lite/MCP clients cannot depend on byte-identical closed errors.",
+      "bounded_contract_correction": "Replace every duplicate error schema with the same closed canonical envelope and exact registry enum, prohibit message/details and all arbitrary strings, bind error_digest computation, and require every adapter, filesystem, SQLite, handoff, and unknown exception to map through one redacting closure before serialization.",
+      "mandatory_vectors": [
+        "malformed, missing, unknown, selector-mismatch, wrong-digest, disabled, and revoked credentials with byte-identical responses",
+        "unknown, expired, closed, and terminated session responses with byte-identical public bytes where ratified",
+        "arbitrary thrown path, SQL, stack, handoff, and platform errors proving no content escape"
+      ],
+      "cross_role_implication": "Requires a fresh Full contract steward and a separate Lite-conformance reviewer; this security review cannot clear protocol, catalog, or error ownership."
+    },
+    {
+      "id": "F1-SEC-005",
+      "severity": "BLOCKER",
+      "title": "Bootstrap and migration lifecycle schemas drift from the ratified exact state machine",
+      "evidence": [
+        "Ratified lifecycle and exact migration states: core lines 416-480 and 1127-1202.",
+        "Accepted migration states use DB_PUBLISHED, LEGACY_REMOVED, and RECOVERY_REQUIRED while omitting DB_COMMITTED, ANCHOR_COMMITTED, LEGACY_ACTIVE, LEGACY_REVOKED, and BLOCKED.",
+        "Accepted authority_meta bootstrap_state and lifecycle fields admit arbitrary strings, and no closed external migration-plan schema binds owner proof, source physical identity/protection, owner locator identity/content/protection, or predecessor anchor."
+      ],
+      "impact": "Crash recovery and rollback cannot be validated against one deterministic state machine, and an implementation may report or skip unratified intermediate states.",
+      "bounded_contract_correction": "Replace the drifted enumerations with the exact ratified states and transition guards. Define closed plan, state, rollback, and blocked evidence schemas binding source and destination physical identities, protection, owner proof, locator content, predecessor, database and anchor publication, and exact rollback outcome.",
+      "mandatory_vectors": [
+        "BOOTSTRAP-LOCATOR-ROLLBACK-001 and each ratified migration crash state",
+        "failed or lost handoff at each durable point without re-reveal",
+        "legacy optional-LF canonicalization, alias, link, protection, ownership, and outside-tree rejection"
+      ],
+      "cross_role_implication": "The corrected transition system requires separate fresh migration-reviewer concurrence as well as security concurrence."
+    },
+    {
+      "id": "F1-SEC-006",
+      "severity": "BLOCKER",
+      "title": "Credential record and one-time handoff evidence are insufficient, with an unresolved sole-owner rotation contradiction",
+      "evidence": [
+        "Ratified bootstrap, credential, collision, and rotation requirements: core lines 416-480 and 744-844.",
+        "Accepted credential schema does not couple credential prefix, format, and digest algorithm and does not discriminate active versus revoked nullability.",
+        "Issue and rotation results expose only a boolean secret_revealed rather than durable locator, physical identity, content digest, protection, ownership, one-time delivery binding, and failed-delivery evidence.",
+        "D0 simultaneously requires old credential revocation before handoff, zero grace, no re-reveal, and recovery from a lost new secret by rotating again. If the revoked credential was the sole active owner credential, the owner has no authenticated path to rotate again."
+      ],
+      "impact": "The handoff cannot be audited and the sole-owner lost-delivery case can permanently lock out the authority while all individual clauses appear locally satisfied.",
+      "bounded_contract_correction": "Add closed credential-state and handoff evidence schemas with prefix/format/digest coupling, active/revoked constraints, locator and physical identity/protection bindings, delivery outcome, and no-secret fields. Do not resolve the sole-owner case in implementation: ratify one of a second active owner prerequisite, an explicit independent recovery authority, or a revised sequencing/grace/versioned protocol.",
+      "mandatory_vectors": [
+        "prior active credentials remain usable after additional credential issuance",
+        "old sessions stale at the required epoch transition",
+        "rotation zero grace, first delivery true, replay false, postcommit failed delivery false",
+        "sole-owner lost handoff for every owner-selected resolution"
+      ],
+      "owner_decision_required": "Resolve the sole-owner rotation and lost-handoff contradiction."
+    },
+    {
+      "id": "F1-SEC-007",
+      "severity": "BLOCKER",
+      "title": "Request, reference, session, idempotency, and cursor invalidation are not fully representable",
+      "evidence": [
+        "Ratified session, generation, race, and invalidation rules: core lines 990-1066.",
+        "Accepted request-record.schema.json omits the ratified stale state.",
+        "There is no closed reference binding schema for session, agent, auth_epoch, authority_generation, policy, physical target, process/write-gate state, and expiry.",
+        "Page-snapshot schemas do not prove persisted redacted entries or explicitly bind every policy/physical/scope/time/state coordinate, so a supposedly durable cursor cannot be validated after restart."
+      ],
+      "impact": "Old references or idempotent requests can cross a credential, policy, restore, or process boundary; cursor semantics after restart are undefined.",
+      "bounded_contract_correction": "Add stale to the exact request state machine; define closed reference, replay, and page-snapshot records with all binding coordinates and invalidation causes; explicitly specify restore invalidation and 24-hour idempotency expiry. Either persist bounded redacted snapshot entries inside the existing schema/table allocation or state that restart invalidates cursors and revise D0 accordingly.",
+      "mandatory_vectors": [
+        "cross-session, cross-agent, cross-auth_epoch, cross-generation, cross-policy, cross-physical-target, cross-process, write-gate, expiry, and restart reference rejection",
+        "old restore request and idempotency replay denial under the replacement owner",
+        "cursor canonicalization, expiry, restart behavior, and per-agent capacity"
+      ],
+      "owner_decision_required": "Choose persisted bounded page-snapshot materialization or explicit restart invalidation."
+    },
+    {
+      "id": "F1-SEC-008",
+      "severity": "BLOCKER",
+      "title": "The global event chain is syntactically open and semantically underbound",
+      "evidence": [
+        "Ratified common event and global chain requirements: core lines 210-242, 959-968, and 1709-1734.",
+        "Accepted event_kind and target fields are generic strings and are not conditionally coupled to action, actor, target, epochs, authority coordinates, or idempotency.",
+        "No accepted schema represents globally unique event ID and sequence across all event tables or binds the bootstrap genesis aggregate and restore history floor."
+      ],
+      "impact": "Per-table valid events may still alias, fork, misattribute an actor or target, or create multiple histories with the same identifiers.",
+      "bounded_contract_correction": "Define a single closed event discriminated union shared by all tables, with action-specific actor/target/epoch/idempotency requirements, global ID and sequence constraints, predecessor and digest coupling, genesis aggregate, restore floor, and explicit table-kind correspondence.",
+      "mandatory_vectors": [
+        "cross-table duplicate sequence or event ID",
+        "gap, fork, wrong table-kind alias, wrong generation or epoch, and wrong predecessor",
+        "bootstrap genesis and restore history floor without permitting a second genesis"
+      ]
+    },
+    {
+      "id": "F1-SEC-009",
+      "severity": "BLOCKER",
+      "title": "Policy capability sets, private dependencies, transport, mapping authentication, and metadata redaction are not closed",
+      "evidence": [
+        "Ratified policy, future authenticated mapping, and activity metadata: core lines 922-968 and D0-15 invariants 1709-1734.",
+        "The operation inventory has one policy_capability although several operations require multiple policy_operations and ordered private dependencies.",
+        "Mapping.add accepts a raw external_subject although D0 reserves mapping to a future authenticated adapter; authenticated_by is an arbitrary string.",
+        "Policy reason_codes permits 32 rather than 16 and lacks the complete ASCII/canonical-order constraints.",
+        "Activity metadata property names are bounded but values remain generic integer/string/null, allowing content in cache_outcome or side_effect_class."
+      ],
+      "impact": "A public operation can be authorized for only part of its effects, an owner_cli-only path can be confused with private authority, unauthenticated external subjects can be bound, and content can leak through audit metadata.",
+      "bounded_contract_correction": "Represent ordered policy-operation arrays and exact required private dependencies for every public tool; separate invocation transport from authorization class; define an authenticated mapping adapter namespace, evidence, and unavailable behavior; cap reason codes at 16 with canonical ASCII values and order; replace metadata free strings with closed enums or non-content-bearing digests.",
+      "mandatory_vectors": [
+        "deny, indeterminate, timeout, and each multi-capability operation",
+        "missing, reordered, duplicated, or externally invoked private dependency",
+        "owner_cli-only transport rejection from public/private tool surfaces",
+        "mapping unavailable without authenticated adapter and authenticated namespace mismatch",
+        "metadata attempts containing credential, path, subject, SQL, stack, or arbitrary user content"
+      ],
+      "owner_decision_required": "Ratify whether mapping operations are callable before the authenticated adapter exists and the exact non-content value domains for activity metadata."
+    },
+    {
+      "id": "F1-SEC-010",
+      "severity": "BLOCKER",
+      "title": "Accepted conformance vectors are descriptive shells rather than executable security cases",
+      "evidence": [
+        "The accepted conformance schema contains only generic id, expect, and assertions fields.",
+        "Four security, four migration, and four race fixtures collapse many preconditions into prose and do not carry exact input bytes, initial durable state, injected failure, expected mutation set, public error bytes, or post-state.",
+        "Ratified RESTORE-OWNER-001 through RESTORE-OWNER-009 and BOOTSTRAP-LOCATOR-ROLLBACK-001 are absent as executable fixtures."
+      ],
+      "impact": "Green schema validation proves fixture shape, not non-enumeration, atomicity, redaction, no-mutation, or crash recovery.",
+      "bounded_contract_correction": "Version the vector schema with closed initial_state, exact request bytes, injected entropy and failure schedule, expected canonical response bytes, allowed and forbidden mutations, durable post-state digests, restart step, and expected error. Materialize each security requirement as a separate executable vector rather than a prose assertion list.",
+      "mandatory_vectors": [
+        "all anchor, bootstrap, credential, restore, event, race, policy, retention, reference, cursor, and redaction families listed in this review",
+        "byte-equivalence cases as individual inputs rather than one combined assertion"
+      ]
+    },
+    {
+      "id": "F1-SEC-011",
+      "severity": "BLOCKER",
+      "title": "Canonical identifier and collision failure behavior lacks complete contract and vectors",
+      "evidence": [
+        "Ratified collision and canonical identifier rules: core lines 744-844, especially 795-798.",
+        "Accepted schemas admit at least one legacy noncanonical selector spelling.",
+        "No accepted negative vector injects UUID, credential selector/full-digest, mapping ID/subject-digest, reference, request, event, or plan collisions and proves no retry, no overwrite, and no partial mutation.",
+        "The registry lacks a clearly dedicated cryptographic external-subject mapping collision outcome."
+      ],
+      "impact": "Retry or overwrite can conceal compromised entropy, aliases can bypass equality and rate keys, and mapping collisions can be misreported as ordinary ownership conflicts.",
+      "bounded_contract_correction": "Close every canonical encoding to one byte spelling and attach exact decode/re-encode rejection. Define collision outcomes for each identifier class, including a ratified mapping digest collision disposition, and require injected entropy to be consumed once with no retry or overwrite.",
+      "mandatory_vectors": [
+        "injected first-call UUID collision for every generated identifier class with entropy-call count exactly one",
+        "credential selector collision and full-digest collision",
+        "mapping ID and external-subject digest collision",
+        "base32, base64url, UUID case, padding, whitespace, optional-LF, and legacy-prefix aliases"
+      ],
+      "owner_decision_required": "Choose whether a mapping cryptographic collision uses a newly ratified code or a precisely narrowed existing code; ordinary MAPPING_CONFLICT is not sufficient without an explicit distinction."
+    }
+  ],
+  "f2_draft_implementation_only_p0_findings": [
+    {
+      "id": "F2-P0-001",
+      "title": "No mutation-intent protocol or atomic predecessor-bound anchor publication",
+      "evidence": "src/identity-authority/operations.ts writes a committed anchor after database mutations; startup mutates the database and checkpoints before validating exact old/new/intent cases, accepts noncanonical JSON, and enumerates arbitrary intent-like files.",
+      "required_before_requalification": "Implement the corrected F1 three-durable-point state machine and crash matrix; no mutation may precede durable intent, and startup may not repair before exact validation."
+    },
+    {
+      "id": "F2-P0-002",
+      "title": "Filesystem inspection and mutation have TOCTOU and physical-identity gaps",
+      "evidence": "src/identity-authority/filesystem.ts inspects a handle then rereads or removes by path; stale lease takeover removes without binding the inspected identity; link, owner/SID, ACL, WAL/SHM, and parent protection are not fully proven.",
+      "required_before_requalification": "Use handle-bound no-follow inspection and mutation, exact file identity recheck, owner and platform protection proof, link-count/type proof, and file plus parent durability."
+    },
+    {
+      "id": "F2-P0-003",
+      "title": "Authentication enumerates disabled and revoked principals and public errors are not closed",
+      "evidence": "operations.ts returns CREDENTIAL_REVOKED and AGENT_DISABLED to credential presenters; auth-failure buckets are absent; closedFault is defined but not the mandatory outer boundary, so adapter, SQLite, filesystem, and handoff errors may escape content.",
+      "required_before_requalification": "Use byte-identical non-enumerating authentication failures, constant-work dummy comparison, atomic auth-failure rate buckets, and one exhaustive non-content error closure. Do not label ordinary failed delivery as GKOS_P6_SECRET_EXPOSURE."
+    },
+    {
+      "id": "F2-P0-004",
+      "title": "Bootstrap handoff, locator protection, and migration recovery are not the ratified protocol",
+      "evidence": "Bootstrap accepts an inherited handle where the protected locator is mandatory; it does not prove terminal/SID/owner/nonredirect or bind the challenge and handoff to exact physical identity/content/protection; the legacy token location and optional-LF handling drift, and exact migration states are skipped.",
+      "required_before_requalification": "Implement the corrected closed handoff and migration state machine with no re-reveal, exact locator proof, recovery, rollback, and blocked states."
+    },
+    {
+      "id": "F2-P0-005",
+      "title": "Credential epoch logic silently disables prior active credentials and stale sessions are not resealed",
+      "evidence": "credential.issue increments agent auth_epoch while authenticate requires credential.auth_epoch_issued to equal current, contradicting the advertised allowance of multiple active credentials. Disable, mapping, and credential mutations update session stale state without recomputing seals, producing restart corruption.",
+      "required_before_requalification": "Define and implement the owner-approved epoch model, preserve all valid active credentials, invalidate the required sessions, and atomically reseal every mutated durable record."
+    },
+    {
+      "id": "F2-P0-006",
+      "title": "Policy, dependencies, transport, and final gate are largely bypassed",
+      "evidence": "withRequest records allow without a real deny/indeterminate policy engine; multi-capability and ordered private dependencies are not enforced; owner_cli-only transport is ignored; the public final gate does not re-evaluate policy, recovery, physical binding, and current principal state.",
+      "required_before_requalification": "Enforce the corrected per-operation policy arrays, private dependency order, transport allowlists, and a transactionally bound final gate immediately before result publication."
+    },
+    {
+      "id": "F2-P0-007",
+      "title": "Reference, cursor, restore, and idempotency invalidation are incomplete",
+      "evidence": "The process-local ReferenceVault omits agent/auth_epoch/generation/policy/physical/write-gate bindings; resolve does not requalify; references survive restore; cursor entries are memory-only; idempotency expiry is not enforced and restore leaves old replay records usable.",
+      "required_before_requalification": "Bind and requalify all corrected coordinates, invalidate at every ratified boundary, enforce 24-hour expiry and IDEMPOTENCY_EXPIRED, and implement the owner-selected restart cursor semantics."
+    },
+    {
+      "id": "F2-P0-008",
+      "title": "Restore constructs a hybrid database and emits false publication evidence",
+      "evidence": "Restore validates only partial backup shape and owner existence, deletes only selected current tables, imports only a subset, and does not atomic-swap a fully verified candidate. Old requests, audit, policy, rates, idempotency, and process references survive; event and digest claims do not match the hybrid durable result.",
+      "required_before_requalification": "Build, fully validate, fsync, and atomic-swap one complete candidate; prove exactly one replacement owner, close and invalidate all pre-restore authority, set the event floor, and emit only evidence derived from the published bytes."
+    },
+    {
+      "id": "F2-P0-009",
+      "title": "Restore abort has no durable intent, exact temp disposition, or crash-reconciled tombstone",
+      "evidence": "Abort hardcodes deleted_exact while deleting only a plan record, does not bind expected temp identity, cannot preserve unsafe objects, and provides no durable ABORT_INTENT, external ABORTED tombstone, startup reconciliation, or proof that database and anchor were not published.",
+      "required_before_requalification": "Implement the corrected state-specific abort protocol and plan discovery after owner ratification."
+    },
+    {
+      "id": "F2-P0-010",
+      "title": "Backup publication lacks the ratified atomic physical protocol",
+      "evidence": "The draft uses VACUUM INTO and does not prove SQLite backup-API semantics, no-follow/no-replace publication, exact destination identity/protection, fsync of file and parent, or request/effect atomicity; manifests do not match accepted schemas.",
+      "required_before_requalification": "Use the ratified backup API and physical publication protocol with mutation intent, exact manifest fields, failure cleanup, and durable request/effect reconciliation."
+    },
+    {
+      "id": "F2-P0-011",
+      "title": "Request admission, effects, finalization, races, and capacity are not transactionally coherent",
+      "evidence": "Admission policy/request/session writes and final request/activity writes span transactions; there is no durable capacity reservation; process-local concurrency is bypassed by another process or restart; cancellation is not integrated with effect commit; unrelated generation change handling and final response coordinates are incomplete.",
+      "required_before_requalification": "Implement all ratified before/after-final-gate races with durable reservations and atomic state/effect/result transitions, including multiprocess and restart execution."
+    },
+    {
+      "id": "F2-P0-012",
+      "title": "Rate and global capacity controls are bypassable",
+      "evidence": "Request buckets are keyed per operation rather than the required aggregate; auth-failure buckets and selector limits are absent; wall/monotonic divergence, effective_now, restart reconstruction, atomic bucket writes, and multiple global caps are not implemented.",
+      "required_before_requalification": "Implement every ratified bucket and cap with canonical keys, atomic admission, restart semantics, and exact boundary tests."
+    },
+    {
+      "id": "F2-P0-013",
+      "title": "Event, receipt, database, and record integrity checks are incomplete or false",
+      "evidence": "Global event IDs and kinds are not checked across event tables; startup omits duplicate, fork, full-coordinate, integrity_check, foreign_key_check, and required pragma validation; receipts omit or misuse auth_epoch, idempotency, and before/after state digests; stale sessions are changed without valid seals.",
+      "required_before_requalification": "Enforce the corrected global event union and all startup/storage invariants before opening the write gate; compute receipts solely from canonical committed records."
+    },
+    {
+      "id": "F2-P0-014",
+      "title": "Effect bridge has no durable A-to-E ordering or qualified recovery",
+      "evidence": "The draft lacks Effects lease transition E/A to E, terminal executor qualification, startup reconciliation, RECOVERED outcome, and mutation intent; append state may cross restore boundaries.",
+      "required_before_requalification": "Implement the ratified effect bridge state machine, leases, idempotent recovery, qualified executor check, restore invalidation, and event/request atomicity."
+    },
+    {
+      "id": "F2-P0-015",
+      "title": "Retention is unauthorized, retroactive, non-UTC-day, and emits fabricated sequence evidence",
+      "evidence": "The retention method has no authenticated owner or trusted-scheduler check and ignores the write gate; it uses rolling N times 24 hours, applies the current rule retroactively, reports placeholder first/last values, risks orphaning rows, and has no intent protocol.",
+      "required_before_requalification": "Implement only after F1 represents prospective policy and source sequences; require authorization, complete UTC days, active-row protection, foreign-key-safe order, true digests/sequences, and mutation intent."
+    },
+    {
+      "id": "F2-P0-016",
+      "title": "Collision and canonical-input failures are retried, collapsed, or leaked",
+      "evidence": "Several UUID collisions reach raw SQLite or generic conflicts, mapping collapses distinct database failures, references retry collisions, and canonical aliases are not uniformly rejected. Injected-random no-retry tests are absent.",
+      "required_before_requalification": "Implement one-shot entropy, exact collision classification, no overwrite, no retry, canonical decode/re-encode, redacted public errors, and every collision vector."
+    }
+  ],
+  "mandatory_negative_and_security_vector_families": [
+    {
+      "family": "ANCHOR-INTENT",
+      "minimum": "ANCHOR-INTENT-001 through ANCHOR-INTENT-009 plus predecessor, alias, physical-protection, and multi-drift negatives"
+    },
+    {
+      "family": "BOOTSTRAP-HANDOFF",
+      "minimum": "locator-only delivery; ACL/mode/owner/type/link/inside-tree checks; failed or lost delivery with no re-reveal; exact rollback and every migration state"
+    },
+    {
+      "family": "CREDENTIAL-AUTH-NONENUM",
+      "minimum": "malformed, missing, unknown, selector mismatch, wrong digest, disabled, and revoked byte-identical responses; dummy compare and auth-failure buckets"
+    },
+    {
+      "family": "CREDENTIAL-ISSUE-ROTATE",
+      "minimum": "prior active credential reconnect; all required session staleness; old credential zero grace; first delivery true and replay false; failed postcommit handoff; owner-selected sole-owner recovery"
+    },
+    {
+      "family": "COLLISION-CANONICAL",
+      "minimum": "injected collision for every identifier class with one entropy call, no retry or overwrite; credential selector/full digest; mapping ID/subject digest; every encoding alias"
+    },
+    {
+      "family": "SESSION-REFERENCE-CURSOR-REPLAY",
+      "minimum": "all cross-bindings, stale/expiry/closure/termination, process/write-gate/restart, restore invalidation, cursor persistence choice, and idempotency expiry"
+    },
+    {
+      "family": "RESTORE-OWNER-ABORT",
+      "minimum": "RESTORE-OWNER-001 through RESTORE-OWNER-009, plan discovery after ambiguous response, full non-hybrid replacement, old-authority denial, event floor, locator conflict, temp dispositions, abort tombstone crashes"
+    },
+    {
+      "family": "GLOBAL-EVENT",
+      "minimum": "cross-table duplicate ID/sequence, gap, fork, kind/table alias, coordinates, genesis, and restore floor"
+    },
+    {
+      "family": "RACE-FINAL-GATE-EFFECT",
+      "minimum": "disable/revoke/rotate before and after final gate; unrelated agent generation change; reconnect; same/different idempotency; cancellation versus effect commit; A/E ordering; multiprocess/restart"
+    },
+    {
+      "family": "POLICY-DEPENDENCY-TRANSPORT",
+      "minimum": "deny/indeterminate/timeout; every multi-capability operation; missing/out-of-order private dependency; owner_cli-only rejection; authenticated mapping unavailable behavior"
+    },
+    {
+      "family": "RETENTION",
+      "minimum": "authorization, prospective policy, complete UTC days, replay minimum, true sequences/digest, active-row protection, crash and anchor intent"
+    },
+    {
+      "family": "REDACTION-NO-JSON",
+      "minimum": "arbitrary thrown path/SQL/stack/handoff errors; metadata content; exact error envelope; no credential in JSON, logs, receipts, fixtures, artifacts, or diagnostics"
+    }
+  ],
+  "owner_semantic_decisions": [
+    {
+      "id": "OWNER-SEC-001",
+      "decision": "Sole-owner credential rotation recovery after a lost postcommit handoff",
+      "options_requiring_ratification": [
+        "require a second active owner credential before rotation",
+        "define an independent authenticated recovery authority",
+        "version the protocol to change revocation/handoff sequencing or grace"
+      ],
+      "reviewer_selection": null
+    },
+    {
+      "id": "OWNER-SEC-002",
+      "decision": "Recovering a server-generated restore_plan_id after an ambiguous or lost response while preserving the exact operation surface",
+      "reviewer_selection": null
+    },
+    {
+      "id": "OWNER-SEC-003",
+      "decision": "Persist bounded redacted page-snapshot entries in the existing allocation or explicitly invalidate cursors on restart",
+      "reviewer_selection": null
+    },
+    {
+      "id": "OWNER-SEC-004",
+      "decision": "Whether mapping operations are callable before a ratified authenticated external adapter exists",
+      "reviewer_selection": null
+    },
+    {
+      "id": "OWNER-SEC-005",
+      "decision": "Retention policy-history and source-sequence representation within exactly sixteen tables",
+      "reviewer_selection": null
+    },
+    {
+      "id": "OWNER-SEC-006",
+      "decision": "Closed non-content-bearing activity metadata value domains",
+      "reviewer_selection": null
+    },
+    {
+      "id": "OWNER-SEC-007",
+      "decision": "Exact mapping cryptographic collision error and disposition",
+      "reviewer_selection": null
+    },
+    {
+      "id": "OWNER-SEC-008",
+      "decision": "Exact restore states in which abort is callable and the locator/temp disposition after staging",
+      "reviewer_selection": null
+    }
+  ],
+  "secret_exposure_and_migration_risk": {
+    "static_scan_result": {
+      "syntactically_valid_credential_literals": 0,
+      "private_keys": 0,
+      "forbidden_raw_secret_json_key_patterns": 0,
+      "conclusion": "No actual secret exposure was found in the reviewed dirty F2 snapshot."
+    },
+    "residual_blocking_risks": [
+      "Content-bearing accepted error schemas and incomplete runtime exception closure can expose path, SQL, stack, handoff, or subject content.",
+      "Free-string activity metadata permits accidental content capture.",
+      "One-time delivery is not durably bound to the exact protected locator and physical object.",
+      "The restore and bootstrap drafts can leave a hybrid or partially migrated authority whose old credentials, requests, references, or idempotency remain usable.",
+      "Migration state-name drift makes crash recovery and rollback evidence ambiguous."
+    ],
+    "process_memory_note": "The draft creates ordinary JavaScript string and Buffer copies of presented credentials that are not reliably erased. D0 excludes process-memory secrecy from its threat model, so this is recorded as residual operational risk rather than a standalone D0 blocker."
+  },
+  "lite_mcp_and_cross_role_implications": {
+    "lite_mcp_conformance_implicated": true,
+    "reasons": [
+      "The exact public error envelope and code registry are inconsistent across root and tool schemas.",
+      "Policy-operation arrays, private dependency ordering, transport exposure, authenticated mapping, and byte-identical non-enumeration alter Full and Lite/MCP generated surfaces.",
+      "Corrected F1 schema and fixture hashes invalidate every accepted consumer hash and F3 conformance output derived from the old pack."
+    ],
+    "required_separate_reviews": [
+      "fresh Full contract steward concurrence for protocol, catalog, error, and vector corrections",
+      "fresh Lite-conformance reviewer concurrence for MCP schemas and executable byte-level vectors",
+      "fresh migration reviewer concurrence for corrected bootstrap/restore lifecycle and rollback",
+      "fresh security concurrence after the owner decisions and versioned F1 pack exist"
+    ],
+    "reviewer_authority_limit": "This reviewer does not clear the Full contract steward, Lite-conformance, migration, implementation, or later acceptance gates."
+  },
+  "f2_snapshot": {
+    "head_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "git_status_summary": [
+      "M scripts/build.mjs",
+      "?? scripts/check-phase6-f2-scope.mjs",
+      "?? scripts/phase6-f2-qualification.mjs",
+      "?? src/identity-authority/",
+      "?? test/phase6-f2-authority.test.mjs"
+    ],
+    "expanded_dirty_path_count": 13,
+    "expanded_status_text_sha256": "28fc0a1620b6aac2666da2a9ec314aa501ab4e86cccf6fb46d3ff94e26c501a4",
+    "canonical_snapshot_list_sha256": "ed7007d5ad706bb40a2bb1100d00f1e4b242f0294ea1044a8d25ee51b1b7477f",
+    "files": [
+      {"path": "scripts/build.mjs", "sha256": "55ec4d272b07220de0d5cae0fcb962b6bb5b50527adb0132045d84a13e1774d8", "bytes": 7007},
+      {"path": "scripts/check-phase6-f2-scope.mjs", "sha256": "779a17e589a871609db68bffb4d0f7519d9f22994476c351619bacb68d6cefb7", "bytes": 2553},
+      {"path": "scripts/phase6-f2-qualification.mjs", "sha256": "3ee678363adc0b2ac045205256426b7f1adc927839ca79acb45805328aa4e62b", "bytes": 2329},
+      {"path": "src/identity-authority/canonical.ts", "sha256": "65bc7cd0eeaaf8ff1ca7ee68ccd257394cc4ac4d2e4df2483ba13a3114d76728", "bytes": 5789},
+      {"path": "src/identity-authority/credential.ts", "sha256": "03bd11b610096ad24e090eae7857a21c9d617496bc454bb4ab19aebfe761c2c6", "bytes": 2255},
+      {"path": "src/identity-authority/errors.ts", "sha256": "2a606eec2cb6921356ade8b57b6d07c96270a499fede02d8548248aaeb231487", "bytes": 3078},
+      {"path": "src/identity-authority/filesystem.ts", "sha256": "15b22aee9f4c9c82f8a8c0fae43b9bcbb7e89ac51ab4ec7b859315c71dc71cb7", "bytes": 4730},
+      {"path": "src/identity-authority/index.ts", "sha256": "e8da530bc24ac50b4328fa4c15b0fc15ce69dec0625ff38592a1b47c8403a169", "bytes": 448},
+      {"path": "src/identity-authority/operations.ts", "sha256": "78e2a9de7148ff80445a106da55395948784a3f66afb35a0367a27631fbb9d51", "bytes": 82586},
+      {"path": "src/identity-authority/sqlite.ts", "sha256": "f8a4a105bac3aafe3827638237dc05e5bd28d981e6e6f372b9a766c62879ab01", "bytes": 13548},
+      {"path": "src/identity-authority/types.ts", "sha256": "64dba5f4f2fd6fe5484aaf2868e2805fb122ddbf4dff74e6e01a9fa18bd499e2", "bytes": 3358},
+      {"path": "src/identity-authority/validation.ts", "sha256": "872f8a075679077e40404195470028d45c4f5af172213529ceff073ebe8ee492", "bytes": 3605},
+      {"path": "test/phase6-f2-authority.test.mjs", "sha256": "590f6d612ee4ea585e799d03d6afd7ffad28e0c281569946e73812a7d38722d2", "bytes": 7527}
+    ]
+  },
+  "review_method": {
+    "actions": [
+      "Verified SHA-256 and byte counts for ratified proposals, decisions, accepted F1 gate, F2 authorization, and F2 stop artifact.",
+      "Compared accepted F1 JSON schemas, operation inventory, error registry, and conformance fixtures against ratified D0 clauses.",
+      "Ran read-only Ajv probes against accepted schemas to demonstrate concrete over-acceptance and under-representability.",
+      "Performed static read-only review of the exact dirty F2 snapshot and bound each reviewed file by SHA-256 and byte count.",
+      "Ran a bounded static secret-pattern scan over the dirty F2 paths."
+    ],
+    "not_performed": [
+      "No product or proposal file was edited.",
+      "No commit, branch, stash, checkout, reset, install, build, test, database migration, or external side effect was performed.",
+      "No runtime qualification is claimed; the stopped draft and contract blockers make static evidence sufficient for this non-concurrence with implementation."
+    ]
+  },
+  "exit_conditions": [
+    "Owner ratifies every semantic decision identified in this review.",
+    "A versioned and hash-bound F1 pack applies every bounded correction and includes executable negative/security vectors with canonical expected bytes and durable post-state.",
+    "Fresh independent Full-contract, Lite-conformance, migration, and security reviewers concur within their separate role authority.",
+    "F2 is reimplemented only against that corrected accepted pack, followed by clean static secret scan and complete crash, race, multiprocess, restart, non-enumeration, redaction, collision, retention, restore, and policy qualification.",
+    "The prior accepted F1 and current dirty F2 snapshot are not used as an implementation authorization or acceptance basis."
+  ],
+  "record_digest_method": "SHA-256 of RFC-8785-compatible canonical JSON with record_digest omitted",
+  "record_digest": "sha256:f4581d6f4b65a19576f32c6abe7432414be77578a5b59d56e8ba6182ae557a92"
+}

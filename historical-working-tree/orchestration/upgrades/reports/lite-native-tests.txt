@@ -1,0 +1,23 @@
+warn: could not canonicalize path [LOCAL_PATH]
+   Compiling gkos-engine-desktop v0.2.0 ([LOCAL_PATH]
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.94s
+     Running unittests src\lib.rs (desktop\src-tauri\target\debug\deps\gkos_engine_desktop_lib-2cfe127b8975dbb5.exe)
+
+running 2 tests
+test tests::windows_and_posix_commands_name_the_native_curl_executable_explicitly ... ok
+test tests::tray_command_targets_the_implemented_authenticated_health_route ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\main.rs (desktop\src-tauri\target\debug\deps\gkos_engine_desktop-bde9211abd548fdb.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests gkos_engine_desktop_lib
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

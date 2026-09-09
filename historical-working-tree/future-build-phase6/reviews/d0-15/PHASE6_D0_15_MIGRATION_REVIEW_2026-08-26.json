@@ -1,0 +1,709 @@
+{
+  "record_type": "gkos-phase6-d0-15-independent-migration-concurrence",
+  "record_version": "1.0.0",
+  "reviewed_at_utc": "2026-08-26T08:31:34.763Z",
+  "verdict": "CONCUR_CORRECTION_REQUIRED",
+  "f2_accepted": false,
+  "implementation_authorized": false,
+  "terminal_statement": "The D0-15 stop is substantively correct and F2 must remain stopped. The accepted F1 pack cannot represent the ratified bootstrap, authority-anchor, restore-plan, restore-event, restore-abort, and durable retention state. The stop artifact's four blocker classes are valid but incomplete: the accepted bootstrap enum contradicts the ratified machine, the external bootstrap and restore plans are not closed records, all RESTORE-OWNER-001..009 and BOOTSTRAP-LOCATOR-ROLLBACK-001 vectors are absent, the pre-authority PLAN_STAGED crash path has an authentication deadlock, and accepted timestamps reject ratified years 3000..9999. A successor contract pack must be owner-ratified, regenerated, independently accepted, and made the exact F2 predecessor before any runtime repair restarts.",
+  "reviewer": {
+    "role": "fresh independent D0-15 migration/bootstrap/restore reviewer",
+    "task_coordinate": "/root/phase6_migration_reviewer",
+    "no_contribution_attestation": "I contributed no proposal, F1 contract, F2 runtime, expected outcome, stop artifact, or reviewed product byte. Product and proposal repositories were read only. This detached review JSON is my only file output.",
+    "product_bytes_edited": false,
+    "proposal_bytes_edited": false,
+    "commit_created": false,
+    "push_performed": false
+  },
+  "exact_inputs": {
+    "accepted_f1": {
+      "repository": "[LOCAL_PATH]",
+      "sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+      "head_reproduced": true
+    },
+    "f2_stop_artifact": {
+      "path": "[LOCAL_PATH]",
+      "bytes": 6663,
+      "sha256": "5d192bd3cb1ddb4f0a8a0d8148d16c605ed80fe2078b5591c2a79c258dcd52ea",
+      "hash_reproduced": true
+    },
+    "ratified_sources": {
+      "owner_ratification_sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929",
+      "core_spec_sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+      "core_operation_inventory_sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+      "core_decision_record_sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+      "core_error_registry_sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+      "governance_sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f"
+    },
+    "accepted_f1_leaves_examined": [
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/audit-receipt.schema.json",
+        "bytes": 45913,
+        "sha256": "d1967a7b49129774ccd15e2122da328d2a8a8da4bb82b861fe5f560ab4e9187d"
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/bootstrap-migration.schema.json",
+        "bytes": 897,
+        "sha256": "e4962ba09df469091bf8e66067c44dbab353ca4a64318264d2b337c5bb3cd15d"
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration.schema.json",
+        "bytes": 3600,
+        "sha256": "b3763d21252af01cc49d1e23fdddcaae642d97b3970b7e7923d2b6dd601fe7da"
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration-fixture.json",
+        "bytes": 1064,
+        "sha256": "409046ba9ef75370098a2fba436b64c5d565506d52f139da4aa6209c340816fe"
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.schema.json",
+        "bytes": 35124,
+        "sha256": "5f6270b0af34ede781198de2b4a88ae2c11a78c2fdabf6b7df0674c26b2b27b7"
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+        "bytes": 23609,
+        "sha256": "2b021e831a53384e551b5719e06c469ed349a8e4888099024fa580caec58c5fc"
+      }
+    ],
+    "f2_draft_snapshot": {
+      "committed": false,
+      "critical_file_hashes": {
+        "src/identity-authority/operations.ts": "78e2a9de7148ff80445a106da55395948784a3f66afb35a0367a27631fbb9d51",
+        "src/identity-authority/filesystem.ts": "15b22aee9f4c9c82f8a8c0fae43b9bcbb7e89ac51ab4ec7b859315c71dc71cb7",
+        "src/identity-authority/sqlite.ts": "f8a4a105bac3aafe3827638237dc05e5bd28d981e6e6f372b9a766c62879ab01",
+        "test/phase6-f2-authority.test.mjs": "590f6d612ee4ea585e799d03d6afd7ffad28e0c281569946e73812a7d38722d2"
+      }
+    }
+  },
+  "reproduction": {
+    "method": "Independent hash reproduction, strict JSON/schema-property introspection, exact operation/vector inventory comparison, TypeScript AST method inspection, and filesystem/state-machine trace. No accepted or draft product command was allowed to mutate product bytes.",
+    "host_limit": "The product intentionally returns GKOS_P6_PLATFORM_UNAVAILABLE on Windows. WSL enumeration returned access denied, so no POSIX live mutation run is claimed. The blockers below are deterministic byte/schema/state contradictions and do not depend on a positive runtime execution.",
+    "accepted_counts": {
+      "operation_count": 32,
+      "owner_only_operations": 24,
+      "local_bootstrap_operations": 1,
+      "public_authenticated_operations": 7,
+      "normalized_tables": 16,
+      "restore_owner_vectors_present": 0
+    },
+    "physical_legacy_source_binding": {
+      "ratified": [
+        "The only locator is the physically resolved same-vault .gkx/desktop-agent.token.",
+        "Qualification occurs under the exclusive authority lease through one no-follow open handle, with regular-file, non-link, owner, protection, size, physical identity, and before/after identity checks.",
+        "The content is 64 lowercase hexadecimal characters after removing at most one terminal LF, decoding to 32 bytes.",
+        "The plan binds the canonical locator/parent identity and, when present, exact file identity, protection, and legacy domain-separated secret digest; absence is also bound and revalidated.",
+        "Declaration/state mismatch is GKOS_P6_MIGRATION_CONFLICT; declared-present malformed physical state is GKOS_P6_MIGRATION_MALFORMED."
+      ],
+      "accepted_f1_representability": "The bootstrap request binds only the declaration. migration.schema.json has generic source_digest/plan_digest fields, and bootstrap-migration.schema.json is only a state-list descriptor. No closed external bootstrap-plan or physical source-witness schema exists.",
+      "f2_observed": [
+        "qualifiedLegacySource joins desktop-agent.token directly beneath options.vaultRoot while the same root also stores authority.sqlite3; it cannot simultaneously be the ratified .gkx source root and .gkx/identity authority root.",
+        "readPrivate checks lstat/fstat, closes that descriptor, then reopens by pathname with readFileSync, so the bytes are not bound to the inspected physical identity.",
+        "existsSync classifies a broken or raced link as absence; no before/after identity or size check is made.",
+        "A valid optional terminal LF is rejected.",
+        "The initial source is qualified before the authority lease. Bootstrap rereads the path later and can derive the credential from bytes different from the initially bound digest.",
+        "The stored bootstrap idempotency digest is not SHA-256 of canonical vault_id, legacy secret digest/null, target schema version, and bootstrap purpose."
+      ],
+      "evidence": [
+        "ratified core spec lines 499-513 and 1075-1125",
+        "src/identity-authority/filesystem.ts symbols readPrivate and qualifiedLegacySource",
+        "src/identity-authority/operations.ts symbol bootstrap"
+      ]
+    },
+    "bootstrap_state_machine": {
+      "ratified_states": [
+        "UNINITIALIZED",
+        "OWNER_PROVED",
+        "PLAN_STAGED",
+        "OWNER_LOCATOR_STAGED",
+        "DB_COMMITTED",
+        "ANCHOR_COMMITTED",
+        "OWNER_ACTIVE",
+        "LEGACY_ACTIVE",
+        "LEGACY_REVOKED",
+        "COMPLETE",
+        "BLOCKED"
+      ],
+      "accepted_states": [
+        "UNINITIALIZED",
+        "OWNER_PROVED",
+        "PLAN_STAGED",
+        "OWNER_LOCATOR_STAGED",
+        "DB_PUBLISHED",
+        "OWNER_ACTIVE",
+        "LEGACY_REMOVED",
+        "COMPLETE",
+        "RECOVERY_REQUIRED"
+      ],
+      "missing_from_f1": [
+        "DB_COMMITTED",
+        "ANCHOR_COMMITTED",
+        "LEGACY_ACTIVE",
+        "LEGACY_REVOKED",
+        "BLOCKED"
+      ],
+      "unratified_f1_states": [
+        "DB_PUBLISHED",
+        "LEGACY_REMOVED",
+        "RECOVERY_REQUIRED"
+      ],
+      "no_legacy_branch": "OWNER_ACTIVE -> COMPLETE without adding an identity, credential, generation, or event.",
+      "legacy_branch": "OWNER_ACTIVE -> LEGACY_ACTIVE -> LEGACY_REVOKED -> COMPLETE. Revocation commits before deleting only the unchanged expected token; restart after revoke preserves database denial and retries exact deletion.",
+      "f2_observed": "F2 skips durable OWNER_PROVED and ANCHOR_COMMITTED, uses DB_PUBLISHED, takes both absent and present-source paths directly from OWNER_ACTIVE to COMPLETE, leaves the legacy credential/file active, and has no LEGACY_ACTIVE/LEGACY_REVOKED cleanup machine."
+    },
+    "bootstrap_pre_authority_crash_deadlock": {
+      "finding": "Ratified D0 says a crash after PLAN_STAGED but before owner locator creation loses the in-memory secret, blocks the plan, and requires explicit owner recovery. The only migration.recover operation is OWNER_ONLY and there is not yet an active authority or usable owner credential. Therefore that exact recovery path cannot authenticate.",
+      "minimal_safe_resolution": "Adopt the restore temp-first pattern for bootstrap: create/fsync an exact protected no-replace credential temporary before PLAN_STAGED; bind path, physical identity, content digest, owner/protection/no-link facts and final locator parent in the plan; after plan fsync perform only the planned no-replace rename. A pre-plan crash can delete only the exact unreferenced temp; a post-plan crash resumes without regeneration or re-reveal.",
+      "alternative_requiring_owner_choice": "Add a separately specified fresh-OS-owner-proof recovery/abort variant to bootstrap.initialize that tombstones the abandoned pre-authority plan before creating any new plan/secret. migration.recover cannot be silently reused because its ratified authority class is OWNER_ONLY."
+    },
+    "restore_coordinate_reproduction": {
+      "pre_restore": {
+        "actor": "Bind initiating owner agent_id, credential_id, request_id, auth_epoch and transport.",
+        "old_authority": "Bind vault_id, old authority_instance_id, restore_epoch, authority_generation, global_event_seq/head, committed anchor digest, and database digest.",
+        "backup": "Bind backup_id, manifest digest, source instance/epoch/generation, source global event seq/head, schema version, checked snapshot bytes/digest, and physical snapshot/manifest identities."
+      },
+      "planned_new_authority": {
+        "authority_instance_id": "new random UUIDv7",
+        "restore_epoch": "old committed anchor restore_epoch + 1",
+        "authority_generation": "max(old committed anchor last_generation, backup authority_generation) + 1",
+        "agent_auth_epochs": "each restored agent auth_epoch + 1 exactly once",
+        "event_floor": "old committed anchor global_event_seq + 1",
+        "event_predecessor": "old committed anchor global_event_head_digest"
+      },
+      "publication_aggregates": [
+        "exactly one restored owner identity",
+        "all restored credential IDs revoked with count plus ordered-set digest",
+        "one fresh replacement owner credential active and locator-binding digest",
+        "all restored sessions closed with count plus ordered-set digest",
+        "all restored agent auth-epoch transitions with count plus ordered transition digest",
+        "page cursor and snapshot invalidations with separate counts/digests",
+        "process-local opaque reference invalidation count/digest",
+        "idempotency/request replay invalidation count/digest and a new-authority scope rule",
+        "restored checked database digest",
+        "new restore event ID/sequence/head and expected committed anchor digest"
+      ],
+      "committed_result": "The published database is the fully qualified backup snapshot transformed only by the ratified restore rules, not a mixture of current and backup tables. The restore event is the active history floor. Old credentials fail; only the replacement owner credential authorizes administration.",
+      "f2_observed": [
+        "newGeneration is current+1 instead of max(current, backup)+1.",
+        "Only selected tables are deleted/repopulated; current requests, activities, policy, bootstrap, audit, retention, rate, outbox, and restore history remain. This is a hybrid database rather than the qualified backup snapshot.",
+        "Sessions are deleted rather than restored closed; cursor/idempotency/session aggregates are absent or hard-coded.",
+        "event_history_floor_seq and predecessor are not advanced to the old anchored head.",
+        "The plan has no RESTORE_* state, physical credential temporary, final locator identity, or durable locator-stage transition.",
+        "The event claims database_published and anchor_published before anchor publication and uses fields rejected by accepted F1.",
+        "The same restore call writes the anchor inside restore and again in executeOwner without a new event."
+      ]
+    },
+    "restore_abort_reproduction": {
+      "ratified": "Only the exact authenticated pre-restore owner can abort before candidate database/anchor publication. RESTORE_ABORT_INTENT is durable first; deletion is limited to the exact planned credential temporary; absent is preserved as absent and unsafe/mismatched is preserved. One old-chain event is appended, the external plan is tombstoned ABORTED with the same event ID/digest, and restart reconciles either side without a duplicate row or secret.",
+      "f2_observed": [
+        "The plan does not bind the initiating credential/request or a credential temporary.",
+        "Abort hard-codes deleted_exact and later deletes the plan file itself, not an exact bound credential temporary.",
+        "No RESTORE_ABORT_INTENT or external ABORTED tombstone is persisted.",
+        "No missing or preserved_unsafe branch exists and removePrivateExact accepts no expected physical identity.",
+        "The event/anchor/plan ordering cannot reconcile a crash between the database event and external tombstone.",
+        "The restore plan ID is undiscoverable after a thrown or crashed restore call."
+      ]
+    },
+    "rollback_restart_replay": [
+      {
+        "point": "bootstrap before plan publication",
+        "required": "Delete only an exact unreferenced implementation-owned temp; restart from UNINITIALIZED."
+      },
+      {
+        "point": "bootstrap after durable locator staging and SQLite rollback",
+        "required": "Remain OWNER_LOCATOR_STAGED; reopen/revalidate the exact locator and repeat only DB publication; never regress, overwrite, regenerate, or reveal."
+      },
+      {
+        "point": "bootstrap DB committed before external state update",
+        "required": "Discover the unique derived bootstrap idempotency key and genesis event, verify all aggregates, and advance once."
+      },
+      {
+        "point": "restore after RESTORE_PLAN_STAGED before final locator rename",
+        "required": "Validate the exact referenced temporary and resume only the no-replace rename; mismatch returns GKOS_P6_AUTHORITY_CORRUPT and deletes nothing."
+      },
+      {
+        "point": "restore after RESTORE_OWNER_LOCATOR_STAGED",
+        "required": "Reopen/revalidate/reuse the exact final locator and candidate; no second credential or reveal."
+      },
+      {
+        "point": "restore at RESTORE_INTENT",
+        "required": "Apply only the ratified old/new DB-anchor-intent matrix; never choose a lower coordinate or synthesize a fork repair."
+      },
+      {
+        "point": "abort event committed before external ABORTED update",
+        "required": "Reconcile the exact event ID/digest pair, update the tombstone once, and append no second event."
+      },
+      {
+        "point": "exact idempotent replay after restart",
+        "required": "Return the same nonsecret result coordinates; never repeat a handoff, file creation, event, generation increment, cleanup, or secret."
+      },
+      {
+        "point": "same raw idempotency key after committed authority restore",
+        "required": "The old-authority result is invalidated and cannot replay or conflict in the new authority; uniqueness and lookup must be scoped by the new authority coordinate."
+      }
+    ]
+  },
+  "contract_gaps": [
+    {
+      "id": "D0-15-CG-BOOTSTRAP-STATE-ENUM",
+      "severity": "BLOCKER",
+      "classification": "accepted F1 contract gap",
+      "evidence": "Ratified core lines 499-513 and 1148-1165 versus accepted bootstrap-migration.schema.json and migration.schema.json.",
+      "finding": "Five ratified states are unrepresentable and three unratified aliases are accepted. authority_meta.bootstrap_state is an unconstrained string, so the singleton does not close the machine either."
+    },
+    {
+      "id": "D0-15-CG-BOOTSTRAP-PLAN-AND-PREAUTH-RECOVERY",
+      "severity": "BLOCKER",
+      "classification": "ratified D0 semantic gap plus accepted F1 schema gap",
+      "evidence": "Ratified core lines 1140-1175; accepted pack has no external bootstrap-plan/source-witness schema; migration.recover is OWNER_ONLY.",
+      "finding": "Physical source/locator identities and pre-DB durable states are not machine representable, and a lost secret after PLAN_STAGED cannot authenticate the only recovery operation."
+    },
+    {
+      "id": "D0-15-CG-AUTHORITY-ANCHOR-UNDERBOUND",
+      "severity": "BLOCKER",
+      "classification": "accepted F1 contract gap",
+      "evidence": "Ratified core lines 239-278 and 947-957 versus audit-receipt.schema.json#/$defs/authority_anchor.",
+      "finding": "The ten-field closed schema omits last_generation, database header digest, candidate event/database digests, predecessor anchor digest, expected committed anchor digest, old event head, and proposed next event head; it also uses field names different from ratified anchor records."
+    },
+    {
+      "id": "D0-15-CG-RESTORE-PLAN-ABSENT",
+      "severity": "BLOCKER",
+      "classification": "accepted F1 contract gap",
+      "evidence": "Ratified core lines 286-312 and 329-404; no accepted F1 schema closes a restore plan.",
+      "finding": "RESTORE_PLAN_STAGED, RESTORE_OWNER_LOCATOR_STAGED, RESTORE_INTENT, COMMITTED, ABORT_INTENT, and ABORTED external records and their exact temp/final locator bindings are not machine representable."
+    },
+    {
+      "id": "D0-15-CG-RESTORE-EVENT-UNDERBOUND",
+      "severity": "BLOCKER",
+      "classification": "accepted F1 contract gap",
+      "evidence": "Ratified core lines 314-377 and 937-957 versus audit-receipt.schema.json#/$defs/restore_event.",
+      "finding": "The schema is not a discriminated oneOf and omits request/actor, backup ID, old/new anchor/event coordinates, replacement owner auth epoch/locator binding, revoked/closed/invalidated counts and digests, restored database digest, exact temp binding, abort intent, and exact publication proofs."
+    },
+    {
+      "id": "D0-15-CG-RESTORE-RECOVERY-DISCOVERY",
+      "severity": "BLOCKER",
+      "classification": "accepted F1 operation/result gap",
+      "evidence": "authority.restore.abort requires restore_plan_id; authority.status has no recovery subject; migration.inspect exposes only migration_id.",
+      "finding": "A crash or failed handoff can close the write gate before the restore call returns a plan ID, making authenticated abort unreachable without an unratified side channel."
+    },
+    {
+      "id": "D0-15-CG-RETENTION-CURRENT-AND-HISTORY",
+      "severity": "BLOCKER",
+      "classification": "accepted F1 contract gap",
+      "evidence": "Ratified core lines 970-988 and 1374-1379; authority_meta has no retention fields and set_retention audit receipts carry only opaque before/after digests.",
+      "finding": "Neither current retention days/effective time nor an exact prospective policy history can be reconstructed inside the 16-table model."
+    },
+    {
+      "id": "D0-15-CG-REQUIRED-VECTORS-ABSENT",
+      "severity": "BLOCKER",
+      "classification": "accepted F1 fixture gap",
+      "evidence": "migration-fixture.json contains only four generic BOOTSTRAP-SOURCE IDs and contains zero RESTORE-OWNER IDs.",
+      "finding": "RESTORE-OWNER-001..009 and BOOTSTRAP-LOCATOR-ROLLBACK-001 explicitly frozen by ratified D0 are absent. The four source vectors do not carry exact request, observed physical state, expected closed error, mutation count, or durable-state outcome."
+    },
+    {
+      "id": "D0-15-CG-TIMESTAMP-RANGE",
+      "severity": "HIGH",
+      "classification": "accepted F1 scalar gap",
+      "evidence": "Ratified D0 accepts years 1970..9999; accepted timestamp regexes accept only 1970..2999.",
+      "finding": "Migration, anchor, backup, restore, and retention records from years 3000..9999 are ratified-valid but schema-invalid."
+    }
+  ],
+  "f2_draft_defects": [
+    {
+      "id": "F2-DRAFT-LEGACY-PHYSICAL-BINDING",
+      "severity": "BLOCKER",
+      "symbols": [
+        "src/identity-authority/filesystem.ts:readPrivate",
+        "src/identity-authority/filesystem.ts:qualifiedLegacySource",
+        "src/identity-authority/operations.ts:bootstrap"
+      ],
+      "finding": "Wrong canonical root, close-and-reopen TOCTOU, no stable file identity/size, no optional LF, source qualification outside the lease, and a later unbound reread."
+    },
+    {
+      "id": "F2-DRAFT-BOOTSTRAP-DURABILITY",
+      "severity": "BLOCKER",
+      "symbols": [
+        "src/identity-authority/operations.ts:bootstrap",
+        "src/identity-authority/sqlite.ts:bootstrap_migrations"
+      ],
+      "finding": "No durable OWNER_PROVED, no temp-before-plan recovery, no ANCHOR_COMMITTED, no legacy branch/cleanup, abstract caller-controlled handoff rather than exact no-replace locator, and no full genesis aggregate digest."
+    },
+    {
+      "id": "F2-DRAFT-LEASE-IDENTITY-DELETION",
+      "severity": "BLOCKER",
+      "symbols": [
+        "src/identity-authority/filesystem.ts:acquireAuthorityLease",
+        "src/identity-authority/filesystem.ts:removePrivateExact"
+      ],
+      "finding": "Stale-lock takeover inspects one lock identity and can delete a replaced identity. Migration exclusivity is therefore not physically bound."
+    },
+    {
+      "id": "F2-DRAFT-ANCHOR-PROTOCOL",
+      "severity": "BLOCKER",
+      "symbols": [
+        "src/identity-authority/operations.ts:writeAnchor",
+        "src/identity-authority/operations.ts:verifyStartup"
+      ],
+      "finding": "No MUTATION_INTENT three-point protocol, no exact intent matrix, permissive intent-name enumeration, fields outside F1, and repeated same-event committed-anchor rewrites."
+    },
+    {
+      "id": "F2-DRAFT-BACKUP-PHYSICAL-AND-SCHEMA",
+      "severity": "BLOCKER",
+      "symbols": [
+        "src/identity-authority/operations.ts:backup"
+      ],
+      "finding": "Uses VACUUM INTO rather than the ratified SQLite backup API into an already qualified no-follow/no-replace target, reopens paths, does not bind manifest/snapshot identities, and emits manifest names rejected by accepted F1."
+    },
+    {
+      "id": "F2-DRAFT-HYBRID-RESTORE",
+      "severity": "BLOCKER",
+      "symbols": [
+        "src/identity-authority/operations.ts:restore"
+      ],
+      "finding": "Publishes a hybrid current/backup database, computes the wrong generation, deletes sessions instead of closing them, omits invalidation aggregates/history floor, lacks physical locator staging, and records publication booleans before publication."
+    },
+    {
+      "id": "F2-DRAFT-RESTORE-ABORT-UNSAFE",
+      "severity": "BLOCKER",
+      "symbols": [
+        "src/identity-authority/operations.ts:restoreAbort"
+      ],
+      "finding": "Deletes the plan rather than the bound credential temp, hard-codes deleted_exact, has no intent/tombstone reconciliation, accepts any current owner credential rather than the bound initiator, and cannot discover the plan ID."
+    },
+    {
+      "id": "F2-DRAFT-RESTORE-REPLAY-SCOPE",
+      "severity": "BLOCKER",
+      "symbols": [
+        "src/identity-authority/sqlite.ts:requests",
+        "src/identity-authority/operations.ts:replay"
+      ],
+      "finding": "Idempotency uniqueness and lookup omit authority instance/restore epoch/generation, so a restored old result can replay or permanently conflict in the new authority."
+    },
+    {
+      "id": "F2-DRAFT-CREDENTIAL-EPOCH-AND-LEGACY",
+      "severity": "HIGH",
+      "symbols": [
+        "src/identity-authority/operations.ts:credentialMutation"
+      ],
+      "finding": "credential.issue advances the agent auth_epoch and silently invalidates other active credentials, contradicting the four-active-credential model and failing to implement the exact legacy revoke/remove transition."
+    },
+    {
+      "id": "F2-DRAFT-FINAL-GENERATION-GATE",
+      "severity": "HIGH",
+      "symbols": [
+        "src/identity-authority/operations.ts:withRequest"
+      ],
+      "finding": "The public final gate checks instance, restore epoch and auth epoch but not authority_generation equality."
+    },
+    {
+      "id": "F2-DRAFT-PERSISTED-SCHEMA-DRIFT",
+      "severity": "BLOCKER",
+      "symbols": [
+        "src/identity-authority/sqlite.ts",
+        "src/identity-authority/operations.ts"
+      ],
+      "finding": "authority_meta contains retention fields forbidden by accepted F1, restore_events contains many forbidden fields, anchors/manifests use different names, and persisted rows are not validated against accepted record schemas."
+    },
+    {
+      "id": "F2-DRAFT-ERROR-MAPPING-AND-TEST-COVERAGE",
+      "severity": "HIGH",
+      "symbols": [
+        "src/identity-authority/operations.ts",
+        "test/phase6-f2-authority.test.mjs"
+      ],
+      "finding": "Failed delivery is mislabeled GKOS_P6_SECRET_EXPOSURE, native JSON/SQLite/filesystem exceptions can escape the closed mapping, and the sole POSIX test uses an in-memory handoff and only the no-legacy happy path; Windows skips the physical reference test."
+    }
+  ],
+  "retention_location_analysis": {
+    "new_table_required": false,
+    "current_policy_location": "authority_meta",
+    "required_current_fields": {
+      "retention_days": "integer 7..365; initialized to 90",
+      "retention_effective_from": "ratified timestamp; initialized to authority creation time",
+      "retention_policy_digest": "digest of canonical days/effective-from policy coordinates"
+    },
+    "durable_history_location": "identity_audit_receipts using a closed set_retention variant",
+    "required_history_fields": [
+      "retention_days_before",
+      "retention_effective_from_before",
+      "retention_policy_digest_before",
+      "retention_days_after",
+      "retention_effective_from_after",
+      "retention_policy_digest_after"
+    ],
+    "sweep_binding": "retention_batches.retention_policy_digest must equal the exact policy version applied to the deleted ordered row set.",
+    "reasoning": "authority_meta is the one singleton current-state record and set_retention events are permanent global-chain history. This preserves the exact 16-table model and avoids abusing retention_batches as mutable policy state. Digest-only before/after fields are insufficient because retention.get and prospective sweep eligibility require the value and effective time."
+  },
+  "operation_resolution": {
+    "new_operation_normatively_required": false,
+    "operation_count_after_minimal_correction": 32,
+    "recommended_existing_operation": "authority.status",
+    "exact_change": {
+      "authority": "OWNER_ONLY unchanged",
+      "normal_transports": [
+        "owner_cli",
+        "private_authority"
+      ],
+      "recovery_gate_exception": "Only owner_cli may read recovery status while write_gate is recovery_required/blocked, after reauthentication of the exact pre-restore credential and equality with the plan's old authority coordinates.",
+      "required_result_addition": {
+        "restore_recovery": "required nullable closed object",
+        "object_fields": [
+          "restore_plan_id",
+          "state",
+          "state_digest",
+          "abort_eligible"
+        ],
+        "forbidden": [
+          "raw path",
+          "credential digest",
+          "credential bytes",
+          "physical identity detail",
+          "protection descriptor"
+        ]
+      }
+    },
+    "why_not_migration_inspect": "Its exact result calls the identifier migration_id and its policy capability is migration.inspect. Returning a restore plan through that field would create a false semantic alias and blur two independently ratified recovery machines.",
+    "why_not_error_detail": "The closed public error envelope cannot carry a plan ID and crash recovery has no response at all.",
+    "new_operation_option": "A new restore.plan.inspect owner_cli operation is coherent but not minimal; it would change the 32-operation and 24-owner counts without adding authority that authority.status does not already possess."
+  },
+  "required_schema_corrections": [
+    {
+      "id": "SCHEMA-BOOTSTRAP-STATES",
+      "files": [
+        "bootstrap-migration.schema.json",
+        "migration.schema.json",
+        "audit-receipt.schema.json#/$defs/authority_meta"
+      ],
+      "correction": "Use the exact ratified state enum and close authority_meta.bootstrap_state to it."
+    },
+    {
+      "id": "SCHEMA-BOOTSTRAP-PLAN",
+      "files": [
+        "bootstrap-migration.schema.json"
+      ],
+      "correction": "Add a reachable strict external bootstrap-plan/source-witness schema with derived idempotency input coordinates, predecessor plan digest, canonical source parent/path binding, nullable present-file identity and legacy secret digest, owner credential temp/final locator binding, protection/owner/no-link facts, and durable state/digest/timestamps."
+    },
+    {
+      "id": "SCHEMA-AUTHORITY-META-RETENTION",
+      "files": [
+        "audit-receipt.schema.json#/$defs/authority_meta"
+      ],
+      "correction": "Require retention_days, retention_effective_from, and retention_policy_digest."
+    },
+    {
+      "id": "SCHEMA-SET-RETENTION-EVENT",
+      "files": [
+        "audit-receipt.schema.json#/$defs/identity_audit_receipt"
+      ],
+      "correction": "Make set_retention a closed discriminated variant requiring exact before/after days, effective times, and policy digests; other actions reject these fields."
+    },
+    {
+      "id": "SCHEMA-AUTHORITY-ANCHOR",
+      "files": [
+        "audit-receipt.schema.json#/$defs/authority_anchor"
+      ],
+      "correction": "Replace the ten-field object with closed anchor_state variants carrying ratified last_generation, DB header, candidate event/DB, predecessor anchor, expected committed anchor, old head and proposed next head fields with exact nullability/equality rules."
+    },
+    {
+      "id": "SCHEMA-RESTORE-PLAN",
+      "files": [
+        "audit-receipt.schema.json"
+      ],
+      "correction": "Add a reachable strict external restore-plan schema for RESTORE_PLAN_STAGED, RESTORE_OWNER_LOCATOR_STAGED, RESTORE_INTENT, COMMITTED, RESTORE_ABORT_INTENT, and ABORTED, including actor/request/idempotency, backup/candidate, old/proposed coordinates, exact temp/final locator bindings, abort disposition, and tombstone event pair."
+    },
+    {
+      "id": "SCHEMA-RESTORE-EVENT",
+      "files": [
+        "audit-receipt.schema.json#/$defs/restore_event"
+      ],
+      "correction": "Use two mutually exclusive closed variants. Standard restore requires the pre-restore actor/request and all old/new authority/event/anchor/generation/auth-epoch/session/idempotency/locator/database aggregates. Abort requires unchanged instance/restore coordinates, plan/backup/candidate/proposed coordinates, abandoned credential and exact temp binding, disposition, false activation/publication facts, abort intent and tombstone."
+    },
+    {
+      "id": "SCHEMA-AUTHORITY-STATUS-RECOVERY",
+      "files": [
+        "operation-inventory.schema.json#/$defs/authority_status_result",
+        "operation-inventory.json"
+      ],
+      "correction": "Add the required nullable restore_recovery object and exact owner_cli recovery-gate semantics without changing operation authority or counts."
+    },
+    {
+      "id": "SCHEMA-BACKUP-MANIFEST-SEMANTICS",
+      "files": [
+        "audit-receipt.schema.json#/$defs/authority_backup_manifest"
+      ],
+      "correction": "No new record/table is necessary. Freeze that vault_id/instance/epoch/generation are source coordinates and sqlite_snapshot_bytes/digest are the checked no-follow backup bytes; F2 must use these exact accepted names and validate the closed instance."
+    },
+    {
+      "id": "SCHEMA-TIMESTAMP-RANGE",
+      "files": [
+        "every F1 timestamp definition"
+      ],
+      "correction": "Accept exactly years 1970..9999, not 1970..2999, while retaining real Gregorian UTC millisecond validation."
+    },
+    {
+      "id": "SCHEMA-CONFORMANCE-VECTOR-DATA",
+      "files": [
+        "conformance.schema.json",
+        "migration-fixture.json"
+      ],
+      "correction": "Migration vectors must contain closed scenario input, observed physical state, crash point, restart state, expected operation/result/error, expected event/generation counts, expected file disposition, and forbidden mutations; generic assertion strings alone are not executable expected outcomes."
+    }
+  ],
+  "required_operation_semantic_corrections": [
+    "bootstrap.initialize: bind source under lease, use temp-before-plan or separately ratified pre-authority recovery, implement every ratified state and both no-legacy/legacy branches, and use the exact derived bootstrap idempotency formula.",
+    "credential.rotate/revoke for the legacy credential: commit database revocation and epoch/event changes before exact token removal; restart retries only unchanged-file cleanup.",
+    "authority.backup: use the SQLite backup API with exact no-follow/no-replace physical targets, checked checkpoint/integrity/foreign keys, strict accepted manifest, fsync ordering, and stable idempotent replay.",
+    "authority.restore: authenticate/bind the exact old owner, stage a physical credential temp and plan, publish a fully qualified transformed backup snapshot, apply max generation/floor rules, and invalidate old sessions/cursors/idempotency with exact aggregates.",
+    "authority.restore.abort: discover via authority.status, require the bound pre-restore credential, persist abort intent, clean only an exact safe temp, append/tombstone once, and reconcile restart.",
+    "authority.status: permit only local owner recovery inspection under a closed write gate and expose the minimal nonsecret restore_recovery object.",
+    "migration.inspect: remain bootstrap-migration inspection only; do not alias a restore plan as migration_id.",
+    "migration.recover: remain authenticated post-authority BLOCKED resolution unless the owner explicitly ratifies a separate pre-authority variant.",
+    "retention.get/set: read/write authority_meta current policy, append the exact set_retention variant, advance the global event chain, and apply the owner-selected prospective rule.",
+    "idempotent replay: scope lookup/uniqueness to the active authority coordinate and prove restart/replay adds no event, generation, handoff, file, or cleanup."
+  ],
+  "required_vector_corrections": {
+    "replace_with_exact_scenarios": [
+      "BOOTSTRAP-SOURCE-001",
+      "BOOTSTRAP-SOURCE-002",
+      "BOOTSTRAP-SOURCE-003",
+      "BOOTSTRAP-SOURCE-004"
+    ],
+    "add_ratified_missing": [
+      "BOOTSTRAP-LOCATOR-ROLLBACK-001",
+      "RESTORE-OWNER-001",
+      "RESTORE-OWNER-002",
+      "RESTORE-OWNER-003",
+      "RESTORE-OWNER-004",
+      "RESTORE-OWNER-005",
+      "RESTORE-OWNER-006",
+      "RESTORE-OWNER-007",
+      "RESTORE-OWNER-008",
+      "RESTORE-OWNER-009"
+    ],
+    "add_to_close_discovered_gaps": [
+      "BOOTSTRAP-SOURCE-MALFORMED-001: exact optional-LF positive and uppercase/whitespace/link/ACL/changed-identity negatives with closed errors",
+      "BOOTSTRAP-NO-LEGACY-BRANCH-001: exact full durable state trace and one owner only",
+      "BOOTSTRAP-LEGACY-BRANCH-001: exact second identity, legacy auth, rotation/revocation, crash-safe removal and COMPLETE",
+      "BOOTSTRAP-PLAN-CRASH-001: owner-selected temp-first or explicit pre-authority recovery result",
+      "ANCHOR-MUTATION-RECOVERY-001..004: old/old/intent removal, new/old completion, new/new lingering-intent removal, and every mismatch/fork fail-closed",
+      "BACKUP-PHYSICAL-001: no-follow/no-replace snapshot+manifest physical identity and strict accepted manifest",
+      "BACKUP-REPLAY-001: restart replay returns the same backup and creates no second file",
+      "RESTORE-GENERATION-MAX-001: backup generation greater than current and current greater than backup",
+      "RESTORE-IDEMPOTENCY-INVALIDATION-001: old result cannot replay/conflict and same raw key can be admitted under the new authority",
+      "RESTORE-STATUS-DISCOVERY-001: crashed call yields no response but exact old owner discovers one nonsecret abort-eligible plan",
+      "RETENTION-PERSISTENCE-001: set, restart, get and exact event reconstruction",
+      "RETENTION-RESTORE-001: backup/restore preserves the selected policy/history under the owner-selected prospective rule",
+      "TIMESTAMP-9999-001 and TIMESTAMP-3000-001: ratified positives; year 10000 and impossible date negatives"
+    ]
+  },
+  "required_error_corrections": {
+    "new_error_code_required": false,
+    "registry_count_after_minimal_correction": 53,
+    "exact_existing_projections": [
+      {
+        "case": "bootstrap legacy_source omitted",
+        "error": "GKOS_P6_INVALID_PARAMS"
+      },
+      {
+        "case": "declaration versus physically observed source mismatch or changed expected legacy file",
+        "error": "GKOS_P6_MIGRATION_CONFLICT"
+      },
+      {
+        "case": "declared-present malformed bytes/type/link/protection/identity",
+        "error": "GKOS_P6_MIGRATION_MALFORMED"
+      },
+      {
+        "case": "staged referenced restore temp/locator/plan missing, corrupt, linked, aliased, misowned, misprotected or identity-mismatched on startup",
+        "error": "GKOS_P6_AUTHORITY_CORRUPT"
+      },
+      {
+        "case": "restore final locator already exists or abort outside exact prepublication state",
+        "error": "GKOS_P6_STATE_CONFLICT"
+      },
+      {
+        "case": "owner file/parent protection cannot be established or verified",
+        "error": "GKOS_P6_STORAGE_PERMISSION_INVALID"
+      },
+      {
+        "case": "backup manifest/snapshot digest or embedded coordinate mismatch",
+        "error": "GKOS_P6_EVIDENCE_MISMATCH or GKOS_P6_AUTHORITY_CORRUPT according to whether the bytes are untrusted input or already admitted authority state; freeze this boundary in vectors"
+      },
+      {
+        "case": "ordinary malformed/unknown/revoked credential at unauthenticated boundary",
+        "error": "GKOS_P6_AUTH_FAILED with the existing oracle rule"
+      },
+      {
+        "case": "closed write gate for an operation not explicitly admitted for recovery",
+        "error": "GKOS_P6_MIGRATION_RECOVERY_REQUIRED"
+      }
+    ],
+    "misuse_to_remove": "A delivery returning delivered=false is not by itself GKOS_P6_SECRET_EXPOSURE. That code is reserved for detected exposure. The operation must preserve the ratified durable state and return the exact storage/state/recovery projection without revealing or regenerating a secret.",
+    "native_exception_rule": "JSON, SQLite, Node and OS messages/codes/paths must be caught and mapped to the existing closed registry; no new public error is needed."
+  },
+  "exact_minimal_resolution_proposal": [
+    {
+      "order": 1,
+      "action": "Keep the F2 lane stopped and preserve the current uncommitted draft only as evidence. Do not accept, sign, commit, push, or repair it during concurrence."
+    },
+    {
+      "order": 2,
+      "action": "Product Owner resolves the three semantic questions below and ratifies a D0 amendment. The amendment must explicitly close bootstrap pre-authority crash recovery, retention prospective meaning, and abort generation/session behavior."
+    },
+    {
+      "order": 3,
+      "action": "Generate a versioned successor F1 contract pack from the amended ratified sources. Correct the existing schemas/operation semantics and keep 16 tables, 32 operations, 24 owner operations, and 53 errors. Adding a new restore inspect operation is unnecessary if authority.status is corrected as specified."
+    },
+    {
+      "order": 4,
+      "action": "Add the exact vectors above, deterministic strict-schema negatives, manifest hashes, docs and generator checks. Independently requalify and accept the successor pack; accepted e29e04b bytes remain historical and immutable."
+    },
+    {
+      "order": 5,
+      "action": "Only after a new owner authorization names the exact accepted successor SHA may a fresh F2 repair turn restart. It must rebuild bootstrap, physical filesystem primitives, anchor, backup, restore, abort, retention and replay from the corrected contract rather than patching around closed-schema failures."
+    },
+    {
+      "order": 6,
+      "action": "Run independent POSIX F2 recovery/crash qualification and later F4/F5 adversarial/platform gates. This review provides no implementation or later-stage authorization."
+    }
+  ],
+  "owner_questions": [
+    {
+      "id": "OWNER-Q-BOOTSTRAP-PREAUTH-CRASH",
+      "question": "Ratify temp-before-plan bootstrap recovery (recommended, no new authority), or ratify a fresh-OS-owner-proof bootstrap.initialize recovery/abort variant that tombstones the abandoned plan before new IDs/secret? The current OWNER_ONLY migration.recover path is impossible before activation."
+    },
+    {
+      "id": "OWNER-Q-RETENTION-PROSPECTIVE",
+      "question": "Does prospective mean the new retention value applies only to rows created at/after retention_effective_from (recommended literal meaning, requiring permanent exact policy history), or to every future sweep including older rows?"
+    },
+    {
+      "id": "OWNER-Q-RESTORE-ABORT-GENERATION",
+      "question": "When abort reopens the old authority, does authority_generation advance exactly once and stale every pre-plan session/cursor (recommended for a closed-gate security transition), or remain equal before/after? D0 explicitly preserves instance/restore epoch but is not exact about generation/session aggregates."
+    }
+  ],
+  "concurrence": {
+    "stop_artifact_four_blocker_classes_valid": true,
+    "stop_artifact_complete": false,
+    "contract_correction_required": true,
+    "f2_draft_repair_possible_before_successor_f1": false,
+    "new_restore_inspect_operation_required": false,
+    "new_retention_table_required": false,
+    "verdict": "CONCUR_CORRECTION_REQUIRED"
+  },
+  "authorization_boundary": {
+    "authorized": "Detached D0-15 migration concurrence record only.",
+    "not_authorized": [
+      "proposal mutation",
+      "accepted F1 mutation",
+      "F2 implementation or repair",
+      "commit",
+      "push",
+      "pull request",
+      "merge",
+      "release",
+      "deployment",
+      "activation",
+      "publication"
+    ]
+  }
+}

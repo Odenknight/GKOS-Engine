@@ -1,0 +1,97 @@
+{
+  "record_type": "gkos-phase6-f2-d0-15-stop",
+  "record_version": "1.0.0",
+  "recorded_date": "2026-08-26",
+  "verdict": "F2_STOPPED_D0_15",
+  "f2_accepted": false,
+  "implementation_handoff_ready": false,
+  "reason": "The accepted F1 contract pack cannot represent several security-relevant records required by the ratified D0 design. F2 is forbidden from changing accepted F1 bytes, so signing the current underbound runtime would overclaim conformance.",
+  "coordinates": {
+    "repository": "GKOS-Engine",
+    "branch": "codex/phase6-f2-authority-engine",
+    "base_commit": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "f2_owner_authorization_sha256": "e16b351f16d8fcf98d4683429764a6009e9073408bdb73c6b36e20f82d0e2118",
+    "f1_gate_sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff",
+    "f1_independent_verdict_sha256": "ee027811dd29826883f736c0f018de552979d2418762e69fa7988aff635aaa70",
+    "d0_ratification_sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929",
+    "governance_sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+    "accepted_audit_receipt_schema_sha256": "d1967a7b49129774ccd15e2122da328d2a8a8da4bb82b861fe5f560ab4e9187d",
+    "accepted_operation_inventory_sha256": "2b021e831a53384e551b5719e06c469ed349a8e4888099024fa580caec58c5fc"
+  },
+  "contract_stop_findings": [
+    {
+      "id": "F2-D0-15-ANCHOR-RECORD-UNDERBOUND",
+      "severity": "BLOCKER",
+      "accepted_source": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/audit-receipt.schema.json#/$defs/authority_anchor",
+      "accepted_line": 3,
+      "d0_source": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "d0_lines": [262, 270],
+      "conflict": "The closed authority_anchor schema permits only the ten listed fields. D0 requires the intent to bind proposed event/database digests, expected committed anchor, old/proposed event heads, and requires the committed anchor to bind its predecessor anchor. Those fields cannot be emitted through the accepted additionalProperties:false schema."
+    },
+    {
+      "id": "F2-D0-15-RESTORE-EVENT-UNDERBOUND",
+      "severity": "BLOCKER",
+      "accepted_source": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/audit-receipt.schema.json#/$defs/restore_event",
+      "accepted_line": 1221,
+      "d0_source": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "d0_line": 937,
+      "conflict": "The closed restore_event schema omits the pre-restore request/actor coordinates, old/new authority coordinates, replacement-owner locator binding, revoked/closed/invalidated aggregates, restored database digest, and restore-abort temporary identity/protection/disposition fields that D0 says each discriminated variant requires."
+    },
+    {
+      "id": "F2-D0-15-RETENTION-STATE-ABSENT",
+      "severity": "BLOCKER",
+      "accepted_source": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+      "accepted_line": 498,
+      "d0_source": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "d0_lines": [922, 1379],
+      "conflict": "retention.set is a mutating F2 owner operation and D0 freezes a durable 7..365 day override, but the exact closed authority_meta record has no retention value/effective-from fields and no other one of the exact 16 tables provides a current retention-policy record. Digest-only audit fields cannot reconstruct the value."
+    },
+    {
+      "id": "F2-D0-15-RESTORE-HANDOFF-RECOVERY-DISCOVERY",
+      "severity": "BLOCKER",
+      "accepted_source": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+      "conflict": "After a durable restore plan closes the write gate and protected credential handoff fails, the 32-operation inventory exposes no restore-plan inspect/discovery operation. authority.restore.abort requires a restore_plan_id that a failed restore call has not returned, leaving the owner unable to invoke the ratified abort path without an unratified side channel."
+    }
+  ],
+  "implementation_findings_not_masked_by_contract_stop": [
+    "Current backup and anchor records use field names outside the accepted closed schemas.",
+    "Current restore produces a hybrid database instead of publishing the fully qualified backup snapshot.",
+    "Current bootstrap omits durable OWNER_PROVED and the legacy LEGACY_REMOVED branch.",
+    "Current public final race check omits equality of authority_generation.",
+    "Current persisted policy reason_codes and activity metadata are SQL text rather than accepted JSON values.",
+    "Current stale-lock takeover does not bind deletion to the originally inspected file identity.",
+    "Current credential.issue advances auth_epoch and silently makes prior active credentials unusable.",
+    "Several frozen capacity and authentication-failure rate limits are not yet enforced.",
+    "Persisted page cursor metadata depends on process-memory page entries and cannot survive restart."
+  ],
+  "working_snapshot": {
+    "commit_created": false,
+    "push_performed": false,
+    "workflow_created": false,
+    "changed_path_count": 13,
+    "allowed_path_ceiling": 14,
+    "protected_path_hits": 0,
+    "accepted_f1_pack_diff_count": 0,
+    "note": "The product worktree intentionally remains uncommitted for owner disposition; these bytes are not a qualified implementation."
+  },
+  "local_evidence": {
+    "typecheck": "PASS",
+    "focused_test": {
+      "tests": 6,
+      "pass": 5,
+      "fail": 0,
+      "skip": 1,
+      "skip_reason": "POSIX reference integration cannot run on the Windows host and WSL access was denied"
+    },
+    "scope_gate": "PASS: 13 changed paths, ceiling 14, zero protected hits",
+    "license_gate": "PASS",
+    "nomenclature_gate": "PASS",
+    "full_suite": "NOT_TERMINAL: interrupted after the contract stop was established; one observed failure was the accepted F1 worktree-status test seeing later-phase uncommitted paths",
+    "pack_gate": "NOT_TERMINAL: Windows EPERM while a build/test process held dist during bounded shutdown"
+  },
+  "required_owner_action": [
+    "Convene the D0-15 Full contract-steward and migration/security roles independently of this implementer.",
+    "Ratify corrected closed authority_anchor, restore_event, durable retention-policy, and restore-plan recovery/discovery contracts and regenerate/requalify the F1 pack.",
+    "Only then authorize F2 to restart from an exact accepted predecessor; do not accept or sign the current worktree as F2."
+  ]
+}

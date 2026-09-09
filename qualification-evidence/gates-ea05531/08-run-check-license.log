@@ -1,0 +1,5 @@
+
+> gkos-engine@2.2.0 check:license
+> node scripts/check-license.mjs
+
+license metadata consistent: Apache-2.0

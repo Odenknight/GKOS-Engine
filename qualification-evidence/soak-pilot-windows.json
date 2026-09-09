@@ -1,0 +1,11 @@
+{
+  "mode": "pilot",
+  "sourceCommit": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+  "tarballSha256": "8b4cc0eb16be7c07b61f66d684e4b50810f94dd4a766b7a82195d48baed6c48a",
+  "tarball": "[LOCAL_PATH]",
+  "inventory": "[LOCAL_PATH]",
+  "consumer": "[LOCAL_PATH]",
+  "output": "[LOCAL_PATH]",
+  "durationMs": 180000,
+  "intervalMs": 15000
+}

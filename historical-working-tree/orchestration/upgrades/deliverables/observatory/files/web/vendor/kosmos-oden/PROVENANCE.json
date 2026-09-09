@@ -1,0 +1,38 @@
+{
+  "repository": "https://github.com/Odenknight/Kosmos-Oden",
+  "commit": "50ebc3c168cf4e34137faf47e0b297b00db1a753",
+  "license": "Apache-2.0; inherited MIT notices preserved",
+  "renderer_core_modified": true,
+  "bundler": "esbuild 0.28.1",
+  "bundle_sha256": "1773879574377fbda32a95612aba2783c54cf30955776fe94294043a9dadfbc9",
+  "inputs": {
+    "node_modules/three/build/three.core.js": "3718df126d69c125362a03340913204470d8c50238605150e57f808840fb7759",
+    "node_modules/three/build/three.module.js": "bbf5ed13fe4373f5bd38b14ea8e62e9f157327da5638edc6d3863e08b167c9c7",
+    "node_modules/gkos-engine/dist/gkos-engine.mjs": "013bf0b3f0a22b8e45aeb0fa92199f2dd564031e31af359172a23950127f4743",
+    "src/kosmos-version.ts": "733a13109707a039c0233d5dd12ccc6237f77ae74c26c2e9bc8049ca11eb2c2d",
+    "node_modules/gkos-engine/dist/navigation.mjs": "a2df3e5cc21128439719ebdeacca5496a58eb8f771cf259cb3657d3a895d2526",
+    "src/navigation-integration.ts": "c26e3fe83e3281cb421c3dd73154161e07ce5a430eed5c9e6e22698c8e3c5333",
+    "src/renderer/cosmology.ts": "7e71834a4b9396ad4fa8b46ebd147dc97134f5ef124504ed8d2781c6b75803c8",
+    "src/renderer/layout.ts": "393bb82f3997584e905113f49ce4dbc1e2a4722cdec9572ba34ef6e22df17d67",
+    "src/renderer/shaders.ts": "d92a64523a57bf9dee68832d9999a41641903a5ff958e790c7ef78d4a7411f00",
+    "src/renderer/i18n.ts": "ef5ecc75dd6f81afa52588825c4b4ca6491b51c830a1021971f18b9e285309d0",
+    "src/standalone/observability.ts": "e08e3660a0af0a8671f6d941f33383215d087856b9eec3c75a6c72438a37ceb4",
+    "src/renderer/renderer.ts": "838de450b4e1ae1004027c8e1afbbf99975d09129fbd3c0446b983369cb8d91a"
+  },
+  "upstream_bundle_sha256": "c656bfe86a59c0bdc5f9c13b55d6fbda5a7f19cc2ef863880306b777dcb8b86c",
+  "upstream_inputs": {
+    "node_modules/three/build/three.core.js": "3718df126d69c125362a03340913204470d8c50238605150e57f808840fb7759",
+    "node_modules/three/build/three.module.js": "bbf5ed13fe4373f5bd38b14ea8e62e9f157327da5638edc6d3863e08b167c9c7",
+    "node_modules/gkos-engine/dist/gkos-engine.mjs": "013bf0b3f0a22b8e45aeb0fa92199f2dd564031e31af359172a23950127f4743",
+    "src/kosmos-version.ts": "733a13109707a039c0233d5dd12ccc6237f77ae74c26c2e9bc8049ca11eb2c2d",
+    "node_modules/gkos-engine/dist/navigation.mjs": "a2df3e5cc21128439719ebdeacca5496a58eb8f771cf259cb3657d3a895d2526",
+    "src/navigation-integration.ts": "c26e3fe83e3281cb421c3dd73154161e07ce5a430eed5c9e6e22698c8e3c5333",
+    "src/renderer/cosmology.ts": "7e71834a4b9396ad4fa8b46ebd147dc97134f5ef124504ed8d2781c6b75803c8",
+    "src/renderer/layout.ts": "393bb82f3997584e905113f49ce4dbc1e2a4722cdec9572ba34ef6e22df17d67",
+    "src/renderer/shaders.ts": "d92a64523a57bf9dee68832d9999a41641903a5ff958e790c7ef78d4a7411f00",
+    "src/renderer/i18n.ts": "ef5ecc75dd6f81afa52588825c4b4ca6491b51c830a1021971f18b9e285309d0",
+    "src/standalone/observability.ts": "e08e3660a0af0a8671f6d941f33383215d087856b9eec3c75a6c72438a37ceb4",
+    "src/renderer/renderer.ts": "f451426c51cbe19653a58ac476f9f618fa324f591b81270f53636cf9a86cc4ca"
+  },
+  "local_patch": "consumer-stable-identity-v1 (uncommitted candidate; upstream commit remains historical base)"
+}

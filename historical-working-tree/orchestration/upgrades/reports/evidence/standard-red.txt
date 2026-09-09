@@ -1,0 +1,629 @@
+▶ known gate missing and mistyped required evidence always refuses without throwing
+  ✖ TA-L1-001 (1.9241ms)
+  ✖ TA-L3-001 (0.2484ms)
+  ✖ TA-L4-001 (0.1803ms)
+  ✖ TA-L4-002 (0.1199ms)
+  ✔ TA-L4-003 (0.1466ms)
+  ✖ TA-L4-004 (0.1583ms)
+  ✖ TA-L5-001 (0.1158ms)
+  ✔ TA-L5-002 (0.1028ms)
+  ✖ TA-L5-003 (0.1558ms)
+  ✖ TA-L5-004 (0.16ms)
+  ✖ TA-L5-005 (0.308ms)
+  ✖ TA-L5-006 (0.1329ms)
+  ✖ TA-L6-001 (0.1005ms)
+  ✖ TA-L6-002 (0.102ms)
+  ✖ TA-L6-003 (0.0953ms)
+  ✔ TA-L6-004 (0.1598ms)
+  ✖ TA-L6-005 (0.1194ms)
+  ✖ TA-L6-006 (0.084ms)
+  ✔ TA-L6-007 (0.066ms)
+  ✖ TA-L6-008 (0.096ms)
+  ✖ TA-L6-009 (0.1901ms)
+  ✖ TA-L7-001 (0.1301ms)
+  ✖ TA-L7-002 (0.0953ms)
+  ✖ TA-L7-003 (0.1378ms)
+  ✔ TA-L7-004 (0.0945ms)
+  ✖ TA-L7-005 (0.1017ms)
+  ✖ TA-L7-006 (0.1102ms)
+  ✖ TA-L7-007 (0.0806ms)
+✖ known gate missing and mistyped required evidence always refuses without throwing (7.8319ms)
+✖ impossible timestamps refuse in encoder, verifier, gate and authority window (0.2021ms)
+✖ lone UTF-16 surrogates refuse instead of replacement encoding, including keys (2.011ms)
+✔ valid leap dates, microsecond boundaries and Unicode preserve exact positive bytes (4.3107ms)
+✖ direct authority evaluation refuses absent records and coerced time evidence (0.1602ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 6
+ℹ fail 27
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 347.0044
+
+✖ failing tests:
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L1-001 (1.9241ms)
+  AssertionError [ERR_ASSERTION]: mutates_predecessor=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L1-001'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L1-001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L3-001 (0.2484ms)
+  AssertionError [ERR_ASSERTION]: inferred=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L3-001'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L3-001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L4-001 (0.1803ms)
+  AssertionError [ERR_ASSERTION]: evaluation=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L4-001'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L4-001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L4-002 (0.1199ms)
+  AssertionError [ERR_ASSERTION]: evaluation=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L4-001'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L4-001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L4-004 (0.1583ms)
+  AssertionError [ERR_ASSERTION]: deterministic_level=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L4-004'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L4-004',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L5-001 (0.1158ms)
+  AssertionError [ERR_ASSERTION]: overdue=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L5-001'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L5-001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L5-003 (0.1558ms)
+  AssertionError [ERR_ASSERTION]: governed_acceptance=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L5-003'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L5-003',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L5-004 (0.16ms)
+  AssertionError [ERR_ASSERTION]: authorized=[object Object]
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L5-004'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L5-004',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L5-005 (0.308ms)
+  AssertionError [ERR_ASSERTION]: proposer_id=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L5-005'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L5-005',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L5-006 (0.1329ms)
+  AssertionError [ERR_ASSERTION]: deleted_prior=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L5-006'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L5-006',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L6-001 (0.1005ms)
+  AssertionError [ERR_ASSERTION]: indefinite_length=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L6-001'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L6-001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L6-002 (0.102ms)
+  AssertionError [ERR_ASSERTION]: duplicate_keys=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L6-002'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L6-002',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L6-003 (0.0953ms)
+  AssertionError [ERR_ASSERTION]: negative_zero=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L6-003'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L6-003',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L6-005 (0.1194ms)
+  AssertionError [ERR_ASSERTION]: valid_utf8=[object Object]
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L6-005'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L6-005',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L6-006 (0.084ms)
+  AssertionError [ERR_ASSERTION]: absent_null_empty_conflated=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L6-006'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L6-006',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L6-008 (0.096ms)
+  AssertionError [ERR_ASSERTION]: complete=[object Object]
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L6-008'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L6-008',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L6-009 (0.1901ms)
+  TypeError: Cannot read properties of undefined (reading 'some')
+      at evaluateGate (file:///[LOCAL_PATH]
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L7-001 (0.1301ms)
+  AssertionError [ERR_ASSERTION]: valid=[object Object]
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L7-001'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L7-001',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L7-002 (0.0953ms)
+  AssertionError [ERR_ASSERTION]: actor_contains=[object Object]
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L7-002'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L7-002',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L7-003 (0.1378ms)
+  TypeError: Cannot read properties of undefined (reading 'some')
+      at evaluateGate (file:///[LOCAL_PATH]
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L7-005 (0.1017ms)
+  AssertionError [ERR_ASSERTION]: reported_committed=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L7-005'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L7-005',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L7-006 (0.1102ms)
+  AssertionError [ERR_ASSERTION]: applicable_route=[object Object]
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L7-006'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L7-006',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:13:13
+✖ TA-L7-007 (0.0806ms)
+  AssertionError [ERR_ASSERTION]: authorized=undefined
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L7-007'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.start (node:internal/test_runner/test:1191:17)
+      at TestContext.test (node:internal/test_runner/test:382:20)
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L7-007',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:30:1
+✖ impossible timestamps refuse in encoder, verifier, gate and authority window (0.2021ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + null
+  - 'GKOS-GATE-L6-004'
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'GKOS-GATE-L6-004',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:43:1
+✖ lone UTF-16 surrogates refuse instead of replacement encoding, including keys (2.011ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /GKOS-GATE-L6-005/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at orchestration\upgrades\standard-r18\conformance\runner\test\fail-closed-inputs.test.mjs:64:1
+✖ direct authority evaluation refuses absent records and coerced time evidence (0.1602ms)
+  TypeError: Cannot destructure property 'valid_from' of 'undefined' as it is undefined.
+      at evaluateAuthorityWindow (file:///[LOCAL_PATH]
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7)

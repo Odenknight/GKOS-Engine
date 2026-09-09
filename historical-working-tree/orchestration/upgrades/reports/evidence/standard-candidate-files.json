@@ -1,0 +1,38 @@
+[
+  {
+    "path": "conformance/runner/authority-window.mjs",
+    "sha256": "80165b5c917110fc55afced690972d88d5ed579b6695b026ec379fccf3af5b64"
+  },
+  {
+    "path": "conformance/runner/canonical.mjs",
+    "sha256": "2c875d7636a82e2e7cc397dd8052a55d6567f3dae626902aaffc8851922bdfb7"
+  },
+  {
+    "path": "conformance/runner/gate-evaluator.mjs",
+    "sha256": "f122655c966714ae01264dabe519f828273ae20d4f1bf46821e62f1d2d5ec8f7"
+  },
+  {
+    "path": "conformance/runner/registry-lint.mjs",
+    "sha256": "c8529a8eec46540ebf98b45e6eee826039135c30785d407a17bf6a30c0508f72"
+  },
+  {
+    "path": "conformance/runner/test/canonical-replay.test.mjs",
+    "sha256": "b92a01e7642bb96ee3e323104e8074249048708fd07f78dab5f1084ece82f304"
+  },
+  {
+    "path": "conformance/runner/canonical-time.mjs",
+    "sha256": "f3cb5fbe95ef7b2e05fbef344f459fe8a68245fe987ce5658565f5c455d5bc3f"
+  },
+  {
+    "path": "conformance/runner/test/fail-closed-inputs.test.mjs",
+    "sha256": "cce8f3ed64dd78dced9278b9115eac39feb33a839e9f8d8288e273acd99b3c9e"
+  },
+  {
+    "path": "conformance/runner/test/track-a-evidence.test.mjs",
+    "sha256": "1cc24e31a19cc919fe8c9892005c5ca32536af6036183935c3947d00b0b2226e"
+  },
+  {
+    "path": "conformance/runner/track-a-evidence.mjs",
+    "sha256": "8c0402c18c4fa57c824dd931e4fa57027611031681f6462c9c9bf7a169a4d516"
+  }
+]

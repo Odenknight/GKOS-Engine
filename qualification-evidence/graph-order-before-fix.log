@@ -1,0 +1,90 @@
+✔ codeUnitCompare is locale-independent: 'z' sorts before 'ä' (1.6794ms)
+✔ emitted graph node order is code-unit order ('z.md' before 'ä.md') (8.9183ms)
+✔ uniq'd aggregate tag list is code-unit ordered (ASCII tags before non-ASCII) (1.3854ms)
+✔ two consecutive full builds of the same fixture are byte-identical (3.6148ms)
+✖ incremental edits preserve canonical link order and identities and converge with clean rebuild (3.5887ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 94.115
+
+✖ failing tests:
+
+test at test\determinism.test.mjs:69:1
+✖ incremental edits preserve canonical link order and identities and converge with clean rebuild (3.5887ms)
+  AssertionError [ERR_ASSERTION]: compare complete ordered links, including generated IDs
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      {
+  +     id: 'contains:folder:.->file:z.md',
+  +     kind: 'contains',
+  +     source: 'folder:.',
+  +     target: 'file:z.md'
+  +   },
+  +   {
+        id: 'contains:folder:.->file:ä.md',
+        kind: 'contains',
+        source: 'folder:.',
+        target: 'file:ä.md'
+      },
+  ...
+      {
+  +     id: 'wikilink:file:z.md->file:a.md:3',
+  +     kind: 'wikilink',
+  +     label: undefined,
+  +     source: 'file:z.md',
+  +     sourcePath: 'z.md',
+  +     target: 'file:a.md'
+  -     id: 'contains:folder:.->file:z.md',
+  -     kind: 'contains',
+  -     source: 'folder:.',
+  -     target: 'file:z.md'
+      },
+      {
+  +     id: 'wikilink:file:ä.md->file:a.md:4',
+  -     id: 'wikilink:file:ä.md->file:a.md:3',
+        kind: 'wikilink',
+        label: undefined,
+        source: 'file:ä.md',
+        sourcePath: 'ä.md',
+        target: 'file:a.md'
+      },
+      {
+  +     id: 'wikilink:file:a.md->file:z.md:5',
+  -     id: 'wikilink:file:a.md->file:z.md:4',
+        kind: 'wikilink',
+        label: undefined,
+        source: 'file:a.md',
+        sourcePath: 'a.md',
+        target: 'file:z.md'
+      },
+  -   {
+  -     id: 'wikilink:file:z.md->file:a.md:5',
+  -     kind: 'wikilink',
+  -     label: undefined,
+  -     source: 'file:z.md',
+  -     sourcePath: 'z.md',
+  -     target: 'file:a.md'
+  -   }
+    ]
+  
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ { id: 'contains:folder:.->file:z.md', source: 'folder:.', target: 'file:z.md', kind: 'contains' }, { id: 'contains:folder:.->file:ä.md', source: 'folder:.', target: 'file:ä.md', kind: 'contains' }, { id: 'contains:folder:.->file:a.md', source: 'folder:.', target: 'file:a.md', kind: 'contains' }, { id: 'wikilink:file:z.md->file:a.md:3', source: 'file:z.md', target: 'file:a.md', kind: 'wikilink', label: undefined, sourcePath: 'z.md' }, { id: 'wikilink:file:ä.md->file:a.md:4', source: 'file:ä.md', target: 'file:a.md', kind: 'wikilink', label: undefined, sourcePath: 'ä.md' }, { id: 'wikilink:file:a.md->file:z.md:5', source: 'file:a.md', target: 'file:z.md', kind: 'wikilink', label: undefined, sourcePath: 'a.md' } ],
+    expected: [ { id: 'contains:folder:.->file:ä.md', source: 'folder:.', target: 'file:ä.md', kind: 'contains' }, { id: 'contains:folder:.->file:a.md', source: 'folder:.', target: 'file:a.md', kind: 'contains' }, { id: 'contains:folder:.->file:z.md', source: 'folder:.', target: 'file:z.md', kind: 'contains' }, { id: 'wikilink:file:ä.md->file:a.md:3', source: 'file:ä.md', target: 'file:a.md', kind: 'wikilink', label: undefined, sourcePath: 'ä.md' }, { id: 'wikilink:file:a.md->file:z.md:4', source: 'file:a.md', target: 'file:z.md', kind: 'wikilink', label: undefined, sourcePath: 'a.md' }, { id: 'wikilink:file:z.md->file:a.md:5', source: 'file:z.md', target: 'file:a.md', kind: 'wikilink', label: undefined, sourcePath: 'z.md' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

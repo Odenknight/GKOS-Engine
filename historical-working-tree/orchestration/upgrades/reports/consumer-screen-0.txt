@@ -1,0 +1,708 @@
+
+2026-08-31/observatory-audit/GKOS-Observatory/contracts/observatory/CONTRACT.md
+1: # Provisional Observatory contracts
+3: Version: observatory.event.v0 / observatory.receipt.v0. These are a replay-wrapper contract, not normative GKOS artifacts. The GKOS Standard has GKX-CBOR-1 canonical encoding; this browser-oriented JSON wrapper deliberately does not claim that identity or conformance. No upstream Engine ran to produce these fixtures.
+5: Canonicalization observatory.canonical.v0 uses UTF-8 JSON with no whitespace, ASCII object keys sorted lexicographically, unchanged array order, JSON string escaping, Unicode scalar strings, null/booleans, and safe integers only (no negative zero). No Unicode normalization. Float values, unsupported types, non-ASCII keys and lone surrogate code points are rejected. SHA-256 is lowercase hex over canonical receipt bytes, excluding the surrounding bundle and trailing newline. The bundle is {canonicalization,receipt,digest,signature:null}. Signature must be null in this release. Hash equality establishes integrity relative to the supplied digest, not origin, truth, certification or resistance to a party replacing both data and digest.
+9: Events require schema_id, event_id, session_id, sequence starting at one, event_type, actor_role, subject_ref, decision and reason_code (nullable), correlation_id, corpus_digest, policy_digest, engine_build_digest:null, fixture_build_digest, recorded_time, time_source:fixed_fixture, visibility:public and message. Public session identifiers are deterministic replay identifiers, not issued interactive credentials.
+11: The fixed-fixture validator rejects missing or extra event fields. A session is 32 lowercase hex characters; every event has the same session and correlation identifier, and its unique ID is session plus colon plus sequence. Subject references use the public MSR-NNN catalog form. Actors match the recorded input role. Recorded times must be valid UTC whole-second timestamps. Intermediate decisions/reasons are null; the final decision is permitted/refused with a declared policy reason. The ordered event manifest must match every event ID and canonical digest exactly, with no duplicates, omissions or extra fields. Both Node and independent Python verifiers enforce these rules even if an attacker recomputes the outer digest.
+15: Public manifest records contain plain text, never HTML. Render textContent. Links point only between public records. A known_protected record has a fixed catalog projection and no protected links. Undisclosed records have no public projection, counts, filenames or events. Generic lookup returns the identical status/body for absent and undisclosed requests; this is not a full timing-side-channel claim.
+17: corpus/build/artifacts.json pins exact public file bytes outside the public tree. Operators must authenticate/pin that manifest separately. A changed artifact plus changed trust anchor cannot be detected by unsigned hashing alone.
+
+2026-08-31/observatory-audit/GKOS-Observatory/deploy/live/patches/README.md
+1: # Observatory MCP content extension
+14: sessions, authorized snapshots, bounded results and traversal telemetry. It also refreshes
+15: authorization after receiving a request body. No filesystem read endpoint,
+25: `UPSTREAM_COMMIT`, `OBSERVATORY_PATCH_SHA256`, and `DIST-SHA256SUMS`. Never rebuild
+
+2026-08-31/observatory-audit/GKOS-Observatory/deploy/live/semantic/README.md
+1: # Offline semantic runtime
+14: must be root-owned and not group/world writable. Retain the runtime lockfile.
+23: remains internal. No source classification is changed. Provider/cache identity
+36: MCP result filtering. Never publish production retrieval output in test fixtures.
+
+2026-08-31/observatory-audit/GKOS-Observatory/DEPLOYMENT.md
+1: # Deployment record — 2026-08-30
+3: ## Current discovery release — 2026-08-31
+35:   capability check, not a cold project-status/summarization acceptance test.
+65: ## Prior reliability release — 2026-08-31
+74: Changes: bounded event reconnect with session-bound replay, duplicate suppression,
+88:   reconnect after forced EOF, two archived events without replay duplication,
+107:   bounded idle expiry. Browser Stop/disconnect was verified separately above.
+121: only the bounded recovery correction and its regression. Patch SHA256:
+132: ## Prior workload-scheduling release — accepted 2026-08-31
+142: (or a lower persisted concurrency ceiling) and one per session. Bounded queues
+146: Streams are separately bounded at8 per credential and24 server-wide.
+149: credential/session authority and fresh source authorization. Disconnect, revoked
+152: responses carry bounded reasons and Retry-After. There is no LAN/token exemption
+184: ## Prior multi-lane transport release — accepted 2026-08-31
+199: The existing event queue and authorization filtering remain enforced.
+205: `error:rate_limited`, a bounded `reason` and `Retry-After`. Clients still need
+227: Rollback requires restoring both identities and the environment from root-private
+233: ## Prior independent Codex credential release — 2026-08-31
+235: Engine `0584a5d-codex1` adds an explicitly enabled second MCP identity for Codex;
+240: Claude retains the original default token and identity. Both have independent
+247: regressions covering explicit enablement, persistence, unchanged default identity,
+255: `desktop-agent.codex.mcp.identity.json`. No credential value entered Git, chat
+265: files private; do not delete or recreate Claude's identity. All Engine restarts
+266: invalidate current sessions, so clients must reconnect.
+269: ## Prior access and viewer release — accepted
+274: `10972ae395bb5baa8b9db44b03760f77759d5ec2`. The existing shared MCP identity now
+281: identity; newly created identities still default to internal. This does not
+284: an identity; server policy enforces its ceiling before retrieval and disclosure.
+286: quota and revocation. Separate simultaneous policy tests require distinct
+287: identity/credential bindings, which the current desktop launcher does not mint.
+302:   preserving identity, token, revocation, canonical bytes and invalid-value refusal.
+307:   hide/show-summary control without replacing the renderer iframe. Local browser
+323: 1,467 metadata rejects and whole-vault authored identity/relationship conflicts
+328: Rollback requires restoring BOTH the prior Engine environment and the prior
+329: internal-ceiling identity before restarting semantic3, whose parser rejects a
+330: secret ceiling. Protected identity backup:
+331: `/etc/gkos-engine/mcp.identity.before-all-levels`; environment backup:
+333: 0600 and exact canonical bytes when restoring the identity. Viewer rollback uses
+337: ## Prior offline semantic release — accepted for explicit scoped testing
+390: ignored `.obsidian`. The admitted view also has identity/relationship conflicts,
+391: including 29 duplicate-UID groups. Whole-vault search must refuse that view.
+402: Rollback to the previous working synthetic lexical deployment requires restoring
+410: ## Previous native retrieval integration — installed and accepted
+416: chunks, verified byte-span citations, provenance and stage status. SQLite FTS5
+432: Per-request authorization intersects native discovery policies before ranking.
+435: Generation changes and invalid authorization fail closed rather than returning
+447: ## Previous MCP content extension
+469: Search is bounded literal AND matching over full authorized text, not semantic
+485: ## Previous live viewer and seven-tool Engine acceptance
+487: Status: **LAN live Engine deployed and accepted at 192.168.5.99, alongside the
+489: static-only status below; historical hashes and checks are retained as history.
+515: TLS bypass. Ordinary browsers still require local CA trust.
+517: Revocation after restart denied MCP; restoration recovered the original identity
+519: An initial revocation test appended a newline that upstream's exact-byte identity
+521: Identity edits must preserve native JSON serialization, including no final newline.
+528: the one default MCP identity has an internal ceiling. Individual invitations,
+534: `.gkx/derived` tree and separate status/credential directory are writable.
+538: ## Historical static deployment — retained evidence
+576: Kosmos-Oden renderer source commit: `50ebc3c168cf4e34137faf47e0b297b00db1a753`.
+577: Renderer SHA256: `c656bfe86a59c0bdc5f9c13b55d6fbda5a7f19cc2ef863880306b777dcb8b86c`.
+589: ## Historical static verified evidence
+614: ## Address ownership resolved
+624: ## Remaining gates
+628: individual identity/session-platform gates, and media pipeline qualification
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/BASELINES.md
+1: # Baseline inventory — 2026-08-30
+10: This deployment is the static canonical replay profile. It does not run an
+30: ## Interface and gap table
+36: | Traversal events | Authenticated `/events`, credential-bound authorized view, retained SSE replay | Adapter needed; Observatory event fixtures must not masquerade as native Engine events |
+40: | Governance/admission receipts | Evidence/store contracts, deterministic admission provider | Not approval authority; no source effects activated |
+41: | Canonical bytes | GKX-CBOR-1, RFC8949 core deterministic CBOR | Observatory JSON replay envelope is explicitly provisional, not a normative GKOS artifact/hash |
+42: | Effects/approval | Navigation Effects and proposal ingress explicitly absent | Simulated effects in fixtures only |
+48: adapter must map exact contracts, qualify redaction and policy mutation behavior,
+51: ## Static server envelope
+56: profile. Viewer files and permitted replay artifacts are read into memory at
+59: `node server/index.mjs --check` validates replay digests and emits the public
+60: artifact snapshot digest. Production requires that exact value in
+63: It covers the corpus artifact manifest, each listed replay's exact bytes, and
+64: every served viewer asset under its public path. The release manifest must
+68: ASCII. The corpus artifact manifest independently binds manifest/replay bytes.
+77: All unavailable paths—including media, private sources, unknown replay IDs,
+85: gate. Static success must not be described as completion of those later gates.
+87: ## Verification performed
+90: Tests cover rejected corpus/replay/viewer tampering, all six replay verification
+92: top-level and same-origin renderer-frame CSP, malformed and oversized (including
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/CORPUS.md
+1: # Meridian corpus and receipt reproduction
+3: This document governs the authored canonical replay corpus, not the separately
+6: replays. Statements below about no ingestion apply to the replay pipeline.
+9: This original CC0 fictional corpus is a short, end-to-end reading of one administrative decision. All names, instruments, events and values are synthetic. Source/license metadata lives in corpus/meridian/SOURCE.json. Source records and scenarios are separate from generated public output and from the golden assertions in tests.
+13: Six canonical scenarios cover authorized retrieval/effect, missing authority, supersession/invalidation, retained conflict, missing authorization, and a cataloged protected record. The absent-versus-undisclosed negative case exists only in automated tests, not a public replay.
+15: The evaluator in corpus/fixture-policy.mjs runs at build time to produce illustrative golden fixtures. It is not the upstream GKOS Engine, an Engine adapter, a deployed permission boundary, or a proof of conformance. The static server must serve only corpus/build/public, never source records. The policy table is published in the manifest; stable reasons explain the fixture decisions independently of the prose.
+21: Notes are safe plain text, not rendered HTML or interpreted Markdown; clients must use textContent. This release does not claim a Markdown/HTML sanitizer. ALL attachments are rejected at build time. Image metadata removal, PDF active-content removal, audio/video re-encoding and thumbnails are deferred; no source media route is supported. No automatic ingestion from /mnt/data or user files occurs.
+23: Canonical receipt bytes are reproducible only for identical recorded inputs, fixed fixture times, source/policy versions, generator source and contract bytes. The JSON wrapper is explicitly provisional and distinct from upstream GKX-CBOR-1. Read contracts/observatory/CONTRACT.md. No private signing key exists. Signature is null, and verification reports unsigned integrity only. Replacing both a receipt and its digest can forge unsigned output; an operator must pin an authenticated release manifest separately. Engine and viewer build digests remain null rather than claiming execution or a viewer build that did not produce the fixtures.
+25: corpus/build/artifacts.json holds exact public-file SHA-256 digests outside the served directory. The server should fail closed on mismatches. Rebuilding after an intentional source change requires a new release artifact trust pin.
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/DECISIONS.md
+1: # Deployment decisions — 2026-08-30
+9: invitation/identity administration. See current [deployment evidence](../DEPLOYMENT.md).
+14: | Topic | Decision and rationale |
+16: | Host | KnightsAI, 192.168.5.10, Proxmox VE. Never modify another workload without resolving ownership conflicts. |
+23: | Profile | Static canonical demonstrations first. Actual upstream Engine integration and live claims require separate implementation and release evidence; fixture generation is labeled honestly. |
+24: | Renderer | Pin and reuse the actual Kosmos-Oden renderer with a narrow adapter; keep the render core unchanged. |
+25: | Contract | Provisional Observatory JSON replay/receipt, explicitly distinct from normative GKX-CBOR-1 and GKOS conformance artifacts. Digests verify integrity, not origin or truth. |
+26: | Refusal | Apply v0.2 distinction: deliberately cataloged protected objects may expose approved catalog fields; undisclosed objects and absent objects must have identical public envelopes. No protected graph metadata. |
+29: | Recovery | Rebuild a separate disposable guest or reinstall release artifacts for validation; never destroy the requested working LXC merely to satisfy an older drill example. |
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/ENGINE-AGENT-HANDOFF.md
+1: # Engine agent handoff — settings, discovery and reliability
+3: Date: 2026-08-31. Status: published for review, **upstream CI blocked by a historical protected-path contract gate**; not merged or promoted to production. Focused settings/runtime staging tests passed; full CI is not green.
+5: ## Integration blocker discovered by GitHub CI
+7: Node 24 full suite: **930 tests, 925 passed, 1 failed, 4 skipped**. Failure: `test/agent-identity-mcp-contract.test.mjs:805`, “diff is all-and-only allowed and protected paths are byte-identical”. The test compares protected files against its historical `INTEGRATION_BASE`, not only uncommitted changes. It rejects changes to `README.md`, `bin/gkx.mjs`, `src/desktop-agent.ts`, `src/ingest/storage.ts`, `src/watcher/coordinator.ts`, `src/watcher/host.ts`, and `src/watcher/journal.ts` in this cumulative integration.
+9: The contract guard and its hashed protected-path manifest were **not bypassed or rewritten**. The Engine owner must decide how a new implementation phase is authorized alongside the frozen historical contract: separate historical qualification from current runtime qualification, or approve an explicit versioned scope amendment. Do not simply remove the assertion or set its baseline to the new HEAD. The missing Phase-4 receipt upload is downstream of the test-step failure, not evidence of a successful qualification run. Other CI jobs may still be running; inspect the linked run before merging.
+11: ## Send this to the Engine agent
+13: > Start with [GKOS-Engine issue #36](https://github.com/Odenknight/GKOS-Engine/issues/36) and [source PR #37](https://github.com/Odenknight/GKOS-Engine/pull/37), branch `codex/engine-settings-audit-20260831`, commit `433fd01e5e49772b80da784e72dc8cbce1459c16`. First resolve the historical protected-path CI gate described above through an explicit contract/scope decision; full CI is not green. Read `docs/SETTINGS.md` and `docs/SETTINGS-TOML.md`. The PR contains the cumulative Observatory extension plus the settings corrections; do not apply the Observatory patch again on top of it. All 47 TOML keys have ownership/status entries, not all 47 are operational. Review SET-08/09 and the acceptance checklist before claiming completion. Preserve admission, authentication, secret handling, exact legacy outputs and frozen historical fixtures. Run CI and the explicit provider/platform tests, then propose reviewed integration/deployment and vault repair separately. Record evidence and commit links against #36 as each open item closes.
+17: ## Immutable coordinates
+33: ## Verification ledger
+42: | Final patch identity | Reverse-apply check passed against staged source, followed by rebuild | Source/patch correspondence, not attestation of authorship |
+48: Staging logs: `[HOST_PATH] `final-build.log`, `final-focused.log`. Logs remain operator-side; published evidence is the bounded summary above.
+54: ## Reproduce
+56: Checkout PR #37 directly for upstream work. For deployment builds, use the pinned base plus the checksum-pinned patch through [build-engine.sh](../deploy/live/build-engine.sh); never stack both representations.
+72: To repeat the actual local-model test, an operator must set `GKOS_TEST_LOCAL_EMBEDDING_CONFIG` to an existing approved, root-protected configuration with the test's required indexing ceiling. Without it, the test skips; report that skip, do not substitute canned vectors and call it a live-model pass. Never put real secrets into CLI arguments, screenshots, issue bodies or committed fixtures.
+74: ## Remaining gates, in order
+79: 4. **Reviewed data repair:** exact intentional FAC fixture manifest first. Keep its eleven known files as a canary, not a blanket directory exclusion. Other identity/relationship findings require evidence and human-reviewed patches; no automatic UID regeneration or `test_fixture` metadata edits.
+80: 5. **Evidence/recency and navigation acceptance:** fresh-session, no-path-hint project discovery; recorded status backed by notes; bounded calls/bytes and accurate unavailable-view wording. Modification time must not be invented from valid_at/head.
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/ENGINE-BUILD-ROADMAP.md
+1: # Engine build roadmap — after discovery1
+3: Date: 2026-08-31. Status: proposed build specifications, not implemented upgrades.
+5: ## Recommendation
+11: is useful afterward, but must not delay those outcomes.
+17: take precedence until an explicit contract decision is approved.
+19: ## Starting point
+38: - Bounded event reconnect/replay, explicit Stop/idle reader cancellation,
+44: resolution and one bounded read took three tool calls. On one 100-record page,
+46: a cold project-status acceptance, a token measurement, or an Engine latency SLO.
+48: ## Build packages and order
+58: | E03 | [Evidence bundles and honest recency](engine-builds/03-evidence-and-recency.md) | P1 | E06 reference foundation; bounded excerpts first, time provenance second |
+59: | E04 | [Snapshot identity and safe incremental discovery](engine-builds/04-snapshots-and-diffs.md) | P1/P2 | E06 + E05 measurements; small manifest first, bounded diff later |
+69:    E03 bounded evidence, and E07 cold discovery/status/citation acceptance.
+79: ## Definition of functional
+82: **recorded** status using admitted source evidence, cite exact supporting bytes,
+91: its scope. Any proposal to move fixtures to a separate test corpus requires an
+92: explicit owner decision; report exclusions are not query/admission exclusions.
+94: ## Evidence reconciliation
+102: | Scope refs surviving reconnect prove durable identity | No: reconnect can preserve an MCP session; paths and UIDs also have different limits |
+114: ## Decisions and inputs still required
+117: - Selection of one useful repair scope and the identity/history decisions needed
+119: - A contract/privacy decision before exporting any more detailed native conflict
+121:   blocked on that decision.
+122: - Approval of recency field meanings, digest schemas and retention limits before
+127: ## Non-goals
+136: ## Sources and implementation ownership
+149: Engine changes must also be represented in the tracked
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/01-diagnostics-and-preflight.md
+1: # E01 — Explainable refusals and search preflight
+3: Status: proposed. Priority: P0. Parent: [roadmap](../ENGINE-BUILD-ROADMAP.md).
+6: ## Outcome and evidence
+14: `gkos_navigation_audit` has bounded Navigation findings. MCP maps
+20: into a detailed public diagnostic.** A secret-ceiling MCP identity is not an
+23: ## Minimum build: same-call explanation
+25: 1. Preserve current error codes and `isError` behavior; never turn a refusal into
+32:    relationship, identity, or missing target caused it. Suggested actions:
+37:    readiness failures need separately reviewed retry semantics and bounded delay.
+39:    `view: { basis: "admitted_authorized", bounded: true }`. This is a statement
+41:    Never add a considered/admitted denominator, hidden count or coverage percent.
+49: serialization change requires explicit extension negotiation/versioning.
+51: ## Protected operator preflight
+58: Produce a bounded, protected report through an operator-local diagnostic runner
+60: It must not run a second writer against live watcher/retrieval state.
+68: | Stable reason categories | Admission rejection, identity conflict, relationship/lineage conflict, or index readiness; more than one may apply |
+71: | `truncated`, examined limits, continuation | Never present a bounded prefix as a complete inventory |
+75: error codes. A record absent from the admitted client view must not cause an
+81: ## Optional second slice: consumer preflight
+86: It must evaluate the same policy/filter/coherence path as a subsequent search,
+92: ## Implementation checkpoints
+104: ## Acceptance tests
+107: - Duplicate identity, ambiguous/unresolved relationship, lineage fork/cycle and
+113:   request-specific fields. A diagnostic must not create a new existence oracle.
+116: - A bounded diagnostic rollup labels incomplete coverage and binds pagination.
+123: ## Release / rollback / done
+127: Rollback removes only the new extension surface; it must not alter source state
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/02-reviewed-repair-and-canaries.md
+1: # E02 — Reviewed project repair and duplicate-identity canaries
+3: Status: proposed. Priority: P0. Parent: [roadmap](../ENGINE-BUILD-ROADMAP.md).
+7: ## Outcome and boundary
+13: This extends [VAULT-REPAIR-PLAN.md](../VAULT-REPAIR-PLAN.md), not an authorization
+19: ## Evidence and inventory design
+27: `GKX-IDENTITY-003`/`004`. Exact paths and per-record expectations are not yet
+29: "conflicted copy" names are not an authoritative identity inventory.
+44: Assessment scores are quality evidence, not a summary of project status and not
+45: proof of identity conflict. Confirm diagnostic candidates against source bytes
+49: ## Build slice A — exact protected canary manifest
+55:   only where meaningful; do not assume both identity codes occur on every file.
+58:   Unlisted diagnostics must fail the canary comparison or require review.
+69: drift must invalidate or require review of the expectation, not silently rebase it.
+71: ## Build slice B — deterministic dry-run repair proposals
+82:    Expanding that scope requires review; a folder alone may not be coherent.
+86:    classification: mechanical candidate, semantic decision, or blocked.
+87: 4. Explicit approvals for identity/history decisions. Determine copy vs version
+88:    vs distinct record before assigning identity or repairing references. Never
+92: 6. Plan digest and a proposed apply order/rollback journal. Counts must state
+98: Do not invent provenance, created dates, sensitivity, authorship or epistemic
+101: ## Build slice C — approved apply wrapper
+103: This is a separate, explicit operator action after dry-run approval and a tested
+106: - Reopen through bounded no-follow/ownership-checked filesystem operations.
+110:   replacement and a durable write journal. Multi-file identity repair is **not**
+112:   not admit an intermediate identity graph. Resume with one coherent reconciliation.
+113: - Keep source backups and approval records; never reset `.gkx` to hide failures or
+121: ## Acceptance tests
+129:   history blocks the proposal until its decision is recorded.
+130: - Drift between approval and apply, scope expansion, symlink/hard-link swaps,
+140: ## Done / open decisions
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/03-evidence-and-recency.md
+1: # E03 — Bounded evidence bundles and honest recency
+3: Status: proposed. Priority: P1. Parent: [roadmap](../ENGINE-BUILD-ROADMAP.md).
+7: ## Outcome and current gap
+10: source/time metadata in a small response, and explain recorded project status
+12: truth or an automatic project-status classifier.
+19: ## Slice A — small, source-backed selection
+21: Prefer a bounded batch/detail extension over expanding every compact navigation
+23: must be registered/versioned under E06 before implementation. It is not installed.
+27: - Input: 1–8 current session-issued `record_refs`, an explicit bounded selector
+39:   provenance. Missing fields remain null/absent with a stable reason, never guessed.
+45:   the concept is absent. The consumer can make a bounded raw read or native search.
+47: Batch failures require defined semantics: malformed outer arguments fail the
+48: request; independently unavailable refs may produce bounded per-item refusals
+50: never full success. If authority cannot be held/revalidated coherently, fail the
+55: LLM in Engine, strip meaningful qualifiers, synthesize status prose, silently
+57: can write its own summary and must cite the actual supporting spans.
+59: ## Slice B — distinct time axes
+63: validity provenance/fallback logic in `src/retrieval/gkx-provenance.ts`. This is
+72: | `authored_updated_at` | Valid authored metadata if present, with source provenance; do not invent it |
+73: | `source_modified_at` | Filesystem/provider observation, not proof of human editing, activity or status |
+80: must not be changed implicitly while adding a separate recency display axis.
+83: content change. Conversely, byte changes may retain mtime. Tests must cover both.
+89: Optional later sorting/filtering must name the time axis, use deterministic path
+93: ## Implementation checkpoints
+96:   source digests, record issuance and bounded pagination helpers.
+100:   provenance: prove coherent metadata delivery; do not bypass secure reopening.
+101: - Reuse existing native search citations; never remove their verification/stale
+103: - Make the batch one bounded scheduler work item with cancellation/limits, not
+106: ## Acceptance tests
+113:   an authorized item never carries data or metadata from a hidden item.
+115:   never deliver a mixed or unauthorized evidence pack.
+117:   copied notes and renamed paths do not create false recency/status claims.
+120: - A synthetic project status question can be answered from two or more exact
+122: - Contradictory or stale recorded status is presented as such. Unknown current
+125: ## Done / release / rollback
+130: surface without migrating source files. Done means bounded usable evidence with
+131: verifiable provenance, not an Engine-authored narrative summary.
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/04-snapshots-and-diffs.md
+1: # E04 — Snapshot identity and safe incremental discovery
+3: Status: proposed. Priority: P1 manifest, P2 incremental history.
+8: ## Outcome and evidence boundary
+11: changed, and support bounded incremental updates when safe. A cache must never
+12: grant access, make a session reference durable, or reveal a formerly/never-visible
+18: locators, not proof of stable identity. Generation numbers are opaque equality/
+26: ## Slice A — small snapshot manifest and explicit digest domains
+30: It must return no catalog rows unless requested and no hidden-corpus denominator.
+47: only through the agreed E03 binding. Never call this the hash of the exact response
+52: corpus/policy-internal details must not enter an exported digest basis. An opaque
+53: authorization-context binding can remain internal or use a reviewed non-disclosing
+54: representation; it must not be a globally correlatable hash of private credentials.
+58: credentials never entitles one to reuse the other's data or refs. A new MCP
+60: policy and must issue/resolve its own refs. Revocation ends server access; it does
+63: Any server-side digest reuse requires verified coherent snapshot freshness and
+64: current authorization. Do not bypass a required secure scan or policy check to
+67: ## Slice B — bounded incremental updates
+74:   authorization context, query and schema. It is not an authority grant or an
+79:   returns a uniform `reset_required` instruction, never a false empty diff.
+87: - Never emit a named tombstone for a now-restricted record merely because it was
+93:   never-visible records must not alter the client projection or produce a new
+97: two retained baselines per credential, a short bounded TTL, and an explicit global
+101: for the first release; restart may require a reset.
+103: ## Implementation checkpoints
+108: - Authorized-view/watcher generation boundaries: current policy must gate any
+109:   cache reuse or delta. No whole-vault cache served through a weaker identity.
+113: ## Acceptance tests
+120: - Manifest results are bounded and contain no note bodies, hidden counts or
+125:   rename guesses cannot cause unauthorized rows or false identity continuity.
+129: - Quota exhaustion/eviction is bounded and produces a recoverable reset, not
+132: ## Done / release / rollback
+136: discards only optional cache/history state, never watcher authority or vault
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/05-observability-and-performance.md
+1: # E05 — Correlated observability and measured performance
+3: Status: proposed. Priority: P0 instrumentation, P2 optimization.
+7: ## Outcome and evidence
+20: Deployed event infrastructure already exists: a bounded process-local event ring,
+25: ## Slice A — bounded protected timing traces
+29: arbitrary header as a log identity or metric label.
+50:   bounded protected retention and are not public searchable records.
+51: - Metric labels use a small fixed vocabulary: tool/stage/status, not one label
+52:   per agent, request, path or query. Detailed attribution is protected and bounded.
+55: - Trace buffers, bytes, sampling and retention are configurable but bounded.
+56:   Dropped telemetry is reported to the operator; it must not block the tool or
+57:   make an untraced call look failed. No query-content replay store is introduced.
+59:   result/digest semantics, fairness, authorization or native refusal policy.
+61: ## Slice B — end-to-end event correlation
+65: stream identity. A reconnect under the same session is not a newly issued identity.
+76: - The viewer's authorized stream received it, possibly by replay.
+77: - The renderer displayed the correct agent at an authorized record, with measured
+85: ## Slice C — reproducible baseline before tuning
+89: Use synthetic corpora first; real scoped controls require operator approval.
+101: - Resolver, bounded raw read, validation/audit, and E03 evidence when implemented.
+113: ## Conditional optimization work
+117: - Reuse verified immutable generation projections/digests where authorization and
+121:   Worker isolation requires a separate authority/cancellation/state-ownership
+124:   A faster refusal is not repaired data; a model change is not identity repair.
+127: until evidence and a separate scoped decision justify them. Establish realistic
+130: ## Implementation checkpoints
+134: status boundaries. Viewer `web/live-client.mjs`/`web/live.mjs` and existing event
+137: ## Acceptance / done / rollback
+150:   an evidence-backed decision not to optimize). Rollback disables only telemetry/
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/06-contract-and-release-hardening.md
+1: # E06 — Contract consistency and reproducible releases
+3: Status: proposed. Priority: P0. Parent: [roadmap](../ENGINE-BUILD-ROADMAP.md).
+4: No owner source-data decision is needed to write synthetic reproductions.
+6: ## Outcome
+13: ## Source-inspected risks: reproduce before changing behavior
+33: ## Slice A — reference and cursor contract
+37: current diagnostic/lineage calls must not silently reuse them for changed bytes.
+40:   hidden-source reads. A source-less capability must remain explicitly unavailable
+54: If compatibility requires diagnostics to use identity-only refs instead, record
+55: that as an explicit contract decision and return an unmistakable current-version
+58: ## Slice B — advertised schema and semantic regressions
+74: - Diagnostic errors: bounded schema-owned field names/codes only; unknown keys and
+75:   values never reflected. Test malformed and well-shaped unknown references
+84: ## Slice C — explicit extension/version discipline
+88: extension currently advertises ten tools; a future client must inspect the new
+95:   an explicit decision, not a renamed version string alone.
+101: - Documentation examples must be executable synthetic fixtures. Illustrative
+104: ## Slice D — packaging and release procedure
+113: immutable root-owned release. Never rebuild a deployed release in place. Record
+126: Versioned cache/metadata formats must define compatibility or safe reset behavior
+129: ## Implementation checkpoints
+137: ## Acceptance / done
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/07-acceptance-and-release-gates.md
+1: # E07 — Cold-agent, safe-failure and starship acceptance
+3: Status: proposed test/build gate. Priority: P0.
+7: ## Product milestone
+9: > Find the game project, explain its recorded status, and cite supporting notes.
+13: The Engine must not expose hidden records, fabricate status/recency, or appear to
+16: ## Evidence classes and run records
+32: bytes, and clear pass/fail/not-run status. Preserve the exact transcript where
+36: ## Call/response budgets
+54: ## Test matrix
+59: | B: recorded status | At least two useful supporting notes, including stale/conflicting evidence | Accurate source-backed account; citations to exact bytes; uncertainty preserved |
+60: | C: unavailable support | Requested source absent or restricted in paired fixtures | Same bounded-view limitation; no existence oracle or invented substitute |
+61: | D: coherent search control | Explicit approved coherent scope, labeled prompted | Native retrieval succeeds; stages and byte citations verify; pagination is bounded |
+63: | F: recovery | New session, generation/content change, expired or mismatched cursor | Resolve known locator or restart bounded discovery; no mixed source versions |
+65: | H: concurrency | Two lanes, setup during work, bounded streams/queues | Fairness/limits preserved; no credential sharing beyond approved setup |
+74: ## Starship run procedure
+77:    authorized viewer credential for events. A successful MCP token must not be
+83: 3. Run a small known admitted discovery, several bounded reads and one diagnostic
+88:    Record agent identity and stream session; shared credential sessions can render
+94:    session-bound cursor, exercise replay deduplication and forced replay gap.
+95:    Do not intentionally restart production or drop its network without approval.
+100: For historical Claude flights, the call log alone can never prove continuous
+104: ## Release checklist
+114: - [ ] Cold product question passes, or a bounded limitation is recorded without
+124: ## Done
+128: remaining gates; the complete functional milestone requires its success and
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/ENGINE-RELIABILITY.md
+1: # Agent event and Engine contract reliability
+3: ## Event watch
+7: returns it to `Watch agent events`. The status text reports the connection state.
+10: 45-second no-traffic timeout. A connection must deliver traffic over at least
+15: the Engine's session-bound replay contract. Replayed sequence numbers are
+24: bounded queues, revocation checks, and disabled idle upstream reuse.
+26: ## MCP diagnostics and snapshot identity
+28: Invalid argument errors keep `GKOS_P6_INVALID_PARAMS` and add bounded
+33: names are never echoed. The error digest includes these issues. Required
+45: require matching scope, authorization and interpretation/configuration; this
+54: ## Targeted discovery and reference recovery
+65: admitted canonical paths and titles. They are bounded to 128 characters and
+76: A path is a locator, not identity: after a rename or path reuse it may resolve
+78: authorship, or authorization. Null/omitted UID disables the guard.
+81: `RESOLVE_KNOWN_PATH_OR_REDISCOVER` and next-action guidance. This never distinguishes
+86: Engine or initializing a new session requires new references.
+98: ## Additional lifecycle safeguards
+108: ## Large-vault recovery defect discovered during deployment
+114: publication's bounded 512 MiB artifact reads. The generic failure code concealed
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/ENGINE-SETTINGS-AUDIT.md
+1: # Engine settings audit and verification
+5: ## What was found and corrected
+13: | SET-05 | MCP tools did not advertise how bounded discovery/references/digests work | Versioned capabilities discovery block and admission-safe regression. No corpus totals/host secrets. |
+16: | SET-08 | TOML service/agent/graph/watcher controls and retrieval.mode could be mistaken for active switches | Mark parsed-but-unwired, provide inspector and safe CLI warnings. Upstream implementation/deprecation decision remains OPEN. |
+20: Authoritative source reference is the Engine branch's `docs/SETTINGS.md` and generated `docs/SETTINGS-TOML.md`; the identical documents are carried inside the tracked cumulative Engine patch. Machine inventory is `bin/settings-inventory.mjs`. The inspector reports configuration wiring, never health by inference.
+22: ## Deployment-only settings
+31: | `GKOS_STATE` | Required existing non-symlink state directory; supplies status-file parent | Credential/status namespace tests. Never publish token contents. |
+34: | `GKOS_CODEX_MCP_ENABLED` | Optional separate MCP credential | Existing identity/scheduling tests; no credential rotation. |
+38: | Caddy `write_timeout` | Viewer event stream lifetime: 0 disables forced 180s disconnect | Prior bounded Engine/SSE tests and browser fixture; manual long-session acceptance remains open. |
+40: Viewer watch/retry state belongs to Observatory, not Engine TOML. The action is **Stop agent events** while a watch is active or reconnecting, **Watch agent events** when stopped. Authentication failure or exhausted retries may stop it, with visible status; transient disconnect alone must not silently reset intent. Existing fixes retain abort, timeout and bounded retry controls.
+42: ## Evidence boundaries
+44: The proposed settings release is staged, not promoted to the live service. Production remains the previously deployed `discovery1` release. **Full upstream CI is blocked:** the historical Phase-6 protected-path guard rejects seven changed paths in this cumulative integration. Focused staging passes are not a full CI pass. The exact failure and required Engine-owner contract decision, test results and GitHub coordinates are recorded in [ENGINE-AGENT-HANDOFF.md](ENGINE-AGENT-HANDOFF.md).
+46: Do not interpret 47/47 schema inventory as 47 fully operational controls. Unwired keys are openly listed; optional remote integrations require explicit provider setup. Likewise, tool discovery does not mean every authorized scope is coherent. Whole-vault search refusal remains a separate admission/data repair issue, not a latency or Rust-rewrite problem.
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/INVALID-PARAMS-BUILD.md
+1: # INVALID_PARAMS build — 2026-08-31
+3: Status: implemented and verified locally; not pushed, merged or deployed.
+8: ## Deliverables
+20: **Use one patch route, never both.** Both routes were applied to clean exported
+31: ## Behavior
+37: The array is bounded to 16, with schema-growth coverage preventing truncation.
+49: Authorization, admission, conflict handling and reference recovery are untouched.
+51: ## Contract compatibility decision
+66: ratification of a complete new identity contract. Historical contracts, manifests,
+70: ## Acceptance evidence
+85: diagnostics need no source data after the existing identity check.
+89: content/runtime regressions, actual native FTS5 retrieval, authorization and
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/LIVE-ENGINE.md
+1: # Live Engine deployment and connection boundary
+5: static replay fixtures: a replay receipt is not
+6: an Engine execution receipt. This configuration does not activate approval,
+9: ## Exact upstream interface
+16: - `src/watcher/service.ts`: operator status/shutdown and loopback listener.
+17: - `src/service/server.ts`: actual HTTP routes and authorization boundary.
+28: storage decision records tested Node 22 and 24 with FTS5, while Node 23.11.1 lacked
+41:   --status-file /var/lib/gkos-engine/desktop-agent.status.json
+46: should be discoverable by a lower-ceiling MCP identity; do not lower the
+49: ## Source and derived-state permissions
+55: The source root must be an actual canonical path, root-owned and not writable
+59: must not own them or have group-write access. Existing bootstrap-created
+63: The actual watcher requires `<notes>/.gkx/derived/retrieval` and
+66: 0700; its derived descendants also require owner-only modes. Do not symlink it
+68: `/var/lib/gkos-engine` service-owned 0700 for credentials/status/locator files.
+74: Keep all source ownership with the administrator. Caddy and `observatory` must
+92: ## Select or change the watched folder
+109: 5. Restart, check native status, verify source writes fail, and verify public
+113:    for an explicit rollback; never copy tokens into the source folder.
+121: ## Credential files and native limitations
+127: | `desktop-agent.token` | Native viewer/operator bearer. Secret sensitivity ceiling; graph/notes/events access, plus local operator routes. Administrator only. Never embed in HTML, proxy configuration or a public browser default. |
+128: | `desktop-agent.mcp.token` | Separate shared MCP-only bearer, no graph/notes HTTP access. New identities default to internal; access1 selects an owner-authorized secret ceiling for this identity. |
+129: | `desktop-agent.mcp.identity.json` | Fixed `Local MCP Agent` identity, random UUIDv7/credential ID, revocation bit and fixed limits. Not a token. |
+131: The launcher supports **one persisted default MCP identity plus an optional Codex identity**, not
+133: onboarding or a credential administration API. The access1 identity validator
+137: one identity, quotas and revocation; do not describe them as individually
+139: testers using a private out-of-band channel. Never print it in task output,
+142: The owner explicitly authorized the shared MCP identity's access1
+148: mode. Simultaneous agents with different ceilings require distinct credential
+149: and identity bindings. The codex1 release provides a distinct Codex binding alongside the original Claude/default binding; general per-agent provisioning is not implemented.
+151: An administrator must stop the service, change only the intended ceiling in the
+152: protected persisted identity JSON, preserve its ownership/0600 and canonical
+155: not change the in-memory identity. Restart invalidates prior MCP sessions; clients
+156: must reconnect. This grants read access only, not source writes or arbitrary tools.
+159: for this identity. The 1,467 metadata rejects remain rejected; whole-vault
+160: identity/relationship conflicts still refuse retrieval. Widening a ceiling does
+164: `revoked` to `true` in its existing identity JSON, preserve file ownership/0600
+167: formatting; a tested edit must preserve it. The native loader reads identity
+169: binding. To restore, repeat with `false` after approval. Stop/start also destroys
+175: identity file; keep a revoked identity revoked until explicit reactivation.
+180: ### Separate Codex credential
+183: `GKOS_CODEX_MCP_ENABLED=1` opts into a second persisted identity, `Codex MCP Agent`.
+185: fail closed. Its new identity defaults to secret and has only `mcp.read`, covering
+191: - `desktop-agent.codex.mcp.token`: independent random bearer; never print it.
+192: - `desktop-agent.codex.mcp.identity.json`: separate agent/credential IDs, ceiling,
+195: Claude continues using `desktop-agent.mcp.token`; its bytes and persisted identity
+203: `tests/live-codex-identity-smoke.mjs` checks distinct identities and a CA-verified
+207: ### Multiple application lanes and workload scheduling
+210: bounded ingress capacity separate from MCP note-tool execution. Limits are:
+223: ingress capacity. Revoked, expired, deleted or disconnected queued sessions must
+224: not execute. Authorization is checked again when work starts. Running work keeps
+230: bounded reason such as `work_rate`, `work_queue_capacity`,
+232: and `Retry-After`. Authorization/session cancellation can also terminate queued
+233: requests; clients must reconnect or obtain fresh permission rather than retry
+236: Neither LAN addresses nor bearer tokens are exempt. Source authorization,
+241: ## HTTPS proxy contract
+256: returns the authorized note DTOs, not an arbitrary source-file download. Never
+257: proxy `/status`, `/control/shutdown`, credential files, source directories, or
+259: deployment's explicit read-route allowlist. Forward the caller's Authorization header; do not inject a
+265: check but remain unexposed. Therefore the proxy must restrict the expected
+266: HTTPS host, reject unapproved browser Origins, and never rely on native CORS as
+268: they still require the bearer. Same-origin browser requests need no permissive
+271: Disable HTTP access to authenticated live routes: credentials must not traverse
+278: ## Agent handshake and supported tools
+281: `Authorization: Bearer <MCP credential>` in its private header/secret setting,
+295: transfer location. Never retrieve `root.key`. Add the CA to the specific MCP
+299: The MCP secret itself must be retrieved only by the authorized administrator
+316: must remain ignored by Git. Prefer a client-supported token-file/secret-store
+317: setting; if it requires a header value, transfer it privately into that setting
+333: path read, source write, approval or effect tool. Request body limit is
+334: 393216 bytes; result limit is 1048576 bytes. The persisted identity concurrency ceiling remains four. The scheduler further restricts work to two server-wide and one per session. Deployed work admission uses a 40-token bucket refilling one token per second. Setup has a separate allowance; see the scheduling section above.
+337: ## Compact catalog discovery and locator recovery
+356: {"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"gkos_record_resolve","arguments":{"canonical_path":"Game_Dev/Status.md","expected_uid":null}}}
+367: never an arbitrary filesystem path. See [contract boundaries](ENGINE-RELIABILITY.md)
+370: ## Agent search and full-note read
+378: The separate `live2` viewer release remains unchanged. Existing clients must
+398: | `gkos_search` | `query`: string; `cursor`: null or returned cursor; `limit`: integer 1–50 | Ranked chunk `items`, each with an issued `record_ref`, `canonical_path`, native `chunk`, `citation`, `stage_scores` and `provenance`; plus native metadata in `retrieval`, `retrieval_window`, and `page`. |
+404: Never substitute a filename, absolute path, URL, guessed record ID or a reference
+438: Search returns a **bounded ranked window of chunks**, not an exhaustive list of
+483: and temporal/provenance metadata. Inspect the actual stage status rather than
+494: semantic scores. Provider configuration and any external data transfer require
+504: credential changes must invalidate the response or continuation rather than
+508: counts and topology must not enter the caller's ranking or returned metadata.
+513: smaller pages require more calls and consume more continuation cursors. Each session's record-reference map and
+522: truth, authorization for an external effect, origin signatures or conformance.
+528: that a protected record exists from a refused read. An authorization rejection
+535: digest, replay and restart-recovery boundaries.
+540: contain a link to it. Authors must classify the whole note appropriately if
+542: the service must still exclude hidden source records, hidden matches and hidden
+544: links/URLs. Treat returned Markdown as untrusted source data, never as system
+549: ## Local vector upgrade: indexing is not disclosure
+556: permission. The owner separately authorized a secret MCP ceiling for access1; the deployed identity and scoped search/read have been verified.
+566: Operator configuration must live outside source notes, be protected from
+567: service/source-author writes, and bind the selected model/runtime identity.
+568: There must be no remote fallback, redirect to another service, automatic model
+574: caller authority, exact source identity/digest checks and live citation checks
+576: ceiling must not cause secret matches, counts, citations or topology to appear
+584: artifacts, licenses, runtime qualification, bounded inference and verified
+593: and normalized vectors. The deployment record must identify the exact runtime
+595: entry module and install lockfile into the provider/cache identity as well as
+624: Status alone is not a full SQLite integrity check or a latency guarantee.
+626: ## Deployment checks and fallback
+631: 4. As service user, run native `bin/gkos.mjs status --state /var/lib/gkos-engine
+633:    arguments. Keep status output operator-only.
+638: 6. Check canaries above a test identity's ceiling are absent and an explicitly
+639:    secret identity can read admitted secret fixtures; confirm
+643: 8. For rollback, remove live proxy routes and stop Engine; static replay must
+648: deployment evidence. A two-client compatibility matrix, individual identity
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/LIVE-VAULT-ADMISSION.md
+1: # Live vault admission inventory
+11: from whether a particular MCP identity may access an admitted note.
+14: frontmatter inventory, not an effective-classification decision. Engine keeps
+15: its secret default for unlabelled sources. The initial shared MCP identity was
+35: sets of notes. Warning counts such as missing provenance references are not
+49: not resolve the authored identity and relationship conflicts.
+53: quarantine or silent exclusion list. A narrowed scope must itself be coherent:
+62: migration proposal. Do not weaken validation, invent provenance or timestamps,
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/MCP-SCHEDULING.md
+1: # MCP workload scheduling
+7: ## Deployed policy
+21: notifications, ping and tool listing do not acquire work slots. Bounded body
+32: Queue admission is not authorization to execute later. Credential validity,
+33: revocation, session ownership/existence and current source authorization must
+39: remain. Stream creation is bounded ingress; an established stream holds neither
+40: an ingress slot nor a work slot. Transport/proxy timeouts can still require
+41: reconnection, so clients must use backoff on retryable errors.
+45: vault's admission failures and whole-vault identity/relationship conflicts.
+47: ## Acceptance
+49: Regression tests must cover setup while two work operations are held, hierarchy
+54: CPU latency. Actual Claude chat and Code registration requires a client-side
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/NAVIGATION-AND-TRAVERSALS.md
+1: # Navigation continuation and viewer history
+3: The subsequent [reliability correction](ENGINE-RELIABILITY.md) adds bounded
+4: automatic event reconnect/replay and fixes audit's omitted stable IDs. The
+8: The navigation cursor is bound to its issuing MCP session and authorization
+12: session-local cursor record. An explicitly supplied scope must match. Start
+13: again with a null cursor after session loss or a source/authorization generation
+14: change. Never share opaque record references or cursors between client lanes.
+26: under one agent identity.
+32: The session archive is bounded in memory (2,000 events / 4 MiB); the latest 200
+40: identity/relationship conflicts. Historical hardware reports are source-note
+43: ## Deployment verification
+48: clearing, real renderer and mobile layout). Its public digest is
+54: Actual Claude app reconnection must be checked separately after the restart.
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/ORIGINAL-README.md
+1: # GKOS Observatory
+5: GKOS Observatory combines the Kosmos-Oden spatial interface with a read-only GKOS Engine execution cell to make normally invisible knowledge-governance states observable: retrieval, validation, refusal, review, authorization, supersession, invalidation, and simulated effect.
+9: > **Status: pre-alpha implementation.** The architecture and test gates are specified. Capabilities must not be described as implemented, demonstrated, conformant, or production-ready until their named tests pass.
+11: ## Why this exists
+26: ## Project relationship
+38: ## What the alpha will provide
+40: ### Spatial display and replay
+46: - Visible separation between retrieval, review, authorization, and simulated effect.
+49: ### Governed note panel
+56: - Stable identity, provenance, status, restrictions, lineage, and warnings.
+58: - Governed image, document-page, audio, video, and bounded text/data derivatives.
+61: Opening the panel resizes the WebGL viewport while preserving graph world coordinates, camera pose, orbit target, selected node, and replay position. An aspect-ratio change necessarily changes pixel projection; the project does not claim pixel-identical star positions.
+63: ### GKOS Engine execution cell
+67: - Markdown/GKX parsing and stable identity.
+77: ### Governed attachments
+83: - Stable source and revision identity.
+86: - Provenance.
+91: Raw attachment directories are never public web roots. Private media is returned only after a session-bound policy decision. Session credentials never appear in media URLs.
+93: ## Initial architecture
+113: The initial stack does not require PostgreSQL, pgvector, Redis, a message broker, Kubernetes, a model server, or a GPU. A dependency is added only when the pinned Engine requires it or measured load demonstrates the need.
+115: ## Demonstration corpus
+123: 5. A conflicting interpretation retained but never authorized.
+124: 6. A publicly cataloged record whose content requires greater capability.
+129: ## Tagging requirements
+137: | Inferred tags | Optional rule-derived output with rule identity and receipt; disabled unless explicitly enabled |
+138: | Control metadata | Sensitivity, retention, review, authorization, and policy state; never represented as an ordinary tag |
+140: The Engine must retain unknown tags, report collisions and aliases, and never silently replace source tags with normalized values. A tag cannot confer sensitivity, review, authorization, or effect authority.
+142: ## Security and claim boundaries
+153: - Invited MCP credentials use Authorization headers, never URLs.
+156: - Static replay remains available when every dynamic capability is disabled.
+158: ## Receipts and deterministic claims
+172: | Ordered receipt | What the recorded scenario contains | Authorization for production use |
+174: Canonical static replays should be signed offline. Live signing remains disabled until a separate key-lifecycle decision authorizes it.
+176: ## Alpha test environment
+200: These are starting test values, not an SLA or a supported production minimum. Measured results may justify later changes through a versioned configuration decision.
+202: ## Test strategy
+204: ### Test suites
+212: | Non-disclosure | Protected canaries never leave their boundary | Scan responses, graph topology, counts, events, receipts, logs, derivatives, and static bundles |
+213: | Object ambiguity | Absent and undisclosed objects do not reveal existence | Compare status, media type, envelope, cache policy, and coarse latency class |
+217: | Replay | 3D and text views represent the same event sequence | Projection digest and golden screenshot/semantic assertions |
+223: ### Stable build interface
+243: ## Promotion gates
+250: | B | Bounded live demo | Gate A plus real Engine policy/refusal output, mutation tests, bypass tests, quotas, cost limits, and live kill switch |
+251: | C | Interactive menu | Gate B plus session issuance, expiry, revocation, CSRF/origin, cross-session, reconnect, retention, and two-week bounded observation |
+253: | E | Public BYO agent | Unscheduled; requires a separate threat model, evidence package, and explicit authorization |
+257: ## Success criteria
+262: 2. replay at least five scenarios in 3D and text modes.
+265: 5. Distinguish retrieval, review, authorization, and simulated effect.
+271: ## Non-goals
+285: ## Planned repository shape
+294: replays/canonical/           Reviewed public replay artifacts
+299: ## Commercial use and licensing
+312: - Third-party code, media, fonts, schemas, or imported standard text may have separate license and attribution requirements and must be recorded before inclusion.
+316: ## Public disclosure
+318: Every hosted instance must display:
+320: > This public sandbox uses synthetic records and demonstrates selected retrieval, policy, refusal, replay, and receipt behaviors. It is not a certified deployment. Effects are simulated. Do not submit sensitive, personal, confidential, regulated, or proprietary information.
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/REVIEW.md
+1: # Sol delegation and root disposition
+3: ## Offline semantic integration — root disposition
+8: Corpus Sol supplied actual-model authorization tests, scope/conflict tests and
+10: runtime trust/cache identity and the performance shortcut. Root reviewed their
+15: accepted. Whole-vault retrieval is blocked by authored identity/relationship
+20: Root required fixes for repeated full-vault revalidation, runtime identity in
+21: vector caches, real-model tests, explicit scope-bound cursors, and a bounded
+25: ## Previous native retrieval integration — root accepted
+29: checks, and viewer Sol agent's independent authorization review and documentation.
+37: citations and provenance. No semantic provider is enabled. Authorization guards
+38: retain bounded source snapshots and a non-exhaustive top-100 chunk window; native
+40: shared MCP identity limits and the summary-only browser REST interface remain.
+41: See DEPLOYMENT.md for exact provenance, evidence and rollback.
+43: ## Previous MCP content extension — root accepted
+47: independent authorization review and usage documentation. Accepted Engine
+49: and actual trusted-CA HTTPS content checks passed. Exact patch provenance is in
+52: The server refreshes authorization after request-body receipt and rechecks
+58: Remaining limits are explicit: bounded literal search, note-level rather than
+59: span-level classification, one shared MCP identity, and unqualified large-note
+63: ## Current live follow-up — accepted for bounded LAN use
+85: | Source/state split | Native `.gkx/derived` location cannot be relocated through supported CLI options. Source files/root remain administrator-owned and Engine-read-only; only derived state plus owner-only status/credentials are writable. |
+87: | Agent identity | Native executable supplies one fixed default MCP identity with internal ceiling. No named minting, OAuth or independent tester attribution; shared credential means shared quota/revocation. |
+88: | Public route boundary | HTTPS exact MCP/read allowlist, foreign-Origin rejection, no operator status/shutdown proxy. Native CORS is not relied on as an authorization boundary. |
+91: | Root disposition | Accepted for the requested LAN Engine/viewer and approved shared MCP access. Required bounded checks passed and exact release evidence is recorded. Broader client compatibility and production qualification remain unclaimed. |
+93: **Backend recommendation:** proceed only as the explicitly approved, bounded
+99: ## Historical static delivery and acceptance
+102: gpt-5.6-sol agents worked in bounded, separate paths. The root agent integrated
+108: | Corpus/contracts | Six Meridian scenarios, disclosure projection, fixture policy, restricted canonical JSON, SHA256 artifacts, independent Python verifier | Accepted for static replay. Root requested stricter envelope/duplicate-event checks and a publication guard. Windows/Linux Python invocation was corrected during actual Node22 deployment. |
+110: | Kosmos-Oden viewer | Preserved upstream render core, thin adapter, replay controls, text fallback, detent inspector, verifier/download and notices | Accepted for current Chromium. Root reviewed actual WebGL and required improved initial framing and working provenance links. Firefox/Safari and physical touch qualification remain open. |
+121: criteria. An unfamiliar person must still demonstrate comprehension without help.
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/RUNBOOK.md
+1: # KnightsAI deployment and operation
+3: ## Declared profile
+7: fixture notes. The `20260830-live2` release is accepted for bounded LAN use; consult
+8: [DEPLOYMENT.md](../DEPLOYMENT.md) for measured checks and limits. Static replay
+12: The native administrator viewer and default MCP identity are separate from the
+13: six unsigned canonical replay scenarios. No anonymous menu, individually named
+22: ## Fresh provisioning
+26:    never alters other guests. Download the named Debian template using `pveam`.
+38:    login before closing the host console. Never bypass changed host-key warnings.
+55: ## Data mount
+64: directories. Mounting another corpus/share requires explicit configuration.
+68: ## Build and install
+72: actual Kosmos-Oden browser renderer and its licenses/provenance are vendored.
+86: Never recompute the digest automatically at service startup. The service fails
+88: deployment record; the public snapshot pin is not a signature or source identity.
+90: Caddy serves static replay on HTTP80 and HTTPS443; live pages redirect to HTTPS
+97: Never retrieve or distribute `root.key`. Caddy's admin endpoint is a permissioned
+100: ## Privileged Debian13 compatibility
+120: ## Operations, rollback, and incident handling
+123: sudo systemctl status observatory caddy gkos-engine nftables
+136: never rebuild it in place. The existing rollback script restores Observatory
+150: support, public launch, and unfamiliar-user comprehension require their own

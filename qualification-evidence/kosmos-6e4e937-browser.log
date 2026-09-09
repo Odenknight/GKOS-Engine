@@ -1,0 +1,53 @@
+
+> kosmos-oden@0.8.1 test:browser:chromium
+> playwright test --project=chromium --project=mobile-chromium test/browser/standalone.spec.ts test/browser/standalone-flows.spec.ts test/browser/embed.spec.ts test/browser/context-loss.spec.ts test/browser/consumer-identity.spec.ts --workers=1
+
+[WebServer] (node:30832) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 38 tests using 1 worker
+
+(node:3500) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › test\browser\consumer-identity.spec.ts:2:1 › stable identity survives live, replay, and buffered-live adapters without label conflation (1.6s)
+  ok  2 [chromium] › test\browser\consumer-identity.spec.ts:27:1 › stable identity survives the versioned embed request-to-render adapter (770ms)
+  ok  3 [chromium] › test\browser\context-loss.spec.ts:12:3 › context loss › loses and restores the WebGL2 context without a frozen canvas (974ms)
+  ok  4 [chromium] › test\browser\embed.spec.ts:10:1 › embed renders under the plugin sandbox (no allow-same-origin) (1.9s)
+  ok  5 [chromium] › test\browser\standalone-flows.spec.ts:19:1 › Engine retrieval uses its separate credential and renders citation text safely (739ms)
+  ok  6 [chromium] › test\browser\standalone-flows.spec.ts:55:1 › file URL imports actual Markdown and exports the displayed graph without network or source changes (1.7s)
+  ok  7 [chromium] › test\browser\standalone-flows.spec.ts:76:1 › demo exports its rendered graph and hides content exports it cannot provide (813ms)
+  ok  8 [chromium] › test\browser\standalone-flows.spec.ts:86:3 › snapshot exports the loaded graph rather than an empty local index (915ms)
+  ok  9 [chromium] › test\browser\standalone-flows.spec.ts:86:3 › engine exports the loaded graph rather than an empty local index (898ms)
+  ok 10 [chromium] › test\browser\standalone-flows.spec.ts:113:1 › expanded connection form is reachable on a short viewport and folder names stay text (736ms)
+  ok 11 [chromium] › test\browser\standalone-flows.spec.ts:133:1 › local engine redirects fail visibly without contacting an external destination (408ms)
+  ok 12 [chromium] › test\browser\standalone.spec.ts:10:1 › standalone boots the r185 WebGL2 renderer and draws the demo cosmos (660ms)
+  ok 13 [chromium] › test\browser\standalone.spec.ts:44:1 › standalone reports WebGL2 requirement message when WebGL2 is unavailable (451ms)
+  ok 14 [chromium] › test\browser\standalone.spec.ts:58:1 › agent traversal renders a breadcrumb plus bounded comet dust (313ms)
+  ok 15 [chromium] › test\browser\standalone.spec.ts:76:1 › primary controls remain inside compact-desktop and mobile viewports (895ms)
+  ok 16 [chromium] › test\browser\standalone.spec.ts:111:1 › constellation key and minimap can be shown from the toolbar (1.2s)
+  ok 17 [chromium] › test\browser\standalone.spec.ts:124:1 › traffic heat is off by default, opt-in, bounded in the existing renderer, and truthfully labelled (721ms)
+  ok 18 [chromium] › test\browser\standalone.spec.ts:144:1 › legacy query token is ignored, removed from the URL, and never copied into password input (585ms)
+  ok 19 [chromium] › test\browser\standalone.spec.ts:151:1 › live events buffer during replay and do not interrupt it until return-live (632ms)
+(node:13200) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 20 [mobile-chromium] › test\browser\consumer-identity.spec.ts:2:1 › stable identity survives live, replay, and buffered-live adapters without label conflation (1.0s)
+  ok 21 [mobile-chromium] › test\browser\consumer-identity.spec.ts:27:1 › stable identity survives the versioned embed request-to-render adapter (805ms)
+  ok 22 [mobile-chromium] › test\browser\context-loss.spec.ts:12:3 › context loss › loses and restores the WebGL2 context without a frozen canvas (957ms)
+  ok 23 [mobile-chromium] › test\browser\embed.spec.ts:10:1 › embed renders under the plugin sandbox (no allow-same-origin) (1.9s)
+  ok 24 [mobile-chromium] › test\browser\standalone-flows.spec.ts:19:1 › Engine retrieval uses its separate credential and renders citation text safely (2.2s)
+  ok 25 [mobile-chromium] › test\browser\standalone-flows.spec.ts:55:1 › file URL imports actual Markdown and exports the displayed graph without network or source changes (1.6s)
+  ok 26 [mobile-chromium] › test\browser\standalone-flows.spec.ts:76:1 › demo exports its rendered graph and hides content exports it cannot provide (811ms)
+  ok 27 [mobile-chromium] › test\browser\standalone-flows.spec.ts:86:3 › snapshot exports the loaded graph rather than an empty local index (829ms)
+  ok 28 [mobile-chromium] › test\browser\standalone-flows.spec.ts:86:3 › engine exports the loaded graph rather than an empty local index (901ms)
+  ok 29 [mobile-chromium] › test\browser\standalone-flows.spec.ts:113:1 › expanded connection form is reachable on a short viewport and folder names stay text (474ms)
+  ok 30 [mobile-chromium] › test\browser\standalone-flows.spec.ts:133:1 › local engine redirects fail visibly without contacting an external destination (379ms)
+  ok 31 [mobile-chromium] › test\browser\standalone.spec.ts:10:1 › standalone boots the r185 WebGL2 renderer and draws the demo cosmos (511ms)
+  ok 32 [mobile-chromium] › test\browser\standalone.spec.ts:44:1 › standalone reports WebGL2 requirement message when WebGL2 is unavailable (392ms)
+  ok 33 [mobile-chromium] › test\browser\standalone.spec.ts:58:1 › agent traversal renders a breadcrumb plus bounded comet dust (322ms)
+  ok 34 [mobile-chromium] › test\browser\standalone.spec.ts:76:1 › primary controls remain inside compact-desktop and mobile viewports (884ms)
+  ok 35 [mobile-chromium] › test\browser\standalone.spec.ts:111:1 › constellation key and minimap can be shown from the toolbar (1.6s)
+  ok 36 [mobile-chromium] › test\browser\standalone.spec.ts:124:1 › traffic heat is off by default, opt-in, bounded in the existing renderer, and truthfully labelled (870ms)
+  ok 37 [mobile-chromium] › test\browser\standalone.spec.ts:144:1 › legacy query token is ignored, removed from the URL, and never copied into password input (514ms)
+  ok 38 [mobile-chromium] › test\browser\standalone.spec.ts:151:1 › live events buffer during replay and do not interrupt it until return-live (547ms)
+
+  38 passed (39.2s)

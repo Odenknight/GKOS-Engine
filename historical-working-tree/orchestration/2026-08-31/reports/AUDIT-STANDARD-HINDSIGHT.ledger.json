@@ -1,0 +1,725 @@
+{
+  "audit_date": "2026-08-31",
+  "scope": "read-only remote audit; local clones/snapshot/testing only",
+  "authority_update": {
+    "source": "current user chat confirmation relayed by root",
+    "text": "Aug 29 changes are ratified",
+    "standard_ddcv_release_gating": false,
+    "standard_v081_one_release_automatic_publication": "after exact-bound mandatory green closure only",
+    "engine_lite_rust_cutover": "separate authorization required"
+  },
+  "repositories": [
+    {
+      "name": "Odenknight/gkos-standard",
+      "main": "71b899473473f47172b181973027f3eb7da25104",
+      "tags": [
+        {
+          "name": "v0.80",
+          "tag_object": "9ef9507f0d1760d2bf63be6444df7da579cf11e0",
+          "commit": "d04011ec296c4e2ee24224a2e4a8f2e0e29f3dbe"
+        },
+        {
+          "name": "v0.79",
+          "commit": "9380f5e1b9a4cbad2c252ce214b65628124e9386"
+        },
+        {
+          "name": "v0.78",
+          "commit": "b1dcfcc80968b41277b707af000b8ff7ff3845ed"
+        },
+        {
+          "name": "v0.77",
+          "commit": "2001ad16132113127198178214e5d0a87d1bc4fe"
+        }
+      ],
+      "open_prs": [],
+      "all_prs": [
+        {
+          "base": {
+            "ref": "main",
+            "sha": "6a7ad71fc027894cd4e2bbb71c3bbadda06cd12f"
+          },
+          "draft": false,
+          "head": {
+            "ref": "docs/ecosystem-readme-20260829",
+            "sha": "0dd18ffff43e9282b7405f647f0692a4aa839bd1"
+          },
+          "merged_at": "2026-08-29T15:44:57Z",
+          "number": 26,
+          "state": "closed",
+          "title": "docs: map GKOS layers to the open ecosystem"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "9568656d249853695b9b50d9bc756212b92ed4b0"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/authority-interval-amendment",
+            "sha": "1d5e382ba5bce1aa8673e59a6ea006085b10e0a3"
+          },
+          "merged_at": "2026-08-22T03:30:22Z",
+          "number": 25,
+          "state": "closed",
+          "title": "feat: define R17 authority validity intervals"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "d04011ec296c4e2ee24224a2e4a8f2e0e29f3dbe"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/gcp67-executable-evidence",
+            "sha": "359b1df15e47c34b0d4f971e65be390bb247692e"
+          },
+          "merged_at": "2026-08-22T03:06:35Z",
+          "number": 24,
+          "state": "closed",
+          "title": "feat: establish executable GCP-6 evidence foundation"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "a2a2a6ca5c4dac32c6d9dc985ed7460f5f4350c6"
+          },
+          "draft": false,
+          "head": {
+            "ref": "r16-v0.80-canonical-serialization",
+            "sha": "c21523188a008f0416e293a9fbe14e918402b0e5"
+          },
+          "merged_at": "2026-08-22T01:14:35Z",
+          "number": 23,
+          "state": "closed",
+          "title": "Publish R16 canonical serialization as GKOS v0.80"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "f078f4e8bbc40c9e8848f3bc8e8bacda6dfa350a"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/kosmos-implementation-example",
+            "sha": "8b0e890eac7ec424d3d3c6797d0488bbedc0bdac"
+          },
+          "merged_at": "2026-08-18T07:32:49Z",
+          "number": 22,
+          "state": "closed",
+          "title": "Add Kosmos-Oden as an implementation example"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "6f3acf3cc42775e6689ac919e5d0e4d7f65988c2"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/readme-domain-benefits",
+            "sha": "0bc24b12da1521a679b6750c3cbbe342c4189482"
+          },
+          "merged_at": "2026-08-18T07:17:50Z",
+          "number": 21,
+          "state": "closed",
+          "title": "Explain GKOS benefits by domain"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "77a93c5e7e956bb0bdec26fb6b852937069437ac"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/gkos-public-graphics",
+            "sha": "b5c42632c8fa5dc1c036171e0f1d4b2bff2d93f5"
+          },
+          "merged_at": "2026-08-18T07:13:13Z",
+          "number": 20,
+          "state": "closed",
+          "title": "Add claim-safe social preview guidance"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "9380f5e1b9a4cbad2c252ce214b65628124e9386"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/readme-public-technical-orientation",
+            "sha": "a1002620ebad427130dd30581fffa982a5e602ee"
+          },
+          "merged_at": "2026-08-18T06:51:37Z",
+          "number": 19,
+          "state": "closed",
+          "title": "Rewrite public and technical GKOS orientation"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "f3a3a1695263f162d2660b0f7b37116bba7db12e"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/publish-gkos-v0.79",
+            "sha": "e39834625282bda3a12bba5336ed0e9b37af20e4"
+          },
+          "merged_at": "2026-08-17T02:31:46Z",
+          "number": 18,
+          "state": "closed",
+          "title": "Release GKOS-2026-08-16 v0.79"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "dbbbccef6571137274e56c40f45a87dbdc6dc762"
+          },
+          "draft": false,
+          "head": {
+            "ref": "gkos-v0.79-r4-governed-navigation",
+            "sha": "d6f71a49bbc131987855b299650cc300db548f6c"
+          },
+          "merged_at": "2026-08-15T23:51:27Z",
+          "number": 17,
+          "state": "closed",
+          "title": "R15 / v0.79: governed state change, re-entry, and bounded delegation"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "71e67fc925cd2548d8424d89421887e686c11e4a"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/zenodo-readiness",
+            "sha": "9f8725e37b3c3e591c8580df0c1b40f1a34258bc"
+          },
+          "merged_at": "2026-08-12T08:50:17Z",
+          "number": 16,
+          "state": "closed",
+          "title": "Prepare GKOS for Zenodo DOI archiving"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "ad10dfe94a024f464430fd243c5a918d03389041"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/science-upgrade-readme-20260808",
+            "sha": "cf07dcc2e90de4bf459f313fde540d7b54aee17f"
+          },
+          "merged_at": "2026-08-08T17:32:43Z",
+          "number": 15,
+          "state": "closed",
+          "title": "Document scientific research upgrade"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "351330ce34ac6bf9f48ac340e3c259ea30e74715"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/srtp-draft-profile-20260808",
+            "sha": "d55e063cfd0c2af983be7ee1fd78527f07b762b7"
+          },
+          "merged_at": "2026-08-08T14:59:35Z",
+          "number": 14,
+          "state": "closed",
+          "title": "Add provisional SRTP draft profile"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "89d7de02c7e34880c53cbf5c377d9c9a2dc3223f"
+          },
+          "draft": true,
+          "head": {
+            "ref": "agent/runner-honesty-and-drift-remediation-20260804",
+            "sha": "546eb5eafd55abfd69efef29dc22efbdd67a6195"
+          },
+          "merged_at": "2026-08-05T07:09:08Z",
+          "number": 13,
+          "state": "closed",
+          "title": "Correct conformance claims and document Engine drift"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "f9375427de7ac5a5bc0bd0b785a28383f8950c98"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/public-orientation-technical-readme-20260804",
+            "sha": "e4ff16ba2ececda5382e4be3c04e59c8234bb23e"
+          },
+          "merged_at": "2026-08-05T02:24:48Z",
+          "number": 12,
+          "state": "closed",
+          "title": "Reframe GKOS public orientation and technical guide"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "f9375427de7ac5a5bc0bd0b785a28383f8950c98"
+          },
+          "draft": true,
+          "head": {
+            "ref": "agent/p2-p3-evidence-gates",
+            "sha": "4e710a381b8c97d27460f14f3f38c974a8f8e712"
+          },
+          "merged_at": null,
+          "number": 11,
+          "state": "closed",
+          "title": "Record P2/P3 evidence gates and KRR audit"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "9ea01d696bb8f2fef6f5826a3556f4fce72537a2"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/portfolio-p0-p1-governance-records",
+            "sha": "1952f001283014bd7ae9cdcd1208bc4cdcf0c5c3"
+          },
+          "merged_at": "2026-08-03T07:52:43Z",
+          "number": 10,
+          "state": "closed",
+          "title": "Record portfolio authority and proposed pre-execution gates"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "9ea01d696bb8f2fef6f5826a3556f4fce72537a2"
+          },
+          "draft": true,
+          "head": {
+            "ref": "agent/gkx-compatibility-r12-20260803",
+            "sha": "14021ff9448b88a0fd4fac3cd535356dd825c3cb"
+          },
+          "merged_at": null,
+          "number": 9,
+          "state": "closed",
+          "title": "Adopt R12 ecosystem compatibility decision"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "834efdb26eb73774fdf5a1922ddc0bf707532313"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/ecosystem-roadmap-alignment",
+            "sha": "2dfe169169e9fe50baf623a2d777ab1a83aaad65"
+          },
+          "merged_at": "2026-08-02T21:01:49Z",
+          "number": 8,
+          "state": "closed",
+          "title": "Align the GKOS ecosystem roadmap and organization"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "bd012c50aa899e608a1facf8c003650729dbdab4"
+          },
+          "draft": false,
+          "head": {
+            "ref": "agent/gkx-naming-transition",
+            "sha": "2cdfde90ff8605baf0dbbc0cbba15f3742158dcd"
+          },
+          "merged_at": "2026-08-02T14:32:29Z",
+          "number": 7,
+          "state": "closed",
+          "title": "Document the GKX naming transition"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "e6de14f2ce754fe54d8fd955e08a9bb02d0bd792"
+          },
+          "draft": false,
+          "head": {
+            "ref": "chore/adopt-r10",
+            "sha": "e7b580b75fd100e9365c09772eabd8689883c2b6"
+          },
+          "merged_at": "2026-07-23T05:11:36Z",
+          "number": 6,
+          "state": "closed",
+          "title": "Adopt R10: schema slice, fixture catalog 0.1.0, GKOS-TS starter runner"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "4f477b97070592fb70da09aba2a54ae47fda1756"
+          },
+          "draft": false,
+          "head": {
+            "ref": "docs/illustrated-edition",
+            "sha": "10f0fa742e46d259793d16016a29d988c8efbb71"
+          },
+          "merged_at": "2026-07-22T20:21:30Z",
+          "number": 5,
+          "state": "closed",
+          "title": "Add v0.76 Illustrated Edition and corrected graphics"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "4f477b97070592fb70da09aba2a54ae47fda1756"
+          },
+          "draft": false,
+          "head": {
+            "ref": "r10-schemas-fixtures-conformance",
+            "sha": "1f1b671c3573ade36eb77c31e36a273d2803953a"
+          },
+          "merged_at": "2026-07-22T20:21:27Z",
+          "number": 4,
+          "state": "closed",
+          "title": "R10 (draft): schema slice, fixture catalog 0.1.0, GKOS-TS starter"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "2ac07932472b0357fc7b2bb4222d87964d7636a1"
+          },
+          "draft": false,
+          "head": {
+            "ref": "release/2026-07-20-v0.76",
+            "sha": "ea95043b3bd4c5ef5e008698045927a7e1a6fbab"
+          },
+          "merged_at": "2026-07-20T18:28:32Z",
+          "number": 3,
+          "state": "closed",
+          "title": "Release GKOS-2026-07-20 v0.76"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "9abf2c0e1dc19c66d163968ea41dea70b937cc79"
+          },
+          "draft": false,
+          "head": {
+            "ref": "fix/release-checksum-manifest",
+            "sha": "3ae951f7743b06c977dbe06521c608220d396b65"
+          },
+          "merged_at": "2026-07-19T23:04:51Z",
+          "number": 2,
+          "state": "closed",
+          "title": "release: generate real SHA256SUMS manifest for v0.75"
+        },
+        {
+          "base": {
+            "ref": "main",
+            "sha": "9abf2c0e1dc19c66d163968ea41dea70b937cc79"
+          },
+          "draft": false,
+          "head": {
+            "ref": "amendments/v0.76-documentation-clarifications",
+            "sha": "3ee138e9b1fd6f4bb5d1252f93f3ec5aa41452cb"
+          },
+          "merged_at": "2026-07-19T22:59:02Z",
+          "number": 1,
+          "state": "closed",
+          "title": "v0.76 documentation-clarification amendments (R9-076..R9-081)"
+        }
+      ],
+      "unmerged_work": [
+        {
+          "branch": "work/v081-track-a-r18",
+          "head": "aa9a05315a9a767bd672aa2bb5179c963d9d66ca",
+          "base": "6a7ad71fc027894cd4e2bbb71c3bbadda06cd12f",
+          "pr": null
+        },
+        {
+          "branch": "agent/p2-p3-evidence-gates",
+          "head": "4e710a381b8c97d27460f14f3f38c974a8f8e712",
+          "pr": 11,
+          "status": "closed unmerged; historical blocked governance docs"
+        },
+        {
+          "branch": "agent/gkx-compatibility-r12-20260803",
+          "head": "14021ff9448b88a0fd4fac3cd535356dd825c3cb",
+          "pr": 9,
+          "status": "closed unmerged; R12 substantially present in main, punctuation-only decision record difference"
+        }
+      ],
+      "checks": [
+        {
+          "id": 99123048867,
+          "name": "test (22)",
+          "head": "71b899473473f47172b181973027f3eb7da25104",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33261089166/job/99123048867"
+        },
+        {
+          "id": 99123048791,
+          "name": "test (24)",
+          "head": "71b899473473f47172b181973027f3eb7da25104",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33261089166/job/99123048791"
+        },
+        {
+          "id": 99123048783,
+          "name": "validate",
+          "head": "71b899473473f47172b181973027f3eb7da25104",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33261089176/job/99123048783"
+        },
+        {
+          "id": 99123048745,
+          "name": "lint",
+          "head": "71b899473473f47172b181973027f3eb7da25104",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33261089154/job/99123048745"
+        },
+        {
+          "id": 99123048739,
+          "name": "links",
+          "head": "71b899473473f47172b181973027f3eb7da25104",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33261089171/job/99123048739"
+        },
+        {
+          "id": 99123048710,
+          "name": "checksums",
+          "head": "71b899473473f47172b181973027f3eb7da25104",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Odenknight/gkos-standard/actions/runs/33261089161/job/99123048710"
+        }
+      ]
+    },
+    {
+      "name": "Odenknight/gkos-hindsight-governance",
+      "main": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+      "actual_tree_sha": "4ab4e928dd20855925b1e10ef49e1e2f9c58b3bb",
+      "tree_verification_evidence": "evidence/hindsight-tree-verification.json",
+      "tags": [],
+      "open_prs": [],
+      "branches": [
+        {
+          "name": "main",
+          "commit": {
+            "sha": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+            "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/commits/59af4d1080efb0eae147d2aec0c0b1b75461b761"
+          },
+          "protected": false
+        },
+        {
+          "name": "work/wp1-track2-contract-foundation",
+          "commit": {
+            "sha": "63858ea542e031ebec37de721b09dcd9977c132e",
+            "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/commits/63858ea542e031ebec37de721b09dcd9977c132e"
+          },
+          "protected": false
+        }
+      ],
+      "all_prs": [
+        {
+          "number": 1,
+          "title": "WP1: Track 2 contract foundation",
+          "state": "closed",
+          "head": "63858ea542e031ebec37de721b09dcd9977c132e",
+          "base": "5a74df3f2038944757e1ad207e37c23c7337ecd6",
+          "merged_at": "2026-08-27T07:57:17Z",
+          "merge_commit": "59af4d1080efb0eae147d2aec0c0b1b75461b761"
+        }
+      ],
+      "checks": [
+        {
+          "id": 98449189784,
+          "name": "wp1-dispatch-ack-${{ github.event.client_payload.logical_dispatch_id }}",
+          "head": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+          "status": "completed",
+          "conclusion": "skipped",
+          "url": "https://github.com/Odenknight/gkos-hindsight-governance/actions/runs/33051891472/job/98449189784"
+        },
+        {
+          "id": 98449187220,
+          "name": "update-pip-graph",
+          "head": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/Odenknight/gkos-hindsight-governance/actions/runs/33051893978/job/98449187220"
+        },
+        {
+          "id": 98449175513,
+          "name": "r2-contract-static-gate",
+          "head": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Odenknight/gkos-hindsight-governance/actions/runs/33051891472/job/98449175513"
+        },
+        {
+          "id": 98449175449,
+          "name": "python-scaffold",
+          "head": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Odenknight/gkos-hindsight-governance/actions/runs/33051891476/job/98449175449"
+        },
+        {
+          "id": 98449175204,
+          "name": "bootstrap-security",
+          "head": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Odenknight/gkos-hindsight-governance/actions/runs/33051891458/job/98449175204"
+        },
+        {
+          "id": 98449175199,
+          "name": "differential-scaffold",
+          "head": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Odenknight/gkos-hindsight-governance/actions/runs/33051891462/job/98449175199"
+        },
+        {
+          "id": 98449175187,
+          "name": "rust-scaffold",
+          "head": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+          "status": "completed",
+          "conclusion": "failure",
+          "url": "https://github.com/Odenknight/gkos-hindsight-governance/actions/runs/33051891464/job/98449175187"
+        }
+      ],
+      "acquisition": "257 source files via connector, exact Git blob SHA1 matched; local staged synthetic index; original history unavailable"
+    }
+  ],
+  "tests": [
+    {
+      "id": "standard-main-tests",
+      "total": 14,
+      "pass": 14,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "id": "standard-main-strict",
+      "result": "FAIL",
+      "missing_gate_mutations": 19,
+      "requirements": 57,
+      "gates": 23
+    },
+    {
+      "id": "standard-main-srtp",
+      "total": 22,
+      "pass": 22,
+      "fail": 0,
+      "skip": 0,
+      "qualifying": false
+    },
+    {
+      "id": "standard-main-starter",
+      "adapter": "fake fixture adapter",
+      "total": 8,
+      "pass": 6,
+      "unevaluated": 2,
+      "exit": 1,
+      "qualifying": false
+    },
+    {
+      "id": "standard-main-replay",
+      "result": "PASS",
+      "canonical_sha256": "03d9507b12bb07d3d0224359881c0f6b6f7c2eb79346e31ca25925365dc2667b",
+      "bytes": 1338,
+      "qualifying": false
+    },
+    {
+      "id": "standard-r18-tests",
+      "total": 43,
+      "pass": 43,
+      "fail": 0,
+      "skip": 0,
+      "strict_lint": "PASS",
+      "requirements": 62,
+      "gates": 28
+    },
+    {
+      "id": "standard-boundary-probes",
+      "gate_false_open": 6,
+      "canonical_invalid_accepted": 2,
+      "portable_rerun": "explicit checkout arguments and documented default both reproduce eight observations",
+      "usage": "evidence/standard-boundary-probes-USAGE.md",
+      "rerun_evidence": "evidence/standard-boundary-probes-portable.txt"
+    },
+    {
+      "id": "standard-main-release-check",
+      "exit": 1,
+      "result": "expected 29 R16 allocations, found 30"
+    },
+    {
+      "id": "v080-release-checksums",
+      "source": "immutable v0.80 git blobs",
+      "total": 3,
+      "pass": 3
+    },
+    {
+      "id": "hindsight-initial-full",
+      "total": 180,
+      "pass": 173,
+      "error": 4,
+      "skip": 3,
+      "error_causes": [
+        "PyYAML absent from declared dependency closure:3 import errors",
+        "snapshot lacks Git index:1"
+      ]
+    },
+    {
+      "id": "hindsight-full-final",
+      "total": 206,
+      "pass": 201,
+      "error": 2,
+      "skip": 3,
+      "error_causes": [
+        "original historical Git objects unavailable in source snapshot"
+      ],
+      "skip_causes": [
+        "Windows symlink creation unavailable"
+      ]
+    },
+    {
+      "id": "hindsight-targeted-final",
+      "total": 126,
+      "pass": 126,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "id": "hindsight-bootstrap",
+      "files": 19,
+      "result": "PASS"
+    },
+    {
+      "id": "hindsight-lane-boundary",
+      "files": 7,
+      "result": "PASS",
+      "scope": "synthetic index only"
+    },
+    {
+      "id": "hindsight-bootstrap-security",
+      "result": "PASS",
+      "scope": "scaffold static integrity only"
+    },
+    {
+      "id": "hindsight-rust-scaffold",
+      "total": 1,
+      "pass": 1,
+      "fail": 0,
+      "scope": "RUNTIME_AUTHORITY=false assertion only"
+    }
+  ],
+  "not_executed": [
+    "live PostgreSQL",
+    "live Hindsight/Graphiti/provider calls",
+    "Node22 local tests",
+    "Linux Python3.12 hash-closed suite",
+    "runtime gateway/adjudicator/parity/crash/concurrency integration"
+  ]
+}

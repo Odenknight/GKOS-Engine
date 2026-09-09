@@ -1,0 +1,78 @@
+*** Begin Patch
+*** Update File: README.md
+@@
+ ## What you can explore
+@@
+ - Optional, separately configured Nextcloud WebDAV sync in the Obsidian
+   plugin. It is not part of ordinary read-only viewing.
++
++## Connectivity, formatting, and synchronization features
++
++Kosmos-Oden's Obsidian settings group these capabilities into four panels.
++Availability depends on the host: the Obsidian plugin has the richest settings
++surface, while the standalone viewer and Tauri shell intentionally expose a
++smaller, safer subset.
++
++### Agent API (HTTP + MCP)
++
++- Read-only REST and MCP Streamable HTTP access to the sensitivity-filtered
++  Kosmos Governed Context Projection (KGCP).
++- Localhost-only binding by default, with an explicit LAN/VLAN mode and a
++  visible network-exposure warning.
++- Configurable port, fail-closed default sensitivity, independent read
++  sensitivity ceiling, required bearer authentication in LAN mode, token
++  regeneration, and deprecated query-token authentication disabled by default.
++- Graph, notes, Graphiti episodes, health, capability discovery, and traversal
++  event access where the connected runtime advertises each capability.
++- Token possession grants read transport access only; it is not identity,
++  approval, governance authority, or permission to modify notes.
++
++### Quick Connect MCP
++
++- Copyable native MCP Streamable HTTP connection material for Claude Code and
++  Claude project `.mcp.json` configuration.
++- Shared Codex app, CLI, and IDE configuration material for OpenAI clients.
++- Bundled first-party stdio configuration for Claude Desktop and other
++  stdio-only clients, without an `mcp-remote` dependency.
++- Vendor-neutral connection details and cURL health checks for other clients.
++- Generated configuration contains endpoint and authentication material and
++  must be handled as a secret; connectivity never enables write authority.
++
++### GKOS note formatting
++
++- Portable `created_at` and `updated_at` timestamps using UTC/Zulu by default
++  or local time with an explicit numeric UTC offset.
++- Canonical timestamp keys for GKX compatibility; custom keys remain ordinary
++  user frontmatter and are not silently treated as GKX fields.
++- Source-content-read-only Navigation centers and warnings for noncanonical
++  legacy center names.
++- Human-editable GKX 2.2 and 2.3 Properties, developer and custom exclusions,
++  safe repair scanning, hash-bound previews, byte-exact backups, and explicit
++  conversion controls.
++- Optional deterministic or model-assisted enrichment proposals. Suggestions
++  remain pending until reviewed and never become authoritative automatically.
++
++### Connectivity to Sync Vault
++
++- Optional Nextcloud WebDAV synchronization using an app password held by
++  Obsidian Secret Storage rather than ordinary plugin settings.
++- Configurable remote vault folder, connection test, manual synchronization,
++  startup synchronization, and scheduled synchronization.
++- Serialized execution: a second synchronization run cannot overlap an active
++  run.
++- Deletion propagation is explicit and off by default; changed-versus-deleted
++  cases remain conflicts rather than being guessed.
++- Optional `.obsidian` synchronization is separate from note synchronization
++  and carries additional plugin/configuration risk.
++- Multi-provider concurrent synchronization is not currently qualified and is
++  not advertised as available.
++
++The authoritative GKX semantics, validation, governed projections, and
++qualified filesystem effects belong to GKOS-Engine. Kosmos-Oden supplies the
++Obsidian UX, visualization, connection helpers, and host adapters. Its offline
++viewer remains read-only and does not acquire the Agent API or sync features
++merely because those controls exist in the plugin.
+ 
+ Drag to orbit, scroll or pinch to zoom, and select a body to focus its
+ neighbors. The Overview, Focus, Depth, and Fly modes offer different ways to
+*** End Patch

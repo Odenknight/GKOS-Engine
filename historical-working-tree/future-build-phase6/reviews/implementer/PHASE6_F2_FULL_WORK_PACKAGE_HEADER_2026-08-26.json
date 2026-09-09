@@ -1,0 +1,89 @@
+{
+  "record_type": "gkos-phase6-f2-full-work-package-header",
+  "record_version": "1.0.0",
+  "recorded_at_utc": "2026-08-26T07:31:00.000Z",
+  "status": "F2_ENTRY_BOUNDARY_FROZEN",
+  "repository": "Odenknight/GKOS-Engine",
+  "branch_to_create": "codex/phase6-f2-authority-engine",
+  "exact_base_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+  "authority": {
+    "owner_authorization_path": "future-build-phase6/reviews/f2/PHASE6_F2_OWNER_AUTHORIZATION_2026-08-26.json",
+    "owner_authorization_sha256": "e16b351f16d8fcf98d4683429764a6009e9073408bdb73c6b36e20f82d0e2118",
+    "f1_acceptance_gate_sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff",
+    "f1_independent_verdict_sha256": "ee027811dd29826883f736c0f018de552979d2418762e69fa7988aff635aaa70",
+    "d0_owner_ratification_sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929",
+    "governance_matrix_sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f"
+  },
+  "accepted_contract": {
+    "name": "GKOS-AGENT-IDENTITY-MCP-CONTRACT",
+    "version": "1.0.0-draft.1",
+    "root": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1",
+    "operation_count": 32,
+    "operation_authority_counts": {
+      "PUBLIC_AUTHENTICATED": 7,
+      "LOCAL_BOOTSTRAP": 1,
+      "OWNER_ONLY": 24
+    },
+    "operation_schema_definition_count": 54,
+    "public_schema_reference_count": 14,
+    "error_code_count": 53,
+    "error_alias_count": 34,
+    "f1_pack_leaf_count": 34,
+    "f1_manifest_hashed_leaf_count": 33,
+    "f1_pack_aggregate_digest": "sha256:e3dab5b4ee3da62a845cc92bc9dc9b831ed492f34371104b503587c566300380"
+  },
+  "allowed_product_paths": [
+    ".github/workflows/phase6-f2-authority.yml",
+    "scripts/build.mjs",
+    "scripts/check-phase6-f2-scope.mjs",
+    "scripts/phase6-f2-qualification.mjs",
+    "src/identity-authority/canonical.ts",
+    "src/identity-authority/credential.ts",
+    "src/identity-authority/errors.ts",
+    "src/identity-authority/filesystem.ts",
+    "src/identity-authority/index.ts",
+    "src/identity-authority/operations.ts",
+    "src/identity-authority/sqlite.ts",
+    "src/identity-authority/types.ts",
+    "src/identity-authority/validation.ts",
+    "test/phase6-f2-authority.test.mjs"
+  ],
+  "maximum_changed_product_path_count": 14,
+  "protected_surfaces": {
+    "accepted_f1_pack": "All 34 leaves beneath the accepted contract root are byte-immutable in F2.",
+    "accepted_f1_support": [
+      ".github/workflows/phase6-identity-contract.yml",
+      "docs/decisions/0006-phase6-agent-identity-mcp-contract.md",
+      "docs/phase6-agent-identity-mcp-contract.md",
+      "evidence/2026-08-25-functional-uplift-phase-6-f1.md",
+      "scripts/generate-agent-identity-mcp-contract.mjs",
+      "test/agent-identity-mcp-contract.test.mjs"
+    ],
+    "phase0_to_phase5": "Every path or prefix in the accepted contract protected-paths.txt is byte-immutable, including package metadata, existing CI/release workflows, README files, CLI, and existing governance/ingest/navigation/retrieval/watcher semantics.",
+    "contract_drift": "Any accepted schema, registry, vector, limit, operation, projection, or expected-outcome change is forbidden and triggers D0-15 stop."
+  },
+  "implementation_scope": [
+    "Reference TypeScript authority engine using Node built-in SQLite with exactly 16 normalized tables.",
+    "Internal owner/admin service boundary for the accepted 1 bootstrap and 24 owner operations, plus reference capability hooks for all 7 public authenticated operations.",
+    "Identity, external mapping, credential, session, policy, activity, audit, retention, rate, replay/idempotency, generations, snapshots, cursors, opaque references, and reference effect-outbox authority state.",
+    "POSIX reference physical storage, authority lease, external anchor, bootstrap/migration, backup, restore, restore-abort, and crash recovery; Windows fails closed as platform unavailable.",
+    "Focused unit/integration/reference tests and an F2-only Linux hosted qualification workflow."
+  ],
+  "explicit_exclusions": [
+    "No accepted F1 pack mutation except runtime read/import of its immutable bytes.",
+    "No protected Phase 0-5 semantic path mutation.",
+    "No F3 MCP stdio or loopback HTTP transport, tool facade, initialize/session transport, or protocol projection implementation.",
+    "No F4 independently authored adversarial expectation pack.",
+    "No F5 cross-platform, ACL, crash, or evidence closeout claim.",
+    "No irreversible Navigation Effects execution; only the accepted authority outbox/bridge state boundary.",
+    "No Lite work, README reconciliation, package export/public API claim, merge, PR, release, deployment, activation, or publication."
+  ],
+  "stop_conditions": [
+    "Accepted F1 bytes are insufficient to determine an exact implementation outcome.",
+    "A required implementation path falls outside the frozen 14-path inventory.",
+    "A protected or accepted-contract byte would need to change.",
+    "A test would need a new expected outcome rather than exercising an accepted outcome.",
+    "A platform guarantee cannot be proved; the reference implementation must instead return GKOS_P6_PLATFORM_UNAVAILABLE."
+  ],
+  "handoff_verdict_ceiling": "F2_IMPLEMENTATION_HANDOFF_READY_NOT_ACCEPTED"
+}

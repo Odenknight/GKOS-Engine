@@ -1,0 +1,111 @@
+{
+  "receipt_version": "1.0",
+  "status": "LOCAL_INTEGRATION_CANDIDATE_TESTED",
+  "scope_limits": [
+    "local branch only",
+    "not pushed, merged, published, released, or tagged",
+    "does not claim GKOS conformance or Standard v0.81 completion"
+  ],
+  "source": {
+    "worktree": "orchestration/integration/standard-r18",
+    "branch": "codex/integrate-standard-r18-20260831",
+    "base_commit": "aa9a05315a9a767bd672aa2bb5179c963d9d66ca",
+    "base_tree": "f85b2653e6324e5d7252508bcb5e7e4ac599966c",
+    "candidate_commit": "9f47ecf8fefb87810cd44bd03fa8e82eb321fd4a",
+    "candidate_tree": "8326360374a7dadbad97e2f92627f5edf578a66f",
+    "commit_subject": "fix: fail closed Standard boundary evidence",
+    "dco_signed_off": true,
+    "final_porcelain_status": ""
+  },
+  "seal": {
+    "patch": "orchestration/upgrades/deliverables/standard-r18.patch",
+    "sha256": "b4ce3f17ef88bb51647577c2d693730e98c96ed8d8a97c602d77b64e7354dcdd",
+    "forward_apply_check": "PASS",
+    "indexed_apply": "PASS",
+    "staged_diff_check": "PASS",
+    "post_commit_reverse_apply_check": "PASS",
+    "changed_files": 9,
+    "insertions": 239,
+    "deletions": 25
+  },
+  "execution_environment": {
+    "node": "v24.18.0",
+    "npm": "10.9.4",
+    "os": "Microsoft Windows 10.0.26200",
+    "architecture": "X64"
+  },
+  "checks": {
+    "native_test_and_default_lint": {
+      "command": "npm test",
+      "exit_code": 0,
+      "tests": 80,
+      "passed": 80,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "default_lint_result": "PASS",
+      "log": "orchestration/integration/receipts/standard-r18-final-npm-test.log",
+      "log_sha256": "bfc3bff60d84b0a6afa71f143cc9e909d35d5d6ca219671b6bc9a373715656a3"
+    },
+    "strict_mutation_predicate_lint": {
+      "command": "node registry-lint.mjs --require-mutation-coverage --out <receipt>",
+      "exit_code": 0,
+      "result": "PASS",
+      "requirement_count": 62,
+      "gate_code_count": 28,
+      "uncovered_gate_codes": [],
+      "executable_uncovered_gate_codes": [],
+      "coverage_scope": "portable-predicate-twins-only; not cumulative profile qualification",
+      "json": "orchestration/integration/receipts/standard-r18-final-strict-lint.json",
+      "json_sha256": "18de82072f8f8d363143c6f100379daca6fd3bc8d1e279eee63643b659787350",
+      "log": "orchestration/integration/receipts/standard-r18-final-strict-lint.log",
+      "log_sha256": "eb1761000d9daa469489b1c26d714dc26e8ea4e84c540551720b8288a44c0097"
+    },
+    "starter_runner": {
+      "command": "node run.mjs --adapter test/fixtures/fake-adapter.mjs --out <receipt>",
+      "exit_code": 1,
+      "exit_interpretation": "EXPECTED_NONQUALIFYING",
+      "executed": 8,
+      "fully_evaluated": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "unevaluated": 2,
+      "unevaluated_fixtures": [
+        {
+          "fixture_id": "GCP3-C01",
+          "detail": "unevaluated expectations: pair, projection.graph_expect"
+        },
+        {
+          "fixture_id": "GCP3-L01",
+          "detail": "unevaluated expectations: pair, projection.graph_expect"
+        }
+      ],
+      "requirements_verified": [],
+      "profiles_claimed": [],
+      "tier_claims": [],
+      "claim": "orchestration/integration/receipts/standard-r18-final-starter-claim.json",
+      "claim_sha256": "75243955ce174aa36a6c9dad8384b3537d3479d88d9532eddaaaf6d7b337d67a",
+      "log": "orchestration/integration/receipts/standard-r18-final-starter.log",
+      "log_sha256": "f572df922715f6f5cfa14074dc475b785f56c168a16eeab83344922490ecab96"
+    }
+  },
+  "q_intent": {
+    "disposition": "OWNER_DECISION_REQUIRED",
+    "finding": "R4 names an eight-invariant gate but supplies no item-level enumeration; proposed non-normative GKOS-DOCSTD-001 section 4 contains seven rows, and no local source identifies an eighth item or a combined row.",
+    "receipt": "orchestration/integration/receipts/Q-INTENT-RESOLUTION.md",
+    "receipt_sha256": "e314b566586f68aebffd6b4b945e699813ae83d25dd1b0b70cfcfd89ae5e21ea"
+  },
+  "rejected_seal_provenance": {
+    "directory": "orchestration/integration/receipts/rejected-seal/standard-r18",
+    "provisional_commit": "db1f4d7e3fccfa5a9afa907e5dc28c770e5f8509",
+    "note": "Preserved before the provisional worktree and branch were removed and recreated at the exact base."
+  },
+  "limitations": [
+    "The strict lint scope explicitly covers portable predicate twins and is not cumulative profile qualification.",
+    "The starter catalog is a mechanism demonstration with two UNEVALUATED graph expectations and makes no requirement, profile, or tier claim.",
+    "Q-INTENT remains an owner decision; no eight-invariant gate was run or reported as passed.",
+    "This receipt records local Windows execution only."
+  ]
+}

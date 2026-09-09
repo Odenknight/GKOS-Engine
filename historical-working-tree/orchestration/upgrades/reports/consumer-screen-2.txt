@@ -1,0 +1,969 @@
+
+2026-08-31/product-audit/Kosmos-Oden/docs/assessments/Detailed_Recommended_Changes.md
+1: # Vault Kosmos (Kosmos-Oden) — Detailed Recommended Changes
+10: ## 1. Purpose of This Document
+29: - a clear separation between the Obsidian host, Agent API, and 3D renderer;
+37: # 2. Priority Summary
+39: ## High Priority
+43: 3. Establish one authoritative renderer source without unnecessary source-tree restructuring.
+44: 4. Document the iframe trust model and perform a bounded sandbox compatibility evaluation.
+51: ## Medium Priority
+55: 12. Add build provenance metadata, checksums, and optional artifact attestations.
+63: ## Low Priority
+74: # 3. High-Priority Recommendations
+76: ## 3.1 Add Continuous Integration
+78: ### Current concern
+85: - generated renderer artifacts are synchronized;
+92: ### Recommended implementation
+159: ### Package-script changes
+170:     "generate:renderer": "node scripts/generate-renderer.mjs",
+178: ### Acceptance criteria
+183: - A source change that requires regeneration causes CI to fail if generated files are stale.
+188: ## 3.2 Commit a Dependency Lockfile and Pin the Toolchain
+190: ### Current concern
+196: ### Recommended implementation
+223: ### Update policy
+232: ### Acceptance criteria
+242: ## 3.3 Establish One Authoritative Renderer Source
+244: ### Current concern
+249: - an embedded renderer represented in `src/kosmos-html.ts`.
+255: ### Revised implementation approach
+271: kosmos-iframe.html      authoritative renderer source
+277: ### Important caveat
+281: If the root HTML is itself minified, bundled, or generated from other renderer code, then the true authoritative source should remain upstream, for example:
+284: src/renderer-source/
+286:   renderer.ts
+287:   renderer.css
+294: > There must be one human-maintained renderer source and any distributed variants must be deterministically generated from it.
+296: ### Generation requirements
+300: 1. read the authoritative renderer artifact;
+317:  * Regenerate with: npm run generate:renderer
+321: ### Verification
+331: ### Backward-compatibility requirements
+333: Renderer unification must not silently break existing users.
+338: - the generated embedded renderer behaves identically;
+343: ### Acceptance criteria
+345: - Renderer behavior is edited in one authoritative source location.
+346: - The embedded renderer is generated from that source.
+347: - No broad directory refactor is required unless the renderer already has multiple true source files.
+351: - The standalone renderer remains backward-compatible or changes are explicitly documented.
+353: ## 3.4 Document the Iframe Trust Model and Perform a Bounded Sandbox Evaluation
+355: ### Current concern
+357: The renderer is placed in an iframe using `srcdoc`, but `srcdoc` does not automatically create a security sandbox.
+369: ### Practical risk assessment
+371: The plugin host already has broad Obsidian privileges. Sandboxing the renderer would not protect the user from malicious or compromised host code.
+375: - the renderer is much larger than the host integration code;
+376: - generated renderer code is harder to review;
+377: - note-derived data enters the renderer;
+378: - future renderer changes may introduce new capabilities;
+379: - a renderer-specific defect could otherwise reach parent-window capabilities.
+383: ### Do not assume either outcome
+387: Do not assume that sandboxing would necessarily break note opening or Obsidian integration. The current note-opening path is mediated through `postMessage` and handled by `main.ts`, so the iframe itself does not appear to require direct access to the Obsidian API for that action.
+389: Other renderer features may still depend on capabilities affected by sandboxing.
+391: ### Recommended action: compatibility experiment
+421: ### Message-protocol hardening
+423: Regardless of sandbox adoption, formalize and validate the host–renderer protocol.
+456: ### Backward compatibility
+458: Because host and embedded renderer normally ship together inside `main.js`, full support for multiple historical protocol versions may be unnecessary.
+465: - document any migration if the standalone renderer and host can be mixed across versions.
+467: ### Acceptance criteria
+470: - The current iframe is described as trusted renderer code unless stronger isolation is proven.
+471: - A bounded sandbox compatibility test is completed and documented.
+476: ## 3.5 Replace the Insecure Token Fallback
+478: ### Current concern
+490: The `Math.random()` fallback is the issue that must be removed.
+492: ### Recommended implementation
+517: ### Token lifecycle improvements
+529: ### Acceptance criteria
+539: ## 3.6 Harden Agent API Authentication
+541: ### Current concern
+555: ### Recommended policy
+559: 1. `Authorization: Bearer <token>`
+568: If compatibility requires retaining query-token authentication:
+577: ### Authentication behavior
+589: ### Acceptance criteria
+599: ## 3.7 Add an Explicit Backward-Compatibility and Deprecation Policy
+601: ### Current concern
+607: - changing renderer generation;
+615: ### Recommended policy
+626: ### Query-token migration example
+636:    - require `Authorization` or `X-API-Key`.
+643: ### Settings migration
+653: ### Protocol compatibility
+660: - keep stable method names unless a security or correctness issue requires change.
+662: ### Acceptance criteria
+670: ## 3.8 Document and Reduce LAN-Mode Risk
+672: ### Current concern
+678: ### Recommended documentation
+684: ### Recommended technical controls
+687: - Require token authentication in LAN mode.
+697: ### Acceptance criteria
+703: - Public-interface exposure is prevented or requires an additional explicit override.
+707: ## 3.9 Build and Verify Release Assets in the Release Workflow
+709: ### Current concern
+715: ### Recommended release workflow
+723: 5. build the renderer;
+757: ### Clean release directory
+773: ### Acceptance criteria
+783: ## 3.10 Add Version-Consistency Verification
+785: ### Current concern
+799: ### Recommended implementation
+821: ### Acceptance criteria
+830: # 4. Medium-Priority Recommendations
+832: ## 4.1 Perform a Test-Coverage Gap Analysis Before Expanding the Suite
+834: ### Current concern
+840: ### Recommended process
+855: | Renderer messaging | Unknown | Unknown | Partial | malformed and forged messages | Medium |
+857: ### Required outputs
+869: ### Prioritization rule
+883: ### Acceptance criteria
+890: ## 4.2 Expand Security and Protocol Testing
+894: ### Authentication
+902: - malformed `Authorization` header;
+908: ### Host and Origin validation
+924: ### HTTP behavior
+938: ### Data safety
+947: ### Acceptance criteria
+956: ## 4.3 Add Build Metadata and Checksums
+982: Optionally use GitHub artifact attestations or Sigstore-compatible provenance.
+984: ### Acceptance criteria
+993: ## 4.4 Improve Logging and Diagnostics Safely
+1001: - renderer load failure;
+1020:   status: 200,
+1030: ## 4.5 Define Supported Runtime Versions
+1044: ## 4.6 Add Staged Performance and Scale Regression Tests
+1046: ### Immediate scope
+1060: ### Later scope
+1084: ### Acceptance criteria
+1089: - Bundle-size increases above a defined threshold require review.
+1091: ## 4.7 Separate Generated Files from Hand-Written Source
+1115: # 5. Additional Review Requirements
+1117: ## 5.1 Verify Fork Lineage, Attribution, and License Obligations
+1119: ### Current context
+1125: ### Recommended checks
+1135: ### Acceptance criteria
+1144: ## 5.2 Document the Standalone HTML Data and Security Model
+1146: ### Current concern
+1148: The standalone renderer is distributed as an HTML artifact, but documentation should explain exactly how it receives vault data.
+1150: Do not assume that a browser can silently scan a vault through `file://`. Browser access normally requires a user-selected file or directory, generated graph data, drag-and-drop, or a local server.
+1154: ### Documentation should answer
+1167: ### Recommended controls
+1169: - keep the standalone renderer network-free unless explicitly documented;
+1176: ### Acceptance criteria
+1185: ## 5.3 Maintain an Iterative Threat Model
+1202: # 6. Low-Priority Recommendations
+1204: ## 6.1 Add `CHANGELOG.md`
+1209: # Changelog
+1211: ## [Unreleased]
+1213: ### Added
+1214: ### Changed
+1215: ### Fixed
+1216: ### Compatibility and lineage
+1220: - [ ] Standalone and embedded renderer modes remain compatible.
+1224: ## Security
+1226: ## [0.5.1] - 2026-07-11
+1234: ## 6.2 Add Repository Templates
+1260: ## 6.3 Add Architecture and Threat-Model Documentation
+1269:   RENDERER-PROTOCOL.md
+1287: ## 6.4 Improve Project Presentation
+1294: - a diagram showing Obsidian host, iframe renderer, REST/MCP server, and clients;
+1299: # 7. Proposed Implementation Sequence
+1301: ## Phase 1 — Build Integrity
+1314: ## Phase 2 — Immediate Security Controls
+1320: 5. Require authentication for LAN mode.
+1328: ## Phase 3 — Renderer Maintainability
+1331: 2. Identify the true authoritative renderer source.
+1336: 7. Perform a bounded iframe-sandbox compatibility experiment.
+1339: **Exit gate:** Standalone and embedded renderer variants cannot drift unnoticed, and the trust model is accurately documented.
+1341: ## Phase 4 — Operational Maturity
+1353: # 8. Agent Review Checklist
+1357: ## Repository and dependencies
+1364: ## Source and generated artifacts
+1366: - [ ] The renderer has one authoritative source.
+1372: ## Tests
+1380: ## Compatibility and lineage
+1384: - [ ] Standalone and embedded renderer modes remain compatible.
+1388: ## Security
+1392: - [ ] LAN mode requires authentication.
+1398: ## Release
+1409: # 9. Definition of Done
+1415: 3. both renderer distributions derive from one source;
+1430: # 10. Repository References
+
+2026-08-31/product-audit/Kosmos-Oden/docs/assessments/Engineering_Assurance_Guide.md
+1: # Vault Kosmos Engineering Assurance Guide
+3: ## Build Provenance, Reproducibility, Security Hardening, and Automated Verification
+12: # 1. Executive Summary
+19: - bundles a large Three.js renderer;
+37: - **Build provenance** answers: *Where did this artifact come from?*
+42: These disciplines are important for human reviewers and even more important for AI agents. An agent can execute checks consistently, but it requires explicit invariants, deterministic commands, machine-readable evidence, and unambiguous failure conditions.
+46: # 2. Why These Controls Matter for Vault Kosmos
+48: ## 2.1 The plugin handles sensitive local information
+67: ## 2.2 The plugin ships generated code
+81: Without provenance and verification, a user cannot easily prove that the bottom artifact came from the top source.
+83: ## 2.3 The renderer is a large embedded payload
+85: A large generated or encoded renderer can hide:
+97: ## 2.4 The Agent API crosses process and network boundaries
+114: ## 2.5 AI agents amplify both capability and risk
+130: # 3. Build Provenance
+132: ## 3.1 Definition
+134: Build provenance is evidence describing how a released artifact was produced.
+136: At minimum, provenance should identify:
+152: Provenance does not merely say “this is version 0.5.1.” It says:
+156: ## 3.2 Threats addressed by provenance
+158: ### Artifact substitution
+162: ### Stale artifact release
+166: ### Local contamination
+170: ### Tag mismatch
+174: ### Dependency ambiguity
+178: ### Compromised release process
+182: ## 3.3 Minimum provenance model
+213: Avoid placing volatile metadata such as local usernames, private paths, or secrets in provenance.
+215: ## 3.4 Stronger provenance
+221: - SLSA-compatible provenance;
+228: ## 3.5 Why provenance matters to human reviewers
+232: Provenance connects code review to what users actually install.
+234: ## 3.6 Why provenance matters to agents
+239: - commit identity;
+242: - lockfile identity; and
+245: Without machine-readable provenance, an agent must infer trust from filenames and human prose, which is weak and error-prone.
+249: # 4. Reproducibility
+251: ## 4.1 Definition
+257: ### Repeatable
+261: ### Reproducible
+265: ### Bit-for-bit reproducible
+269: Bit-for-bit output is the strongest form, but useful improvements can be made even before perfect byte identity is achieved.
+271: ## 4.2 Sources of non-reproducibility
+291: ## 4.3 Reproducibility requirements for Vault Kosmos
+293: ### Pin dependencies
+297: ### Pin the runtime
+301: ### Build from a clean checkout
+305: ### Avoid network inputs during build
+307: All build inputs should be represented by the repository and lockfile. The build should not fetch changing remote scripts or renderer assets.
+309: ### Normalize generated output
+320: ### Separate build metadata from executable output
+322: If a build timestamp is useful, place it in `BUILD-INFO.json` rather than embedding it in `main.js`, because timestamps make byte identity impossible.
+324: ### Use deterministic renderer generation
+326: The standalone and embedded renderer should be generated from the same source in the same workflow.
+328: ## 4.4 Proposed reproducibility test
+348: ## 4.5 When byte-for-byte identity is not achieved
+364: ## 4.6 Why reproducibility matters
+379: # 5. Security Hardening
+381: ## 5.1 Definition
+392: ## 5.2 Core security objectives
+396: ### Confidentiality
+400: ### Integrity
+404: ### Availability
+408: ### Least privilege
+410: The renderer, API, and build workflow should have only the capabilities they require.
+412: ### Safe defaults
+418: ## 5.3 Authentication hardening
+420: ### Use cryptographic randomness only
+424: ### Prefer headers
+429: Authorization: Bearer TOKEN
+440: ### Fail closed
+444: ### Protect LAN mode
+448: - require authentication;
+453: ### Minimize token display
+455: Display a token only when needed. Avoid persistent full-token rendering in screenshots, logs, and status text.
+457: ### Rotate tokens
+459: Provide a clear regeneration process and explain that clients must be updated after rotation.
+463: ## 5.4 Network hardening
+465: ### Keep loopback as the default
+469: ### Treat LAN mode as elevated exposure
+471: LAN mode should require an explicit action and warning.
+473: ### Host and Origin validation
+480: - client identity;
+485: ### Rate and concurrency limits
+496: ### Timeouts
+507: ## 5.5 Input validation
+532: ## 5.6 Output controls
+552: ## 5.7 Iframe and renderer hardening
+554: ### Accurate boundary description
+558: ### Explicit sandbox evaluation
+562: ### Message protocol validation
+564: Validate all messages exchanged between host and renderer.
+566: ### Capability minimization
+568: The renderer should not need:
+576: If it does not require these, ensure the architecture does not inadvertently grant them.
+578: ### Network-free renderer
+580: Automated tests can inspect source and runtime behavior to verify that the renderer does not make unexpected external requests.
+584: ## 5.8 Dependency and supply-chain hardening
+601: ## 5.9 Release-workflow hardening
+622: - require review for workflow changes;
+627: - publish checksums and provenance.
+631: # 6. Automated Verification
+633: ## 6.1 Definition
+654: Claim: LAN mode always requires authentication.
+657: Gate: CI must pass before merge.
+660: ## 6.2 Verification layers
+662: ### Static verification
+671: ### Unit verification
+681: ### Integration verification
+691: ### Artifact verification
+697: - verify provenance.
+699: ### Runtime verification
+703: - send host-renderer messages;
+708: ### Security regression verification
+714: ## 6.3 Recommended CI jobs
+716: ### Job 1: Source validation
+724: ### Job 2: Generated-artifact validation
+727: npm run generate:renderer
+734: ### Job 3: Reproducibility
+738: ### Job 4: Security tests
+750: ### Job 5: Release simulation
+763: ## 6.4 Example invariant file
+806: ## 6.5 Human review and agent review should complement each other
+825: AI agents can assist both, but should not be the sole approval authority for security-sensitive workflow or authentication changes.
+827: Recommended approval policy:
+833: - introduction of write endpoints: explicit architectural decision and threat-model update.
+837: # 7. Proposed Assurance Architecture
+849:            +--> Renderer Generation
+871:            +--> BUILD-INFO provenance
+883: # 8. Suggested Verification Commands
+898: npm run generate:renderer
+923: # 9. Failure Policy
+927: ## Fail the build when
+939: ## Warn, but do not necessarily fail, when
+946: ## Require explicit review when
+959: # 10. Measures of Success
+965: - generated renderer outputs cannot silently diverge;
+968: - malicious or malformed requests produce bounded failures;
+977: # 11. Recommended Initial Milestone
+985: 5. Add deterministic renderer generation.
+988: 8. Require auth in LAN mode.
+996: # 12. Final Rationale
+998: Build provenance, reproducibility, security hardening, and automated verification are sometimes treated as enterprise bureaucracy. For Vault Kosmos, they are practical safeguards.
+1004: - a large embedded renderer;
+1025: # 13. Repository References
+
+2026-08-31/product-audit/Kosmos-Oden/docs/assets/README.md
+1: # Product images
+11: The images do not establish certification, compliance, endorsement, approval,
+14: decision, or activation authority and changes no source content.
+
+2026-08-31/product-audit/Kosmos-Oden/docs/BUILD-DIRECTIVE.md DUPLICATE 2026-08-31/product-audit/Kosmos-Oden/BUILD-DIRECTIVE-v0.5.5.md
+
+
+2026-08-31/product-audit/Kosmos-Oden/docs/COMMUNITY-PLUGIN.md
+1: # Obsidian Community Plugin — packaging, releases & submission
+6: ## Plugin components vs standalone (the separation)
+13: The standalone is **never** part of the plugin download — Obsidian only fetches
+20: ## Cutting a release
+23: **The tag must equal `manifest.json`'s `version` exactly, with no `v` prefix**
+27: # 1. bump the version in ONE place; check:versions enforces agreement across
+28: #    manifest.json / versions.json / package.json / src/kosmos-version.ts
+29: # 2. commit, then tag with the exact version — NO leading v:
+45: ## First-time submission to the community catalog
+72: ## Testing before submission
+76:   r185 renderer line.
+
+2026-08-31/product-audit/Kosmos-Oden/docs/DEFERRED-STANDALONE-GKX-ENGINE.md
+1: # Deferred: Standalone GKX 2.3 Engine and Agentic Service
+3: Status: **filed for a later development cycle**. This work is not part of the
+6: ## Objective
+14: ## Required boundaries
+16: - The deterministic engine must run without a model, network connection, or
+21: - Proposed values never enter effective state without an accepted authority
+22:   decision.
+26: - The deterministic engine must validate every agent-produced envelope before
+29:   must be identifiable and hash-verifiable.
+32: ## Candidate deployment shapes
+39: The implementation decision should be made after measuring packaging,
+42: ## Minimum deliverables
+47:   evidence, relationships, policy identity, and corpus assessment;
+56:   provenance, authority verification, and sensitive-data filtering.
+58: ## Acceptance criteria
+66:   authority decision.
+72: ## First task when resumed
+74: Write an architecture decision record comparing embedded-library, child-process,
+
+2026-08-31/product-audit/Kosmos-Oden/docs/ENGINE-2.1-COMPATIBILITY.md
+1: # GKOS-Engine 2.1 compatibility
+4: `f4dfda16eac746c667cf042f908a918d9acc6713`; package and lockfile must continue
+7: ## Consumer boundary
+18: ## Observable Navigation behavior
+35: ## Engine 1.x to 2.x source changes
+52: ## Evidence separation
+
+2026-08-31/product-audit/Kosmos-Oden/docs/EVOLUTION-AND-SAFEGUARDS.md
+1: # The Evolution of GKX Note Formatting — and How the Safeguards Held
+16: ## The safety architecture (what was already true)
+25:   never rewrites a note. It produces an `GkxMigrationPlan` — a plan hash, a
+40:   (`skippedChanged`), never overwritten with stale proposed content.
+41: - **Body bytes are never touched — only frontmatter.** Every proposal
+55: and `provenance.extraction.method: "deterministic-migration"`. Nothing about
+60: ## The incident (beta.10)
+65: `sensitivity:`, `provenance:`, `relationships:`, `review:`, `assessment:`,
+92: ## The reversal (beta.11) — no vault restore needed
+94: beta.11 shipped a bounded repair, not a rollback. It works because of the
+104: the converter over — carries no such marker and is never touched by this
+107: deterministic-migration marker; native authored 2.3 notes are never
+111: editable GKX 2.2 frontmatter block: scalar fields for identity, type,
+136: ## The permanent fix (beta.12 → 0.6.5)
+171:   machine dialect. They are never flattened automatically by anything in
+175: ## What this proved
+189:   frontmatter, never the Markdown content a person wrote.
+190: - **Authored content is never auto-flattened.** The same check that found
+196: provenance, evidence structure, review state, the machinery an agent needs
+
+2026-08-31/product-audit/Kosmos-Oden/docs/GKOS-ENGINE-DEFINITIONS.md
+17: # GKOS Engine Definitions
+26: Status values used below:
+37: # Part 1 — Definitions
+39: ## GKOS Engine
+49: L5-style decision recording under a disclosed single-actor waiver, nothing more.
+52: **Status:** defined-in-engine.
+54: ## GKX Notes (2.2)
+57: covering identity, type, title, description, `timestamp`, epistemic state,
+64: **Status:** defined-in-engine.
+66: ## Agent-Ready dialect (flat 2.3)
+70: quoted strings in top-level lists. This is the dialect any human-edited file MUST use
+77: **Status:** defined-in-engine.
+79: ## Machine Dialect (nested 2.3)
+82: `sensitivity`, `provenance`, `relationships`, `evidence`, `lineage`, `review`,
+83: `assessment`, `authorization`, `labels`) for corpora **no human ever hand-edits**.
+89: **Status:** defined-in-engine.
+91: ## GKOS-Engine-Lite schema
+97: projection plane (computed) and the governance plane (`.gkx/` sidecars), never in the
+98: note. This is the schema a stranger's plain-Markdown folder must satisfy to be
+102: **Status:** defined-in-engine.
+104: ## Authoring plane / projection plane / governance plane
+112:   diagnostics, defaulted-value marking, effective state. Never persisted as note
+115:   policy, schema, cache. Written only by explicit governed operations, never on a
+122: **Status:** defined-in-engine.
+124: ## Progressive disclosure
+132: defaulted-vs-authored marking. Hiding is a view concern only — the engine never
+137: **Status:** defined-in-engine (contract specified; UI implementation is a build
+140: ## Validating projection
+143: policy-checked in-memory structure (parse → build projection → assess) that never
+151: **Status:** defined-in-engine.
+153: ## Origin separation (authored / derived / proposed / approved)
+158: `proposed` (an agent or human suggested it, not yet decided), `approved` (a decision
+160: tagged `proposed` is never treated as `approved` without a matching
+163: that record — a human cannot fabricate approval by typing a word in Properties.
+167: **Status:** needs-GKOS-adoption (GKOS names "authored, derived, proposed, and
+168: governed state" as things that must be separated per R5-045 but does not define the
+171: ## Defaulted-vs-authored marking
+181: **Status:** defined-in-engine.
+183: ## Proposal envelope
+187: `updated_at` excluded so timestamp-stamper runs never invalidate a pending
+188: proposal), a patch restricted to authoring-plane keys only, proposer identity
+190: validation is purely structural (schema-valid, fresh hash, in-scope keys, bounded
+192: `requires-elevated-authority` and never auto-applied.
+195: **Status:** needs-GKOS-adoption (GKOS's Layer 5 requires proposals to receive
+196: "authorized append-only Decision Records" but does not define the proposal envelope
+197: itself, its input-hash binding, or the requires-elevated-authority tag).
+199: ## Decision record
+201: **Definition:** One immutable file per decision (`.gkx/decisions/<decision-id>.yaml`)
+202: carrying: decision id, proposal id and revision (hash), disposition (acceptance and
+208: `GKX-DECISION-002` rather than a false tamper alarm. Disclosed honestly: the chain
+211: **Status:** needs-GKOS-adoption (GKOS §7.5/§10.5 requires an "authorized append-only
+212: Decision Record" and forbids self-approval, but specifies none of: file layout,
+215: ## Single-actor waiver profile
+222: engine still enforces procedurally: an agent identity has no accept surface (accept
+224: conformance claim must list this waiver as a limitation.
+225: **Engine location:** decision-record disposition field; Build Instructions §3
+227: **Status:** needs-GKOS-adoption (Governance Critique hole 6: GKOS's append-only
+228: decision records have no hash chain, signature, or external anchor, and §5.7 is
+232: ## Governed write / governed apply
+236: atomic apply (inside `vault.process`, staleness check *inside* the callback, never a
+242: **Status:** defined-in-engine.
+244: ## Hash-bound plan
+248: callback and aborts (marks skipped) on mismatch, so a plan can never be silently
+252: **Status:** defined-in-engine.
+254: ## Byte-exact backup
+259: and not a source-preservation claim (that requires the separate opt-in §11 revision
+262: **Status:** defined-in-engine.
+264: ## Deterministic marker
+270: *whether bytes changed*, a marker detects *provenance of the bytes*.
+272: **Status:** defined-in-engine.
+274: ## Sidecar
+278: `proposals/<proposal-id>.yaml`, `decisions/<decision-id>.yaml`,
+283: actions or governed operations — never on a file-change event or timer, because
+291: **Status:** defined-in-engine.
+293: ## Uid-first identity
+296: a policy-permitted namespaced id), not a filename or path, is a note's identity.
+297: Renaming or moving a file must not create a new identity or destroy lineage. The
+301: **Engine location:** `src/core/identity.ts`; `.gkx/cache/uid-index.json`.
+302: **Status:** GKOS-defined (GKOS §7.2/§10.2: "Filenames and paths are not identity" —
+306: ## Path-to-uid drift
+308: **Definition:** Diagnostic `GKX-IDENTITY-005` — fires when a uid previously seen at
+311: conflict-copy). Distinguishes an ordinary tracked rename from an untracked identity
+313: **Engine location:** `src/core/identity.ts`, diagnostic `GKX-IDENTITY-005`.
+314: **Status:** defined-in-engine.
+316: ## Fail-closed sensitivity
+327: **Status:** GKOS-defined (GKOS §11: "Missing or ambiguous sensitivity fails closed
+331: ## Sensitivity ceiling
+339: **Status:** needs-GKOS-adoption (GKOS §11 requires "sensitivity filtering" on agent
+343: ## Authority receipt
+346: a receipt, not any property of an actor (model identity, prompt text, role, score),
+347: is what constitutes authority. GKOS requires the Governance Coordinator to "verify
+348: authority receipts" (§9.1) against a schema GKOS never specifies — no fields, no
+351: not implement authenticated receipts; single-actor-profile decision records instead
+354: **Engine location:** decision-record field (`src/core/decisions.ts`, planned).
+355: **Status:** needs-GKOS-adoption — **schema still provisional in GKOS.** The
+362: ## Actor identity
+364: **Definition (GKOS side, unresolved):** GKOS requires non-self-approval ("No actor
+366: work," §5) but never defines when two agent invocations count as "the same actor" —
+370: proposer identity is currently recorded as a free-form string (`human`,
+375: **Status:** needs-GKOS-adoption — v0.8-class engineering gate. Governance
+377: self-approval prohibition explicitly extended to collusion-adjacent cases.
+379: ## Blast radius
+385: from the proposal's target via the relation/lineage graph within a bounded hop
+391: **Status:** needs-GKOS-adoption — v0.76-class documentation clarification (the
+395: ## Consequential use
+401: deletion/tombstone. Anything in this enumerated set requires an Authorized Use
+406: **Status:** needs-GKOS-adoption — v0.76-class documentation clarification.
+408: ## Materially equivalent
+421: **Status:** needs-GKOS-adoption — v0.76-class documentation clarification.
+423: ## Upward receipt
+425: **Definition (GKOS side, unresolved):** GKOS §7.7/Annex A require Layer 7 to
+430: **Engine location:** not implemented; would sit alongside decision-record chaining
+432: **Status:** needs-GKOS-adoption — v0.8-class engineering gate (an attestation-chain
+435: ## Layer re-entry
+438: result, exported context) re-entering the corpus MUST do so only as a **new
+440: never re-enters already carrying its prior layer's authority. The engine's
+441: mechanical form: enrichment output is emitted as a proposal envelope, never written
+442: in place; imported agent summaries are treated as new sources, never merged
+446: proposals, never in-place edits); `kosmos-invariants.yml`
+448: **Status:** GKOS-defined (GKOS §7.8: "Upper-layer results returning to the corpus
+449: MUST enter as new Layer-1 sources and begin a new governed lifecycle" — the engine
+452: ## Epistemic state vocabulary
+464: vocabularies). Promotion to `accepted` specifically requires a corroborating
+465: approval/authorization record (`GKX-EPISTEMIC-004` warns otherwise) — acceptance is
+466: never treated as verified authority on confidence alone.
+469: **Status:** needs-GKOS-adoption (Governance Critique hole 3, the highest-leverage,
+472: sentence." GKOS's own epistemic model in §6 requires an epistemic-promotion
+473: mechanism but never enumerates the states being promoted between.)
+475: ## Temporal validity / HEAD
+480: of the corpus/decision-chain as of the most recent scan — the default view when no
+481: `at-time` query is given. Both are computed in the projection plane, never stored as
+485: **Status:** GKOS-defined (GKOS §7.3/§10.3 require "temporal validity" on assertion
+490: ## Content hash
+493: with `updated_at` **excluded** so that a timestamp-stamper run never invalidates a
+499: **Status:** defined-in-engine.
+501: ## Policy hash
+509: **Status:** defined-in-engine.
+513: # Part 2 — Mapping table: what the GKOS governing document needs
+519: **v0.8** = engineering gate, requires a new mechanism (schema, chain, attestation)
+524: | Epistemic state vocabulary (12-state) | §6 Epistemic model | Adopt GKX 2.3's twelve-state enumeration and ordering by citation; §6 currently requires promotion/demotion but never lists the states being moved between. | v0.76 |
+530: | Actor identity | §5 Authority model ("No actor may approve... its own work"); §9.4 Subdelegation | Define actor = agent contract ID + owning principal; extend the self-approval prohibition to explicit collusion-adjacent cases (same owner, same orchestrator, different contract). | v0.8 |
+532: | Decision-record integrity (hash chaining) | §7.5/§10.5 Layer 5 (Decision Record — "append-only"); §5 Authority model (non-self-approval enforcement) | Add per-record hash chaining with an out-of-corpus head anchor now; note signatures as a later upgrade. | v0.8 |
+534: | Origin separation (authored/derived/proposed/approved) | §3 Core thesis / R5-045 ("separation of authored, derived, proposed, and governed state"); §6 Epistemic model | Define the four-way origin tag explicitly and the rule that a value cannot self-promote from proposed to approved without a matching Decision Record. | v0.76 |
+535: | Layer-artifact mapping to a concrete schema program | §7/§8 (Seven-layer reference model, Layer interface contracts); §27 Schema program | Cite GKX 2.3's concrete realization of each layer artifact (uid/type/provenance/relationships/evidence/diagnostics/decisions) as the reference schema program, closing "GKOS v0.75 defines semantic requirements but does not yet declare a complete normative serialization." | v0.76 |
+537: | Sensitivity ceiling / nonexistent-equivalence | §11 Security, privacy, retention, and workload governance ("sensitivity filtering") | Define a per-caller sensitivity ceiling and require that above-ceiling targets are indistinguishable from nonexistent targets in agent-interface responses (no hash-match oracle). | v0.76 |
+539: | Uid-first identity / rename-alias handling | §7.2/§10.2 Layer 2 (Structure and Identity — "Filenames and paths are not identity") | Cite a concrete mechanism (persisted rename-alias cache keyed by uid, rebuildable from bytes) as the reference implementation of the identity-stability requirement. | v0.76 |
+540: | Deterministic conformance test artifacts (fixture corpus) | §21 Fixture program; §26 Fixture catalog; §10 Conformance model | Cite the GKX 2.3 shared fixture corpus (valid/invalid notes in both dialects, dialect-conversion pairs, proposal/decision round-trips, authority-rule cases) as the first executable evidence toward GCP fixtures, per Build Instructions §12. | v0.76 |
+546: authority-receipt schema, decision-record hash chaining plus the single-actor waiver
+547: profile, and the actor-identity model — require new mechanism design and are
+553: # Counts
+
+2026-08-31/product-audit/Kosmos-Oden/docs/GKX-2.3-PROFILE.md
+1: # GKX v2.3 Validating Projection Profile
+7: ## Implemented profile
+14:   identity diagnostics;
+21:   `labels`; tags are never silently promoted into an authority-bearing label
+25: - seven deterministic assessment dimensions, null handling, policy identity,
+35: ## Bundled deterministic policy
+51: ## Explicit limitations
+55: authorized operational use, full sidecar-decision processing, signed schema
+
+2026-08-31/product-audit/Kosmos-Oden/docs/GKX-22-VS-23-POSITIONING.md
+1: # GKX 2.2 vs 2.3 — Audience Positioning Determination
+3: **Status:** Decision record (design-level, adversarially verified)
+7: ## Determination
+12: - **GKX 2.2 is the complete human product.** Its flat Properties surface (identity,
+23:   structured provenance, deterministic assessments, review/authorization state, and
+34:   human never meets the governance machinery; it lives in the in-memory projection and
+38:   editor), but no Kosmos-Oden writer introduces it, and it should never be recommended
+41: ## Practical guidance
+46: | Personal vault + AI assistants (enrichment, MCP agents) | **Flat editable 2.3.** Same flat surface; agents get uid-first identity, assessments, proposals, and origin separation via projection + sidecars. |
+47: | Machine-managed knowledge stores, pipelines, multi-agent systems with rare human touch | **Full 2.3** (nested in-note or sidecar-heavy), governed writes only; humans interact through review UIs, never raw files. |
+49: ## Why this is the durable split
+51: 1. **Curation tax is the binding constraint.** Every human-facing field must pay rent
+63: 3. **Agents need exactly what humans won't maintain.** Provenance, evidence weights,
+72: ## Naming
+
+2026-08-31/product-audit/Kosmos-Oden/docs/GKX-23-OBSIDIAN-ENGINE-REDESIGN.md
+1: # GKX 2.3 Deterministic Engine in Obsidian — Redesign
+3: **Status:** Design for the beta.13 development cycle (adversarially verified against
+12: ## 1. Lessons this redesign is built on
+21: 2. **Capture must be ceremony-free.** A conforming system must accept an unadorned note
+22:    and never require a human to fill governance fields. Fields that are always defaults
+31:    projection, on every surface (plugin, standalone, CLI, REST, MCP). The LLM is never
+34: ## 2. The three-plane architecture
+56: │   Crash-safe writes, uid-keyed, input-hash-bound, per-decision     │
+57: │   immutable records. Never rendered as note frontmatter.           │
+61: ### Normative: writers on the authoring plane
+71:    bind an input hash computed with `updated_at` excluded, so a stamper run never
+90: requires a corroborating decision record") unless a matching `.gkx/decisions/` record
+92: approval state the entire governance plane exists to gate (beta.12 currently has this
+95: ## 3. Component redesign
+97: ### 3.1 Parsing, Obsidian's metadata cache, and property types
+99: Keep the engine's own bounded parser as the **semantic source of truth**; use
+104: Property-type registration is a **UI nicety semantics never depend on**, implemented
+117: ### 3.2 UID-first identity and rename handling
+119: New module `src/core/identity.ts` + persisted cache `.gkx/cache/uid-index.json`:
+129: - Diagnostics stay as-is (`GKX-IDENTITY-001..004`), plus `GKX-IDENTITY-005
+133: ### 3.3 Sidecar subsystem (new `src/core/sidecar/`)
+150: quarantined (`*.invalid-<ts>`) and diagnosed, never half-applied.
+156:   Sync. Everything except decisions rebuilds deterministically from bytes; decision
+162:   explicit user actions — never automatically on file change. Assessments remain
+166: ### 3.4 Proposals and decisions — the single-actor governed loop
+172:   keys only), proposer identity (`human`, `plugin:enrichment`, `agent:<id>`),
+176:   oversized. **Admitted but tagged `requires-elevated-authority`:** sensitivity
+178:   proposal space* (agents may propose, must never finalize); refusing them at ingress
+181: - **Decisions: one immutable file per decision** — `.gkx/decisions/<decision-id>.yaml`
+185:   and two heads after a sync merge raise an `GKX-DECISION-002 fork` diagnostic instead
+192: - Decision record fields (per GKOS §6.5, adapted): decision id, proposal id **and
+200:   mark skipped on mismatch) — exactly as `applyGkxMigrationPlan` already does. Never a
+203:   attributed origin `approved` (with decision id) in the projection and all API/export
+204:   surfaces — the decision index overlays the parse — until a subsequent human edit
+214: identity has no accept surface (accept exists only in the human UI), and no automated
+215: path applies anything. Any conformance statement must list this waiver as a limitation.
+220: propose-scoped token, writing only to `.gkx/proposals/`, never touching notes.
+221: Landing it requires amending `kosmos-invariants.yml` (`api_write_routes:
+229: ### 3.5 Assessment, policy, and schema identity
+240: ### 3.6 Capture ergonomics (new, normative)
+242: - An unadorned note is **never an error**. Notes without GKX frontmatter project as
+248:   conversion flow. The recurring nature of onboarding (scan never rewrites) is
+257: ### 3.7 Migration, enrichment, incremental (kept)
+266: ## 4. Scope and honest claims
+273:   projection with L5-style decision recording under a disclosed single-actor waiver.
+279: ## 5. Work items (beta.13, each lands independently)
+283: 2. UID index cache + rename wiring + `GKX-IDENTITY-005`.
+284: 3. Proposal envelope + structural validation + per-decision files + derived chain
+298: ## 6. Test additions
+301:   new bytes, never partial; startup sweep converges; `.old-*` fallback path exercised.
+306:   equivalence, `requires-elevated-authority` tagging, queue saturation.
+309: - Origin attribution: accept → apply → rescan yields `approved` origin with decision
+311: - `authorship_origin: approved` without decision record → `GKX-AUTHORITY-003`,
+
+2026-08-31/product-audit/Kosmos-Oden/docs/GKX-AUTHORING-MIGRATION.md
+1: # GKX Human-Editable Formatting Behavior
+11: notes unchanged. It proposes a bounded flat repair only for notes carrying the
+21: 2.3 notes remain fully supported by the reader and are never flattened.
+24: scanning alone never rewrites a note. The writer preserves Markdown body bytes,
+27: sensitivity reduction. Consequential semantic changes still require separate
+
+2026-08-31/product-audit/Kosmos-Oden/docs/GKX-ENRICHMENT.md
+1: # GKX Content-Assisted Enrichment
+3: ## What this feature does
+7: Obsidian tags, and explicitly evidenced relationship wikilinks. It never changes
+22: ## “Meaningful” is not an objective automation guarantee
+29: - require minimum prose length and letter density;
+42: ## LLM safety controls
+44: The optional model is a bounded proposal generator, not an agent with write
+49: - LAN and cloud runs require fresh confirmation showing the exact endpoint and
+54: - confidential and PHI notes are never sent to cloud; the configurable cloud
+56: - the API key is read from a named environment variable and never stored in
+61:   failure never falls back from local to cloud, and three consecutive provider
+76: ## GKX processing exclusions
+86: ## Review record
+88: The JSONL record contains the source path and hash, provider/model identity,
+98: review ordering only; it is never approval or epistemic authority.
+100: ## Governed review and apply
+103: must explicitly accept or reject it and may edit the proposed value. The final
+104: reviewed value, original proposal, decision, reason, confidence, and evidence
+105: references are bound into the plan. Confidence never selects or accepts an
+124: model only if a model second pass is still desired. Never paste raw model JSON
+136: the complete decision plan. Persisted plans deliberately omit note bodies.
+137: Applying requires three acknowledgements: a separate restorable vault backup,
+148: Markdown body is preserved byte-for-byte. The decision plan and result audit are stored under
+151: ## Blocked migration notes
+156: is intentionally more limited than enrichment: bounded frontmatter and deterministic blocker codes
+157: are sent, with likely credential-key values redacted. The result must cite the
+164: disclosure would be circular and unsafe. LAN blocked review instead requires a
+166: discloses only the bounded/redacted advisory input.
+
+2026-08-31/product-audit/Kosmos-Oden/docs/GKX-MIGRATION.md
+1: # GKX Note Audit and Migration
+3: ## Purpose
+11: ## Workflow and warnings
+17:   unversioned notes and bounded repairs for known generated defects.
+21:   ambiguity or identity conflicts.
+29:    and SHA-256 plan hash. Scanning never changes notes.
+32:    Upgrade-all also requires a separate governed-override acknowledgement.
+45: ## Classification
+60: An unversioned `id` is never emitted as governed metadata: a valid lowercase
+70: ## Confidence and manual review
+81: review; it is not an entailment probability, epistemic state, approval, or
+83: plan hash, so they cannot be altered after approval without invalidating the
+86: ## Conservative defaults
+106: ## LLM assessment
+123: | No LLM | Reproducible, fast, private, easy to audit | Generic descriptions/types require later human refinement |
+126: per-run LAN/cloud consent, minimum-necessary bounded excerpts, no cloud
+147: It sends only deterministic finding codes and bounded frontmatter whose
+154: review requires its own fresh acknowledgement of that uncertainty.
+156: ## Recovery
+161: one-click action: a later human edit must not be silently erased. Keep the
+
+2026-08-31/product-audit/Kosmos-Oden/docs/KOSMOS-GOVERNED-CONTEXT-PROJECTION.md
+1: # Kosmos Governed Context Projection (KGCP)
+3: KGCP is Kosmos-Oden's deterministic, agent-facing projection of an Obsidian vault. It is the formal name for the built-in Graphiti-like operability that does not require Graphiti, a graph database, embeddings, or an LLM.
+5: KGCP provides UID-first identity, explicit typed relationships, canonical lineage, point-in-time state, sensitivity filtering, GKX v2.3 governance origins, assessments, diagnostics, lexical search, REST, MCP, and reproducible Graphiti adapter episodes. Source notes remain authoritative.
+7: Graphiti is optional. The `gkx-graphiti/2.3.0` adapter turns KGCP records into chronological JSON episodes and authored `fact_triple` episodes. Graphiti may then infer entities, facts, communities, and semantic retrieval indexes. Those results are derived proposals and must never be imported into authored GKX fields. A future import workflow may store them only as derived/proposal sidecars requiring review.
+9: ## Time model
+19: ## Graphiti 0.29 contract
+21: Kosmos-Oden tests against `graphiti-core==0.29.0` and requires a security floor of 0.28.2. The generated Python script uses the awaited core API; its return is the direct-ingestion readiness boundary. Graphiti MCP queue acceptance is not treated as searchable readiness because upstream does not expose a documented per-job completion contract.
+23: Combined extraction is experimental and disabled by default. In 0.29.0 it is available only through `extract_nodes_and_edges_bulk(..., use_combined_extraction=True)`, not public `add_episode`/`add_episode_bulk`. A trial must record token cost, ingestion duration, entity recall, and edge accuracy against authored fact-triple fixtures. Null means not measured.
+25: `episode_metadata` is included in the adapter envelope and episode body/filter contract. Graphiti 0.29's `EpisodicNode` supports it, but the tagged public add APIs do not accept it directly; the generated profile states this limitation instead of silently dropping provenance.
+
+2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/CAPABILITY-MATRIX.md
+1: # Navigation and Navigation Effects capability matrix
+3: Status: **draft integration guidance only**
+16: ## Audited coordinates
+29: ## Status vocabulary
+31: Capability reporting must keep these questions separate:
+33: | State | Meaning | Must not be inferred from |
+37: | **Authorized** | A current credential-bound grant permits the specific actor, operation, vault, root, object class, and sensitivity | Configuration alone, model confidence, identity labels, or timestamps |
+46: ## Capability matrix
+53: | **Authority provider** | Absent | Static Effects capability input is `authority_provider`; each request must still validate the current actor, grant, capability, scope, root, object class, sensitivity ceiling, policy binding, expiry, and retention state | `authority_provider: false`; request denied | Explicit host provider plus a valid credential-bound grant for the exact requested effect; connectivity and tokens alone never supply authority |
+54: | **Durable journal** | Absent | Apply and rollback infrastructure requires a durable journal; the experimental Node executor defines hash-chained entries, checkpoints, receipts, and corruption blocking | `durable_journal: false` | Qualified host wiring with durable intent before source replacement, validated predecessor hashes/checkpoints/receipts, and honest platform durability limits |
+55: | **Policy digest** | No Effects policy is configured | Capability input `policy` is only valid after the host checks an exact policy reference and digest; each plan and authority binding must agree with the same digest | `policy: false`; mismatch or drift denies planning/execution | Exact policy ID, version, and lowercase SHA-256 digest validated against current bytes and rebound into plan, authority, archive, receipt, and status |
+57: | **Startup recovery** | No Effects recovery controller is wired | Static `startup_recovery` reachability requires adapter, journal, and policy, but reachability does not mean recovery is safe; conflicting or corrupt state closes a write latch | Unsafe/not run | Lease held; journal, checkpoints, archives, receipts, temporary files, and targets classified; every nonterminal effect resolved or safely blocking; `safeToEnableWrites` true |
+59: | **MOC ownership** | No adoption registry or Effects ownership UI exists; existing MOCs remain outside an Effects runtime | Contract ownership is `unmanaged`, `region-managed`, or `fully-managed`; unmanaged denies apply; adoption and creation require digest-bound bindings | Every existing MOC is `unmanaged` | Explicit human adoption of exact current bytes, durable ownership binding/receipt, marker validation for region management, and immediate pre-effect digest recheck |
+63: ## Configured capability is not effect authority
+90: Kosmos status must therefore expose those states independently and apply the
+93: ## Kosmos automatic-effect gate
+112: Automatic creation additionally requires:
+122: failed gate must produce truthful status and review/recovery guidance, not a
+125: ## Ownership-specific truth table
+131: | `fully-managed` | Current bytes must match the digest-bound adoption binding | Requires explicit `creationAuthorized: true` and an absence precondition | Allowed only after all global gates and the relevant maintenance/creation setting pass |
+134: configuration-mismatched markers require review and no write. An external edit
+137: ## Status presentation requirements
+157: “Adapter available” must never render as “write authorized.” “Recovery
+158: available” must never render as “recovery safe.” “Planner available” must never
+161: ## Current integration conclusion
+
+2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/DEVELOPMENT-PIN.md
+1: # Navigation Effects development pin
+3: Status: exact development-only integration coordinate. This is not a released
+4: Engine 2.2 artifact, production compatibility claim, write authorization, or
+7: ## Exact coordinate
+27: must isolate framework-neutral imports behind its Engine adapter. Browser and
+28: Obsidian bundles must never import the Node executor.
+30: ## Replacement gate
+36: remains off and the dependency must be described as experimental integration
+
+2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/IMPLEMENTATION-HANDOFF.md
+1: # Navigation Effects implementation handoff
+4: Status: feature-branch implementation handoff; no merge, release, deployment,
+7: ## 1. Exact handoff coordinates
+22: ## 2. Work completed
+24: ### Engine reconciliation
+31: - Preserved the existing bounded frontmatter correction instead of replaying a
+41: ### Kosmos no-write foundation
+51: - Added independent status fields for planner, adapter, authority provider,
+57: - Added bounded canonical policy validation and a pure credential-bound
+59:   approval booleans, and timestamps cannot create authority.
+63: ### Verification evidence at the handoff boundary
+69: - Kosmos browser qualification at the preceding renderer-equivalent code head:
+71:   3/3 passed. Subsequent changes were non-renderer validators and documentation.
+78: Exact hosted-run status remains evidence tied to its SHA. Do not copy these
+81: ## 3. Controlling implementation order
+89: 5. trusted status/recovery/rollback/audit UI and qualification tooling.
+92: easier to test. Each packet first exposes pure plans and status. Execution
+97: ## 4. Ownership and adoption registry
+99: ### Goal
+106: ### Recommended files
+116: ### Registry model
+148: ### Adoption workflow
+158: 5. Require an explicit credential-bound human confirmation. Viewer or MCP
+161: 7. On any mismatch, mark the preview stale and require regeneration.
+166: ### Marker rules
+179: Never insert markers into an existing MOC before the operator reviews and
+182: ### UI solution
+195: ### Required tests
+208: ## 5. Obsidian and standalone/native effect adapters
+210: ### Goal
+222: ### Recommended files
+233: ### Host-neutral interface
+246:   recover(decision: AuthorizedRecoveryDecision): Promise<RecoveryReceipt>;
+254: ### Shared pre-I/O safety boundary
+272: ### Obsidian profile solution
+277:   `require("fs")` reachable from the browser bundle.
+285: ### Standalone/native profile solution
+288:   backend, never in viewer JavaScript.
+291: - Expose only redacted capability/recovery/status values to the trusted local
+295: ### Parity tests
+301: may differ but must be reported explicitly rather than changing semantics.
+303: ## 6. Journal, archive, lease, and recovery integration
+305: ### Goal
+307: Connect Kosmos lifecycle and status to the existing Engine transaction
+310: ### Required state roots
+326: operation must never delete archives.
+328: ### Mandatory transaction order
+357: External bytes always win. A mismatch becomes stale/conflict; never overwrite.
+359: ### Archive layout
+377: ### Lease solution
+383: - lease binds host/process identity, vault identity, creation time, and owner;
+389: Bearer possession or plugin presence never substitutes for the lease or
+392: ### Startup recovery solution
+408: Recovery completion does not enable writing by itself. Reconciliation must
+411: ### Required failure tests
+423: ## 7. Coordinator, reconciliation, and self-write suppression
+425: ### Goal
+431: ### Recommended files
+443: ### Coordinator input contract
+459: Hints contain no note body. Coalesce by stable identity and retain every
+463: ### Debounce and queue solution
+473: ### Affected-scope solution
+478: Rename, duplicate identity, configuration change, policy change, ownership
+485: ### Receipt-bound self-write suppression
+487: Never suppress by time window alone. Record:
+501: suppression binding exactly once or retain a bounded duplicate-delivery count
+505: ### Reconciliation solution
+526: ### Required tests
+530: - Bounded queue overflow persists full-reconciliation intent.
+540: ## 8. Cross-packet integration gates
+552: npm run check:renderer-provenance
+567: ## 9. Immediate next implementation packet
+569: The next bounded packet should implement the ownership/adoption registry and
+583: ## 10. Stop conditions
+585: Stop and report if implementation would require any of the following:
+596: - exposing the Node executor to browser/Obsidian renderer code;
+597: - weakening loopback, path, authorization, crash, or durability tests;
+600:   without the required owner authorization.
+602: ## 11. Related records
+
+2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/PACKET-B-WORKING-RESULT-20260827.md
+1: # Navigation Effects Packet B working-tree receipt
+5: Status: **pre-commit working result; not a qualification or adoption receipt**
+7: ## Coordinate and scope
+21: ## Working result present
+30: ## Local evidence
+35:   renderer-provenance, and `git diff --check` gates: pass.
+55: ## Explicit nonclaims
+
+2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/PACKET-C0-WORKING-RESULT-20260827.md
+1: # Navigation Effects Packet C0 working-result receipt
+5: Status: **working-tree contract evidence only; Packet C is not implemented or qualified**
+7: ## Scope present
+12: handles, execution evidence, authorized recovery/rollback, and bounded shutdown
+21: ## Engine API blockers
+30:   no authorized recovery decision;
+33: - `COOPERATIVE_VAULT_THREAT_MODEL_ONLY`: the executor requires acknowledgement
+41: ## Verification
+46:   version, lockfile, artifact, invariant, and renderer-provenance checks.
+55: ## Explicit nonclaims
+
+2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/QUALIFICATION-PLAN.md
+1: # Navigation Effects qualification plan
+3: Status: implementation and qualification plan only. This document does not
+7: ## 1. Purpose and status language
+16: Use these labels in test output, status UI, and qualification evidence:
+34: ## 2. Qualification layers
+38: | Local synthetic | One developer host, fake clocks, memory or temporary-directory adapters | Pure validation, deterministic plans, state-machine decisions, bounded queues, fail-closed behavior, byte preservation under injected faults | Cross-platform path behavior, true durability, process-crash recovery, Obsidian lifecycle parity, long-run stability |
+47: ## 3. Capability gate map
+49: The status model must expose each row independently. A false row supplies a
+50: bounded reason code and must not be summarized as merely “disabled.”
+57: | Authority provider configured | provider status; no token/connectivity inference | Yes | Yes | Yes |
+58: | Durable journal configured | opened and validated store identity | Yes | Yes | Yes |
+60: | Vault lease held | current lease identity | No | Yes | Yes |
+62: | Reconciliation safe | current reconciliation decision/checkpoint | No | Yes | Yes |
+68: Advertising a planner or adapter is never equivalent to authority. A bearer
+70: event is never accepted as an authority source.
+72: ## 4. Incremental work packets
+74: Each packet is committed separately. Its focused tests must pass before the
+80: ### Packet A — settings, status, policy, and authority
+85: - `src/navigation-effects/status.ts`
+94: 2. Additive migration never changes a false write flag to true.
+104:    actor identity, authority digest, and evaluation time. Expired, malformed,
+107:    Settings, status, logs, and test snapshots contain only stable non-secret
+114: ### Packet B — ownership and digest-bound adoption
+124: 1. Every discovered existing MOC begins `unmanaged`; unmanaged targets never
+136:    or externally changed markers require review and write nothing.
+147: ### Packet C — Obsidian and standalone/native effect adapters
+182:    effect; it never deletes the original archive.
+188: ### Packet D — coordinator, reconciliation, and self-write suppression
+203: 2. Create/modify/rename/delete deliveries coalesce by stable identity, retain
+206: 3. Queue and path capacity are bounded. Overflow persists a full-
+229: parse-count assertions for an ordinary edit, reconciliation decision fixtures,
+232: ### Packet E — adversarial, crash, security, scale, and soak tooling
+238: - scale/soak runner with bounded logs and environment metadata.
+244: 2. Every redacted surface (logs, errors, status, receipts, audit export) is
+254: ### Packet F — trusted settings, adoption, recovery, status, and audit UI
+261: - `src/ui/moc-status-view.ts`
+268:    available” never renders as “authorized” or “safe.”
+283:    and screen-reader status changes receive browser evidence.
+289: ## 5. Common local synthetic command gate
+310: missing planned test is recorded as **not implemented**, never skipped as a
+312: receipt rather than this evergreen plan. Two clean builds must be compared
+315: ## 6. Real-process crash gate
+334: 8. retain a bounded machine-readable result bound to the kill point and all
+338: safe transaction boundary. If the shutdown budget expires, restart must find
+341: ## 7. Cross-platform blockers
+355: It must not be hidden by a compatibility shim or described as stronger
+358: ## 8. Scale and convergence evidence
+383: ## 9. Twenty-four-hour soak blocker
+389: The deterministic schedule must include ordinary edits, bursts, renames,
+399: samples, shutdown/restart results, and bounded raw-log digests. The source
+400: fixture's human regions and a secret-canary scan must pass at the end.
+407: ## 10. Evidence and handoff format
+409: Each packet hands the orchestrator a bounded receipt containing:
+419: - reviewer identity for deliberate snapshot, durability, or contract changes.
+426: ## 11. Release-blocker summary
+437: - authorization of any existing MOC adoption;
+
+2026-08-31/product-audit/Kosmos-Oden/docs/RELEASE-PROCESS.md
+1: # Release Process
+6: ## Cutting a release
+21: ## What CI does on a version tag (`.github/workflows/release.yml`)
+28:    - `BUILD-INFO.json` — provenance: commit, tag, workflow, run id, Node version,
+37: ## Independent verification (any user or agent)
+40: # Rebuild the tagged commit and compare to the published artifacts
+51: to vary between builds; it is release metadata and is never embedded in the
+
+2026-08-31/product-audit/Kosmos-Oden/docs/RENDERER-MIGRATION-r185.md
+1: # Renderer Migration — Three.js r128 → r185 (WebGL2)
+3: **Release:** `0.6.0-beta.2` · **Status:** beta QA, not yet promoted.
+6: move the stable renderer
+12: ## What changed
+22: | Provenance | notice only | `renderer-provenance.json` + `check:renderer-provenance` (exact version, lockfile integrity, revision, marker, no CDN) |
+23: | Legacy | — | r128 moved to `vendor/legacy/` with a provenance note |
+34: ## Determinism / build
+42: `<meta name="kosmos-renderer" content="three r185 WebGLRenderer webgl2">` and
+45: ## What still needs YOUR sign-off (not doable in the build sandbox)
+47: Per CI/CD directive §3.1/§4/§9, an agent must not promote a renderer change.
+50: 1. **Real-browser matrix** — run `npm run test:renderer` (Playwright specs added
+56:    parity but must be confirmed with pixel probes).
+64: 119 unit tests, version/artifact/invariant/renderer-provenance checks); the
+65: built standalone boots the r185 WebGL2 renderer in a Chromium pane
+68: ## Rollback
+
+2026-08-31/product-audit/Kosmos-Oden/docs/RENDERER-PROTOCOL.md
+1: # Host ↔ Renderer Protocol & Iframe Trust Model
+3: ## Trust model (honest description)
+13: Critically, **`allow-same-origin` is NOT granted**, so the renderer runs in an
+16: the renderer never needs the Obsidian API or `allow-same-origin`.
+19: sandboxing the renderer does not protect against a compromised host. It does
+20: limit the blast radius of a defect in the large, partly-generated renderer,
+23: ## Bounded sandbox compatibility experiment (Doc1 §3.4)
+32: | WebGL / Three.js renderer construction | Constructs (renderer aborts loudly otherwise; it did not) | OK |
+38: | Obsidian API / same-origin storage | Not required by the renderer | Correctly denied |
+43: ## Message protocol
+46: `version`; the renderer structurally validates each and rejects unknown
+49: ### Host → renderer
+66: renderer keeps a breadcrumb of the last 24 hops for 30 seconds, draws fading
+69: and emits a bounded additive comet tail plus residual snow-dust that fades in
+73: `graph_at_time` 6) so a broad result never floods the halo budget; whole-vault
+79: posts this message on leaf/layout changes so the renderer can fully stop its
+83: ### Renderer → host
+95: file explorer — it must never open or create a note for a folder path. The
+100: ### Validation
+102: - `protocol` must equal `"vault-kosmos"` (foreign messages are ignored silently).
+103: - `version` must equal the current version (1); unknown versions are rejected
+105: - `type` must be recognized; payload shape is checked.
+106: - All paths must be relative with no `..` traversal and no absolute/drive roots.
+108: ### Compatibility
+110: Host and renderer ship together inside `main.js`, so a single current version
+111: suffices. For resilience, the renderer also still accepts the legacy flat
+114: host/renderer combinations remain.
+
+2026-08-31/product-audit/Kosmos-Oden/docs/SCHEMA-AND-POLICY-LOADING.md
+1: # GKX 2.3 Schema and Policy Loading
+5: report its version, hash, and trust state. A 2.3 note is never silently
+11: Before local or remote package loading can be enabled, it must verify manifest,
+16: Network failure or validation failure must leave the active package unchanged.

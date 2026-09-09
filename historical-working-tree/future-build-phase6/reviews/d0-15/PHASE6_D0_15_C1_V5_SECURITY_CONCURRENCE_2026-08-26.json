@@ -1,0 +1,439 @@
+{
+  "artifact_type": "phase6_d0_15_c1_v5_security_concurrence",
+  "schema_version": "1.0.0",
+  "review_id": "PHASE6-D0-15-C1-V5-SECURITY-2026-08-26",
+  "reviewed_at_utc": "2026-08-26T15:13:15.7450881Z",
+  "reviewer_role": "brand-new independent zero-contribution C1 security reviewer",
+  "reviewer_task": "/root/d015_c1_v5_security_concurrence",
+  "wave": "C1_ONLY",
+  "verdict": "ACCEPT_CONCURRENCE",
+  "concurrence": true,
+  "severity": "NONE",
+  "terminal_statement": "ACCEPT_CONCURRENCE. The exact V11 coordinate is raw-byte consistent, canonically digest-consistent, acyclic, source-trace complete, and security-closed for fresh C1. Registry V5 contains 468 unique lexicographically sorted canonical non-MCP executable leaves as 18 named plus 450 additional, 12 valid non-counting aliases, 16 exact families summing to 468, 53 exact registered-code envelope leaves, and 67 unchanged accepted-F1 official MCP vectors. Every prior security rejection was independently re-audited. C1-V4-SEC-001 is closed by all 44 exact four-table global-event matrix leaves plus the four retained same-table generated event_id collision leaves, with the required collision, startup-corruption, rollback, entropy, and blocked-gate semantics. C1-V4-SEC-002 is closed by the source-bound inventory of four observed output methods crossed with five existing sensitive classes for 20 exact leaves, including the path-bearing console.log coordinates and direct process stdout/stderr writes, with zero named sensitive bytes and no new logger or configuration. Q17 and Q18 are exact. No finding remains and this concurrence is unconditional. This record grants no C2, C3, product or proposal correction, F1 or F2 work, implementation, regeneration, commit, push, workflow, pull request, merge, release, deployment, activation, or publication authority.",
+  "no_contribution_attestation": {
+    "reviewer_was_fresh_for_v11": true,
+    "reviewer_authored_or_modified_any_reviewed_input": false,
+    "reviewer_selected_new_product_semantics": false,
+    "reviewer_selected_a_privileged_event_table_representative": false,
+    "reviewer_defined_a_logger_or_logging_configuration": false,
+    "reviewer_defined_a_new_security_boundary": false,
+    "reviewed_bytes_edited": false,
+    "product_or_proposal_bytes_edited": false,
+    "artifact_created": "this detached concurrence receipt only"
+  },
+  "scope": [
+    "exact V8, V10, Registry V5, Map V5, and V11 raw SHA-256, byte-length, and canonical internal-digest integrity",
+    "all prior C1 security rejection findings as historical noncarrying evidence",
+    "all 468 canonical non-MCP fixture rows, 12 aliases, 16 families, 53 registered-code envelope leaves, and 67 accepted-F1 official MCP vectors",
+    "all 44 exact global-event table-coordinate leaves and four retained same-table generated event_id collision leaves",
+    "all four observed accepted-F1 output methods crossed with five existing sensitive classes, including path-bearing console.log and direct stdout/stderr writes",
+    "credential non-enumeration, one-time handoff, error-envelope, redaction/no-JSON, collision, cursor, reference, snapshot, policy, dependency, transport, race, Q17, and Q18 semantics",
+    "source traces, acyclic descendant bindings, preservation rules, and authorization boundaries"
+  ],
+  "exact_v11_coordinate": [
+    {
+      "coordinate": "V8",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V8_2026-08-26.json",
+      "sha256": "6b8a5b9fca8c72561ef1aee56c15911e34d0559edcae058f19631b71e16d9116",
+      "bytes": 18358,
+      "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2",
+      "role": "Q17-Q20 owner resolution and bounded standing source-preserving evidence authority"
+    },
+    {
+      "coordinate": "V10",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_STANDING_SOURCE_PRESERVING_DISPOSITION_V10_2026-08-26.json",
+      "sha256": "2fc2da6a15308460c091624c5ccaa9ede2b3a17ac529b3fe401f9d9138f9814b",
+      "bytes": 28622,
+      "record_digest": "a560e9dbd92cd8e31fb6b05512c5c197bf92e2c3b8a204a7877bc7d5b2e89de7",
+      "role": "ratified source-preserving mechanical disposition for both C1 V4 security findings"
+    },
+    {
+      "coordinate": "Registry V5",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V5_2026-08-26.json",
+      "sha256": "de2a2f28ee0248b01644bf50328c8e1321790e5e0fd6f3b3c12d40adb92610c8",
+      "bytes": 254938,
+      "record_digest": "db1806b1edda3a8eaab27e9d1c2861d95fbd5cce61630412b52087a0232efde4",
+      "role": "closed 468-row canonical non-MCP security fixture registry"
+    },
+    {
+      "coordinate": "Map V5",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V5_2026-08-26.json",
+      "sha256": "7c9f4cb1fcd97dded263be39cc21bff1291968bd9d41747dcef68748d009fb56",
+      "bytes": 24737,
+      "record_digest": "380736841645b57bd6d31e2dab68c632f328efdc163e1d40fc48438494f1fda7",
+      "role": "acyclic correction map binding V10 and Registry V5"
+    },
+    {
+      "coordinate": "V11",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_COORDINATE_RECEIPT_V11_2026-08-26.json",
+      "sha256": "7f091d1c1dde22c4adf060b166694fc112f7a7eadc24f4a82ae8a8d1cfde9aad",
+      "bytes": 12544,
+      "record_digest": "6d7725bd8b095daf9280882702aa075d55576ecffaf88d2fc8f1d624350e12a7",
+      "role": "exact coordinate receipt authorizing fresh C1 migration and security evidence only"
+    }
+  ],
+  "historical_noncarrying_security_receipts": [
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "2ff2035b102caf69127719313e223e590ad8959df98fe9fec2b482631cbe47f8",
+      "bytes": 33807,
+      "record_digest": "a89c23269ca373ac4fdc72fab7a7842a0838e4ad93f832b00b48222c82cac1ff",
+      "verdict": "REJECT_CONCURRENCE"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V2_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "b69e578c54f8779eedfcfb329f8859820e0d656e116cc646a1dcfb9cd174f350",
+      "bytes": 29000,
+      "record_digest": "17187cb3c65cfe9ae203f47ab243cc8dda420cb512bbf6a824c9021c491888f4",
+      "verdict": "REJECT_CONCURRENCE"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V3_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "b8060ba76b759ad8ee871cb4f66696cc08e7f237483c007e111a181888a86981",
+      "bytes": 32134,
+      "record_digest": "92298b88abf726ef16bdebe2b89cd33aa9611248c57970a812df16b3b0296a01",
+      "verdict": "REJECT_CONCURRENCE"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V4_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "7bc783da8dedceecd05e27a3ceab4394a2775b623cfff5f8e2a42a0d3c866c91",
+      "bytes": 27190,
+      "record_digest": "3d04c1692e7f815b4f3600a1ebbac063b8f81418b1a77255821f166e0908b2b8",
+      "verdict": "REJECT_CONCURRENCE"
+    }
+  ],
+  "integrity_and_source_trace_audit": {
+    "raw_sha256_and_byte_length_method": "Read exact bytes and compute SHA-256 without newline or JSON normalization; compare byte length and declared coordinate.",
+    "internal_record_digest_method": "Parse JSON, omit only the top-level record_digest member, recursively sort object keys, preserve array order, serialize primitives with JSON.stringify semantics, encode UTF-8, and compute SHA-256.",
+    "v8_raw_hash_bytes_and_internal_digest_match": true,
+    "v10_raw_hash_bytes_and_internal_digest_match": true,
+    "registry_v5_raw_hash_bytes_and_internal_digest_match": true,
+    "map_v5_raw_hash_bytes_and_internal_digest_match": true,
+    "v11_raw_hash_bytes_and_internal_digest_match": true,
+    "v10_exact_parent_ledger_rows_checked": 10,
+    "v10_exact_parent_ledger_rows_matching_raw_sha256_and_bytes": 10,
+    "map_v5_exact_parent_ledger_rows_checked": 7,
+    "map_v5_exact_parent_ledger_rows_matching_raw_sha256_and_bytes": 7,
+    "v11_primary_and_historical_ledger_rows_checked": 8,
+    "v11_primary_and_historical_ledger_rows_matching_raw_sha256_and_bytes": 8,
+    "registry_v5_source_trace_rows_checked": 20,
+    "registry_v5_source_trace_paths_matching_raw_sha256_and_bytes": 20,
+    "registry_v5_source_trace_declared_internal_digests_checked": 12,
+    "registry_v5_source_trace_declared_internal_digests_matching": 12,
+    "missing_source_path_count": 0,
+    "raw_hash_or_length_mismatch_count": 0,
+    "declared_internal_digest_mismatch_count": 0,
+    "cycle_found": false,
+    "acyclic_order": [
+      "immutable D0, accepted-F1, governance, proposal, source-review, and historical concurrence parents",
+      "V8 owner resolution and bounded standing evidence authority",
+      "V10 source-preserving mechanical disposition",
+      "Registry V5",
+      "Map V5",
+      "V11 exact-coordinate receipt",
+      "this detached fresh C1 V5 security concurrence"
+    ],
+    "result": "PASS"
+  },
+  "accepted_f1_source_and_mcp_audit": {
+    "commit": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "tree": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+    "commit_and_tree_resolve": true,
+    "source_blobs": [
+      {
+        "path": "src/desktop-agent.ts",
+        "git_blob": "835f0d3e1231696d936b9ae1cb53bb67bda8fb30",
+        "bytes": 21774,
+        "sha256": "29a15df5efb1a0bdd469e9f36b43b5d50fffb00de542d2f7a19ae06bd09661d1",
+        "verified": true
+      },
+      {
+        "path": "scripts/generate-agent-identity-mcp-contract.mjs",
+        "git_blob": "899d825f6fd15dcde4c344f5f59abacd8d3ed992",
+        "bytes": 111170,
+        "sha256": "95fcdb91814ecf683461a791f4a4dc99ede9d279abba87ee59a9d08cce23ba68",
+        "verified": true
+      }
+    ],
+    "explicit_observed_output_methods": [
+      "console.error",
+      "console.log",
+      "process.stdout.write",
+      "process.stderr.write"
+    ],
+    "explicit_call_sites": 9,
+    "console_error_call_sites": 3,
+    "console_log_call_sites": 4,
+    "process_stdout_write_call_sites": 1,
+    "process_stderr_write_call_sites": 1,
+    "path_bearing_console_log_coordinates_verified": [
+      "src/desktop-agent.ts:595",
+      "scripts/generate-agent-identity-mcp-contract.mjs:346"
+    ],
+    "direct_stdout_stderr_coordinate_verified": "scripts/generate-agent-identity-mcp-contract.mjs:295",
+    "unsupported_error_only_configured_level_claim_removed": true,
+    "new_logger_or_configuration_defined": false,
+    "mcp_fixture_path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/mcp-conformance-fixture.json",
+    "official_mcp_vector_rows": 67,
+    "official_mcp_unique_vector_ids": 67,
+    "registry_v5_changes_official_mcp_ids_or_valid_wire_semantics": false,
+    "result": "PASS"
+  },
+  "closed_registry_and_count_audit": {
+    "canonical_non_mcp_fixture_rows": 468,
+    "unique_canonical_non_mcp_ids": 468,
+    "canonical_ids_lexicographically_sorted": true,
+    "fixture_rows_with_missing_or_extra_core_fields": 0,
+    "fixture_rows_with_empty_core_fields": 0,
+    "class_counts": {
+      "named_core_subtotal": 8,
+      "named_recovery_subtotal": 10,
+      "additional": 450
+    },
+    "accounting_formula": "8 + 10 = 18 named; 18 + 450 = 468 canonical non-MCP fixture rows",
+    "aliases": 12,
+    "unique_aliases": 12,
+    "alias_names_colliding_with_canonical_ids": 0,
+    "aliases_with_missing_target": 0,
+    "families": 16,
+    "family_count_sum": 468,
+    "family_count_mismatches": 0,
+    "exact_family_totals": {
+      "ACTIVITY-METADATA": 37,
+      "ANCHOR-INTENT": 34,
+      "BACKUP": 9,
+      "BOOTSTRAP-HANDOFF": 39,
+      "COLLISION-CANONICAL": 32,
+      "CREDENTIAL-AUTH-NONENUM": 7,
+      "CREDENTIAL-ISSUE-ROTATE": 22,
+      "GLOBAL-EVENT": 52,
+      "POLICY-DEPENDENCY-TRANSPORT": 18,
+      "RACE-FINAL-GATE-EFFECT": 21,
+      "RATE": 7,
+      "REDACTION-NO-JSON": 99,
+      "RESTORE-OWNER-ABORT": 41,
+      "RETENTION": 15,
+      "SESSION-REFERENCE-CURSOR-REPLAY": 28,
+      "TIMESTAMP": 7
+    },
+    "forbidden_modal_or_alternative_occurrences": 0,
+    "generic_any_occurrences": 0,
+    "range_shorthand_occurrences": 0,
+    "unresolved_bundle_occurrences": 0,
+    "error_registry_source_codes": 53,
+    "error_envelope_numeric_leaves": 53,
+    "unique_materialized_error_codes": 53,
+    "source_and_materialized_error_code_set_differences": 0,
+    "source_and_materialized_error_code_order_equal": true,
+    "result": "PASS"
+  },
+  "registry_v4_to_v5_delta_audit": {
+    "registry_v4_rows": 413,
+    "registry_v5_rows": 468,
+    "common_ids": 409,
+    "retired_generic_global_event_rows": 4,
+    "new_exact_global_event_rows": 44,
+    "new_output_sink_rows": 15,
+    "rebound_existing_console_error_rows": 5,
+    "other_common_fixture_rows_changed": 0,
+    "net_canonical_delta": 55,
+    "expected_delta_only": true,
+    "result": "PASS"
+  },
+  "global_event_security_audit": {
+    "exact_tables": [
+      "effect_outbox_events",
+      "identity_audit_receipts",
+      "restore_events",
+      "retention_batches"
+    ],
+    "event_id_insertion_unequal_ordered_rows": 12,
+    "event_id_startup_distinct_unordered_rows": 6,
+    "global_event_seq_insertion_ordered_with_equal_rows": 16,
+    "global_event_seq_startup_unordered_with_replacement_rows": 10,
+    "exact_matrix_rows": 44,
+    "exact_matrix_rows_present": 44,
+    "matrix_rows_missing": 0,
+    "retained_same_table_generated_event_id_insertion_rows": 4,
+    "retired_generic_ids_present_as_canonical_or_alias": 0,
+    "insertion_event_id_projection": "GKOS_P6_IDENTITY_COLLISION",
+    "insertion_event_id_entropy_calls": 1,
+    "insertion_event_id_zero_retry_overwrite_event_and_authority_mutation": true,
+    "insertion_sequence_projection": "GKOS_P6_STATE_CONFLICT",
+    "insertion_sequence_full_rollback_and_zero_retry_overwrite": true,
+    "startup_duplicate_projection": "GKOS_P6_AUTHORITY_CORRUPT",
+    "startup_duplicate_blocks_write_gate": true,
+    "startup_duplicate_zero_repair_overwrite_alias_and_publication": true,
+    "gap_fork_genesis_kind_coordinate_and_restore_floor_leaves_retained": true,
+    "privileged_table_representative_selected": false,
+    "result": "PASS"
+  },
+  "observed_output_sink_redaction_audit": {
+    "observed_methods": 4,
+    "existing_sensitive_classes": [
+      "credential",
+      "path",
+      "sql",
+      "stack",
+      "external_subject_preimage"
+    ],
+    "expected_method_sensitive_cross_product_rows": 20,
+    "materialized_method_sensitive_cross_product_rows": 20,
+    "missing_cross_product_rows": 0,
+    "console_error_rows": 5,
+    "console_log_rows": 5,
+    "process_stdout_write_rows": 5,
+    "process_stderr_write_rows": 5,
+    "path_bearing_console_log_explicitly_bound": true,
+    "direct_process_stdout_write_explicitly_bound": true,
+    "direct_process_stderr_write_explicitly_bound": true,
+    "zero_named_sensitive_bytes_required_in_each_observed_channel": true,
+    "outputs_limited_to_already_closed_ids_codes_and_domain_separated_digests": true,
+    "new_logger_configuration_channel_error_response_retry_state_operation_or_public_semantic": false,
+    "result": "PASS"
+  },
+  "prior_security_rejection_reaudit": [
+    {
+      "finding": "C1-SEC-001",
+      "result": "PASS_CLOSED",
+      "basis": "The original same-path superseded-byte problem is absent from the V11 coordinate. V10, Registry V5, Map V5, and V11 form an acyclic descendant graph; every exact parent ledger and all 20 Registry V5 source-trace raw coordinates match, and every declared trace record digest recomputes."
+    },
+    {
+      "finding": "C1-SEC-002",
+      "result": "PASS_CLOSED",
+      "basis": "All 468 rows have exactly the seven required nonempty fields, unique IDs, one named input, deterministic schedule, one exact result projection, and exhaustive mutation text. No modal, alternative, generic-any, range, slash-shorthand, or unresolved source-controlled bundle remains."
+    },
+    {
+      "finding": "C1-V2-SEC-001",
+      "result": "PASS_CLOSED",
+      "basis": "Every formerly open public projection is closed to an existing registered result or exact schema-only rejection, including ordinary bootstrap publication failure under Q17."
+    },
+    {
+      "finding": "C1-V2-SEC-002",
+      "result": "PASS_CLOSED",
+      "basis": "Field ranges, state branches, handoff branches, crash cuts, physical-protection variants, cursor/reference states, error serializers, and other bundles are materialized as separate canonical leaves. Registry V5 preserves that closure and adds only the V10-authorized mechanical rows."
+    },
+    {
+      "finding": "C1-V3-SEC-001",
+      "result": "PASS_CLOSED",
+      "basis": "BOOTSTRAP-HANDOFF-FAILURE-001 fixes PLAN_STAGED, exact protected temporary preservation, absent final locator, no-replace publication failure before final creation, discarded exception text, content-free evidence, nonretryable GKOS_P6_STORAGE_PERMISSION_INVALID in the exact six-field envelope, absent secret_revealed, zero state advance or regeneration, and exact-temp recovery."
+    },
+    {
+      "finding": "C1-V3-SEC-002",
+      "result": "PASS_CLOSED",
+      "basis": "The Registry V5 executable-field scan finds zero missing, extra, empty, modal, alternative, generic-any, range, or unresolved-bundle coordinates; IDs and derived counts were recomputed after materialization."
+    },
+    {
+      "finding": "C1-V4-SEC-001",
+      "result": "PASS_CLOSED",
+      "basis": "All 44 source-controlled exact global-event table-coordinate rows are present, the four same-table generated event_id insertion leaves remain distinct, and the four generic multi-coordinate rows are absent as canonical IDs and aliases. Required error, entropy, rollback, blocked-gate, and no-repair semantics are preserved."
+    },
+    {
+      "finding": "C1-V4-SEC-002",
+      "result": "PASS_CLOSED",
+      "basis": "The exact two accepted-F1 source blobs verify four explicit observed output methods at nine call sites. Registry V5 materializes their 4 x 5 sensitive-class cross-product as 20 exact leaves, explicitly covers both path-bearing console.log coordinates and direct stdout/stderr writes, removes the unsupported error-only configuration assertion, and defines no new logger or configuration."
+    }
+  ],
+  "q17_q18_audit": [
+    {
+      "decision": "Q17",
+      "fixture": "BOOTSTRAP-HANDOFF-FAILURE-001",
+      "result": "PASS",
+      "basis": "The exact pre-final publication cut preserves PLAN_STAGED and its bound protected temporary, returns nonretryable GKOS_P6_STORAGE_PERMISSION_INVALID in the six-field content-free envelope without secret_revealed, records only content-free failed-publication evidence, performs no regeneration, overwrite, deletion, reveal, state advance, success activity, or hybrid publication, and reuses only the requalified exact temporary on recovery. Lost acknowledgement remains a separate leaf."
+    },
+    {
+      "decision": "Q18",
+      "fixture": "RACE-MULTIPROCESS-001",
+      "result": "PASS",
+      "basis": "Distinct idempotency keys A and B are fixed. A serializes first and commits exactly one disable mutation, contiguous event, generation advance, auth_epoch advance, matching anchor, success activity, and result. B revalidates disabled state and returns nonretryable GKOS_P6_STATE_CONFLICT with zero mutation; exact retry B returns the identical conflict with zero mutation and no gap, fork, duplicate, or hybrid."
+    }
+  ],
+  "security_semantics_audit": [
+    {
+      "area": "exact six-field error envelopes and registered-code closure",
+      "result": "PASS",
+      "basis": "ERROR-ENVELOPE-001 through 053 occur exactly once in source registry order and membership, bind the six-field envelope and digest recomputation, and introduce no code. Message, details, alias-code, and unknown-code negatives remain separate."
+    },
+    {
+      "area": "credential authentication non-enumeration and one-time handoff",
+      "result": "PASS",
+      "basis": "Malformed, absent, unknown-selector, selector mismatch, digest mismatch, disabled, and revoked conditions remain byte-identical GKOS_P6_AUTH_FAILED with bounded failure accounting. Ordinary handoff failure, acknowledgement loss, and proven exposure remain disjoint, content-free, and non-revealing."
+    },
+    {
+      "area": "cursor, reference, snapshot, and replay precedence",
+      "result": "PASS",
+      "basis": "Restart-invalidated reference-bound cursors return GKOS_P6_REQUEST_STALE_AUTHORITY before resolver or snapshot lookup; live physical drift returns authenticated-redacted GKOS_P6_RESOURCE_NOT_FOUND without replacement-object access; stale authority and replay conflicts remain non-enumerating and zero-mutation."
+    },
+    {
+      "area": "policy, dependency, transport, and mapping deferral",
+      "result": "PASS",
+      "basis": "Policy denial, indeterminate, timeout, reason-code, multi-record, dependency-order, and owner-only transport leaves remain fail-closed. Mapping add/revoke stay non-enumerating GKOS_P6_PLATFORM_UNAVAILABLE before the separately ratified adapter; adapter-dependent collision qualification remains deferred as one unit."
+    },
+    {
+      "area": "redaction and no-JSON leakage",
+      "result": "PASS",
+      "basis": "Result, error, receipt, activity, fixture, artifact, diagnostic, path, SQL, stack, handoff, exposure, and all observed source-output methods are closed to zero named sensitive bytes, closed IDs/codes/digests, or schema rejection. Raw exception text and secret preimages are never serialized or persisted."
+    },
+    {
+      "area": "identity and global-event collisions",
+      "result": "PASS",
+      "basis": "Generated-identifier collision handling keeps one entropy call, no retry or overwrite, full rollback, and stop-class projection. The global four-table union is exhaustively materialized for insertion and startup event_id/global_event_seq coordinates with exact error and blocked-gate behavior."
+    },
+    {
+      "area": "multiprocess and final-gate races",
+      "result": "PASS",
+      "basis": "Q18 fixes the exact two-process serialization winner and loser. The remaining final-gate, disable, policy, generation, auth_epoch, effect-outbox, crash-cut, and stale-request leaves preserve one linearized outcome without fork, gap, double effect, or hybrid state."
+    },
+    {
+      "area": "authority boundary",
+      "result": "PASS",
+      "basis": "V11 authorizes only detached fresh C1 migration and security evidence. This receipt contributes no semantics and authorizes no C2, C3, product, proposal, implementation, repository, or publication action."
+    }
+  ],
+  "findings": [],
+  "acceptance": {
+    "unconditional": true,
+    "all_prior_security_rejections_closed": true,
+    "all_directed_security_checks_pass": true,
+    "waiver_used": false,
+    "assumption_used": false,
+    "new_owner_choice_required": false,
+    "c1_security_complete_for_exact_v11_coordinate": true,
+    "c1_overall_complete": "only if the separately authorized fresh C1 V5 migration reviewer independently returns unconditional ACCEPT_CONCURRENCE on this same exact V11 coordinate"
+  },
+  "authorization_boundary": {
+    "this_detached_c1_security_receipt_authorized": true,
+    "c2_authorized": false,
+    "c3_authorized": false,
+    "product_authorized": false,
+    "proposal_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f1_authorized": false,
+    "f2_authorized": false,
+    "f2_restart_authorized": false,
+    "product_contract_or_fixture_regeneration_authorized": false,
+    "regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_authorized": false,
+    "push_authorized": false,
+    "workflow_authorized": false,
+    "pull_request_authorized": false,
+    "merge_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "activation_authorized": false,
+    "publication_authorized": false,
+    "rule": "If both fresh C1 V5 reviewers accept, stop and preserve both receipts. C2 still requires separate explicit Product Owner authorization."
+  },
+  "preservation": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_disposition": "immutable historical evidence only; not edited, requalified, or restarted by this review",
+    "stopped_f2_disposition": "preserved dirty, uncommitted, unqualified, and stopped; not inspected for mutation, reset, discarded, repaired, qualified, committed, pushed, or restarted by this review",
+    "reviewed_evidence_bytes_edited": false,
+    "new_artifact_only": true
+  },
+  "self_raw_coordinate_rule": "The raw SHA-256 and byte length of this receipt are computed after the record_digest value is inserted and are reported externally; they are intentionally not embedded because doing so would be self-referential.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "2c2634f50e26ef0a2336ea1a001cf0b9075fc77bd35f98cf59cbbddcdeaefbcc"
+}

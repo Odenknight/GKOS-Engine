@@ -1,0 +1,25 @@
+✔ 2.2 expected projection preimages reproduce fixed pins and retain workload (1826.8531ms)
+✔ 2.2 oracle rejects changed chunks instead of adopting an arbitrary digest (1731.2848ms)
+✔ separate full-history historical and current workflow contracts (3.5932ms)
+✔ native SQLite initial, one-item reuse, and clean rebuild match independent 2.2 manifests (18017.988ms)
+✔ Slice-C SamplePlan and 10k fixture reproduce every frozen byte coordinate (1439.011ms)
+✔ Slice-C qualification TAP oracle enforces exact totals, unique names, and ceiling budgets (17.1353ms)
+✔ Slice-C qualification receipt freezes exact keys, nullability, privacy, and digest (1.1558ms)
+✔ Slice-C query authenticity rejects cache and measured-round substitutions (0.507ms)
+✔ Slice-C publication eligibility requires exact committed hosted provenance (0.2469ms)
+✔ Slice-C source provenance distinguishes push checkout from pull-request head (0.2685ms)
+✔ Slice-C Observation receipt freezes exact top/sample keys, digest, and failure nullability (0.3961ms)
+phase4 retrieval observation: OBS_REPORT_INVALID; inspect observation-receipt.json
+✔ Slice-C Observation pass authority is Linux x64 only (497.8955ms)
+✔ Slice-C offline boundary denies every frozen network and process family (28.8784ms)
+✔ Slice-C temp capability cleans exact roots and fail-retains identity substitutions (139.1765ms)
+✔ Slice-C historical workflow bytes and supplementary cross-runtime lanes remain replayable (36.2398ms)
+✔ Slice-C frozen pack and CLI fixture retain LF bytes on autocrlf checkouts (1211.82ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21762.82

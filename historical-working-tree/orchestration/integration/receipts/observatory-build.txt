@@ -1,0 +1,14 @@
+
+> gkos-observatory@0.1.0 build
+> npm run corpus && npm run build:web
+
+
+> gkos-observatory@0.1.0 corpus
+> node scripts/build-corpus.mjs
+
+Built six static replays; unsigned integrity only.
+
+> gkos-observatory@0.1.0 build:web
+> node scripts/build-web.mjs
+
+Built static Kosmos-Oden observer with verified renderer bytes; consult PROVENANCE.json for historical upstream and local patch standing.

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/checkpoint.schema.json",
+  "title": "Effect Journal Checkpoint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["artifactKind", "effectsContract", "sequence", "entryDigest", "cleanShutdown", "recordedAt"],
+  "properties": {
+    "artifactKind": { "const": "engine.effect-journal-checkpoint" },
+    "effectsContract": { "const": "1.0.0" },
+    "sequence": { "type": "integer", "minimum": -1 },
+    "entryDigest": { "oneOf": [{ "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }, { "type": "null" }] },
+    "cleanShutdown": { "type": "boolean" },
+    "recordedAt": { "type": "string", "format": "date-time" }
+  }
+}

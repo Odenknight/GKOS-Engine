@@ -1,0 +1,28 @@
+# qualification-exempt service-vector-real.test.mjs: requires an owner-supplied, locally trusted ONNX runtime and model pack; enable with GKOS_TEST_LOCAL_EMBEDDING_CONFIG
+# qualification-group 1/4: watcher-observation-qualification.test.mjs
+✔ watcher observation runner emits exactly one sealed governed measurement (41952.1683ms)
+✔ terminal watcher observation audit accepts all-and-only six exact governed lanes (156.5382ms)
+ℹ suites 0
+ℹ duration_ms 42272.1011
+# qualification-group 2/4: watcher-large-restart.test.mjs
+✔ restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority (144500.2032ms)
+ℹ {"topology_bytes":1552042,"graph_bytes":30764374}
+ℹ {"phase":"failed-reconciliation-shutdown","elapsed_ms":4990.422400000003}
+ℹ suites 0
+ℹ duration_ms 144743.6385
+# qualification-group 3/4: service-stdio-package.test.mjs
+
+> gkos-engine@2.2.0 prepare
+> node scripts/build.mjs
+
+✔ npm CLI discovery works outside an npm lifecycle (4.8841ms)
+✖ packed installation runs the stdio bridge against one authenticated real process (278855.4825ms)
+ℹ suites 0
+ℹ duration_ms 279137.6608
+
+✖ failing tests:
+
+test at test\service-stdio-package.test.mjs:46:1
+✖ packed installation runs the stdio bridge against one authenticated real process (278855.4825ms)
+  'test timed out after 180000ms'
+# qualification-group 4/4: admission-policy.test.mjs,agent-identity-mcp-contract-draft2.test.mjs,candidate-ledger.test.mjs,compatibility-baseline.test.mjs,desktop-agent.test.mjs,determinism.test.mjs,documentation-capabilities.test.mjs,gkx-blocked-review.test.mjs,gkx-cli.test.mjs,gkx-enrichment.test.mjs,gkx-exclusions.test.mjs,gkx-index-projection-options.test.mjs,gkx-migration.test.mjs,gkx-network.test.mjs,gkx23.test.mjs,governance.test.mjs,graphiti.test.mjs,incremental.test.mjs,ingest-cli.test.mjs,ingest-storage.test.mjs,ingest-validation.test.mjs,ingestion.test.mjs,intelligence.test.mjs,lineage.test.mjs,managed-moc-no-change.test.mjs,navigation-architecture.test.mjs,navigation-cli.test.mjs,navigation-determinism.test.mjs,navigation-effects-assistance.test.mjs,navigation-effects-contract.test.mjs,navigation-effects-host.test.mjs,navigation-effects-node.test.mjs,navigation-effects-performance.test.mjs,navigation-effects-planner.test.mjs,navigation-effects-reconciliation.test.mjs,navigation.test.mjs,nomenclature.test.mjs,parser.test.mjs,public-api.test.mjs,release-220-preflight.test.mjs,resolver.test.mjs,retrieval-authorized-view.test.mjs,retrieval-candidate-store.test.mjs,retrieval-cli.test.mjs,retrieval-config.test.mjs,retrieval-core.test.mjs,retrieval-evaluation-cli.test.mjs,retrieval-evaluation.test.mjs,retrieval-manifest-upgrade.test.mjs,retrieval-native-read.test.mjs,retrieval-observation-2.2.test.mjs,retrieval-observation-qualification.test.mjs,retrieval-provenance.test.mjs,retrieval-store.test.mjs,retrieval-temporal.test.mjs,retrieval-windows-path-security.test.mjs,runtime-qualification.test.mjs,science-core.test.mjs,science-standard-fixtures.test.mjs,science-verification.test.mjs,sea-target.test.mjs,service-authorized-view.test.mjs,service-content.test.mjs,service-contracts.test.mjs,service-multiclient.test.mjs,service-param-errors.test.mjs,service-reference-freshness.test.mjs,service-retrieval.test.mjs,service-runtime.test.mjs,service-scheduling.test.mjs,service-secret-canary.test.mjs,service-stdio.test.mjs,settings-inventory.test.mjs,symlink-invocation.test.mjs,temporal.test.mjs,timestamps.test.mjs,watcher-coordinator.test.mjs,watcher-fast-path.test.mjs,watcher-index-validation.test.mjs,watcher-journal-host.test.mjs,watcher-pointer-host.test.mjs,watcher-recovery-contracts.test.mjs,watcher-service-cli.test.mjs,watcher-source-scan.test.mjs

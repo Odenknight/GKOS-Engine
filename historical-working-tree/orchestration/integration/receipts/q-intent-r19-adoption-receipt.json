@@ -1,0 +1,95 @@
+{
+  "receipt_version": "1.0",
+  "status": "OWNER_DECISION_ENCODED_LOCAL_REVIEW_CANDIDATE",
+  "decision": "R19-132",
+  "branch": "codex/adopt-q-intent-r19-20260901",
+  "parent_commit": "9f47ecf8fefb87810cd44bd03fa8e82eb321fd4a",
+  "candidate_commit": "04a164792c0957f5ce8acc9ba6853597ec0660dd",
+  "candidate_tree": "534d518cf091578b8f0a6e06629e1f0e5cb017c6",
+  "preserved_review_branch": {
+    "name": "codex/integrate-standard-r18-20260831",
+    "commit": "9f47ecf8fefb87810cd44bd03fa8e82eb321fd4a"
+  },
+  "adoption": {
+    "position": 8,
+    "invariant": "Every committed governed state change is durably receipted.",
+    "failure_condition": "A governed mutation commits without a durably bound receipt, or receipt-binding failure neither fails closed nor produces verifiable rollback or compensation.",
+    "normative_provenance": [
+      "R15-104",
+      "R15-105",
+      "GKOS-RECEIPT-001",
+      "GKOS-RECEIPT-003"
+    ],
+    "directive_provenance": [
+      "STD-079 r4 invariant 3",
+      "STD-079 r4 invariant 4"
+    ],
+    "prospective_not_historical_recovery": true,
+    "docstd_adopted_scope": "section 4 eight-position intent-review table only"
+  },
+  "files": [
+    {
+      "path": "CHANGELOG.md",
+      "git_blob": "7aa517c49332689f0746dd282db14b8ab8231823",
+      "sha256": "a8e3427d8af77f16d705dbd4369049cdbf01d1f3b1ea02cdaa729c1165e216ec"
+    },
+    {
+      "path": "conformance/runner/test/documentation-intent.test.mjs",
+      "git_blob": "ca1f49bd44cbe2f727ddcc3e1e8f6d3870d48785",
+      "sha256": "b480edbd8a1480b5dd4e6286c18626754572fc5f1e6f30c95a299e975fd2a65d"
+    },
+    {
+      "path": "decisions/GKOS_Decision_Register.md",
+      "git_blob": "64166bdeb6c58b9585074f34d679870fe4039342",
+      "sha256": "ef663234ba41175689387e8746dcbe6b8d012fc987d08f332cf5fbe515b62958"
+    },
+    {
+      "path": "decisions/R19_Documentation_Intent_Eighth_Invariant_Development_Decision_Record.md",
+      "git_blob": "00ac538d9807b24b417870339a1927b41c1c479e",
+      "sha256": "f8dc34f9674d9d41249a22b52f17648183fee540ac580ce187e9594ca83c69b1"
+    },
+    {
+      "path": "docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+      "git_blob": "136b38f2ff99b2922dbe10eba9a8dce3f7e11d57",
+      "sha256": "9e613c0ae00b673910702ccbbdcc11f71283c437e6c9784f9688e0c120d319a1"
+    }
+  ],
+  "checks": {
+    "native_test": {
+      "exit_code": 0,
+      "tests": 82,
+      "passed": 82,
+      "failed": 0,
+      "log_sha256": "9acb963b5bfc691d7e6dee422502930c24c68c115454d9007f66021ffa1dac5a"
+    },
+    "strict_mutation_lint": {
+      "exit_code": 0,
+      "result": "PASS",
+      "requirements": 62,
+      "gate_codes": 28,
+      "uncovered": 0,
+      "executable_uncovered": 0,
+      "json_sha256": "18de82072f8f8d363143c6f100379daca6fd3bc8d1e279eee63643b659787350"
+    },
+    "starter_runner": {
+      "exit_code": 1,
+      "interpretation": "EXPECTED_NONQUALIFYING",
+      "executed": 8,
+      "passed": 6,
+      "unevaluated": 2,
+      "profiles_claimed": [],
+      "tier_claims": [],
+      "claim_sha256": "1245b9bab71636a5a3ace521c01ab2ccad2f19abe5a6745df15ecb008067fb5b"
+    },
+    "markdownlint": {
+      "result": "NOT_EXECUTED",
+      "reason": "markdownlint-cli2 absent locally; no-install probe attempted blocked registry/cache access"
+    }
+  },
+  "scope_limits": [
+    "local branch only; no push",
+    "not merged, tagged, released, published, or deployed",
+    "does not qualify Standard v0.81 or any GCP profile",
+    "R18-131 requires complete final rerun and separate publication authority for any release candidate including R19"
+  ]
+}

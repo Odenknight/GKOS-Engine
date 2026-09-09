@@ -1,0 +1,14 @@
+{
+  "version": "gkos-current-runtime-qualification/1",
+  "lane": "current-runtime",
+  "source": null,
+  "node": "v24.18.0",
+  "platform": "win32",
+  "arch": "x64",
+  "started_at": "2026-08-31T21:12:32.429Z",
+  "commands": [],
+  "status": "FAIL",
+  "release_qualified": false,
+  "error": "Command failed: git ls-files -z --cached --others --exclude-standard\nfatal: detected dubious ownership in repository at '[LOCAL_PATH]'\n'[LOCAL_PATH]' is owned by:\n\tFAC-MEDIA/CodexSandboxOffline (S-1-5-21-4236690665-1551969254-997487753-1004)\nbut the current user is:\n\tFAC-MEDIA/FAC (S-1-5-21-4236690665-1551969254-997487753-1001)\nTo add an exception for this directory, call:\n\n\tgit config --global --add safe.directory [LOCAL_PATH]",
+  "ended_at": "2026-08-31T21:12:32.460Z"
+}

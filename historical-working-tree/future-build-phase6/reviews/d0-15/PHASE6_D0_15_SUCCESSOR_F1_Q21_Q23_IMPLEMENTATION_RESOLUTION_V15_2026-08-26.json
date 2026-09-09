@@ -1,0 +1,932 @@
+{
+  "record_type": "gkos-phase6-d0-15-successor-f1-q21-q23-implementation-resolution",
+  "record_version": "15.0.0",
+  "recorded_at_utc": "2026-08-27T02:40:03.9364298Z",
+  "status": "EXACT_Q21_Q23_RATIFIED_SUCCESSOR_F1_LOCAL_IMPLEMENTATION_RESOLUTION",
+  "owner_statement_exact": "Ratify Q21–Q23 as proposed.",
+  "purpose": "Capture the Product Owner's exact Q21 through Q23 ratification in a detached immutable resolution record; bind V14 and the full accepted V11, C1, C2, and C3 chain; close the deterministic fixture-only DC06 embodiment, independently adjudicated four-leaf fixture lineage partition, exact aliases, and rational persisted refill accumulator needed for direct successor-F1 implementation; record the remaining mechanical implementation resolutions; and preserve V14's local implementation and local validation boundary without granting delivery, remote, F2, or Lite authority.",
+  "record_properties": {
+    "detached": true,
+    "immutable_after_finalization": true,
+    "exact_byte_bound": true,
+    "owner_ratification": true,
+    "implementation_resolution": true,
+    "review_verdict": false,
+    "existing_evidence_effect": false,
+    "accepted_f1_object_effect": false,
+    "product_effect": "LOCAL_UNCOMMITTED_SUCCESSOR_F1_DESCENDANT_ONLY_UNDER_V14"
+  },
+  "authority_application": {
+    "authority_source": "Product Owner statement captured verbatim in owner_statement_exact",
+    "ratified_questions": [
+      "Q21",
+      "Q22",
+      "Q23"
+    ],
+    "implementing_authority": "V14",
+    "authorized_repository": "GKOS-Engine",
+    "authorized_worktree": "[LOCAL_PATH]",
+    "authorized_base_commit": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "authorized_base_tree": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+    "authorized_execution_mode": "LOCAL_IMPLEMENTATION_AND_LOCAL_VALIDATION_ONLY",
+    "application_result": "Q21_Q23_EXACT_IMPLEMENTATION_CHOICES_RATIFIED_WITHIN_V14_BOUNDARY"
+  },
+  "exact_bound_chain": [
+    {
+      "coordinate": "V11",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_COORDINATE_RECEIPT_V11_2026-08-26.json",
+      "sha256": "7f091d1c1dde22c4adf060b166694fc112f7a7eadc24f4a82ae8a8d1cfde9aad",
+      "bytes": 12544,
+      "record_digest": "6d7725bd8b095daf9280882702aa075d55576ecffaf88d2fc8f1d624350e12a7",
+      "accepted": true,
+      "carrying": true
+    },
+    {
+      "coordinate": "C1 V5 migration",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V5_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "72c2a6522e3d6b9d8d4fe12ed24a551588fac71e7afa142f0d43475082bc82b1",
+      "bytes": 20482,
+      "record_digest": "6fd4af09f4bbf7bcdca8920bc97e913b148a32e0287335d2a49b74722d8067b6",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "unconditional": true,
+      "findings": 0,
+      "accepted": true,
+      "carrying": true
+    },
+    {
+      "coordinate": "C1 V5 security",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V5_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "a2a48f99e6634d1d3e0eed803be3e66496b55ca68a521105cbd43347322ee978",
+      "bytes": 25164,
+      "record_digest": "2c2634f50e26ef0a2336ea1a001cf0b9075fc77bd35f98cf59cbbddcdeaefbcc",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "unconditional": true,
+      "findings": 0,
+      "accepted": true,
+      "carrying": true
+    },
+    {
+      "coordinate": "V12",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C2_AUTHORITY_CONCURRENCY_AUTHORIZATION_V12_2026-08-26.json",
+      "sha256": "705cae2e96de3e7478001c186f422c9ba0e09c57b7e37b9a2d0069cd79641884",
+      "bytes": 16043,
+      "record_digest": "6d464a19ff1cafd9ecbdfcef6b31f063d3553a8b7178eacb0628f6204739debc",
+      "accepted": true,
+      "carrying": true
+    },
+    {
+      "coordinate": "C2",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C2_AUTHORITY_CONCURRENCY_CONCURRENCE_2026-08-26.json",
+      "sha256": "dc1ba0ed630ed4dc3d22d1859bbfdcbc190eb0b571c8bc1a7bf923396ae75651",
+      "bytes": 27334,
+      "record_digest": "9adebab9a1844d5b81acc89e77a26cd6157fc0aba28aeba796c27ee9f272470c",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "unconditional": true,
+      "findings": 0,
+      "accepted": true,
+      "carrying": true
+    },
+    {
+      "coordinate": "V13",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C3_FULL_LITE_AUTHORIZATION_V13_2026-08-26.json",
+      "sha256": "6d9befe456d9e69ed33330a60fda7c3ab544a715979820b54307418c42175d72",
+      "bytes": 25268,
+      "record_digest": "8326b3c61cd3484007e6605f19c312105b2de49a14516a2c4685b01e50b697ad",
+      "accepted": true,
+      "carrying": true
+    },
+    {
+      "coordinate": "C3 Full-contract",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C3_FULL_CONTRACT_CONCURRENCE_2026-08-26.json",
+      "sha256": "e2f70301e1cfd67027423e832e4e2bf843b64b175b86b66ac3453dff7cdea9d6",
+      "bytes": 39414,
+      "record_digest": "2d89c5abf2371434a2140e6f8b7685f5e8b7d424c2cdd72909f46918683976c9",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "unconditional": true,
+      "findings": 0,
+      "accepted": true,
+      "carrying": true
+    },
+    {
+      "coordinate": "C3 Lite-conformance",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C3_LITE_CONFORMANCE_CONCURRENCE_2026-08-26.json",
+      "sha256": "2aca3584cca79db3047a20c94227c8e9ffd506e07888230298e3fa2ac8118bd0",
+      "bytes": 36079,
+      "record_digest": "ec2a894d5a296753f7dfd5ad57d9ba532f4beb318037a4c8d79b1df86c9f7397",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "unconditional": true,
+      "findings": 0,
+      "accepted": true,
+      "carrying": true
+    },
+    {
+      "coordinate": "V14",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_SUCCESSOR_F1_PRODUCT_CORRECTION_AUTHORIZATION_V14_2026-08-26.json",
+      "sha256": "a99ed06b071647a00335e0e1ffa0d9febd5b85840107fabdd695fbdd901452aa",
+      "bytes": 21314,
+      "record_digest": "b5d85744614cf74cfd323b6966149e77896c5a615058ba99227523f415ab9270",
+      "status": "EXACT_SUCCESSOR_F1_LOCAL_PRODUCT_CORRECTION_AND_VALIDATION_AUTHORIZED_ONLY",
+      "accepted": true,
+      "carrying": true
+    }
+  ],
+  "v11_transitive_exact_sources": [
+    {
+      "coordinate": "V8",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V8_2026-08-26.json",
+      "sha256": "6b8a5b9fca8c72561ef1aee56c15911e34d0559edcae058f19631b71e16d9116",
+      "bytes": 18358,
+      "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2"
+    },
+    {
+      "coordinate": "V10",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_STANDING_SOURCE_PRESERVING_DISPOSITION_V10_2026-08-26.json",
+      "sha256": "2fc2da6a15308460c091624c5ccaa9ede2b3a17ac529b3fe401f9d9138f9814b",
+      "bytes": 28622,
+      "record_digest": "a560e9dbd92cd8e31fb6b05512c5c197bf92e2c3b8a204a7877bc7d5b2e89de7"
+    },
+    {
+      "coordinate": "Registry V5",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V5_2026-08-26.json",
+      "sha256": "de2a2f28ee0248b01644bf50328c8e1321790e5e0fd6f3b3c12d40adb92610c8",
+      "bytes": 254938,
+      "record_digest": "db1806b1edda3a8eaab27e9d1c2861d95fbd5cce61630412b52087a0232efde4",
+      "canonical_cases": 468,
+      "aliases": 12
+    },
+    {
+      "coordinate": "Map V5",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V5_2026-08-26.json",
+      "sha256": "7c9f4cb1fcd97dded263be39cc21bff1291968bd9d41747dcef68748d009fb56",
+      "bytes": 24737,
+      "record_digest": "380736841645b57bd6d31e2dab68c632f328efdc163e1d40fc48438494f1fda7"
+    }
+  ],
+  "ratified_q21": {
+    "id": "Q21",
+    "decision": "RATIFY_GKOS_P6_DC06_FIXTURE_EMBODIMENT_1_0_0",
+    "profile_name": "gkos-p6-dc06-fixture-embodiment/1.0.0",
+    "scope": "Deterministic fixture-only executable embodiment of all 468 Registry V5 canonical non-MCP cases and 12 non-counting aliases while preserving the 67 official MCP cases.",
+    "fixture_only_boundary": {
+      "semantic_scope_value": "fixture_only_oracle",
+      "every_fixture_only_derived_value_marked": true,
+      "fixture_module_may_be_imported_by_runtime": false,
+      "production_entropy_selected": false,
+      "production_digest_meanings_selected": false,
+      "new_public_semantics_selected": false,
+      "rule": "The fixture domains, values, clocks, entropy, credential presentations, and digest preimages below exist only to make generated fixture bytes deterministic. Runtime code must use its separately accepted production implementations and must not import, call, copy, or treat the fixture module as production authority."
+    },
+    "generated_fixture_json_shape": {
+      "top_level_additional_properties": false,
+      "top_level_fields_exactly": [
+        "contract_version",
+        "kind",
+        "profile",
+        "source_registry_digest",
+        "vector_count",
+        "aliases",
+        "vectors"
+      ],
+      "contract_version": "1.0.0-draft.1",
+      "profile": "gkos-p6-dc06-fixture-embodiment/1.0.0",
+      "kind_by_leaf": {
+        "canonical-fixture.json": "canonical",
+        "migration-fixture.json": "migration",
+        "race-fixture.json": "race",
+        "security-fixture.json": "security"
+      },
+      "source_registry_digest": "sha256:de2a2f28ee0248b01644bf50328c8e1321790e5e0fd6f3b3c12d40adb92610c8",
+      "vector_count_rule": "Exact vectors array length and exact Q22 leaf count.",
+      "alias_entry_additional_properties": false,
+      "alias_entry_fields_exactly": [
+        "alias_id",
+        "target_id"
+      ],
+      "alias_placement": "Store each alias exactly once in the aliases array of its canonical target's Q22 leaf. Preserve Registry V5 alias_map order after filtering to that leaf. Do not place aliases in vectors.",
+      "vector_additional_properties": false,
+      "vector_fields_exactly": [
+        "id",
+        "class",
+        "family",
+        "registry_ordinal",
+        "semantic_scope",
+        "registry_source",
+        "initial_state",
+        "stimulus",
+        "schedule",
+        "expected"
+      ],
+      "vector_semantic_scope": "fixture_only_oracle",
+      "registry_source_additional_properties": false,
+      "registry_source_fields_exactly": [
+        "input",
+        "schedule",
+        "expected",
+        "mutation"
+      ],
+      "initial_state_additional_properties": false,
+      "initial_state_fields_exactly": [
+        "durable_ledger",
+        "durable_ledger_digest",
+        "physical_ledger",
+        "physical_ledger_digest",
+        "clock_state",
+        "clock_state_digest",
+        "oracles",
+        "oracle_state_digest"
+      ],
+      "oracles_additional_properties": false,
+      "oracles_fields_exactly": [
+        "entropy",
+        "credentials",
+        "failures",
+        "crashes",
+        "digest_outputs"
+      ],
+      "stimulus_additional_properties": false,
+      "stimulus_fields_exactly": [
+        "kind",
+        "operation",
+        "request_id",
+        "request_bytes_hex",
+        "request_byte_length",
+        "request_digest"
+      ],
+      "schedule_step_additional_properties": false,
+      "schedule_step_fields_exactly": [
+        "step",
+        "actor",
+        "action",
+        "injection",
+        "checkpoint"
+      ],
+      "expected_additional_properties": false,
+      "expected_fields_exactly": [
+        "response",
+        "required_mutations",
+        "allowed_mutations",
+        "forbidden_mutations",
+        "durable_ledger",
+        "durable_ledger_digest",
+        "physical_ledger",
+        "physical_ledger_digest",
+        "clock_state_digest",
+        "oracle_state_digest",
+        "poststate_digest"
+      ],
+      "response_additional_properties": false,
+      "response_fields_exactly": [
+        "kind",
+        "schema_ref",
+        "bytes_hex",
+        "byte_length",
+        "digest"
+      ],
+      "response_kind": [
+        "success",
+        "error",
+        "none"
+      ],
+      "ordering_rule": "Within each leaf, vectors preserve Registry V5 array order and registry_ordinal retains the one-based position in the full 468-row registry. No ID-prefix or lexical-sort heuristic determines placement or order.",
+      "assertion_shell_fields_forbidden": [
+        "assertions",
+        "expect"
+      ]
+    },
+    "canonical_json": {
+      "name": "CJ",
+      "object_keys": "recursively sorted by UTF-16 code-unit order",
+      "ordinary_arrays": "preserve declared sequence",
+      "declared_set_arrays": "sort and deduplicate before serialization",
+      "numbers": "shortest safe base-10 integer form only",
+      "strings_and_primitives": "JSON.stringify semantics",
+      "encoding": "strict UTF-8",
+      "bom": false,
+      "whitespace": false,
+      "trailing_lf_in_preimage_or_wire_bytes": false,
+      "contract_artifact_files_end_with_one_lf": true
+    },
+    "synthetic_generation": {
+      "registry_ordinal": "one-based n in Registry V5 array order",
+      "default_case_time": "2026-08-25T00:00:00.000Z plus (n-1)*3600000 milliseconds",
+      "default_step_advance_ms": 1,
+      "clock_override_rule": "Boundary and skew leaves carry explicit wall, monotonic, and effective sequences; restart resets process-monotonic origin without granting time or capacity.",
+      "uuid_seed": "SHA-256(UTF8('GKOS-P6-DC06-FIXTURE-UUID-V1') || 0x00 || CJ({case_id,role,occurrence}))",
+      "uuidv7_layout": "bytes 0..5 are the supplied 48-bit millisecond time; byte 6 is 0x70|(seed[0]&0x0f); byte 7 is seed[1]; byte 8 is 0x80|(seed[2]&0x3f); bytes 9..15 are seed[3..9]; output is lowercase canonical UUID text",
+      "request_id_rule": "Allocate one fixture UUIDv7 only at the accepted request-allocation stage; predispatch stages retain null; RSR-001 uses its fixed override.",
+      "collision_rule": "The entropy oracle returns the programmed already-existing identifier on exactly one call, reports entropy_calls=1, and performs no retry or overwrite.",
+      "unconstrained_nonsecret_string": "fixture-<role>-<n:04>-<occurrence:02>",
+      "real_secret_path_subject_sql_stack_or_exception_input_allowed": false
+    },
+    "credential_oracle": {
+      "test_only": true,
+      "stored_fields": [
+        "symbolic_handle",
+        "credential_id",
+        "secret_digest",
+        "agent_id",
+        "auth_epoch",
+        "presentation_class",
+        "parse_ok",
+        "selector_match",
+        "full_digest_match",
+        "credential_status",
+        "agent_status",
+        "constant_work_units",
+        "entropy_calls"
+      ],
+      "presentation_classes": [
+        "valid",
+        "malformed",
+        "missing",
+        "unknown",
+        "selector_mismatch",
+        "wrong_digest",
+        "disabled",
+        "revoked"
+      ],
+      "wire_bytes": null,
+      "secret_bytes": null,
+      "valid_raw_gkos1_value_stored": false,
+      "fixed_production_credential_rule_preserved": "GKOS-CREDENTIAL-V1 remains the production rule but is not recomputed from or materialized with raw secret bytes in fixtures."
+    },
+    "state_and_wire_rules": {
+      "durable_ledger": "Complete abstract rows for the 16 normalized tables plus protected external records, all required nullable fields present; tables sort by name and rows by canonical primary key; records contain no raw secret, raw subject, raw absolute path, SQL, stack, or exception text.",
+      "physical_ledger": "Entries sort by locator_key and require presence, object_type, symbolic parent/name, path_binding_digest, physical_identity_digest, owner_digest, protection_digest, content_digest, byte_length, regular_file, no_link, alias_count, file_fsynced, parent_fsynced, and published; absent values are explicit nulls; no absolute path is stored.",
+      "request_bytes": "Exact canonical tool-input bytes, or exact raw transport bytes for framing leaves, stored as lowercase even-length hex without 0x plus byte length and SHA-256.",
+      "success_bytes": "CJ of the exact closed successful result including result_digest.",
+      "error_bytes": "CJ of exactly contract_version,error_code,request_id,retryable,retry_after_ms,error_digest with additionalProperties=false.",
+      "no_response_bytes": "empty byte array represented by empty hex string and length zero",
+      "hex_rule": "lowercase even-length hexadecimal without 0x",
+      "digest_text_rule": "sha256: followed by exactly 64 lowercase hexadecimal characters",
+      "base64url_rule": "unpadded decode followed by mandatory identical canonical re-encode",
+      "result_digest_fixture_rule": "SHA-256 of CJ(success result with only result_digest omitted)",
+      "activity_or_request_input_digest_fixture_rule": "SHA-256 of exact request bytes",
+      "activity_or_request_result_digest_fixture_rule": "SHA-256 of complete success bytes and null for error or no-response",
+      "record_event_anchor_manifest_digest_rule": "SHA-256 of CJ(record with only its own digest member omitted)",
+      "error_digest_rule": "SHA-256 of canonical public envelope bytes with only error_digest omitted",
+      "poststate_rule": "FX('GKOS-P6-DC06-FIXTURE-POSTSTATE-V1',{durable_ledger_digest,physical_ledger_digest,clock_state_digest,oracle_state_digest})",
+      "mutation_check": "Compare exact initial and final ledgers and oracle traces; enforce required, allowed, and forbidden mutation sets mechanically rather than from prose."
+    },
+    "fixture_digest_primitive": {
+      "name": "FX",
+      "formula": "'sha256:' || lowerhex(SHA-256(UTF8(tag) || 0x00 || CJ(preimage)))",
+      "fixture_tags_must_contain_fixture": true
+    },
+    "domain_tag_table": [
+      {
+        "scope": "production-fixed",
+        "tag": "GKOS-CREDENTIAL-V1",
+        "preimage": "raw secret bytes S; never stored in fixture",
+        "output": "accepted gkc1_ identifier and sha256 secret digest"
+      },
+      {
+        "scope": "production-fixed",
+        "tag": "GKOS-IDEMPOTENCY-V1",
+        "preimage": "agent_id || NUL || operation || NUL || raw_key",
+        "output": "sha256 digest"
+      },
+      {
+        "scope": "production-fixed",
+        "tag": "GKOS-AUTHORITY-ANCHOR-NAME-V1",
+        "preimage": "UTF-8 vault_id",
+        "output": "lowercase base32 of first 130 digest bits"
+      },
+      {
+        "scope": "production-fixed",
+        "tag": "GKOS-PAGE-SNAPSHOT-AUTHORIZATION-V1",
+        "preimage": "accepted complete page-snapshot authorization tuple",
+        "output": "sha256 digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-REFERENCE-V1",
+        "preimage": "{case_id,kind,occurrence}",
+        "output": "gkrec1_ or gkscp1_ plus unpadded base64url of first 16 digest bytes"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-REFERENCE-DIGEST-V1",
+        "preimage": "{kind,reference_text}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-CURSOR-V1",
+        "preimage": "{case_id,occurrence}",
+        "output": "gkcur1_ plus unpadded base64url of 32 digest bytes"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-CURSOR-DIGEST-V1",
+        "preimage": "{cursor_text}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-UNKNOWN-SELECTOR-V1",
+        "preimage": "{canonical_selector}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-RATE-BUCKET-V1",
+        "preimage": "{vault_id,authority_instance_id,restore_epoch,bucket_class,agent_id,auth_epoch,selector_bucket_digest}; explicit nulls retained",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-PATH-BINDING-V1",
+        "preimage": "{platform,parent_locator_key,relative_name}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-PHYSICAL-IDENTITY-V1",
+        "preimage": "{platform,volume_token,object_token,generation}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-OWNER-V1",
+        "preimage": "{platform,principal_token}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-PROTECTION-V1",
+        "preimage": "{platform,owner_digest,mode_bits,acl,inheritance_protected}; acl sorted by CJ bytes",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-CONTENT-ORACLE-V1",
+        "preimage": "{content_handle,shape,byte_length}; no content bytes",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-LOCATOR-BINDING-V1",
+        "preimage": "{platform,vault_id,credential_id,physical_identity_digest,protection_digest,content_digest}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-FILTER-V1",
+        "preimage": "{operation,filter,scope_ref,temporal_cutoff,order_version}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-REFERENCE-SET-V1",
+        "preimage": "{members:[sorted unique reference digests]}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-STATE-SET-V1",
+        "preimage": "{set_kind,members:[{key,record_digest}]} sorted by key",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-ORDERED-ROWS-V1",
+        "preimage": "{record_type,rows:[{sequence,record_digest}]} in true sequence order",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-RETENTION-POLICY-V1",
+        "preimage": "{retention_days,retention_effective_from}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-RESTORE-RECOVERY-V1",
+        "preimage": "{restore_plan_id,state,abort_eligible}",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-DATABASE-STATE-V1",
+        "preimage": "canonically sorted abstract tables and rows",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-DURABLE-LEDGER-V1",
+        "preimage": "complete abstract durable ledger",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-PHYSICAL-LEDGER-V1",
+        "preimage": "complete normalized physical ledger",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-CLOCK-STATE-V1",
+        "preimage": "final programmed wall, monotonic, and effective coordinates",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-ORACLE-STATE-V1",
+        "preimage": "final entropy, credential, failure, and crash call counters",
+        "output": "FX digest"
+      },
+      {
+        "scope": "fixture-only",
+        "tag": "GKOS-P6-DC06-FIXTURE-POSTSTATE-V1",
+        "preimage": "{durable_ledger_digest,physical_ledger_digest,clock_state_digest,oracle_state_digest}",
+        "output": "FX digest"
+      }
+    ],
+    "cursor_encoding_vectors": {
+      "canonical_e_rule": "Force the final source-byte low nibble to 1 so canonical unpadded base64url ends in E.",
+      "alias_b_rule": "Start from a canonical encoding ending in A and replace only the final character with B.",
+      "alias_d_rule": "Start from the same canonical bytes and replace only the final character with D.",
+      "noncanonical_aliases_are_rejected_not_normalized": true
+    },
+    "rsr_001": {
+      "shared_by": [
+        "SNAPSHOT-RESTART-001",
+        "SNAPSHOT-RESTART-REFERENCE-ABSENT-001",
+        "SNAPSHOT-RESTART-REFERENCE-CORRUPT-001",
+        "SNAPSHOT-RESTART-REFERENCE-DEAD-001",
+        "SNAPSHOT-RESTART-SNAPSHOT-ABSENT-001",
+        "SNAPSHOT-RESTART-SNAPSHOT-CORRUPT-001",
+        "SNAPSHOT-RESTART-SNAPSHOT-DEAD-001",
+        "SNAPSHOT-RESTART-SNAPSHOT-LIVE-001"
+      ],
+      "request_id": "018f0c9a-7b3d-7a40-8c11-102030405060",
+      "error_digest_preimage_utf8": "{\"contract_version\":\"1.0.0-draft.1\",\"error_code\":\"GKOS_P6_REQUEST_STALE_AUTHORITY\",\"request_id\":\"018f0c9a-7b3d-7a40-8c11-102030405060\",\"retry_after_ms\":null,\"retryable\":false}",
+      "error_digest": "sha256:9e39061191652729087b6f7b46a040d991f72983bef762b3c507e9ffbd876676",
+      "canonical_utf8": "{\"contract_version\":\"1.0.0-draft.1\",\"error_code\":\"GKOS_P6_REQUEST_STALE_AUTHORITY\",\"error_digest\":\"sha256:9e39061191652729087b6f7b46a040d991f72983bef762b3c507e9ffbd876676\",\"request_id\":\"018f0c9a-7b3d-7a40-8c11-102030405060\",\"retry_after_ms\":null,\"retryable\":false}",
+      "bytes": 264,
+      "reuse_rule": "All eight cases reference one materialized RSR-001 byte set and may not regenerate independent variants."
+    },
+    "retry_values": {
+      "retryable_true_codes": [
+        "GKOS_P6_RATE_LIMITED",
+        "GKOS_P6_CONCURRENCY_LIMIT",
+        "GKOS_P6_SHUTTING_DOWN"
+      ],
+      "all_other_codes": {
+        "retryable": false,
+        "retry_after_ms": null
+      },
+      "fixture_samples": {
+        "GKOS_P6_RATE_LIMITED": 6000,
+        "GKOS_P6_CONCURRENCY_LIMIT": 100,
+        "GKOS_P6_SHUTTING_DOWN": 1000
+      },
+      "dynamic_rate_rule": "Minimum positive integer milliseconds until one full token is available, capped at 60000, using the Q23 rational accumulator without floating point or rounding drift.",
+      "sample_scope": "fixture-only; values do not establish a universal production retry value outside the represented state"
+    }
+  },
+  "ratified_q22": {
+    "id": "Q22",
+    "decision": "USE_INDEPENDENTLY_ADJUDICATED_FOUR_LEAF_LINEAGE_PARTITION",
+    "provisional_partition_rejected": true,
+    "membership_rule": "A canonical Registry V5 row belongs to exactly one leaf solely by exact equality of its family to that leaf's enumerated family set below. Preserve Registry V5 array order within the selected leaf. Every one of the 16 families appears in exactly one set; no case ID prefix, source location, operation, class, or implementation heuristic may override family membership.",
+    "canonical_fixture": {
+      "path": "canonical-fixture.json",
+      "count": 67,
+      "families": {
+        "COLLISION-CANONICAL": 32,
+        "SESSION-REFERENCE-CURSOR-REPLAY": 28,
+        "TIMESTAMP": 7
+      },
+      "alias_targets": 6
+    },
+    "migration_fixture": {
+      "path": "migration-fixture.json",
+      "count": 89,
+      "families": {
+        "BACKUP": 9,
+        "BOOTSTRAP-HANDOFF": 39,
+        "RESTORE-OWNER-ABORT": 41
+      },
+      "alias_targets": 1
+    },
+    "race_fixture": {
+      "path": "race-fixture.json",
+      "count": 107,
+      "families": {
+        "ANCHOR-INTENT": 34,
+        "GLOBAL-EVENT": 52,
+        "RACE-FINAL-GATE-EFFECT": 21
+      },
+      "alias_targets": 4
+    },
+    "security_fixture": {
+      "path": "security-fixture.json",
+      "count": 205,
+      "families": {
+        "ACTIVITY-METADATA": 37,
+        "CREDENTIAL-AUTH-NONENUM": 7,
+        "CREDENTIAL-ISSUE-ROTATE": 22,
+        "POLICY-DEPENDENCY-TRANSPORT": 18,
+        "RATE": 7,
+        "REDACTION-NO-JSON": 99,
+        "RETENTION": 15
+      },
+      "alias_targets": 1
+    },
+    "derived_totals": {
+      "canonical_non_mcp_cases": 468,
+      "aliases": 12,
+      "official_mcp_cases_preserved": 67,
+      "fixture_leaf_counts_sum_to_468": true,
+      "alias_route_counts_sum_to_12": true
+    },
+    "alias_routes": [
+      {
+        "alias": "ANCHOR-MUTATION-RECOVERY-001",
+        "target": "ANCHOR-INTENT-001",
+        "target_leaf": "race-fixture.json"
+      },
+      {
+        "alias": "ANCHOR-MUTATION-RECOVERY-002",
+        "target": "ANCHOR-INTENT-002",
+        "target_leaf": "race-fixture.json"
+      },
+      {
+        "alias": "ANCHOR-MUTATION-RECOVERY-003",
+        "target": "ANCHOR-INTENT-003",
+        "target_leaf": "race-fixture.json"
+      },
+      {
+        "alias": "ANCHOR-MUTATION-RECOVERY-004",
+        "target": "ANCHOR-INTENT-004",
+        "target_leaf": "race-fixture.json"
+      },
+      {
+        "alias": "RESTORE-PLAN-DISCOVERY-001",
+        "target": "RESTORE-STATUS-DISCOVERY-001",
+        "target_leaf": "migration-fixture.json"
+      },
+      {
+        "alias": "RETENTION-DURABLE-001",
+        "target": "RETENTION-PERSISTENCE-001",
+        "target_leaf": "security-fixture.json"
+      },
+      {
+        "alias": "SCHEMA-CURSOR-003",
+        "target": "CURSOR-CANONICAL-001",
+        "target_leaf": "canonical-fixture.json"
+      },
+      {
+        "alias": "SCHEMA-CURSOR-004",
+        "target": "CURSOR-ALIAS-001",
+        "target_leaf": "canonical-fixture.json"
+      },
+      {
+        "alias": "SCHEMA-CURSOR-005",
+        "target": "CURSOR-ALIAS-002",
+        "target_leaf": "canonical-fixture.json"
+      },
+      {
+        "alias": "cursor-alias-B",
+        "target": "CURSOR-ALIAS-001",
+        "target_leaf": "canonical-fixture.json"
+      },
+      {
+        "alias": "cursor-alias-D",
+        "target": "CURSOR-ALIAS-002",
+        "target_leaf": "canonical-fixture.json"
+      },
+      {
+        "alias": "cursor-canonical-E",
+        "target": "CURSOR-CANONICAL-001",
+        "target_leaf": "canonical-fixture.json"
+      }
+    ],
+    "alias_semantics": "Alias lookup returns the exact canonical target object unchanged, including the target's canonical id, bytes, and digests. An alias never adds an executable row and is never substituted into the canonical case id."
+  },
+  "ratified_q23": {
+    "id": "Q23",
+    "decision": "RATIFY_EXACT_RATIONAL_PERSISTED_REFILL_ACCUMULATOR",
+    "numerator_microtokens": 1000000,
+    "interval_ms": 6000,
+    "persisted_remainder_min": 0,
+    "persisted_remainder_max": 5999,
+    "credit_formula": "credit_microtokens = floor((elapsed_ms * 1000000 + persisted_remainder) / 6000)",
+    "remainder_formula": "new_persisted_remainder = (elapsed_ms * 1000000 + persisted_remainder) mod 6000",
+    "token_update_formula": "new_tokens_micro = min(capacity_micro, old_tokens_micro + credit_microtokens) before debit",
+    "retry_formula": "minimum positive integer elapsed milliseconds for which the accumulator reaches at least one full 1000000-microtoken debit, capped at 60000",
+    "integer_only": true,
+    "floating_point_allowed": false,
+    "remainder_persisted_across_restart": true,
+    "tokens_capacity_clock_and_remainder_persisted_atomically": true,
+    "restart_grants_no_capacity": true,
+    "rounding_drift": false,
+    "exact_samples": {
+      "one_second_from_remainder_zero": {
+        "elapsed_ms": 1000,
+        "credit_microtokens": 166666,
+        "new_persisted_remainder": 4000
+      },
+      "second_one_second_step": {
+        "elapsed_ms": 1000,
+        "starting_remainder": 4000,
+        "credit_microtokens": 166667,
+        "new_persisted_remainder": 2000
+      },
+      "third_one_second_step": {
+        "elapsed_ms": 1000,
+        "starting_remainder": 2000,
+        "credit_microtokens": 166667,
+        "new_persisted_remainder": 0
+      },
+      "exact_six_second_total": {
+        "elapsed_ms": 6000,
+        "starting_remainder": 0,
+        "credit_microtokens": 1000000,
+        "new_persisted_remainder": 0
+      }
+    },
+    "implementation_requirement": "Replace any lossy integer refill_micro_per_ms embodiment with an exact persisted rational accumulator representation in the already-authorized successor-F1 correction, without floating-point state or restart loss."
+  },
+  "mechanical_implementation_resolutions": {
+    "manifest": {
+      "source_base_commit_field": "source_base_commit",
+      "source_base_commit_value": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+      "source_base_meaning": "accepted Phase-6 entry/source coordinate",
+      "successor_qualification_base_commit": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+      "successor_qualification_base_tree": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+      "add_new_manifest_base_field": false,
+      "top_level_fields_exactly": [
+        "aggregate_digest",
+        "contract_name",
+        "contract_version",
+        "generation_input_digest",
+        "generator_digest",
+        "leaf_count",
+        "leaves",
+        "source_base_commit",
+        "source_repository"
+      ],
+      "top_level_field_count": 9,
+      "manifest_additional_field_allowed": false,
+      "manifest_self_listing": false,
+      "rule": "Keep source_base_commit exactly 808d875b557f4cfd2bb0addccba44d70c9748f35. Treat e29e04bdad1cd192a25eba2d682a4c46774def28 as the successor qualification base outside the existing manifest shape. Do not add, rename, or overload a manifest field."
+    },
+    "mapping_add_request": {
+      "additionalProperties": false,
+      "required_fields_in_order": [
+        "agent_id",
+        "namespace",
+        "idempotency_key"
+      ],
+      "field_count": 3,
+      "provider_field_allowed": false,
+      "external_subject_field_allowed": false,
+      "external_subject_digest_field_allowed": false,
+      "pre_adapter_valid_request_outcome": "GKOS_P6_PLATFORM_UNAVAILABLE",
+      "adapter_dependent_subject_digest_or_collision_semantics_selected": false
+    },
+    "cursor_stale_precedence": {
+      "reference_bound_cursor_after_process_restart": "CURSOR_STALE projection through GKOS_P6_REQUEST_STALE_AUTHORITY",
+      "evaluate_restart_marker_before": [
+        "reference digest validation",
+        "reference resolver lookup",
+        "snapshot digest validation",
+        "snapshot lookup",
+        "physical lookup",
+        "existence disclosure"
+      ],
+      "continuation_after_restart_allowed": false,
+      "rsr_001_exact_reuse_required": true
+    },
+    "workflow_preservation": {
+      "workflow_bytes_may_change": false,
+      "remote_or_hosted_workflow_run_authorized": false,
+      "workflow_run_coordinate_may_change": false,
+      "rule": "Preserve accepted workflow bytes and accepted run/evidence coordinates unchanged; local validation creates no replacement hosted run."
+    },
+    "readme_boundary": {
+      "root_readme_paths": [
+        "README.md",
+        "TECHNICAL_README.md"
+      ],
+      "root_readmes_protected": true,
+      "root_readmes_editable": false,
+      "contract_pack_readmes_may_change_only_if_in_allowed_register_and_mechanically_required": true
+    },
+    "mapping_deferral": "Adapter-dependent mapping subject digest, canonical subject preimage, collision predicate, equality, evidence binding, and adapter qualification remain deferred.",
+    "implementation_authority": "All implementation and local validation derives from V14; V15 resolves choices but grants no broader execution or delivery authority."
+  },
+  "authorization_boundary": {
+    "successor_f1_local_implementation_authorized_under_v14": true,
+    "successor_f1_local_validation_authorized_under_v14": true,
+    "successor_f1_local_generator_execution_authorized_under_v14": true,
+    "successor_f1_uncommitted_local_changes_authorized_under_v14": true,
+    "commit_authorized": false,
+    "push_authorized": false,
+    "pr_authorized": false,
+    "pull_request_authorized": false,
+    "merge_authorized": false,
+    "remote_workflow_authorized": false,
+    "hosted_workflow_authorized": false,
+    "release_authorized": false,
+    "deploy_authorized": false,
+    "deployment_authorized": false,
+    "activate_authorized": false,
+    "activation_authorized": false,
+    "publish_authorized": false,
+    "publication_authorized": false,
+    "f2_authorized": false,
+    "f2_edit_authorized": false,
+    "f2_restart_authorized": false,
+    "f2_qualification_authorized": false,
+    "f2_copy_or_merge_into_successor_authorized": false,
+    "lite_product_edit_authorized": false,
+    "lite_work_authorized": false,
+    "lite_phase_advance_authorized": false,
+    "lite_pin_to_successor_authorized": false,
+    "accepted_f1_commit_or_tree_rewrite_authorized": false,
+    "existing_evidence_edit_authorized": false,
+    "root_readme_edit_authorized": false,
+    "protected_path_edit_authorized": false,
+    "out_of_register_path_edit_authorized": false,
+    "new_public_or_production_digest_semantics_authorized": false,
+    "rule": "V15 supplies exact implementation resolutions inside V14 only. Every false boundary continues to require separate explicit Product Owner authorization."
+  },
+  "preservation": {
+    "accepted_f1_commit": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_tree": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+    "accepted_f1_object_edited": false,
+    "v8_v10_registry_v5_map_v5_v11_c1_v5_v12_c2_v13_c3_v14_bytes_edited": false,
+    "existing_evidence_bytes_edited": false,
+    "product_bytes_edited_by_v15_creation": false,
+    "workflow_bytes_edited_by_v15_creation": false,
+    "root_readmes_edited_by_v15_creation": false,
+    "stopped_f2_edited": false,
+    "stopped_f2_remains_dirty_uncommitted_unqualified_and_stopped": true,
+    "engine_lite_admission_commit": "ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2",
+    "engine_lite_edited": false,
+    "new_artifact_only": true,
+    "new_artifact": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_SUCCESSOR_F1_Q21_Q23_IMPLEMENTATION_RESOLUTION_V15_2026-08-26.json"
+  },
+  "source_graph_and_chronology": {
+    "status": "PASS",
+    "acyclic_order": [
+      "accepted-F1 commit and tree",
+      "V8 and V10 plus Registry V5 and Map V5",
+      "V11 exact-coordinate receipt",
+      "both fresh C1 V5 acceptances",
+      "V12 C2 authorization",
+      "accepted C2 concurrence",
+      "V13 C3 authorization",
+      "parallel accepted C3 Full-contract and Lite-conformance receipts",
+      "V14 successor-F1 local product-correction authorization",
+      "this detached V15 Q21-Q23 ratification and implementation resolution",
+      "future local uncommitted successor-F1 implementation and validation"
+    ],
+    "v15_binds_only_existing_ancestors": true,
+    "v15_prebinds_no_future_product_hash_byte_length_or_run": true,
+    "cycle_or_forward_raw_coordinate_reference_found": false,
+    "acyclic": true
+  },
+  "integrity_verification": {
+    "method": "Read every bound artifact as exact raw bytes; compute raw SHA-256 and byte length; parse every JSON artifact; recompute each canonical internal record digest with only the top-level record_digest omitted; confirm accepted verdicts, unconditionality, and zero findings; recompute Q22 family and alias totals; recompute Q23 arithmetic samples; inspect the V14 boundary; and verify this new artifact's parse, canonical digest, raw coordinate, and evidence-only diff after finalization.",
+    "direct_bound_chain_artifacts_checked": 9,
+    "direct_bound_chain_raw_sha256_matches": 9,
+    "direct_bound_chain_byte_length_matches": 9,
+    "direct_bound_chain_record_digest_matches": 9,
+    "v11_transitive_sources_checked": 4,
+    "v11_transitive_source_raw_sha256_matches": 4,
+    "v11_transitive_source_byte_length_matches": 4,
+    "v11_transitive_source_record_digest_matches": 4,
+    "bound_json_parsed": 13,
+    "accepted_c1_v5_roles": 2,
+    "accepted_c1_v5_findings": 0,
+    "accepted_c2_roles": 1,
+    "accepted_c2_findings": 0,
+    "accepted_c3_roles": 2,
+    "accepted_c3_findings": 0,
+    "q22_family_counts_sum_to_468": true,
+    "q22_alias_counts_sum_to_12": true,
+    "q23_arithmetic_samples_recomputed": true,
+    "chronology": "PASS",
+    "acyclicity": "PASS",
+    "this_v15_json_parse": "PASS_AFTER_FINALIZATION",
+    "this_v15_canonical_internal_record_digest": "PASS_AFTER_FINALIZATION",
+    "this_v15_final_raw_sha256_and_byte_length": "REPORTED_EXTERNALLY_AFTER_FINALIZATION",
+    "new_artifact_only_diff": "PASS_AFTER_FINALIZATION"
+  },
+  "mandatory_stop": {
+    "after_local_implementation_and_validation": "Stop with the successor-F1 worktree uncommitted. Preserve the exact local diff and local validation results. Do not commit, push, open a pull request, run a remote or hosted workflow, merge, release, deploy, activate, publish, alter or restart F2, or edit Engine-Lite without separate explicit Product Owner authorization.",
+    "if_resolution_requires_production_digest_meaning_or_mapping_adapter_semantics": "Stop and return to the Product Owner; the fixture-only Q21 domains do not select those runtime meanings.",
+    "automatic_delivery_advance": false,
+    "automatic_f2_advance": false,
+    "automatic_lite_advance": false
+  },
+  "self_raw_coordinate_rule": "This detached V15 artifact cannot embed its own final raw SHA-256 or byte length without changing those bytes. Its final raw SHA-256 and byte length are reported externally after final write and verification; the canonical internal record_digest below is self-verifying under the declared omission rule.",
+  "terminal_statement": "THE PRODUCT OWNER RATIFIED Q21 THROUGH Q23 EXACTLY AS PROPOSED. GKOS-P6-DC06-FIXTURE-EMBODIMENT/1.0.0, ITS FIXTURE-ONLY DETERMINISTIC RULES, TAGS, CREDENTIAL ORACLE, RSR-001, RETRY VALUES, THE INDEPENDENTLY ADJUDICATED 67/89/107/205 LINEAGE PARTITION WITH 6/1/4/1 ALIAS ROUTING, AND THE EXACT 1000000-OVER-6000 PERSISTED-REMAINDER RATE ACCUMULATOR ARE NOW CLOSED FOR LOCAL SUCCESSOR-F1 IMPLEMENTATION UNDER V14. SOURCE_BASE_COMMIT REMAINS 808D875B557F4CFD2BB0ADDCCBA44D70C9748F35; E29E04BDAD1CD192A25EBA2D682A4C46774DEF28 REMAINS THE SUCCESSOR QUALIFICATION BASE; MAPPING.ADD IS THE CLOSED THREE-FIELD AGENT_ID/NAMESPACE/IDEMPOTENCY_KEY REQUEST; CURSOR-STALE PRECEDENCE, WORKFLOW PRESERVATION, AND ROOT-README PROTECTION REMAIN MANDATORY. FIXTURE-ONLY MODULES MAY NOT BE IMPORTED BY RUNTIME, PRODUCTION DIGEST MEANINGS AND ADAPTER-DEPENDENT MAPPING SEMANTICS REMAIN UNSELECTED, AND COMMIT, PUSH, PR, MERGE, REMOTE WORKFLOW, RELEASE, DEPLOYMENT, ACTIVATION, PUBLICATION, F2, AND LITE ACTIONS REMAIN UNAUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "7354435adfcbda06165cb6ce79f607022241f0333873335df6ca1e4eeda3fa9d"
+}

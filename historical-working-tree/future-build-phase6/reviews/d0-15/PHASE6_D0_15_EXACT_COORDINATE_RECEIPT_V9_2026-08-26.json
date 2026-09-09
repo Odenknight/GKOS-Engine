@@ -1,0 +1,187 @@
+{
+  "record_type": "gkos-phase6-d0-15-standing-authority-exact-coordinate-receipt",
+  "record_version": "9.0.0",
+  "ratified_at_utc": "2026-08-26T14:12:51.6480489Z",
+  "status": "STANDING_AUTHORITY_EXACT_COORDINATE_APPLIED_FRESH_C1_ONLY",
+  "owner_statement_exact": "Ratify all future dispositions.",
+  "purpose": "Apply the Product Owner's exact standing-disposition statement, solely within the bounded source-preserving evidence scope established by immutable V8, to the already-existing and fully validated Registry V4 and Map V4 bytes. This receipt completes the required acyclic exact-coordinate application and authorizes fresh C1 migration and security concurrence only.",
+  "standing_authority_application": {
+    "authority_source": "V8",
+    "owner_statement_applied_exactly": "Ratify all future dispositions.",
+    "application": "This is a standing-owner ratification application to the exact existing V8, Registry V4, and Map V4 bytes listed below. It is not a new blanket delegation and does not enlarge V8's standing scope.",
+    "bounded_scope": [
+      "source-preserving evidence-only D0-15 correction dispositions that mechanically apply Q1 through Q20",
+      "derived count, raw-hash, byte-length, and canonical-digest descendants of existing evidence",
+      "exact-coordinate receipt applications after all bound artifacts exist and validate",
+      "fresh zero-contribution C1 migration and security evidence reruns after an exact-coordinate receipt"
+    ],
+    "excluded_scope": [
+      "any new or contradictory public behavior or security semantic",
+      "any new error projection, response shape, retry rule, state transition, operation representative, security boundary, fixture meaning, or predetermined count target",
+      "C2 or C3 concurrence",
+      "successor-F1 correction, F2 restart, product or proposal edits, regeneration, implementation, commit, push, workflow, PR, merge, release, deployment, activation, or publication"
+    ],
+    "ambiguity_rule": "Any genuine ambiguity, conflict, new owner choice, or semantic change remains outside standing authority and must return to the Product Owner."
+  },
+  "exact_ratified_coordinate": [
+    {
+      "coordinate": "V8",
+      "role": "Q17-Q20 owner resolution, inherited Q1-Q16 basis, and bounded standing evidence-disposition authority",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V8_2026-08-26.json",
+      "sha256": "6b8a5b9fca8c72561ef1aee56c15911e34d0559edcae058f19631b71e16d9116",
+      "bytes": 18358,
+      "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2"
+    },
+    {
+      "coordinate": "Registry V4",
+      "role": "closed canonical non-MCP fixture registry materializing Q1-Q20 and C1-V3-MECH-001 through 006",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V4_2026-08-26.json",
+      "sha256": "279397cd052352c071e9714219c7b4a99882adcbabc83b058a60ca9e1dea9b1c",
+      "bytes": 179929,
+      "record_digest": "9d7a70bf2f160c424332a612389504a0d39d792d96e8d8c82b2d9c77eb42007f"
+    },
+    {
+      "coordinate": "Map V4",
+      "role": "corrected Q1-Q20 decision and correction map applying the standing error-level disposition",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V4_2026-08-26.json",
+      "sha256": "ef2eb284bc992ccf32170b7aaf0d21b140a61395b86a4cb97bef96aeb9ab5967",
+      "bytes": 21386,
+      "record_digest": "c20588e1cd55226ca3f65a73e272dde8ac3b98dd573d7b2c823b2e8d962568ef"
+    }
+  ],
+  "ratified_semantic_and_count_summary": {
+    "owner_questions": "Q1 through Q20 exactly as bound by V8 and Map V4",
+    "corrected_recommendations": "D015-R01 through D015-R15 exactly as bound by Map V4, including R06 clarified, R07 owner-amended, and R15 owner-amended",
+    "derived_corrections": "D015-DC01 through D015-DC13 exactly as bound by Map V4",
+    "standing_error_level_disposition": "The configured in-scope log level is exactly error, as mechanically embodied in Registry V4 and Map V4 without a new public or security semantic.",
+    "normalized_authority_tables": 16,
+    "operations": 32,
+    "owner_only_operations": 24,
+    "error_registry_codes": 53,
+    "per_registered_code_executable_error_envelope_leaves": 53,
+    "official_mcp_vectors": 67,
+    "official_mcp_ids_or_valid_wire_semantics_changed": false,
+    "named_non_mcp_subtotal": 18,
+    "named_non_mcp_subtotal_is_overall_total": false,
+    "additional_canonical_non_mcp_fixtures": 395,
+    "overall_canonical_non_mcp_fixtures": 413,
+    "aliases": 12,
+    "coverage_families": 16,
+    "accounting_formula": "18 + 395 = 413 canonical non-MCP fixtures; 12 aliases do not add executable cases",
+    "family_totals": {
+      "ACTIVITY-METADATA": 37,
+      "ANCHOR-INTENT": 34,
+      "BACKUP": 9,
+      "BOOTSTRAP-HANDOFF": 39,
+      "COLLISION-CANONICAL": 32,
+      "CREDENTIAL-AUTH-NONENUM": 7,
+      "CREDENTIAL-ISSUE-ROTATE": 22,
+      "GLOBAL-EVENT": 12,
+      "POLICY-DEPENDENCY-TRANSPORT": 18,
+      "RACE-FINAL-GATE-EFFECT": 21,
+      "RATE": 7,
+      "REDACTION-NO-JSON": 84,
+      "RESTORE-OWNER-ABORT": 41,
+      "RETENTION": 15,
+      "SESSION-REFERENCE-CURSOR-REPLAY": 28,
+      "TIMESTAMP": 7
+    },
+    "family_total_sum": 413
+  },
+  "exact_coordinate_verification": {
+    "method": "For each ratified artifact, parse JSON, verify raw SHA-256 and byte length, recompute the declared canonical internal record digest, and cross-check Registry V4 and Map V4 accounting, family totals, source bindings, and authority boundaries.",
+    "results": [
+      "V8 raw SHA-256, byte length, and internal record digest match",
+      "Registry V4 raw SHA-256, byte length, and internal record digest match",
+      "Map V4 raw SHA-256, byte length, and internal record digest match",
+      "Registry V4 contains exactly 413 unique lexicographically sorted canonical fixture IDs",
+      "Registry V4 contains exactly 12 unique aliases and every alias target exists",
+      "Registry V4 contains exactly 16 family totals and their sum is 413",
+      "Registry V4 materializes exactly 53 per-registered-code executable ERROR-ENVELOPE leaves for the exact 53-code registry",
+      "Registry V4 and Map V4 agree on 18 named subtotal, 395 additional canonical cases, 413 overall canonical cases, 12 aliases, 16 families, 53 error leaves, and 67 unchanged official MCP vectors",
+      "Registry V4 and Map V4 agree on each of the 16 exact family totals",
+      "Map V4 binds the exact V8 and Registry V4 coordinate and preserves the earlier owner and concurrence chain as immutable historical evidence",
+      "Map V4 records every C1 V3 finding as closed by source-preserving evidence and does not carry either historical verdict"
+    ],
+    "overall": "PASS"
+  },
+  "historical_noncarrying_c1_v3_receipts": [
+    {
+      "role": "C1 V3 migration acceptance of the superseded V7, Registry V3, and Map V3 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V3_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "8ae7046263f73df945dc354589de6b0403c8ae4c8c8e13ceebc14b1b20b35dd6",
+      "bytes": 19940,
+      "record_digest": "ad9e2513535e69a3617542c8699684fa1830bd9c89e6d23376da780d0a8be4f8",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "disposition": "immutable historical and noncarrying; it does not count as acceptance of this V9 coordinate"
+    },
+    {
+      "role": "C1 V3 security rejection of the superseded V7, Registry V3, and Map V3 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V3_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "b8060ba76b759ad8ee871cb4f66696cc08e7f237483c007e111a181888a86981",
+      "bytes": 32134,
+      "record_digest": "92298b88abf726ef16bdebe2b89cd33aa9611248c57970a812df16b3b0296a01",
+      "verdict": "REJECT_CONCURRENCE",
+      "disposition": "immutable historical defect evidence; the source-preserving closures are embodied in Registry V4 and Map V4, but the rejection does not become or imply acceptance"
+    }
+  ],
+  "historical_chain_rule": "Neither C1 V3 verdict carries into this new coordinate. Migration acceptance does not count as a new acceptance, and security rejection does not become or imply acceptance. Both roles must perform fresh zero-contribution review of the same exact V9-ratified coordinate.",
+  "fresh_c1_authorization": {
+    "authorized": true,
+    "wave": "C1",
+    "roles": [
+      "migration",
+      "security"
+    ],
+    "fresh": true,
+    "zero_contribution": true,
+    "independent": true,
+    "same_exact_coordinate_required": true,
+    "required_inputs": [
+      "the exact V8, Registry V4, and Map V4 artifacts and coordinates in this receipt",
+      "this exact V9 receipt as an additional immutable authority input",
+      "both C1 V3 receipts as historical noncarrying chain evidence",
+      "all immutable D0, accepted-F1, governance, proposal, source-review, owner, registry, map, and ratification parents already bound through V8 and Map V4"
+    ],
+    "migration_scope": "acyclic provenance; preserved named restore and bootstrap meanings; Q17 and Q18 recovery and concurrency behavior; C1-V3-MECH-001 through 006; exact physical disposition; retention history; rollback; count and family closure; and noncarry of the old acceptance",
+    "security_scope": "all Q1-Q20 public and security projections; Q17 bootstrap-handoff failure separation from lost acknowledgement; Q18 agent.disable multiprocess serialization; standing error-level evidence disposition; exact error envelopes; redaction; collision; cursor and reference precedence; policy; every mechanical expansion; 53 per-code leaves; and count and family closure",
+    "acceptance_rule": "Both fresh roles must independently return unconditional acceptance of the same exact coordinate with matching inputs and no contribution to ratified semantics, registry rows, fixture IDs, expected outcomes, correction-map bytes, implementation, or evidence.",
+    "failure_rule": "Any rejection, conditional acceptance, ambiguity, independence defect, input mismatch, source-trace mismatch, or byte drift stops C1 and returns to the Product Owner unless it is a strictly source-preserving evidence disposition already within V8's standing scope.",
+    "success_effect": "Two fresh C1 acceptances establish C1 completion evidence only. They do not authorize C2, C3, product work, or successor-F1 correction."
+  },
+  "authority_boundary": {
+    "preserve_v9_receipt_authorized": true,
+    "fresh_c1_migration_concurrence_authorized": true,
+    "fresh_c1_security_concurrence_authorized": true,
+    "c2_authority_concurrency_concurrence_authorized": false,
+    "c3_full_contract_concurrence_authorized": false,
+    "c3_lite_conformance_concurrence_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "product_contract_or_fixture_regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_authorized": false,
+    "push_authorized": false,
+    "workflow_authorized": false,
+    "pr_authorized": false,
+    "merge_release_deploy_activate_publish_authorized": false,
+    "rule": "This V9 applies V8's bounded standing authority to exact existing bytes and authorizes fresh C1 migration and security concurrence records only. C2, C3, successor-F1 correction, F2, and every product or repository mutation remain outside authority."
+  },
+  "post_c1_boundary": {
+    "if_either_c1_rejects": "Remain stopped. Source-preserving evidence-only dispositions may proceed only when they are mechanically within V8's standing scope; any new semantic choice returns to the Product Owner.",
+    "if_both_c1_accept": "Preserve the two new acceptance receipts and return for explicit next-wave authorization. Do not automatically start C2.",
+    "c2_requires_new_explicit_authority": true,
+    "c3_requires_later_explicit_authority": true,
+    "product_correction_requires_later_explicit_authority": true
+  },
+  "preservation": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_disposition": "immutable historical evidence only",
+    "stopped_f2_disposition": "uncommitted, unqualified, preserved exactly, and not authorized for reset, discard, repair, grandfathering, qualification, commit, push, or restart",
+    "prior_d0_15_records": "immutable historical evidence"
+  },
+  "terminal_statement": "THE PRODUCT OWNER'S EXACT STATEMENT `Ratify all future dispositions.` IS APPLIED WITHIN V8'S BOUNDED SOURCE-PRESERVING EVIDENCE-ONLY SCOPE TO THE EXACT EXISTING V8, REGISTRY V4, AND MAP V4 BYTES. FRESH ZERO-CONTRIBUTION C1 MIGRATION AND SECURITY CONCURRENCE IS AUTHORIZED. BOTH C1 V3 VERDICTS ARE HISTORICAL AND NONCARRYING. NO C2, C3, PRODUCT OR PROPOSAL EDIT, SUCCESSOR-F1 CORRECTION, F2 RESTART, PRODUCT REGENERATION, IMPLEMENTATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, OR PUBLICATION IS AUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "610657caf21d2a4a47b9ad9c5fac2a6ac9d7deecaa0b070609014c5e817d9f07"
+}

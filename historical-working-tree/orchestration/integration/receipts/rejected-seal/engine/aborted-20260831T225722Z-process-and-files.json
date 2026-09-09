@@ -1,0 +1,82 @@
+{
+  "status": "REJECTED_ABORTED",
+  "reason": "Overlapping/abandoned test attempts are not admissible final integration evidence",
+  "stopped_controller_pid": 12644,
+  "stopped_test_runner_pid": 23820,
+  "stopped_process_tree": [
+    24696,
+    24380,
+    21776,
+    23820,
+    10580,
+    9776,
+    24072,
+    12644
+  ],
+  "quarantined_at_utc": "2026-08-31T22:57:22.9569003Z",
+  "files": [
+    {
+      "original_name": "engine-corrected-native-test-pass.log",
+      "rejected_name": "aborted-20260831T225722Z-engine-corrected-native-test-pass.log",
+      "bytes": 75908,
+      "sha256": "6c6a7a344390fd63e63d3790c8b7f500409809f74854cb8589bb6a87078773cb",
+      "last_write_utc": "2026-08-31T22:55:32.2691162Z"
+    },
+    {
+      "original_name": "engine-corrected-native-test-safe.log",
+      "rejected_name": "aborted-20260831T225722Z-engine-corrected-native-test-safe.log",
+      "bytes": 42013,
+      "sha256": "a3b857ebe09dbdb3e3c27a63b6743459e0a3af68eb3aea3c3231bc2ed940fffa",
+      "last_write_utc": "2026-08-31T22:50:10.9208947Z"
+    },
+    {
+      "original_name": "engine-corrected-native-test.log",
+      "rejected_name": "aborted-20260831T225722Z-engine-corrected-native-test.log",
+      "bytes": 42523,
+      "sha256": "c7ca6e87dab44b190b0c4da0ebb3f3a2ec593e022d38de50717adb95b1d828d0",
+      "last_write_utc": "2026-08-31T22:49:15.1860285Z"
+    },
+    {
+      "original_name": "engine-corrected-npm-ci.log",
+      "rejected_name": "aborted-20260831T225722Z-engine-corrected-npm-ci.log",
+      "bytes": 835,
+      "sha256": "3cbf1d8c8387c1181ab5e1f9aa33ba67adf36df59cb5c7c248e8a8b8ccfdcff2",
+      "last_write_utc": "2026-08-31T22:43:32.9351656Z"
+    },
+    {
+      "original_name": "engine-corrected-typecheck.log",
+      "rejected_name": "aborted-20260831T225722Z-engine-corrected-typecheck.log",
+      "bytes": 51,
+      "sha256": "c488b68ba3182301d8f759d23fad9fc77427c6214ae666ce71a6d24a12009144",
+      "last_write_utc": "2026-08-31T22:43:42.5988460Z"
+    },
+    {
+      "original_name": "engine-current-check.log",
+      "rejected_name": "aborted-20260831T225722Z-engine-current-check.log",
+      "bytes": 3835,
+      "sha256": "bbd755b8f8202e78ba3c9510bcaf3a15f6d0cdf238cff6ca3355974c97ffe769",
+      "last_write_utc": "2026-08-31T22:45:12.7990938Z"
+    },
+    {
+      "original_name": "engine-inventory-check.json",
+      "rejected_name": "aborted-20260831T225722Z-engine-inventory-check.json",
+      "bytes": 69210,
+      "sha256": "efde6481a803c67631392ac6649ecca46c9ddd64ff6c19c44a092681410feb03",
+      "last_write_utc": "2026-08-31T22:34:23.6355678Z"
+    },
+    {
+      "original_name": "engine-npm-ci.log",
+      "rejected_name": "aborted-20260831T225722Z-engine-npm-ci.log",
+      "bytes": 147,
+      "sha256": "af8d6239aa2130ea269dd789caf4ca1a6214f26b9bbc250fdee64e3604b9f715",
+      "last_write_utc": "2026-08-31T22:33:52.8162576Z"
+    },
+    {
+      "original_name": "engine-typecheck.log",
+      "rejected_name": "aborted-20260831T225722Z-engine-typecheck.log",
+      "bytes": 51,
+      "sha256": "c488b68ba3182301d8f759d23fad9fc77427c6214ae666ce71a6d24a12009144",
+      "last_write_utc": "2026-08-31T22:34:21.3609986Z"
+    }
+  ]
+}

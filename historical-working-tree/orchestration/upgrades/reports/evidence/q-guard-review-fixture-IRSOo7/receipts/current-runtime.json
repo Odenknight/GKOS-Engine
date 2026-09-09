@@ -1,0 +1,24 @@
+{
+  "version": "gkos-current-runtime-qualification/1",
+  "lane": "current-runtime",
+  "source": {
+    "head": "254188137c82bbf8d6014715cdad2d7acb0c2499",
+    "tree": "99b93f38d223e7675d540d77d5f27712dded023f",
+    "files": [
+      {
+        "path": "source.txt",
+        "sha256": "e18b59081b32bc09c2e07ff6f8d3d7d2e1f09df63251844ba94eebc0ec5e4d85"
+      }
+    ],
+    "sha256": "d0c4cec9ee31adc55dcb83fc6ee6607e5b376cbbe4e09b7c89cb48aa1a693ac3"
+  },
+  "node": "v24.18.0",
+  "platform": "win32",
+  "arch": "x64",
+  "started_at": "2026-08-31T21:11:38.345Z",
+  "commands": [],
+  "status": "FAIL",
+  "release_qualified": false,
+  "error": "ENOENT: no such file or directory, open '[LOCAL_PATH]'",
+  "ended_at": "2026-08-31T21:11:38.421Z"
+}

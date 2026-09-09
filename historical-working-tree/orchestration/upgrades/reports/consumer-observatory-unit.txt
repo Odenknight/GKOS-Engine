@@ -1,0 +1,51 @@
+
+> gkos-observatory@0.1.0 test
+> node --test tests/*.test.mjs
+
+✔ all six golden outcomes and deterministic bytes (22.8456ms)
+✔ protected content and topology never enter public artifacts (7.9767ms)
+✔ absent and undisclosed are identical; unknown visibility fails closed (0.3278ms)
+✔ attachment support is explicitly rejected; public text is not interpreted as markup (0.4938ms)
+✔ mutating effect refusal changes the golden expected result (0.2125ms)
+✔ publication guard rejects undisclosed references and protected text before writing (0.4063ms)
+✔ watch resumes with a session-bound cursor, skips duplicates, and bounds retries (28.5671ms)
+✔ 409 reports a gap and clears the cursor before a fresh connection (1.3751ms)
+✔ credential denial and incompatible streams stop without automatic retries (0.7543ms)
+✔ Stop during backoff prevents another connection and stale state updates (0.3504ms)
+✔ Stop during a response race never delivers events (0.3749ms)
+✔ silent connections time out and retry, with each abandoned attempt aborted (43.7413ms)
+✔ a silent 200 stream does not replenish its retry budget merely by remaining open (46.7641ms)
+✔ many small blocks in one transport chunk are accepted; oversized blocks are bounded (2.4737ms)
+✔ Stop and idle timeout cancel a pending body read even when the transport ignores AbortSignal (18.3629ms)
+﹣ installer accepts one healthy startup and fails fast on crash or replacement invocation (0.7795ms) # SKIP
+✔ canonical golden string ordering and restricted types (1.2675ms)
+✔ all receipts verify, changed data/order/digest/signature/manifest rejected (15.5084ms)
+✔ independent Python verifier accepts committed six bundles (454.4483ms)
+✔ both verifiers reject rehashed structurally invalid envelopes and manifests (1036.6915ms)
+✔ startup fails closed for manifest, replay, and viewer mutations (54.6351ms)
+✔ health, replay and verifier report static unsigned integrity only (242.2452ms)
+✔ private sources, media, unknown objects and write paths are uniformly unavailable (141.2066ms)
+✔ CSP is restrictive with same-origin framing only for renderer frame (26.0466ms)
+✔ verifier rejects oversized, malformed and unsupported requests (38.1906ms)
+✔ forwarded IP spoofing cannot escape rate limit; time expiry restores service (44.877ms)
+✔ served snapshot remains unchanged after disk mutation (22.5489ms)
+✔ CLI verifies production release through a directory symlink and enforces its pin (197.139ms)
+✔ live graph preserves Engine semantics and accepts no fixture substitution (1.4848ms)
+✔ live note summaries remain summaries, not invented note body text (0.1912ms)
+✔ live client fails closed on denial or oversized response (23.6569ms)
+✔ SSE parser preserves actual Engine statuses and ignores heartbeats (0.4052ms)
+✔ bearer delivery is fixed-origin and never uses URL or browser storage (1.1975ms)
+✔ archive bounds bytes and count, deduplicates replay, and clears explicitly (0.9302ms)
+✔ event parser rejects missing identities and excludes unrecognized archive fields (0.2223ms)
+✔ network errors do not falsely report invalid credentials (0.1799ms)
+✔ viewer projection excludes protected content and topology even if given catalog nodes (1.0674ms)
+✔ every canonical replay uses one adapter and does not mutate source or send non-public refs (5.7279ms)
+✔ local identity patch and historical upstream coordinate retain explicit byte integrity (7.8361ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 1608.9321

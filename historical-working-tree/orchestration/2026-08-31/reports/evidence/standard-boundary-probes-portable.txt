@@ -1,0 +1,87 @@
+RERUN: 2026-08-31 provenance/portability correction
+SOURCE: main 71b899473473f47172b181973027f3eb7da25104; R18 aa9a05315a9a767bd672aa2bb5179c963d9d66ca
+CWD: [LOCAL_PATH]
+COMMAND: node "[LOCAL_PATH]" --main-checkout "[LOCAL_PATH]" --r18-checkout "[LOCAL_PATH]"
+EXIT: 0
+{
+  "source": {
+    "main": "71b899473473f47172b181973027f3eb7da25104",
+    "r18": "aa9a05315a9a767bd672aa2bb5179c963d9d66ca"
+  },
+  "checkout_mode": "explicit",
+  "gate_probes": [
+    {
+      "input": {
+        "kind": "authority",
+        "valid": true,
+        "evaluation_time": "2026-08-31T00:00:00.000000Z"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "context-binding"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "digest-binding"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "restrictiveness"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "canonical-time",
+        "value": "2026-99-99T99:99:99.000000Z"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    },
+    {
+      "input": {
+        "kind": "authorization-manifest"
+      },
+      "expected": "refusal for missing or malformed mandatory evidence",
+      "observed": null
+    }
+  ],
+  "canonical_probes": [
+    {
+      "input": {
+        "compiled_at": "2026-99-99T12:00:00.000000Z"
+      },
+      "expected": "refuse malformed time or lone surrogate",
+      "observed": "ACCEPTED",
+      "hex": "a16b636f6d70696c65645f6174781b323032362d39392d39395431323a30303a30302e3030303030305a"
+    },
+    {
+      "input": {
+        "text": "\ud800"
+      },
+      "expected": "refuse malformed time or lone surrogate",
+      "observed": "ACCEPTED",
+      "hex": "a1647465787463efbfbd"
+    }
+  ]
+}
+
+BACKWARDS-COMPATIBILITY CHECK: same script, no arguments, from the same arbitrary CWD
+EXIT: 0
+RESULT: original-local-audit-defaults, same six null gate results and two ACCEPTED canonical results.
+
+CLI SMOKE CHECK (Node spawnSync child status, independent of PowerShell exit mapping):
+--help => exit 0, usage text, no checkout imports required.
+--main-checkout . without --r18-checkout => exit 2, clear setup error.
+Both JSON ledgers parse; source ledger has actual_tree_sha and no ambiguous tree field.
+git diff --stat is empty for Standard main, R18, and the Hindsight snapshot.

@@ -1,0 +1,44 @@
+TAP version 13
+# Subtest: package setup cancellation terminates the spawned process
+ok 1 - package setup cancellation terminates the spawned process
+  ---
+  duration_ms: 13.6059
+  type: 'test'
+  ...
+# Subtest: npm pack JSON accepts one array or object report and refuses unsafe filenames
+ok 2 - npm pack JSON accepts one array or object report and refuses unsafe filenames
+  ---
+  duration_ms: 1.522
+  type: 'test'
+  ...
+# Subtest: npm CLI discovery works outside an npm lifecycle
+ok 3 - npm CLI discovery works outside an npm lifecycle
+  ---
+  duration_ms: 3.2628
+  type: 'test'
+  ...
+# Subtest: packed installation runs the stdio bridge against one authenticated real process
+ok 4 - packed installation runs the stdio bridge against one authenticated real process
+  ---
+  duration_ms: 14075.6703
+  type: 'test'
+  ...
+# {"phase":"clone","status":"START"}
+# {"phase":"clone","status":"PASS","elapsed_ms":504.0773}
+# {"phase":"install_source","status":"START"}
+# {"phase":"install_source","status":"PASS","elapsed_ms":1412.0385}
+# {"phase":"build_source","status":"START"}
+# {"phase":"build_source","status":"PASS","elapsed_ms":5662.3597}
+# {"phase":"pack","status":"START"}
+# {"phase":"pack","status":"PASS","elapsed_ms":2489.6866}
+# {"phase":"install_consumer","status":"START"}
+# {"phase":"install_consumer","status":"PASS","elapsed_ms":3656.5076999999983}
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14181.6243

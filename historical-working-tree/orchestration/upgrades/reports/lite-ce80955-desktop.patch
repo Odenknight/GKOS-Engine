@@ -1,0 +1,805 @@
+diff --git a/desktop/docs/QUICKSTART.md b/desktop/docs/QUICKSTART.md
+index 049cf63..2114d4d 100644
+--- a/desktop/docs/QUICKSTART.md
++++ b/desktop/docs/QUICKSTART.md
+@@ -2,13 +2,15 @@
+ 
+ ## Why use this
+ 
+-Your notes are yours, and they stay on your computer. GKOS Engine Desktop lets AI assistants you already use — like Claude — read and understand your notes without uploading anything anywhere. It watches your notes folder, builds a live map of what's in it (including a connections view called Graphiti), and applies privacy rules you choose before any assistant can see a single word. It only talks to programs on your own machine — it cannot accept a connection from the internet.
++GKOS Engine Desktop watches your notes folder and builds a live map of what's in it, including a Graphiti projection. When enabled, the current sidecar exposes that map through a bearer-token-protected, GET-only REST API bound directly to loopback. GKOS has no built-in upload, remote-bind, proxy, or tunnel feature. A client holding the token can copy or export responses, and separately configured proxy or tunnel software can relay them beyond this computer.
++
++Sensitivity values classify records and fail closed when missing or invalid, but they are not access-control rules for this API. Any local app that receives the bearer token can read every indexed note and projection. Keep sharing disabled or withhold the token when that is not acceptable.
+ 
+ Optional AI suggestions require a separately installed local helper. It is not
+ required for setup, never writes notes, and cannot override engine privacy or
+ validation rules.
+ 
+-The normal settings screen uses one **Share with local AI apps** switch.
++The normal settings screen uses one **Enable local Agent API** switch.
+ Ports, access keys, and configuration text stay under **Advanced connection
+ settings** or **Show technical details**. Most people never need to change
+ them.
+@@ -48,7 +50,7 @@ The app walks you through five short steps the first time it opens.
+ 
+ 1. **Welcome.** A short explanation of why the app exists (the same idea as above).
+ 2. **Pick your notes folder.** Choose the folder on your computer where your notes live.
+-3. **Choose your default privacy level.** Every note gets a privacy level. Unlabeled notes use whichever one you pick here. From most open to most private:
++3. **Choose your default sensitivity classification.** Every note gets a classification. Unlabeled notes use whichever one you pick here. From most open to most private:
+    - **public** — fine for anyone to see.
+    - **internal** — for your eyes and your own tools, not the outside world.
+    - **restricted** — limited to a specific purpose.
+@@ -59,18 +61,22 @@ The app walks you through five short steps the first time it opens.
+ 
+    **Secret** is picked for you by default. When in doubt, keep secret.
+ 
+-   One rule to remember: the app can mark a note as **more** private than your default — never less.
+-4. **Turn on the local agent connection.** This is off until you switch it on. Turning it on means notes on your computer become reachable by other apps on this same computer — never over the internet. Your default privacy level from step 3 governs what unlabeled notes show.
++   One rule to remember: the app can mark a note as **more** sensitive than your default — never less. This classification does not filter Agent API responses.
++4. **Turn on the local Agent API.** This is off until you switch it on. Turning it on makes every indexed note readable by apps holding the bearer token. The server itself binds to loopback; token-holding clients or separately configured proxies can still copy or relay responses.
+ 5. **Finish.** The wizard closes and the app settles into your tray (Mac: menu bar, top right; Windows: system tray, bottom right).
+ 
+-## 4. Connect Claude Desktop
++## 4. Verify the local Agent API
+ 
+-Open the tray icon and choose **Copy MCP connect snippet**. Paste it into Claude Desktop's settings. It looks like this:
++Open the tray icon and choose **Copy Agent API health command**, then run the copied command in a terminal. It looks like this:
+ 
+ ```
+-claude mcp add kosmos-oden http://127.0.0.1:4814/mcp
++# Windows PowerShell
++curl.exe -H "Authorization: Bearer <token>" "http://127.0.0.1:4814/health"
++
++# macOS or Linux
++curl -H "Authorization: Bearer <token>" "http://127.0.0.1:4814/health"
+ ```
+ 
+ ## You're done
+ 
+-GKOS Engine Desktop now lives quietly in your tray (menu bar on Mac, system tray on Windows). Click the icon any time to open Settings, see status, copy the connect snippet again, or choose **Open 3D View** for a read-only 3D map of your notes and their connections.
++GKOS Engine Desktop now lives quietly in your tray (menu bar on Mac, system tray on Windows). Click the icon any time to open Settings, see status, copy the health command again, or choose **Open 3D View** for a read-only 3D map of your notes and their connections. The pinned sidecar does not expose MCP; do not configure an MCP client against `/mcp`.
+diff --git a/desktop/docs/USER-GUIDE.md b/desktop/docs/USER-GUIDE.md
+index 2419768..c821eb9 100644
+--- a/desktop/docs/USER-GUIDE.md
++++ b/desktop/docs/USER-GUIDE.md
+@@ -4,9 +4,9 @@
+ 
+ You write notes because thinking on paper (or in Obsidian, or a plain folder of markdown files) helps you think. Increasingly, you also want to talk to an AI assistant about those notes — ask it questions, have it find connections, let it help you write. The usual way to do that means uploading your notes to someone else's server. GKOS Engine Desktop is a different way.
+ 
+-This app runs quietly on your own computer. It watches a notes folder you choose, and builds a live "map" of what's inside it — including a connections view called Graphiti, which shows how your notes relate to each other, like a web of related ideas. AI assistants that also run on your computer, such as Claude Desktop, can then look at that map through a small local doorway the app opens for them.
++This app runs quietly on your own computer. It watches a notes folder you choose and builds a live "map" of what's inside it, including a connections view called Graphiti. When enabled, a bearer-token-protected, GET-only REST API lets local programs read that map.
+ 
+-The key difference is privacy. Before any assistant can see anything, you choose a default privacy level for your notes, and any note without an explicit label is treated as your most private setting by default — not the most open. The app also physically cannot accept a connection from anywhere except your own computer: there is no cloud feature, no remote access, and no tunnel of any kind. Your notes never leave the machine they're on.
++The built-in server binds directly to loopback and GKOS provides no upload, remote-bind, proxy, or tunnel feature. Sensitivity labels still matter as governance metadata and missing labels fail closed, but they do not filter this API. Any program that receives the bearer token can read, copy, or export every indexed note and projection. Separately configured proxy or tunnel software can relay those responses beyond this computer.
+ 
+ ## Optional intelligence assistance
+ 
+@@ -17,9 +17,9 @@ and cannot edit files automatically. The desktop app works without it.
+ 
+ The everyday controls use plain language:
+ 
+-- **Share with local AI apps** turns the protected, read-only connection on or
++- **Enable local Agent API** turns the bearer-protected, read-only connection on or
+   off.
+-- **Copy setup** gives you ready-to-paste setup for the AI app you choose.
++- **Copy command** gives you an authenticated command for an implemented REST route.
+ - Ports, endpoints, and access keys are hidden under **Advanced connection
+   settings** and **Show technical details**. Leave them unchanged unless an
+   app specifically asks for them.
+@@ -42,11 +42,11 @@ The everyday controls use plain language:
+ | phi | Health information | Medical history, therapy notes |
+ | secret | Your most private notes | Passwords, deeply personal journal entries |
+ 
+-**Fail-closed** — if a note has no privacy label at all, the app never guesses something open. It treats the note as being at your chosen default level, and that default starts at **secret** until you change it. Nothing is exposed by accident.
++**Fail-closed classification** — if a note has no sensitivity label, the app uses your chosen default, which starts at **secret**. This prevents accidental low classification; it does not hide records from a bearer-authenticated Agent API caller.
+ 
+-**Raise-only** — the app can decide a note deserves a stricter (more private) label than your default, but it can never loosen a label to make a note more open than what you or the note itself declared. Privacy only ever tightens automatically, never relaxes.
++**Raise-only** — the app can decide a note deserves a stricter label than your default, but it cannot automatically loosen a label. This is a metadata rule, not caller authorization.
+ 
+-**Loopback / local-only** — the app's connection to AI assistants only works between programs on the same computer (this is what "loopback" means). It cannot accept a connection from the internet, another computer, or your phone. Your notes never leave this computer.
++**Loopback binding** — GKOS binds its built-in server directly to `127.0.0.1` and does not include a remote-bind, proxy, or tunnel feature. Loopback does not prevent a token-holding client from copying responses or separately configured software from relaying them elsewhere.
+ 
+ **Graphiti projections** — a knowledge-graph view: a web of connections between your notes (this note cites that one, this idea contradicts that one, and so on) that an AI assistant can follow when answering your questions.
+ 
+@@ -84,12 +84,12 @@ On macOS Ventura and newer, if step 3 doesn't show a dialog:
+ 
+ ## The first-run wizard, step by step
+ 
+-The wizard runs once, the first time you open the app, and enforces one important order: you must choose a privacy default **before** the app can ever talk to an assistant.
++The wizard runs once, the first time you open the app, and requires a default sensitivity classification before the Agent API can be enabled.
+ 
+ 1. **Welcome.** A one-paragraph explanation of why the app exists (the same pitch as above).
+ 2. **Notes-folder picker.** A native file dialog. Choose the folder your notes live in. You can change this later in Settings.
+-3. **Default-sensitivity chooser.** The seven levels appear as a list, each with a one-line description (see the table above). **secret** is preselected. You must actively confirm your choice to move on — nothing proceeds silently. Remember the raise-only rule: this is a floor for unlabeled notes, and the app can only make a note *more* private automatically, never less.
+-4. **Enable the local agent connection.** Only now does this toggle appear, and it starts **off**. Turning it on shows a network notice: your notes become reachable to other programs running on this same computer (never the internet), and the default sensitivity you just set governs any unlabeled note. Leave it off if you're not ready to connect an assistant yet — you can turn it on anytime from Settings.
++3. **Default-sensitivity chooser.** The seven levels appear as a list, each with a one-line description (see the table above). **secret** is preselected. You must actively confirm your choice to move on. The choice classifies unlabeled notes but does not filter authenticated API responses.
++4. **Enable the local Agent API.** Only now does this toggle appear, and it starts **off**. Turning it on makes every indexed note reachable to programs on this computer that have the bearer token. Leave it off if that is not acceptable.
+ 5. **Finish.** The wizard closes and the app moves into your system tray (Mac: menu bar; Windows: system tray).
+ 
+ You can revisit every one of these choices later in the Settings window.
+@@ -99,55 +99,50 @@ You can revisit every one of these choices later in the Settings window.
+ Open Settings from the tray icon.
+ 
+ - **Notes folder** — shows your current folder; click to change it.
+-- **Sensitivity dropdown** — your default privacy level. Changing it **re-scans your notes** and restarts the local connection, because the new default has to be applied from scratch.
++- **Sensitivity dropdown** — your default classification for unlabeled notes. Changing it **re-scans your notes** and restarts the local API. It does not grant or deny API access.
+ - **Enable toggle** — turns the local agent connection on or off.
+ - **Port** — the local network port the app listens on (default `4814`). Leave it alone unless another app complains about a conflict.
+-- **Status panel** — shows how many notes are indexed, when the last scan happened, and the local address assistants connect to.
+-- **Token** — a long random code the app generates for itself, like a password it uses to prove a connecting program is allowed in. You never need to type it yourself — the connect snippets below include it automatically.
++- **Status panel** — shows how many notes are indexed, when the last scan happened, and the local API address.
++- **Token** — a long random bearer credential. Any program with it can read every implemented Agent API route, so treat copied commands as secrets.
+ 
+-## Connecting agents
++## Using the local Agent API
+ 
+-### Claude Desktop (recommended path)
++The pinned sidecar does not expose MCP. Configuring Claude Desktop, Claude Code, Cursor, or another MCP client against `/mcp` will return `404`.
+ 
+-1. Open the tray icon and choose **Copy MCP connect snippet**.
+-2. In Claude Desktop, open its settings and add a new MCP server using the snippet you copied. It looks like:
++Open the tray icon and choose **Copy Agent API health command**, or copy one of the commands in Settings. The implemented routes are `/health`, `/notes`, `/graph`, and `/graphiti/episodes`. For example:
+    ```
+-   claude mcp add kosmos-oden http://127.0.0.1:4814/mcp
+-   ```
+-3. Restart Claude Desktop if it asks you to.
+-
+-### Cursor
+-
+-The tray menu's connect panel also offers a Cursor-formatted snippet — copy it into Cursor's MCP settings the same way.
++   # Windows PowerShell
++   curl.exe -H "Authorization: Bearer <token>" "http://127.0.0.1:4814/health"
+ 
+-### Other tools (generic)
+-
+-A generic TOML snippet is also available from the same panel, for any other MCP-compatible tool that accepts a local server address and token.
++   # macOS or Linux
++   curl -H "Authorization: Bearer <token>" "http://127.0.0.1:4814/health"
++   ```
++All four routes are GET-only and return JSON. No source-note mutation route exists.
+ 
+ ## The 3D view
+ 
+-The tray menu can open a **3D view** of your notes: a read-only, rotatable map of your notes and the connections between them, the same Graphiti projection an assistant would follow. It reads from the same local engine your assistants use — nothing leaves this computer, and, like everything else in the app, it can only look at your notes, never change them.
++The tray menu can open a **3D view** of your notes: a read-only, rotatable map of your notes and the connections between them, using the same loopback API. The GKOS view does not upload responses or change source notes. Software holding the bearer token can still copy or relay API responses.
+ 
+ There are two ways to open it from the tray:
+ 
+ - **Open 3D View** shows the map in its own app window.
+ - **Open 3D View (browser)** opens the same map in your default web browser instead. Use this if the in-app window comes up blank.
+ 
+-Either way, if the local Agent API is switched off, the view still opens — it just shows a small connect form instead of a map. Turn the API on in Settings (and pick a notes folder) to populate it. The view connects to the loopback address automatically and carries the access token for you, exactly like the connect snippets do.
++Either way, if the local Agent API is switched off, the view still opens — it just shows a small connect form instead of a map. Turn the API on in Settings (and pick a notes folder) to populate it. The view connects to the loopback address automatically and carries the access token for you.
+ 
+ ## Privacy & safety FAQ
+ 
+-**Is anything uploaded anywhere?**
+-No. The app only listens on "loopback" — a technical term for connections that stay inside your own computer. It cannot accept a connection from the internet, another device, or anywhere else. There is no cloud feature in this app at all.
++**Does GKOS upload anything?**
++GKOS has no built-in upload feature and its server binds directly to loopback. That does not control what another token-holding program does with a response, and it does not prevent separately configured proxy or tunnel software from exposing the local service.
+ 
+-**What can agents see?**
+-Only what your sensitivity settings allow. Each note has an effective privacy level — either the level it declares, or your chosen default if it declares none — and an assistant only sees notes at or below the ceiling your setup allows.
++**What can API clients see?**
++Every indexed note and projection. Sensitivity is included as metadata but is not an access-control filter. The bearer token authorizes the whole current read API.
+ 
+ **What can agents change?**
+ Nothing. The connection is read-only. Assistants can look at your notes and the map built from them, but nothing they do can edit, delete, or create files in your notes folder.
+ 
+-**What if I have private notes I don't want any assistant to see?**
+-Label them with a stricter sensitivity level yourself, or simply rely on fail-closed: any note with no label at all defaults to your chosen default, which starts at the strictest setting (secret) until you change it.
++**What if I have notes I do not want an API client to see?**
++Do not enable the Agent API for that corpus, do not share its bearer token, or use a separate notes directory. A stricter sensitivity label alone does not hide a note from this API.
+ 
+ **Why is the app unsigned right now?**
+ Digital signing is a separate step the developer is completing later. An unsigned app still runs the same code — the warnings you see are your operating system's standard caution for any app that hasn't been through that process yet, not a sign of a problem with this specific app.
+@@ -160,11 +155,11 @@ Make sure you used right-click → Open (not double-click) the first time, or ch
+ **The app won't open on Windows.**
+ Make sure you clicked "More info" then "Run anyway" on the SmartScreen warning. If Windows blocks it entirely, check whether antivirus software is quarantining the file.
+ 
+-**An assistant can't connect.**
+-Check three things in order: is the enable toggle switched on in Settings; did you paste the current connect snippet (regenerate it from the tray if you're not sure); and have you restarted the assistant app after connecting it.
++**An API client can't connect.**
++Check that the API is enabled, the client targets `127.0.0.1` and an implemented route, and the request carries the current `Authorization: Bearer <token>` header. `/mcp` is not implemented.
+ 
+ **My notes aren't showing up.**
+-First check that the notes folder path in Settings actually points to where your notes live. If the folder is correct but notes still seem to be missing, check your default sensitivity setting: if it's set very strict (like secret) and your notes have no privacy labels of their own, they'll all resolve to that strict level — and an assistant's request may not be allowed to see anything at that level. This is by design, not a bug: the app would rather hide too much than expose too much. Lower your default sensitivity in Settings if you want more unlabeled notes visible.
++First check that the notes folder path in Settings points to where your notes live and inspect `/health` for the indexed count. Changing sensitivity will not make a record appear or disappear from the current API because sensitivity is not its access-control boundary.
+ 
+ ## Uninstall
+ 
+diff --git a/desktop/src-tauri/src/lib.rs b/desktop/src-tauri/src/lib.rs
+index c1e02b5..6a71a23 100644
+--- a/desktop/src-tauri/src/lib.rs
++++ b/desktop/src-tauri/src/lib.rs
+@@ -7,7 +7,7 @@
+ //!     disable/quit, restart-with-backoff max 3 then surface an error state);
+ //!   * expose commands to the frontend (pick folder, get/set settings,
+ //!     start/stop sidecar, read status file + token, open windows);
+-//!   * a tray with: Open Settings, Copy MCP connect snippet, Quit.
++//!   * a tray with: Open Settings, Copy Agent API health command, Quit.
+ //!
+ //! Loopback-only and unsigned are enforced upstream (the sidecar hardcodes
+ //! 127.0.0.1; signing is deliberately absent from tauri.conf.json).
+@@ -29,7 +29,6 @@ const MAX_RESTARTS: u32 = 3;
+ const DEFAULT_PORT: u16 = 4814;
+ /// Loopback host the viewer's `?api=` points at (matches the sidecar's hardcoded bind).
+ const LOOPBACK_HOST: &str = "127.0.0.1";
+-const MCP_SERVER_NAME: &str = "kosmos-oden";
+ const SENSITIVITY_LEVELS: [&str; 7] = [
+     "public",
+     "internal",
+@@ -580,18 +579,30 @@ fn open_url_in_default_browser(url: &str) -> Result<(), String> {
+ 
+ // -------------------------------- tray --------------------------------------
+ 
+-fn copy_snippet(app: &AppHandle) {
++fn agent_api_health_command_with(executable: &str, port: u16, token: &str) -> String {
++    format!(
++        "{executable} -H \"Authorization: Bearer {token}\" \"http://{LOOPBACK_HOST}:{port}/health\""
++    )
++}
++
++fn agent_api_health_command(port: u16, token: &str) -> String {
++    #[cfg(target_os = "windows")]
++    let executable = "curl.exe";
++    #[cfg(not(target_os = "windows"))]
++    let executable = "curl";
++    agent_api_health_command_with(executable, port, token)
++}
++
++fn copy_health_command(app: &AppHandle) {
+     let state = app.state::<AppState>();
+     let port = state.settings.lock().unwrap().port;
+     match read_token(app) {
+         Some(token) => {
+-            let snippet = format!(
+-                "claude mcp add --transport http --header \"Authorization: Bearer {token}\" {MCP_SERVER_NAME} \"http://127.0.0.1:{port}/mcp\""
+-            );
+-            let _ = app.clipboard().write_text(snippet);
++            let command = agent_api_health_command(port, &token);
++            let _ = app.clipboard().write_text(command);
+         }
+         None => {
+-            // Not enabled yet — open settings so the user can enable + connect.
++            // Not enabled yet — open settings so the user can enable the API.
+             let _ = show_settings(app);
+         }
+     }
+@@ -600,9 +611,14 @@ fn copy_snippet(app: &AppHandle) {
+ fn build_tray(app: &AppHandle) -> Result<(), String> {
+     let open_settings = MenuItem::with_id(app, "open_settings", "Open Settings", true, None::<&str>)
+         .map_err(|e| e.to_string())?;
+-    let copy_snippet_item =
+-        MenuItem::with_id(app, "copy_snippet", "Copy MCP connect snippet", true, None::<&str>)
+-            .map_err(|e| e.to_string())?;
++    let copy_health_item = MenuItem::with_id(
++        app,
++        "copy_health",
++        "Copy Agent API health command",
++        true,
++        None::<&str>,
++    )
++    .map_err(|e| e.to_string())?;
+     let open_3d = MenuItem::with_id(app, "open_3d", "Open 3D View", true, None::<&str>)
+         .map_err(|e| e.to_string())?;
+     let open_3d_browser =
+@@ -611,7 +627,13 @@ fn build_tray(app: &AppHandle) -> Result<(), String> {
+     let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>).map_err(|e| e.to_string())?;
+     let menu = Menu::with_items(
+         app,
+-        &[&open_settings, &copy_snippet_item, &open_3d, &open_3d_browser, &quit],
++        &[
++            &open_settings,
++            &copy_health_item,
++            &open_3d,
++            &open_3d_browser,
++            &quit,
++        ],
+     )
+     .map_err(|e| e.to_string())?;
+ 
+@@ -624,7 +646,7 @@ fn build_tray(app: &AppHandle) -> Result<(), String> {
+             "open_settings" => {
+                 let _ = show_settings(app);
+             }
+-            "copy_snippet" => copy_snippet(app),
++            "copy_health" => copy_health_command(app),
+             "open_3d" => {
+                 if let Err(e) = show_3d_view(app) {
+                     eprintln!("open 3D view failed: {e}");
+@@ -646,6 +668,33 @@ fn build_tray(app: &AppHandle) -> Result<(), String> {
+     Ok(())
+ }
+ 
++#[cfg(test)]
++mod tests {
++    use super::{agent_api_health_command, agent_api_health_command_with};
++
++    #[test]
++    fn tray_command_targets_the_implemented_authenticated_health_route() {
++        let command = agent_api_health_command(4814, "phase-test-token");
++        #[cfg(target_os = "windows")]
++        assert!(command.starts_with("curl.exe "));
++        #[cfg(not(target_os = "windows"))]
++        assert!(command.starts_with("curl "));
++        assert!(!command.contains("/mcp"));
++    }
++
++    #[test]
++    fn windows_and_posix_commands_name_the_native_curl_executable_explicitly() {
++        assert_eq!(
++            agent_api_health_command_with("curl.exe", 4814, "phase-test-token"),
++            "curl.exe -H \"Authorization: Bearer phase-test-token\" \"http://127.0.0.1:4814/health\""
++        );
++        assert_eq!(
++            agent_api_health_command_with("curl", 4814, "phase-test-token"),
++            "curl -H \"Authorization: Bearer phase-test-token\" \"http://127.0.0.1:4814/health\""
++        );
++    }
++}
++
+ // -------------------------------- run ---------------------------------------
+ 
+ #[cfg_attr(mobile, tauri::mobile_entry_point)]
+diff --git a/desktop/src/main.ts b/desktop/src/main.ts
+index bffd108..305ec12 100644
+--- a/desktop/src/main.ts
++++ b/desktop/src/main.ts
+@@ -10,7 +10,7 @@ import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+ 
+ import { STRINGS, SENSITIVITY_LEVELS, SENSITIVITY_DESCRIPTIONS, type SensitivityLevel } from "./strings";
+ import { normalizeSettings, enableBlockedReason, type Settings } from "./settings-schema";
+-import { allSnippets } from "./snippets";
++import { allSnippets, commandPlatform } from "./snippets";
+ import type { StatusDoc, SupervisorStatus, ConnectPayload } from "./status";
+ 
+ // ---- Rust bridge (command names must match src-tauri/src/lib.rs) ----
+@@ -289,17 +289,20 @@ async function renderSettings(root: HTMLElement): Promise<void> {
+     st.appendChild(connectionDetails);
+     card.appendChild(st);
+ 
+-    // Quick connect
++    // Exact local Agent API examples. The pinned sidecar does not expose MCP.
+     const qc = section(STRINGS.connect.heading);
+     qc.appendChild(el("p", "help", STRINGS.connect.intro));
+     if (!connect || supervisor === "stopped" || supervisor === "error") {
+       qc.appendChild(el("p", "help", STRINGS.connect.disabled));
+     } else {
+-      const snips = allSnippets({ port: connect.port, token: connect.token });
+-      qc.appendChild(snippetBlock(STRINGS.connect.claudeCode, STRINGS.connect.claudeCodeDesc, snips.claudeCode));
+-      qc.appendChild(snippetBlock(STRINGS.connect.claudeJson, STRINGS.connect.claudeJsonDesc, snips.claudeJson));
+-      qc.appendChild(snippetBlock(STRINGS.connect.cursor, STRINGS.connect.cursorDesc, snips.cursor));
+-      qc.appendChild(snippetBlock(STRINGS.connect.toml, STRINGS.connect.tomlDesc, snips.toml));
++      const snips = allSnippets(
++        { port: connect.port, token: connect.token },
++        commandPlatform(navigator.userAgent),
++      );
++      qc.appendChild(snippetBlock(STRINGS.connect.health, STRINGS.connect.healthDesc, snips.health));
++      qc.appendChild(snippetBlock(STRINGS.connect.notes, STRINGS.connect.notesDesc, snips.notes));
++      qc.appendChild(snippetBlock(STRINGS.connect.graph, STRINGS.connect.graphDesc, snips.graph));
++      qc.appendChild(snippetBlock(STRINGS.connect.graphiti, STRINGS.connect.graphitiDesc, snips.graphiti));
+     }
+     card.appendChild(qc);
+ 
+diff --git a/desktop/src/snippets.ts b/desktop/src/snippets.ts
+index c95621f..616ea8f 100644
+--- a/desktop/src/snippets.ts
++++ b/desktop/src/snippets.ts
+@@ -1,11 +1,13 @@
+ /**
+- * Quick-connect snippet generation — pure functions (no Tauri, no DOM) so they
+- * are unit-testable with `node --test`. Formats mirror Kosmos-Oden's
+- * settings.ts exactly (server name `kosmos-oden`, MCP Streamable HTTP + bearer)
+- * so the ecosystem stays consistent.
++ * Authenticated local Agent API examples — pure functions (no Tauri, no DOM)
++ * so they are unit-testable with `node --test`.
++ *
++ * The pinned sidecar is a GET-only REST service. It does not expose MCP. Keep
++ * these examples limited to routes the exact Engine pin implements so the UI
++ * cannot advertise a configuration that deterministically returns 404.
+  */
+ 
+-import { LOOPBACK_HOST, MCP_SERVER_NAME } from "./strings";
++import { LOOPBACK_HOST } from "./strings";
+ 
+ export interface ConnectInfo {
+   port: number;
+@@ -17,61 +19,28 @@ export function baseUrl(port: number): string {
+   return `http://${LOOPBACK_HOST}:${port}`;
+ }
+ 
+-/** The MCP endpoint URL, e.g. `http://127.0.0.1:4814/mcp`. */
+-export function mcpUrl(port: number): string {
+-  return `${baseUrl(port)}/mcp`;
+-}
+-
+-/**
+- * The short tray snippet the docs illustrate for Claude Desktop. We emit the
+- * fully-working variant (transport + bearer header) so the pasted command
+- * actually authenticates against the token-gated loopback server.
+- */
+-export function claudeCodeCommand(info: ConnectInfo): string {
+-  return `claude mcp add --transport http --header "Authorization: Bearer ${info.token}" ${MCP_SERVER_NAME} "${mcpUrl(info.port)}"`;
+-}
+-
+-/** `.mcp.json` block for a Claude Code project (Streamable HTTP). */
+-export function claudeProjectJson(info: ConnectInfo): string {
+-  return JSON.stringify(
+-    {
+-      mcpServers: {
+-        [MCP_SERVER_NAME]: {
+-          type: "streamable-http",
+-          url: mcpUrl(info.port),
+-          headers: { Authorization: `Bearer ${info.token}` },
+-        },
+-      },
+-    },
+-    null,
+-    2,
+-  );
+-}
++export const AGENT_API_ROUTES = Object.freeze({
++  health: "/health",
++  notes: "/notes",
++  graph: "/graph",
++  graphiti: "/graphiti/episodes",
++} as const);
+ 
+-/** Cursor MCP settings block (HTTP transport + bearer header). */
+-export function cursorJson(info: ConnectInfo): string {
+-  return JSON.stringify(
+-    {
+-      mcpServers: {
+-        [MCP_SERVER_NAME]: {
+-          url: mcpUrl(info.port),
+-          headers: { Authorization: `Bearer ${info.token}` },
+-        },
+-      },
+-    },
+-    null,
+-    2,
+-  );
+-}
++export type AgentApiRoute = keyof typeof AGENT_API_ROUTES;
++export type CommandPlatform = "windows" | "posix";
+ 
+-/** Generic TOML (Codex / universal MCP surfaces). */
+-export function genericToml(info: ConnectInfo): string {
+-  return `[mcp_servers.${MCP_SERVER_NAME}]\nurl = "${mcpUrl(info.port)}"\nhttp_headers = { Authorization = "Bearer ${info.token}" }\n`;
++export function commandPlatform(userAgent: string): CommandPlatform {
++  return /windows/i.test(userAgent) ? "windows" : "posix";
+ }
+ 
+-/** A cURL health check (plain HTTP, bearer). */
+-export function curlHealth(info: ConnectInfo): string {
+-  return `curl -H "Authorization: Bearer ${info.token}" "${baseUrl(info.port)}/health"`;
++/** An exact authenticated GET example for one implemented Agent API route. */
++export function curlAgentApi(
++  info: ConnectInfo,
++  route: AgentApiRoute,
++  platform: CommandPlatform = "posix",
++): string {
++  const executable = platform === "windows" ? "curl.exe" : "curl";
++  return `${executable} -H "Authorization: Bearer ${info.token}" "${baseUrl(info.port)}${AGENT_API_ROUTES[route]}"`;
+ }
+ 
+ /**
+@@ -96,13 +65,15 @@ export function viewerAppUrl(info: ConnectInfo): string {
+   return `vault-kosmos.html?${viewerQuery(info)}`;
+ }
+ 
+-/** All snippets keyed by client, for the quick-connect panel. */
+-export function allSnippets(info: ConnectInfo): Record<string, string> {
++/** All implemented REST examples keyed by response surface. */
++export function allSnippets(
++  info: ConnectInfo,
++  platform: CommandPlatform = "posix",
++): Record<string, string> {
+   return {
+-    claudeCode: claudeCodeCommand(info),
+-    claudeJson: claudeProjectJson(info),
+-    cursor: cursorJson(info),
+-    toml: genericToml(info),
+-    curl: curlHealth(info),
++    health: curlAgentApi(info, "health", platform),
++    notes: curlAgentApi(info, "notes", platform),
++    graph: curlAgentApi(info, "graph", platform),
++    graphiti: curlAgentApi(info, "graphiti", platform),
+   };
+ }
+diff --git a/desktop/src/strings.ts b/desktop/src/strings.ts
+index eb61296..327ea29 100644
+--- a/desktop/src/strings.ts
++++ b/desktop/src/strings.ts
+@@ -40,18 +40,15 @@ export const SENSITIVITY_DESCRIPTIONS: Record<SensitivityLevel, string> = {
+ 
+ export const DEFAULT_PORT = 4814;
+ export const LOOPBACK_HOST = "127.0.0.1";
+-/** Ecosystem-consistent MCP server name (matches Kosmos-Oden). */
+-export const MCP_SERVER_NAME = "kosmos-oden";
+-
+ export const STRINGS = {
+   app: {
+     name: APP_NAME,
+-    tagline: "Point it at a notes folder; talk to your notes with local AI — nothing leaves this computer.",
++    tagline: "Point it at a notes folder and inspect its read-only map through a local API.",
+   },
+ 
+   tray: {
+     openSettings: "Open Settings",
+-    copySnippet: "Copy MCP connect snippet",
++    copySnippet: "Copy Agent API health command",
+     open3d: "Open 3D View",
+     open3dBrowser: "Open 3D View (browser)",
+     quit: "Quit",
+@@ -59,15 +56,15 @@ export const STRINGS = {
+     tooltipIndexing: `${APP_NAME} — indexing…`,
+     tooltipServing: `${APP_NAME} — serving (loopback only)`,
+     tooltipError: `${APP_NAME} — error (see Settings)`,
+-    snippetCopied: "MCP connect snippet copied to the clipboard.",
+-    snippetUnavailable: "Enable the local Agent API first, then copy the snippet.",
++    snippetCopied: "Agent API health command copied to the clipboard.",
++    snippetUnavailable: "Enable the local Agent API first, then copy the command.",
+   },
+ 
+   wizard: {
+     // Step 1 — Welcome
+     welcomeTitle: "Welcome to GKOS Engine Desktop",
+     welcomeBody:
+-      "This app runs quietly on your own computer. It watches a notes folder you choose and builds a live map of what's inside it — including a connections view called Graphiti. AI assistants that also run on your computer, such as Claude Desktop, can then look at that map through a small local doorway the app opens for them. Before any assistant can see anything, you choose a default privacy level; any note without an explicit label is treated as your most private setting by default. The app physically cannot accept a connection from anywhere except your own computer — no cloud, no remote access, no tunnel of any kind.",
++      "This app runs quietly on your own computer. It watches a notes folder you choose and builds a live map of what's inside it — including a connections view called Graphiti. The built-in server binds directly to loopback and has no upload, remote-bind, proxy, or tunnel feature. Sensitivity levels classify records but do not filter this API: an app with the bearer token can read, copy, or export every indexed note. A separately configured client, proxy, or tunnel can relay those responses beyond this computer.",
+     welcomeNext: "Get started",
+ 
+     // Step 2 — Notes folder
+@@ -82,23 +79,23 @@ export const STRINGS = {
+     // Step 3 — Default sensitivity
+     sensitivityTitle: "Choose your default privacy level",
+     sensitivityBody:
+-      "Every note in the map carries a privacy level. Notes that declare no level of their own use the default you choose here. Secret is preselected — when in doubt, keep secret. Remember the raise-only rule: the app can mark a note as more private than your default automatically, but never less.",
++      "Every note in the map carries a sensitivity classification. Notes that declare no level of their own use the default you choose here. Secret is preselected — when in doubt, keep secret. The raise-only rule prevents automatic lowering, but classifications do not grant or deny Agent API access.",
+     sensitivityConfirm: "Confirm and continue",
+     sensitivityBack: "Back",
+ 
+     // Step 4 — Enable toggle + network notice
+-    enableTitle: "Connect local AI apps",
+-    enableToggle: "Allow AI apps on this computer to read the protected note map",
++    enableTitle: "Enable the local Agent API",
++    enableToggle: "Allow apps on this computer with the access token to read the note map",
+     // Verbatim network-notice pattern mirrored from the Kosmos plugin.
+     enableNotice:
+-      "This is optional and starts off. When enabled, approved AI apps on this computer can read the protected note map—not edit your notes. It cannot connect from the internet, another device, or your phone. Leave it off until you want to connect an AI app.",
++      "This is optional and starts off. The built-in server binds directly to loopback. When enabled, any app with the bearer token can read, copy, or export every indexed note and projection—not edit your notes through this API. Sensitivity labels are metadata, not an access-control filter. GKOS has no built-in remote proxy or tunnel, but separately configured software can relay responses.",
+     enableBack: "Back",
+     enableNext: "Continue",
+ 
+     // Step 5 — Finish
+     finishTitle: "You're all set",
+     finishBody:
+-      "The app now lives in your system tray (Mac: menu bar, top right; Windows: system tray, bottom right). Click the icon any time to open Settings, see status, or copy a connect snippet.",
++      "The app now lives in your system tray (Mac: menu bar, top right; Windows: system tray, bottom right). Click the icon any time to open Settings, see status, or copy an authenticated health-check command.",
+     finishDone: "Finish",
+   },
+ 
+@@ -108,9 +105,9 @@ export const STRINGS = {
+     folderChange: "Change…",
+     sensitivityLabel: "Default privacy level",
+     sensitivityHelp:
+-      "Used only when a note has no privacy level of its own. GKOS may make a note more private, never less.",
+-    enableLabel: "Share with local AI apps",
+-    enableHelp: "Optional. AI apps on this computer can read the protected map, but cannot edit your notes.",
++      "Used only to classify a note that has no sensitivity of its own. It does not control who can read the Agent API.",
++    enableLabel: "Enable local Agent API",
++    enableHelp: "Optional. Any local app given the bearer token can read every indexed note, but cannot edit your notes.",
+     advancedHeading: "Advanced connection settings",
+     advancedHelp: "Most people can leave these settings unchanged.",
+     portLabel: "Port",
+@@ -131,20 +128,20 @@ export const STRINGS = {
+   },
+ 
+   connect: {
+-    heading: "Connect an AI app",
++    heading: "Local Agent API",
+     intro:
+-      "Choose your AI app and copy its ready-to-paste setup. Your private access key is included automatically.",
+-    disabled: "Turn on “Share with local AI apps” first.",
+-    claudeCode: "Claude Desktop or Claude Code",
+-    claudeCodeDesc: "Copy the ready-to-paste setup command.",
+-    claudeJson: "Claude project",
+-    claudeJsonDesc: "Copy setup for a single Claude project.",
+-    cursor: "Cursor",
+-    cursorDesc: "Copy setup for Cursor.",
+-    toml: "Other AI apps",
+-    tomlDesc: "Advanced setup for compatible local AI apps.",
+-    copy: "Copy setup",
+-    copied: "Setup copied. Paste it into your AI app.",
++      "The current sidecar is an authenticated, GET-only REST API. It does not expose MCP. These commands include your bearer token.",
++    disabled: "Turn on the local Agent API first.",
++    health: "Health and status",
++    healthDesc: "Check whether the local API is ready.",
++    notes: "Indexed notes",
++    notesDesc: "Read all indexed notes and their sensitivity metadata.",
++    graph: "Canonical graph",
++    graphDesc: "Read the complete current graph projection.",
++    graphiti: "Graphiti episodes",
++    graphitiDesc: "Read the current Graphiti export projection.",
++    copy: "Copy command",
++    copied: "Command copied. Treat the embedded bearer token as a secret.",
+     technicalDetails: "Show technical details",
+   },
+ 
+@@ -152,7 +149,7 @@ export const STRINGS = {
+     // Copy for the 3D view feature (tray items + docs share this register).
+     heading: "The 3D view",
+     intro:
+-      "A read-only 3D map of your notes and their connections, opened from the tray. It talks to the same loopback engine your assistants use — nothing leaves this computer, and it never edits your notes.",
++      "A read-only 3D map of your notes and their connections, opened from the tray. It uses the same bearer-protected loopback API and does not edit source notes. GKOS does not upload the response, but software holding the token can copy or relay it.",
+     openInApp: "Open 3D View opens the map in its own app window.",
+     openInBrowser:
+       "Open 3D View (browser) opens the same map in your default web browser instead — use this if the in-app window comes up blank.",
+diff --git a/desktop/test/phase0-compatibility.test.mjs b/desktop/test/phase0-compatibility.test.mjs
+index 6e01a8c..8787cb6 100644
+--- a/desktop/test/phase0-compatibility.test.mjs
++++ b/desktop/test/phase0-compatibility.test.mjs
+@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
+ 
+ import { allSnippets, viewerAppUrl, viewerQuery } from "../dist-test/snippets.js";
+ import { defaultSettings } from "../dist-test/settings-schema.js";
+-import { DEFAULT_PORT, LOOPBACK_HOST, MCP_SERVER_NAME } from "../dist-test/strings.js";
++import { DEFAULT_PORT, LOOPBACK_HOST } from "../dist-test/strings.js";
+ 
+ const desktopRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+ const fixture = JSON.parse(
+@@ -48,7 +48,6 @@ async function desktopSnapshot() {
+     service_boundary: {
+       host: LOOPBACK_HOST,
+       port: DEFAULT_PORT,
+-      mcp_server_name: MCP_SERVER_NAME,
+       status_fields: interfaceFields(statusSource, "StatusDoc"),
+       settings_fields: interfaceFields(settingsSource, "Settings"),
+       default_settings: defaultSettings(),
+@@ -60,11 +59,18 @@ async function desktopSnapshot() {
+ }
+ 
+ function assertDesktopSnapshot(actual) {
+-  assert.deepEqual(actual, fixture.runtime_snapshot);
++  const historical = structuredClone(fixture.runtime_snapshot);
++  delete historical.service_boundary.mcp_server_name;
++  delete historical.snippets;
++  const current = structuredClone(actual);
++  delete current.snippets;
++  assert.deepEqual(current, historical);
+ }
+ 
+-test("Phase 0 desktop package, status, settings, and client boundary match the fixture", async () => {
++test("Phase 0 desktop package, status, and settings remain stable after retiring phantom MCP snippets", async () => {
+   assertDesktopSnapshot(await desktopSnapshot());
++  assert.match(fixture.runtime_snapshot.snippets.claudeCode, /\/mcp/);
++  assert.doesNotMatch(JSON.stringify((await desktopSnapshot()).snippets), /\/mcp(?:\\|"|\/)/i);
+ });
+ 
+ test("Phase 0 desktop fixture detects a deliberate loopback boundary perturbation", async () => {
+diff --git a/desktop/test/settings.test.mjs b/desktop/test/settings.test.mjs
+index 958928d..aa6e74a 100644
+--- a/desktop/test/settings.test.mjs
++++ b/desktop/test/settings.test.mjs
+@@ -67,9 +67,15 @@ test("enable is gated on folder + sensitivity (decision 3)", () => {
+ });
+ 
+ test("everyday UI copy avoids internal connection jargon", () => {
+-  assert.match(STRINGS.settings.enableLabel, /local AI apps/i);
+-  assert.doesNotMatch(STRINGS.settings.enableLabel, /API|MCP|loopback/i);
++  assert.match(STRINGS.settings.enableLabel, /Agent API/i);
++  assert.doesNotMatch(STRINGS.connect.intro, /streamable-http|\/mcp/i);
++  assert.match(STRINGS.connect.intro, /does not expose MCP/i);
++  assert.match(STRINGS.wizard.enableNotice, /not an access-control filter/i);
++  assert.match(STRINGS.wizard.welcomeBody, /proxy, or tunnel/i);
++  assert.match(STRINGS.wizard.welcomeBody, /copy, or export/i);
++  assert.doesNotMatch(STRINGS.wizard.welcomeBody, /nothing leaves|no tunnel|cannot accept/i);
++  assert.match(STRINGS.settings.enableHelp, /every indexed note/i);
+   assert.match(STRINGS.settings.advancedHeading, /advanced/i);
+-  assert.match(STRINGS.connect.copy, /copy setup/i);
+-  assert.match(STRINGS.connect.copied, /paste it into your AI app/i);
++  assert.match(STRINGS.connect.copy, /copy command/i);
++  assert.match(STRINGS.connect.copied, /bearer token/i);
+ });
+diff --git a/desktop/test/snippets.test.mjs b/desktop/test/snippets.test.mjs
+index 07ad21b..22d8866 100644
+--- a/desktop/test/snippets.test.mjs
++++ b/desktop/test/snippets.test.mjs
+@@ -1,13 +1,10 @@
+ import { test } from "node:test";
+ import assert from "node:assert/strict";
+ import {
++  AGENT_API_ROUTES,
+   baseUrl,
+-  mcpUrl,
+-  claudeCodeCommand,
+-  claudeProjectJson,
+-  cursorJson,
+-  genericToml,
+-  curlHealth,
++  commandPlatform,
++  curlAgentApi,
+   allSnippets,
+   viewerQuery,
+   viewerAppUrl,
+@@ -15,47 +12,44 @@ import {
+ 
+ const info = { port: 4814, token: "deadbeefcafe" };
+ 
+-test("baseUrl / mcpUrl use loopback host and given port", () => {
++test("Agent API examples expose only exact implemented GET routes", () => {
+   assert.equal(baseUrl(4814), "http://127.0.0.1:4814");
+-  assert.equal(mcpUrl(9000), "http://127.0.0.1:9000/mcp");
+-});
+-
+-test("claude code command mirrors Kosmos-Oden format with bearer + server name", () => {
+-  const cmd = claudeCodeCommand(info);
+-  assert.match(cmd, /^claude mcp add --transport http --header "Authorization: Bearer deadbeefcafe" kosmos-oden "http:\/\/127\.0\.0\.1:4814\/mcp"$/);
+-});
+-
+-test("claude project .mcp.json is valid streamable-http block", () => {
+-  const obj = JSON.parse(claudeProjectJson(info));
+-  assert.equal(obj.mcpServers["kosmos-oden"].type, "streamable-http");
+-  assert.equal(obj.mcpServers["kosmos-oden"].url, "http://127.0.0.1:4814/mcp");
+-  assert.equal(obj.mcpServers["kosmos-oden"].headers.Authorization, "Bearer deadbeefcafe");
+-});
+-
+-test("cursor block is valid JSON with url + header", () => {
+-  const obj = JSON.parse(cursorJson(info));
+-  assert.equal(obj.mcpServers["kosmos-oden"].url, "http://127.0.0.1:4814/mcp");
+-  assert.equal(obj.mcpServers["kosmos-oden"].headers.Authorization, "Bearer deadbeefcafe");
+-});
+-
+-test("generic TOML has section header, url, and http_headers", () => {
+-  const toml = genericToml(info);
+-  assert.match(toml, /\[mcp_servers\.kosmos-oden\]/);
+-  assert.match(toml, /url = "http:\/\/127\.0\.0\.1:4814\/mcp"/);
+-  assert.match(toml, /http_headers = \{ Authorization = "Bearer deadbeefcafe" \}/);
++  assert.deepEqual(AGENT_API_ROUTES, {
++    health: "/health",
++    notes: "/notes",
++    graph: "/graph",
++    graphiti: "/graphiti/episodes",
++  });
++  assert.equal(
++    curlAgentApi(info, "health"),
++    'curl -H "Authorization: Bearer deadbeefcafe" "http://127.0.0.1:4814/health"',
++  );
+ });
+ 
+-test("curl health check targets /health with bearer", () => {
+-  assert.equal(curlHealth(info), 'curl -H "Authorization: Bearer deadbeefcafe" "http://127.0.0.1:4814/health"');
++test("Windows examples use curl.exe instead of PowerShell's curl alias", () => {
++  assert.equal(commandPlatform("Mozilla/5.0 (Windows NT 10.0; Win64; x64)"), "windows");
++  assert.equal(commandPlatform("Mozilla/5.0 (Macintosh; Intel Mac OS X)"), "posix");
++  assert.equal(
++    curlAgentApi(info, "health", "windows"),
++    'curl.exe -H "Authorization: Bearer deadbeefcafe" "http://127.0.0.1:4814/health"',
++  );
++  for (const command of Object.values(allSnippets(info, "windows"))) {
++    assert.match(command, /^curl\.exe /);
++  }
+ });
+ 
+-test("allSnippets returns every client key", () => {
+-  const s = allSnippets(info);
+-  assert.deepEqual(Object.keys(s).sort(), ["claudeCode", "claudeJson", "curl", "cursor", "toml"]);
++test("all snippets use bearer auth and never advertise the absent MCP route", () => {
++  const snippets = allSnippets(info);
++  assert.deepEqual(Object.keys(snippets).sort(), ["graph", "graphiti", "health", "notes"]);
++  for (const [name, command] of Object.entries(snippets)) {
++    assert.match(command, /Authorization: Bearer deadbeefcafe/, name);
++    assert.doesNotMatch(command, /\/mcp(?:\b|\/)/i, name);
++  }
++  assert.match(snippets.notes, /\/notes"$/);
++  assert.match(snippets.graph, /\/graph"$/);
++  assert.match(snippets.graphiti, /\/graphiti\/episodes"$/);
+ });
+ 
+-// ---- 3D viewer URL building --------------------------------------------
+-
+ test("viewerQuery percent-encodes the api base and carries the token", () => {
+   assert.equal(
+     viewerQuery(info),

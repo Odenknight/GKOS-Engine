@@ -1,0 +1,8 @@
+SOURCE: 59af4d1080efb0eae147d2aec0c0b1b75461b761 (exact verified source-file snapshot; synthetic local index; no original history)
+ENVIRONMENT: Windows x64 Python 3.14.2 audit venv; declared pinned versions plus diagnostic PyYAML 6.0.3; not the hash-pinned Ubuntu3.12 CI environment
+COMMAND: python -m unittest contracts.tests.test_hindsight_compatibility_contract contracts.tests.test_r2_contracts contracts.tests.test_r2_postgres_contracts contracts.tests.test_r2_semantic_coherence contracts.tests.test_r2_phase_a_fixtures contracts.tests.test_r2_owner_decision_intake contracts.tests.test_r2_runtime_limits contracts.tests.test_wp1_traceability -q
+EXIT: 0
+----------------------------------------------------------------------
+Ran 126 tests in 5.460s
+
+OK

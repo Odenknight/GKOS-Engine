@@ -1,0 +1,208 @@
+
+> gkos-engine@2.2.0 pretest:navigation
+> node scripts/build.mjs
+
+built dist/gkos-engine.mjs
+built dist/adapter.mjs
+built dist/gkx.mjs
+built dist/graphiti-adapter.mjs
+built dist/navigation.mjs
+built dist/service.mjs
+built dist/navigation-effects.mjs
+built dist/governance.mjs
+built dist/admission-policy.mjs
+built dist/service-node.mjs
+built dist/service-stdio.mjs
+built dist/retrieval.mjs
+built dist/retrieval-host.mjs
+built dist/retrieval-path-security.mjs
+built dist/retrieval-evaluation-host.mjs
+built dist/ingest-host.mjs
+built dist/ingest-source-scan.mjs
+built dist/watcher-contracts.mjs
+built dist/watcher-host.mjs
+built dist/gkos-desktop-agent.mjs
+built dist/gkos-desktop-agent.cjs
+built dist/navigation-effects-node.mjs
+built dist/*.d.ts
+
+> gkos-engine@2.2.0 test:navigation
+> node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-effects-contract.test.mjs test/navigation-effects-planner.test.mjs test/navigation-effects-node.test.mjs test/navigation-effects-performance.test.mjs test/navigation-effects-reconciliation.test.mjs test/navigation-effects-assistance.test.mjs test/navigation-effects-host.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs
+
+✔ State-Change Receipt is a role embedded in the governed record (2.5514ms)
+✔ receipt unavailable means no governed effect or successful claim (1.4378ms)
+✔ invalid receipt-role fields fail closed (0.2511ms)
+✔ durability failure never publishes state or committed receipt outcome (8.7775ms)
+✔ commit transitions outcome only at the transactional publication boundary (2.2022ms)
+✔ duplicate operation replay is exactly-once and conflicting replay is rejected (1.7989ms)
+✔ optimistic head and digest preconditions are enforced (1.4911ms)
+✔ NavigationCore cannot transitively reach filesystem mutation primitives (89.4429ms)
+✔ framework-neutral Navigation Effects cannot transitively reach Node filesystem modules (96.6746ms)
+✔ architecture gate proves it catches a transitive hidden writer (5.3796ms)
+✔ deterministic Navigation modules contain no hidden wall clock, locale, random, or model source (4.7521ms)
+✔ checker type and evaluator have no replacement-classification input (2.2994ms)
+✔ Engine Navigation contract pack is mechanically integration-only (4.9771ms)
+✔ pinned R15 traceability references only active allocated identifiers (1.6766ms)
+✔ package exports and build products include Navigation, Governance, Retrieval, and contract packs (2.4456ms)
+✔ 2.2.0 candidate metadata and documentation claims are synchronized (12.7295ms)
+✔ all nav analysis commands emit stdout and leave source bytes untouched (676.4886ms)
+✔ nav context never treats body or fenced-code keys as frontmatter (84.8591ms)
+✔ nav context rejects duplicate public identities with stable code and no source metadata (91.4654ms)
+✔ nav context rejects an invalid authored UID before successful projection (88.2254ms)
+✔ recipient value alone never changes built-in public-only context eligibility (215.7847ms)
+✔ nav mutation verbs and output/write flags are rejected (794.099ms)
+✔ reentry and promotion CLI commands create plans only (133.2961ms)
+✔ all deterministic Navigation outputs are byte-identical under reordered enumeration (24.3709ms)
+✔ deterministic assistance is stable under corpus reordering and binds exact bytes (19.7071ms)
+✔ excludes archives, state and fail-closed sensitivity before model access (2.5075ms)
+✔ rejects duplicate identities and collision paths; never resolves ambiguous basename (1.4503ms)
+✔ provider is optional and cannot overwrite deterministic output (4.4565ms)
+✔ invalid, unauthorized and oversized model output falls back without leaking errors (6.5191ms)
+✔ timeout aborts provider and bounded request avoids sending any content (19.9701ms)
+✔ startup reconciles before readiness, coalesces events and respects maximum delay (1.8552ms)
+✔ inflight events remain durable and failed work retries (1.2727ms)
+✔ overflow persists full intent, ignored paths do not enqueue, recovery blocks (0.5437ms)
+✔ periodic reconciliation and shutdown preserve pending work (0.6127ms)
+✔ batch plans real managed MOCs with stable digests, no-ops and adoption protection (13.9971ms)
+✔ startup failure never advertises write readiness (0.5103ms)
+✔ corrupt durable intent blocks startup without overwriting evidence (0.5117ms)
+✔ concurrent admission coalesces into bounded durable batches (79.7348ms)
+✔ coordinator requires complete validated limits and detaches caller configuration (1.0512ms)
+✔ deterministic extraction ignores fenced examples, inline code, comments and frontmatter (3.386ms)
+✔ Navigation Effects is separately versioned and default capability discovery is fail-closed (1.1963ms)
+✔ effect capability dependencies are reported independently and deletion remains disabled (0.2258ms)
+✔ Navigation 1.0 capability truth remains unchanged (0.1145ms)
+✔ framework-neutral effects source has no filesystem dependency or Node executor primitive (5.6499ms)
+✔ contract pack is integration-only, effects-separated, and mechanically complete (81.5067ms)
+✔ all required adversarial fixtures are registered and remain effect-free (8.4231ms)
+✔ security and lineage fixtures encode fail-closed outcomes without content disclosure (2.2901ms)
+✔ package export and build products include Navigation Effects without changing release metadata (1.6921ms)
+✔ host creates, advances ownership, archives replacements and restarts as a no-op (511.6383ms)
+✔ host recovers an effect committed before ownership metadata persisted (191.2136ms)
+✔ host refuses external edits and current authority revocation (169.0466ms)
+✔ host state tampering blocks startup and preserves evidence (123.7897ms)
+✔ runtime observes file edits and closes resources within shutdown budget (1105.9392ms)
+✔ host preserves human bytes through successive region-managed updates (192.3436ms)
+✔ missing ownership state alongside an existing effect journal fails closed (155.4969ms)
+✔ periodic and startup reconciliation repair changes with no delivered event (354.0714ms)
+✔ cross-folder rename reconciles both scopes and leaves an unrelated MOC untouched (361.0066ms)
+✔ shutdown waits for an active commit and preserves newer admitted work for restart (321.5221ms)
+✔ failed graph publication replays the same committed effect before ownership advancement (169.5126ms)
+✔ Node executor requires an explicit cooperative-vault path threat model (10.1066ms)
+✔ Node executor journals, archives exact bytes, atomically replaces, verifies, receipts, and replays idempotently (149.6119ms)
+✔ fresh executor performs a safe startup preflight before normal first use (86.0459ms)
+✔ precondition mismatch is stale and never overwrites external bytes (47.4894ms)
+✔ stale receipts are journal-sealed and tampering blocks replay and startup (66.0962ms)
+✔ executor requires a current host precondition provider (18.6076ms)
+✔ vault lease excludes a second writer (16.4615ms)
+✔ a verifiably dead same-host lease is quarantined with a cleanup receipt (18.1987ms)
+✔ an external edit immediately before replace wins and the prepared image is not applied (108.6687ms)
+✔ multi-file execution uses deterministic target lock order (144.5847ms)
+✔ concurrent execute calls serialize shared archive updates without losing effects (141.06ms)
+✔ sequential shared-run commits retain immutable per-effect receipt bindings (183.0972ms)
+✔ startup recovery accepts successive committed effects on the same target (219.4412ms)
+✔ startup recovery completes an interrupted successor without treating its predecessor as corrupt (156.6477ms)
+▶ terminal successor attempts cannot mask corruption of the committed target head
+  ✔ stale (119.7105ms)
+  ✔ aborted (134.3624ms)
+✔ terminal successor attempts cannot mask corruption of the committed target head (254.6765ms)
+✔ concurrent executeMany batches share one queue and merge a common archive (139.6443ms)
+✔ startup recovery is serialized behind an in-flight execution (74.5665ms)
+✔ rollback is a separately authorized, preconditioned, archived effect (146.1962ms)
+▶ startup recovery classifies every injected transition without silent overwrite
+  ✔ after-received (35.3339ms)
+  ✔ after-planned (38.264ms)
+  ✔ after-prepared (39.9338ms)
+  ✔ after-archive (58.5946ms)
+  ✔ after-temporary-write (77.8042ms)
+  ✔ after-replace (83.8017ms)
+  ✔ after-verified (125.7742ms)
+  ✔ after-receipt (112.8702ms)
+✔ startup recovery classifies every injected transition without silent overwrite (573.6292ms)
+▶ hard process termination at every transition recovers without losing the before-image
+  ✔ after-received (135.2866ms)
+  ✔ after-planned (113.8268ms)
+  ✔ after-prepared (145.9903ms)
+  ✔ after-archive (143.532ms)
+  ✔ after-temporary-write (167.7028ms)
+  ✔ after-replace (196.2199ms)
+  ✔ after-verified (182.8636ms)
+  ✔ after-receipt (182.4003ms)
+✔ hard process termination at every transition recovers without losing the before-image (1269.2219ms)
+▶ filesystem fault injection preserves recoverable intent and never silently overwrites
+  ✔ archive (50.7643ms)
+  ✔ temporary-write (66.2015ms)
+  ✔ replace (96.3592ms)
+  ✔ verify (97.2038ms)
+  ✔ receipt (123.3557ms)
+✔ filesystem fault injection preserves recoverable intent and never silently overwrites (434.748ms)
+✔ tampered recovery-required receipt blocks recovery without being overwritten (36.2283ms)
+✔ tampered post-write pre-commit receipt blocks recovery without being overwritten (89.2505ms)
+✔ recovery conflict is sealed stale, disables writes, and reopens validly (61.7294ms)
+✔ successful explicit recovery re-enables a fresh executor after a failed startup preflight (128.9956ms)
+✔ retry retains immutable receipt bytes for every sealed journal terminal (118.026ms)
+✔ stale-after-archive validates archive evidence before enabling writes (53.1657ms)
+✔ executor rejects noncanonical colliding effect IDs before durable I/O (4.2662ms)
+✔ journal corruption blocks startup recovery (7.2883ms)
+▶ archive or checkpoint corruption blocks write-plane startup
+  ✔ archive manifest (62.4212ms)
+  ✔ checkpoint binding (9.0618ms)
+  ✔ primary receipt (67.7959ms)
+  ✔ archive receipt copy (71.4724ms)
+  ✔ immutable effect binding (63.616ms)
+  ✔ archive after image (68.0453ms)
+  ✔ archive diff (69.3374ms)
+  ✔ archive result (68.5725ms)
+  ✔ manifest security binding (65.0977ms)
+  ✔ unowned manifest binding (65.894ms)
+  ✔ committed target (75.7371ms)
+✔ archive or checkpoint corruption blocks write-plane startup (688.5342ms)
+✔ graceful shutdown durably checkpoints before refusing new work (11.3746ms)
+✔ symlink or junction targets fail closed when the platform permits creating one (31.1345ms)
+✔ path/grant scale fixture records 100 validations without a latency claim (4.6279ms)
+ℹ {"fixture":"agent-path-validation","size":100,"elapsedMs":3.45,"unsupportedPerformanceClaim":false}
+✔ path/grant scale fixture records 2,000 validations without a latency claim (25.7578ms)
+ℹ {"fixture":"agent-path-validation","size":2000,"elapsedMs":25.392,"unsupportedPerformanceClaim":false}
+✔ path/grant scale fixture records 10,000 validations without a latency claim (96.4201ms)
+ℹ {"fixture":"agent-path-validation","size":10000,"elapsedMs":96.008,"unsupportedPerformanceClaim":false}
+✔ path/grant scale fixture records 50,000 validations without a latency claim (314.8622ms)
+ℹ {"fixture":"agent-path-validation","size":50000,"elapsedMs":314.228,"unsupportedPerformanceClaim":false}
+✔ region parser and renderer are exact and reject malformed nesting (10.0646ms)
+✔ region merge preserves surrounding human bytes exactly (1.687ms)
+✔ same managed MOC inputs produce identical plans and proposed bytes (10.158ms)
+✔ planner fails closed for unmanaged, stale adoption, moved markers, and policy mismatch (1.7122ms)
+✔ fully managed create requires explicit creation authorization (1.1771ms)
+✔ path and agent grant validation rejects traversal, absolute, device, expiry, and collisions (1.3374ms)
+✔ archive paths are canonical and unsafe run IDs are rejected (0.8267ms)
+✔ in-memory adapter is deterministic and injects bounded faults (2.1548ms)
+✔ importing Navigation and Effects surfaces creates no files or runtime authority (121.9965ms)
+✔ archive-ignore excludes exactly _archive/moc-runs/** across separators (3.4023ms)
+✔ canonical five are exact; case anomalies and old heuristic names are flags, not aliases (10.4785ms)
+✔ classification and management always carry deterministic reason evidence (1.5841ms)
+✔ promoted names have canonical downstream parity and promotion is versioned/receipted (5.4528ms)
+✔ candidate bytes are SHA-256-bound and independent of run metadata (4.2812ms)
+✔ dual diff preserves stable-ID moves and labels exact-content moves as observations (2.2428ms)
+✔ artifact diff reason-codes policy/config/managed/human/order changes (2.3537ms)
+✔ context pack excludes Navigation archives before aggregation, fails closed, obeys budget, and cannot claim Layer 6 (2.543ms)
+✔ projection gate rejects discoverable duplicate identities deterministically without denied metadata (1.7301ms)
+✔ projection gate evaluates all blocking severities and keeps safe warnings projectable (1.9391ms)
+✔ policy exceptions suppress sources and adapters cannot rewrite authored sensitivity (0.958ms)
+✔ denied duplicates and archived duplicates are silent; valid path identity succeeds (1.5538ms)
+✔ audit detects stale/digest/config/archive/manifest/context and discoverability failures deterministically (18.6512ms)
+✔ re-entry always plans a distinct L1 source, preserves predecessor, and never infers supersession (1.4084ms)
+✔ bounded delegation is attenuated, expiring, exact-scope, receipted, and review-queued (2.1055ms)
+✔ checker API is escalation-only; major and indeterminate cannot become routine (0.4438ms)
+✔ overdue review freezes only the affected grant; exception is bounded and durably receipted (0.6235ms)
+✔ retention hold evaluation is fail-closed and never deletes (0.2256ms)
+✔ GkxIndex.applyChanges is the sole incremental change-detection call (14.7152ms)
+✔ capability advertisement truthfully exposes every effect boundary (0.3951ms)
+✔ canonical GKX API is available from the engine and package subpaths (1.0543ms)
+✔ downstream adapter is immutable, policy-bound, and product-neutral (14.8783ms)
+ℹ tests 160
+ℹ suites 0
+ℹ pass 160
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5682.1491

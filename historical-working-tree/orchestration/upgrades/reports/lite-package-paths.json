@@ -1,0 +1,15 @@
+{
+  "base": "4027bfc4499ad0a2f3e753401f1320468e283823",
+  "paths": [
+    "desktop/docs/QUICKSTART.md",
+    "desktop/docs/USER-GUIDE.md",
+    "desktop/src-tauri/src/lib.rs",
+    "desktop/src/main.ts",
+    "desktop/src/snippets.ts",
+    "desktop/src/strings.ts",
+    "desktop/test/phase0-compatibility.test.mjs",
+    "desktop/test/settings.test.mjs",
+    "desktop/test/snippets.test.mjs",
+    "desktop/test/packaged-rest-runtime.test.mjs"
+  ]
+}

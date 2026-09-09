@@ -1,0 +1,736 @@
+{
+  "artifact_type": "GKOS_PHASE6_D0_15_C3_LITE_CONFORMANCE_CONCURRENCE",
+  "schema_version": "1.0.0",
+  "review_id": "PHASE6-D0-15-C3-LITE-CONFORMANCE-CONCURRENCE-2026-08-26",
+  "reviewed_at_utc": "2026-08-26T21:10:30.7959641Z",
+  "wave": "C3",
+  "review_role": "Lite-conformance",
+  "review_kind": "brand-new fresh independent zero-contribution concurrence",
+  "status": "ACCEPTED_UNCONDITIONALLY_ZERO_FINDINGS",
+  "verdict": "ACCEPT_CONCURRENCE",
+  "concurrence": true,
+  "unconditional": true,
+  "severity": "NONE",
+  "finding_count": 0,
+  "findings": [],
+  "terminal_statement": "UNCONDITIONAL ACCEPT_CONCURRENCE WITH ZERO FINDINGS. THE EXACT V13-AUTHORIZED V11, BOTH FRESH C1 V5 ACCEPTANCE RECEIPTS, V12, ACCEPTED C2, AND V13 COORDINATE IS INTERNALLY CONSISTENT AND LITE-CONFORMANT. LITE ADMISSION ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2 IS CLEAN, HAS NO PHASE-6 IDENTITY/MCP PACK OR PIN, EXPOSES NO /mcp ROUTE, AND TRUTHFULLY DOCUMENTS ONLY ITS LEGACY AUTHENTICATED GET-ONLY REST ROUTES WITH SENSITIVITY AS METADATA RATHER THAN ACCESS CONTROL. A FUTURE LITE DERIVATIVE MAY COPY AND EXACT-PIN ONLY THE INDEPENDENTLY ACCEPTED HOSTED-GREEN FULL F5 PACK, EXPOSE EXACTLY THE SEVEN REQUIRED FULL TOOLS WITH IDENTICAL INPUTS, RESULTS, STATES, ERRORS, DENIALS, ORDERING, PAGINATION, LIMITS, AND TRANSPORTS, KEEP ALL SIXTEEN DEFERRED TOOLS ABSENT, OMIT ALL TWENTY-FOUR OWNER-ONLY OPERATIONS AND LOCAL BOOTSTRAP, PRESERVE ALL SIXTY-SEVEN MCP IDS AND VALID WIRE BEHAVIOR, AND ADD NO INDEPENDENT SEMANTICS OR AUTHORITY. THIS DETACHED RECEIPT HAS NO PRODUCT EFFECT OR DOWNSTREAM AUTHORITY. FULL-CONTRACT MUST INDEPENDENTLY ACCEPT THE SAME COORDINATE; EVEN DUAL ACCEPTANCE STOPS FOR A SEPARATE EXPLICIT MAJOR SUCCESSOR-F1 OR PRODUCT DECISION.",
+  "independence_and_zero_contribution_attestation": {
+    "brand_new_fresh_reviewer": true,
+    "independent_from_full_contract_c3_reviewer": true,
+    "independent_from_every_reviewed_author_corrector_and_prior_reviewer": true,
+    "authored_or_corrected_reviewed_lite_product_or_runtime": false,
+    "authored_or_corrected_reviewed_full_product_or_runtime": false,
+    "authored_or_corrected_rules_fixtures_or_outcomes": false,
+    "authored_or_corrected_v8_v10_registry_v5_map_v5_or_v11": false,
+    "authored_or_corrected_c1_receipts_v12_c2_or_v13": false,
+    "contributed_product_proposal_contract_fixture_evidence_or_semantics": false,
+    "reviewed_bytes_edited": false,
+    "product_or_proposal_bytes_edited": false,
+    "lite_repository_edits": [],
+    "full_repository_product_edits": [],
+    "only_output": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C3_LITE_CONFORMANCE_CONCURRENCE_2026-08-26.json"
+  },
+  "exact_v13_authorization": {
+    "authorized": true,
+    "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C3_FULL_LITE_AUTHORIZATION_V13_2026-08-26.json",
+    "raw_sha256": "6d9befe456d9e69ed33330a60fda7c3ab544a715979820b54307418c42175d72",
+    "bytes": 25268,
+    "record_digest": "8326b3c61cd3484007e6605f19c312105b2de49a14516a2c4685b01e50b697ad",
+    "role_authorized": "Lite-conformance",
+    "same_exact_coordinate_as_full_required": true,
+    "historical_lite_verdict_carries": false,
+    "historical_full_verdict_carries": false,
+    "review_authorized_output_count": 1,
+    "review_authorized_output_kind": "detached Lite-conformance C3 receipt only"
+  },
+  "historical_noncarrying_lite_receipt": {
+    "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_LITE_CONFORMANCE_CONCURRENCE_2026-08-26.json",
+    "raw_sha256": "0166532acd20213a4072d1d26f9d71cecf38ed4ce4b0f8542c53fe57daf0fd59",
+    "bytes": 39412,
+    "historical_verdict": "ACCEPT_CONCURRENCE",
+    "carrying": false,
+    "used_to_reach_this_verdict": false,
+    "bytes_edited": false,
+    "disposition": "preserved immutable historical context only; it does not satisfy V13's fresh C3 Lite assignment"
+  },
+  "exact_input_ledger": [
+    {
+      "coordinate": "V8",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V8_2026-08-26.json",
+      "raw_sha256": "6b8a5b9fca8c72561ef1aee56c15911e34d0559edcae058f19631b71e16d9116",
+      "bytes": 18358,
+      "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2"
+    },
+    {
+      "coordinate": "V10",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_STANDING_SOURCE_PRESERVING_DISPOSITION_V10_2026-08-26.json",
+      "raw_sha256": "2fc2da6a15308460c091624c5ccaa9ede2b3a17ac529b3fe401f9d9138f9814b",
+      "bytes": 28622,
+      "record_digest": "a560e9dbd92cd8e31fb6b05512c5c197bf92e2c3b8a204a7877bc7d5b2e89de7"
+    },
+    {
+      "coordinate": "Registry V5",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V5_2026-08-26.json",
+      "raw_sha256": "de2a2f28ee0248b01644bf50328c8e1321790e5e0fd6f3b3c12d40adb92610c8",
+      "bytes": 254938,
+      "record_digest": "db1806b1edda3a8eaab27e9d1c2861d95fbd5cce61630412b52087a0232efde4"
+    },
+    {
+      "coordinate": "Map V5",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V5_2026-08-26.json",
+      "raw_sha256": "7c9f4cb1fcd97dded263be39cc21bff1291968bd9d41747dcef68748d009fb56",
+      "bytes": 24737,
+      "record_digest": "380736841645b57bd6d31e2dab68c632f328efdc163e1d40fc48438494f1fda7"
+    },
+    {
+      "coordinate": "V11",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_COORDINATE_RECEIPT_V11_2026-08-26.json",
+      "raw_sha256": "7f091d1c1dde22c4adf060b166694fc112f7a7eadc24f4a82ae8a8d1cfde9aad",
+      "bytes": 12544,
+      "record_digest": "6d7725bd8b095daf9280882702aa075d55576ecffaf88d2fc8f1d624350e12a7"
+    },
+    {
+      "coordinate": "C1 V5 migration",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V5_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "raw_sha256": "72c2a6522e3d6b9d8d4fe12ed24a551588fac71e7afa142f0d43475082bc82b1",
+      "bytes": 20482,
+      "record_digest": "6fd4af09f4bbf7bcdca8920bc97e913b148a32e0287335d2a49b74722d8067b6",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "unconditional": true,
+      "findings": 0
+    },
+    {
+      "coordinate": "C1 V5 security",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V5_SECURITY_CONCURRENCE_2026-08-26.json",
+      "raw_sha256": "a2a48f99e6634d1d3e0eed803be3e66496b55ca68a521105cbd43347322ee978",
+      "bytes": 25164,
+      "record_digest": "2c2634f50e26ef0a2336ea1a001cf0b9075fc77bd35f98cf59cbbddcdeaefbcc",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "unconditional": true,
+      "findings": 0
+    },
+    {
+      "coordinate": "V12",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C2_AUTHORITY_CONCURRENCY_AUTHORIZATION_V12_2026-08-26.json",
+      "raw_sha256": "705cae2e96de3e7478001c186f422c9ba0e09c57b7e37b9a2d0069cd79641884",
+      "bytes": 16043,
+      "record_digest": "6d464a19ff1cafd9ecbdfcef6b31f063d3553a8b7178eacb0628f6204739debc"
+    },
+    {
+      "coordinate": "C2",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C2_AUTHORITY_CONCURRENCY_CONCURRENCE_2026-08-26.json",
+      "raw_sha256": "dc1ba0ed630ed4dc3d22d1859bbfdcbc190eb0b571c8bc1a7bf923396ae75651",
+      "bytes": 27334,
+      "record_digest": "9adebab9a1844d5b81acc89e77a26cd6157fc0aba28aeba796c27ee9f272470c",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "unconditional": true,
+      "findings": 0
+    },
+    {
+      "coordinate": "V13",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C3_FULL_LITE_AUTHORIZATION_V13_2026-08-26.json",
+      "raw_sha256": "6d9befe456d9e69ed33330a60fda7c3ab544a715979820b54307418c42175d72",
+      "bytes": 25268,
+      "record_digest": "8326b3c61cd3484007e6605f19c312105b2de49a14516a2c4685b01e50b697ad"
+    }
+  ],
+  "coordinate_integrity_and_chronology_audit": {
+    "direct_inputs_checked": 10,
+    "json_parse_failures": 0,
+    "raw_sha256_mismatches": 0,
+    "byte_length_mismatches": 0,
+    "canonical_record_digest_mismatches": 0,
+    "v11_primary_coordinate_entries": 4,
+    "v11_primary_coordinate_mismatches": 0,
+    "fresh_c1_v5_receipts": 2,
+    "fresh_c1_v5_unconditional_acceptances": 2,
+    "fresh_c1_v5_total_findings": 0,
+    "c2_unconditional_acceptance": true,
+    "c2_findings": 0,
+    "v8_before_v10": true,
+    "v10_before_registry_v5": true,
+    "registry_v5_before_map_v5": true,
+    "map_v5_before_v11": true,
+    "v11_before_c1_v5": true,
+    "c1_v5_before_v12": true,
+    "v12_before_c2": true,
+    "c2_before_v13": true,
+    "v13_before_this_receipt": true,
+    "cycle_or_forward_self_coordinate": false,
+    "historical_receipt_used_as_carrying_input": false,
+    "result": "PASS"
+  },
+  "full_typescript_semantic_authority_audit": {
+    "full_is_sole_semantic_authority": true,
+    "full_reference_language": "TypeScript",
+    "accepted_f1_commit": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_tree": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+    "accepted_f1_disposition": "immutable historical accepted evidence; V11 corrections govern a future successor-F1 and do not mutate or requalify these bytes",
+    "accepted_f1_acceptance_gate": {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_ACCEPTANCE_GATE_2026-08-26.json",
+      "raw_sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff",
+      "bytes": 2347,
+      "status": "F1_ACCEPTED",
+      "mandatory_jobs": "11_OF_11_SUCCESS",
+      "ordinary_ci": "15_SUCCESS_1_EXPECTED_SKIP_0_FAILURE",
+      "pack_leaves": 34,
+      "manifest_hashed_leaves": 33
+    },
+    "accepted_f1_independent_review": {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_FULL_INDEPENDENT_REVIEW_V3_2026-08-26.json",
+      "raw_sha256": "ee027811dd29826883f736c0f018de552979d2418762e69fa7988aff635aaa70",
+      "bytes": 33708,
+      "internal_digest": "5594425282e20e8cee295c0fccb611cf4243ee87c92472ba3f5b6737c69130c5",
+      "verdict": "ACCEPT",
+      "findings": 0
+    },
+    "accepted_f1_bound_artifacts": [
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.json",
+        "git_blob": "74608e817886335c49c0533ae85a29be68048535",
+        "bytes": 14604,
+        "sha256": "433d3e9881833b15dbb72b40accaa9591f8b022149148dc5962d501a3d61cea5"
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+        "git_blob": "e773873a014a3fa95c156c3e4a018d5dfcc5e9d0",
+        "bytes": 23609,
+        "sha256": "2b021e831a53384e551b5719e06c469ed349a8e4888099024fa580caec58c5fc"
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/mcp-conformance-fixture.json",
+        "git_blob": "78eb0f4dfb5992a98826862e4ed2e401d770b2fd",
+        "bytes": 61620,
+        "sha256": "f3dde86c43973a55c72d804ab46bbcbca96d5431da4824243614415467dc7f23"
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error.schema.json",
+        "git_blob": "5acc5a4f83ad892e45e6fe8004dbe49e9ea14722",
+        "bytes": 3238,
+        "sha256": "9cbbd1d83decfc59859e3d6ac541e7d3ecfae25a51f21d2b2a5a31bdce832d70"
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
+        "git_blob": "b6eb69ee18b8432794904f7bfb3bf225ec345e48",
+        "bytes": 5719,
+        "sha256": "e6e045abe5ec77d96f747c5358dca62deca212940f3b32a170099dcddf321463"
+      },
+      {
+        "path": "docs/decisions/0005-lite-packaging.md",
+        "git_blob": "2d91ca1baeb67807b064d789e259cd268e05d960",
+        "bytes": 5884,
+        "sha256": "355e887f4fd73b45ddef4ff4905413343faf0cd6b02f7a10443901cc18eaca0d"
+      },
+      {
+        "path": "scripts/generate-agent-identity-mcp-contract.mjs",
+        "git_blob": "899d825f6fd15dcde4c344f5f59abacd8d3ed992",
+        "bytes": 111170,
+        "sha256": "95fcdb91814ecf683461a791f4a4dc99ede9d279abba87ee59a9d08cce23ba68"
+      }
+    ],
+    "rust_may_define_semantics": false,
+    "lite_may_resolve_full_ambiguity": false,
+    "lite_may_weaken_full_denial": false,
+    "lite_may_add_or_override_full_state_error_race_default_enum_precision_or_canonicalization": false,
+    "result": "PASS"
+  },
+  "exact_lite_admission_audit": {
+    "repository": "[LOCAL_PATH]",
+    "branch": "codex/post-phase5-admission-fixes",
+    "upstream": "origin/codex/post-phase5-admission-fixes",
+    "ahead": 0,
+    "behind": 0,
+    "commit": "ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2",
+    "tree": "95dfaaca2f92e33a3def629ed78590119667a68d",
+    "parent": "e3166f5e9b29b27e3b3634001af9a32ab26ffb10",
+    "subject": "fix(desktop): align Agent API guidance with runtime",
+    "author_date": "2026-08-25T13:35:44-04:00",
+    "signed_off_by_present": true,
+    "tracked_files": 223,
+    "head_matches_required_commit": true,
+    "index_clean": true,
+    "worktree_clean": true,
+    "untracked_files": 0,
+    "exact_files": [
+      {
+        "path": "README.md",
+        "git_blob": "446cd5d1f9f79dff76aa1e268b1f51551c7dd6cb",
+        "bytes": 12681,
+        "sha256": "4ba79350151c1efaa96fa4676b8bee3fdd634c1848cf0c683e054b4c48ea038f"
+      },
+      {
+        "path": "package.json",
+        "git_blob": "65f8344bf78cceaa9db1502bc3cfe93c49163c84",
+        "bytes": 861,
+        "sha256": "deae05c6bd0bd2cee37aaf711b179c4189256493cef961791c80787c60937402"
+      },
+      {
+        "path": "rust/Cargo.toml",
+        "git_blob": "8119b07876e9420a48b1b735366d454b456f9c5c",
+        "bytes": 678,
+        "sha256": "6f1f4b859d96b12ca439d61320dadcc0cde837213b1a89c32e3dc58109462088"
+      },
+      {
+        "path": "rust/README.md",
+        "git_blob": "23943556de5ac3891fc3c7970a68e9053d5e6850",
+        "bytes": 2233,
+        "sha256": "ac39b12796b5f6562b368d52bd81f637b2b93cd085aab87ed2f4a379383189c"
+      },
+      {
+        "path": "desktop/docs/QUICKSTART.md",
+        "git_blob": "2114d4d6cd0c09aaab21e1e05f8d09f58411c60d",
+        "bytes": 4355,
+        "sha256": "b491f1b3238f46c8e9386ef362ab771d47c35d89e2820765f45e0ba36bf43e7a"
+      },
+      {
+        "path": "desktop/docs/USER-GUIDE.md",
+        "git_blob": "c821eb98ba92c8811d2f3e09a5271383d91f72db",
+        "bytes": 11749,
+        "sha256": "14204cc496fac12b87f5d867346cf1d2cca0ac460c0f45aad9a430b8eccf07df"
+      },
+      {
+        "path": "desktop/src-tauri/src/lib.rs",
+        "git_blob": "6a71a231de2f056170d32c961c6ae2197513c459",
+        "bytes": 26278,
+        "sha256": "ade794fb82313b0a69b6008684d36d7d69191b27cfa6a5f31d3b62c524752b6f"
+      },
+      {
+        "path": "desktop/src/snippets.ts",
+        "git_blob": "616ea8f6baddcb94fd6a0ecd54cbd89d16e29397",
+        "bytes": 2873,
+        "sha256": "0c17024996f69fa53bbdc857b024437c3c457da9b1e64a58e7e4f18996718d38"
+      },
+      {
+        "path": "desktop/src/strings.ts",
+        "git_blob": "327ea292236c638cb16512fb5916681e8e0f777b",
+        "bytes": 8132,
+        "sha256": "eeb1ec34ce2a8c6da9fff3defd70d2970c26d9ad35fee2a50a5b1a75ce0faf6e"
+      },
+      {
+        "path": "desktop/test/snippets.test.mjs",
+        "git_blob": "22d88663f9b90f61c0124782759cafd184791460",
+        "bytes": 2756,
+        "sha256": "ab8e77307030ab7de92e71d9cb6723fc636722bab86cf713b47514b80505c11e"
+      }
+    ],
+    "root_readme_boundary": "The JavaScript CLI remains a thin delegate to pinned Full; Rust is a separately governed future static-Lite path, not a second GKX parser, lineage model, schema, governance, or semantic authority, and no static distribution or platform qualification is claimed.",
+    "rust_readme_boundary": "Callers supply canonical policy-evaluated envelopes; Rust does not parse frontmatter or assign identity, lineage, temporal validity, sensitivity, governance standing, or discoverability.",
+    "phase6_identity_mcp_pack_paths": [],
+    "phase6_identity_mcp_full_pin_paths": [],
+    "older_non_phase6_full_pin_paths": [
+      "rust/contracts/gkos-ingest-validation-1.0.0-draft.1/FULL-PIN.json",
+      "rust/contracts/gkos-retrieval-1.0.0-draft.1/FULL-PIN.json",
+      "rust/contracts/gkos-retrieval-1.0.0-draft.2/FULL-PIN.json",
+      "rust/contracts/gkos-retrieval-evaluation-1.0.0-draft.1/FULL-PIN.json",
+      "rust/contracts/gkos-watcher-recovery-1.0.0-draft.1/FULL-PIN.json"
+    ],
+    "phase6_pack_or_pin_present": false,
+    "result": "PASS"
+  },
+  "legacy_lite_route_and_sensitivity_audit": {
+    "full_dependency_pin_from_lite_package": "a57b98c00c1913f5b7ed96839b3f8effe5be9c4a",
+    "full_dependency_tree": "159bc22f6d61bb1db2577a61458309fc83d1f389",
+    "route_source": {
+      "path": "src/desktop-agent.ts",
+      "git_blob": "e85522d3b28a1fc958154167b0d071a83c5252ce",
+      "bytes": 18629,
+      "sha256": "3fd9d906f5ab22ec7eb69012ef9f1f882484cdc63ca5375197fef792d4e53e33"
+    },
+    "generated_current_snippet_routes": [
+      "/health",
+      "/notes",
+      "/graph",
+      "/graphiti/episodes"
+    ],
+    "implemented_route_cases": [
+      "/",
+      "/health",
+      "/notes",
+      "/graph",
+      "/graphiti/episodes"
+    ],
+    "root_is_health_alias": true,
+    "preflight_method": "OPTIONS",
+    "authenticated_application_method": "GET_ONLY",
+    "every_non_preflight_request_requires_bearer_token": true,
+    "non_get_authenticated_response": 405,
+    "authenticated_unknown_route_response": 404,
+    "mcp_route_occurrences_in_exact_route_source": 0,
+    "mcp_route_implemented": false,
+    "authenticated_mcp_route_result": 404,
+    "current_docs_truthfully_warn_no_mcp": true,
+    "sensitivity_field_in_notes_response": "n.gkx.projection.effective.sensitivity or null",
+    "sensitivity_used_to_filter_authenticated_notes_graph_or_graphiti_results": false,
+    "sensitivity_is_classification_metadata_only": true,
+    "legacy_rest_is_phase6_identity_or_mcp_authority": false,
+    "legacy_rest_may_be_relabelled_as_phase6_mcp": false,
+    "result": "PASS"
+  },
+  "future_lite_exact_copy_and_pin_gate": {
+    "current_lite_may_copy_or_pin_now": false,
+    "precondition": "Independently accepted hosted-green Full F5 on the owner-authorized successor-F1 chain with exact reciprocal Lite handoff.",
+    "l1_required_actions": [
+      "copy the complete accepted Full identity/MCP contract pack byte-for-byte",
+      "bind an exact FULL-PIN to the accepted Full F5 commit, accepted successor-F1 pack manifest, hosted run, artifact ledger, and acceptance digest",
+      "verify every filename, byte length, SHA-256, manifest aggregate, generation input, generator digest, and deterministic archive digest",
+      "keep any Rust verifier crate-private, inert, derivative, and non-authoritative"
+    ],
+    "copy_may_select_subset": false,
+    "copy_may_regenerate_semantics_in_rust": false,
+    "copy_may_precede_hosted_green_full_f5": false,
+    "result": "PASS"
+  },
+  "required_public_tool_conformance": {
+    "required_tool_count": 7,
+    "tool_registry_binding": "Exact accepted successor Full registry and schemas control; the accepted-F1 blobs identify the preserved names and behavior but may not substitute for the V11-governed successor bytes.",
+    "common_authority": "PUBLIC_AUTHENTICATED",
+    "common_transports": [
+      "native_stdio",
+      "loopback_streamable_http"
+    ],
+    "common_output_variants": [
+      "success",
+      "error_envelope"
+    ],
+    "closed_error_code_count": 53,
+    "accepted_error_alias_count": 34,
+    "error_rule": "Use the exact successor Full closed error domain and content-free canonical envelope; no Lite-specific message, details, retry, visibility, status, or denial exception is permitted.",
+    "common_annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "tools": [
+      {
+        "name": "gkos_capabilities",
+        "core_operation": "capability.list_effective",
+        "input_schema_ref": "tool-registry.schema.json#/$defs/input_capabilities",
+        "result_schema_ref": "tool-registry.schema.json#/$defs/result_capabilities",
+        "ordering": ["capability_name:asc"],
+        "pagination": "none",
+        "timeout_ms": 5000,
+        "max_result_bytes": 262144
+      },
+      {
+        "name": "gkos_record_validate",
+        "core_operation": "record.validate",
+        "input_schema_ref": "tool-registry.schema.json#/$defs/input_record_ref",
+        "result_schema_ref": "tool-registry.schema.json#/$defs/result_record_validate",
+        "ordering": ["severity:desc", "code:asc", "record_ref:asc"],
+        "pagination": "none",
+        "timeout_ms": 10000,
+        "max_result_bytes": 262144
+      },
+      {
+        "name": "gkos_record_assess",
+        "core_operation": "record.assess",
+        "input_schema_ref": "tool-registry.schema.json#/$defs/input_record_ref",
+        "result_schema_ref": "tool-registry.schema.json#/$defs/result_record_assess",
+        "ordering": ["code:asc"],
+        "pagination": "none",
+        "timeout_ms": 15000,
+        "max_result_bytes": 262144
+      },
+      {
+        "name": "gkos_lineage_get",
+        "core_operation": "record.lineage.read",
+        "input_schema_ref": "tool-registry.schema.json#/$defs/input_lineage_get",
+        "result_schema_ref": "tool-registry.schema.json#/$defs/result_lineage_get",
+        "ordering": ["valid_at:asc", "record_ref:asc"],
+        "pagination": "stateful_snapshot_cursor",
+        "timeout_ms": 10000,
+        "max_result_bytes": 1048576
+      },
+      {
+        "name": "gkos_graph_at_time",
+        "core_operation": "graph.temporal.read",
+        "input_schema_ref": "tool-registry.schema.json#/$defs/input_graph_at_time",
+        "result_schema_ref": "tool-registry.schema.json#/$defs/result_graph_at_time",
+        "ordering": ["valid_at:asc", "record_ref:asc"],
+        "pagination": "stateful_snapshot_cursor",
+        "timeout_ms": 20000,
+        "max_result_bytes": 1048576
+      },
+      {
+        "name": "gkos_navigation_discover",
+        "core_operation": "navigation.discover",
+        "input_schema_ref": "tool-registry.schema.json#/$defs/input_navigation_discover",
+        "result_schema_ref": "tool-registry.schema.json#/$defs/result_navigation_discover",
+        "ordering": ["classification:asc", "canonical_path:asc", "record_ref:asc"],
+        "pagination": "stateful_snapshot_cursor",
+        "timeout_ms": 20000,
+        "max_result_bytes": 1048576
+      },
+      {
+        "name": "gkos_navigation_audit",
+        "core_operation": "navigation.audit",
+        "input_schema_ref": "tool-registry.schema.json#/$defs/input_navigation_audit",
+        "result_schema_ref": "tool-registry.schema.json#/$defs/result_navigation_audit",
+        "ordering": ["severity:desc", "code:asc", "record_ref:asc"],
+        "pagination": "stateful_snapshot_cursor",
+        "timeout_ms": 30000,
+        "max_result_bytes": 1048576
+      }
+    ],
+    "identical_full_inputs_required": true,
+    "identical_full_results_required": true,
+    "identical_full_states_required": true,
+    "identical_full_errors_required": true,
+    "identical_full_denials_required": true,
+    "identical_full_ordering_required": true,
+    "identical_full_pagination_required": true,
+    "identical_full_limits_required": true,
+    "identical_full_transports_required": true,
+    "weaker_denial_allowed": false,
+    "result": "PASS"
+  },
+  "deferred_and_private_surface_exclusion": {
+    "deferred_tool_count": 16,
+    "deferred_tools_required_absent": [
+      "gkos_record_get",
+      "gkos_record_search",
+      "gkos_related_get",
+      "gkos_policy_get",
+      "gkos_navigation_context",
+      "gkos_navigation_diff",
+      "gkos_reentry_plan",
+      "gkos_navigation_effect_plan",
+      "gkos_navigation_effect_execute",
+      "gkos_governance_append",
+      "identity_administration",
+      "credential_administration",
+      "graphiti_adapter",
+      "retrieval_adapter",
+      "model_invocation",
+      "provider_configuration"
+    ],
+    "operation_inventory_count": 32,
+    "public_authenticated_operations": 7,
+    "local_bootstrap_operations": 1,
+    "owner_only_operations": 24,
+    "local_bootstrap_required_absent": [
+      "bootstrap.initialize"
+    ],
+    "owner_only_operations_required_absent": [
+      "activity.list",
+      "agent.disable",
+      "agent.enable",
+      "agent.get",
+      "agent.list",
+      "agent.provision",
+      "agent.rename",
+      "authority.backup",
+      "authority.restore",
+      "authority.restore.abort",
+      "authority.status",
+      "credential.issue",
+      "credential.list",
+      "credential.revoke",
+      "credential.rotate",
+      "mapping.add",
+      "mapping.list",
+      "mapping.revoke",
+      "migration.inspect",
+      "migration.recover",
+      "retention.get",
+      "retention.set",
+      "session.close",
+      "session.list"
+    ],
+    "deferred_or_private_entry_exposed_as_lite_tool": false,
+    "result": "PASS"
+  },
+  "official_mcp_vector_audit": {
+    "official_vector_count": 67,
+    "unique_id_count": 67,
+    "id_array_json_sha256": "58c004b9d963268500cb5c83f46e8f3e3d83edb9f3f4781332046eeca9a86b31",
+    "ids": [
+      "MCP-INIT-001", "MCP-INIT-002", "MCP-INIT-003", "MCP-PING-001", "MCP-BARRIER-001",
+      "MCP-HTTP-001", "MCP-HTTP-002", "MCP-HTTP-003", "MCP-HTTP-004", "MCP-HTTP-005",
+      "MCP-HTTP-006", "MCP-HTTP-007", "MCP-HTTP-008", "MCP-HTTP-009", "MCP-HTTP-010",
+      "MCP-HTTP-011", "MCP-HTTP-012", "MCP-HTTP-013", "MCP-HTTP-014", "MCP-HTTP-015",
+      "MCP-HTTP-016", "MCP-HTTP-017", "MCP-HTTP-018", "MCP-HTTP-019", "MCP-HTTP-020",
+      "MCP-HTTP-021", "MCP-HTTP-022", "MCP-HTTP-023", "MCP-HTTP-024", "MCP-HTTP-025",
+      "MCP-METHOD-001", "MCP-CANCEL-001", "MCP-CANCEL-002", "MCP-CANCEL-003", "MCP-CANCEL-004",
+      "MCP-TOOL-001", "MCP-TOOL-002", "MCP-TOOL-003", "MCP-TOOL-004", "MCP-TOOL-005",
+      "MCP-TOOL-006", "MCP-TOOL-007", "SCHEMA-TIME-001", "SCHEMA-TIME-002", "SCHEMA-TIME-003",
+      "SCHEMA-TIME-004", "SCHEMA-UID-001", "SCHEMA-UID-002", "SCHEMA-UID-003", "SCHEMA-CURSOR-001",
+      "SCHEMA-CURSOR-002", "SCHEMA-CURSOR-003", "SCHEMA-CURSOR-004", "SCHEMA-CURSOR-005", "SCHEMA-PATH-001",
+      "SCHEMA-PATH-002", "SCHEMA-PATH-003", "SCHEMA-PATH-004", "MCP-SCOPE-001", "MCP-GRAPH-001",
+      "MCP-GRAPH-002", "MCP-GRAPH-003", "MCP-SCOPE-002", "MCP-SCOPE-003", "MCP-SCOPE-004",
+      "MCP-SHUTDOWN-001", "MCP-SHUTDOWN-002"
+    ],
+    "id_addition_removal_or_renumbering_allowed": false,
+    "valid_wire_behavior_change_allowed": false,
+    "future_lite_must_match_every_vector": true,
+    "initialization_ping_barrier_http_method_cancel_tool_schema_scope_graph_and_shutdown_coverage_preserved": true,
+    "result": "PASS"
+  },
+  "registry_v5_complete_lite_accounting": {
+    "canonical_cases": 468,
+    "unique_sorted_canonical_ids": 468,
+    "families": 16,
+    "family_sum": 468,
+    "named_core_subtotal": 8,
+    "named_restore_bootstrap_subtotal": 10,
+    "named_subtotal": 18,
+    "additional_canonical_cases": 450,
+    "formula": "8 + 10 = 18; 18 + 450 = 468",
+    "aliases": 12,
+    "aliases_count_as_cases": false,
+    "disposition_rule": "The 468 canonical cases are exhaustively partitioned below. COPY_VALIDATION_ONLY means Lite validates the exact copied Full bytes and canonical encodings without implementing a new authority. REQUIRED_PUBLIC_ADVERSARIAL_PARITY means the seven-tool wrapper must reproduce the applicable Full acceptance, result, error, redaction, non-enumeration, ordering, cursor, limit, state, and denial behavior. FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION means Lite exposes no corresponding operation or adapter; copied contract evidence remains inert and Full remains the only runtime authority.",
+    "partition_counts": {
+      "COPY_VALIDATION_ONLY": 69,
+      "REQUIRED_PUBLIC_ADVERSARIAL_PARITY": 164,
+      "FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION": 235,
+      "sum": 468
+    },
+    "family_dispositions": [
+      {"family": "ACTIVITY-METADATA", "cases": 37, "disposition": "COPY_VALIDATION_ONLY"},
+      {"family": "ANCHOR-INTENT", "cases": 34, "disposition": "FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION"},
+      {"family": "BACKUP", "cases": 9, "disposition": "FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION"},
+      {"family": "BOOTSTRAP-HANDOFF", "cases": 39, "disposition": "FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION"},
+      {"family": "COLLISION-CANONICAL", "cases": 32, "disposition": "COPY_VALIDATION_ONLY"},
+      {"family": "CREDENTIAL-AUTH-NONENUM", "cases": 7, "disposition": "REQUIRED_PUBLIC_ADVERSARIAL_PARITY"},
+      {"family": "CREDENTIAL-ISSUE-ROTATE", "cases": 22, "disposition": "FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION"},
+      {"family": "GLOBAL-EVENT", "cases": 52, "disposition": "FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION"},
+      {"family": "POLICY-DEPENDENCY-TRANSPORT", "cases": 18, "disposition": "SPLIT", "required_public_adversarial_parity": 16, "full_private_or_adapter_deferred_omission": 2, "omitted_ids": ["MAPPING-ADD-UNAVAILABLE-001", "MAPPING-REVOKE-UNAVAILABLE-001"]},
+      {"family": "RACE-FINAL-GATE-EFFECT", "cases": 21, "disposition": "FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION"},
+      {"family": "RATE", "cases": 7, "disposition": "REQUIRED_PUBLIC_ADVERSARIAL_PARITY"},
+      {"family": "REDACTION-NO-JSON", "cases": 99, "disposition": "REQUIRED_PUBLIC_ADVERSARIAL_PARITY"},
+      {"family": "RESTORE-OWNER-ABORT", "cases": 41, "disposition": "FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION"},
+      {"family": "RETENTION", "cases": 15, "disposition": "FULL_PRIVATE_OR_ADAPTER_DEFERRED_OMISSION"},
+      {"family": "SESSION-REFERENCE-CURSOR-REPLAY", "cases": 28, "disposition": "REQUIRED_PUBLIC_ADVERSARIAL_PARITY"},
+      {"family": "TIMESTAMP", "cases": 7, "disposition": "REQUIRED_PUBLIC_ADVERSARIAL_PARITY"}
+    ],
+    "alias_map": [
+      {"alias": "ANCHOR-MUTATION-RECOVERY-001", "canonical_id": "ANCHOR-INTENT-001"},
+      {"alias": "ANCHOR-MUTATION-RECOVERY-002", "canonical_id": "ANCHOR-INTENT-002"},
+      {"alias": "ANCHOR-MUTATION-RECOVERY-003", "canonical_id": "ANCHOR-INTENT-003"},
+      {"alias": "ANCHOR-MUTATION-RECOVERY-004", "canonical_id": "ANCHOR-INTENT-004"},
+      {"alias": "RESTORE-PLAN-DISCOVERY-001", "canonical_id": "RESTORE-STATUS-DISCOVERY-001"},
+      {"alias": "RETENTION-DURABLE-001", "canonical_id": "RETENTION-PERSISTENCE-001"},
+      {"alias": "SCHEMA-CURSOR-003", "canonical_id": "CURSOR-CANONICAL-001"},
+      {"alias": "SCHEMA-CURSOR-004", "canonical_id": "CURSOR-ALIAS-001"},
+      {"alias": "SCHEMA-CURSOR-005", "canonical_id": "CURSOR-ALIAS-002"},
+      {"alias": "cursor-alias-B", "canonical_id": "CURSOR-ALIAS-001"},
+      {"alias": "cursor-alias-D", "canonical_id": "CURSOR-ALIAS-002"},
+      {"alias": "cursor-canonical-E", "canonical_id": "CURSOR-CANONICAL-001"}
+    ],
+    "aliases_must_resolve_exactly_as_full": true,
+    "copy_validation_only_creates_a_new_parser_or_authority": false,
+    "private_omission_waives_publicly_observable_state_error_race_or_denial_parity": false,
+    "unaccounted_cases": 0,
+    "double_counted_cases": 0,
+    "result": "PASS"
+  },
+  "mapping_adapter_deferral_audit": {
+    "mapping_adapter_status": "DEFERRED",
+    "adapter_dependent_mapping_predicate_invented": false,
+    "mapping_subject_digest_collision_qualification_claimed": false,
+    "adapter_evidence_binding_claimed": false,
+    "mapping_id_success_path_qualification_claimed": false,
+    "pre_adapter_error": "GKOS_P6_PLATFORM_UNAVAILABLE",
+    "retained_registry_cases": [
+      "MAPPING-ADD-UNAVAILABLE-001",
+      "MAPPING-REVOKE-UNAVAILABLE-001"
+    ],
+    "future_lite_mapping_tools_exposed": false,
+    "future_lite_may_replace_platform_unavailable_with_new_behavior": false,
+    "result": "PASS"
+  },
+  "prohibited_semantic_and_authority_additions": {
+    "second_identity_service": false,
+    "second_mcp_service": false,
+    "filesystem_writer": false,
+    "provider_authority": false,
+    "effects_authority": false,
+    "rust_semantic_authority": false,
+    "new_state": false,
+    "new_error": false,
+    "new_race_rule": false,
+    "new_default": false,
+    "new_denial_exception": false,
+    "new_parser": false,
+    "new_enum_member": false,
+    "new_precision_rule": false,
+    "new_canonicalization_rule": false,
+    "weaker_denial": false,
+    "unsupported_feature_claim": false,
+    "result": "PASS"
+  },
+  "acceptance_decision": {
+    "all_directed_lite_conformance_checks_pass": true,
+    "coordinate_mismatch_found": false,
+    "byte_drift_found": false,
+    "digest_failure_found": false,
+    "chronology_or_cycle_defect_found": false,
+    "historical_carry_defect_found": false,
+    "reviewer_independence_defect_found": false,
+    "ambiguity_found": false,
+    "conditionality_or_qualification_used": false,
+    "waiver_used": false,
+    "assumption_used": false,
+    "reviewer_contribution_found": false,
+    "unsupported_lite_feature_found": false,
+    "weaker_denial_found": false,
+    "finding_count": 0,
+    "acceptance_permitted": true,
+    "verdict": "ACCEPT_CONCURRENCE"
+  },
+  "authorization_boundary": {
+    "this_detached_c3_lite_receipt_authorized": true,
+    "this_receipt_has_product_effect": false,
+    "this_receipt_has_downstream_authority": false,
+    "full_contract_must_independently_accept": true,
+    "one_acceptance_alone_completes_c3": false,
+    "dual_acceptance_automatically_authorizes_successor_f1": false,
+    "successor_f1_authorized": false,
+    "product_change_authorized": false,
+    "lite_l1_l4_authorized": false,
+    "f2_authorized": false,
+    "f2_restart_authorized": false,
+    "implementation_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "contract_or_fixture_regeneration_authorized": false,
+    "commit_authorized": false,
+    "push_authorized": false,
+    "workflow_authorized": false,
+    "pull_request_authorized": false,
+    "merge_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "activation_authorized": false,
+    "publication_authorized": false,
+    "rule": "This receipt records only the V13-authorized fresh Lite-conformance C3 verdict. It cannot authorize, imply, substitute for, or begin Full acceptance, successor-F1, F2, Lite L1-L4, implementation, repository delivery, activation, or publication activity."
+  },
+  "mandatory_stop": {
+    "stop_now": true,
+    "preserve_this_receipt_and_every_bound_coordinate": true,
+    "await_independent_full_contract_verdict": true,
+    "if_full_also_unconditionally_accepts_zero_findings": "C3 dual concurrence is complete, but stop for a separate explicit Product Owner major successor-F1 or product authorization.",
+    "if_full_returns_any_other_result": "Rejection controls; preserve all coordinates and use only separately applicable bounded evidence-only correction or rerun authority.",
+    "no_automatic_next_phase": true
+  },
+  "validation": {
+    "input_json_parse": "PASS_10_OF_10",
+    "input_raw_sha256_bytes_and_record_digests": "PASS_10_OF_10",
+    "accepted_f1_commit_tree_and_selected_blobs": "PASS",
+    "lite_commit_tree_head_index_worktree_and_selected_blobs": "PASS",
+    "lite_route_inventory": "PASS",
+    "mcp_ids_checked": 67,
+    "registry_rows_scanned": 468,
+    "registry_aliases_checked": 12,
+    "registry_family_sum": 468,
+    "this_receipt_json_parse": "PASS",
+    "this_receipt_canonical_internal_record_digest": "PASS",
+    "this_receipt_final_raw_sha256_and_byte_length": "REPORTED_EXTERNALLY_AFTER_FINALIZATION",
+    "input_ledgers_reverified_after_finalization": "PASS",
+    "lite_repository_reverified_clean_after_finalization": "PASS",
+    "git_diff_check": "PASS_SOLE_NEW_C3_LITE_RECEIPT_PATH"
+  },
+  "self_raw_coordinate_rule": "This receipt cannot embed its own final raw SHA-256 or byte length without changing those bytes. Its final raw SHA-256 and byte length are reported externally after the record_digest is inserted and every validation is rerun.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "ec2a894d5a296753f7dfd5ad57d9ba532f4beb318037a4c8d79b1df86c9f7397"
+}

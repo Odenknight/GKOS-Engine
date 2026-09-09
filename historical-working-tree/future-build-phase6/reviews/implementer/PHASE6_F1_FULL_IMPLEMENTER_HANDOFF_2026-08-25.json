@@ -1,0 +1,402 @@
+{
+  "record_type": "gkos-phase6-f1-full-implementer-handoff",
+  "record_version": "1.0.0",
+  "generated_at_utc": "2026-08-26T02:53:55.826Z",
+  "package": {
+    "package_id": "F1",
+    "contract_name": "GKOS-AGENT-IDENTITY-MCP-CONTRACT",
+    "contract_version": "1.0.0-draft.1",
+    "contract_root": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1",
+    "repository": "https://github.com/Odenknight/GKOS-Engine",
+    "local_repository": "[LOCAL_PATH]",
+    "branch": "codex/phase6-f1-contract-pack",
+    "entry_sha": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+    "proposed_result_sha": "25acd484c6f804c8e4a6cfdef21849aa397cb47a",
+    "scope": "F1 contract pack only"
+  },
+  "accepted_predecessors": {
+    "owner_ratification": {
+      "path": "future-build-phase6/reviews/final/PHASE6_D0_OWNER_RATIFICATION_2026-08-25.json",
+      "sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929",
+      "bytes": 2842
+    },
+    "independent_d0_acceptance": {
+      "path": "future-build-phase6/reviews/final/PHASE6_D0_CROSS_REGISTER_ACCEPTANCE_V7_2026-08-25.md",
+      "sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb",
+      "bytes": 13939,
+      "verdict": "ZERO_FINDING_ACCEPT"
+    },
+    "frozen_input_sha256": {
+      "core_spec": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+      "core_operation_inventory": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+      "core_decision_record": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+      "core_error_registry": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+      "core_validation": "4f31f73833344b0d771775beb869f32da3404c6ef49b1c53f365e2407cd3b6b8",
+      "allowed_paths": "7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce",
+      "protected_paths": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948",
+      "interface_proposal": "476e839fb81f2f936785a38278846d33c7a680a84069607b1188c5ca2609e427",
+      "mcp_registry_schema": "5c043dc5570c4c52ad13425925711e672ec198d5910ab5c9e8c1438cb5ed8004",
+      "mcp_catalog": "c0ed2b963dcaef8a8bd08a427687d493bb7e85f1e26076a88a04f68b2117de7e",
+      "mcp_vectors": "23f48e01f890b746012d3713b8ece8331b113927ca15ab72e9955cf03830387c",
+      "interface_validation": "7f2171bc98112a529f05b9324be20475484ec55e4ac392829109e6f94121daef",
+      "source_provenance": "7284527598409b43218f99f87e8365b3382b3fae1606f9975ae9acba90108321",
+      "governance_matrix": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f"
+    }
+  },
+  "path_boundary": {
+    "allowed_ceiling": 40,
+    "changed_path_count": 40,
+    "raw_changed_path_inventory_sha256": "7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce",
+    "changed_inventory_equals_frozen_allowed_bytes": true,
+    "changed_paths": [
+      ".github/workflows/phase6-identity-contract.yml",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/README.md",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/TECHNICAL_README.md",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/activity.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/agent-identity.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/allowed-paths.txt",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/audit-receipt.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/bootstrap-migration.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/canonical-fixture.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/conformance.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/credential.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error-fixture.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/external-mapping.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/hosted-artifact-inventory.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/lifecycle.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/limits.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/mcp-conformance-fixture.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration-fixture.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/platform-matrix.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/platform-matrix.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/protected-paths.txt",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/qualification-receipt.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/race-fixture.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/request.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/security-fixture.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/session.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.schema.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.schema.json",
+      "docs/decisions/0006-phase6-agent-identity-mcp-contract.md",
+      "docs/phase6-agent-identity-mcp-contract.md",
+      "evidence/2026-08-25-functional-uplift-phase-6-f1.md",
+      "scripts/generate-agent-identity-mcp-contract.mjs",
+      "test/agent-identity-mcp-contract.test.mjs"
+    ],
+    "protected_path_count": 22,
+    "protected_paths_sha256": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948",
+    "protected_paths": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/phase4-retrieval-observation.yml",
+      ".github/workflows/sidecar-release.yml",
+      "README.md",
+      "TECHNICAL_README.md",
+      "bin/gkx.mjs",
+      "contracts/ingest/",
+      "contracts/navigation-effects/",
+      "contracts/navigation/",
+      "contracts/retrieval/",
+      "contracts/watcher/",
+      "docs/decisions/0003-multi-agent-identity-and-authentication.md",
+      "docs/decisions/0005-lite-packaging.md",
+      "package-lock.json",
+      "package.json",
+      "src/desktop-agent.ts",
+      "src/governance/",
+      "src/ingest/",
+      "src/navigation-effects/",
+      "src/navigation/",
+      "src/retrieval/",
+      "src/watcher/"
+    ],
+    "protected_diff_command": "git diff --name-only 808d875b557f4cfd2bb0addccba44d70c9748f35 -- <22 exact protected paths>",
+    "protected_diff_output": "",
+    "protected_diff_result": "PASS_ZERO_DIFF"
+  },
+  "pack": {
+    "leaf_count": 34,
+    "manifest_hashed_leaf_count": 33,
+    "pack_manifest": {
+      "bytes": 5718,
+      "sha256": "c5477ff88d09395be5416db94829ed020d625867d79cf533145ac04cafdd2a98",
+      "aggregate_digest": "sha256:ab23360c2bcac837f2dd68555c042539ec144a34daff4e0795ac499daf2a12dc",
+      "generation_input_digest": "sha256:ec3ece84c71114b0d97cfa23376d37d35fde2f4e6105815d5c5e967ff886cc18",
+      "generator_digest": "sha256:04e817bb906f4e73749a47878832ca220ec56a5571ee1fd0fa2583d319cd1333"
+    },
+    "archive": {
+      "path": "GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar",
+      "bytes": 349184,
+      "sha256": "a768be2c79c33fc99b62a3cd3db9a29e92c1b20efc7f21e7580c756ab1df77f3",
+      "format": "deterministic USTAR",
+      "entry_mode": "0644",
+      "uid": 0,
+      "gid": 0,
+      "mtime": 0
+    },
+    "schema_registry_fixture_hash_authority": {
+      "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
+      "sha256": "c5477ff88d09395be5416db94829ed020d625867d79cf533145ac04cafdd2a98",
+      "entries": [
+        {"path":"activity.schema.json","size":6570,"sha256":"dca4bc32cb69c82a9cec146459cc5b17d6a9d91a049757e531ecae4f7229b5ef"},
+        {"path":"agent-identity.schema.json","size":2711,"sha256":"724f153f1a4cf963a52c6d49a972222c4eb7d5552f0b3e76d48deb5dbd756f8f"},
+        {"path":"audit-receipt.schema.json","size":45913,"sha256":"d1967a7b49129774ccd15e2122da328d2a8a8da4bb82b861fe5f560ab4e9187d"},
+        {"path":"bootstrap-migration.schema.json","size":897,"sha256":"e4962ba09df469091bf8e66067c44dbab353ca4a64318264d2b337c5bb3cd15d"},
+        {"path":"canonical-fixture.json","size":3813,"sha256":"07224c5d20a44bd86de7de7828ba43ccea840e6ebef3084eb07f3c53b80f4eb9"},
+        {"path":"conformance.schema.json","size":1330,"sha256":"380fda1fab5ce397b95ebdc51c1da69079de39581f037f1be8712437233306eb"},
+        {"path":"credential.schema.json","size":3862,"sha256":"f7bfbf1ad4887e3429e96e3238c77504cada1389d798a4d6b543ac92b87227e8"},
+        {"path":"error-fixture.json","size":12362,"sha256":"6ff23b1ceba9b5f7d6145d8537b85242f8bba08b728ec3fc2d08199e97971978"},
+        {"path":"error.schema.json","size":3238,"sha256":"9cbbd1d83decfc59859e3d6ac541e7d3ecfae25a51f21d2b2a5a31bdce832d70"},
+        {"path":"external-mapping.schema.json","size":2711,"sha256":"e8ef62eab81448adb525291fc172c7c073655c6a17504a4e8181de323f0a5f75"},
+        {"path":"hosted-artifact-inventory.json","size":577,"sha256":"1a1ac34857c4a0e08408670e3d4858e9dea8368b9b14966fb5cc83edaefcc37f"},
+        {"path":"lifecycle.schema.json","size":1041,"sha256":"0499acfb3734134d3075d1034b7cc150c26ed1768ebd5a75334dab913af2ca9f"},
+        {"path":"limits.schema.json","size":7120,"sha256":"4b5d67074fdf324776d52ba1f11b8837a1954d41a652d1ddc108707511ac7097"},
+        {"path":"mcp-conformance-fixture.json","size":61620,"sha256":"f3dde86c43973a55c72d804ab46bbcbca96d5431da4824243614415467dc7f23"},
+        {"path":"migration-fixture.json","size":1064,"sha256":"409046ba9ef75370098a2fba436b64c5d565506d52f139da4aa6209c340816fe"},
+        {"path":"migration.schema.json","size":3600,"sha256":"b3763d21252af01cc49d1e23fdddcaae642d97b3970b7e7923d2b6dd601fe7da"},
+        {"path":"operation-inventory.json","size":23609,"sha256":"2b021e831a53384e551b5719e06c469ed349a8e4888099024fa580caec58c5fc"},
+        {"path":"operation-inventory.schema.json","size":35124,"sha256":"5f6270b0af34ede781198de2b4a88ae2c11a78c2fdabf6b7df0674c26b2b27b7"},
+        {"path":"platform-matrix.json","size":4935,"sha256":"16928aa94d9369f1e231467749b9eefb2f6ad079626eff86ca698e6c68dc4e81"},
+        {"path":"platform-matrix.schema.json","size":1879,"sha256":"f99aefdf82ffe833fcfa851cd238d151ee42c79b0ee7e44920d47c3f33b3079d"},
+        {"path":"qualification-receipt.schema.json","size":3945,"sha256":"33b16f020fe67b24f08707619e72001fa7c4153d5ac99db669567ebe7c007c14"},
+        {"path":"race-fixture.json","size":1172,"sha256":"a4d4bc27162b331df1c54f73bba66b3792f21776bbabd653364b568a5b51f4a1"},
+        {"path":"request.schema.json","size":6877,"sha256":"71daa507a5942bce57fd02a4dc2d38044a339d45827f573829c8a7467c5b7959"},
+        {"path":"security-fixture.json","size":1011,"sha256":"52d9010f76d77245202b97271a46de3ef8021651073f32bb0264f0dc097191d3"},
+        {"path":"session.schema.json","size":3596,"sha256":"0164a09e15031e19154bd5d1c3b57300ecfd25f06ecf504bb9632ae3ff95552f"},
+        {"path":"tool-registry.json","size":14604,"sha256":"433d3e9881833b15dbb72b40accaa9591f8b022149148dc5962d501a3d61cea5"},
+        {"path":"tool-registry.schema.json","size":51538,"sha256":"b41530d92655f52634584db0436b6e3d9bd55aece72bb6ae48cc05878db50087"},
+        {"path":"transport.json","size":1574,"sha256":"01067e32bc3df781744309429c8d0b174ab711aa39ff8daa48f5a03aad881276"},
+        {"path":"transport.schema.json","size":2278,"sha256":"c9a824276a569acdd9f2229964f19e4c9f4ca0a99de1ae443d8e9bac514509f1"}
+      ]
+    }
+  },
+  "surface_inventory": {
+    "operation_count": 32,
+    "authority_class_counts": {
+      "PUBLIC_AUTHENTICATED": 7,
+      "OWNER_ONLY": 24,
+      "LOCAL_BOOTSTRAP": 1
+    },
+    "operation_schema_definitions": 54,
+    "public_schema_refs": 14,
+    "required_mcp_tools": 7,
+    "deferred_mcp_surfaces": 16,
+    "mcp_conformance_vectors": 67,
+    "core_operation_vectors": 8,
+    "transports": [
+      "stdio",
+      "loopback Streamable HTTP"
+    ],
+    "runtime_exports_added": 0,
+    "runtime_authority_implementation_added": false
+  },
+  "closed_error_inventory": {
+    "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error-fixture.json",
+    "sha256": "6ff23b1ceba9b5f7d6145d8537b85242f8bba08b728ec3fc2d08199e97971978",
+    "error_count": 53,
+    "alias_count": 34,
+    "unauthenticated_non_enumeration": true,
+    "unknown_internal_rule": "GKOS_P6_INTERNAL_ERROR",
+    "codes": [
+      "GKOS_P6_PARSE_ERROR","GKOS_P6_INVALID_REQUEST","GKOS_P6_INVALID_PARAMS","GKOS_P6_PEER_FORBIDDEN","GKOS_P6_HOST_FORBIDDEN","GKOS_P6_ORIGIN_FORBIDDEN","GKOS_P6_METHOD_NOT_ALLOWED","GKOS_P6_DELETE_INVALID","GKOS_P6_UNSUPPORTED_MEDIA_TYPE","GKOS_P6_PROTOCOL_VERSION_INVALID","GKOS_P6_NOT_ACCEPTABLE","GKOS_P6_JSONRPC_METHOD_NOT_FOUND","GKOS_P6_UNSUPPORTED_CONTRACT_VERSION","GKOS_P6_UNKNOWN_OPERATION","GKOS_P6_PAYLOAD_TOO_LARGE","GKOS_P6_AUTH_FAILED","GKOS_P6_OWNER_REQUIRED","GKOS_P6_POLICY_DENIED","GKOS_P6_POLICY_INDETERMINATE","GKOS_P6_SESSION_UNKNOWN","GKOS_P6_SESSION_EXPIRED","GKOS_P6_SESSION_STALE","GKOS_P6_REQUEST_REPLAY_CONFLICT","GKOS_P6_REQUEST_STALE_AUTHORITY","GKOS_P6_IDEMPOTENCY_EXPIRED","GKOS_P6_AGENT_DISABLED","GKOS_P6_CREDENTIAL_REVOKED","GKOS_P6_IDENTITY_COLLISION","GKOS_P6_CREDENTIAL_COLLISION","GKOS_P6_MAPPING_CONFLICT","GKOS_P6_STATE_CONFLICT","GKOS_P6_RESOURCE_NOT_FOUND","GKOS_P6_RATE_LIMITED","GKOS_P6_CONCURRENCY_LIMIT","GKOS_P6_REQUEST_TIMEOUT","GKOS_P6_REQUEST_CANCELLED","GKOS_P6_CAPABILITY_UNAVAILABLE","GKOS_P6_PLATFORM_UNAVAILABLE","GKOS_P6_BOOTSTRAP_REQUIRED","GKOS_P6_MIGRATION_MALFORMED","GKOS_P6_MIGRATION_CONFLICT","GKOS_P6_MIGRATION_RECOVERY_REQUIRED","GKOS_P6_AUTHORITY_CORRUPT","GKOS_P6_DATABASE_CAPACITY","GKOS_P6_ACTIVITY_CAPACITY","GKOS_P6_RETENTION_INVALID","GKOS_P6_CLOCK_INVALID","GKOS_P6_STORAGE_PERMISSION_INVALID","GKOS_P6_AUDIT_WRITE_FAILED","GKOS_P6_EVIDENCE_MISMATCH","GKOS_P6_SECRET_EXPOSURE","GKOS_P6_SHUTTING_DOWN","GKOS_P6_INTERNAL_ERROR"
+    ],
+    "aliases": {
+      "AUTH_INVALID":"GKOS_P6_AUTH_FAILED","AUTH_REQUIRED":"GKOS_P6_AUTH_FAILED","CREDENTIAL_REVOKED_UNAUTHENTICATED":"GKOS_P6_AUTH_FAILED","CURSOR_INVALID":"GKOS_P6_INVALID_PARAMS","CURSOR_STALE":"GKOS_P6_REQUEST_STALE_AUTHORITY","FORWARDED_IDENTITY_FORBIDDEN":"GKOS_P6_POLICY_DENIED","IDENTITY_DISABLED_UNAUTHENTICATED":"GKOS_P6_AUTH_FAILED","MCP_ACCEPT_NOT_NEGOTIABLE":"GKOS_P6_NOT_ACCEPTABLE","MCP_CALL_MALFORMED":"GKOS_P6_INVALID_PARAMS","MCP_HTTP_CONTENT_TYPE_INVALID":"GKOS_P6_UNSUPPORTED_MEDIA_TYPE","MCP_HTTP_CONTENT_TYPE_MISSING":"GKOS_P6_UNSUPPORTED_MEDIA_TYPE","MCP_HTTP_CONTENT_TYPE_UNSUPPORTED":"GKOS_P6_UNSUPPORTED_MEDIA_TYPE","MCP_HTTP_DELETE_BODY_FORBIDDEN":"GKOS_P6_DELETE_INVALID","MCP_HTTP_DELETE_CONTENT_TYPE_FORBIDDEN":"GKOS_P6_DELETE_INVALID","MCP_HTTP_DELETE_FRAMING_INVALID":"GKOS_P6_DELETE_INVALID","MCP_HTTP_GET_METHOD_NOT_ALLOWED":"GKOS_P6_METHOD_NOT_ALLOWED","MCP_HTTP_HOST_FORBIDDEN":"GKOS_P6_HOST_FORBIDDEN","MCP_HTTP_METHOD_INVALID":"GKOS_P6_METHOD_NOT_ALLOWED","MCP_HTTP_METHOD_NOT_ALLOWED":"GKOS_P6_METHOD_NOT_ALLOWED","MCP_HTTP_ORIGIN_FORBIDDEN":"GKOS_P6_ORIGIN_FORBIDDEN","MCP_HTTP_PEER_FORBIDDEN":"GKOS_P6_PEER_FORBIDDEN","MCP_HTTP_PROTOCOL_VERSION_INVALID":"GKOS_P6_PROTOCOL_VERSION_INVALID","MCP_HTTP_PROTOCOL_VERSION_MISSING":"GKOS_P6_PROTOCOL_VERSION_INVALID","MCP_HTTP_PROTOCOL_VERSION_UNSUPPORTED":"GKOS_P6_PROTOCOL_VERSION_INVALID","MCP_JSONRPC_METHOD_NOT_FOUND":"GKOS_P6_JSONRPC_METHOD_NOT_FOUND","MCP_NOT_INITIALIZED":"GKOS_P6_INVALID_REQUEST","MCP_SESSION_EXPIRED":"GKOS_P6_SESSION_UNKNOWN","MCP_SESSION_INVALID":"GKOS_P6_SESSION_UNKNOWN","MCP_SESSION_NOT_FOUND":"GKOS_P6_SESSION_UNKNOWN","MCP_SESSION_REQUIRED":"GKOS_P6_INVALID_REQUEST","MCP_SESSION_TERMINATED":"GKOS_P6_SESSION_UNKNOWN","MCP_TOOL_INPUT_INVALID":"GKOS_P6_INVALID_PARAMS","MCP_UNKNOWN_TOOL":"GKOS_P6_UNKNOWN_OPERATION","TOOL_NOT_AVAILABLE":"GKOS_P6_UNKNOWN_OPERATION"
+    }
+  },
+  "declarative_transition_and_adversarial_evidence": {
+    "canonical_fixture": "PASS",
+    "migration_fixture": "PASS",
+    "race_fixture": "PASS",
+    "security_fixture": "PASS",
+    "mcp_vectors_consumed": 67,
+    "core_operation_vectors_consumed": 8,
+    "replay_contracts": "DECLARATIVE_ONLY_PASS",
+    "recovery_contracts": "DECLARATIVE_ONLY_PASS",
+    "cancellation_contracts": "DECLARATIVE_ONLY_PASS",
+    "runtime_transition_execution": "NOT_F1",
+    "runtime_race_execution": "NOT_F1",
+    "runtime_recovery_execution": "NOT_F1",
+    "overclaim_guard": "No F2/F4/F5 runtime, ACL, crash, service, authority, credential, migration, or effects claim is made."
+  },
+  "local_qualification": {
+    "toolchain": {
+      "node": "24.18.0",
+      "npm": "10.9.4",
+      "typescript": "project lockfile",
+      "schema": "Ajv Draft 2020-12 strict"
+    },
+    "commands": [
+      {"command":"npx --yes npm@10.9.4 --version","exit_code":0,"result":"10.9.4"},
+      {"command":"npx --yes npm@10.9.4 ci --ignore-scripts","exit_code":0,"result":"PASS"},
+      {"command":"npm run typecheck","exit_code":0,"result":"PASS"},
+      {"command":"npm run build","exit_code":0,"result":"PASS"},
+      {"command":"node scripts/generate-agent-identity-mcp-contract.mjs --check","exit_code":0,"result":"PASS","leaf_count":34,"hashed_leaf_count":33},
+      {"command":"node --test test/agent-identity-mcp-contract.test.mjs","exit_code":0,"result":"PASS","tests":8,"pass":8,"fail":0,"skip":0},
+      {"command":"npm test","coordinate":"376431388caa7c97e178078d6a39840fd825ce44; final delta is workflow-only and exact-final hosted Linux24 repeated this command","exit_code":0,"result":"PASS","tests":875,"pass":869,"fail":0,"skip":6,"duration_ms":903491.3943},
+      {"command":"npm run test:navigation","exit_code":0,"result":"PASS","tests":128,"pass":127,"fail":0,"skip":1},
+      {"command":"npm run test:intelligence","exit_code":0,"result":"PASS","tests":4,"pass":4,"fail":0,"skip":0},
+      {"command":"npm run check:license","exit_code":0,"result":"PASS"},
+      {"command":"npm run check:nomenclature","exit_code":0,"result":"PASS"},
+      {"command":"npm run pack:check","exit_code":0,"result":"PASS","package_file_count":466,"package_bytes":3107971},
+      {"command":"ratified source-coordinate mechanical comparison","exit_code":0,"result":"RATIFIED_SOURCE_COORDINATES_MATCH=14/14"},
+      {"command":"accepted interface machine-artifact semantic comparison","exit_code":0,"result":"SEMANTIC_EQUAL=3/3"},
+      {"command":"git diff --check","exit_code":0,"result":"PASS"},
+      {"command":"git diff --name-only <entry> -- <22 protected>","exit_code":0,"result":"PASS_ZERO_DIFF"}
+    ],
+    "output_hash_note": "Interactive local stdout was not persisted as a separate evidence artifact; exact terminal counts are recorded above. Raw generated bytes, hosted receipts, archive, manifest, and immutable hosted job logs are hashed or identified separately. This is disclosed and not represented as F5 evidence."
+  },
+  "hosted_qualification": {
+    "workflow": "GKOS Phase 6 identity contract qualification",
+    "run_id": 32923481532,
+    "url": "https://github.com/Odenknight/GKOS-Engine/actions/runs/32923481532",
+    "head_sha": "25acd484c6f804c8e4a6cfdef21849aa397cb47a",
+    "conclusion": "success",
+    "job_count": 11,
+    "success_count": 11,
+    "failure_count": 0,
+    "jobs": [
+      {"name":"p6-f1-contract-windows-node23","id":98041556698,"conclusion":"success","started_at":"2026-08-26T02:38:31Z","completed_at":"2026-08-26T02:39:28Z"},
+      {"name":"p6-f1-pack-reproducibility","id":98041556798,"conclusion":"success","started_at":"2026-08-26T02:38:30Z","completed_at":"2026-08-26T02:38:40Z"},
+      {"name":"p6-f1-contract-windows-node24","id":98041556827,"conclusion":"success","started_at":"2026-08-26T02:38:31Z","completed_at":"2026-08-26T02:39:34Z"},
+      {"name":"p6-f1-contract-macos-node22","id":98041556834,"conclusion":"success","started_at":"2026-08-26T02:38:32Z","completed_at":"2026-08-26T02:38:55Z"},
+      {"name":"p6-f1-contract-linux-node23","id":98041556837,"conclusion":"success","started_at":"2026-08-26T02:38:31Z","completed_at":"2026-08-26T02:39:00Z"},
+      {"name":"p6-f1-secret-scan","id":98041556845,"conclusion":"success","started_at":"2026-08-26T02:38:30Z","completed_at":"2026-08-26T02:38:40Z"},
+      {"name":"p6-f1-contract-windows-node22","id":98041556847,"conclusion":"success","started_at":"2026-08-26T02:38:31Z","completed_at":"2026-08-26T02:39:35Z"},
+      {"name":"p6-f1-schema-adversarial","id":98041556850,"conclusion":"success","started_at":"2026-08-26T02:38:31Z","completed_at":"2026-08-26T02:38:46Z"},
+      {"name":"p6-f1-contract-linux-node22","id":98041556893,"conclusion":"success","started_at":"2026-08-26T02:38:31Z","completed_at":"2026-08-26T02:38:59Z"},
+      {"name":"p6-f1-contract-linux-node24","id":98041556930,"conclusion":"success","started_at":"2026-08-26T02:38:31Z","completed_at":"2026-08-26T02:49:05Z"},
+      {"name":"p6-f1-artifact-audit","id":98043437066,"conclusion":"success","started_at":"2026-08-26T02:49:09Z","completed_at":"2026-08-26T02:49:26Z"}
+    ],
+    "annotations": [
+      {
+        "level": "warning",
+        "path": ".github",
+        "message": "GitHub forced actions/checkout@v4, actions/setup-node@v4, and actions/upload-artifact@v4 from their deprecated Node.js 20 action runtime to Node.js 24.",
+        "impact": "non-blocking; package test Node versions remained pinned by setup-node and all jobs succeeded"
+      }
+    ]
+  },
+  "hosted_artifacts": {
+    "count": 11,
+    "retention_days": 90,
+    "expires_at": "2026-11-24T02:38:27Z",
+    "outer_api_artifacts": [
+      {"id":9590860511,"name":"gkos-p6-f1-terminal-audit-receipt","size_in_bytes":786},
+      {"id":9590854034,"name":"gkos-p6-f1-linux-node24-receipt","size_in_bytes":759},
+      {"id":9590652003,"name":"gkos-p6-f1-windows-node22-receipt","size_in_bytes":758},
+      {"id":9590651720,"name":"gkos-p6-f1-windows-node24-receipt","size_in_bytes":758},
+      {"id":9590649864,"name":"gkos-p6-f1-windows-node23-receipt","size_in_bytes":757},
+      {"id":9590639050,"name":"gkos-p6-f1-linux-node23-receipt","size_in_bytes":754},
+      {"id":9590638802,"name":"gkos-p6-f1-linux-node22-receipt","size_in_bytes":754},
+      {"id":9590637358,"name":"gkos-p6-f1-macos-node22-receipt","size_in_bytes":754},
+      {"id":9590634059,"name":"gkos-p6-f1-adversarial-receipt","size_in_bytes":792},
+      {"id":9590631948,"name":"gkos-p6-f1-secret-scan-receipt","size_in_bytes":787},
+      {"id":9590631824,"name":"gkos-p6-f1-contract-pack","size_in_bytes":41693}
+    ],
+    "inner_files": [
+      {"path":"gkos-p6-f1-adversarial-receipt/qualification-receipt.json","bytes":1170,"sha256":"98156c900e3cd7d3937ba180fed667c066b22322a5d5a9a334d04786711cf21e"},
+      {"path":"gkos-p6-f1-contract-pack/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar","bytes":349184,"sha256":"a768be2c79c33fc99b62a3cd3db9a29e92c1b20efc7f21e7580c756ab1df77f3"},
+      {"path":"gkos-p6-f1-contract-pack/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar.sha256","bytes":117,"sha256":"1a327741d58dda769f1bc956b0252886c1b5e779693b626592e61de1f2330181"},
+      {"path":"gkos-p6-f1-contract-pack/qualification-receipt.json","bytes":1174,"sha256":"ca77fdaebca162df152fbed5dc1555624d7d48f40e6d331710155ad5143daef5"},
+      {"path":"gkos-p6-f1-linux-node22-receipt/qualification-receipt.json","bytes":993,"sha256":"ce656bf63a4d8d5b570daf2ea5f9736bdfc855eca6683a1ed464ea02efdb125d"},
+      {"path":"gkos-p6-f1-linux-node23-receipt/qualification-receipt.json","bytes":993,"sha256":"475385e882cbdad17849a56de9c851995bea15fca595e3d4736bf832105bb4d2"},
+      {"path":"gkos-p6-f1-linux-node24-receipt/qualification-receipt.json","bytes":994,"sha256":"682ffbe81dadf4b3d4af65289ec93af565708a04a2a352ffb7a6f95408b7b8f0"},
+      {"path":"gkos-p6-f1-macos-node22-receipt/qualification-receipt.json","bytes":995,"sha256":"43fac3a2c9d2c51f878c678689acda606b10b84b588fbdea8d98894f2bbb4cbc"},
+      {"path":"gkos-p6-f1-secret-scan-receipt/qualification-receipt.json","bytes":1161,"sha256":"57c2841063c20adf7df273e539e2c00746100096a702709f34346a404057ecea"},
+      {"path":"gkos-p6-f1-terminal-audit-receipt/qualification-receipt.json","bytes":1165,"sha256":"83c96bc10d63e92f1be3187541ea704b00067668bc175543062f0a180fa2912b"},
+      {"path":"gkos-p6-f1-windows-node22-receipt/qualification-receipt.json","bytes":999,"sha256":"b4fdbc8f16014c6a008839b05664596380e78724ea16aba21406ea19f10512d8"},
+      {"path":"gkos-p6-f1-windows-node23-receipt/qualification-receipt.json","bytes":999,"sha256":"a73bfb6db6d470f020eeb2c5eb6f13842cd15ea82d8afec6e67c9d3931a7d03c"},
+      {"path":"gkos-p6-f1-windows-node24-receipt/qualification-receipt.json","bytes":999,"sha256":"b1d24e3f1d72b92989e78ea529831e05b09ec5b99d4a0ad626f7e8bc96ca4fe9"}
+    ],
+    "all_and_only_audit": "PASS",
+    "receipt_schema_validation": "PASS_11_OF_11",
+    "archive_inner_digest_validation": "PASS"
+  },
+  "signature_and_repository_state": {
+    "commit_count": 5,
+    "commits": [
+      "7d1e34f08a2e6905e8fef4dbe351239d42a59fad",
+      "006882c7f3d9ba495f2167a4671810c7f281151d",
+      "1651b81a353a207dd2990eb6ee6cee7992a23319",
+      "376431388caa7c97e178078d6a39840fd825ce44",
+      "25acd484c6f804c8e4a6cfdef21849aa397cb47a"
+    ],
+    "signature_scheme": "SSH ED25519",
+    "signature_fingerprint": "SHA256:dwwxvq69ZWPDlS6bzlvZ0uXo76ZKTRqvMSmDGhABhfM",
+    "signer": "oden@odenknight.com",
+    "local_verify_commit": "GOOD_5_OF_5",
+    "remote_final_signature_verified": true,
+    "remote_final_signature_reason": "valid",
+    "dco_signed_off_by": "OdenKnight <Odenknight@users.noreply.github.com>",
+    "dco_commit_count": "5_OF_5",
+    "worktree_porcelain": "",
+    "worktree_clean": true,
+    "local_head": "25acd484c6f804c8e4a6cfdef21849aa397cb47a",
+    "origin_branch_head": "25acd484c6f804c8e4a6cfdef21849aa397cb47a",
+    "local_remote_equal": true,
+    "pull_request": null,
+    "pull_request_head_equality": "NOT_APPLICABLE_NO_PR_CREATED_OR_AUTHORIZED"
+  },
+  "secret_content_and_redaction": {
+    "hosted_secret_scan": "PASS",
+    "local_generated_content_scan": "PASS",
+    "private_key_material_found": 0,
+    "credential_secret_material_found": 0,
+    "raw_one_time_secret_values_found": 0,
+    "runtime_log_redaction_claim": "NOT_F1"
+  },
+  "unresolved_findings": [
+    {
+      "id": "F1-HANDOFF-ORDINARY-CI-PHASE5-WINDOWS-LATENCY",
+      "scope": "pre-existing protected Phase5 watcher qualification lane",
+      "severity_for_f1": "NON_CAUSAL_EXTERNAL_GATE_FINDING",
+      "first_observed_run": 32922436861,
+      "first_job_id": 98038490758,
+      "bounded_rerun": 32923481470,
+      "bounded_rerun_job_id": 98041556564,
+      "bounded_rerun_conclusion": "failure",
+      "exact_code": "GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED",
+      "ordinary_ci_terminal_counts": {
+        "success": 13,
+        "failure": 1,
+        "skipped": 2
+      },
+      "causality": "F1 changed none of the 22 accepted protected paths, including .github/workflows/ci.yml and contracts/watcher/ and src/watcher/. Exact local full suite passed 869/869 non-skipped tests. The bounded hosted rerun reproduced the same protected Windows22 latency ceiling.",
+      "disposition": "Not repaired or threshold-weakened in F1. Independent review/orchestrator may route it to the protected Phase5 owner; ordinary CI is not represented as green."
+    }
+  ],
+  "forbidden_work_confirmed_absent": {
+    "F2_runtime_authority": true,
+    "F3_mcp_service_or_facade": true,
+    "F4_adversarial_runtime_execution": true,
+    "F5_platform_evidence_closeout": true,
+    "Lite_L1_through_L4": true,
+    "effects_behavior_change": true,
+    "README_reconciliation": true,
+    "merge": true,
+    "tag": true,
+    "release": true,
+    "deployment": true,
+    "activation": true,
+    "publication": true,
+    "pull_request_creation": true
+  },
+  "governance": {
+    "implementer": "Peirce (/root/compare_engine)",
+    "self_review_or_acceptance": false,
+    "required_independent_reviewer": "Beauvoir",
+    "reviewer_recusal_note": "The implementer authored package, workflow, tests, generated bytes, and this handoff and must not accept F1.",
+    "next_package_authorization": "NONE_UNTIL_INDEPENDENT_F1_ACCEPTANCE",
+    "slot_release": true
+  },
+  "state": "READY_FOR_REVIEW",
+  "verdict": "F1_IMPLEMENTATION_HANDOFF_READY",
+  "explicit_non_verdict": "F1_NOT_ACCEPTED"
+}

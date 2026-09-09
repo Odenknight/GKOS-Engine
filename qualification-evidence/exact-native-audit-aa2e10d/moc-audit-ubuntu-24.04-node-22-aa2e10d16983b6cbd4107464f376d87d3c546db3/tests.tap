@@ -1,0 +1,531 @@
+TAP version 13
+# Subtest: unchanged execution stores fully bound NO_CHANGE and exact retries preserve receipt/sequence/source bytes
+ok 1 - unchanged execution stores fully bound NO_CHANGE and exact retries preserve receipt/sequence/source bytes
+  ---
+  duration_ms: 204.179948
+  type: 'test'
+  ...
+# Subtest: native process exit during no-change after-received recovers one verified receipt
+ok 2 - native process exit during no-change after-received recovers one verified receipt
+  ---
+  duration_ms: 191.034052
+  type: 'test'
+  ...
+# Subtest: native process exit during no-change after-planned recovers one verified receipt
+ok 3 - native process exit during no-change after-planned recovers one verified receipt
+  ---
+  duration_ms: 188.725682
+  type: 'test'
+  ...
+# Subtest: native process exit during no-change after-prepared recovers one verified receipt
+ok 4 - native process exit during no-change after-prepared recovers one verified receipt
+  ---
+  duration_ms: 203.610233
+  type: 'test'
+  ...
+# Subtest: native process exit during no-change after-no-change-audit recovers one verified receipt
+ok 5 - native process exit during no-change after-no-change-audit recovers one verified receipt
+  ---
+  duration_ms: 177.699287
+  type: 'test'
+  ...
+# Subtest: native process exit during no-change after-receipt recovers one verified receipt
+ok 6 - native process exit during no-change after-receipt recovers one verified receipt
+  ---
+  duration_ms: 171.74117
+  type: 'test'
+  ...
+# Subtest: missing or corrupt no-change audit blocks startup rather than reconstructing historical success
+ok 7 - missing or corrupt no-change audit blocks startup rather than reconstructing historical success
+  ---
+  duration_ms: 100.035056
+  type: 'test'
+  ...
+# Subtest: unchanged managed MOC still revalidates live authority and retains unresolved intent on refusal
+ok 8 - unchanged managed MOC still revalidates live authority and retains unresolved intent on refusal
+  ---
+  duration_ms: 85.862382
+  type: 'test'
+  ...
+# Subtest: native audit destination write failure cannot seal NO_CHANGE or promote an operation
+ok 9 - native audit destination write failure cannot seal NO_CHANGE or promote an operation
+  ---
+  duration_ms: 78.035887
+  type: 'test'
+  ...
+# Subtest: host creates, advances ownership, archives replacements and restarts as a no-op
+ok 10 - host creates, advances ownership, archives replacements and restarts as a no-op
+  ---
+  duration_ms: 368.466919
+  type: 'test'
+  ...
+# Subtest: host recovers an effect committed before ownership metadata persisted
+ok 11 - host recovers an effect committed before ownership metadata persisted
+  ---
+  duration_ms: 115.302783
+  type: 'test'
+  ...
+# Subtest: host refuses external edits and current authority revocation
+ok 12 - host refuses external edits and current authority revocation
+  ---
+  duration_ms: 92.445152
+  type: 'test'
+  ...
+# Subtest: host state tampering blocks startup and preserves evidence
+ok 13 - host state tampering blocks startup and preserves evidence
+  ---
+  duration_ms: 76.566918
+  type: 'test'
+  ...
+# Subtest: runtime observes file edits and closes resources within shutdown budget
+ok 14 - runtime observes file edits and closes resources within shutdown budget
+  ---
+  duration_ms: 952.903222
+  type: 'test'
+  ...
+# Subtest: host preserves human bytes through successive region-managed updates
+ok 15 - host preserves human bytes through successive region-managed updates
+  ---
+  duration_ms: 89.873621
+  type: 'test'
+  ...
+# Subtest: missing ownership state alongside an existing effect journal fails closed
+ok 16 - missing ownership state alongside an existing effect journal fails closed
+  ---
+  duration_ms: 50.117921
+  type: 'test'
+  ...
+# Subtest: periodic and startup reconciliation repair changes with no delivered event
+ok 17 - periodic and startup reconciliation repair changes with no delivered event
+  ---
+  duration_ms: 179.624497
+  type: 'test'
+  ...
+# Subtest: cross-folder rename reconciles both scopes and leaves an unrelated MOC untouched
+ok 18 - cross-folder rename reconciles both scopes and leaves an unrelated MOC untouched
+  ---
+  duration_ms: 184.335734
+  type: 'test'
+  ...
+# Subtest: shutdown waits for an active commit and preserves newer admitted work for restart
+ok 19 - shutdown waits for an active commit and preserves newer admitted work for restart
+  ---
+  duration_ms: 145.250565
+  type: 'test'
+  ...
+# Subtest: failed graph publication replays the same committed effect before ownership advancement
+ok 20 - failed graph publication replays the same committed effect before ownership advancement
+  ---
+  duration_ms: 86.632718
+  type: 'test'
+  ...
+# Subtest: Node executor requires an explicit cooperative-vault path threat model
+ok 21 - Node executor requires an explicit cooperative-vault path threat model
+  ---
+  duration_ms: 16.255178
+  type: 'test'
+  ...
+# Subtest: Node executor journals, archives exact bytes, atomically replaces, verifies, receipts, and replays idempotently
+ok 22 - Node executor journals, archives exact bytes, atomically replaces, verifies, receipts, and replays idempotently
+  ---
+  duration_ms: 128.090702
+  type: 'test'
+  ...
+# Subtest: fresh executor performs a safe startup preflight before normal first use
+ok 23 - fresh executor performs a safe startup preflight before normal first use
+  ---
+  duration_ms: 56.568629
+  type: 'test'
+  ...
+# Subtest: precondition mismatch is stale and never overwrites external bytes
+ok 24 - precondition mismatch is stale and never overwrites external bytes
+  ---
+  duration_ms: 29.851029
+  type: 'test'
+  ...
+# Subtest: stale receipts are journal-sealed and tampering blocks replay and startup
+ok 25 - stale receipts are journal-sealed and tampering blocks replay and startup
+  ---
+  duration_ms: 38.047685
+  type: 'test'
+  ...
+# Subtest: executor requires a current host precondition provider
+ok 26 - executor requires a current host precondition provider
+  ---
+  duration_ms: 10.364653
+  type: 'test'
+  ...
+# Subtest: vault lease excludes a second writer
+ok 27 - vault lease excludes a second writer
+  ---
+  duration_ms: 7.677588
+  type: 'test'
+  ...
+# Subtest: a verifiably dead same-host lease is quarantined with a cleanup receipt
+ok 28 - a verifiably dead same-host lease is quarantined with a cleanup receipt
+  ---
+  duration_ms: 7.80402
+  type: 'test'
+  ...
+# Subtest: an external edit immediately before replace wins and the prepared image is not applied
+ok 29 - an external edit immediately before replace wins and the prepared image is not applied
+  ---
+  duration_ms: 68.063274
+  type: 'test'
+  ...
+# Subtest: multi-file execution uses deterministic target lock order
+ok 30 - multi-file execution uses deterministic target lock order
+  ---
+  duration_ms: 89.675578
+  type: 'test'
+  ...
+# Subtest: concurrent execute calls serialize shared archive updates without losing effects
+ok 31 - concurrent execute calls serialize shared archive updates without losing effects
+  ---
+  duration_ms: 84.216232
+  type: 'test'
+  ...
+# Subtest: sequential shared-run commits retain immutable per-effect receipt bindings
+ok 32 - sequential shared-run commits retain immutable per-effect receipt bindings
+  ---
+  duration_ms: 119.426775
+  type: 'test'
+  ...
+# Subtest: startup recovery accepts successive committed effects on the same target
+ok 33 - startup recovery accepts successive committed effects on the same target
+  ---
+  duration_ms: 151.466833
+  type: 'test'
+  ...
+# Subtest: startup recovery completes an interrupted successor without treating its predecessor as corrupt
+ok 34 - startup recovery completes an interrupted successor without treating its predecessor as corrupt
+  ---
+  duration_ms: 90.648517
+  type: 'test'
+  ...
+# Subtest: terminal successor attempts cannot mask corruption of the committed target head
+    # Subtest: stale
+    ok 1 - stale
+      ---
+      duration_ms: 78.970907
+      type: 'test'
+      ...
+    # Subtest: aborted
+    ok 2 - aborted
+      ---
+      duration_ms: 79.238859
+      type: 'test'
+      ...
+    1..2
+ok 35 - terminal successor attempts cannot mask corruption of the committed target head
+  ---
+  duration_ms: 158.817119
+  type: 'test'
+  ...
+# Subtest: concurrent executeMany batches share one queue and merge a common archive
+ok 36 - concurrent executeMany batches share one queue and merge a common archive
+  ---
+  duration_ms: 79.139574
+  type: 'test'
+  ...
+# Subtest: startup recovery is serialized behind an in-flight execution
+ok 37 - startup recovery is serialized behind an in-flight execution
+  ---
+  duration_ms: 44.468336
+  type: 'test'
+  ...
+# Subtest: rollback is a separately authorized, preconditioned, archived effect
+ok 38 - rollback is a separately authorized, preconditioned, archived effect
+  ---
+  duration_ms: 94.084351
+  type: 'test'
+  ...
+# Subtest: startup recovery classifies every injected transition without silent overwrite
+    # Subtest: after-received
+    ok 1 - after-received
+      ---
+      duration_ms: 18.881316
+      type: 'test'
+      ...
+    # Subtest: after-planned
+    ok 2 - after-planned
+      ---
+      duration_ms: 20.696474
+      type: 'test'
+      ...
+    # Subtest: after-prepared
+    ok 3 - after-prepared
+      ---
+      duration_ms: 23.093901
+      type: 'test'
+      ...
+    # Subtest: after-archive
+    ok 4 - after-archive
+      ---
+      duration_ms: 29.832625
+      type: 'test'
+      ...
+    # Subtest: after-temporary-write
+    ok 5 - after-temporary-write
+      ---
+      duration_ms: 43.07178
+      type: 'test'
+      ...
+    # Subtest: after-replace
+    ok 6 - after-replace
+      ---
+      duration_ms: 31.373069
+      type: 'test'
+      ...
+    # Subtest: after-verified
+    ok 7 - after-verified
+      ---
+      duration_ms: 34.385976
+      type: 'test'
+      ...
+    # Subtest: after-receipt
+    ok 8 - after-receipt
+      ---
+      duration_ms: 46.298628
+      type: 'test'
+      ...
+    1..8
+ok 39 - startup recovery classifies every injected transition without silent overwrite
+  ---
+  duration_ms: 249.261596
+  type: 'test'
+  ...
+# Subtest: hard process termination at every transition recovers without losing the before-image
+    # Subtest: after-received
+    ok 1 - after-received
+      ---
+      duration_ms: 88.67828
+      type: 'test'
+      ...
+    # Subtest: after-planned
+    ok 2 - after-planned
+      ---
+      duration_ms: 84.689463
+      type: 'test'
+      ...
+    # Subtest: after-prepared
+    ok 3 - after-prepared
+      ---
+      duration_ms: 89.725031
+      type: 'test'
+      ...
+    # Subtest: after-archive
+    ok 4 - after-archive
+      ---
+      duration_ms: 88.985786
+      type: 'test'
+      ...
+    # Subtest: after-temporary-write
+    ok 5 - after-temporary-write
+      ---
+      duration_ms: 116.229163
+      type: 'test'
+      ...
+    # Subtest: after-replace
+    ok 6 - after-replace
+      ---
+      duration_ms: 115.832545
+      type: 'test'
+      ...
+    # Subtest: after-verified
+    ok 7 - after-verified
+      ---
+      duration_ms: 116.238138
+      type: 'test'
+      ...
+    # Subtest: after-receipt
+    ok 8 - after-receipt
+      ---
+      duration_ms: 116.179119
+      type: 'test'
+      ...
+    1..8
+ok 40 - hard process termination at every transition recovers without losing the before-image
+  ---
+  duration_ms: 818.496268
+  type: 'test'
+  ...
+# Subtest: filesystem fault injection preserves recoverable intent and never silently overwrites
+    # Subtest: archive
+    ok 1 - archive
+      ---
+      duration_ms: 31.86147
+      type: 'test'
+      ...
+    # Subtest: temporary-write
+    ok 2 - temporary-write
+      ---
+      duration_ms: 37.213768
+      type: 'test'
+      ...
+    # Subtest: replace
+    ok 3 - replace
+      ---
+      duration_ms: 58.845284
+      type: 'test'
+      ...
+    # Subtest: verify
+    ok 4 - verify
+      ---
+      duration_ms: 48.207729
+      type: 'test'
+      ...
+    # Subtest: receipt
+    ok 5 - receipt
+      ---
+      duration_ms: 53.337834
+      type: 'test'
+      ...
+    1..5
+ok 41 - filesystem fault injection preserves recoverable intent and never silently overwrites
+  ---
+  duration_ms: 230.377405
+  type: 'test'
+  ...
+# Subtest: tampered recovery-required receipt blocks recovery without being overwritten
+ok 42 - tampered recovery-required receipt blocks recovery without being overwritten
+  ---
+  duration_ms: 17.886962
+  type: 'test'
+  ...
+# Subtest: tampered post-write pre-commit receipt blocks recovery without being overwritten
+ok 43 - tampered post-write pre-commit receipt blocks recovery without being overwritten
+  ---
+  duration_ms: 37.04801
+  type: 'test'
+  ...
+# Subtest: recovery conflict is sealed stale, disables writes, and reopens validly
+ok 44 - recovery conflict is sealed stale, disables writes, and reopens validly
+  ---
+  duration_ms: 35.231973
+  type: 'test'
+  ...
+# Subtest: successful explicit recovery re-enables a fresh executor after a failed startup preflight
+ok 45 - successful explicit recovery re-enables a fresh executor after a failed startup preflight
+  ---
+  duration_ms: 65.948585
+  type: 'test'
+  ...
+# Subtest: retry retains immutable receipt bytes for every sealed journal terminal
+ok 46 - retry retains immutable receipt bytes for every sealed journal terminal
+  ---
+  duration_ms: 65.082856
+  type: 'test'
+  ...
+# Subtest: stale-after-archive validates archive evidence before enabling writes
+ok 47 - stale-after-archive validates archive evidence before enabling writes
+  ---
+  duration_ms: 33.48171
+  type: 'test'
+  ...
+# Subtest: executor rejects noncanonical colliding effect IDs before durable I/O
+ok 48 - executor rejects noncanonical colliding effect IDs before durable I/O
+  ---
+  duration_ms: 2.551618
+  type: 'test'
+  ...
+# Subtest: journal corruption blocks startup recovery
+ok 49 - journal corruption blocks startup recovery
+  ---
+  duration_ms: 4.208807
+  type: 'test'
+  ...
+# Subtest: archive or checkpoint corruption blocks write-plane startup
+    # Subtest: archive manifest
+    ok 1 - archive manifest
+      ---
+      duration_ms: 31.579884
+      type: 'test'
+      ...
+    # Subtest: checkpoint binding
+    ok 2 - checkpoint binding
+      ---
+      duration_ms: 6.320485
+      type: 'test'
+      ...
+    # Subtest: primary receipt
+    ok 3 - primary receipt
+      ---
+      duration_ms: 32.267344
+      type: 'test'
+      ...
+    # Subtest: archive receipt copy
+    ok 4 - archive receipt copy
+      ---
+      duration_ms: 35.702471
+      type: 'test'
+      ...
+    # Subtest: immutable effect binding
+    ok 5 - immutable effect binding
+      ---
+      duration_ms: 34.105165
+      type: 'test'
+      ...
+    # Subtest: archive after image
+    ok 6 - archive after image
+      ---
+      duration_ms: 36.684342
+      type: 'test'
+      ...
+    # Subtest: archive diff
+    ok 7 - archive diff
+      ---
+      duration_ms: 34.437653
+      type: 'test'
+      ...
+    # Subtest: archive result
+    ok 8 - archive result
+      ---
+      duration_ms: 32.921714
+      type: 'test'
+      ...
+    # Subtest: manifest security binding
+    ok 9 - manifest security binding
+      ---
+      duration_ms: 32.096147
+      type: 'test'
+      ...
+    # Subtest: unowned manifest binding
+    ok 10 - unowned manifest binding
+      ---
+      duration_ms: 34.270688
+      type: 'test'
+      ...
+    # Subtest: committed target
+    ok 11 - committed target
+      ---
+      duration_ms: 39.984177
+      type: 'test'
+      ...
+    1..11
+ok 50 - archive or checkpoint corruption blocks write-plane startup
+  ---
+  duration_ms: 352.133694
+  type: 'test'
+  ...
+# Subtest: graceful shutdown durably checkpoints before refusing new work
+ok 51 - graceful shutdown durably checkpoints before refusing new work
+  ---
+  duration_ms: 6.490989
+  type: 'test'
+  ...
+# Subtest: symlink or junction targets fail closed when the platform permits creating one
+ok 52 - symlink or junction targets fail closed when the platform permits creating one
+  ---
+  duration_ms: 19.105288
+  type: 'test'
+  ...
+1..52
+# tests 86
+# suites 0
+# pass 86
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3324.11121

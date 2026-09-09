@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-08-31T23:02:13.8097812Z",
+  "purpose": "Determine whether the selected Node-on-Linux qualification lane is available locally without installation or network access.",
+  "environment": {
+    "provider": "WSL2",
+    "distribution": "Debian",
+    "debian_version": "13.5",
+    "kernel": "6.18.33.2-microsoft-standard-WSL2",
+    "workspace_mount": "PASS"
+  },
+  "node": {
+    "status": "ABSENT",
+    "native_executable": null
+  },
+  "npm": {
+    "status": "WINDOWS_INTEROP_ONLY",
+    "executable": "/mnt/c/Program Files/nodejs/npm",
+    "version_observed": "10.9.4"
+  },
+  "qualification": {
+    "status": "NOT_RUN",
+    "reason": "The Debian environment has no native Node.js executable. No runtime was installed or downloaded under this authorization."
+  },
+  "authority": {
+    "production_host_selected": "Node.js on Linux",
+    "production_authority_granted": false,
+    "effects_writes_enabled": false
+  }
+}

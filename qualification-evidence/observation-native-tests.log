@@ -1,0 +1,25 @@
+✔ 2.2 expected projection preimages reproduce fixed pins and retain workload (1483.5307ms)
+✔ 2.2 oracle rejects changed chunks instead of adopting an arbitrary digest (1424.5224ms)
+✔ separate full-history historical and current workflow contracts (4.3436ms)
+✖ native SQLite initial, one-item reuse, and clean rebuild match independent 2.2 manifests (13581.7832ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 3
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16639.873
+
+✖ failing tests:
+
+test at test\retrieval-observation-2.2.test.mjs:59:1
+✖ native SQLite initial, one-item reuse, and clean rebuild match independent 2.2 manifests (13581.7832ms)
+  Error: OBS_UPDATE_REUSE_INVALID
+      at fail (file:///[LOCAL_PATH]
+      at Module.verifyReuseRows (file:///[LOCAL_PATH]
+      at TestContext.<anonymous> (file:///[LOCAL_PATH]
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:911:7) {
+    code: 'OBS_UPDATE_REUSE_INVALID'
+  }

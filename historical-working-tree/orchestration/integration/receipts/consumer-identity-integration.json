@@ -1,0 +1,38 @@
+{
+  "version": "consumer-identity-integration/1",
+  "date": "2026-08-31",
+  "remote_writes": false,
+  "kosmos": {
+    "base": "6486035dfc2e42173b1158b8007c9bab35aa7dc9",
+    "branch": "codex/integrate-kosmos-identity-20260831",
+    "commit": "52b843c50a9e810bf8ad7ac7de8e4505a44b6baa",
+    "tree": "2a3d9a777c7e3ef582c9e5d544acb04f92c2f5fc",
+    "patch_sha256": "b52b9df81756d3876e90f3d46d24e8dc75df2c58aca63dc5ea145d7a195bbfee",
+    "status_clean": true,
+    "checks": {
+      "verify": {"passed": true, "tests": 283, "failed": 0, "skipped": 0, "receipt_sha256": "a1cae5a2d02c1a456e9ae94115f16036cae37ad45e17e65735e1eacdaffdb344"},
+      "browser": {"passed": true, "tests": 2, "projects": ["chromium", "mobile-chromium"], "receipt_sha256": "08d6824c02759e4e73ea9e875301f828a96029ff87888106b81c3523a29f15aa"}
+    }
+  },
+  "observatory": {
+    "base_source_coordinate": "8da1d2239a9ce0af5570fe1bfa264934d8aabbe4",
+    "base_source_object_available_locally": false,
+    "local_git_base": "2a7b66fc6a33076fdcf29574cf2e31082c1b6e2a",
+    "reconstruction_commit": "07ffb58859c8e0622a746d88df9016d7b520c6d3",
+    "branch": "codex/integrate-observatory-identity-20260831",
+    "commit": "2c01d9ea1263db2e4d7f438c2955cbc481c69f6e",
+    "tree": "4e9530c9f71348f29763c4e22faafe3572ba8803",
+    "patch_sha256": "bd454ba7801dd95c16be0f9d53373aee805955a4f591fa74243244467890d508",
+    "status_clean": true,
+    "checks": {
+      "build": {"passed": true, "receipt_sha256": "b02652052a914ae46b8af2f2216a2a6e50bae2baad03402e3c547a54318e8c77"},
+      "native": {"passed": true, "tests": 39, "passed_count": 38, "failed": 0, "skipped": 1, "skip_reason": "Windows Bash installer test", "receipt_sha256": "de731d37b29d49b59119b9ce33c0fbbf41da1200a3760c665eb85af414c79623"},
+      "webgl_browser": {"passed": true, "transport": "synthetic mocked SSE", "renderer": "actual headless Chromium WebGL", "receipt_sha256": "66a8602464bd42a7ec7a6042f97ec4050a91a50c26641ca33de8e7b465ac1d6c"}
+    }
+  },
+  "limits": [
+    "No production or deployed Engine connection was made.",
+    "No credential, release, push, merge, deployment, or authority activation occurred.",
+    "Observatory source coordinate 8da1d2239a9ce0af5570fe1bfa264934d8aabbe4 is not a locally available Git object and is not claimed as an ancestor."
+  ]
+}

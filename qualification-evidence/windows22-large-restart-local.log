@@ -1,0 +1,19 @@
+TAP version 13
+# (node:32260) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority
+ok 1 - restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority
+  ---
+  duration_ms: 121268.9582
+  type: 'test'
+  ...
+# {"topology_bytes":1552042,"graph_bytes":30764373}
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 121660.9231
