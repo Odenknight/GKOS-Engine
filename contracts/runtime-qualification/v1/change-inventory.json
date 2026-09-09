@@ -396,10 +396,28 @@
       "rationale": "Runtime modernization and stability: qualify Node 22/24/26 and execute dedicated watcher observations through one bounded exact-latency retry wrapper."
     },
     {
+      "path": ".github/workflows/managed-moc-audit-2.2.yml",
+      "before": null,
+      "after": "7421258d9380ae8def43300e6f706339318fcf3b543b060759bf73a827663c76",
+      "rationale": "Run native no-change process-exit, failure and receipt tests on mandatory Linux/Windows Node22/24 with bounded environment/test evidence."
+    },
+    {
+      "path": ".github/workflows/npm-release-2.2.yml",
+      "before": null,
+      "after": "89289faba34af4b3ae2f0c8b9a644f55f8fad15205ef733c3559ba158c5c319e",
+      "rationale": "Add immutable exact-tag OIDC-only release workflow that refuses absent approval/evidence and mismatched source or tarball; no release triggered."
+    },
+    {
+      "path": ".github/workflows/observation-2.2.yml",
+      "before": null,
+      "after": "26e2e20eea2b2eb1b7914a6f98433e83383930ecfe5278df73e394b8833792f7",
+      "rationale": "Add a distinct fail-closed Linux 2.2 observation workflow with bounded artifact upload."
+    },
+    {
       "path": ".github/workflows/phase4-retrieval-observation.yml",
       "before": "8335d9b88016414584117202b7d083393d360a1c",
-      "after": "033df13af0bfb9f02b1c8679b8d04cf5c32b348718022386b1f919e389254662",
-      "rationale": "Workflow equivalence repair: keep the standalone Phase 4 observation lane byte-equivalent to its CI bridge after the approved exact checkout/setup-node v5 pin upgrade."
+      "after": "2addd303a6922d80a936f46edd15be19f24429cdf551473bb6525e08696bcda9",
+      "rationale": "Name historical Engine 2.1.2 lane and execute the exact last successful historical source with full history."
     },
     {
       "path": ".github/workflows/runtime-qualification.yml",
@@ -410,8 +428,8 @@
     {
       "path": ".github/workflows/sidecar-release.yml",
       "before": "4e8b5e5eb49ceabcfdf048b3d3cf7163725e2554",
-      "after": "68209099200a7152b8b95a66dba36fc381124e535fb1326c886ea2a73d020bcb",
-      "rationale": "Release stability: build SEA artifacts on Node 24 LTS and bind checkout and setup-node to reviewed v5 commits."
+      "after": "d9effe53e0f61158b3238a4f70c41dfa07e464f43bf86c4aeebbdd3f468151a1",
+      "rationale": "Preserve binary builds and artifacts; prevent v2.2.0 sidecar uploads from prematurely creating or rewriting official stable release notes."
     },
     {
       "path": ".gitignore",
@@ -440,8 +458,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "e13d2715484aa0eff67d04c691de229cfbcf011444f6c3fe5f8a62e1cd0a99c9",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "23fbc3aab2f40022913d5b077585ccf116f89df36b6a0e5edc958193409a4d2b",
+      "rationale": "Retain current capability documentation and add reviewed full-history verification instructions from PR #47."
     },
     {
       "path": "ROADMAP.md",
@@ -638,8 +656,8 @@
     {
       "path": "docs/CURRENT_CAPABILITIES.md",
       "before": "154d01ab1328d6f7a8cc10974cde6d8651402357",
-      "after": "283ce2d15fc7cd02d5e07d7664a40aaab93156d8803dd04b196d703aac62d0fd",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "78c3494cd54aa880949782cd6a76e932ce4db5b291a8e627ace67caa42799a90",
+      "rationale": "Describe implemented separate durable no-op audit while preserving unqualified scale/soak and filesystem limitations."
     },
     {
       "path": "docs/DETERMINISTIC-MOC-ASSISTANCE.md",
@@ -654,22 +672,64 @@
       "rationale": "Document executed isolated OD-02 scope, commands, upstream pins, Supersedes none and explicit lack of release/profile/registration claims."
     },
     {
+      "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
+      "before": null,
+      "after": "38e7a280d18b34b7b005892b755126fcfbd4baf083eabb260b46fac51f66cd92",
+      "rationale": "Record the soak-pilot ordering defect, independently reproduced link-ID drift, canonical assembly repair and pending new-candidate qualification; preserve failed evidence."
+    },
+    {
+      "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
+      "before": null,
+      "after": "42b2ec2c53ad2866c3a78e524dfdeac54b5e01b1e633d8f21b16c909ee43ac2f",
+      "rationale": "Specify separate no-change audit artifact and truthful file-sync/recovery guarantees and remaining durability gates."
+    },
+    {
+      "path": "docs/NATIVE-RETRIEVAL-READ-REMEDIATION.md",
+      "before": null,
+      "after": "83523aee6d362b5f65a49aaf4648c16de21c57c01b96437a20fee0b1a4e53194",
+      "rationale": "Record bounded native-read diagnostics and isolated repair limits without dismissing the old latency failure or claiming new candidate qualification."
+    },
+    {
       "path": "docs/NAVIGATION-EFFECTS-CONTRACT.md",
       "before": null,
       "after": "6514c8e48174017a248960b5a1512739c8416abbb76b5b766429e6dc54913c29",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "docs/NPM-2.2-OWNER-ACTIONS.md",
+      "before": null,
+      "after": "b072ebe666d141bf43990cca008d377e8f70b4efcd7c849398562ca83d00b7d3",
+      "rationale": "Provide exact npm trusted-publisher and protected GitHub environment setup; preserve absent owner-account and final qualification blockers."
+    },
+    {
+      "path": "docs/OBSERVATION-2.2-QUALIFICATION.md",
+      "before": null,
+      "after": "2e8da20ad7853f5be1ea644f2f1f22c9bc6d2bb41ce8dcf1e5d6033a818aecef",
+      "rationale": "Document distinct historical/current identities, workload, digest derivation and limitations."
+    },
+    {
       "path": "docs/RELEASE-STATUS.md",
       "before": null,
-      "after": "c4be9892ebed0bb9db87c46f91f37a7bbff1767068af66e4122deafedba3c652",
-      "rationale": "Document current source capabilities, release status and exact merged verification evidence; no runtime or release activation."
+      "after": "d825e703221185c741951bd9b0f20b0d40e35f67a9eafdcf3eb0199994efda2a",
+      "rationale": "Record exact candidate focused evidence without claiming publication or completion of remaining mandatory gates."
+    },
+    {
+      "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",
+      "before": null,
+      "after": "89935024c69ad6edef09a40b24eeed073d50c2614bf4ad2ac5d1c147e599de6f",
+      "rationale": "Preserve PR #47 exact bounded failure diagnosis and follow-up record."
     },
     {
       "path": "docs/VERSION-PROFILE-COMPATIBILITY.md",
       "before": "e2bcc225192fee89b0272ea446a1c3467a22fb9b",
       "after": "e1a8881dbb3ad3390a041d9d566609b8fb95082493276532320e8f3b23f00270",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "docs/WINDOWS-QUALIFICATION-REMEDIATION-20260908.md",
+      "before": null,
+      "after": "35730828ad967521c1f2b0e70206fcab0cc3941b74360ddd62f0b8e231f6be41",
+      "rationale": "Record exact failed candidate evidence, measured secure scan bottleneck, bounded implementation repair and remaining exact-head qualification gates without relaxing limits."
     },
     {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
@@ -738,6 +798,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "evidence/2026-09-08-release-220-starting-state.md",
+      "before": null,
+      "after": "abebb07f5e89794a9a533e81a6a51498041cd63b153e8963fa916bcc22ee9626",
+      "rationale": "Record exact reconciled release starting coordinates, open work, environment and unmet gates."
+    },
+    {
       "path": "examples/managed-moc.mjs",
       "before": null,
       "after": "f97cf6a973ecbba28b4b86d40b052a18fc87560b1d0b59eb9ab3438d472c792c",
@@ -780,10 +846,40 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "scripts/generate-retrieval-observation-fixture-2.2.mjs",
+      "before": null,
+      "after": "83805dd8b3e50accf7eba91ce7bd9b08345c58978a2021c7cb27e45364cbf3aa",
+      "rationale": "Bind separately versioned 2.2 fixture to reviewed fixed expected digests; preserve historical bytes."
+    },
+    {
+      "path": "scripts/observation-2.2-material.mjs",
+      "before": null,
+      "after": "d963d6affcc45878b6007c2b5fe052e76a08218019ce720b0db1cea4e77ca56b",
+      "rationale": "Independently construct 2.2 projection preimages without production indexing or canonicalization."
+    },
+    {
+      "path": "scripts/release-220-preflight.mjs",
+      "before": null,
+      "after": "581f6adb15db65971d66eec236dbc537e22595c2ab357559252209a0585f4747",
+      "rationale": "Fail closed on any missing mandatory exact-commit gate, incomplete soak, missing evidence binding, wrong tag or inspected tarball digest/inventory."
+    },
+    {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
       "after": "5161ce1e3092df97f187e1476f94ef2e8ad8ca2e411a01f8afa26b798b79c848",
       "rationale": "Windows reliability: retry the singleton watcher observation once only after its sole complete TAP latency failure."
+    },
+    {
+      "path": "scripts/run-retrieval-observation-qualification-2.2.mjs",
+      "before": null,
+      "after": "025cf0d8bd2855c4d044800ee75651e5f8207d986e02a21a3434af222e703c7d",
+      "rationale": "Separate 2.2 runner with strict source binding, complete manifest checks and native vector reuse verification; preserve workload and p95."
+    },
+    {
+      "path": "scripts/run-retrieval-observation-qualification.mjs",
+      "before": "5001102ad0df3a89e27677fe100143353b8f7b1d",
+      "after": "0d4c8aa90b17fda486745ec28a24dec99f0c014952bbfffd223658e137f58f91",
+      "rationale": "Retain existing current qualification adaptation; add only PR #47 allowlisted diagnostic output."
     },
     {
       "path": "scripts/run-watcher-observation-qualification.mjs",
@@ -828,10 +924,22 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/incremental.ts",
+      "before": "b8e7c28ee99596e461123aca4597237277be758e",
+      "after": "5765ac4fac40b2d32e3cbf81f97bddfd5aa041ccca265b7d8e58d903b0c115b4",
+      "rationale": "Group candidates once to avoid quadratic unchanged scans; sort representative source paths before assembly so incremental history cannot alter link order or generated IDs; preserve all candidate, reuse and validation checks."
+    },
+    {
       "path": "src/index.ts",
       "before": "b4550c73992d38f7fc3e52383efde0de276ae27d",
       "after": "76e958a89e81530f75a166a34a19b6b1fc63a827d806a2f6a5c79035900fae77",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "src/ingest/source-scan.ts",
+      "before": "c36a98bc8e379177475b5bef7d0df1c95cf45313",
+      "after": "43a0cad6a92bde0fe7445dc707452fc50503aacf10dc6cac27456bcfb5f63c41",
+      "rationale": "Bound independent secure watcher file probes to four; retain serial public Phase3 scanning, every capability/TOCTOU check, both complete snapshots and deterministic ordering; drain work before descent or failure."
     },
     {
       "path": "src/navigation-effects/assistance.ts",
@@ -872,14 +980,14 @@
     {
       "path": "src/navigation-effects/moc-batch.ts",
       "before": null,
-      "after": "f767587c352d6a9798544d936b931b3236f22290238dad881a63313dc89a6966",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "2ebfc2cc63dcbbee46f8df871defbbd99a4154246c732560c41d7b600256ac45",
+      "rationale": "Forward explicit no-change audit planning option for the managed Node host."
     },
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "81525d1b5df21cf7f4c9f6b15cf0963b04188650c4a2ffd91110c430787ca631",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "ece4d38d2c93f58f2a72029253e26cd8fa33cbfb3ba77e82e363589d33fee0be",
+      "rationale": "Persist separate versioned NO_CHANGE audits before terminal completion; verify on replay, revalidate interrupted no-ops, retain exact failure/refusal semantics."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
@@ -896,8 +1004,8 @@
     {
       "path": "src/navigation-effects/node/moc-host.ts",
       "before": null,
-      "after": "0de96e4580009ea6e4f771d73205ffb4a7f8b7fe8512ed4cdc5087f2e52e12c3",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "d582ca399ab54cd4c36af6a99495c6c1f1d51805a8028aa5e5ecccebf98cb949",
+      "rationale": "Execute byte-identical managed plans through durable executor; bind reconciliation identity and suppress false source-change callbacks."
     },
     {
       "path": "src/navigation-effects/node/moc-runtime.ts",
@@ -914,8 +1022,8 @@
     {
       "path": "src/navigation-effects/planner.ts",
       "before": null,
-      "after": "dbe8ab1b5b72901a1da1a9458af9a7e9dd1f885abd6d9239148002f52d291a4d",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "9ff0726eb113627d22d4bac05d4dd82a8cf54de5285fe4572f2107142773bf46",
+      "rationale": "Add explicit opt-in durable no-change plan with reconciliation identity while preserving default pure no-op behavior."
     },
     {
       "path": "src/navigation-effects/types.ts",
@@ -932,8 +1040,8 @@
     {
       "path": "src/retrieval/coordinator.ts",
       "before": "f7fe89a328c61bebfbfee87eb3d4bb3efdf89111",
-      "after": "0016afb181d572af42996a731de081683369ba572374a6386d8a5b5702c15cf7",
-      "rationale": "Q-GUARD Windows coverage closure: reopen private evaluation generations through the evaluation-only long-path SQLite authority without changing ordinary coordinator stores."
+      "after": "58d0a15f3599a3bb4ae0d282431f39e3a4acf705ad6fd84736f5302205d4dd2c",
+      "rationale": "Bound only Engine-native, unique-path eligible source reads to four after policy/filter/time admission; preserve custom/repeated-path serial semantics, every freshness check and deterministic result processing."
     },
     {
       "path": "src/retrieval/evaluation-executor.ts",
@@ -970,6 +1078,12 @@
       "before": "9c8517d5c14fdbac1164f05681b875ffb6fa26f0",
       "after": "0b1a5e1acc36dfb8c6ba213736d93c3d03abe87fc7ec52623cebd61b6c9a4ab0",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/native-read.ts",
+      "before": null,
+      "after": "bf43601948b0ab427f2ede63da89723e1994b1163d47e36417653f77fc636e47",
+      "rationale": "Internal four-worker ordered read primitive; retain failed-read refusal values and drain all admitted work before returning; not a public API."
     },
     {
       "path": "src/retrieval/sqlite-store.ts",
@@ -1012,6 +1126,12 @@
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
       "after": "8ccdfb38565d16b38bb20f2d625cb1ce263d631ff46519a7473f3fd4e18d81f2",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/determinism.test.mjs",
+      "before": "d29098024595fc7d53fccb17c69e912c0d1a7457",
+      "after": "9f1bc0062d8846ba32bb73683cc45db8bdad6ca691eae90bf15fe3c950e1a8e7",
+      "rationale": "Regress edited and permuted source traversal: exact full ordered node/link equality and link identities must converge with a clean rebuild while parsing only changed content."
     },
     {
       "path": "test/documentation-capabilities.test.mjs",
@@ -1074,6 +1194,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "test/managed-moc-no-change.test.mjs",
+      "before": null,
+      "after": "7b1c4db7185c3096da7df6c299fdc1356e2f1958f8716d9036cdf19fe029a1e4",
+      "rationale": "Native no-change receipts, idempotency, five process-exit recovery phases, corrupt-audit refusal and actual destination write failure."
+    },
+    {
       "path": "test/navigation-architecture.test.mjs",
       "before": "b9636738cb6c719e02145386ee5746583a24f878",
       "after": "2b2f0ddbdb21b237cd28363034f318fa9aa73c426629a182c58f8bd6d106a065",
@@ -1094,8 +1220,8 @@
     {
       "path": "test/navigation-effects-host.test.mjs",
       "before": null,
-      "after": "4b8b4fe94280901a598cd5e36088a1b2c304dd428247263d28a759b684147990",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "6f0d3ec51c6bfe414f727f12e5a17339db92f6451177591f98e533a3281273fb",
+      "rationale": "Assert original journal prefix and exact new no-change terminal sequence rather than expecting absent audits."
     },
     {
       "path": "test/navigation-effects-node.test.mjs",
@@ -1128,6 +1254,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "test/release-220-preflight.test.mjs",
+      "before": null,
+      "after": "bc2214c5c44b159128bdb9db1b5d225e622c1b11ae16129babb5ac5dfea88a17",
+      "rationale": "Negative and positive preflight tests for mandatory gates, source identity, soak length, archive digests and package inventory."
+    },
+    {
       "path": "test/retrieval-evaluation-cli.test.mjs",
       "before": "80d2df55e3c6c97e95b08101a1e892ef63c43da7",
       "after": "cf17cd786e39b163707f027c74c5445a9d6c321322b9d153541436e936835a39",
@@ -1146,10 +1278,22 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "test/retrieval-native-read.test.mjs",
+      "before": null,
+      "after": "965011839bde0c0bf9025cb7cfc98d07f4915898e6bc3d37f007826558b3b9f9",
+      "rationale": "Test exact four-read bound, ordered completion, failure draining, duplicate helper refusal, serial custom callbacks and native/custom stale-source result equality."
+    },
+    {
+      "path": "test/retrieval-observation-2.2.test.mjs",
+      "before": null,
+      "after": "621d034de1b2980df66e996fee5365967977cb5c87f49fc228969f077c833e6b",
+      "rationale": "Test fixed pins, fail-closed oracle substitution, workflow separation, and actual native 10k SQLite convergence/reuse."
+    },
+    {
       "path": "test/retrieval-observation-qualification.test.mjs",
       "before": "4e4e0a64a7b03c61dcf933b7ffc4364d56eab0fd",
-      "after": "76080c78a278920fe08fab081d7eccb80395d8620361197e9d8b45cd6e231455",
-      "rationale": "Workflow equivalence and Q-GUARD repair: retain the approved v5 workflow digest and isolate the non-Linux observation oracle from an unrelated pull-request event environment."
+      "after": "456cb1355c6b60e70f27bbfba34e3b13de6713501943d6b1e1b2ac883e5a3e4e",
+      "rationale": "Retain exact historical workflow hash via immutable Git object; successor workflow contract is tested separately."
     },
     {
       "path": "test/retrieval-provenance.test.mjs",
@@ -1196,8 +1340,8 @@
     {
       "path": "test/service-stdio-package.test.mjs",
       "before": "5e302462792e360747bf0254d336f8d747f55e4c",
-      "after": "b2894842f847b77d25377819461ea22c1864e3aeb0032206441d653e431df09d",
-      "rationale": "Q-GUARD hosted stability repair: retain a finite per-test ceiling with enough saturated Windows runner headroom for the clean clone, install, pack, reinstall, and authenticated process round-trip."
+      "after": "99e10a2d3613cc429ba954332a88846268cffe6bdef46548c73b510c04d329e3",
+      "rationale": "Make package setup abort-aware with bounded phase diagnostics, one explicit build, ordered cleanup and safe npm report parsing; retain real authenticated installed-package assertions and unchanged deadlines."
     },
     {
       "path": "test/watcher-coordinator.test.mjs",
@@ -1214,8 +1358,8 @@
     {
       "path": "test/watcher-large-restart.test.mjs",
       "before": "6645c5680b85689548f07963fe596e05e12e03ef",
-      "after": "29978a55b73ec828fd1da1900ab7009e0f006209c2a22a86aec447287e9a8c49",
-      "rationale": "CI repair: prove large watcher restart binds and reopens the runtime-selected concrete lexical backend."
+      "after": "e9d2e3b1549b3ee450b563c791c13f7b7194fb3a718ee0ee6f5e8c59c9b0d6d3",
+      "rationale": "Retain the unchanged large graph, hardlink refusal, same-parent shutdown retry and pointer assertions; emit bounded shutdown duration for CI diagnosis."
     },
     {
       "path": "test/watcher-observation-qualification.test.mjs",
@@ -1234,6 +1378,12 @@
       "before": "064563e6a26da7e90e76591fe907463bc29f3a0c",
       "after": "bb99d4a0794ad37141a096aaaad62b2d74155f7cb33a9176a7ac94525ef11a18",
       "rationale": "Q-GUARD coverage closure: register the native Linux shutdown regression only where the Linux watcher and physical FTS5 capability exist."
+    },
+    {
+      "path": "test/watcher-source-scan.test.mjs",
+      "before": "a4d4b5f55a18e28b2bd209d5278685b39dd8123c",
+      "after": "6b78d365c46b4ec85dfd885f50863052da780242b85ce9dda5d302a162a222a3",
+      "rationale": "Assert bounded concurrent opens across nested directories, exact stable scan evidence and no pending file work after refusal."
     }
   ]
 }

@@ -1,0 +1,46 @@
+name: Engine 2.2 retrieval observation
+on:
+  push:
+    branches: [main, 'release/**']
+  pull_request:
+  schedule:
+    - cron: '37 4 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  current-2-2:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      GIT_CONFIG_COUNT: 1
+      GIT_CONFIG_KEY_0: core.autocrlf
+      GIT_CONFIG_VALUE_0: 'false'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck && npm run build && npm run pack:check
+      - name: Build private runner
+        run: ./node_modules/.bin/esbuild scripts/run-retrieval-observation-qualification-2.2.mjs --bundle --platform=node --format=esm --target=node24 --outfile="$RUNNER_TEMP/observation-2.2.mjs"
+      - name: Execute exact current source
+        run: |
+          mkdir -m 700 "$RUNNER_TEMP/observation-2.2"
+          node "$RUNNER_TEMP/observation-2.2.mjs" --mode observation --artifact-root "$RUNNER_TEMP/observation-2.2"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: observation-2.2-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/observation-2.2/performance-sample-plan.json
+            ${{ runner.temp }}/observation-2.2/observation-receipt.json
+            ${{ runner.temp }}/observation-2.2/observation-report.json
+          if-no-files-found: error
+          retention-days: 30
+      - run: git diff --exit-code && test -z "$(git status --porcelain)"
+        if: always()

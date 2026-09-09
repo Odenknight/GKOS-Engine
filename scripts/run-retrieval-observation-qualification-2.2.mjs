@@ -21,6 +21,7 @@ import {
   rmdir,
 } from "node:fs/promises";
 import { execFileSync, spawn } from "node:child_process";
+import { ENGINE_VERSION } from "../src/version.ts";
 
 import {
   coordinatorFromRetrievalEvaluationDatabase,
@@ -41,6 +42,8 @@ import {
   PERFORMANCE_VAULT_ID,
   buildPerformanceCorpus,
   expectedPerformanceCoordinates,
+  expectedPerformanceManifests,
+  PERFORMANCE_FIXTURE_VERSION,
   indexRequestSequenceDigest,
   performanceFixtureMaterial,
   performanceQueryCycle,
@@ -48,9 +51,9 @@ import {
   queryAttemptSetDigest,
   resultSetDigest,
   sampleVectorDigest,
-} from "./generate-retrieval-observation-fixture.mjs";
+} from "./generate-retrieval-observation-fixture-2.2.mjs";
 
-const OBSERVATION_RECEIPT_VERSION = "gkos-retrieval-evaluation-phase4-observation-receipt/1.0.0";
+const OBSERVATION_RECEIPT_VERSION = "gkos-retrieval-evaluation-phase4-observation-receipt/2.2.0";
 const CLI_RECEIPT_VERSION = "gkos-retrieval-evaluation-phase4-qualification/1.0.0";
 const CLI_SAMPLE_PLAN_VERSION = "gkos-retrieval-evaluation-phase4-qualification-sample-plan/1.0.0";
 const CLI_SAMPLE_PLAN_DIGEST = "sha256:b37749ee2302fa5086769aa81234f89a4b180e7f2569a18d19c86178da8fb83d";
@@ -129,7 +132,7 @@ const PHASE5_SLICE_B_EXPECTED_CHANGE_ROWS = Object.freeze([
 ]);
 const SCAN_PRESENTATION_VERSION = "gkos-retrieval-evaluation-scan-presentation/1.0.0-draft.1";
 const QUERY_REQUEST_SEQUENCE_VERSION = "gkos-retrieval-evaluation-performance-query-request-sequence/1.0.0";
-const OBSERVATION_RUNNER_PATH = "scripts/run-retrieval-observation-qualification.mjs";
+const OBSERVATION_RUNNER_PATH = "scripts/run-retrieval-observation-qualification-2.2.mjs";
 const OBSERVATION_PLAN_FILE = "performance-sample-plan.json";
 const OBSERVATION_RECEIPT_FILE = "observation-receipt.json";
 const OBSERVATION_REPORT_FILE = "observation-report.json";
@@ -252,6 +255,14 @@ export function buildObservationReceiptForTest(value) {
     failure_codes: failureCodes,
     publication_eligible: value.publication_eligible,
     source: value.source,
+    identity: {
+      engine_version: ENGINE_VERSION,
+      retrieval_contract_version: "gkos-retrieval/1.0.0-draft.1",
+      projection_schema_version: 2,
+      fixture_version: PERFORMANCE_FIXTURE_VERSION,
+      fixture_digest: PERFORMANCE_FIXTURE_DIGEST,
+      source_commit: value.source?.checkout_commit ?? null,
+    },
     sample_plan: observationSamplePlanReceipt(),
     fixture: value.fixture,
     environment: value.environment,
@@ -358,7 +369,7 @@ async function observationSourceReceipt(repoRoot) {
     checkout_commit: state.checkoutCommit,
     source_head_commit: state.sourceHeadCommit,
     event_commit: state.eventCommit,
-    event_name: eventName(new Set(["local", "schedule", "workflow_dispatch"])),
+    event_name: eventName(new Set(["local", "push", "pull_request", "schedule", "workflow_dispatch"])),
     runner_file_sha256: state.runnerFileSha256,
     runner_committed_blob_sha256: state.runnerCommittedBlobSha256,
     runner_committed_at_checkout: state.committedAtCheckout,
@@ -369,7 +380,7 @@ async function observationSourceReceipt(repoRoot) {
 
 export function publicationEligibleForTest(source) {
   return process.env.GITHUB_ACTIONS === "true" &&
-    ["schedule", "workflow_dispatch"].includes(source.event_name) &&
+    ["push", "pull_request", "schedule", "workflow_dispatch"].includes(source.event_name) &&
     source.execution_provenance === "committed_clean" && source.worktree_clean && source.runner_committed_at_checkout &&
     source.runner_committed_blob_sha256 === source.runner_file_sha256 &&
     source.checkout_commit === source.source_head_commit && source.source_head_commit === source.event_commit;
@@ -519,6 +530,9 @@ export function verifySliceBProtectedInputsForTest(repoRoot, headCommitInput = "
 }
 
 export async function verifyFrozenQualificationInputsForTest(repoRoot) {
+  if (!gitDiffClean(repoRoot, "650eab4a6752227cae336d7556a57826c22a0d5a", ["scripts/generate-retrieval-observation-fixture.mjs"])) {
+    fail("GKX_EVAL_QUALIFICATION_IMMUTABILITY_INVALID");
+  }
   const packRoot = "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1";
   const phase03 = [
     "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1",
@@ -841,7 +855,7 @@ export function exerciseOfflineGuardFamiliesForTest() {
   } finally { guard.restore(); }
 }
 
-class ConstantEmbeddingProvider {
+export class ConstantEmbeddingProvider {
   kind = "local_onnx";
   provider_id = "phase4-observation-local";
   model_id = "phase4-observation-constant-v1";
@@ -920,7 +934,7 @@ function indexInput(stateDirectory, corpus) {
   };
 }
 
-async function runIndexPhase(provider, phase, stateDirectory, corpus, expected) {
+export async function runIndexPhase(provider, phase, stateDirectory, corpus, expected) {
   provider.beginIndexPhase(phase);
   const start = process.hrtime.bigint();
   const indexed = await indexRetrievalGeneration(indexInput(stateDirectory, corpus), provider);
@@ -929,6 +943,10 @@ async function runIndexPhase(provider, phase, stateDirectory, corpus, expected) 
   const callCount = observed.records.length;
   const itemCount = observed.records.reduce((sum, row) => sum + row.item_count, 0);
   const requestSequenceDigest = indexRequestSequenceDigest(phase, observed.records);
+  const expectedManifest = expectedPerformanceManifests()[phase === "initial_index" ? "initial" : "updated"];
+  if (stableJson(indexed.generation.manifest) !== stableJson(expectedManifest)) {
+    fail("GKX_EVAL_OBSERVATION_INDEX_RECEIPT_MISMATCH");
+  }
   if (callCount !== expected.provider_call_count || itemCount !== expected.provider_item_count ||
       requestSequenceDigest !== expected.index_request_sequence_digest ||
       indexed.generation.manifest.projection_id !== expected.expected_projection_id ||
@@ -955,6 +973,32 @@ function queryRequestSequenceDigest(phase, requestIds) {
     phase,
     request_ids: requestIds,
   });
+}
+
+export function readReuseRows(databasePath) {
+  const { DatabaseSync } = require('node:sqlite');
+  const db = new DatabaseSync(databasePath, { readOnly: true });
+  try {
+    return db.prepare('SELECT c.source_id, c.structural_position, c.part_ordinal, c.chunk_id, c.content_digest, c.source_digest, v.vector_json FROM chunks c JOIN chunk_vectors v USING (chunk_id) ORDER BY c.chunk_id').all();
+  } finally { db.close(); }
+}
+
+export function verifyReuseRows(before, after) {
+  const coordinate = row => stableJson([row.source_id, row.structural_position, row.part_ordinal]);
+  const previous = new Map(before.map(row => [coordinate(row), row]));
+  if (previous.size !== before.length || new Set(after.map(coordinate)).size !== after.length) fail('OBS_UPDATE_REUSE_INVALID');
+  let unchanged = 0, changed = 0, changedSourceRecords = 0;
+  for (const row of after) {
+    const prior = previous.get(coordinate(row));
+    if (!prior) fail('OBS_UPDATE_REUSE_INVALID');
+    if (prior.source_digest !== row.source_digest) changedSourceRecords++;
+    if (prior.content_digest === row.content_digest) {
+      if (prior.chunk_id !== row.chunk_id || prior.vector_json !== row.vector_json) fail('OBS_UPDATE_REUSE_INVALID');
+      unchanged++;
+    } else changed++;
+  }
+  if (before.length !== 10000 || after.length !== 10000 || unchanged !== 9999 || changed !== 1 || changedSourceRecords !== 10) fail('OBS_UPDATE_REUSE_INVALID');
+  return { unchanged_vectors_verified: unchanged, changed_content_count: changed, changed_source_record_count: changedSourceRecords };
 }
 
 function stageExpectation() {
@@ -1131,6 +1175,10 @@ async function observationStage(code, operation) {
 }
 
 async function runObservation(repoRoot, artifactRoot, source) {
+  if (ENGINE_VERSION !== "2.2.0" ||
+      git(repoRoot, ["rev-parse", "--is-shallow-repository"]) !== "false" ||
+      !source.worktree_clean || !source.runner_committed_at_checkout ||
+      source.checkout_commit !== source.source_head_commit) fail("OBS_SOURCE_PROVENANCE_INVALID");
   if (normalizedPlatform() !== "linux" || arch() !== "x64") fail("OBS_REPORT_INVALID");
   try { await verifyFrozenQualificationInputsForTest(repoRoot); }
   catch (error) { throwObservation("OBS_PACK_IMMUTABILITY_INVALID", error); }
@@ -1159,9 +1207,11 @@ async function runObservation(repoRoot, artifactRoot, source) {
     if (initialIndex.provider_call_count !== 313 || initialIndex.provider_item_count !== 10_000) {
       fail("OBS_INDEX_PROVIDER_LEDGER_INVALID");
     }
+    const initialReuseRows = readReuseRows(initialIndex.database_path);
     const updateIndex = await observationStage("OBS_UPDATE_FAILED", () =>
       runIndexPhase(indexProvider, "incremental_update", temporary.incremental_state, updated, coordinates.index.incremental_update));
     if (updateIndex.provider_call_count !== 1 || updateIndex.provider_item_count !== 1) fail("OBS_UPDATE_REUSE_INVALID");
+    const reuse = verifyReuseRows(initialReuseRows, readReuseRows(updateIndex.database_path));
     const queryProvider = new ConstantEmbeddingProvider();
     const incrementalQueries = await observationStage("OBS_QUERY_FAILED", () =>
       runQueryPhase("incremental_observation", updateIndex.database_path, updated, queryProvider, 6, 2));
@@ -1272,6 +1322,7 @@ async function runObservation(repoRoot, artifactRoot, source) {
           projection_digest: updateIndex.projection_digest,
           chunks_reprocessed: 1,
           chunks_reused: 9_999,
+          reuse,
         },
         clean_rebuild: {
           index_request_sequence_digest: rebuildIndex.index_request_sequence_digest,
@@ -1610,8 +1661,11 @@ export async function main(argv = process.argv.slice(2)) {
     if (receipt.status !== "pass") process.exitCode = 1;
     return;
   }
-  const source = await observationSourceReceipt(repoRoot);
-  try { await runObservation(repoRoot, artifactRoot, source); }
+  let source = null;
+  try {
+    source = await observationSourceReceipt(repoRoot);
+    await runObservation(repoRoot, artifactRoot, source);
+  }
   catch (error) {
     const code = typeof error?.message === "string" && OBSERVATION_FAILURE_CODES.has(error.message)
       ? error.message
@@ -1625,7 +1679,7 @@ export async function main(argv = process.argv.slice(2)) {
 const invokedPath = process.argv[1] ? resolve(process.argv[1]) : null;
 if (invokedPath !== null && invokedPath === resolve(fileURLToPath(import.meta.url)) && process.argv[2] === "--mode") {
   main().catch((error) => {
-    process.stderr.write(`phase4 retrieval qualification: ${error?.message ?? "operational failure"}\n`);
+    process.stderr.write("phase4 retrieval qualification: OBS_REPORT_INVALID\n");
     process.exitCode = 2;
   });
 }
