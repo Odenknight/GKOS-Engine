@@ -1,9 +1,9 @@
-# GKOS-Engine
+# GKOS-Engine 2.2.0
 
 Turn a folder of Markdown into a dependable knowledge map—locally,
 deterministically, and with the privacy boundary kept in view.
 
-**GKOS-Engine 2.2.0** (development candidate) parses and validates GKX records, builds canonical graphs,
+**GKOS-Engine 2.2.0** (current `main` source; release qualification pending) parses and validates GKX records, builds canonical graphs,
 projects Graphiti episodes, indexes and retrieves knowledge, analyzes navigation
 pages, and can serve an authenticated live view to local applications and named
 MCP agents. The core is TypeScript, has no Obsidian or browser dependency, and
@@ -26,11 +26,24 @@ for the complete inventory and the [roadmap](ROADMAP.md) for future work.
 
 ## Source, tags and releases
 
-The `main` branch contains the **2.2.0 development candidate**, including the
-experimental managed-MOC host. It is not an installed-product or release claim.
-As checked on September 6, 2026, the newest Git version tag is `v2.1.2`, while
-GitHub marks **2.1.1** as its latest published release. Those older snapshots do
-not include the current 2.2 MOC implementation.
+The current source version is **2.2.0**. The package manifest, lockfile and
+runtime identity agree. As verified on September 9, 2026:
+
+| Surface | Version and status |
+| --- | --- |
+| Current main source | **2.2.0**; includes the changes merged through PRs #48, #49 and #50 |
+| Public npm package | **2.0.1**, the current `latest` dist-tag; `npm install gkos-engine` does not install current main |
+| Latest GitHub release | [2.1.1](https://github.com/Odenknight/GKOS-Engine/releases/tag/v2.1.1) |
+| Newest Git version tag | `v2.1.2`; historical snapshot |
+
+The 2.2.0 source includes durable managed-MOC `NO_CHANGE` audit receipts,
+separate current and historical retrieval-observation lanes, deterministic
+incremental graph convergence, bounded native retrieval reads, and the
+[documentation digest verifier](docs/DOCUMENTATION-DIGEST-VERIFIER.md).
+Main baseline [`dee4a53`](https://github.com/Odenknight/GKOS-Engine/commit/dee4a53ab8eade0e49c726d34cdc86f46e05c253)
+passed CI, Linux/Windows runtime qualification, retrieval observation and native
+audit checks. These results belong to that commit. The final artifact, consumer,
+soak and publisher-setup gates still control an official 2.2.0 release.
 
 Read [release status and verification evidence](docs/RELEASE-STATUS.md) before
 choosing a dependency. GitHub topic tags describe the project; they do not
@@ -49,6 +62,7 @@ certify a feature, authorize writes, or identify a released artifact.
 | MOC assistance | Deterministic explicit tags/links and tag-grouped proposals; optional bounded LLM suggestions | Model-free baseline; optional provider off by default, separate data-access approval, review-only output |
 | Local service | Serve authorized graph, notes, Graphiti episodes, capabilities, MCP, and traversal events on loopback port 4814 | Implemented under an integration-only draft contract |
 | MCP | Ten credential-bound read-only tools over Streamable HTTP, plus a packaged stdio compatibility bridge | Seven original Draft.2 tools plus three Observatory extensions; no source-write tools |
+| Documentation verification | Check exact file bytes and ordered SHA-256 manifests; validate claimed receipts against pinned v0.81 schemas | Repository tools; schema validation is not authority or profile qualification |
 | Optional intelligence | Validate proposal-only responses from a separate Python AI sidecar | Optional; never approval authority |
 | Scientific trace evaluation | Deterministic checks for a provisional research-trace draft | Experimental and opt-in |
 | Admission-policy provider | Evaluate pinned, bounded admission requests and emit deterministic, hash-bound receipts | Implemented in 2.1.2; no approval, activation, or materialization authority |
@@ -264,7 +278,7 @@ entry points are the packaged commands and repository host integrations.
 
 ## Versions and standing
 
-The candidate npm package is `2.2.0`. The public exchange namespace remains GKX `2.0`,
+The current source package version is `2.2.0`; npm currently publishes `2.0.1`. The public exchange namespace remains GKX `2.0`,
 while the existing validating projection identifier remains
 `gkx-2.3-validating-projection`. These names describe different layers and are
 not interchangeable; [the compatibility guide](docs/VERSION-PROFILE-COMPATIBILITY.md)
@@ -325,8 +339,10 @@ The host defaults to 750 ms debounce, a 3-second maximum delay during continuous
 activity, and five-minute passive reconciliation. Startup recovery and a full
 reconciliation precede readiness. Watchers are hints, not guaranteed delivery.
 Failed graph-publication callbacks can replay the same effect ID; consumers
-must handle that idempotently. Byte-identical passes avoid rewrites but do not
-yet emit dedicated durable no-op audit receipts.
+must handle that idempotently. Byte-identical passes avoid source rewrites and
+emit dedicated durable `NO_CHANGE` audit receipts with operation, authority,
+ownership, digest, sequence and recovery bindings. See the
+[no-change audit guide](docs/MANAGED-MOC-NO-CHANGE-AUDIT.md).
 
 End-to-end P95 targets, the 24-hour soak and native power-loss guarantees remain
 qualification work. Neither these building blocks nor successful CI establish
@@ -373,7 +389,7 @@ them; the gate is zero failures with only documented skips.
 
 ## What comes next?
 
-Near-term work includes durable no-op audit records, measured end-to-end
+Near-term work includes final-artifact qualification, measured end-to-end
 performance and parsing counts, a 24-hour soak, platform durability evidence,
 and exact-artifact consumer qualification. Kosmos owns its adapter/UI and
 credential-bound agent-note tools; Rust follows its separate implementation

@@ -1,47 +1,47 @@
 # Source and release status
 
-Checked September 8, 2026. This page separates implemented code from published
-artifacts and enabled product features. For the functional inventory, see
-[current capabilities](CURRENT_CAPABILITIES.md); for remaining work, see the
-[roadmap](../ROADMAP.md).
+Checked September 9, 2026. Current main implements Engine **2.2.0**. This source
+version is distinct from the artifacts already published to npm and GitHub.
 
 | Surface | Verified status |
 | --- | --- |
-| Merged 2.2 source baseline | `f1a95f8f3933f834eb4030f0f0d143051e6eecc2`, merged through [PR #43](https://github.com/Odenknight/GKOS-Engine/pull/43) |
-| Package source version | 2.2.0 development candidate; not a published 2.2 release |
-| Newest remote Git version tag | `v2.1.2`, resolving to `7bf14b481e78c5ae9d1e14661602be4f24559d0e` |
+| Implementation baseline | [`dee4a53ab8eade0e49c726d34cdc86f46e05c253`](https://github.com/Odenknight/GKOS-Engine/commit/dee4a53ab8eade0e49c726d34cdc86f46e05c253), incorporating PRs #48, #49 and #50 |
+| Package, lockfile and runtime version | **2.2.0**, current source; not a published 2.2.0 artifact |
+| Public npm latest | [gkos-engine 2.0.1](https://www.npmjs.com/package/gkos-engine/v/2.0.1) |
+| Newest Git version tag | `v2.1.2`, resolving to `7bf14b481e78c5ae9d1e14661602be4f24559d0e` |
 | GitHub latest published release | [2.1.1](https://github.com/Odenknight/GKOS-Engine/releases/tag/v2.1.1) |
-| Current source MCP tools | Ten credential-filtered read-only tools; no agent source-write endpoints |
-| Managed MOC writes | Experimental, separately configured Node host; explicit ownership and authority required |
-| Optional model assistance | Off by default; approved data access and reviewed proposals, not autonomous writing |
+| Managed MOC writes | Implemented experimental Node host; explicit ownership and authority required; durable no-change audit receipts implemented |
+| MCP | Ten credential-filtered read-only tools; no agent source-write endpoints |
 
-## Verification evidence
+## Main verification
 
-The merged source baseline passed [post-merge CI](https://github.com/Odenknight/GKOS-Engine/actions/runs/34022818430)
-and [historical/current runtime qualification](https://github.com/Odenknight/GKOS-Engine/actions/runs/34022818434).
-These results belong to that exact revision. They do not certify later commits,
-a downstream Obsidian installation, physical power-loss safety, or a 24-hour soak.
+The exact baseline above passed:
 
-The release branch adds separately versioned 2.2 retrieval observation and
-durable no-op audit receipts. Native Linux/Windows focused audit checks and
-packed consumer smoke checks have passed on candidate
-`458a23f3771ae7b303cf03956727d0b0a7eed98a`; these do not qualify later commits.
-Remaining qualification includes end-to-end latency and incremental parsing
-measurements, the full 24-hour soak, comprehensive native durability evidence,
-and exact Kosmos consumer integration. Track
-[Engine #44](https://github.com/Odenknight/GKOS-Engine/issues/44).
+- [CI](https://github.com/Odenknight/GKOS-Engine/actions/runs/34303985235).
+- [Historical and current runtime qualification](https://github.com/Odenknight/GKOS-Engine/actions/runs/34303985155), including mandatory native Linux/Windows Node 22 and 24. Node 26 remains informational.
+- [Engine 2.2 retrieval observation](https://github.com/Odenknight/GKOS-Engine/actions/runs/34303985108).
+- [Managed-MOC native audit qualification](https://github.com/Odenknight/GKOS-Engine/actions/runs/34303985163).
 
-## Choosing and publishing a version
+These results bind that revision. Documentation updates and subsequent source
+changes have their own checks; earlier results do not certify a new artifact,
+consumer installation, physical power-loss safety or a completed 24-hour soak.
 
-Developers inspecting 2.2 should record an exact commit and treat it as
-experimental source. Final downstream adoption requires an authorized immutable
-release artifact, integrity evidence, and consumer compatibility checks. A
-floating `main` dependency is not that evidence.
+## Implemented and remaining
 
-Existing tags and release notes describe historical snapshots and must not be
-rewritten to advertise capabilities added later. Creating a `v*` tag triggers
-this repository's sidecar release workflow; it is a publication action, not
-merely a documentation label. No 2.2 tag or release is created by this update.
+Main now includes the separate [2.2 observation lane](OBSERVATION-2.2-QUALIFICATION.md),
+[durable no-change audits](MANAGED-MOC-NO-CHANGE-AUDIT.md), deterministic graph
+convergence, bounded native retrieval reads, and the
+[documentation verifier](DOCUMENTATION-DIGEST-VERIFIER.md). Historical 2.1.2
+fixtures and replay remain separate. See [current capabilities](CURRENT_CAPABILITIES.md).
 
-GitHub repository topics are discovery labels only. Neither topics, passing CI,
-nor a version number grants write authority or establishes GKOS conformance.
+An official 2.2.0 release still requires the exact final candidate and tarball,
+complete native durability/performance and consumer evidence, a full 24-hour
+soak, exact Kosmos integration, and owner trusted-publisher/protected-environment
+setup. [Issue #44](https://github.com/Odenknight/GKOS-Engine/issues/44) controls the
+remaining inventory. The prepared OIDC workflow refuses incomplete approval or
+mismatched source/artifact identity.
+
+Developers using main should record an exact commit. Consumers selecting a
+published package should use an immutable version and integrity pin. Existing
+tags and releases remain historical; this documentation does not create or move
+a tag, publish a package, grant write authority or establish GKOS conformance.

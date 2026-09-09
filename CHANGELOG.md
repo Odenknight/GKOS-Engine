@@ -2,7 +2,19 @@
 
 ## 2.2.0
 
-Development candidate; not yet a tagged or published release.
+Current main source version; not yet a tagged or published 2.2.0 release.
+
+- Merged separately versioned 2.2 retrieval observation with independent digest
+  pins, real SQLite FTS5 indexing, incremental reuse and deterministic rebuild
+  checks; preserved the historical 2.1.2 replay and frozen evidence.
+- Added durable managed-MOC `NO_CHANGE` audit receipts and native recovery tests.
+- Made incremental graph ordering deterministic and bounded native source reads
+  while preserving policy admission, citation freshness and path checks.
+- Made packed-MCP qualification setup cancellable, with one explicit build
+  and bounded phase diagnostics under the unchanged deadlines.
+- Added pinned documentation digest and refusal-receipt schema verification.
+- Prepared exact-tag OIDC-only publication gates; final release qualification
+  and owner publisher setup remain required.
 
 - Reconciled broad-audience README, current capability inventory, technical and
   beginner guides, version/profile notes and future roadmap with implemented
