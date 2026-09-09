@@ -1,0 +1,254 @@
+[
+  {
+    "name": "phase5-watcher-artifact-audit",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-artifact-audit",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (windows-latest, 26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (windows-latest, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (ubuntu-24.04, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (windows-latest, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (ubuntu-24.04, 26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (ubuntu-24.04, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (ubuntu-24.04, 26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (ubuntu-24.04, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (windows-latest, 26)",
+    "state": "IN_PROGRESS"
+  },
+  {
+    "name": "current-runtime (ubuntu-24.04, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (windows-latest, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-runtime (windows-latest, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "windows-retrieval-path-security (22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-linux (26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-windows (26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "windows-retrieval-path-security (22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "windows-retrieval-path-security (26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-linux (24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-windows (26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "build (26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-windows (22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-windows (22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (windows-latest, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-linux (22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (macos-14, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (macos-14, 23)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "windows-retrieval-path-security (24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (windows-latest, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-windows (24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "native-no-change (windows-latest, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "native-no-change (windows-latest, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "windows-retrieval-path-security (24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "build (24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "build (26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-linux (22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (ubuntu-24.04, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "build (22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "build (24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (ubuntu-24.04, 23)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (ubuntu-24.04, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (windows-latest, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (windows-latest, 23)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (windows-latest, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "native-no-change (ubuntu-24.04, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (ubuntu-24.04, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (windows-latest, 23)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (macos-14, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (macos-14, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (macos-14, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-windows (24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-linux (26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (ubuntu-24.04, 22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase5-watcher-linux (24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "windows-retrieval-path-security (26)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (ubuntu-24.04, 23)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "build (22)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "native-no-change (ubuntu-24.04, 24)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "current-2-2",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "historical-contract-replay (macos-14, 23)",
+    "state": "SUCCESS"
+  },
+  {
+    "name": "phase4-retrieval-observation-manual",
+    "state": "SKIPPED"
+  },
+  {
+    "name": "phase4-retrieval-observation-manual",
+    "state": "SKIPPED"
+  }
+]
