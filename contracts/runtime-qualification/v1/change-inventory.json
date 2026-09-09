@@ -708,6 +708,12 @@
       "rationale": "Document distinct historical/current identities, workload, digest derivation and limitations."
     },
     {
+      "path": "docs/PROJECT-HANDOFF-20260909.md",
+      "before": null,
+      "after": "8b09b63a83b1ceddb46e549c4d684d48768928c2b59fa8fc88d7680eb5ffcb05",
+      "rationale": "Link immutable public local-work archive and preserve exact-source release blockers before next owner directive."
+    },
+    {
       "path": "docs/RELEASE-STATUS.md",
       "before": null,
       "after": "d825e703221185c741951bd9b0f20b0d40e35f67a9eafdcf3eb0199994efda2a",
