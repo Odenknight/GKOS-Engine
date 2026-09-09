@@ -642,6 +642,12 @@
       "rationale": "Specify separate no-change audit artifact and truthful file-sync/recovery guarantees and remaining durability gates."
     },
     {
+      "path": "docs/NATIVE-RETRIEVAL-READ-REMEDIATION.md",
+      "before": null,
+      "after": "fd5a04be1c5b9c8bf153aa8a09f6c82b95a763992a38bf8775955d4d0596fa13",
+      "rationale": "Record bounded native-read diagnostics and isolated repair limits without dismissing the old latency failure or claiming new candidate qualification."
+    },
+    {
       "path": "docs/NAVIGATION-EFFECTS-CONTRACT.md",
       "before": null,
       "after": "6514c8e48174017a248960b5a1512739c8416abbb76b5b766429e6dc54913c29",
@@ -980,8 +986,8 @@
     {
       "path": "src/retrieval/coordinator.ts",
       "before": "f7fe89a328c61bebfbfee87eb3d4bb3efdf89111",
-      "after": "0016afb181d572af42996a731de081683369ba572374a6386d8a5b5702c15cf7",
-      "rationale": "Q-GUARD Windows coverage closure: reopen private evaluation generations through the evaluation-only long-path SQLite authority without changing ordinary coordinator stores."
+      "after": "58d0a15f3599a3bb4ae0d282431f39e3a4acf705ad6fd84736f5302205d4dd2c",
+      "rationale": "Bound only Engine-native, unique-path eligible source reads to four after policy/filter/time admission; preserve custom/repeated-path serial semantics, every freshness check and deterministic result processing."
     },
     {
       "path": "src/retrieval/evaluation-executor.ts",
@@ -1018,6 +1024,12 @@
       "before": "9c8517d5c14fdbac1164f05681b875ffb6fa26f0",
       "after": "0b1a5e1acc36dfb8c6ba213736d93c3d03abe87fc7ec52623cebd61b6c9a4ab0",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/retrieval/native-read.ts",
+      "before": null,
+      "after": "bf43601948b0ab427f2ede63da89723e1994b1163d47e36417653f77fc636e47",
+      "rationale": "Internal four-worker ordered read primitive; retain failed-read refusal values and drain all admitted work before returning; not a public API."
     },
     {
       "path": "src/retrieval/sqlite-store.ts",
@@ -1162,6 +1174,12 @@
       "before": null,
       "after": "7dc4248c03f4a27f2799f020b20172b6e7cfa68cb3e6eb796fa18f01949216f9",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/retrieval-native-read.test.mjs",
+      "before": null,
+      "after": "965011839bde0c0bf9025cb7cfc98d07f4915898e6bc3d37f007826558b3b9f9",
+      "rationale": "Test exact four-read bound, ordered completion, failure draining, duplicate helper refusal, serial custom callbacks and native/custom stale-source result equality."
     },
     {
       "path": "test/retrieval-observation-2.2.test.mjs",
