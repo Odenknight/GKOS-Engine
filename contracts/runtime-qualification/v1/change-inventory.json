@@ -446,8 +446,8 @@
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "ad1d437229f17a7d5637fffe445feaaa074025133149c73fd809d849b4185c9c",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "a9088cd2bb13c7befa787daac68dfbe33abc2c9ab83152407b405de8da7dbe29",
+      "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities."
     },
     {
       "path": "COMPAT.md",
@@ -458,8 +458,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "23fbc3aab2f40022913d5b077585ccf116f89df36b6a0e5edc958193409a4d2b",
-      "rationale": "Retain current capability documentation and add reviewed full-history verification instructions from PR #47."
+      "after": "d3176f34487b11f2f7591af014b203d2a9ed2174c225f45e51628208da852f43",
+      "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities."
     },
     {
       "path": "ROADMAP.md",
@@ -656,8 +656,8 @@
     {
       "path": "docs/CURRENT_CAPABILITIES.md",
       "before": "154d01ab1328d6f7a8cc10974cde6d8651402357",
-      "after": "78c3494cd54aa880949782cd6a76e932ce4db5b291a8e627ace67caa42799a90",
-      "rationale": "Describe implemented separate durable no-op audit while preserving unqualified scale/soak and filesystem limitations."
+      "after": "d2625471b8237d47c4403921abd6fdf4848212cacb169dd5e234085c575ae827",
+      "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities."
     },
     {
       "path": "docs/DETERMINISTIC-MOC-ASSISTANCE.md",
@@ -716,8 +716,8 @@
     {
       "path": "docs/RELEASE-STATUS.md",
       "before": null,
-      "after": "d825e703221185c741951bd9b0f20b0d40e35f67a9eafdcf3eb0199994efda2a",
-      "rationale": "Record exact candidate focused evidence without claiming publication or completion of remaining mandatory gates."
+      "after": "ea2e3708a9722571071873377fe1c6bfe072f2bf2c90b12f32d87d6d8d0ef2b8",
+      "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities."
     },
     {
       "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",

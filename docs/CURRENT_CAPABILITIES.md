@@ -1,6 +1,6 @@
 # Current capabilities: GKOS-Engine 2.2.0
 
-Updated 2026-09-06. This inventory describes implemented source behavior, not a published release or a GKOS conformance claim. The [README](../README.md) is the introduction; the [roadmap](../ROADMAP.md) lists future work.
+Updated 2026-09-09. This inventory describes implemented source behavior, not a published release or a GKOS conformance claim. The [README](../README.md) is the introduction; the [roadmap](../ROADMAP.md) lists future work.
 
 A capability can exist in code without being configured, authorized, safe after recovery, or enabled by an operator. Qualification is another separate requirement. Installing a package proves none of those later conditions.
 
@@ -94,6 +94,11 @@ Current package lanes: Node 22 and 24 blocking, Node 26 informative; npm >=10. H
 - Automatic updater/signing/notarization, a published 2.2 artifact, Rust parity or new GKOS conformance.
 
 ## Evidence and updates
+
+The merged `dee4a53` baseline includes the separate 2.2 observation lane, durable
+no-change audits, bounded native retrieval reads and documentation verification.
+Its CI, native runtime, observation and audit checks passed; see
+[current release status](RELEASE-STATUS.md) for exact run links and remaining gates.
 
 See [host lifecycle qualification](../evidence/2026-09-06-moc-host-lifecycle-qualification.md) for exact baseline receipt hashes, counts and limitations. Its a4ed15d hosted tree passed Ubuntu and Windows Node 22/24/26 lanes. Later changes require their own qualification; neither a version bump nor documentation transfers an earlier pass to a new commit.
 
