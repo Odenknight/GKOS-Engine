@@ -44,3 +44,23 @@ by the tests and must remain part of review. No qualification pass is inferred
 for a newly packed artifact. Adoption requires exact-commit native matrix,
 observation, package/consumer checks and new24-hour soak evidence. Preserve every
 old failure and old-source pass with its original binding.
+## Packaged MCP qualification timeout follow-up
+
+Exact-source runtime run 34293967667 at f7d80e6 failed on Windows Node 24.19.0.
+The packed-MCP test exceeded its 180-second deadline before the outer runner
+reached its 30-minute limit. The original log cannot identify which setup phase
+stalled. Other passing lanes do not override this failure.
+
+Replace synchronous setup with abort-aware subprocess calls, emit allowlisted
+phase names/status/timings, and build once explicitly between script-disabled
+lockfile installation and packing. The authenticated installed-package protocol
+assertions and both deadlines remain unchanged. Cleanup closes the bridge and
+HTTP server before removing the isolated fixture. Cancellation coverage proves
+termination of the direct spawned process; it does not establish descendant
+process-tree termination under every build-tool failure.
+
+Four focused tests pass on native Windows Node 24.18.0 (19.84 seconds) and
+22.23.2 (14.18 seconds), including an installed packed bridge exchange. Logs are
+package-test-cancellable-node24.log and package-test-cancellable-node22.log in
+the external evidence directory. Hosted exact-source qualification remains
+required; this repair does not establish the original timeout's precise cause.

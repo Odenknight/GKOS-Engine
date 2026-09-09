@@ -644,7 +644,7 @@
     {
       "path": "docs/NATIVE-RETRIEVAL-READ-REMEDIATION.md",
       "before": null,
-      "after": "fd5a04be1c5b9c8bf153aa8a09f6c82b95a763992a38bf8775955d4d0596fa13",
+      "after": "83523aee6d362b5f65a49aaf4648c16de21c57c01b96437a20fee0b1a4e53194",
       "rationale": "Record bounded native-read diagnostics and isolated repair limits without dismissing the old latency failure or claiming new candidate qualification."
     },
     {
@@ -1238,8 +1238,8 @@
     {
       "path": "test/service-stdio-package.test.mjs",
       "before": "5e302462792e360747bf0254d336f8d747f55e4c",
-      "after": "b2894842f847b77d25377819461ea22c1864e3aeb0032206441d653e431df09d",
-      "rationale": "Q-GUARD hosted stability repair: retain a finite per-test ceiling with enough saturated Windows runner headroom for the clean clone, install, pack, reinstall, and authenticated process round-trip."
+      "after": "99e10a2d3613cc429ba954332a88846268cffe6bdef46548c73b510c04d329e3",
+      "rationale": "Make package setup abort-aware with bounded phase diagnostics, one explicit build, ordered cleanup and safe npm report parsing; retain real authenticated installed-package assertions and unchanged deadlines."
     },
     {
       "path": "test/watcher-coordinator.test.mjs",
