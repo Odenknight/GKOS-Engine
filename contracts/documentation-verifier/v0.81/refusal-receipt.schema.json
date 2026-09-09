@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/refusal-receipt.schema.json",
+  "title": "GKX Refusal Receipt role",
+  "type": "object",
+  "required": [
+    "canonical_profile", "artifact_type", "schema_version",
+    "receipt_id", "gate_code", "requirement_id", "predicate_ref",
+    "result", "input_refs", "evaluated_at", "actor_context", "policy_ref"
+  ],
+  "properties": {
+    "canonical_profile": { "const": "GKX-CBOR-1" },
+    "artifact_type": { "const": "refusal-receipt" },
+    "schema_version": { "const": "1.0.0" },
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "gate_code": {
+      "type": "string",
+      "pattern": "^GKOS-GATE-L[1-7]-\\d{3}$"
+    },
+    "requirement_id": {
+      "type": "string",
+      "pattern": "^GKOS-[A-Z]+-\\d{3}$"
+    },
+    "predicate_ref": { "$ref": "gkx-common.defs.json#/$defs/componentReference" },
+    "result": { "const": "refused" },
+    "input_refs": {
+      "type": "array",
+      "minItems": 1,
+      "x-gkx-set-order": "canonical-cbor-bytewise",
+      "items": { "$ref": "gkx-common.defs.json#/$defs/artifactReference" }
+    },
+    "evaluated_at": { "$ref": "gkx-common.defs.json#/$defs/canonicalTimestamp" },
+    "actor_context": {
+      "type": "array",
+      "minItems": 1,
+      "x-gkx-set-order": "canonical-cbor-bytewise",
+      "items": { "$ref": "gkx-common.defs.json#/$defs/actorReference" }
+    },
+    "requested_effect_scope": { "$ref": "gkx-common.defs.json#/$defs/effectScope" },
+    "refusal_effect": { "type": "string" },
+    "escalation_route": { "type": "string" },
+    "policy_ref": { "$ref": "gkx-common.defs.json#/$defs/componentReference" }
+  },
+  "additionalProperties": false
+}

@@ -384,6 +384,12 @@
   ],
   "candidate_changes": [
     {
+      "path": ".gitattributes",
+      "before": "0f3ffed343d2c7ed7aad2e67be2ef4e47ae6ff15",
+      "after": "4726ac4c2ea7777c75bb5034ba06acd7c67eee14c1acbdf62c8f9bf01ea63893",
+      "rationale": "Preserve exact upstream documentation blob and v0.81 schema bytes across Windows checkout without changing existing frozen qualification fixtures."
+    },
+    {
       "path": ".github/workflows/ci.yml",
       "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
       "after": "81cb20749c449c813efc9c10c1a1315a17385e8149b23303ab347482a70d02f2",
@@ -466,6 +472,36 @@
       "before": "d28fee76dd931095907d35d5582be8f7045f52d8",
       "after": "c0635ea39f0d0ecc2ad746241bc5bd08a813e4c42173ec9cc302450be0294eb6",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "contracts/documentation-verifier/v0.81/LICENSE.txt",
+      "before": null,
+      "after": "c40538b67a5de4054b116e900b6bfcfeaec2fa4de594e28ca444ba952c5938d2",
+      "rationale": "Preserve exact pinned upstream v0.81 schema, transitive definitions, Apache license/notice or explicit provenance for isolated schema validation; no standard modification."
+    },
+    {
+      "path": "contracts/documentation-verifier/v0.81/UPSTREAM-NOTICE.md",
+      "before": null,
+      "after": "4fc70e62ebe85ed35e75f5d91d9fc4dfcd4d3ccffbfdb10bd5985e04a7d8a9d3",
+      "rationale": "Preserve exact pinned upstream v0.81 schema, transitive definitions, Apache license/notice or explicit provenance for isolated schema validation; no standard modification."
+    },
+    {
+      "path": "contracts/documentation-verifier/v0.81/gkx-common.defs.json",
+      "before": null,
+      "after": "b040687a4a9b6d17bce9e86fae28e6db7e667af8e2ebbe59f60ab9f2eea04c4b",
+      "rationale": "Preserve exact pinned upstream v0.81 schema, transitive definitions, Apache license/notice or explicit provenance for isolated schema validation; no standard modification."
+    },
+    {
+      "path": "contracts/documentation-verifier/v0.81/provenance.json",
+      "before": null,
+      "after": "bc98d0a872e766f498341532634f14202f1dd3b9c7341c94e7cbd6b2f353e54f",
+      "rationale": "Preserve exact pinned upstream v0.81 schema, transitive definitions, Apache license/notice or explicit provenance for isolated schema validation; no standard modification."
+    },
+    {
+      "path": "contracts/documentation-verifier/v0.81/refusal-receipt.schema.json",
+      "before": null,
+      "after": "11017113221f8ebc51b03c7de8078bdba3258a7d32b084d675ffd3de28c0182f",
+      "rationale": "Preserve exact pinned upstream v0.81 schema, transitive definitions, Apache license/notice or explicit provenance for isolated schema validation; no standard modification."
     },
     {
       "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures.manifest.json",
@@ -630,6 +666,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "docs/DOCUMENTATION-DIGEST-VERIFIER.md",
+      "before": null,
+      "after": "69e0c4d2cf1bbd674779c6a5ee5faa775da0a81fc501d682b7f0106035bdc232",
+      "rationale": "Document executed isolated OD-02 scope, commands, upstream pins, Supersedes none and explicit lack of release/profile/registration claims."
+    },
+    {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
       "before": null,
       "after": "38e7a280d18b34b7b005892b755126fcfbd4baf083eabb260b46fac51f66cd92",
@@ -664,6 +706,12 @@
       "before": null,
       "after": "2e8da20ad7853f5be1ea644f2f1f22c9bc6d2bb41ce8dcf1e5d6033a818aecef",
       "rationale": "Document distinct historical/current identities, workload, digest derivation and limitations."
+    },
+    {
+      "path": "docs/PROJECT-HANDOFF-20260909.md",
+      "before": null,
+      "after": "8b09b63a83b1ceddb46e549c4d684d48768928c2b59fa8fc88d7680eb5ffcb05",
+      "rationale": "Link immutable public local-work archive and preserve exact-source release blockers before next owner directive."
     },
     {
       "path": "docs/RELEASE-STATUS.md",
@@ -856,6 +904,18 @@
       "before": null,
       "after": "d1120a52f538437548fd444cbd7f929efbef49c23b30ea99547881324d8f85bf",
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
+    },
+    {
+      "path": "scripts/validate-refusal-receipt-v081.mjs",
+      "before": null,
+      "after": "9648040266e7fe6fea8814b5e41e33aa467e4408a0b0c4ef59ccd6e9e57039e6",
+      "rationale": "Validate caller-claimed receipts against SHA-pinned actual v0.81 schemas with explicit JSON-schema-only scope and no gate registration or CBOR truth claim."
+    },
+    {
+      "path": "scripts/verify-documentation-artifact.mjs",
+      "before": null,
+      "after": "c435f54358692b11401e0036078ddc44c99c7d66f85a047953acdd27b814d3ea",
+      "rationale": "Implement owner-approved OD-02 bounded exact-byte SHA-256 and independently declared ordered manifest verification; emit Engine-specific result, not standard RefusalReceipt."
     },
     {
       "path": "services/gkos-intelligence/pyproject.toml",
@@ -1084,6 +1144,54 @@
       "before": null,
       "after": "4f7b532827ca28348b8a510237db6216a17dcb68d801ac5679dbf54ef06916de",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/documentation-verifier.test.mjs",
+      "before": null,
+      "after": "f937bb84caa8c2c6d07738f46ef02a46fdf9b2e3829337642568a85983511ed7",
+      "rationale": "Pin independent intact and deliberately altered annex digests; verify input refusals, CLI statuses, schema pin tampering, structural receipt negatives and reason-code distinction."
+    },
+    {
+      "path": "test/fixtures/documentation-verifier/artifact.json",
+      "before": null,
+      "after": "52896d2d4916a6cb6ea0250bdb994ef49ac7751a31db2a0dfd591196d9665007",
+      "rationale": "Independent v2.1.1 raw Git blob and annex digest test input at f4dfda1; separately named documentation fixture, no mutation of frozen 2.1.2 evidence."
+    },
+    {
+      "path": "test/fixtures/documentation-verifier/v2.1.1/CHANGELOG.md",
+      "before": null,
+      "after": "fc0cd4d63f5fc0bcc15432cfdb06f59a3632f8bcf5e3399c2fdf2f8f74f706e6",
+      "rationale": "Independent v2.1.1 raw Git blob and annex digest test input at f4dfda1; separately named documentation fixture, no mutation of frozen 2.1.2 evidence."
+    },
+    {
+      "path": "test/fixtures/documentation-verifier/v2.1.1/LICENSE",
+      "before": null,
+      "after": "34d0c901bc4ac593bc23871166c4d8b7d1293ae00a95c43ae33d9f40717a7fcd",
+      "rationale": "Independent v2.1.1 raw Git blob and annex digest test input at f4dfda1; separately named documentation fixture, no mutation of frozen 2.1.2 evidence."
+    },
+    {
+      "path": "test/fixtures/documentation-verifier/v2.1.1/NOTICE",
+      "before": null,
+      "after": "d561803781c9fe59d3ef5b37f28711a6eaf673d8835b978c4996813d40b42050",
+      "rationale": "Independent v2.1.1 raw Git blob and annex digest test input at f4dfda1; separately named documentation fixture, no mutation of frozen 2.1.2 evidence."
+    },
+    {
+      "path": "test/fixtures/documentation-verifier/v2.1.1/README.md",
+      "before": null,
+      "after": "59160952ee0300c020b6d2cbb6c90235ba736e52616aa66b8d26f97c189e0fe0",
+      "rationale": "Independent v2.1.1 raw Git blob and annex digest test input at f4dfda1; separately named documentation fixture, no mutation of frozen 2.1.2 evidence."
+    },
+    {
+      "path": "test/fixtures/documentation-verifier/v2.1.1/VERSIONING.md",
+      "before": null,
+      "after": "4a7feb514a7da59136619ede59146ce357984c835718e25cacb7d44a231fd612",
+      "rationale": "Independent v2.1.1 raw Git blob and annex digest test input at f4dfda1; separately named documentation fixture, no mutation of frozen 2.1.2 evidence."
+    },
+    {
+      "path": "test/fixtures/documentation-verifier/v2.1.1/package.json",
+      "before": null,
+      "after": "0caa2a6f19f4084cbf839e8f7643632bef13ed0ad6326d714aef024a67e1b97f",
+      "rationale": "Independent v2.1.1 raw Git blob and annex digest test input at f4dfda1; separately named documentation fixture, no mutation of frozen 2.1.2 evidence."
     },
     {
       "path": "test/fixtures/navigation-effects-crash-child.mjs",

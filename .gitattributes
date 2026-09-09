@@ -32,3 +32,7 @@ test/service-secret-canary.test.mjs text eol=lf
 # The admission-policy proposal is byte-governed. These files are contract
 # inputs and must retain their published LF representation on every platform.
 contracts/admission-policy/** text eol=lf
+
+# OD-02 imported blobs and schema pins retain exact upstream bytes.
+contracts/documentation-verifier/v0.81/*.json -text
+test/fixtures/documentation-verifier/v2.1.1/* -text
