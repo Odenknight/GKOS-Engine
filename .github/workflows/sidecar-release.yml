@@ -53,7 +53,9 @@ jobs:
           cache: npm
 
       - name: Verify release identity
-        if: startsWith(github.ref, 'refs/tags/')
+        # The stable 2.2 release notes/evidence are created only after npm and
+        # consumer verification. Keep these binaries as run artifacts meanwhile.
+        if: startsWith(github.ref, 'refs/tags/') && github.ref != 'refs/tags/v2.2.0'
         shell: bash
         run: |
           set -euo pipefail

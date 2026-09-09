@@ -315,8 +315,20 @@ export class GkxIndex {
       group.push(file);
       changedByPath.set(path, group);
     }
+    // Snapshot path groups after renames/removals. Each normalized changed path
+    // is processed once, so its previous group stays valid throughout this loop.
+    // Avoid scanning the complete candidate set once per submitted source.
+    const previousByPath = new Map<string, NoteRecord[]>();
+    if (changedByPath.size > 0) {
+      for (const record of this.candidateRecords.values()) {
+        if (!changedByPath.has(record.relativePath)) continue;
+        const previous = previousByPath.get(record.relativePath) ?? [];
+        previous.push(record);
+        previousByPath.set(record.relativePath, previous);
+      }
+    }
     for (const [path, group] of changedByPath) {
-      const previous = [...this.candidateRecords.values()].filter((record) => record.relativePath === path);
+      const previous = previousByPath.get(path) ?? [];
       const incomingDescriptors = group.map(canonicalCandidateSourceDescriptor).sort();
       const previousDescriptors = previous.map(canonicalCandidateRecordDescriptor).sort();
       // The complete canonical parser descriptor, including source times and
@@ -443,7 +455,13 @@ export class GkxIndex {
     const candidates = [...this.candidateRecords.entries()]
       .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
       .map(([, record]) => record);
-    const graph = assembleGraphWithCanonicalCandidates([...this.records.values()], candidates, this.folders);
+    // Replacing a canonical record changes Map insertion order. Assembly
+    // derives link order and some link IDs from traversal order, so bind it
+    // to source paths rather than the history of incremental edits.
+    const records = [...this.records.entries()]
+      .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+      .map(([, record]) => record);
+    const graph = assembleGraphWithCanonicalCandidates(records, candidates, this.folders);
     graph.diagnostics.attachments = this.attachments.length;
     return graph;
   }

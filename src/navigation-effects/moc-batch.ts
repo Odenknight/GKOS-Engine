@@ -27,6 +27,7 @@ export async function planManagedMocBatch(input: {
   authorityEvaluatedAt: string;
   archiveDate: string;
   runId: string;
+  recordNoChange?: boolean;
 }): Promise<{ corpusDigest: string; results: MocApplyPlanningResult[] }> {
   const value = structuredClone(input);
   if (!await verifyVaultNavigationConfig(value.config) || value.snapshot.vaultId !== value.config.vaultId) throw new Error("INVALID_NAVIGATION_CONFIG");
@@ -76,7 +77,7 @@ export async function planManagedMocBatch(input: {
     unique.add(key);
     const candidate = candidates.get(t.path);
     if (!candidate) { results.push({ status: "review-required", targetPath: t.path, reasonCodes: ["NO_DETERMINISTIC_CANDIDATE"] }); continue; }
-    results.push(await planMocApply({ candidate, currentBytes: t.currentBytes, ownership: t.ownership, authority: t.authority, vaultId: snapshot.vaultId, corpusDigest, policyRef: value.policyRef, authorityEvaluatedAt: value.authorityEvaluatedAt, archiveDate: value.archiveDate, runId: value.runId }));
+    results.push(await planMocApply({ candidate, currentBytes: t.currentBytes, ownership: t.ownership, authority: t.authority, vaultId: snapshot.vaultId, corpusDigest, policyRef: value.policyRef, authorityEvaluatedAt: value.authorityEvaluatedAt, archiveDate: value.archiveDate, runId: value.runId, recordNoChange: value.recordNoChange }));
   }
   return deepFreeze({ corpusDigest, results });
 }

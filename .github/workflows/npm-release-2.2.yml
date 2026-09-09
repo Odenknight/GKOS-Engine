@@ -1,0 +1,109 @@
+name: Immutable Engine 2.2 npm release
+on:
+  push:
+    tags: [v2.2.0]
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+concurrency:
+  group: gkos-engine-2.2.0-publication
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.repository == 'Odenknight/GKOS-Engine'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    environment: gkos-engine-release
+    env:
+      GKOS_220_APPROVAL_JSON: ${{ vars.GKOS_220_APPROVAL_JSON }}
+      GIT_CONFIG_COUNT: 1
+      GIT_CONFIG_KEY_0: core.autocrlf
+      GIT_CONFIG_VALUE_0: 'false'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: refs/tags/v2.2.0
+          fetch-depth: 0
+          path: candidate
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          repository: Odenknight/gkos-standard
+          ref: ad10dfe94a024f464430fd243c5a918d03389041
+          path: gkos-standard
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: candidate/package-lock.json
+      - name: Exact approved source and signed annotated tag
+        working-directory: candidate
+        env:
+          ALLOWED_SIGNERS: ${{ vars.GKOS_RELEASE_ALLOWED_SIGNERS }}
+        run: |
+          set -euo pipefail
+          mkdir -m 700 "$RUNNER_TEMP/release-evidence"
+          printf '%s\n' "$ALLOWED_SIGNERS" > "$RUNNER_TEMP/release-evidence/allowed-signers"
+          git -c gpg.format=ssh -c gpg.ssh.allowedSignersFile="$RUNNER_TEMP/release-evidence/allowed-signers" verify-tag v2.2.0
+          node scripts/release-220-preflight.mjs > "$RUNNER_TEMP/release-evidence/preflight.json"
+      - name: Install current trusted-publishing CLI
+        run: npm install --global npm@12.0.2 --registry=https://registry.npmjs.org
+      - name: Retrieve the exact approved qualification bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          artifact_id="$(node -e 'console.log(JSON.parse(process.env.GKOS_220_APPROVAL_JSON).evidenceArtifactId)')"
+          gh api "repos/Odenknight/GKOS-Engine/actions/artifacts/$artifact_id" > "$RUNNER_TEMP/release-evidence/qualified-artifact-metadata.json"
+          node -e 'const fs=require("node:fs"),assert=require("node:assert/strict"),r=JSON.parse(process.env.GKOS_220_APPROVAL_JSON),m=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/release-evidence/qualified-artifact-metadata.json"));assert.equal(m.expired,false);assert.equal(m.workflow_run.head_sha,r.sourceCommit);'
+          gh api "repos/Odenknight/GKOS-Engine/actions/artifacts/$artifact_id/zip" > "$RUNNER_TEMP/release-evidence/qualified-evidence.zip"
+      - name: Refuse existing version and verify registry maintainer
+        working-directory: candidate
+        run: |
+          set -euo pipefail
+          npm view gkos-engine versions --json --registry=https://registry.npmjs.org > "$RUNNER_TEMP/release-evidence/versions.json"
+          npm view gkos-engine dist-tags --json --registry=https://registry.npmjs.org > "$RUNNER_TEMP/release-evidence/dist-tags.json"
+          npm view gkos-engine maintainers --json --registry=https://registry.npmjs.org > "$RUNNER_TEMP/release-evidence/maintainers.json"
+          node --input-type=module -e 'import fs from "node:fs"; import assert from "node:assert/strict"; const root=process.env.RUNNER_TEMP+"/release-evidence/"; assert.ok(!JSON.parse(fs.readFileSync(root+"versions.json")).includes("2.2.0")); assert.ok(JSON.parse(fs.readFileSync(root+"maintainers.json")).some(x=>x.startsWith("odenknight <")));'
+      - name: Rerun release gates serially
+        working-directory: candidate
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run typecheck
+          npm run build
+          npm test
+          npm run test:navigation
+          npm run test:intelligence
+          npm run pack:check
+          npm run check:license
+          npm run check:nomenclature
+          npm audit --audit-level=low
+          npm run qualify:current -- --output "$RUNNER_TEMP/current-qualification"
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+      - name: Create and inspect the one publication artifact
+        working-directory: candidate
+        run: |
+          set -euo pipefail
+          npm pack --dry-run --ignore-scripts --json > "$RUNNER_TEMP/release-evidence/pack-dry-run.json"
+          npm pack --ignore-scripts --json --pack-destination "$RUNNER_TEMP/release-evidence" > "$RUNNER_TEMP/release-evidence/pack.json"
+          node scripts/release-220-preflight.mjs --artifact "$RUNNER_TEMP/release-evidence/gkos-engine-2.2.0.tgz" "$RUNNER_TEMP/release-evidence/pack.json" > "$RUNNER_TEMP/release-evidence/artifact.json"
+          npm sbom --sbom-format=cyclonedx > "$RUNNER_TEMP/release-evidence/sbom.cdx.json"
+          npm publish "$RUNNER_TEMP/release-evidence/gkos-engine-2.2.0.tgz" --dry-run --ignore-scripts --registry=https://registry.npmjs.org --tag=latest --access=public
+      - name: Publish inspected artifact through OIDC only
+        working-directory: candidate
+        run: |
+          set -euo pipefail
+          npm view gkos-engine versions --json --registry=https://registry.npmjs.org > "$RUNNER_TEMP/release-evidence/versions-immediate.json"
+          npm view gkos-engine dist-tags --json --registry=https://registry.npmjs.org > "$RUNNER_TEMP/release-evidence/dist-tags-immediate.json"
+          node -e 'const fs=require("node:fs"),assert=require("node:assert/strict"),root=process.env.RUNNER_TEMP+"/release-evidence/"; assert.ok(!JSON.parse(fs.readFileSync(root+"versions-immediate.json")).includes("2.2.0")); assert.equal(JSON.parse(fs.readFileSync(root+"dist-tags-immediate.json")).latest,"2.0.1")'
+          node scripts/release-220-preflight.mjs --artifact "$RUNNER_TEMP/release-evidence/gkos-engine-2.2.0.tgz" "$RUNNER_TEMP/release-evidence/pack.json"
+          npm publish "$RUNNER_TEMP/release-evidence/gkos-engine-2.2.0.tgz" --ignore-scripts --registry=https://registry.npmjs.org --tag=latest --access=public
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: gkos-engine-2.2.0-release-evidence-${{ github.run_id }}
+          path: ${{ runner.temp }}/release-evidence/
+          if-no-files-found: error
+          retention-days: 90

@@ -347,6 +347,12 @@ authority.
 
 ## Build and verification
 
+Use a full Git clone for verification: historical fixture tests read exact
+commits and cannot reliably run from a shallow clone or a source ZIP. Check
+with `git rev-parse --is-shallow-repository`; if it prints `true`, run
+`git fetch --unshallow origin` before testing. In GitHub Actions, use
+`actions/checkout` with `fetch-depth: 0`.
+
 Run build and packaging steps separately from running tests: npm preparation
 can rebuild `dist/` and invalidate a concurrent test run.
 
