@@ -7027,6 +7027,144 @@
       "original_sha256": "bc1b13f4c9e3689f7a7809e49a515dd05196181ec726ea4232aca8e49295b1b8",
       "published_sha256": "3690e6da0de26f54febe96a72707b611588f2b30d1795630965e315f194657fd",
       "sanitized": true
+    },
+    {
+      "path": "other-working-trees/.work_deterministic-moc/package.json",
+      "original_sha256": "ae4d46c60508f6d37818e58872a5729a5189d733ca38f6245f2f10b858e8a272",
+      "published_sha256": "ae4d46c60508f6d37818e58872a5729a5189d733ca38f6245f2f10b858e8a272",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/.work_deterministic-moc/src/navigation-effects/index.ts",
+      "original_sha256": "2b3919c266da13fb22511a28f3bbab83b03b76429ffe37aa38a6e722046f4908",
+      "published_sha256": "2b3919c266da13fb22511a28f3bbab83b03b76429ffe37aa38a6e722046f4908",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/.work_deterministic-moc/test/navigation-effects-contract.test.mjs",
+      "original_sha256": "e3be74b5eb923446afabc75f39ce7a24e8adf7fd554ca5f98d8501fe6dd3076a",
+      "published_sha256": "e3be74b5eb923446afabc75f39ce7a24e8adf7fd554ca5f98d8501fe6dd3076a",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/.work_deterministic-moc/docs/DETERMINISTIC-MOC-ASSISTANCE.md",
+      "original_sha256": "b8417f71a8d90b3705e057633bc95127f4c5bcc9f43b924573adb150ed596a35",
+      "published_sha256": "b8417f71a8d90b3705e057633bc95127f4c5bcc9f43b924573adb150ed596a35",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/.work_deterministic-moc/evidence/2026-09-05-deterministic-moc-assistance.md",
+      "original_sha256": "65f26721ad906dfd09663d70c8665ad7417f88dc20bcd172388d14f55a18ae4a",
+      "published_sha256": "65f26721ad906dfd09663d70c8665ad7417f88dc20bcd172388d14f55a18ae4a",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/.work_deterministic-moc/src/navigation-effects/assistance.ts",
+      "original_sha256": "632657a69e032f604bff9d3f0023dc7c02704e46c735f4cbf8383ecceb0a9985",
+      "published_sha256": "632657a69e032f604bff9d3f0023dc7c02704e46c735f4cbf8383ecceb0a9985",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/.work_deterministic-moc/src/navigation-effects/coordinator.ts",
+      "original_sha256": "454fd28489ed40c525ea308d211bc936a6784b6521db2b8c2ac774aa5e3585b5",
+      "published_sha256": "454fd28489ed40c525ea308d211bc936a6784b6521db2b8c2ac774aa5e3585b5",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/.work_deterministic-moc/src/navigation-effects/moc-batch.ts",
+      "original_sha256": "30d553f39a58db818ce916cfbc62103e239209bdd93dd35bfdfd8c35f41e29a7",
+      "published_sha256": "30d553f39a58db818ce916cfbc62103e239209bdd93dd35bfdfd8c35f41e29a7",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/.work_deterministic-moc/test/navigation-effects-assistance.test.mjs",
+      "original_sha256": "0860f5042cb76b3ecf0da609f3389f6c3bc35fc2fe6d2822f719e15f0c17bea2",
+      "published_sha256": "0860f5042cb76b3ecf0da609f3389f6c3bc35fc2fe6d2822f719e15f0c17bea2",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/README.md",
+      "original_sha256": "075d08834c8a5ffefc9e57ed03ec06cf1187e1126d2a121f4163b7edb03a2ab5",
+      "published_sha256": "075d08834c8a5ffefc9e57ed03ec06cf1187e1126d2a121f4163b7edb03a2ab5",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/scripts/build.mjs",
+      "original_sha256": "55ec4d272b07220de0d5cae0fcb962b6bb5b50527adb0132045d84a13e1774d8",
+      "published_sha256": "55ec4d272b07220de0d5cae0fcb962b6bb5b50527adb0132045d84a13e1774d8",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/scripts/check-phase6-f2-scope.mjs",
+      "original_sha256": "779a17e589a871609db68bffb4d0f7519d9f22994476c351619bacb68d6cefb7",
+      "published_sha256": "779a17e589a871609db68bffb4d0f7519d9f22994476c351619bacb68d6cefb7",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/scripts/phase6-f2-qualification.mjs",
+      "original_sha256": "3ee678363adc0b2ac045205256426b7f1adc927839ca79acb45805328aa4e62b",
+      "published_sha256": "3ee678363adc0b2ac045205256426b7f1adc927839ca79acb45805328aa4e62b",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/canonical.ts",
+      "original_sha256": "65bc7cd0eeaaf8ff1ca7ee68ccd257394cc4ac4d2e4df2483ba13a3114d76728",
+      "published_sha256": "65bc7cd0eeaaf8ff1ca7ee68ccd257394cc4ac4d2e4df2483ba13a3114d76728",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/credential.ts",
+      "original_sha256": "03bd11b610096ad24e090eae7857a21c9d617496bc454bb4ab19aebfe761c2c6",
+      "published_sha256": "03bd11b610096ad24e090eae7857a21c9d617496bc454bb4ab19aebfe761c2c6",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/errors.ts",
+      "original_sha256": "2a606eec2cb6921356ade8b57b6d07c96270a499fede02d8548248aaeb231487",
+      "published_sha256": "2a606eec2cb6921356ade8b57b6d07c96270a499fede02d8548248aaeb231487",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/filesystem.ts",
+      "original_sha256": "15b22aee9f4c9c82f8a8c0fae43b9bcbb7e89ac51ab4ec7b859315c71dc71cb7",
+      "published_sha256": "15b22aee9f4c9c82f8a8c0fae43b9bcbb7e89ac51ab4ec7b859315c71dc71cb7",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/index.ts",
+      "original_sha256": "e8da530bc24ac50b4328fa4c15b0fc15ce69dec0625ff38592a1b47c8403a169",
+      "published_sha256": "e8da530bc24ac50b4328fa4c15b0fc15ce69dec0625ff38592a1b47c8403a169",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/operations.ts",
+      "original_sha256": "78e2a9de7148ff80445a106da55395948784a3f66afb35a0367a27631fbb9d51",
+      "published_sha256": "78e2a9de7148ff80445a106da55395948784a3f66afb35a0367a27631fbb9d51",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/sqlite.ts",
+      "original_sha256": "f8a4a105bac3aafe3827638237dc05e5bd28d981e6e6f372b9a766c62879ab01",
+      "published_sha256": "f8a4a105bac3aafe3827638237dc05e5bd28d981e6e6f372b9a766c62879ab01",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/types.ts",
+      "original_sha256": "64dba5f4f2fd6fe5484aaf2868e2805fb122ddbf4dff74e6e01a9fa18bd499e2",
+      "published_sha256": "64dba5f4f2fd6fe5484aaf2868e2805fb122ddbf4dff74e6e01a9fa18bd499e2",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/validation.ts",
+      "original_sha256": "872f8a075679077e40404195470028d45c4f5af172213529ceff073ebe8ee492",
+      "published_sha256": "872f8a075679077e40404195470028d45c4f5af172213529ceff073ebe8ee492",
+      "sanitized": false
+    },
+    {
+      "path": "other-working-trees/GKOS-functional-uplift_GKOS-Engine/test/phase6-f2-authority.test.mjs",
+      "original_sha256": "590f6d612ee4ea585e799d03d6afd7ffad28e0c281569946e73812a7d38722d2",
+      "published_sha256": "590f6d612ee4ea585e799d03d6afd7ffad28e0c281569946e73812a7d38722d2",
+      "sanitized": false
     }
   ],
   "excluded": [

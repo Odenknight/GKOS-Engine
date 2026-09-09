@@ -1,0 +1,123 @@
+{
+  "name": "gkos-engine",
+  "version": "2.1.2",
+  "description": "Deterministic GKX validation, projection, graph, and source-content-read-only Navigation with explicit governance boundaries.",
+  "type": "module",
+  "main": "./dist/gkos-engine.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/gkos-engine.mjs",
+      "default": "./dist/gkos-engine.mjs"
+    },
+    "./adapter": {
+      "types": "./dist/adapter.d.ts",
+      "import": "./dist/adapter.mjs",
+      "default": "./dist/adapter.mjs"
+    },
+    "./gkx": {
+      "types": "./dist/gkx.d.ts",
+      "import": "./dist/gkx.mjs",
+      "default": "./dist/gkx.mjs"
+    },
+    "./graphiti": {
+      "types": "./dist/graphiti-adapter.d.ts",
+      "import": "./dist/graphiti-adapter.mjs",
+      "default": "./dist/graphiti-adapter.mjs"
+    },
+    "./navigation": {
+      "types": "./dist/navigation/index.d.ts",
+      "import": "./dist/navigation.mjs",
+      "default": "./dist/navigation.mjs"
+    },
+    "./navigation-effects": {
+      "types": "./dist/navigation-effects/index.d.ts",
+      "import": "./dist/navigation-effects.mjs",
+      "default": "./dist/navigation-effects.mjs"
+    },
+    "./navigation-effects/node": {
+      "types": "./dist/navigation-effects/node/index.d.ts",
+      "import": "./dist/navigation-effects-node.mjs",
+      "default": "./dist/navigation-effects-node.mjs"
+    },
+    "./governance": {
+      "types": "./dist/governance/index.d.ts",
+      "import": "./dist/governance.mjs",
+      "default": "./dist/governance.mjs"
+    },
+    "./retrieval": {
+      "types": "./dist/retrieval/index.d.ts",
+      "import": "./dist/retrieval.mjs",
+      "default": "./dist/retrieval.mjs"
+    },
+    "./admission-policy": {
+      "types": "./dist/admission-policy/index.d.ts",
+      "import": "./dist/admission-policy.mjs",
+      "default": "./dist/admission-policy.mjs"
+    }
+  },
+  "bin": {
+    "gkx": "bin/gkx.mjs",
+    "gkos": "bin/gkos.mjs",
+    "gkos-mcp-stdio": "bin/gkos-mcp-stdio.mjs"
+  },
+  "files": [
+    "dist/",
+    "!dist/gkos-agent-*",
+    "!dist/sea-config.json",
+    "!dist/sea-prep.blob",
+    "bin/",
+    "src/",
+    "contracts/",
+    "docs/",
+    "evidence/ENGINE-NAV-CONTRACT-1.0.0.json",
+    "evidence/2026-08-16-navigation-2.1.0-verification.md",
+    "evidence/2026-08-20-navigation-2.1.2-corrective-verification.md",
+    "evidence/2026-08-26-admission-policy-provider-v1.md",
+    "evidence/2026-08-27-sol-pr31-repair.md",
+    "README.md",
+    "TECHNICAL_README.md",
+    "BEGINNERS_GUIDE.md",
+    "COMPAT.md",
+    "CHANGELOG.md",
+    "TRACEABILITY.md",
+    "services/gkos-intelligence/",
+    "!services/gkos-intelligence/**/__pycache__/**",
+    "!services/gkos-intelligence/**/*.pyc",
+    "!services/gkos-intelligence/**/*.pyo"
+  ],
+  "engines": {
+    "node": ">=22 <25",
+    "npm": ">=10"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "node scripts/build.mjs",
+    "prepare": "node scripts/build.mjs",
+    "pretest": "node scripts/build.mjs",
+    "test": "node scripts/run-current-tests.mjs",
+    "qualify:current": "node scripts/runtime-qualification.mjs",
+    "pretest:navigation": "node scripts/build.mjs",
+    "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-effects-contract.test.mjs test/navigation-effects-planner.test.mjs test/navigation-effects-node.test.mjs test/navigation-effects-performance.test.mjs test/navigation-effects-reconciliation.test.mjs test/navigation-effects-assistance.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
+    "test:intelligence": "node scripts/test-intelligence.mjs",
+    "pack:check": "node scripts/check-pack.mjs",
+    "check:license": "node scripts/check-license.mjs",
+    "check:nomenclature": "node scripts/check-nomenclature.mjs",
+    "generate:admission-policy": "node scripts/generate-admission-policy-v1.mjs"
+  },
+  "license": "Apache-2.0",
+  "author": "OdenKnight",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Odenknight/GKOS-Engine.git"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "esbuild": "^0.28.1",
+    "postject": "^1.0.0-alpha.6",
+    "typescript": "5.9.3"
+  }
+}

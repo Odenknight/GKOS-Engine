@@ -1,0 +1,5 @@
+{
+  "head": "d19ccfee1d971f1e282f886562a3809924a8a8a2",
+  "status": "M package.json\n M src/navigation-effects/index.ts\n M test/navigation-effects-contract.test.mjs",
+  "note": "Historical working copy; not current implementation or qualification."
+}
