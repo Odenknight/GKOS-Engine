@@ -1214,8 +1214,8 @@
     {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "8ccdfb38565d16b38bb20f2d625cb1ce263d631ff46519a7473f3fd4e18d81f2",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "4edd9c983360eb546ca2e0c1c91e95beeaf6d32424cec9b6e340c05526599326",
+      "rationale": "Preserve frozen public API fixtures while explicitly asserting the two additive Graphiti exports and all existing exports."
     },
     {
       "path": "test/determinism.test.mjs",
