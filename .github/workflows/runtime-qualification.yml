@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   historical-contract-replay:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ startsWith(matrix.os, 'ubuntu-') && !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && fromJSON('["self-hosted","Linux","X64","r720-ci"]') || matrix.os }}
     continue-on-error: ${{ matrix.node == 23 }}
     strategy:
       fail-fast: false
@@ -47,7 +47,7 @@ jobs:
 
   current-runtime:
     needs: historical-contract-replay
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ startsWith(matrix.os, 'ubuntu-') && !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && fromJSON('["self-hosted","Linux","X64","r720-ci"]') || matrix.os }}
     continue-on-error: ${{ matrix.node == 26 }}
     env:
       GIT_CONFIG_COUNT: 1
