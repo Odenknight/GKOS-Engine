@@ -458,8 +458,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "d3176f34487b11f2f7591af014b203d2a9ed2174c225f45e51628208da852f43",
-      "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities."
+      "after": "5f10bd2bf0beec7d62cdeaf60510a7df58b153ef93f2e9b5f32797738c5a8d1d",
+      "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities. September 12 owner-authorized documentation clarification: different ownership is desirable, not required; functioning products still need implementation-independence evidence. No runtime or qualification standing changes."
     },
     {
       "path": "ROADMAP.md",
