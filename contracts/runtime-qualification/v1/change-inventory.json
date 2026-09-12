@@ -386,14 +386,14 @@
     {
       "path": ".gitattributes",
       "before": "0f3ffed343d2c7ed7aad2e67be2ef4e47ae6ff15",
-      "after": "4726ac4c2ea7777c75bb5034ba06acd7c67eee14c1acbdf62c8f9bf01ea63893",
-      "rationale": "Preserve exact upstream documentation blob and v0.81 schema bytes across Windows checkout without changing existing frozen qualification fixtures."
+      "after": "d9f545e123e02f49209da578c09e378949c15d45df54900ced39cc91317c0ef7",
+      "rationale": "Preserve exact Graphiti receipt bytes across Windows/Linux checkouts; existing historical byte rules unchanged."
     },
     {
       "path": ".github/workflows/ci.yml",
       "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
-      "after": "81cb20749c449c813efc9c10c1a1315a17385e8149b23303ab347482a70d02f2",
-      "rationale": "Runtime modernization and stability: qualify Node 22/24/26 and execute dedicated watcher observations through one bounded exact-latency retry wrapper."
+      "after": "8a3a01f5829964bcc628dd4c813c2705d05f836bd831fd15fc089e4133fd016c",
+      "rationale": "Execute the external Graphiti runner regressions on the existing CI matrix; existing gates unchanged."
     },
     {
       "path": ".github/workflows/managed-moc-audit-2.2.yml",
@@ -446,8 +446,8 @@
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "a9088cd2bb13c7befa787daac68dfbe33abc2c9ab83152407b405de8da7dbe29",
-      "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities."
+      "after": "f9e9a8f9619d99e04659d536e54fb1b106f0301942a87a76238ed72e5e418dc4",
+      "rationale": "Document the optional Graphiti 0.30.2 adapter and bounded qualification, preserving candidate release standing."
     },
     {
       "path": "COMPAT.md",
@@ -458,8 +458,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "5f10bd2bf0beec7d62cdeaf60510a7df58b153ef93f2e9b5f32797738c5a8d1d",
-      "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities. September 12 owner-authorized documentation clarification: different ownership is desirable, not required; functioning products still need implementation-independence evidence. No runtime or qualification standing changes."
+      "after": "3cafa4543db3ca9e09717ea98352a1b690970482fd7376f7b398e3dd08acaabe",
+      "rationale": "Link the optional Graphiti runner and independent source-byte evidence contract."
     },
     {
       "path": "ROADMAP.md",
@@ -470,8 +470,8 @@
     {
       "path": "TECHNICAL_README.md",
       "before": "d28fee76dd931095907d35d5582be8f7045f52d8",
-      "after": "c0635ea39f0d0ecc2ad746241bc5bd08a813e4c42173ec9cc302450be0294eb6",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "bdb5831af17806f483c3a78d7293d0abb3fa60edeef0cb7dca6028e1b4738835",
+      "rationale": "Update the declared optional Graphiti target to the actually smoke-tested 0.30.2 version."
     },
     {
       "path": "contracts/documentation-verifier/v0.81/LICENSE.txt",
@@ -678,6 +678,12 @@
       "rationale": "Record the soak-pilot ordering defect, independently reproduced link-ID drift, canonical assembly repair and pending new-candidate qualification; preserve failed evidence."
     },
     {
+      "path": "docs/GRAPHITI-030-ADAPTER.md",
+      "before": null,
+      "after": "0bb47a51043048273156ffe02d1277826cba14bfcacdf502a363f64c4bf59b20",
+      "rationale": "Document API migration, recovery limitations, source evidence, exact smoke results and unqualified production gates."
+    },
+    {
       "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
       "before": null,
       "after": "42b2ec2c53ad2866c3a78e524dfdeac54b5e01b1e633d8f21b16c909ee43ac2f",
@@ -810,6 +816,42 @@
       "rationale": "Record exact reconciled release starting coordinates, open work, environment and unmet gates."
     },
     {
+      "path": "evidence/graphiti-030-20260912/SHA256SUMS",
+      "before": null,
+      "after": "3150ba3c024c68083a0c8174a327ea4588b5d87db92165ca5219c2ca6743acbc",
+      "rationale": "Sanitized synthetic Graphiti qualification receipt/input or exact-byte manifest; documents limited observations, not production qualification."
+    },
+    {
+      "path": "evidence/graphiti-030-20260912/authorized-input.json",
+      "before": null,
+      "after": "83528bc6b729edeaa1ffd55fe78a83fffe7fc0c85889736e5952029941f60cf2",
+      "rationale": "Sanitized synthetic Graphiti qualification receipt/input or exact-byte manifest; documents limited observations, not production qualification."
+    },
+    {
+      "path": "evidence/graphiti-030-20260912/configuration.json",
+      "before": null,
+      "after": "8a0fe05de6da514e425f547fd9792f636487d2ea238ffdac9abbf464b5abed2b",
+      "rationale": "Sanitized synthetic Graphiti qualification receipt/input or exact-byte manifest; documents limited observations, not production qualification."
+    },
+    {
+      "path": "evidence/graphiti-030-20260912/core-smoke.json",
+      "before": null,
+      "after": "0f837c0e8c41e6f72fc47143cd05e56a7ac7a16eb42dafba15bf6d140a0b0049",
+      "rationale": "Sanitized synthetic Graphiti qualification receipt/input or exact-byte manifest; documents limited observations, not production qualification."
+    },
+    {
+      "path": "evidence/graphiti-030-20260912/generated-runner.json",
+      "before": null,
+      "after": "f0b882a25794128f3790ef22bdda070f8b14a01f7776151efb883d4c0cd74c55",
+      "rationale": "Sanitized synthetic Graphiti qualification receipt/input or exact-byte manifest; documents limited observations, not production qualification."
+    },
+    {
+      "path": "evidence/graphiti-030-20260912/new-uuid-failure.json",
+      "before": null,
+      "after": "afa4b8cc36b030aabd889328c83ce2c9c947c86438dc5986d9520c1af89c06e3",
+      "rationale": "Sanitized synthetic Graphiti qualification receipt/input or exact-byte manifest; documents limited observations, not production qualification."
+    },
+    {
       "path": "examples/managed-moc.mjs",
       "before": null,
       "after": "f97cf6a973ecbba28b4b86d40b052a18fc87560b1d0b59eb9ab3438d472c792c",
@@ -824,8 +866,8 @@
     {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "c54cf1c6c471f745bc6d43dfa0f0cbff1abb50a5e57d6b132715eb4d4378f05b",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "bf0bd6edb2e94ff5eeb24c4d019cae6d0d1e97024826b08073500477e8ba8382",
+      "rationale": "Expose the generated-runner regression command without new dependencies or product version changes."
     },
     {
       "path": "scripts/benchmark-managed-moc.mjs",
@@ -862,6 +904,18 @@
       "before": null,
       "after": "d963d6affcc45878b6007c2b5fe052e76a08218019ce720b0db1cea4e77ca56b",
       "rationale": "Independently construct 2.2 projection preimages without production indexing or canonicalization."
+    },
+    {
+      "path": "scripts/qualify-graphiti-runner.py",
+      "before": null,
+      "after": "ba2dafa6d30d5da6895a93798c491822fed29eb9c5d4f66a7241155189724e9f",
+      "rationale": "Live generated-runner harness reuses local models, verifies persistence/retry refusal and removes only its test database."
+    },
+    {
+      "path": "scripts/qualify-graphiti.py",
+      "before": null,
+      "after": "4ad6b0e0774f7cf15c4b2911c3c8d7ccb9be4740dfd710282ec54240dc950ca7",
+      "rationale": "Synthetic live core-API fixture with scoped provenance queries and exact temporary database cleanup."
     },
     {
       "path": "scripts/release-220-preflight.mjs",
@@ -906,6 +960,18 @@
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
     },
     {
+      "path": "scripts/test-graphiti-runner.mjs",
+      "before": null,
+      "after": "041849088295921aed7e1cee29db290fb90170bd649c47a790f83819323e6245",
+      "rationale": "Run Python regressions against the actual packaged script in a bounded temporary directory."
+    },
+    {
+      "path": "scripts/test-graphiti-runner.py",
+      "before": null,
+      "after": "305f7ed0080eafe6cea8b40b08e74f548baaf3bebd87f48ec31210547a78c8b1",
+      "rationale": "Standard-library runner regressions cover ID mapping, structured triplets, scope/version/input rejection, ambiguous effects and bad readback."
+    },
+    {
       "path": "scripts/validate-refusal-receipt-v081.mjs",
       "before": null,
       "after": "9648040266e7fe6fea8814b5e41e33aa467e4408a0b0c4ef59ccd6e9e57039e6",
@@ -928,6 +994,24 @@
       "before": "8ef321f2073fee8c715b85ce9cb92e7c03262e74",
       "after": "75f2e6bbc3a58c04403e1a6d9d8c47ea6eb90712e4856b1638003f631be04fbf",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/graphiti-adapter.ts",
+      "before": "bf95b6a858645c82c832dbb68d06e6ff2d7dec3e",
+      "after": "711eb1d5c48e4b19e95b01252d5deacb9667c7fbf4426fdd8a20478dc8258c27",
+      "rationale": "Export the optional source-evidence helper and external runner from the existing Graphiti entry point."
+    },
+    {
+      "path": "src/graphiti-ingest-script.ts",
+      "before": null,
+      "after": "0391880e0115a420fd31b098af7dd294c3ad95f13824c88838d725e0d7e62f8e",
+      "rationale": "External runner maps newly generated projection IDs, verifies content/group persistence, bounds input and calls, and refuses ambiguous retries."
+    },
+    {
+      "path": "src/graphiti.ts",
+      "before": "b674c65babba76399689dccd897d31a777423c6e",
+      "after": "aa85fb0f91342f3c18f2d391e8d03515808257f9926b6059167f6e558a97f02d",
+      "rationale": "Update optional Graphiti target/low-level surface name; add exact-byte SHA-256 evidence separate from change keys."
     },
     {
       "path": "src/incremental.ts",
@@ -1198,6 +1282,12 @@
       "before": null,
       "after": "702340b218966a17f922ce3af0512f6b09fe2b2b8353ee1bc42ce0e60cdcf3b7",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/graphiti.test.mjs",
+      "before": "12a1cb2b59421c5466e5e285655f6d150fb956f8",
+      "after": "18c6178fb6c460325344ad4fc1dfb4b93fe8bd5c36ab126af9bd9127648cc20f",
+      "rationale": "Retain export semantics and test the 0.30.2 profile plus exact-byte digest/truncation/revision separation."
     },
     {
       "path": "test/managed-moc-no-change.test.mjs",
