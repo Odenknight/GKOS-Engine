@@ -9,6 +9,7 @@ export {
   graphitiIngestionProfile,
   buildGraphitiEpisodes,
   attachGraphitiContent,
+  attachGraphitiSourceEvidence,
   buildGraphitiEpisodesWithContent,
   stripFrontmatter,
 } from "./graphiti";
@@ -21,3 +22,4 @@ export type {
 } from "./graphiti";
 
 export type { GraphitiEpisode } from "./types";
+export { GRAPHITI_INGEST_SCRIPT } from "./graphiti-ingest-script";

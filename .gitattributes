@@ -36,3 +36,6 @@ contracts/admission-policy/** text eol=lf
 # OD-02 imported blobs and schema pins retain exact upstream bytes.
 contracts/documentation-verifier/v0.81/*.json -text
 test/fixtures/documentation-verifier/v2.1.1/* -text
+
+# Graphiti qualification receipts are byte-hashed, including the input manifest.
+evidence/graphiti-030-20260912/* -text

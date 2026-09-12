@@ -164,6 +164,10 @@ node bin/gkx.mjs export graphiti ./my-notes \
 
 Graphiti is a projection of GKX, not a second source of truth. Stable IDs,
 bounded content, and canonical attributes make repeated exports comparable.
+The [0.30.2 adapter](docs/GRAPHITI-030-ADAPTER.md) includes an optional external
+ingestion runner with derived-ID mappings and persistence receipts, plus a
+separate exact-source-byte evidence helper. Semantic broker readiness is not
+implied by export or ingestion success.
 
 ## Run the local service
 

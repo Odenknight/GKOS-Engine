@@ -1,6 +1,7 @@
 /** Graphiti export tests: identity, ordering, namespace, authority, temporal safety. */
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import {
   buildGraph,
   buildGraphitiEpisodes,
@@ -8,6 +9,7 @@ import {
   graphitiIngestionProfile,
   measureGraphitiExtraction,
   stripFrontmatter,
+  attachGraphitiSourceEvidence,
 } from "../dist/gkos-engine.mjs";
 
 function fixtureGraph() {
@@ -100,7 +102,7 @@ test("GKX 2.3 adapter exports governance, evidence, hashes, metadata and saga hi
 
 test("combined extraction remains opt-in and metrics require real denominators", () => {
   const profile=graphitiIngestionProfile({combinedExtraction:true});
-  assert.equal(profile.combinedExtractionSurface,"graphiti-0.29-low-level-utility");
+  assert.equal(profile.combinedExtractionSurface,"graphiti-0.30-low-level-utility");
   assert.equal(profile.publicAddEpisodeSupportsCombinedExtraction,false);
   const episodes=buildGraphitiEpisodes(fixtureGraph());
   const metrics=measureGraphitiExtraction(episodes,[
@@ -110,4 +112,23 @@ test("combined extraction remains opt-in and metrics require real denominators",
   assert.equal(metrics.entityRecall,1);
   assert.equal(metrics.edgeAccuracy,1);
   assert.equal(metrics.tokenCost,0.04);
+});
+
+test("source evidence hashes exact bytes independently of truncated body and change keys", async () => {
+  const source = Buffer.from('---\r\ntitle: Fuel\r\n---\r\nCafé fuel.\r\n');
+  const episodes = buildGraphitiEpisodesWithContent(fixtureGraph(), new Map([["Fuel.md", "Café fuel."]]), { maxContentChars: 2 });
+  const fuel = episodes.find(e => e.name === "Fuel");
+  const changeKey = JSON.parse(fuel.episode_body).integrity.content_hash;
+  await attachGraphitiSourceEvidence(episodes, new Map([["Fuel.md", source]]));
+  const body = JSON.parse(fuel.episode_body);
+  assert.equal(body.content_truncated, true);
+  assert.equal(body.source_evidence.sha256, createHash("sha256").update(source).digest("hex"));
+  assert.equal(body.source_evidence.byte_length, source.length);
+  assert.equal(body.integrity.content_hash, changeKey);
+  assert.equal(body.source_evidence.semantic_support, "unverified");
+  assert.equal(JSON.parse(episodes.find(e => e.name === "Engine v1").episode_body).source_evidence, undefined);
+  await attachGraphitiSourceEvidence(episodes, new Map([["Fuel.md", Buffer.from(source.toString().replaceAll("\r\n", "\n"))]]));
+  assert.notEqual(JSON.parse(fuel.episode_body).source_evidence.sha256, body.source_evidence.sha256);
+  await attachGraphitiSourceEvidence(episodes, new Map());
+  assert.equal(JSON.parse(fuel.episode_body).source_evidence, undefined, "missing revision bytes cannot retain prior evidence");
 });

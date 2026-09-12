@@ -1,5 +1,5 @@
 /**
- * Gkx Governed Context Projection (KGCP) — Graphiti 0.29 adapter.
+ * Gkx Governed Context Projection (KGCP) — Graphiti 0.30.2 adapter.
  *
  * Source notes and accepted semantic events remain authoritative. Graphiti is
  * a disposable, non-authoritative projection. Origin separation is preserved,
@@ -9,7 +9,7 @@
 import { codeUnitCompare, contentHash } from "./paths";
 import type { GraphitiEpisode, GkxGraph, GkxNode, GkxRelation } from "./types";
 
-export const GRAPHITI_CORE_VERSION = "0.29.0";
+export const GRAPHITI_CORE_VERSION = "0.30.2";
 export const GRAPHITI_ADAPTER_SCHEMA = "gkx-graphiti/2.3.0";
 export const DEFAULT_GRAPHITI_CONTENT_CHARS = 20_000;
 export const DEFAULT_GRAPHITI_ATTRIBUTE_CHARS = 250;
@@ -31,7 +31,7 @@ export interface GraphitiIngestionProfile {
   adapterSchema: typeof GRAPHITI_ADAPTER_SCHEMA;
   testedGraphitiCore: typeof GRAPHITI_CORE_VERSION;
   combinedExtraction: boolean;
-  combinedExtractionSurface: "disabled" | "graphiti-0.29-low-level-utility";
+  combinedExtractionSurface: "disabled" | "graphiti-0.30-low-level-utility";
   publicAddEpisodeSupportsCombinedExtraction: false;
   episodeMetadataTransport: "adapter-envelope-and-episode-body";
   attributeMaxChars: number;
@@ -196,7 +196,7 @@ export function graphitiIngestionProfile(options: GraphitiOptions = {}): Graphit
     adapterSchema: GRAPHITI_ADAPTER_SCHEMA,
     testedGraphitiCore: GRAPHITI_CORE_VERSION,
     combinedExtraction: combined,
-    combinedExtractionSurface: combined ? "graphiti-0.29-low-level-utility" : "disabled",
+    combinedExtractionSurface: combined ? "graphiti-0.30-low-level-utility" : "disabled",
     publicAddEpisodeSupportsCombinedExtraction: false,
     episodeMetadataTransport: "adapter-envelope-and-episode-body",
     attributeMaxChars: options.maxAttributeChars ?? DEFAULT_GRAPHITI_ATTRIBUTE_CHARS,
@@ -396,6 +396,36 @@ export function buildGraphitiEpisodesWithContent(
     contents,
     options.maxContentChars ?? DEFAULT_GRAPHITI_CONTENT_CHARS
   );
+}
+
+/** Optional byte evidence, separate from change keys and semantic support.
+ * The caller supplies the exact authorized source revision bytes, including
+ * frontmatter and original line endings. No normalization or body truncation.
+ * Missing bytes yield no evidence; this helper performs no filesystem reads.
+ */
+export async function attachGraphitiSourceEvidence(
+  episodes: GraphitiEpisode[], sources: ReadonlyMap<string, Uint8Array>
+): Promise<GraphitiEpisode[]> {
+  for (const episode of episodes) {
+    if (episode.source !== "json") continue;
+    const body = JSON.parse(episode.episode_body);
+    const source = sources.get(body.path);
+    if (!source) {
+      delete body.source_evidence;
+      episode.episode_body = JSON.stringify(body);
+      continue;
+    }
+    const bytes = new Uint8Array(source);
+    const digest = await globalThis.crypto.subtle.digest("SHA-256", bytes);
+    const sha256 = Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, "0")).join("");
+    body.source_evidence = {
+      schema: "gkos-source-bytes/1", algorithm: "sha256", sha256,
+      byte_length: bytes.byteLength, representation: "exact-source-bytes",
+      revision: `sha256:${sha256}`, semantic_support: "unverified",
+    };
+    episode.episode_body = JSON.stringify(body);
+  }
+  return episodes;
 }
 
 /** Strip YAML frontmatter from raw note text (for episode content payloads). */
