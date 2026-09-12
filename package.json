@@ -94,6 +94,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "test:graphiti-runner": "node scripts/test-graphiti-runner.mjs",
     "example:moc": "node examples/managed-moc.mjs",
     "bench:moc": "node scripts/benchmark-managed-moc.mjs",
     "build": "node scripts/build.mjs",

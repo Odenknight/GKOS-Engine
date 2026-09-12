@@ -1,0 +1,24 @@
+{
+  "schema": "gkos-graphiti-run/1",
+  "graphiti_core": "0.30.2",
+  "manifest_sha256": "83528bc6b729edeaa1ffd55fe78a83fffe7fc0c85889736e5952029941f60cf2",
+  "source_group": "gkx-synthetic-qualification-3e6f7b8b-assertions",
+  "projection_group": "gkos_9a5323e098fd458a98942eb9f4bf6672",
+  "state": "persistence-verified",
+  "accepted_is_searchable": false,
+  "searchability": "unverified",
+  "readback_performed": true,
+  "episodes_completed": 1,
+  "episodes": [
+    {
+      "canonical_uuid": "8797bdda-021a-56e1-afcf-ac09d4f5d223",
+      "episode_body_sha256": "7dcbd3d81efd4d59862cb400e45c0150061f4b1a2682b285edc1b503d7af1a03",
+      "projection_uuid": "de1e6d6a-2a98-4537-84ac-6452044ca861",
+      "state": "persistence-verified"
+    }
+  ],
+  "combined_extraction_applied": false,
+  "ingestion_duration_ms": 68167.69,
+  "retry_refusal_verified": true,
+  "cleanup_verified": true
+}

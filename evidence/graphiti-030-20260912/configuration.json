@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-12",
+  "graphiti_core": "0.30.2",
+  "upstream_commit": "eaa4128681bc53487138a4bbc22d58336ebe70d2",
+  "wheel_sha256": "97674a49514130db175faecf23221ce9338240be3cbe13a7e23e5a5033892b9f",
+  "hive_image": "sha256:5b86864964b705d5d530456d1ed97486f76687450b5b2e11dd48f0a45099a782",
+  "falkordb_version": "4.16.3",
+  "falkordb_image": "sha256:c7082788609c4d7033129e55272581c49322c4cd7024cec75464ca343b6a6fb5",
+  "python": "3.12",
+  "extractor_alias": "util4",
+  "extractor_artifact_digest": null,
+  "embedding_model": "nomic-embed-text-v1.5.Q8_0.gguf",
+  "embedding_dimensions": 768,
+  "embedding_artifact_digest": null,
+  "reranker": "existing NoModelReranker (input-order reciprocal scores)",
+  "max_coroutines": 2,
+  "real_vault_ingestion": false,
+  "service_changed": false,
+  "production_qualified": false,
+  "limitations": [
+    "Model aliases/artifact digests are not frozen; not a reproducible full benchmark",
+    "Synthetic fixture only; no managed broker or 1k/10k/50k workload qualification"
+  ]
+}

@@ -4,6 +4,11 @@
 
 Current main source version; not yet a tagged or published 2.2.0 release.
 
+- Updated the optional Graphiti profile to 0.30.2; corrected new-episode UUID
+  handling in an Engine-owned external runner with durable retry refusal and
+  persistence readback. Added independent source-byte SHA-256 evidence support.
+  Synthetic local-backend receipts do not qualify a production semantic broker.
+
 - Merged separately versioned 2.2 retrieval observation with independent digest
   pins, real SQLite FTS5 indexing, incremental reuse and deterministic rebuild
   checks; preserved the historical 2.1.2 replay and frozen evidence.

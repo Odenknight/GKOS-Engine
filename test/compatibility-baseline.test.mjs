@@ -184,17 +184,20 @@ test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI beh
   ].sort();
   const navigationEffectsNodeExports = ["DurableEffectJournal", "NodeNavigationEffectsExecutor", "SimulatedEffectCrash", "NodeManagedMocHost", "NodeManagedMocRuntime"].sort();
   const rootExports = Object.keys(root).sort();
-  const phase0Root = rootExports.filter((name) => !navigationEffectsExports.includes(name));
+  const graphitiAdditions = ["GRAPHITI_INGEST_SCRIPT", "attachGraphitiSourceEvidence"].sort();
+  const additiveRootExports = [...navigationEffectsExports, ...graphitiAdditions].sort();
+  const phase0Root = rootExports.filter((name) => !additiveRootExports.includes(name));
   const actualExports = {
     root: phase0Root,
     adapter: Object.keys(adapter).sort(),
     gkx: Object.keys(gkx).sort(),
-    graphiti: Object.keys(graphiti).sort(),
+    graphiti: Object.keys(graphiti).filter((name) => !graphitiAdditions.includes(name)).sort(),
     navigation: Object.keys(navigation).sort(),
     governance: Object.keys(governance).sort(),
   };
   assert.deepEqual(actualExports, expectedExports);
-  assert.deepEqual(rootExports.filter((name) => !expectedExports.root.includes(name)), navigationEffectsExports);
+  assert.deepEqual(rootExports.filter((name) => !expectedExports.root.includes(name)), additiveRootExports);
+  assert.deepEqual(Object.keys(graphiti).filter((name) => !expectedExports.graphiti.includes(name)).sort(), graphitiAdditions);
   assert.deepEqual(Object.keys(navigationEffects).sort(), navigationEffectsExports);
   assert.deepEqual(Object.keys(navigationEffectsNode).sort(), navigationEffectsNodeExports);
   assert.deepEqual(

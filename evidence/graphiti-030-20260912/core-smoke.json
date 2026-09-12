@@ -1,0 +1,42 @@
+{
+  "schema": "gkos-graphiti-qualification/1",
+  "timestamp": "2026-09-12T21:20:32.133139+00:00",
+  "graphiti_core": "0.30.2",
+  "synthetic_only": true,
+  "fixture_sha256": "ee229ec61a682fa403bce76f3e2b374d41c3d3d165f9ede12467bee8c582ab5f",
+  "model": "util4",
+  "embedding_model": "/mnt/data/llm/embed/nomic-embed-text-v1.5.Q8_0.gguf",
+  "budgets": {
+    "ingest_timeout_s": 300,
+    "query_timeout_s": 30,
+    "query_runs": 5
+  },
+  "checks": {
+    "persistence": true,
+    "search_with_episode_provenance": true,
+    "search_runs": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "other_group_empty": true,
+    "passed": true
+  },
+  "query_ms": [
+    23.36,
+    21.44,
+    20.98,
+    21.1,
+    21.3
+  ],
+  "production_qualified": false,
+  "ingestion_ms": 22967.46,
+  "identity_mapping": "Graphiti-generated UUID retained after ingestion; canonical IDs remain separate",
+  "extracted": {
+    "nodes": 3,
+    "edges": 2
+  },
+  "cleanup_verified": true
+}

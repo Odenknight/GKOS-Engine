@@ -158,7 +158,7 @@ and lineage, calculates temporal state, and produces stable node/link ordering.
 `GkxIndex.applyChanges()` is the incremental update boundary and emits a
 `GraphDelta` without introducing an alternate graph model.
 
-The Graphiti adapter declares core version `0.29.0` and adapter schema
+The Graphiti adapter declares core version `0.30.2` and adapter schema
 `gkx-graphiti/2.3.0`. It supplies deterministic UUIDs, bounded attributes and
 content, extraction metrics, episode projection, and optional content
 attachment. A Graphiti episode is derived state and never authority over its

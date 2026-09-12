@@ -47,6 +47,9 @@ jobs:
       - name: Build (dist/gkos-engine.mjs)
         run: npm run build
 
+      - name: Graphiti generated-runner regression tests
+        run: npm run test:graphiti-runner
+
       - name: Legacy nomenclature gate (tracked and generated release content)
         run: npm run check:nomenclature
 

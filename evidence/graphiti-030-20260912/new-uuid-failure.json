@@ -1,0 +1,24 @@
+{
+  "schema": "gkos-graphiti-qualification/1",
+  "timestamp": "2026-09-12T21:19:21.263648+00:00",
+  "graphiti_core": "0.30.2",
+  "synthetic_only": true,
+  "fixture_sha256": "ee229ec61a682fa403bce76f3e2b374d41c3d3d165f9ede12467bee8c582ab5f",
+  "model": "util4",
+  "embedding_model": "/mnt/data/llm/embed/nomic-embed-text-v1.5.Q8_0.gguf",
+  "budgets": {
+    "ingest_timeout_s": 300,
+    "query_timeout_s": 30,
+    "query_runs": 5
+  },
+  "checks": {
+    "passed": false
+  },
+  "query_ms": [],
+  "production_qualified": false,
+  "error": {
+    "type": "NodeNotFoundError",
+    "message": "node 0c5f905c-2ffa-4c05-83fb-e4785bd4c696 not found"
+  },
+  "cleanup_verified": true
+}
