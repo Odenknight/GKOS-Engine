@@ -15,6 +15,13 @@ GKOS-Engine is designed to be the quiet machinery underneath products such as
 Kosmos-Oden: one interpretation of GKX, reusable from a library, CLI, headless
 service, or desktop sidecar.
 
+Under the Standard's [September 12 independence clarification](https://github.com/Odenknight/gkos-standard/blob/main/docs/decisions/2026-09-12-implementation-independence.md),
+different ownership is ideal, not required. Different functioning products
+still need public evidence of implementation independence; multiple interfaces
+to this Engine do not establish that evidence by themselves. This clarification
+does not qualify this Engine or any consumer product, or change this
+implementation's test and release standing.
+
 A **map of content (MOC)** is a note that links to other notes, like a table of
 contents. **GKX** is the structured record format the engine interprets. An
 **effect** changes stored state. Generating a suggestion and having permission
