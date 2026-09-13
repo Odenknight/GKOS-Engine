@@ -1076,8 +1076,8 @@
     {
       "path": "scripts/run-watcher-observation-qualification.mjs",
       "before": "a11d7081118cde88a8db2d8bbab6429805f61b2c",
-      "after": "75136af40d5f7728e01df46a16a62ab8c1d5bc0e868595816d6fbf1aba2ee599",
-      "rationale": "CI repair: preserve the strict child stderr protocol while suppressing only Node-owned SQLite and environment-proxy warnings."
+      "after": "e06b2576ee37d3091c496ff5f69398f1a3199460d6689f932ed9c81fa59d6cba",
+      "rationale": "Preserve strict child stderr and Node-owned warning handling; report bounded numeric publication/search timings on latency failure without changing thresholds or sealed measurement schema."
     },
     {
       "path": "scripts/run-watcher-observation-with-retry.mjs",
