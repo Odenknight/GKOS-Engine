@@ -35,6 +35,14 @@ next harness revision waits for a real file event to change the committed
 source snapshot, with a 120-second failure deadline, and records execution
 kinds. Its measurements must remain distinct from these earlier failures.
 
+The real-event smoke at 7000ad454afdc4f546bde05ec9c909b5619d27a9 completed
+with apply_changes and exactly one reparsed source. Activation took 17,288 ms,
+so it correctly returned FAIL_BUDGET. RSS was 985.04 MiB; persisted state was
+55,924,866 bytes; shutdown completed without error. This verifies the scoped
+incremental parse path, while leaving the end-to-end latency failure open.
+The local receipt is graphiti-watcher-event-smoke/receipt.json with its hashed
+samples.jsonl. The full 24-hour run has not started.
+
 Raw synthetic receipts and profiling code remain in the task workspace:
 graphiti-native-baseline/native-1000.json, profile-native-retrieval.mjs,
 profile-native-retrieval.log, and graphiti-watcher-smoke/{receipt.json,samples.jsonl}.
