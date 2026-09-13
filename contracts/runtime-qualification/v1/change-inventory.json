@@ -668,7 +668,7 @@
     {
       "path": "docs/BUILD-COMPLETION-REGISTER.md",
       "before": null,
-      "after": "34712a712bd3e70f9c806037457c2db972a198a43b3de4563491dda780f9520d",
+      "after": "6f31bf54252182ec4a3f6af55f6ca682dd00c7c80dc576bdeada261304c05875",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -740,7 +740,7 @@
     {
       "path": "docs/GRAPHITI-READONLY-DRIVER.md",
       "before": null,
-      "after": "2bc4aa2dc97115e1a70e0f144d5f931714e4615e85ff88e503b0a9d43298acdd",
+      "after": "913832e8ed38e7747bd3ec2d032bc5ea451fec3262d2ec3bd468a41c8db6d15d",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1124,13 +1124,19 @@
     {
       "path": "services/gkos-graphiti/qualify_live.py",
       "before": null,
-      "after": "72345e5c846228a80f4d7f50b97e1ddabd0aac9a8b4e00877989abc8650d1c01",
+      "after": "97ea5d2f7f719a1dc348bc9a456a9ee28e0b2379384311cb01f5a24654eb107c",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "services/gkos-graphiti/qualify_readonly.py",
       "before": null,
       "after": "52d1bbca0fb1eeadc5fc0c1504727442ad9896e43fc4bd0b9acce30307485acb",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/qualify_readonly_search.py",
+      "before": null,
+      "after": "74e7d9b84d57938eff4a043183d97a1bf55b25a8a5893ba8e22ca1b9c50bcf0f",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
