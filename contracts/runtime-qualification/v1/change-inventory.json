@@ -1008,6 +1008,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "scripts/check-graphiti-manifest-python.mjs",
+      "before": null,
+      "after": "e002ff02a71a3c5e9e9c674074eed4aaaafe0ca28855da05dd4749c4f82f4bd0",
+      "rationale": "Private managed Graphiti manifest binding: preserve raw source bytes, match Python ledger canonicalization, and verify Unicode and asynchronous input capture; no product query capability activation."
+    },
+    {
       "path": "scripts/current-test-plan.mjs",
       "before": null,
       "after": "7ba8a03569c99c893f82fe08b9752f49f8abc1a0d8a2ad68d96ad09f7bf1f4de",
@@ -1238,14 +1244,20 @@
     {
       "path": "src/graphiti-broker.ts",
       "before": null,
-      "after": "46fd957c52079513c234fed2b5c9802095eabd09ce038ee35a3f3af45057f01a",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "a89fcafc6ea2c56ca144ccb655fb3196331ac85ad53dc4a3ddd434722559d7e7",
+      "rationale": "Private managed Graphiti manifest binding: preserve raw source bytes, match Python ledger canonicalization, and verify Unicode and asynchronous input capture; no product query capability activation."
     },
     {
       "path": "src/graphiti-ingest-script.ts",
       "before": null,
       "after": "489f1ff0ad5d2e1a8606f00a9d2f00a3248b10233cf72622b796ae602890d0d1",
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
+    },
+    {
+      "path": "src/graphiti-manifest.ts",
+      "before": null,
+      "after": "cb73e99485f2fdf35660ddfe45c5f4a1ee979dfc9f3177abe71c4d83d093f1ec",
+      "rationale": "Private managed Graphiti manifest binding: preserve raw source bytes, match Python ledger canonicalization, and verify Unicode and asynchronous input capture; no product query capability activation."
     },
     {
       "path": "src/graphiti-query-contract.ts",
@@ -1558,6 +1570,12 @@
       "before": null,
       "after": "61add4c676687d73f6fc02c8a97cc14481ec9e2fbee0ad3363bf36b0092d270e",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "test/graphiti-manifest.test.mjs",
+      "before": null,
+      "after": "78853d42428a44f4d50ac361764de5120b98e719ec8c57c809124ff1559461e9",
+      "rationale": "Private managed Graphiti manifest binding: preserve raw source bytes, match Python ledger canonicalization, and verify Unicode and asynchronous input capture; no product query capability activation."
     },
     {
       "path": "test/graphiti-query-contract.test.mjs",

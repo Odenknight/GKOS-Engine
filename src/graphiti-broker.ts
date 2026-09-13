@@ -82,3 +82,4 @@ export class GraphitiQueryBroker {
 }
 
 export { graphitiHttpQuery } from "./graphiti-query-http";
+export { buildManagedGraphitiManifest, managedEpisodeJson } from "./graphiti-manifest";

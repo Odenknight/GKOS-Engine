@@ -1,0 +1,35 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {buildManagedGraphitiManifest, managedEpisodeJson} from '../dist/graphiti-broker.mjs';
+
+const episode = () => ({name:'é😀', episode_body:'{"x":"雪"}', source_description:'a\r\nb\rc\n\u007f', reference_time:'2026-09-13T00:00:00Z'});
+const hash = bytes => 'sha256:' + createHash('sha256').update(bytes).digest('hex');
+
+test('managed manifest preserves raw bytes and Python ledger string canonicalization', async () => {
+  const value = episode();
+  const canonical = '{"episode_body":"{\\"x\\":\\"\\u96ea\\"}","name":"\\u00e9\\ud83d\\ude00","reference_time":"2026-09-13T00:00:00Z","source_description":"a\\r\\nb\\rc\\n\\u007f"}';
+  assert.equal(managedEpisodeJson(value), canonical);
+  const raw = Buffer.from([0xef,0xbb,0xbf,0x0d,0x0a,0xff]);
+  const expected = [{episode_digest:hash(canonical), source_digest:hash(raw), source_id:'source:one'}];
+  assert.deepEqual(await buildManagedGraphitiManifest([{source_id:'source:one',raw,episode:value}]), {
+    manifest:expected, source_snapshot_digest:hash(JSON.stringify(expected)),
+  });
+});
+
+test('managed manifest captures the entire input before hashing and preserves order', async () => {
+  const inputs = ['one','two'].map(id => ({source_id:id, raw:Buffer.from(id), episode:episode()}));
+  const expected = await buildManagedGraphitiManifest(inputs);
+  const pending = buildManagedGraphitiManifest(inputs);
+  inputs[1].raw.fill(0); inputs[1].episode.name = 'changed'; inputs.reverse();
+  assert.deepEqual(await pending, expected);
+  const reversed = await buildManagedGraphitiManifest(['two','one'].map(id => ({source_id:id,raw:Buffer.from(id),episode:episode()})));
+  assert.notEqual(reversed.source_snapshot_digest, expected.source_snapshot_digest);
+});
+
+test('managed manifest rejects ambiguous identities and malformed string envelopes', async () => {
+  const input = {source_id:'one',raw:Buffer.from('x'),episode:episode()};
+  for (const inputs of [[], [input,input], [{...input,source_id:'../one'}], [{...input,episode:{...episode(),name:'\ud800'}}], [{...input,episode:{...episode(),extra:true}}]]) {
+    await assert.rejects(buildManagedGraphitiManifest(inputs), TypeError);
+  }
+});
