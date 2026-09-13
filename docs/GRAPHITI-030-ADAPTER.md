@@ -32,6 +32,52 @@ an old generation after source authorization changes. Unpublished failed groups
 can be removed by an authorized backend operator using the exact receipt group.
 No prefix-wide database deletion is part of the runner.
 
+### Observe an existing receipt without retrying
+
+The generated runner now accepts `python graphiti-ingest.py --reconcile
+graphiti-episodes.json`. This bounded recovery step is **FalkorDB-only**. Use it
+with the same authorized export and connection configuration after independently
+confirming the original writer is stopped. It validates the exact manifest,
+corpus, projection-group shape, sequential canonical/body mappings and completion
+counts before any backend access. It does not establish current source permission;
+the operator must reauthorize access first. Receipt digests bind observed bytes,
+not an independently authenticated ledger or ownership lease.
+
+Each mapped episode is checked using parameterized `GRAPH.RO_QUERY`, not
+Graphiti's ordinary query path. The query returns at most two boolean rows for
+content/group equality; it neither returns source text nor creates a missing
+graph. The client has 10-second connection, 30-second socket/query and 10-second
+close bounds. There is no model initialization, index creation, ingestion or
+automatic retry. A missing projection UUID stays an ambiguous write; absence or
+mismatch never becomes permission to re-ingest.
+
+Each invocation writes a new `graphiti-reconciliation-<random-id>.json` with
+schema `gkos-graphiti-reconciliation/1`, input and original-receipt SHA-256s,
+timestamp, per-episode observations and the unattempted count. The original
+ingestion receipt is preserved. `persistence-observed` means every expected
+episode matched at observation time, not that a generation is published or
+searchable. All outcomes retain `retry_allowed=false`,
+`generation_published=false` and `searchability=unverified`. Partial, ambiguous,
+mismatched or unavailable observations exit nonzero and require operator
+reconciliation. Source/receipt bytes are checked again after reads and after
+closing the client; this detects changed bytes, not an active-writer lease or
+an ABA change that restores the same bytes.
+
+Receipt writes now use exclusive random temporary filenames, file flush/fsync
+and atomic replacement. POSIX also fsyncs the parent directory after creation
+and replacement. Windows has no portable directory-fsync API here, so these
+checks do not claim power-loss durability there. Interrupted temporary files
+are preserved rather than silently adopted or truncated. No managed queue,
+exactly-once recovery, derived-data purge or publication authority is added.
+
+The [synthetic recovery receipt](../evidence/graphiti-reconciliation-20260913/receipt.json)
+records actual generated-runner observations on the existing FalkorDB service:
+returned mapping, changed-content refusal, missing-graph refusal without graph
+creation, ambiguous-write refusal, unchanged ingestion receipts, no Graphiti
+initialization and exact fixture cleanup. `scripts/qualify-graphiti-reconciliation.py`
+reproduces this bounded test. It does not use real vault data or repeat model
+extraction, and is not a production recovery or multi-principal isolation gate.
+
 For FalkorDB, set `FALKORDB_HOST`, optionally `FALKORDB_PORT`, `FALKORDB_USER`,
 and `FALKORDB_PASSWORD`. A new database named by the receipt's projection group
 is used. For Neo4j, set `GRAPHITI_DB=neo4j`, `NEO4J_URI`, `NEO4J_USER`,

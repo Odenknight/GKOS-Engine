@@ -39,3 +39,4 @@ test/fixtures/documentation-verifier/v2.1.1/* -text
 
 # Graphiti qualification receipts are byte-hashed, including the input manifest.
 evidence/graphiti-030-20260912/* -text
+evidence/graphiti-reconciliation-20260913/* -text

@@ -4,6 +4,11 @@
 
 Current main source version; not yet a tagged or published 2.2.0 release.
 
+- Added FalkorDB read-only reconciliation observations to the optional Graphiti
+  runner. Existing receipts and ambiguous retry refusal are preserved; mapped
+  episodes can be checked without model/index/ingestion calls or publication.
+  Receipt replacement uses exclusive temporary files and POSIX directory fsync.
+
 - Added the optional Graphiti query draft-1 contract with bounded response
   validation, current scope/generation binding and authorized episode revision
   checks. Synthetic adversarial fixtures cover its refusal boundary; a live
