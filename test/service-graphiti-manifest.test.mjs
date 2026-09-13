@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {spawnSync} from 'node:child_process';
+import {once} from 'node:events';
 import {buildGraph} from '../dist/gkos-engine.mjs';
-import {buildServiceGraphitiManifest,buildServiceGraphitiQueryContext} from '../dist/service-node.mjs';
+import {buildServiceGraphitiManifest,buildServiceGraphitiQueryContext,createServiceGraphitiHost,createLocalServiceServer,ServiceCredentialRegistry} from '../dist/service-node.mjs';
 const at='2026-09-13T00:00:00.000Z';
 const hash=bytes=>'sha256:'+createHash('sha256').update(bytes).digest('hex');
 function fixture(){
@@ -11,7 +12,7 @@ function fixture(){
     `---\r\ngkx_version: "2.3"\r\nuid: "550e8400-e29b-41d4-a716-44665544910${i}"\r\ntitle: ${level}\r\ntype: note\r\ncreated_at: ${at}\r\nepistemic_state: observation\r\nsensitivity: ${level}\r\n---\r\n${level} café 🌌`}));
   const input={identity:{credentialId:'test',agentId:'test-agent',agentLabel:'Test',sensitivityCeiling:'public',capabilities:['graphiti.read'],revoked:false},
     corpus:{graph:buildGraph(sourceRecords,[]),sourceRecords,generation:1,evaluationTime:at},
-    authorization:{configured:true,generation:1,policyDigest:'sha256:'+'a'.repeat(64)},evaluationTime:at};
+    authorization:{configured:true,generation:1,policyDigest:'sha256:'+'a'.repeat(64)},evaluationTime:at,vaultName:'Manifest fixture'};
   return {input,bytes:new Map(sourceRecords.map(s=>[s.relativePath,Buffer.from(s.content)]))};
 }
 test('service ingestion derives the entire permitted export with exact original source bytes',async()=>{
@@ -96,4 +97,40 @@ test('published service reconciliation rejects changed authority, incomplete map
     const f=structuredClone(base);mutate(f);
     assert.equal(await buildServiceGraphitiQueryContext(f.input,f.bytes,f.authority,f.publication),null);
   }
+});
+
+test('service host binds actual ledger evidence through authenticated HTTP and rejects changed revisions',async()=>{
+  const f=await publishedFixture();
+  let revision=1,phase='ready',calls=0;
+  const reads=[];
+  const host=createServiceGraphitiHost({
+    current:()=>({...f.authority,revision:String(revision)}),
+    readSourceBytes:async path=>{reads.push(path);if(phase==='source-change')revision++;return f.bytes.get(path);},
+    readPublication:async()=>{if(phase==='publication-change')revision++;return f.publication;},
+    query:async request=>{
+      calls++;
+      if(phase==='query-change')revision++;
+      return JSON.stringify({contract_version:request.contract_version,request_id:request.request_id,binding:request.binding,
+        hits:[{fact:'synthetic related fact',semantic_support:'unverified',citations:f.publication.mappings}]});
+    },
+  });
+  const token='synthetic-host.'+'x'.repeat(48);
+  const server=createLocalServiceServer({credentials:new ServiceCredentialRegistry([{token,identity:f.input.identity}]),
+    snapshot:()=>f.input.corpus,authorization:()=>f.input.authorization,status:()=>({state:'serving'}),vaultName:f.input.vaultName,graphitiHost:host});
+  server.listen(0,'127.0.0.1');await once(server,'listening');
+  try{
+    const url='http://127.0.0.1:'+server.address().port;
+    const status=await fetch(url+'/graphiti/query/status',{headers:{authorization:'Bearer '+token}});
+    assert.equal(status.status,200);assert.equal((await status.json()).searchable,true);
+    for(phase of ['ready','source-change','publication-change','query-change']){
+      const before=calls;
+      const response=await fetch(url+'/graphiti/query',{method:'POST',headers:{authorization:'Bearer '+token,'content-type':'application/json'},
+        body:JSON.stringify({query:'related',request_id:'host-query',limit:5})});
+      const body=await response.json();
+      assert.equal(response.status,phase==='ready'?200:503,phase);
+      if(phase==='ready')assert.equal(body.hits[0].citations[0].source_digest,hash(f.bytes.get('public.md')));
+      if(phase==='source-change'||phase==='publication-change')assert.equal(calls,before);
+    }
+    assert.equal(reads.includes('secret.md'),false);
+  }finally{server.close();await once(server,'close');}
 });

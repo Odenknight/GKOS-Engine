@@ -4,5 +4,6 @@ export * from "./mcp";
 export * from "./server";
 export * from "./local-embedding";
 export * from "./graphiti-manifest";
+export * from "./graphiti-host";
 
 export * from "./work-scheduler";

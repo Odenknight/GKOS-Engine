@@ -1136,8 +1136,8 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "98168293bbc7d96cffcd0f41f8f7d1c98eb63ce683477eb61d7df4c8db47920c",
-      "rationale": "Support abortable asynchronous Graphiti host preparation within query and readiness total deadlines; verify revocation and stalled preparation denial."
+      "after": "6cce4b63c7f16086693b3ba000de611c78bef56e46b6d61b0fcdc961245a86f2",
+      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
     },
     {
       "path": "services/gkos-graphiti/backend.py",
@@ -1482,6 +1482,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/service/graphiti-host.ts",
+      "before": null,
+      "after": "1bf6ff7f9825ac8f2b596fd2d2662b6f41249184e1a9161016a3854dd468e60e",
+      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
+    },
+    {
       "path": "src/service/graphiti-manifest.ts",
       "before": null,
       "after": "0fc617a6f4cf3cc5837a76da1bac1991f2366340f3bcc8af59a382d3ddd2cde8",
@@ -1496,14 +1502,14 @@
     {
       "path": "src/service/node.ts",
       "before": "a66997dc3e0248ddd9988149a224ec462ce74f57",
-      "after": "b2d8be62d9580fd8364a79621f3368d7739e736d2810d3b8149836d8d737ccfb",
-      "rationale": "Derive managed ingestion manifest from authorized service snapshot and matching original source bytes; qualify denial and snapshot capture."
+      "after": "42a258e4ce25bd06c13a07776f800623fdbf53326287797050d60a7686565b15",
+      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
     },
     {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
-      "after": "a49d58ba2bad8beb4280e82508d69921d4bb894488b15edfccfb21d9226f8518",
-      "rationale": "Support abortable asynchronous Graphiti host preparation within query and readiness total deadlines; verify revocation and stalled preparation denial."
+      "after": "6384e390fc744d5ceedc88a1070ab607a06bcc7825723a8383b7f0621ed37bec",
+      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
     },
     {
       "path": "src/version.ts",
@@ -1778,8 +1784,8 @@
     {
       "path": "test/service-graphiti-manifest.test.mjs",
       "before": null,
-      "after": "1b6020f2909f83ff719032f717d63801cbadebecf0cd0c1f96626e3f1d911e56",
-      "rationale": "Reconcile actual published ledger receipt with current authorized source manifest, exact mappings and worker observation digest; exercise Python ledger integration and denials."
+      "after": "9369d03a8024da3e23395c51291d81417f43c2299d1a16ed82c5663b0421eeb2",
+      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",

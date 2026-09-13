@@ -165,3 +165,15 @@ the provider later; an uncooperative preparation retains its ingress slot until
 it settles. The returned `current()` callback must still synchronously check
 fresh source, policy and publication generations. Async preparation does not
 make a cached authorization context safe to reuse.
+
+`createServiceGraphitiHost` supplies that service callback. The deployment provides
+bounded source reads, a trusted publication reader, its fixed query transport,
+and a synchronous current revision covering source/policy/configuration/publication
+state. Revisions must never be reused, and the resolver must reject stale service
+snapshots. The adapter reads only authorized paths, enforces a shared 64 MiB byte
+budget, reconciles the receipt and checks revision/abort state after each await.
+Its returned context cannot be mutated to alter the retained authority map.
+An authenticated HTTP test exercises this adapter against actual temporary Python
+ledger evidence, including invalidation during source reads, publication reads
+and queries. Query facts remain synthetic; production source/ledger configuration
+and live backend qualification are still required.

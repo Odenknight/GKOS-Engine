@@ -43,7 +43,7 @@ export interface LocalServiceOptions {
    * source, policy and publication generations after preparation and queries. */
   graphitiHost?: (input: { identity: ServiceCredentialIdentity; view: GkosAuthorizedView;
     snapshot: ServiceCorpusSnapshot; authorization: ServiceAuthorizationConfiguration;
-    signal: AbortSignal }) => GraphitiBrokerHost | null | Promise<GraphitiBrokerHost | null>;
+    signal: AbortSignal; vaultName?: string }) => GraphitiBrokerHost | null | Promise<GraphitiBrokerHost | null>;
 }
 
 interface RateState { tokens: number; lastRefill: number; active: number }
@@ -284,7 +284,7 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
           if (request.method !== "GET") { send(response, 405, { error: "method_not_allowed" }, requestOrigin); return; }
           const authorized = await view(identity, "graphiti_episodes");
           if (expired()) return;
-          const host = await options.graphitiHost?.({ identity, ...authorized, signal: disconnected.signal });
+          const host = await options.graphitiHost?.({ identity, ...authorized, signal: disconnected.signal, vaultName: options.vaultName });
           if (expired()) return;
           let status: GraphitiQueryStatus = { contract_version: GRAPHITI_QUERY_CONTRACT_VERSION, mode: "unavailable",
             searchable: false, binding: null };
@@ -310,7 +310,7 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
           }
           const authorized = await view(identity, "graphiti_episodes");
           if (expired()) return;
-          const host = await options.graphitiHost?.({ identity, ...authorized, signal: disconnected.signal });
+          const host = await options.graphitiHost?.({ identity, ...authorized, signal: disconnected.signal, vaultName: options.vaultName });
           if (expired()) return;
           if (!host) { send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin); return; }
           const guardedHost: GraphitiBrokerHost = { query: (request, signal) => {
@@ -332,7 +332,7 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
           if (expired()) return;
           const final = await view(identity, "graphiti_episodes");
           if (expired()) return;
-          const current = await options.graphitiHost?.({ identity, ...final, signal: disconnected.signal });
+          const current = await options.graphitiHost?.({ identity, ...final, signal: disconnected.signal, vaultName: options.vaultName });
           if (expired()) return;
           if (!result || !current || final.snapshot.generation !== authorized.snapshot.generation ||
               final.authorization.generation !== authorized.authorization.generation ||
