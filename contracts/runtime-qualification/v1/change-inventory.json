@@ -1208,8 +1208,8 @@
     {
       "path": "services/gkos-graphiti/test_worker.py",
       "before": null,
-      "after": "3abdd18a227dd9f16e017781213b9981ce81aae82d2d62038744f44c9b2d70ac",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "d8d4e8e82272b058f55d4564864268eff821633a985acf30c779be488eb61cfa",
+      "rationale": "Exercise two episodes from one source through worker readback, published ledger, and query citation conversion; semantic support remains unverified."
     },
     {
       "path": "services/gkos-graphiti/worker.py",

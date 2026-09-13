@@ -1,5 +1,6 @@
 import asyncio
 import copy
+import json
 import tempfile
 import sys
 import types
@@ -9,6 +10,7 @@ from backend import GraphitiBackend
 from pathlib import Path
 from ledger import Ledger, Refused, digest
 from worker import Worker, purge_job
+from readonly_query import query_published
 
 
 class WorkerTests(unittest.IsolatedAsyncioTestCase):
@@ -46,6 +48,32 @@ class WorkerTests(unittest.IsolatedAsyncioTestCase):
             self.ledger.read(result["job"], self.bound)
         with self.assertRaises(Refused):
             await self.worker.run(self.current, lambda group: self.backend)
+
+    async def test_same_source_episodes_survive_worker_publication_and_query_citations(self):
+        self.episodes.append({**self.episodes[0], "name": "relationship", "episode_body": '{"fact":"relay connects chamber"}'})
+        self.manifest.append({**self.manifest[0], "episode_digest": digest(self.episodes[1])})
+        self.bound["source_snapshot_digest"] = digest(self.manifest)
+        added = []
+        async def add(episode):
+            added.append(copy.deepcopy(episode))
+            return f"episode-{len(added)}"
+        self.backend.add = add
+        result = await self.worker.run(self.current, lambda group: self.backend)
+        self.assertEqual(added, self.episodes)
+        self.ledger.publish(result["job"], self.bound)
+        published = self.ledger.read(result["job"], self.bound)
+        self.assertEqual([m["source_id"] for m in published["mappings"]], ["note", "note"])
+        request = {"contract_version": "gkos-graphiti-query/1.0.0-draft.1", "request_id": "multi",
+                   "binding": published["binding"], "query": "relay", "limit": 5}
+        driver = object()
+        async def search(*args):
+            return [types.SimpleNamespace(fact="relay connects chamber", episodes=["episode-1", "episode-2"],
+                                          group_id=published["binding"]["projection_id"])]
+        with patch("readonly_query._groups", {driver: published["binding"]["projection_id"]}), \
+             patch("readonly_query.search_readonly", side_effect=search):
+            body = await query_published(self.ledger, result["job"], lambda: copy.deepcopy(self.bound), None, driver, request)
+        self.assertEqual(json.loads(body)["hits"][0]["citations"], published["mappings"])
+        self.assertEqual(json.loads(body)["hits"][0]["semantic_support"], "unverified")
 
     async def test_revocation_after_add_quarantines_without_read_or_publish(self):
         async def add(episode):
