@@ -1130,8 +1130,8 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "279500b7bd303679d73f1d7611734bee4ee7e956701ed57fca6a0e8d1dad76b5",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "51bdbb74735620e7acc56e215385414b50954e74a8e8d729e9783668ff21fb4b",
+      "rationale": "Optional private authenticated Graphiti HTTP adapter with bounded decoding, live session checks, deadline enforcement, pinned aiohttp dependency, and real-ledger loopback tests; no deployed host qualification."
     },
     {
       "path": "services/gkos-graphiti/backend.py",
@@ -1170,10 +1170,22 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "services/gkos-graphiti/query_http.py",
+      "before": null,
+      "after": "e25c665f726cfb948096cf3751c7f9bb918b03eba693554b1321e6981c371d82",
+      "rationale": "Optional private authenticated Graphiti HTTP adapter with bounded decoding, live session checks, deadline enforcement, pinned aiohttp dependency, and real-ledger loopback tests; no deployed host qualification."
+    },
+    {
       "path": "services/gkos-graphiti/readonly_query.py",
       "before": null,
       "after": "72493bb98cf76c0ab20e77dae519730ec81147aaf10a9b2e6ed364fdfe60abef",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/requirements-query.txt",
+      "before": null,
+      "after": "a945d0dd64976f30283dc6647ff363a1c6bc3a6b73f84ee7fefb154052958a32",
+      "rationale": "Optional private authenticated Graphiti HTTP adapter with bounded decoding, live session checks, deadline enforcement, pinned aiohttp dependency, and real-ledger loopback tests; no deployed host qualification."
     },
     {
       "path": "services/gkos-graphiti/test_backend.py",
@@ -1198,6 +1210,12 @@
       "before": null,
       "after": "c7f7b4708f00da399477d1cd368b2f9a8565250162018e0de5090d4f3f8a295f",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/test_query_http.py",
+      "before": null,
+      "after": "40ba2d6a3ba5c9d423a1a32836748a004026a09dfb267367f0f27807d73f184a",
+      "rationale": "Optional private authenticated Graphiti HTTP adapter with bounded decoding, live session checks, deadline enforcement, pinned aiohttp dependency, and real-ledger loopback tests; no deployed host qualification."
     },
     {
       "path": "services/gkos-graphiti/test_readonly_query.py",

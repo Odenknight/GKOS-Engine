@@ -117,3 +117,20 @@ used temporary local storage. The same source passed all thirteen synthetic
 live SDK checks at 11:39:05.903608Z with verified fixture cleanup. Local evidence:
 `graphiti-host-tests-20260913T113950Z/receipt.json` and
 `graphiti-readonly-search-live-20260913T113858Z/receipt.json`.
+
+## Private query HTTP adapter
+
+`query_http.create_query_app` provides an optional aiohttp application; it does not
+start a listener or select credentials. Install the separately pinned
+`requirements-query.txt` for this adapter and its HTTP tests (Python 3.11+).
+The host supplies a synchronous credential resolver returning a stable
+`QuerySession` object; replacement or revocation must stop returning that object.
+Its current callback must derive fresh complete principal scope. Wire bindings
+are checked against that host-selected published ledger, never used to select it.
+
+The adapter bounds request bodies to 16 KiB, rejects duplicate JSON object keys,
+rechecks the session after upload and query, and rejects late success using a
+monotonic deadline. Backend failures return generic errors. Deployment still
+owns TLS, listener confinement, credential storage, and request admission limits.
+The tests now include actual loopback HTTP with a temporary published ledger;
+SDK search is synthetic. This does not qualify a live model or deployed host.
