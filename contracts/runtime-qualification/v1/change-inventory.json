@@ -1148,8 +1148,8 @@
     {
       "path": "services/gkos-graphiti/ledger.py",
       "before": null,
-      "after": "1d40c1872d1daeb2879feecff16a08f859f65c045cc6d13e93ce03613bf0c546",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "05e61cfe7b68192f9f44b5aa88d47f4b3b9c7c13cbc1ae339666959d710691c8",
+      "rationale": "Allow distinct managed episodes from one consistent source version; reject duplicate episodes and conflicting raw source digests, with ledger publication and producer tests."
     },
     {
       "path": "services/gkos-graphiti/qualify_live.py",
@@ -1190,8 +1190,8 @@
     {
       "path": "services/gkos-graphiti/test_ledger.py",
       "before": null,
-      "after": "60557e5f629d7342ea8e4bf4c6187061926ae4731e0d34fb3f5b2d64f46abd2a",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "f7f8c4663e8aa3b9b1c41db111037eb1406f49cba5c0df71390828cbe8597f4a",
+      "rationale": "Allow distinct managed episodes from one consistent source version; reject duplicate episodes and conflicting raw source digests, with ledger publication and producer tests."
     },
     {
       "path": "services/gkos-graphiti/test_published_query.py",
@@ -1256,8 +1256,8 @@
     {
       "path": "src/graphiti-manifest.ts",
       "before": null,
-      "after": "cb73e99485f2fdf35660ddfe45c5f4a1ee979dfc9f3177abe71c4d83d093f1ec",
-      "rationale": "Private managed Graphiti manifest binding: preserve raw source bytes, match Python ledger canonicalization, and verify Unicode and asynchronous input capture; no product query capability activation."
+      "after": "36c3c14ec4f4e8aed1410c308ce925ab37c497f9b9c3a99b0d57791283098e90",
+      "rationale": "Allow distinct managed episodes from one consistent source version; reject duplicate episodes and conflicting raw source digests, with ledger publication and producer tests."
     },
     {
       "path": "src/graphiti-query-contract.ts",
@@ -1574,8 +1574,8 @@
     {
       "path": "test/graphiti-manifest.test.mjs",
       "before": null,
-      "after": "78853d42428a44f4d50ac361764de5120b98e719ec8c57c809124ff1559461e9",
-      "rationale": "Private managed Graphiti manifest binding: preserve raw source bytes, match Python ledger canonicalization, and verify Unicode and asynchronous input capture; no product query capability activation."
+      "after": "2da055a834e994a7feabc19f72092dca393b0431b67c7e681e2c770c52838aae",
+      "rationale": "Allow distinct managed episodes from one consistent source version; reject duplicate episodes and conflicting raw source digests, with ledger publication and producer tests."
     },
     {
       "path": "test/graphiti-query-contract.test.mjs",

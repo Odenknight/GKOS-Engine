@@ -43,16 +43,21 @@ def validate_manifest(current, manifest):
     if type(manifest) is not list or not 1 <= len(manifest) <= 50000:
         raise Refused("manifest-invalid")
     seen = set()
+    sources = {}
     for item in manifest:
         if type(item) is not dict or set(item) != {"source_id", "source_digest", "episode_digest"}:
             raise Refused("source-invalid")
         uid = item["source_id"]
-        if not isinstance(uid, str) or not re.fullmatch(r"[A-Za-z0-9._:-]{1,128}", uid) or uid in seen:
+        if not isinstance(uid, str) or not re.fullmatch(r"[A-Za-z0-9._:-]{1,128}", uid):
             raise Refused("source-invalid")
-        seen.add(uid)
         for key in ("source_digest", "episode_digest"):
             if not isinstance(item[key], str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", item[key]):
                 raise Refused("source-digest-invalid")
+        episode = (uid, item["episode_digest"])
+        if episode in seen or (uid in sources and sources[uid] != item["source_digest"]):
+            raise Refused("source-invalid")
+        seen.add(episode)
+        sources[uid] = item["source_digest"]
     if digest(manifest) != current["source_snapshot_digest"]:
         raise Refused("manifest-binding-mismatch")
     return canonical(manifest)

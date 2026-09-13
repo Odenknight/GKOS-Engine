@@ -27,23 +27,29 @@ export async function buildManagedGraphitiManifest(inputs: readonly {
   source_id: string; raw: Uint8Array; episode: ManagedGraphitiEpisode;
 }[]): Promise<{ manifest: {source_id: string; source_digest: string; episode_digest: string}[]; source_snapshot_digest: string }> {
   if (!Array.isArray(inputs) || inputs.length < 1 || inputs.length > 50000) throw new TypeError("GKOS_GRAPHITI_MANIFEST_INVALID");
-  const seen = new Set<string>();
   let bytes = 0;
   // Capture all inputs before the first await, so concurrent caller mutation
   // cannot combine one source generation with another episode generation.
   const captured = inputs.map(input => {
     if (!input || typeof input.source_id !== "string" || !/^[A-Za-z0-9._:-]{1,128}$/.test(input.source_id) ||
-      seen.has(input.source_id) || !(input.raw instanceof Uint8Array)) throw new TypeError("GKOS_GRAPHITI_MANIFEST_INVALID");
-    seen.add(input.source_id);
+      !(input.raw instanceof Uint8Array)) throw new TypeError("GKOS_GRAPHITI_MANIFEST_INVALID");
     const episode = managedEpisodeJson(input.episode);
     bytes += input.raw.byteLength + episode.length;
     if (bytes > 64 * 1024 * 1024) throw new TypeError("GKOS_GRAPHITI_MANIFEST_TOO_LARGE");
     return {id: input.source_id, raw: new Uint8Array(input.raw), episode};
   });
   const manifest = [];
+  const sources = new Map<string, string>();
+  const seen = new Set<string>();
   for (const input of captured) {
+    const episode_digest = await sha256Bytes(input.episode);
+    const source_digest = await sha256Bytes(input.raw);
+    const key = `${input.id}\u0000${episode_digest}`;
+    if (seen.has(key) || sources.has(input.id) && sources.get(input.id) !== source_digest) throw new TypeError("GKOS_GRAPHITI_MANIFEST_INVALID");
+    seen.add(key);
+    sources.set(input.id, source_digest);
     // Key insertion order matches Python sort_keys for the fixed ASCII schema.
-    manifest.push({episode_digest: await sha256Bytes(input.episode), source_digest: await sha256Bytes(input.raw), source_id: input.id});
+    manifest.push({episode_digest, source_digest, source_id: input.id});
   }
   return {manifest, source_snapshot_digest: await sha256Bytes(JSON.stringify(manifest))};
 }

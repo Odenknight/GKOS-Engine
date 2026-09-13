@@ -33,3 +33,13 @@ test('managed manifest rejects ambiguous identities and malformed string envelop
     await assert.rejects(buildManagedGraphitiManifest(inputs), TypeError);
   }
 });
+
+test('one source can bind distinct episodes but cannot mix source versions', async () => {
+  const first = {source_id:'one',raw:Buffer.from('same source'),episode:episode()};
+  const second = {...first,episode:{...episode(),name:'relationship'}};
+  const result = await buildManagedGraphitiManifest([first,second]);
+  assert.equal(result.manifest.length,2);
+  assert.equal(result.manifest[0].source_digest,result.manifest[1].source_digest);
+  assert.notEqual(result.manifest[0].episode_digest,result.manifest[1].episode_digest);
+  await assert.rejects(buildManagedGraphitiManifest([first,{...second,raw:Buffer.from('changed source')}]),TypeError);
+});
