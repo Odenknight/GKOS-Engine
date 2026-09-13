@@ -668,7 +668,7 @@
     {
       "path": "docs/BUILD-COMPLETION-REGISTER.md",
       "before": null,
-      "after": "077b5ef3856052b975cac5737b3a1f5bf3af1effa63f9d3f62705864b8dc2a4a",
+      "after": "34712a712bd3e70f9c806037457c2db972a198a43b3de4563491dda780f9520d",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -735,6 +735,12 @@
       "path": "docs/GRAPHITI-PROJECTION-PERFORMANCE.md",
       "before": null,
       "after": "a0b6d81602411833abfad353333ac2c117191d9331ef1696d3284aeaa81ca707",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "docs/GRAPHITI-READONLY-DRIVER.md",
+      "before": null,
+      "after": "2bc4aa2dc97115e1a70e0f144d5f931714e4615e85ff88e503b0a9d43298acdd",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
