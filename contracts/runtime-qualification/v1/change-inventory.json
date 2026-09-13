@@ -1460,8 +1460,8 @@
     {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
-      "after": "20459a43c4816009ed72f2972edf2d107140a8b62df6824beb97c6634880e217",
-      "rationale": "Recheck current credential before all successful JSON responses after asynchronous host work; deny revoked or changed identities without returning protected data."
+      "after": "318dbf44e5c55c1ef23be01f824510744b2d7cb95a35252afc6668915fee6b2e",
+      "rationale": "Private authenticated Graphiti query route uses host-owned scope binding, rechecks credentials and service generation/policy, bounds stalled authority time, and rejects caller binding; service tests cover denial, revocation, stale state and backend outage."
     },
     {
       "path": "src/version.ts",
@@ -1748,8 +1748,8 @@
     {
       "path": "test/service-runtime.test.mjs",
       "before": "c3ad015d1e157f57cfc7b4f9d99a5e9601ae33bc",
-      "after": "4cd6979a7da88dd6d8d0d1f7614b0f123f8bb905adfb9c0736f6601372c0931d",
-      "rationale": "Regression for revocation during asynchronous authorization across health, capabilities, notes, graph and Graphiti episode REST routes."
+      "after": "c0c1f2c1c79126bc865dc9bb2fee26878c322505f84b31f7534d8335cf19593d",
+      "rationale": "Private authenticated Graphiti query route uses host-owned scope binding, rechecks credentials and service generation/policy, bounds stalled authority time, and rejects caller binding; service tests cover denial, revocation, stale state and backend outage."
     },
     {
       "path": "test/service-stdio-package.test.mjs",

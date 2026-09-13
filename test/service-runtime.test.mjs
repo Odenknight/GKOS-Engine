@@ -84,9 +84,10 @@ async function fixtureServer(options = {}) {
   const server = createLocalServiceServer({
     credentials, snapshot, status: () => ({ state: "serving" }), vaultName: "test", vaultId: "vault:test",
     navigationConfig, eventRing: events, corsAllowlist: ["null"], requestTimeoutMs: options.requestTimeoutMs ?? 1000,
+    graphitiHost: options.graphitiHost,
     authorization: async (committed) => {
-      options.afterSnapshot?.(liveSources);
-      return { configured: true, generation: committed.generation, policyDigest: `sha256:${"b".repeat(64)}` };
+      await options.afterSnapshot?.(liveSources);
+      return { configured: true, generation: committed.generation, policyDigest: options.policyDigest?.() ?? `sha256:${"b".repeat(64)}` };
     },
   });
   server.listen(0, HOST);
@@ -95,6 +96,28 @@ async function fixtureServer(options = {}) {
 }
 
 async function close(server) { server.close(); await once(server, "close"); }
+
+test("semantic query route uses host authority and rejects caller-supplied binding", async () => {
+  let calls = 0;
+  const binding = {corpus_id:'fixture',scope_digest:`sha256:${'a'.repeat(64)}`,policy_digest:`sha256:${'b'.repeat(64)}`,
+    source_snapshot_digest:`sha256:${'c'.repeat(64)}`,projection_id:'projection',configuration_digest:`sha256:${'d'.repeat(64)}`};
+  const fixture = await fixtureServer({graphitiHost: ({view}) => {
+    assert.equal(view.notes.some(note => note.path.includes(CANARY)),false);
+    return {current: () => ({status:{contract_version:'gkos-graphiti-query/1.0.0-draft.1',mode:'managed',searchable:true,binding},
+      decision:'allow',complete_dependency_scope:true,authorized_episodes:new Map()}),
+      query: async request => { calls++; return JSON.stringify({contract_version:request.contract_version,request_id:request.request_id,binding:request.binding,hits:[]}); }};
+  }});
+  try {
+    const body = {query:'relay',request_id:'one',limit:5};
+    assert.equal((await request(fixture.port,'/graphiti/query',{method:'POST',body})).status,401);
+    assert.equal((await request(fixture.port,'/graphiti/query',{token:VIEWER_TOKEN,method:'POST',body:{...body,binding}})).status,400);
+    assert.equal(calls,0);
+    const result = await request(fixture.port,'/graphiti/query',{token:VIEWER_TOKEN,method:'POST',body});
+    assert.equal(result.status,200);
+    assert.deepEqual(JSON.parse(result.body).binding,binding);
+    assert.equal(calls,1);
+  } finally { await close(fixture.server); }
+});
 
 test("REST responses deny credentials revoked during authorization", async () => {
   for (const route of ["/health", "/capabilities", "/notes", "/graph", "/graphiti/episodes"]) {
@@ -424,4 +447,43 @@ test("navigation continuation recovers same-session scope while rejecting cross-
     const restarted = await call(fixture.port, headers, "nav-restart", "gkos_navigation_discover", { cursor: null, limit: 1 });
     assert.equal(restarted.isError, false);
   } finally { await close(fixture.server); }
+});
+
+test("semantic query route suppresses revoked, stale and unavailable provider results", async () => {
+  for (const change of ['none','credential','generation','policy','scope','outage']) {
+    let generation=7, policy=`sha256:${'b'.repeat(64)}`, allowed=true, fixture;
+    const binding={corpus_id:'fixture',scope_digest:`sha256:${'a'.repeat(64)}`,policy_digest:policy,
+      source_snapshot_digest:`sha256:${'c'.repeat(64)}`,projection_id:'projection',configuration_digest:`sha256:${'d'.repeat(64)}`};
+    const citation={projection_episode_id:'episode',source_id:'source',source_digest:`sha256:${'e'.repeat(64)}`};
+    fixture=await fixtureServer({generation:()=>generation,policyDigest:()=>policy,graphitiHost:()=>({
+      current:()=>({status:{contract_version:'gkos-graphiti-query/1.0.0-draft.1',mode:'managed',searchable:true,binding},decision:allowed?'allow':'deny',complete_dependency_scope:true,
+        authorized_episodes:new Map([['episode',{source_id:citation.source_id,source_digest:citation.source_digest}]])}),
+      query:async request=>{
+        if(change==='credential') fixture.credentials.setRevoked('credential:legacy-viewer',true);
+        if(change==='generation') generation++;
+        if(change==='policy') policy=`sha256:${'f'.repeat(64)}`;
+        if(change==='scope') allowed=false;
+        if(change==='outage') throw new Error('PRIVATE_BACKEND_DIAGNOSTIC');
+        return JSON.stringify({contract_version:request.contract_version,request_id:request.request_id,binding:request.binding,
+          hits:[{fact:'SYNTHETIC_QUERY_FACT',semantic_support:'unverified',citations:[citation]}]});
+      },
+    })});
+    try {
+      const result=await request(fixture.port,'/graphiti/query',{token:VIEWER_TOKEN,method:'POST',body:{query:'relay',request_id:'one',limit:5}});
+      if(change==='none') {assert.equal(result.status,200); assert.equal(JSON.parse(result.body).hits[0].semantic_support,'unverified');}
+      else {assert.notEqual(result.status,200,change); assert.equal(result.body.includes('SYNTHETIC_QUERY_FACT'),false,change);}
+      assert.equal(result.body.includes('PRIVATE_BACKEND_DIAGNOSTIC'),false);
+    } finally {await close(fixture.server);}
+  }
+});
+
+test("semantic query deadline includes a stalled authority lookup", async () => {
+  let releaseAuthority;
+  const stalled=new Promise(resolve=>{releaseAuthority=resolve;});
+  const fixture=await fixtureServer({requestTimeoutMs:40,afterSnapshot:()=>stalled});
+  try {
+    const result=await request(fixture.port,'/graphiti/query',{token:VIEWER_TOKEN,method:'POST',body:{query:'relay',request_id:'one',limit:5}});
+    assert.equal(result.status,503);
+    assert.deepEqual(JSON.parse(result.body),{error:'semantic_query_unavailable'});
+  } finally {releaseAuthority(); await close(fixture.server);}
 });
