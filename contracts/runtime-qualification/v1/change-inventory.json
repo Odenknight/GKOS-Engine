@@ -386,8 +386,8 @@
     {
       "path": ".gitattributes",
       "before": "0f3ffed343d2c7ed7aad2e67be2ef4e47ae6ff15",
-      "after": "d9f545e123e02f49209da578c09e378949c15d45df54900ced39cc91317c0ef7",
-      "rationale": "Preserve exact Graphiti receipt bytes across Windows/Linux checkouts; existing historical byte rules unchanged."
+      "after": "321f7a806ba0d421bb103cc45d78937fbfa7dd2d398d486eb4da59ba6f4dbcbe",
+      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
       "path": ".github/workflows/ci.yml",
@@ -446,8 +446,8 @@
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "19493333e2771f187b6de4952eaaaa49b674dd60947ef01bb1f7fc048d3cdf0d",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "685a294f4b88946b40856f40116c69fa83fb4c946731fe905db94c88ae682bd7",
+      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
       "path": "COMPAT.md",
@@ -692,8 +692,8 @@
     {
       "path": "docs/GRAPHITI-030-ADAPTER.md",
       "before": null,
-      "after": "ca825bd353fe46542558ed67358d592b29fea85470ddd4cbdae8e75c1af4e962",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "2dfd346f88408dae7d2cd85383b8d5c2bd98cff72175be844f8ae9adc9303409",
+      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
       "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
@@ -864,6 +864,18 @@
       "rationale": "Sanitized synthetic Graphiti qualification receipt/input or exact-byte manifest; documents limited observations, not production qualification."
     },
     {
+      "path": "evidence/graphiti-reconciliation-20260913/SHA256SUMS",
+      "before": null,
+      "after": "4e289f5bcd0df1e5fc7dd14e62ee46c4b708eb581f3d5872e49bfbd217eb098f",
+      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
+    },
+    {
+      "path": "evidence/graphiti-reconciliation-20260913/receipt.json",
+      "before": null,
+      "after": "1d8c0787db64e800730f1243d61f731b8eef6a75ae871fc411160f66934ebeda",
+      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
+    },
+    {
       "path": "examples/managed-moc.mjs",
       "before": null,
       "after": "f97cf6a973ecbba28b4b86d40b052a18fc87560b1d0b59eb9ab3438d472c792c",
@@ -916,6 +928,12 @@
       "before": null,
       "after": "d963d6affcc45878b6007c2b5fe052e76a08218019ce720b0db1cea4e77ca56b",
       "rationale": "Independently construct 2.2 projection preimages without production indexing or canonicalization."
+    },
+    {
+      "path": "scripts/qualify-graphiti-reconciliation.py",
+      "before": null,
+      "after": "ad8374a37e49437a9cf90765d9d141bbfed2bf3e1291947f860e3609e5ae2d2e",
+      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
       "path": "scripts/qualify-graphiti-runner.py",
@@ -980,8 +998,8 @@
     {
       "path": "scripts/test-graphiti-runner.py",
       "before": null,
-      "after": "305f7ed0080eafe6cea8b40b08e74f548baaf3bebd87f48ec31210547a78c8b1",
-      "rationale": "Standard-library runner regressions cover ID mapping, structured triplets, scope/version/input rejection, ambiguous effects and bad readback."
+      "after": "d62fccf7ee3fc668aa79b51a1cc42592d72a2cfdcf2a77a2886c799b6d24edf8",
+      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
       "path": "scripts/validate-refusal-receipt-v081.mjs",
@@ -1016,8 +1034,8 @@
     {
       "path": "src/graphiti-ingest-script.ts",
       "before": null,
-      "after": "0391880e0115a420fd31b098af7dd294c3ad95f13824c88838d725e0d7e62f8e",
-      "rationale": "External runner maps newly generated projection IDs, verifies content/group persistence, bounds input and calls, and refuses ambiguous retries."
+      "after": "489f1ff0ad5d2e1a8606f00a9d2f00a3248b10233cf72622b796ae602890d0d1",
+      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
       "path": "src/graphiti-query-contract.ts",

@@ -1,0 +1,19 @@
+{
+  "schema": "gkos-graphiti-reconciliation-qualification/1",
+  "recorded_at": "2026-09-13T05:43:19.921283+00:00",
+  "graphiti_core": "0.30.2",
+  "runner_sha256": "304daf21ef80a82f707a54020bb28d0b0b784b4a25f4bf1e59daca884bb51ff1",
+  "synthetic_only": true,
+  "checks": {
+    "returned_mapping_observed": true,
+    "mismatch_refused": true,
+    "missing_graph_refused": true,
+    "readonly_did_not_create_missing_graph": true,
+    "ambiguous_write_not_retried": true,
+    "original_receipt_unchanged": true,
+    "no_graphiti_or_model_initialization": true,
+    "separate_observation_receipts": true,
+    "exact_fixture_cleanup": true
+  },
+  "production_qualified": false
+}
