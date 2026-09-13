@@ -96,6 +96,18 @@ async function fixtureServer(options = {}) {
 
 async function close(server) { server.close(); await once(server, "close"); }
 
+test("REST responses deny credentials revoked during authorization", async () => {
+  for (const route of ["/health", "/capabilities", "/notes", "/graph", "/graphiti/episodes"]) {
+    let fixture;
+    fixture = await fixtureServer({ afterSnapshot: () => fixture.credentials.setRevoked("credential:legacy-viewer", true) });
+    try {
+      const result = await request(fixture.port, route, { token: VIEWER_TOKEN });
+      assert.equal(result.status, 401, route);
+      assert.deepEqual(JSON.parse(result.body), { error: "unauthorized" }, route);
+    } finally { await close(fixture.server); }
+  }
+});
+
 async function initialize(port) {
   const initialized = await request(port, "/mcp", { token: AGENT_TOKEN, method: "POST", body: {
     jsonrpc: "2.0", id: "init", method: "initialize",

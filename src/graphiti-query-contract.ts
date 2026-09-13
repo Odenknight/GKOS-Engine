@@ -71,7 +71,7 @@ function record(value: unknown, keys: readonly string[]): value is Record<string
 
 function text(value: unknown, maxBytes: number): value is string {
   return typeof value === "string" && value.trim().length > 0 && value.length <= maxBytes &&
-    encoder.encode(value).length <= maxBytes && !/[\u0000-\u001f\u007f]/u.test(value);
+    encoder.encode(value).length <= maxBytes && !/[\u0000-\u001f\u007f\ud800-\udfff]/u.test(value);
 }
 
 function binding(value: unknown): value is GraphitiQueryBinding {

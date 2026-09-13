@@ -107,6 +107,29 @@ test('runtime observes file edits and closes resources within shutdown budget', 
   }
 });
 
+test('runtime does not suppress a rename matching a completed self-write', async t => {
+  const { root, options } = await fixture(t);
+  const runtime = new NodeManagedMocRuntime(options);
+  try {
+    assert.equal(await runtime.start(), true);
+    assert.equal(runtime.status.watcherActive, true);
+    // Startup generated this file and retained its completed-write binding.
+    assert.equal(runtime.selfWrites.has('topics/index.md'), true);
+    let requests = 0;
+    const coordinator = runtime.host.coordinator;
+    const request = coordinator.requestReconciliation.bind(coordinator);
+    coordinator.requestReconciliation = async now => { requests++; return request(now); };
+    // Exercise the registered watcher callback deterministically; no claim
+    // about an OS-specific rename event sequence is made by this fixture.
+    runtime.watcher.emit('change', 'rename', 'topics/index.md');
+    const deadline = Date.now() + 2000;
+    while (runtime.eventPending && Date.now() < deadline) await new Promise(r => setTimeout(r, 5));
+    assert.equal(runtime.eventPending, false);
+    assert.equal(requests, 1);
+    assert.equal(coordinator.status.pending, true);
+  } finally { assert.deepEqual(await runtime.shutdown(), { clean: true }); }
+});
+
 test('host preserves human bytes through successive region-managed updates', async t => {
   const { root, context, options } = await fixture(t);
   const before = 'Human prefix\r\n' + renderGeneratedMocRegion('old links', context.config.digest) + '\r\nHuman suffix\r\n';
