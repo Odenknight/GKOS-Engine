@@ -668,7 +668,7 @@
     {
       "path": "docs/BUILD-COMPLETION-REGISTER.md",
       "before": null,
-      "after": "25e4ae56929a3e5501958cfb53fe986fb92eadba61ce4a38cadae36c83d191ea",
+      "after": "077b5ef3856052b975cac5737b3a1f5bf3af1effa63f9d3f62705864b8dc2a4a",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1082,7 +1082,7 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "95b1b3f4a32b7126414e0060f6c10667d969ffe3a0eb761b714670cd181ec96b",
+      "after": "e4739fbbb2793e8a459cc89b571c5d95772800303e97ef64f9b7df27133a3d61",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1107,6 +1107,12 @@
       "path": "services/gkos-graphiti/test_backend.py",
       "before": null,
       "after": "28519b95f6014d311ce8fd6da72faf70dc086d12024d09cce86b5beb4b35910c",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/test_crash_recovery.py",
+      "before": null,
+      "after": "61b40a61e1e51099917955eef9cc30288f0f8549d167a364609645b7e56fc09f",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {

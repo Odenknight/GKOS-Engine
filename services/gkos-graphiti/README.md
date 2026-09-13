@@ -64,3 +64,18 @@ projection, tests real ingestion/readback, ledger reopen, stale-policy denial,
 revocation and physical cleanup. Its receipt is integration-smoke evidence;
 performance budgets, model-artifact binding, crash/power-loss matrices and full
 Kosmos/Hermes acceptance remain separate gates.
+
+`test_crash_recovery.py` now exercises eight real child-process exits: immediately
+after an event mutation inside an uncommitted transaction and immediately after
+commit, for observation, replacement publication, corpus revocation and purge
+metadata. Reopening checks SQLite integrity, rollback of interrupted event/state
+updates, durable committed states, atomic replacement of the previous generation,
+and denial of unauthorized reads and retries. A separate twelve-generation test
+covers corpus revocation across queued, running, observed, published, quarantined
+and purged states while preserving an independent corpus; revocation survives
+reopen and repeated revocation does not append duplicate events.
+
+On September 13, 2026, all 21 standard-library managed-host tests passed locally
+on Windows. These are synthetic local process-crash checks. They do not simulate
+device power loss, certify physical backend deletion, or close the complete G3
+production recovery gate. No runtime behavior or automatic retry policy changed.

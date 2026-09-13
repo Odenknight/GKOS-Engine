@@ -8,7 +8,7 @@ reopened live qualification; the managed synthetic smoke passed nine checks.
 | Plan / gate | Current disposition | Next required evidence |
 | --- | --- | --- |
 | Graphiti G2 compatibility and contract | 0.30.2 runner and draft query contract merged; packaged consumer fixture passes | Exact managed-service/model configuration and migration qualification |
-| G3 managed ingestion and safety | Managed code merged; live synthetic ingestion/readback, reopen, revocation and purge passed nine checks | Broader crash/recovery and complete revocation qualification; ambiguous retries remain refused |
+| G3 managed ingestion and safety | Live synthetic smoke passed nine checks; local tests cover eight process-exit transaction boundaries and twelve-generation corpus revocation | Backend/process orchestration, physical power-loss and complete production recovery qualification; ambiguous retries remain refused |
 | G4 performance/value | Frozen native 1k diagnostic failed concurrency16 latency; exact synthetic recall passed | Repair latency, then qualify 1k/10k/50k; reviewed semantic relevance set and live comparison |
 | G5 broker | Private bounded query broker in PR57, contract and cancellation tests pass | Authenticated product transport, read-only backend instrumentation and outage integration |
 | G6 Kosmos | 0.8.3 export/status/source evidence and identity fixes merged and installed | Governed result/evidence UI, exact consumer qualification and actual Hermes traversal |
