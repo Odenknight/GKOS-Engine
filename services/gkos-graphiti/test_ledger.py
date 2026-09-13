@@ -1,5 +1,9 @@
 import copy
+import json
 import tempfile
+import subprocess
+import sys
+import time
 import unittest
 from pathlib import Path
 
@@ -124,6 +128,45 @@ class ManagedLedgerTests(unittest.TestCase):
         self.store.revoke("fixture")
         with self.assertRaisesRegex(Refused, "lease-invalid"):
             self.store.observe(job, lease["token"], self.bound, self.mappings, digest("r"))
+
+    def test_killed_process_preserves_claim_and_requires_reconciliation(self):
+        self.store.clock = time.time
+        job = self.store.enqueue(self.bound, self.manifest)
+        code = """
+import json,sys,time
+from pathlib import Path
+from ledger import Ledger
+store=Ledger(Path(sys.argv[1]))
+store.claim(sys.argv[2], json.loads(sys.argv[3]), seconds=1)
+print('claimed',flush=True)
+time.sleep(60)
+"""
+        child = subprocess.Popen([sys.executable, '-c', code, str(self.root), job, json.dumps(self.bound)],
+                                 cwd=Path(__file__).parent, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        try:
+            # A bounded reader avoids hanging the suite if the child fails to start.
+            import concurrent.futures
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                ready = pool.submit(child.stdout.readline)
+                try:
+                    self.assertEqual(ready.result(timeout=5).strip(), 'claimed')
+                except BaseException:
+                    child.kill()
+                    raise
+            child.kill()
+            child.wait(timeout=5)
+            self.assertEqual(self.store.status(job)['state'], 'running')
+            time.sleep(1.1)
+            self.assertEqual(self.store.quarantine_expired(), 1)
+            with self.assertRaisesRegex(Refused, 'not-queued'):
+                self.store.claim(job, self.bound)
+            self.assertEqual(self.store.status(job)['state'], 'quarantined')
+        finally:
+            if child.poll() is None:
+                child.kill()
+                child.wait(timeout=5)
+            child.stdout.close()
+            child.stderr.close()
 
 
 if __name__ == "__main__":

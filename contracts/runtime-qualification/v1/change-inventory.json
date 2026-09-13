@@ -1094,7 +1094,7 @@
     {
       "path": "services/gkos-graphiti/test_ledger.py",
       "before": null,
-      "after": "475a990bbbd29bcb47059a258f58581f856d5c1e74f40aed40f3ac305cb45e2b",
+      "after": "ede46d609d03a686f930a5d1645ff4cf0acc9799d190a5a4261f41a449798203",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
