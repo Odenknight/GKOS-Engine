@@ -1490,8 +1490,8 @@
     {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
-      "after": "318dbf44e5c55c1ef23be01f824510744b2d7cb95a35252afc6668915fee6b2e",
-      "rationale": "Private authenticated Graphiti query route uses host-owned scope binding, rechecks credentials and service generation/policy, bounds stalled authority time, and rejects caller binding; service tests cover denial, revocation, stale state and backend outage."
+      "after": "93d6f89b36139a7b0be73f5f6d76ec820b375645cfbd187f871c4e1e60a157f6",
+      "rationale": "Reject synchronous host work past total query deadline before binding, provider invocation and publication; regression reproduced original late binding and now passes."
     },
     {
       "path": "src/version.ts",
@@ -1778,8 +1778,8 @@
     {
       "path": "test/service-runtime.test.mjs",
       "before": "c3ad015d1e157f57cfc7b4f9d99a5e9601ae33bc",
-      "after": "c0c1f2c1c79126bc865dc9bb2fee26878c322505f84b31f7534d8335cf19593d",
-      "rationale": "Private authenticated Graphiti query route uses host-owned scope binding, rechecks credentials and service generation/policy, bounds stalled authority time, and rejects caller binding; service tests cover denial, revocation, stale state and backend outage."
+      "after": "dea9bd93817cfa656294f11a91e3dc971d4fb10fc8d31e6e3faf9319154b9a94",
+      "rationale": "Reject synchronous host work past total query deadline before binding, provider invocation and publication; regression reproduced original late binding and now passes."
     },
     {
       "path": "test/service-stdio-package.test.mjs",

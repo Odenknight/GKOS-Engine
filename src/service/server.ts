@@ -266,22 +266,34 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
         if ([...url.searchParams.keys()].length > 0) { send(response, 400, { error: "bad_request" }, requestOrigin); return; }
         if (route === "/graphiti/query") {
           if (request.method !== "POST") { send(response, 405, { error: "method_not_allowed" }, requestOrigin); return; }
+          const expires = performance.now() + requestTimeoutMs;
+          const expired = (): boolean => {
+            if (!disconnected.signal.aborted && performance.now() < expires) return false;
+            disconnected.abort();
+            if (!response.headersSent && !response.destroyed) send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin);
+            return true;
+          };
           queryTimer = setTimeout(() => {
             disconnected.abort();
             if (!response.headersSent && !response.destroyed) send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin);
           }, requestTimeoutMs);
           const body = await readJson(request, requestTimeoutMs) as Record<string, unknown>;
-          if (disconnected.signal.aborted) return;
+          if (expired()) return;
           if (!body || Array.isArray(body) || Object.keys(body).length !== 3 ||
               typeof body.query !== "string" || typeof body.request_id !== "string" ||
               !Number.isInteger(body.limit) || Number(body.limit) < 1 || Number(body.limit) > 50) {
             send(response, 400, { error: "bad_request" }, requestOrigin); return;
           }
           const authorized = await view(identity, "graphiti_episodes");
-          if (disconnected.signal.aborted) return;
+          if (expired()) return;
           const host = options.graphitiHost?.({ identity, ...authorized });
+          if (expired()) return;
           if (!host) { send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin); return; }
-          const guardedHost: GraphitiBrokerHost = { query: (request, signal) => host.query(request, signal), current: () => {
+          const guardedHost: GraphitiBrokerHost = { query: (request, signal) => {
+            if (performance.now() >= expires || signal.aborted) throw new GkosServiceDeniedError();
+            return host.query(request, signal);
+          }, current: () => {
+            if (performance.now() >= expires) throw new GkosServiceDeniedError();
             const currentIdentity = token ? options.credentials.resolve(token) : null;
             if (!currentIdentity || currentIdentity.revoked || currentIdentity.credentialId !== identity.credentialId ||
                 currentIdentity.agentId !== identity.agentId || currentIdentity.sensitivityCeiling !== identity.sensitivityCeiling ||
@@ -293,9 +305,9 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
           const result = await graphitiBroker.search(guardedHost, { credential: identity.credentialId,
             session: identity.credentialId, requestId: body.request_id, query: body.query,
             limit: Number(body.limit), signal: disconnected.signal, deadlineMs: requestTimeoutMs });
-          if (disconnected.signal.aborted) return;
+          if (expired()) return;
           const final = await view(identity, "graphiti_episodes");
-          if (disconnected.signal.aborted) return;
+          if (expired()) return;
           const current = options.graphitiHost?.({ identity, ...final });
           if (!result || !current || final.snapshot.generation !== authorized.snapshot.generation ||
               final.authorization.generation !== authorized.authorization.generation ||
@@ -304,7 +316,7 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
                 binding: result.binding, query: body.query, limit: Number(body.limit) }, JSON.stringify(result), current.current())) {
             send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin); return;
           }
-          if (!response.destroyed) send(response, 200, result, requestOrigin);
+          if (!expired() && !response.destroyed) send(response, 200, result, requestOrigin);
           return;
         }
         if (route === "/events") {

@@ -487,3 +487,15 @@ test("semantic query deadline includes a stalled authority lookup", async () => 
     assert.deepEqual(JSON.parse(result.body),{error:'semantic_query_unavailable'});
   } finally {releaseAuthority(); await close(fixture.server);}
 });
+
+test("semantic query rejects synchronous authority work past the total deadline", async () => {
+  let calls=0;
+  const fixture=await fixtureServer({requestTimeoutMs:40,afterSnapshot:()=>{
+    const until=performance.now()+65; while(performance.now()<until) {}
+  },graphitiHost:()=>{calls++; return null;}});
+  try {
+    const result=await request(fixture.port,'/graphiti/query',{token:VIEWER_TOKEN,method:'POST',body:{query:'relay',request_id:'one',limit:5}});
+    assert.equal(result.status,503);
+    assert.equal(calls,0,'expired service authority must not reach host query binding');
+  } finally {await close(fixture.server);}
+});
