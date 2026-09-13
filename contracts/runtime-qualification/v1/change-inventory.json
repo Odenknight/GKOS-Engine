@@ -716,7 +716,7 @@
     {
       "path": "docs/GRAPHITI-MANAGED-HOST.md",
       "before": null,
-      "after": "38e3bfa875e4c21f5c87f97582cd23e0354d32a1b93cb164742e6046c528f714",
+      "after": "64a5e1afee5552903c65a7c44686f3994296b9631f327c1ad42c719e60df80cf",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1064,7 +1064,7 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "db0c98360c4f62b93b44da98ec191049aef3093295c11e4aa05d5a4195048f1c",
+      "after": "95b1b3f4a32b7126414e0060f6c10667d969ffe3a0eb761b714670cd181ec96b",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1076,7 +1076,7 @@
     {
       "path": "services/gkos-graphiti/ledger.py",
       "before": null,
-      "after": "b41fb6b41d6d066223050a3ff8be921c062776d295d5f7d7c6305f588b7ac75f",
+      "after": "2cbf41c2886085e4ce20d9141881e110ab233ee6e40dbfb6f906c0c8c5b14914",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1100,13 +1100,13 @@
     {
       "path": "services/gkos-graphiti/test_worker.py",
       "before": null,
-      "after": "98ee66c4b1bcfcea3d7b62fe59c917eb96b3173c598a335cd73b4d33e2f90cb0",
+      "after": "98d807269f95fae70c3be9db32d9631669eba0399d5e3160381c16e59581f3d5",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "services/gkos-graphiti/worker.py",
       "before": null,
-      "after": "56a3759fa62aa5136d02dfc0f1be31535adce236b10d81114585d951a2f62852",
+      "after": "ac16d57bf5de76094a31f4bd74e109eb6a5b5858967d6f21826bb77a29a95b21",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {

@@ -38,6 +38,25 @@ def binding(value):
     return canonical(value)
 
 
+def validate_manifest(current, manifest):
+    if type(manifest) is not list or not 1 <= len(manifest) <= 50000:
+        raise Refused("manifest-invalid")
+    seen = set()
+    for item in manifest:
+        if type(item) is not dict or set(item) != {"source_id", "source_digest", "episode_digest"}:
+            raise Refused("source-invalid")
+        uid = item["source_id"]
+        if not isinstance(uid, str) or not re.fullmatch(r"[A-Za-z0-9._:-]{1,128}", uid) or uid in seen:
+            raise Refused("source-invalid")
+        seen.add(uid)
+        for key in ("source_digest", "episode_digest"):
+            if not isinstance(item[key], str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", item[key]):
+                raise Refused("source-digest-invalid")
+    if digest(manifest) != current["source_snapshot_digest"]:
+        raise Refused("manifest-binding-mismatch")
+    return canonical(manifest)
+
+
 class Ledger:
     # ponytail: one local SQLite writer; split by independent corpus only after
     # measured queue contention warrants it. Network filesystems unsupported.
@@ -56,6 +75,12 @@ class Ledger:
         self.db.execute("PRAGMA foreign_keys=ON")
         self.db.execute("PRAGMA journal_mode=DELETE")
         self.db.execute("PRAGMA synchronous=FULL")
+        page_size = self.db.execute("PRAGMA page_size").fetchone()[0]
+        page_limit = (256 * 1024 * 1024) // page_size
+        actual_limit = self.db.execute(f"PRAGMA max_page_count={page_limit}").fetchone()[0]
+        if actual_limit > page_limit:
+            self.close()
+            raise Refused("ledger-byte-capacity")
         version = self.db.execute("PRAGMA user_version").fetchone()[0]
         if version not in (0, 1):
             self.close()
@@ -115,22 +140,7 @@ class Ledger:
 
     def enqueue(self, current, manifest):
         bound = binding(current)
-        if type(manifest) is not list or not 1 <= len(manifest) <= 50000:
-            raise Refused("manifest-invalid")
-        seen = set()
-        for item in manifest:
-            if type(item) is not dict or set(item) != {"source_id", "source_digest", "episode_digest"}:
-                raise Refused("source-invalid")
-            uid = item["source_id"]
-            if not isinstance(uid, str) or not re.fullmatch(r"[A-Za-z0-9._:-]{1,128}", uid) or uid in seen:
-                raise Refused("source-invalid")
-            seen.add(uid)
-            for key in ("source_digest", "episode_digest"):
-                if not isinstance(item[key], str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", item[key]):
-                    raise Refused("source-digest-invalid")
-        if digest(manifest) != current["source_snapshot_digest"]:
-            raise Refused("manifest-binding-mismatch")
-        encoded = canonical(manifest)
+        encoded = validate_manifest(current, manifest)
         job = digest({"binding": current, "manifest": manifest})
         with self.transaction():
             prior = self.db.execute("SELECT id FROM jobs WHERE id=?", (job,)).fetchone()

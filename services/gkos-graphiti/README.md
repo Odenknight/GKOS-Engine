@@ -46,8 +46,10 @@ After a crash, expiry reconciliation fences publication; an operator establishes
 writer quiescence and purges the isolated graph before planning a new authorized
 generation. This increment does not promise exactly-once extraction or implement
 automatic retry. It retains metadata/audit history; queue capacity is bounded,
-and 100,000 total jobs requires explicit retention maintenance rather than
-silent evidence deletion.
+and a 256 MiB SQLite page cap plus 100,000 total jobs require explicit retention
+maintenance rather than silent evidence deletion. SQLite rollback journals need
+additional disk headroom. Episode envelopes are bounded incrementally before
+copying/aggregate serialization; an oversized export never reaches the backend.
 
 The private TypeScript `GraphitiQueryBroker` reuses the frozen draft query checks
 and existing fair scheduler (two active slots and bounded queues). It checks

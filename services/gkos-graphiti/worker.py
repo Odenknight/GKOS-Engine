@@ -1,7 +1,7 @@
 """Trusted single-worker adapter; never import this into the deterministic core."""
 import asyncio
 import copy
-from ledger import Refused, binding, canonical, digest
+from ledger import Refused, binding, canonical, digest, validate_manifest
 from backend import validate_episode
 
 
@@ -24,14 +24,18 @@ class Worker:
         self.active = True
         backend, job, lease = None, None, None
         try:
-            initial, manifest, episodes = copy.deepcopy(current())
+            initial, manifest, episodes = current()
             binding(initial)
-            if type(episodes) is not list or len(episodes) != len(manifest):
+            if type(episodes) is not list or type(manifest) is not list or not 1 <= len(episodes) <= 50000 or len(episodes) != len(manifest):
                 raise Refused("episodes-invalid")
+            validate_manifest(initial, manifest)
+            encoded_size = 1
             for episode in episodes:
                 validate_episode(episode)
-            if len(canonical(episodes)) > 64 * 1024 * 1024:
-                raise Refused("episode-export-too-large")
+                encoded_size += len(canonical(episode)) + 1
+                if encoded_size > 64 * 1024 * 1024:
+                    raise Refused("episode-export-too-large")
+            initial, manifest, episodes = copy.deepcopy((initial, manifest, episodes))
             if any(digest(episode) != source["episode_digest"] for episode, source in zip(episodes, manifest)):
                 raise Refused("episode-binding-mismatch")
             job = self.ledger.enqueue(initial, manifest)
