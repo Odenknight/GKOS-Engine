@@ -750,6 +750,12 @@
       "rationale": "Specify separate no-change audit artifact and truthful file-sync/recovery guarantees and remaining durability gates."
     },
     {
+      "path": "docs/MOC-RENAME-RECONCILIATION.md",
+      "before": null,
+      "after": "c2841e8a242278f7686a9c526eaa4070fad4ce8628a0ee12b6ba1e450ae33716",
+      "rationale": "Records the rename defect, targeted verification and remaining native authority qualification limits."
+    },
+    {
       "path": "docs/NATIVE-RETRIEVAL-READ-REMEDIATION.md",
       "before": null,
       "after": "83523aee6d362b5f65a49aaf4648c16de21c57c01b96437a20fee0b1a4e53194",
@@ -1352,8 +1358,8 @@
     {
       "path": "src/navigation-effects/node/moc-runtime.ts",
       "before": null,
-      "after": "cbe8f2f230dc559380ca1de457a870b3a4ab322dd6b6582d66b5e8d18375d1a9",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "95b3c010acf4cba3c9feb08967b75d90b76b06bdf5ed33ae8e7cff169b864066",
+      "rationale": "Rename events always request full reconciliation; matching self-write target bytes cannot account for another removed path."
     },
     {
       "path": "src/navigation-effects/path-policy.ts",
@@ -1604,8 +1610,8 @@
     {
       "path": "test/navigation-effects-host.test.mjs",
       "before": null,
-      "after": "6f0d3ec51c6bfe414f727f12e5a17339db92f6451177591f98e533a3281273fb",
-      "rationale": "Assert original journal prefix and exact new no-change terminal sequence rather than expecting absent audits."
+      "after": "d48f12e94cb34fb4a0ed2a2592537f5091cf8390375b199a86b40b9aee89a2f4",
+      "rationale": "Regression exercises the registered rename callback against a completed self-write and requires durable reconciliation admission."
     },
     {
       "path": "test/navigation-effects-node.test.mjs",
