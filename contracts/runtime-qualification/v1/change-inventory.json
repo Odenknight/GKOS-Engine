@@ -740,7 +740,7 @@
     {
       "path": "docs/GRAPHITI-READONLY-DRIVER.md",
       "before": null,
-      "after": "7449d0bcf086fd4ec2445c63efc4da27445bc652267a2b9262401ac13b9f4f42",
+      "after": "9f7af9c4852e031d39ad7fc65fb4ef98096975c55f83fe242402a9825984b708",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
