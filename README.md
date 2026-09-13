@@ -432,3 +432,5 @@ First-party software is Apache-2.0. Documentation and original graphics are
 CC BY 4.0 as described in [LICENSE](LICENSE). See [NOTICE](NOTICE),
 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and
 [TRADEMARKS.md](TRADEMARKS.md).
+
+The optional [Graphiti query broker](docs/GRAPHITI-QUERY-BROKER.md) executes the versioned contract through a trusted host with bounded admission, cancellation and fresh result authorization.

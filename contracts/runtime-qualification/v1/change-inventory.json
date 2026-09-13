@@ -458,8 +458,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "3cafa4543db3ca9e09717ea98352a1b690970482fd7376f7b398e3dd08acaabe",
-      "rationale": "Link the optional Graphiti runner and independent source-byte evidence contract."
+      "after": "043ea6d4decf6de40a50e9172a3e1d78dd2c71a584bd695ddc3ff1473411d752",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
     },
     {
       "path": "ROADMAP.md",
@@ -696,6 +696,12 @@
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
+      "path": "docs/GRAPHITI-QUERY-BROKER.md",
+      "before": null,
+      "after": "38fec321c0bda7a77904ec040b8f3056e61286738bef29341cb37753ae6f6878",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
+    },
+    {
       "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
       "before": null,
       "after": "42b2ec2c53ad2866c3a78e524dfdeac54b5e01b1e633d8f21b16c909ee43ac2f",
@@ -890,8 +896,8 @@
     {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "bf0bd6edb2e94ff5eeb24c4d019cae6d0d1e97024826b08073500477e8ba8382",
-      "rationale": "Expose the generated-runner regression command without new dependencies or product version changes."
+      "after": "e532de782ef25b140b6bb401260caa92a6df9ae176661ff3ec8fd07d7a24a022",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
     },
     {
       "path": "scripts/benchmark-managed-moc.mjs",
@@ -1014,6 +1020,36 @@
       "rationale": "Implement owner-approved OD-02 bounded exact-byte SHA-256 and independently declared ordered manifest verification; emit Engine-specific result, not standard RefusalReceipt."
     },
     {
+      "path": "services/gkos-graphiti/README.md",
+      "before": null,
+      "after": "c1e00f5b368e6d8389e9d5875bd9ee8fcfe04a7fabdbb44c8eed9f0fda32e2f0",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
+    },
+    {
+      "path": "services/gkos-graphiti/ledger.py",
+      "before": null,
+      "after": "b82bb4e30b831568ff8b7afc2dfa13e18e4de1119d9c3362becc21bf0b7c9536",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
+    },
+    {
+      "path": "services/gkos-graphiti/tests/test_ledger.py",
+      "before": null,
+      "after": "306c1993fed61ec91649af4c6a567558d24a59b6779ae91491faf6948ee63a91",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
+    },
+    {
+      "path": "services/gkos-graphiti/tests/test_worker.py",
+      "before": null,
+      "after": "f93074ecd7b15640e1970b52a159e5c092b062de9eb87a4671454687f7747120",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
+    },
+    {
+      "path": "services/gkos-graphiti/worker.py",
+      "before": null,
+      "after": "3f99907f18ac49c4e55aed9ab78e098e3560c2c8fa6d478ddd3078ac7cdf2fe0",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
+    },
+    {
       "path": "services/gkos-intelligence/pyproject.toml",
       "before": "1660cf89b26c10ac6e2112e0532ce94f4e99fa71",
       "after": "f6717418d091513cab566cf0e6781d700e5d2b709b705d6fdac72b1888e7a5e3",
@@ -1028,8 +1064,8 @@
     {
       "path": "src/graphiti-adapter.ts",
       "before": "bf95b6a858645c82c832dbb68d06e6ff2d7dec3e",
-      "after": "ded6584934c1d3b947e389064921ddb7c830fc169b7205ea69d0ec8d43a10b71",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "5914fc6b60fdce2febb7384fb5d87a9aaac85c4130ae29cb8b477d782dc7e080",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
     },
     {
       "path": "src/graphiti-ingest-script.ts",
@@ -1038,10 +1074,22 @@
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
+      "path": "src/graphiti-query-broker.ts",
+      "before": null,
+      "after": "7d032e947e3d761d76c056d2bb65b731909a4be69355937c63be1414b11e66d4",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
+    },
+    {
       "path": "src/graphiti-query-contract.ts",
       "before": null,
       "after": "497b49a78c364a64ec34a5f1c4af3e28e8e450212ec5df1afe6e06fbeeb55595",
       "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+    },
+    {
+      "path": "src/graphiti-query-http.ts",
+      "before": null,
+      "after": "5944f2fd1ddf4613487c4db23ec16d1444f8ac2c9ccdb55bd367f2371929731b",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
     },
     {
       "path": "src/graphiti.ts",
@@ -1250,8 +1298,8 @@
     {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "fbd4882e14ad16ec81b0c88055b8df85e2bae33b4472af2df9921e1a05337f4f",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "2dd295dbb30b7ad59e4be2f07d471ee5f43dabf0e1e2c55a2ea4644ca2928633",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
     },
     {
       "path": "test/determinism.test.mjs",
@@ -1320,10 +1368,28 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "test/graphiti-ledger.test.mjs",
+      "before": null,
+      "after": "bb8d2e9ebcc48c190724baac4a63566efe3f68b845f48b99805cb802c453e5ef",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
+    },
+    {
+      "path": "test/graphiti-query-broker.test.mjs",
+      "before": null,
+      "after": "396e0fc417cef8098b1608dc7fe9503efc0e5f9ea18514a30f292fec806ecf59",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
+    },
+    {
       "path": "test/graphiti-query-contract.test.mjs",
       "before": null,
       "after": "133dfd194172bc58633ed955d8c0bccac6ab37ff538b47b711305c50790d7295",
       "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+    },
+    {
+      "path": "test/graphiti-query-http.test.mjs",
+      "before": null,
+      "after": "38625846bf5093aabfbe421506997e87e78b8a1cafd1d1b92446639153c2b989",
+      "rationale": "Graphiti bounded query broker and durable synthetic-job worker implementation; reviewed additive API, tests, packaging and documentation. No semantic release qualification implied."
     },
     {
       "path": "test/graphiti.test.mjs",

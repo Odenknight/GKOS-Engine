@@ -23,6 +23,9 @@ export type {
 
 export type { GraphitiEpisode } from "./types";
 export { GRAPHITI_INGEST_SCRIPT } from "./graphiti-ingest-script";
+export { GraphitiQueryBroker } from "./graphiti-query-broker";
+export { graphitiHttpQuery } from "./graphiti-query-http";
+export type { GraphitiBrokerHost, GraphitiBrokerResult } from "./graphiti-query-broker";
 export {
   GRAPHITI_QUERY_CONTRACT_VERSION,
   prepareGraphitiQueryRequest,

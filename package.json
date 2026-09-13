@@ -84,6 +84,9 @@
     "CHANGELOG.md",
     "TRACEABILITY.md",
     "services/gkos-intelligence/",
+    "services/gkos-graphiti/",
+    "!services/gkos-graphiti/**/__pycache__/**",
+    "!services/gkos-graphiti/**/*.pyc",
     "!services/gkos-intelligence/**/__pycache__/**",
     "!services/gkos-intelligence/**/*.pyc",
     "!services/gkos-intelligence/**/*.pyo"
