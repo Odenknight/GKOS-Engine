@@ -798,6 +798,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "docs/WATCHER-ARTIFACT-SERIALIZATION.md",
+      "before": null,
+      "after": "380b854b59a23786a11c36dbb238446260cc0617490d66e68fe5aea63c5a141b",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "docs/WINDOWS-QUALIFICATION-REMEDIATION-20260908.md",
       "before": null,
       "after": "35730828ad967521c1f2b0e70206fcab0cc3941b74360ddd62f0b8e231f6be41",
