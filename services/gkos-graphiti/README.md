@@ -131,6 +131,8 @@ are checked against that host-selected published ledger, never used to select it
 The adapter bounds request bodies to 16 KiB, rejects duplicate JSON object keys,
 rechecks the session after upload and query, and rejects late success using a
 monotonic deadline. Backend failures return generic errors. Deployment still
-owns TLS, listener confinement, credential storage, and request admission limits.
+owns TLS, listener confinement and credential storage. The adapter admits at most
+four requests by default (configurable from one to sixteen), without a waiting
+queue. A backend that suppresses cancellation retains its slot until it settles.
 The tests now include actual loopback HTTP with a temporary published ledger;
 SDK search is synthetic. This does not qualify a live model or deployed host.

@@ -17,7 +17,7 @@ class QueryHttpTests(unittest.IsolatedAsyncioTestCase):
         self.token = "x" * 64
         self.session = QuerySession(None, "host-job", lambda: {}, None, None)
         self.live = self.session
-        self.client = TestClient(TestServer(create_query_app(lambda token: self.live if token == self.token else None, timeout=.1)))
+        self.client = TestClient(TestServer(create_query_app(lambda token: self.live if token == self.token else None, timeout=.1, max_active=1)))
         await self.client.start_server()
         self.headers = {"Authorization": "Bearer " + self.token}
 
@@ -32,6 +32,33 @@ class QueryHttpTests(unittest.IsolatedAsyncioTestCase):
             response = await self.client.post('/query', headers=self.headers, json={"binding": "untrusted"})
             self.assertEqual(response.status, 200)
             self.assertEqual(query.call_args.args[:3], (None, "host-job", self.session.current))
+
+    async def test_capacity_is_retained_until_backend_settles(self):
+        entered, cancelled, release = asyncio.Event(), asyncio.Event(), asyncio.Event()
+        async def stubborn(*args):
+            entered.set()
+            try:
+                await asyncio.Future()
+            except asyncio.CancelledError:
+                cancelled.set()
+                await release.wait()
+            return b'{"hits":[]}'
+        with patch("query_http.query_published", side_effect=stubborn) as query:
+            first = asyncio.create_task(self.client.post('/query', headers=self.headers, json={}))
+            try:
+                await asyncio.wait_for(entered.wait(), 1)
+                await asyncio.wait_for(cancelled.wait(), 1)
+                second = await self.client.post('/query', headers=self.headers, json={})
+                self.assertEqual(second.status, 503)
+                self.assertEqual(await second.json(), {"error":"query_capacity"})
+                self.assertEqual(query.call_count, 1)
+            finally:
+                release.set()
+                response = await first
+            self.assertEqual(response.status, 503)
+        with patch("query_http.query_published", new_callable=AsyncMock, return_value=b'{"hits":[]}'):
+            response = await self.client.post('/query', headers=self.headers, json={})
+            self.assertEqual(response.status, 200)
 
     async def test_revocation_and_backend_diagnostics_do_not_escape(self):
         async def revoke(*args):

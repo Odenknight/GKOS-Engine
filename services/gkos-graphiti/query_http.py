@@ -26,17 +26,21 @@ class QuerySession:
     driver: object
 
 
-def create_query_app(resolve_session, *, timeout=30):
+def create_query_app(resolve_session, *, timeout=30, max_active=4):
     """resolve_session(secret) authenticates and derives complete source scope.
 
     It returns a QuerySession or None, synchronously, without request-selected
     ledger jobs. session.current must recheck that principal's live authority.
     This factory neither binds a port nor selects credentials or corpus data.
     """
-    if not callable(resolve_session) or type(timeout) not in (int, float) or not 0 < timeout <= 60:
+    if not callable(resolve_session) or type(timeout) not in (int, float) or not 0 < timeout <= 60 or \
+            type(max_active) is not int or not 1 <= max_active <= 16:
         raise ValueError("query-host-configuration-invalid")
+    active = 0
 
     async def query(request):
+        nonlocal active
+        admitted = False
         deadline = monotonic() + timeout
         header = request.headers.getall("Authorization", [])
         if len(header) != 1 or not re.fullmatch(r"Bearer [A-Za-z0-9._~-]{32,512}", header[0]):
@@ -45,6 +49,10 @@ def create_query_app(resolve_session, *, timeout=30):
             session = resolve_session(header[0][7:])
             if not isinstance(session, QuerySession):
                 return web.json_response({"error": "unauthorized"}, status=401)
+            if active >= max_active:
+                return web.json_response({"error": "query_capacity"}, status=503)
+            active += 1
+            admitted = True
             async with asyncio.timeout(timeout):
                 if request.query_string or request.content_type != "application/json":
                     return web.json_response({"error": "bad_request"}, status=400)
@@ -73,6 +81,11 @@ def create_query_app(resolve_session, *, timeout=30):
         except Exception:
             # Backend exceptions can contain query text, endpoints or credentials.
             return web.json_response({"error": "semantic_query_unavailable"}, status=503)
+        finally:
+            # A backend suppressing cancellation retains its slot until its
+            # coroutine actually settles; elapsed time cannot release capacity.
+            if admitted:
+                active -= 1
 
     app = web.Application(client_max_size=16384)
     app.router.add_post("/query", query)

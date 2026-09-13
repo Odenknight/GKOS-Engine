@@ -1130,8 +1130,8 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "51bdbb74735620e7acc56e215385414b50954e74a8e8d729e9783668ff21fb4b",
-      "rationale": "Optional private authenticated Graphiti HTTP adapter with bounded decoding, live session checks, deadline enforcement, pinned aiohttp dependency, and real-ledger loopback tests; no deployed host qualification."
+      "after": "ec6329dd5d4084304c1d37646008e6f69812330902ee866d5aec737edc34174a",
+      "rationale": "Bound private HTTP adapter admission without queueing; retain physical capacity through suppressed cancellation and test release after backend settles."
     },
     {
       "path": "services/gkos-graphiti/backend.py",
@@ -1172,8 +1172,8 @@
     {
       "path": "services/gkos-graphiti/query_http.py",
       "before": null,
-      "after": "e25c665f726cfb948096cf3751c7f9bb918b03eba693554b1321e6981c371d82",
-      "rationale": "Optional private authenticated Graphiti HTTP adapter with bounded decoding, live session checks, deadline enforcement, pinned aiohttp dependency, and real-ledger loopback tests; no deployed host qualification."
+      "after": "59a34ae3fe79f10fee03e9153655c0986ff76baecd2a1a1378eb4e65dfdeda3b",
+      "rationale": "Bound private HTTP adapter admission without queueing; retain physical capacity through suppressed cancellation and test release after backend settles."
     },
     {
       "path": "services/gkos-graphiti/readonly_query.py",
@@ -1214,8 +1214,8 @@
     {
       "path": "services/gkos-graphiti/test_query_http.py",
       "before": null,
-      "after": "40ba2d6a3ba5c9d423a1a32836748a004026a09dfb267367f0f27807d73f184a",
-      "rationale": "Optional private authenticated Graphiti HTTP adapter with bounded decoding, live session checks, deadline enforcement, pinned aiohttp dependency, and real-ledger loopback tests; no deployed host qualification."
+      "after": "44d8879457d1fdbca02e7aa2d3d9db4035a32967f2d5dc476e0a5ee287e81880",
+      "rationale": "Bound private HTTP adapter admission without queueing; retain physical capacity through suppressed cancellation and test release after backend settles."
     },
     {
       "path": "services/gkos-graphiti/test_readonly_query.py",
