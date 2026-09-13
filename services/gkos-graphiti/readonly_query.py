@@ -5,9 +5,21 @@ import importlib.metadata
 import json
 import re
 import weakref
+from time import monotonic
 from ledger import Refused
 
 _groups = weakref.WeakKeyDictionary()
+
+
+async def _await_before_deadline(operation, seconds):
+    deadline = monotonic() + seconds
+    result = await asyncio.wait_for(operation, seconds)
+    # wait_for can return after expiry when a provider blocks the loop or
+    # suppresses cancellation. Never accept that late result. Retain the await
+    # until physical cleanup finishes; this is not a hard process deadline.
+    if monotonic() >= deadline:
+        raise TimeoutError("query-deadline-exceeded")
+    return result
 
 
 def create_readonly_driver(group, client):
@@ -20,7 +32,7 @@ def create_readonly_driver(group, client):
 
     class ReadGraph:
         async def query(self, query, params=None):
-            return await asyncio.wait_for(client.select_graph(group).ro_query(
+            return await _await_before_deadline(client.select_graph(group).ro_query(
                 query, params=params, timeout=30000), 30)
 
     class ReadClient:
@@ -30,7 +42,7 @@ def create_readonly_driver(group, client):
             return ReadGraph()
 
         async def aclose(self):
-            await asyncio.wait_for(client.aclose(), 10)
+            await _await_before_deadline(client.aclose(), 10)
 
     class ReadDriver(FalkorDriver):
         def clone(self, database):
@@ -76,7 +88,7 @@ async def search_readonly(graphiti, driver, query, limit=10):
     # API with a detached recipe for every request, including concurrent calls.
     config = copy.deepcopy(EDGE_HYBRID_SEARCH_RRF)
     config.limit = limit
-    result = await asyncio.wait_for(graphiti.search_(query, config=config, group_ids=[group], driver=driver), 30)
+    result = await _await_before_deadline(graphiti.search_(query, config=config, group_ids=[group], driver=driver), 30)
     return result.edges
 
 
