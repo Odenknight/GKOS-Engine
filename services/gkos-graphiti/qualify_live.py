@@ -14,10 +14,11 @@ from ledger import Ledger, Refused, digest
 from worker import Worker, purge_job
 
 
-async def main():
+async def main(*, probe_readonly_search=False):
     checks = {}
     error_type = None
     groups = []
+    instances = []
     client = graph_client()
     versions = {name: importlib.metadata.version(name) for name in ("graphiti-core", "falkordb", "redis")}
     episodes = [{"name": "GKOS managed synthetic relay", "episode_body": '{"fact":"The synthetic relay is in the test chamber."}',
@@ -31,7 +32,9 @@ async def main():
         worker = Worker(ledger)
         def backend(group):
             groups.append(group)
-            return GraphitiBackend(group, make_graphiti, FalkorDB(host=HOST, socket_timeout=30, socket_connect_timeout=10))
+            instance = GraphitiBackend(group, make_graphiti, FalkorDB(host=HOST, socket_timeout=30, socket_connect_timeout=10))
+            instances.append(instance.graphiti)
+            return instance
         try:
             result = await worker.run(lambda: (bound, manifest, episodes), backend)
             job = result["job"]
@@ -40,6 +43,22 @@ async def main():
             ledger.publish(job, bound)
             published = ledger.read(job, bound)
             checks["exact_mapping_published"] = published["mappings"][0]["source_id"] == "synthetic-relay"
+            if probe_readonly_search:
+                from graphiti_core import Graphiti
+                from readonly_query import create_readonly_driver, search_readonly
+                prior = instances[0]
+                driver = create_readonly_driver(groups[0], FalkorDB(host=HOST, socket_timeout=30, socket_connect_timeout=10))
+                reader = Graphiti(graph_driver=driver, llm_client=prior.llm_client, embedder=prior.embedder,
+                                  cross_encoder=prior.cross_encoder, max_coroutines=2)
+                try:
+                    hits = await search_readonly(reader, driver, "synthetic relay test chamber", 5)
+                    checks["readonly_semantic_search_returned_facts"] = bool(hits) and len(hits) <= 5 and all(
+                        isinstance(hit.fact, str) and "relay" in hit.fact.lower() for hit in hits)
+                    allowed = {mapping["projection_episode_id"] for mapping in ledger.read(job, bound)["mappings"]}
+                    checks["readonly_semantic_citations_match_published_mapping"] = bool(hits) and all(
+                        hit.group_id == groups[0] and hit.episodes and set(hit.episodes) <= allowed for hit in hits)
+                finally:
+                    await reader.close()
             try:
                 ledger.read(job, {**bound, "policy_digest": digest("changed-policy")})
             except Refused:
@@ -72,12 +91,15 @@ async def main():
                 if group in client.list_graphs():
                     client.select_graph(group).delete()
             checks["fixture_cleanup"] = all(group not in client.list_graphs() for group in groups)
-    passed = error_type is None and len(checks) == 9 and all(checks.values())
+    passed = error_type is None and len(checks) == (11 if probe_readonly_search else 9) and all(checks.values())
+    sources = ["ledger.py", "worker.py", "backend.py", "qualify_live.py"]
+    if probe_readonly_search:
+        sources += ["readonly_query.py", "qualify_readonly_search.py"]
     print(json.dumps({"schema": "gkos-graphiti-managed-qualification/1", "timestamp": datetime.now(timezone.utc).isoformat(),
         "status": "PASS" if passed else "FAIL", "error_type": error_type,
         "python": platform.python_version(), "packages": versions, "checks": checks,
         "source_sha256": {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
-                          for name in ("ledger.py", "worker.py", "backend.py", "qualify_live.py")},
+                          for name in sources},
         "scope": "synthetic integration smoke; not performance, model-artifact or production qualification"}, indent=2))
     if not passed:
         raise RuntimeError("managed qualification failed; inspect receipt")
