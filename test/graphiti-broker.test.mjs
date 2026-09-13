@@ -80,3 +80,16 @@ test('caller cancellation and shutdown abort work and suppress late responses', 
   broker.close();
   assert.equal(await broker.search(host, input()), null);
 });
+
+
+test('a blocked event loop cannot admit a response after its deadline', async () => {
+  const broker = new GraphitiQueryBroker();
+  try {
+    const host = { current: context, query: async () => {
+      const until = performance.now() + 30;
+      while (performance.now() < until) { /* simulate a synchronous provider */ }
+      return JSON.stringify(fixture.result);
+    } };
+    assert.equal(await broker.search(host, input({ deadlineMs: 10 })), null);
+  } finally { broker.close(); }
+});
