@@ -722,7 +722,7 @@
     {
       "path": "docs/GRAPHITI-MANAGED-LIVE-RESULTS.md",
       "before": null,
-      "after": "99331051b6853eff46d6cc72903cdc59d8b1bbc787595b20d293dd056f82dc49",
+      "after": "7be85ea97a08b449074b59c1962026a1fab525f66b0c05b670705b196df9b1d8",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
