@@ -810,6 +810,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "docs/WATCHER-SCAN-SCHEDULING.md",
+      "before": null,
+      "after": "e90e58306b4d9d2e2d99b3c7ba6aa140bac9b7bc6eed6c4451b3fb2e00bfcd2c",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "docs/WINDOWS-QUALIFICATION-REMEDIATION-20260908.md",
       "before": null,
       "after": "35730828ad967521c1f2b0e70206fcab0cc3941b74360ddd62f0b8e231f6be41",
