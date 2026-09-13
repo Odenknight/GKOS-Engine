@@ -1544,8 +1544,8 @@
     {
       "path": "src/watcher/contracts.ts",
       "before": "0cc72b3c8776dd9421798b157102ae4f8fba3ac4",
-      "after": "70fa450a181358403db04cb708064d4350e35af700891ab474817a9eb3bfa6ee",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "672071478794dceaa0df3fff163c0f03a74f5ab0368ca4f58ef80724a774c623",
+      "rationale": "Reuse one canonical digest of the detached, validated graph delta across transition and graph-state comparisons within an activation check; preserve all validation boundaries."
     },
     {
       "path": "src/watcher/coordinator.ts",

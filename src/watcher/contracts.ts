@@ -1604,6 +1604,7 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
   const transitions = preparedOnly ? sealWatcherTransitionPrefix(transitionInput) : sealWatcherTransitionChain(transitionInput);
   if (transitions.length !== (preparedOnly ? 6 : 7)) fail("GKX_WATCHER_CONTRACT_TRANSITION_INVALID", "coherent activation requires prepared5 or complete6 progression.");
   const normalizedGraphDelta = sealCanonicalRecoveryRecord(bundle.normalized_graph_delta);
+  const normalizedGraphDeltaDigest = retrievalCanonicalDigest(normalizedGraphDelta as JsonRecord);
   const canonicalGraph = sealCanonicalRecoveryRecord(bundle.canonical_graph);
   const rawGraph = sealCanonicalRecoveryRecord(bundle.raw_graph);
   const graphitiProjection = sealCanonicalRecoveryRecord(bundle.graphiti_projection);
@@ -1667,7 +1668,7 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
   }
   if (transitions.some((transition) => transition.batch_id !== batch.batch_id || transition.observation_digest !== observation.observation_digest)
       || transitions.slice(1).some((transition) => transition.plan_digest !== plan.plan_digest)
-      || transitions.slice(2).some((transition) => transition.gkx_delta_digest !== retrievalCanonicalDigest(normalizedGraphDelta as JsonRecord))) {
+      || transitions.slice(2).some((transition) => transition.gkx_delta_digest !== normalizedGraphDeltaDigest)) {
     fail("GKX_WATCHER_CONTRACT_TRANSITION_INVALID", "coherent activation transition authority differs.");
   }
   if ((plan.intended_source_mutations as unknown[]).length === 0 && plan.folder_set_changed === false
@@ -1698,7 +1699,7 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
       || !isDeepStrictEqual(graphitiProjection, expectedGraphitiProjection)
       || graphState.graph_artifact_file !== rawGraphCoordinate.file || graphState.graph_artifact_digest !== rawGraph.graph_artifact_digest
       || graphState.canonical_graph_digest !== retrievalCanonicalDigest(canonicalGraph as JsonRecord)
-      || graphState.gkx_delta_digest !== retrievalCanonicalDigest(normalizedGraphDelta as JsonRecord)
+      || graphState.gkx_delta_digest !== normalizedGraphDeltaDigest
       || graphState.graphiti_projection_digest !== retrievalCanonicalDigest(graphitiProjection as JsonRecord)
       || stableJson(manifest.retrieval_projection_state) !== stableJson(retrievalState)
       || stableJson(manifest.graph_projection_state) !== stableJson(graphState)
