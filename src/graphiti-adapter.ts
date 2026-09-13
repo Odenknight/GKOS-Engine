@@ -23,3 +23,12 @@ export type {
 
 export type { GraphitiEpisode } from "./types";
 export { GRAPHITI_INGEST_SCRIPT } from "./graphiti-ingest-script";
+export {
+  GRAPHITI_QUERY_CONTRACT_VERSION,
+  prepareGraphitiQueryRequest,
+  acceptGraphitiQueryResult,
+} from "./graphiti-query-contract";
+export type {
+  GraphitiQueryBinding, GraphitiQueryRequest, GraphitiQueryCitation,
+  GraphitiQueryResult, GraphitiQueryStatus, GraphitiQueryContext,
+} from "./graphiti-query-contract";

@@ -184,7 +184,7 @@ test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI beh
   ].sort();
   const navigationEffectsNodeExports = ["DurableEffectJournal", "NodeNavigationEffectsExecutor", "SimulatedEffectCrash", "NodeManagedMocHost", "NodeManagedMocRuntime"].sort();
   const rootExports = Object.keys(root).sort();
-  const graphitiAdditions = ["GRAPHITI_INGEST_SCRIPT", "attachGraphitiSourceEvidence"].sort();
+  const graphitiAdditions = ["GRAPHITI_INGEST_SCRIPT", "attachGraphitiSourceEvidence", "GRAPHITI_QUERY_CONTRACT_VERSION", "prepareGraphitiQueryRequest", "acceptGraphitiQueryResult"].sort();
   const additiveRootExports = [...navigationEffectsExports, ...graphitiAdditions].sort();
   const phase0Root = rootExports.filter((name) => !additiveRootExports.includes(name));
   const actualExports = {

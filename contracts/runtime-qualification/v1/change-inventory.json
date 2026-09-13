@@ -446,8 +446,8 @@
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "f9e9a8f9619d99e04659d536e54fb1b106f0301942a87a76238ed72e5e418dc4",
-      "rationale": "Document the optional Graphiti 0.30.2 adapter and bounded qualification, preserving candidate release standing."
+      "after": "19493333e2771f187b6de4952eaaaa49b674dd60947ef01bb1f7fc048d3cdf0d",
+      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
     },
     {
       "path": "COMPAT.md",
@@ -502,6 +502,18 @@
       "before": null,
       "after": "11017113221f8ebc51b03c7de8078bdba3258a7d32b084d675ffd3de28c0182f",
       "rationale": "Preserve exact pinned upstream v0.81 schema, transitive definitions, Apache license/notice or explicit provenance for isolated schema validation; no standard modification."
+    },
+    {
+      "path": "contracts/graphiti/query-draft1/README.md",
+      "before": null,
+      "after": "ac72bea0ce5b6d519b8c608ba68805f447c2b7e452e5db6600fa8beec0416616",
+      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+    },
+    {
+      "path": "contracts/graphiti/query-draft1/fixture.json",
+      "before": null,
+      "after": "07fcf0d92dc321ec38d7860005fce410e753be313ea2f31c0e18f0342cca952f",
+      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
     },
     {
       "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures.manifest.json",
@@ -680,8 +692,8 @@
     {
       "path": "docs/GRAPHITI-030-ADAPTER.md",
       "before": null,
-      "after": "0bb47a51043048273156ffe02d1277826cba14bfcacdf502a363f64c4bf59b20",
-      "rationale": "Document API migration, recovery limitations, source evidence, exact smoke results and unqualified production gates."
+      "after": "ca825bd353fe46542558ed67358d592b29fea85470ddd4cbdae8e75c1af4e962",
+      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
     },
     {
       "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
@@ -998,14 +1010,20 @@
     {
       "path": "src/graphiti-adapter.ts",
       "before": "bf95b6a858645c82c832dbb68d06e6ff2d7dec3e",
-      "after": "711eb1d5c48e4b19e95b01252d5deacb9667c7fbf4426fdd8a20478dc8258c27",
-      "rationale": "Export the optional source-evidence helper and external runner from the existing Graphiti entry point."
+      "after": "ded6584934c1d3b947e389064921ddb7c830fc169b7205ea69d0ec8d43a10b71",
+      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
     },
     {
       "path": "src/graphiti-ingest-script.ts",
       "before": null,
       "after": "0391880e0115a420fd31b098af7dd294c3ad95f13824c88838d725e0d7e62f8e",
       "rationale": "External runner maps newly generated projection IDs, verifies content/group persistence, bounds input and calls, and refuses ambiguous retries."
+    },
+    {
+      "path": "src/graphiti-query-contract.ts",
+      "before": null,
+      "after": "497b49a78c364a64ec34a5f1c4af3e28e8e450212ec5df1afe6e06fbeeb55595",
+      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
     },
     {
       "path": "src/graphiti.ts",
@@ -1214,8 +1232,8 @@
     {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "4edd9c983360eb546ca2e0c1c91e95beeaf6d32424cec9b6e340c05526599326",
-      "rationale": "Preserve frozen public API fixtures while explicitly asserting the two additive Graphiti exports and all existing exports."
+      "after": "fbd4882e14ad16ec81b0c88055b8df85e2bae33b4472af2df9921e1a05337f4f",
+      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
     },
     {
       "path": "test/determinism.test.mjs",
@@ -1282,6 +1300,12 @@
       "before": null,
       "after": "702340b218966a17f922ce3af0512f6b09fe2b2b8353ee1bc42ce0e60cdcf3b7",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/graphiti-query-contract.test.mjs",
+      "before": null,
+      "after": "133dfd194172bc58633ed955d8c0bccac6ab37ff538b47b711305c50790d7295",
+      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
     },
     {
       "path": "test/graphiti.test.mjs",
