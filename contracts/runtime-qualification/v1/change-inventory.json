@@ -1304,8 +1304,8 @@
     {
       "path": "src/graphiti.ts",
       "before": "b674c65babba76399689dccd897d31a777423c6e",
-      "after": "36084eca6422c4a93183e0259c63fa84110322536bf386192402aac23b3df055",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "7211e0bc4dcc41266e78a6eaa457c3a112482dc94b42c54325463fc6a136617d",
+      "rationale": "Relationship episodes name their originating source path and can carry exact source-byte evidence without copying note content; absent bytes remove stale evidence."
     },
     {
       "path": "src/incremental.ts",
@@ -1622,8 +1622,8 @@
     {
       "path": "test/graphiti.test.mjs",
       "before": "12a1cb2b59421c5466e5e285655f6d150fb956f8",
-      "after": "f54cceb4517719eef7b8e6b22819e8438a48cbb80fb6aad73827b43644fa47a2",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "5b5cf727c3924eaf6283bb955fbfe74f80c67a67a5ac8cb6c9ef6bde2e539457",
+      "rationale": "Relationship episodes name their originating source path and can carry exact source-byte evidence without copying note content; absent bytes remove stale evidence."
     },
     {
       "path": "test/lineage-inspection.test.mjs",
