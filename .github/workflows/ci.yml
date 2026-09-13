@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     continue-on-error: ${{ matrix.node == 26 }}
     strategy:
       fail-fast: false
@@ -168,7 +168,7 @@ jobs:
 
   phase4-retrieval-observation-manual:
     if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 45
     concurrency:
       group: phase4-retrieval-observation-${{ github.ref }}
@@ -236,7 +236,7 @@ jobs:
         run: git diff --exit-code
 
   phase5-watcher-linux:
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     continue-on-error: ${{ matrix.node == 26 }}
     timeout-minutes: 45
     strategy:
@@ -393,7 +393,7 @@ jobs:
 
   phase5-watcher-artifact-audit:
     needs: [phase5-watcher-linux, phase5-watcher-windows]
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 45
     permissions:
       actions: read

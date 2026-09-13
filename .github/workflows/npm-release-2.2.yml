@@ -12,7 +12,7 @@ concurrency:
 jobs:
   publish:
     if: github.repository == 'Odenknight/GKOS-Engine'
-    runs-on: ubuntu-24.04
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-24.04' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 120
     environment: gkos-engine-release
     env:
