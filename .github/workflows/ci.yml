@@ -50,6 +50,9 @@ jobs:
       - name: Graphiti generated-runner regression tests
         run: npm run test:graphiti-runner
 
+      - name: Graphiti managed ledger and worker tests
+        run: python -m unittest discover -s services/gkos-graphiti -p 'test_*.py' -v
+
       - name: Legacy nomenclature gate (tracked and generated release content)
         run: npm run check:nomenclature
 

@@ -15,6 +15,10 @@ GKOS-Engine is designed to be the quiet machinery underneath products such as
 Kosmos-Oden: one interpretation of GKX, reusable from a library, CLI, headless
 service, or desktop sidecar.
 
+FAC selected this as the common knowledge Engine for future products. Follow the
+[product Engine policy](docs/PRODUCT-ENGINE-POLICY.md) for the existing public
+adapter, immutable dependency pins and product-specific acceptance evidence.
+
 Under the Standard's [September 12 independence clarification](https://github.com/Odenknight/gkos-standard/blob/main/docs/decisions/2026-09-12-implementation-independence.md),
 different ownership is ideal, not required. Different functioning products
 still need public evidence of implementation independence; multiple interfaces

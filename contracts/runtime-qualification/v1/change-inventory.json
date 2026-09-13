@@ -392,8 +392,8 @@
     {
       "path": ".github/workflows/ci.yml",
       "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
-      "after": "8a3a01f5829964bcc628dd4c813c2705d05f836bd831fd15fc089e4133fd016c",
-      "rationale": "Execute the external Graphiti runner regressions on the existing CI matrix; existing gates unchanged."
+      "after": "ded98f6627c4487a4e814de22de2dc4cd308ac019526a917f2691e6fd24dfa6f",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": ".github/workflows/managed-moc-audit-2.2.yml",
@@ -446,8 +446,8 @@
     {
       "path": "CHANGELOG.md",
       "before": "4ddad03504dcc6899601d0887cf18803c51958b0",
-      "after": "685a294f4b88946b40856f40116c69fa83fb4c946731fe905db94c88ae682bd7",
-      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
+      "after": "487698b4ea3a8e1d9481f9c32987c5fc4af27609c26bb111caf6417666669b46",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "COMPAT.md",
@@ -458,8 +458,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "3cafa4543db3ca9e09717ea98352a1b690970482fd7376f7b398e3dd08acaabe",
-      "rationale": "Link the optional Graphiti runner and independent source-byte evidence contract."
+      "after": "c4eae2e31fea80bbe9ac3104589da7f057a4ae57abd8c66de94ed9e1bd4a1e71",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "ROADMAP.md",
@@ -696,6 +696,12 @@
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
+      "path": "docs/GRAPHITI-MANAGED-HOST.md",
+      "before": null,
+      "after": "38e3bfa875e4c21f5c87f97582cd23e0354d32a1b93cb164742e6046c528f714",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
       "before": null,
       "after": "42b2ec2c53ad2866c3a78e524dfdeac54b5e01b1e633d8f21b16c909ee43ac2f",
@@ -724,6 +730,12 @@
       "before": null,
       "after": "2e8da20ad7853f5be1ea644f2f1f22c9bc6d2bb41ce8dcf1e5d6033a818aecef",
       "rationale": "Document distinct historical/current identities, workload, digest derivation and limitations."
+    },
+    {
+      "path": "docs/PRODUCT-ENGINE-POLICY.md",
+      "before": null,
+      "after": "ca9db913f01a97e0bf22b8002af6ba03d22767e608a8ec2c0a444184635ce7e2",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "docs/PROJECT-HANDOFF-20260909.md",
@@ -902,8 +914,8 @@
     {
       "path": "scripts/build.mjs",
       "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
-      "after": "c3685829078b14c669f38e373c1187f5310499cce82826d216ec345236eb23e0",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "f73428e3243f652764f08325e5ed5ce1c9ae54e15868d19c5acca60e8fbf7ec6",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "scripts/current-test-plan.mjs",
@@ -1014,6 +1026,54 @@
       "rationale": "Implement owner-approved OD-02 bounded exact-byte SHA-256 and independently declared ordered manifest verification; emit Engine-specific result, not standard RefusalReceipt."
     },
     {
+      "path": "services/gkos-graphiti/README.md",
+      "before": null,
+      "after": "db0c98360c4f62b93b44da98ec191049aef3093295c11e4aa05d5a4195048f1c",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/backend.py",
+      "before": null,
+      "after": "fd15697f7ff3520b74040781984fd3c63cca72c62dd48b6f8b10a238b07e2df0",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/ledger.py",
+      "before": null,
+      "after": "b41fb6b41d6d066223050a3ff8be921c062776d295d5f7d7c6305f588b7ac75f",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/qualify_live.py",
+      "before": null,
+      "after": "311277d8944cb078a7af163ae7f9718ae579166c40b4f9438c5016dcf9efe059",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/test_backend.py",
+      "before": null,
+      "after": "28519b95f6014d311ce8fd6da72faf70dc086d12024d09cce86b5beb4b35910c",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/test_ledger.py",
+      "before": null,
+      "after": "475a990bbbd29bcb47059a258f58581f856d5c1e74f40aed40f3ac305cb45e2b",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/test_worker.py",
+      "before": null,
+      "after": "98ee66c4b1bcfcea3d7b62fe59c917eb96b3173c598a335cd73b4d33e2f90cb0",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/worker.py",
+      "before": null,
+      "after": "56a3759fa62aa5136d02dfc0f1be31535adce236b10d81114585d951a2f62852",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "services/gkos-intelligence/pyproject.toml",
       "before": "1660cf89b26c10ac6e2112e0532ce94f4e99fa71",
       "after": "f6717418d091513cab566cf0e6781d700e5d2b709b705d6fdac72b1888e7a5e3",
@@ -1030,6 +1090,12 @@
       "before": "bf95b6a858645c82c832dbb68d06e6ff2d7dec3e",
       "after": "ded6584934c1d3b947e389064921ddb7c830fc169b7205ea69d0ec8d43a10b71",
       "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+    },
+    {
+      "path": "src/graphiti-broker.ts",
+      "before": null,
+      "after": "959feb93e8d20e375a37e730c4cfe39a824cb956faf3d9f0bd2a17623a9fc47b",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "src/graphiti-ingest-script.ts",
@@ -1318,6 +1384,12 @@
       "before": null,
       "after": "702340b218966a17f922ce3af0512f6b09fe2b2b8353ee1bc42ce0e60cdcf3b7",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/graphiti-broker.test.mjs",
+      "before": null,
+      "after": "38732923da73592a215967c58e03a2ff350d0a6a1cba93da4c4ac9f85c256528",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "test/graphiti-query-contract.test.mjs",
