@@ -51,14 +51,16 @@ function stateSize(path) {
   }
   return total;
 }
-let host, stopped = false;
+let host, stopped = false, observationStart = null;
 const latencies = [], begun = performance.now();
 process.once('SIGINT', () => { stopped = true; });
 process.once('SIGTERM', () => { stopped = true; });
 try {
   host = await startWatcherHost(options);
   assert.equal(host.status().document_count, count);
-  while (!stopped && performance.now() - begun < duration * 1000) {
+  observationStart = performance.now();
+  receipt.observation_started_at = new Date().toISOString();
+  while (!stopped && performance.now() - observationStart < duration * 1000) {
     const before = host.status().source_snapshot_digest;
     execution.length = 0;
     const editStart = performance.now();
@@ -84,7 +86,7 @@ try {
       assert.equal(host.status().source_snapshot_digest, status.source_snapshot_digest);
     }
     writeFileSync(summaryPath, JSON.stringify(receipt, null, 2));
-    const remaining = duration * 1000 - (performance.now() - begun);
+    const remaining = duration * 1000 - (performance.now() - observationStart);
     if (remaining > 0) await new Promise(resolve => setTimeout(resolve, Math.min(60000, remaining)));
   }
   const ordered = [...latencies].sort((a, b) => a - b);
@@ -98,6 +100,7 @@ finally {
     catch (error) { receipt.status = 'FAIL'; receipt.shutdown_error = error.message; }
   }
   receipt.ended_at = new Date().toISOString(); receipt.elapsed_seconds = (performance.now() - begun) / 1000;
+  receipt.observation_seconds = observationStart === null ? 0 : (performance.now() - observationStart) / 1000;
   receipt.samples_sha256 = sha(readFileSync(samplesPath));
   writeFileSync(summaryPath, JSON.stringify(receipt, null, 2) + '\n');
 }

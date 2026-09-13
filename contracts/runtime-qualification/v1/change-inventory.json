@@ -1034,7 +1034,7 @@
     {
       "path": "scripts/soak-watcher.mjs",
       "before": null,
-      "after": "9bf622bcb42701a0ef109c64f919d3dc4cc1e5fc50cc6d0b6425578bee163cf3",
+      "after": "f6019fc9750136b6520a61225c2a8451d5748478e33e5860c06f5e735597debc",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
