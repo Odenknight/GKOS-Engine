@@ -1362,6 +1362,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/watcher/contracts.ts",
+      "before": "0cc72b3c8776dd9421798b157102ae4f8fba3ac4",
+      "after": "6a71f9efbe56e4b71b46f272ef56bb8c2f3b0fff65a33a542ea56abcf2266a3a",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "src/watcher/coordinator.ts",
       "before": "4c2d09a947f81fc28e3ccf3806b348fcaff672ec",
       "after": "06c55a8c85a44ea8a782db7ed2d469083d9d64d8f40e9539cc534feeb7fd937b",
@@ -1654,6 +1660,12 @@
       "before": "44d7cfd700c0510a76d746a25ac072791fb32105",
       "after": "135cf822c2e5b34b0a373c33d6faf3c9a1f2e0d3cd13cdf55701790fa8adeb07",
       "rationale": "Q-GUARD coverage closure: register the native POSIX file-authority assertions only where those ownership and mode capabilities exist."
+    },
+    {
+      "path": "test/watcher-recovery-contracts.test.mjs",
+      "before": "2519ed9ed3e66f5f216afe76ebe5547110b06a30",
+      "after": "2734992d864fee1e237bc22b63b9b1eca39eb10cccb6205dbfe215d46d953632",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "test/watcher-service-cli.test.mjs",

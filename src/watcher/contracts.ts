@@ -409,7 +409,12 @@ function digestMaterial(value: JsonRecord, digestField: string): JsonRecord {
 }
 
 export function sealWatcherRecoveryRecord(value: unknown): Readonly<JsonRecord> {
-  const item = canonicalRecord(value, "watcher recovery record");
+  return sealCanonicalRecoveryRecord(canonicalRecord(value, "watcher recovery record"));
+}
+
+/** Only detached JSON produced by canonicalRecord may enter this private path. */
+function sealCanonicalRecoveryRecord(value: unknown): Readonly<JsonRecord> {
+  const item = record(value, "watcher recovery record");
   if (typeof item.contract_version !== "string") {
     return fail("GKX_WATCHER_CONTRACT_VERSION_INVALID", "watcher recovery record contract_version is invalid.");
   }
@@ -1585,28 +1590,28 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
     "normalized_graph_delta", "canonical_graph", "raw_graph", "graphiti_projection",
     "manifest", "pointer", "intent", "outcome", "active", "source_removal_event_set_bundle", "source_removal_activation",
   ], "coherent activation bundle");
-  const batch = sealWatcherRecoveryRecord(bundle.batch);
-  const observation = sealWatcherRecoveryRecord(bundle.observation);
-  const observationAuthority = sealWatcherRecoveryRecord(bundle.observation_authority);
+  const batch = sealCanonicalRecoveryRecord(bundle.batch);
+  const observation = sealCanonicalRecoveryRecord(bundle.observation);
+  const observationAuthority = sealCanonicalRecoveryRecord(bundle.observation_authority);
   const preScan = sealPreScanState(bundle.pre_scan_state);
-  const plan = sealWatcherRecoveryRecord(bundle.plan);
-  const planAuthority = sealWatcherRecoveryRecord(bundle.plan_authority);
-  const topology = sealWatcherRecoveryRecord(bundle.topology);
+  const plan = sealCanonicalRecoveryRecord(bundle.plan);
+  const planAuthority = sealCanonicalRecoveryRecord(bundle.plan_authority);
+  const topology = sealCanonicalRecoveryRecord(bundle.topology);
   const transitionInput = canonicalArray(bundle.transitions, "coherent activation transitions");
   const preparedOnly = record(transitionInput.at(-1), "coherent activation final transition").state === "activation_prepared";
   const transitions = preparedOnly ? sealWatcherTransitionPrefix(transitionInput) : sealWatcherTransitionChain(transitionInput);
   if (transitions.length !== (preparedOnly ? 6 : 7)) fail("GKX_WATCHER_CONTRACT_TRANSITION_INVALID", "coherent activation requires prepared5 or complete6 progression.");
-  const normalizedGraphDelta = sealWatcherRecoveryRecord(bundle.normalized_graph_delta);
-  const canonicalGraph = sealWatcherRecoveryRecord(bundle.canonical_graph);
-  const rawGraph = sealWatcherRecoveryRecord(bundle.raw_graph);
-  const graphitiProjection = sealWatcherRecoveryRecord(bundle.graphiti_projection);
-  const manifest = sealWatcherRecoveryRecord(bundle.manifest);
-  const pointer = sealWatcherRecoveryRecord(bundle.pointer);
-  const intent = sealWatcherRecoveryRecord(bundle.intent);
+  const normalizedGraphDelta = sealCanonicalRecoveryRecord(bundle.normalized_graph_delta);
+  const canonicalGraph = sealCanonicalRecoveryRecord(bundle.canonical_graph);
+  const rawGraph = sealCanonicalRecoveryRecord(bundle.raw_graph);
+  const graphitiProjection = sealCanonicalRecoveryRecord(bundle.graphiti_projection);
+  const manifest = sealCanonicalRecoveryRecord(bundle.manifest);
+  const pointer = sealCanonicalRecoveryRecord(bundle.pointer);
+  const intent = sealCanonicalRecoveryRecord(bundle.intent);
   const outcome = preparedOnly ? bundle.outcome === null ? null : fail("GKX_WATCHER_CONTRACT_RELATION_INVALID", "prepared activation cannot contain an outcome.")
-    : sealWatcherRecoveryRecord(bundle.outcome);
+    : sealCanonicalRecoveryRecord(bundle.outcome);
   const active = preparedOnly ? bundle.active === null ? null : fail("GKX_WATCHER_CONTRACT_RELATION_INVALID", "prepared activation cannot contain ActiveCoherent.")
-    : sealWatcherRecoveryRecord(bundle.active);
+    : sealCanonicalRecoveryRecord(bundle.active);
   const removalCount = Number(planAuthority.source_removal_event_count);
   const removalBundle = removalCount === 0
     ? bundle.source_removal_event_set_bundle === null ? null
@@ -1615,7 +1620,7 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
   const removalActivation = preparedOnly || removalCount === 0
     ? bundle.source_removal_activation === null ? null
       : fail("GKX_WATCHER_CONTRACT_SOURCE_REMOVAL_INVALID", "prepared/zero-removal activation must not carry an outbox activation.")
-    : sealWatcherRecoveryRecord(bundle.source_removal_activation);
+    : sealCanonicalRecoveryRecord(bundle.source_removal_activation);
   const outerGuard = sealWatcherRecoveryRecord(outerPointerGuardValue);
   const observationCoordinate = watcherArtifactCoordinate("observation", observation as JsonRecord);
   const planCoordinate = watcherArtifactCoordinate("plan", plan as JsonRecord);

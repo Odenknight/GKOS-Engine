@@ -814,6 +814,27 @@ test("semantic seals return detached deeply frozen canonical authority", () => {
   assert.throws(() => watcher.sealWatcherTransitionChain(sparse), { code: "GKX_WATCHER_CONTRACT_RECORD_INVALID" });
 });
 
+test("bundle child fast validation cannot admit caller proxies, accessors, arrays or bad digests", () => {
+  const row = readJson("watcher-conformance-fixture.json").semantic_cases.find(item => item.case_id === "coherent-activation-complete");
+  for (const field of ["plan", "canonical_graph", "raw_graph", "graphiti_projection"]) {
+    let traps = 0;
+    const proxyInput = clone(row.input.arguments[0]);
+    proxyInput[field] = new Proxy(proxyInput[field], { get() { traps++; throw Error("must not execute"); } });
+    assert.throws(() => watcher.sealWatcherCoherentActivationBundle(proxyInput, row.input.arguments[1]), { code: "GKX_WATCHER_CONTRACT_RECORD_INVALID" });
+    assert.equal(traps, 0);
+    const accessorInput = clone(row.input.arguments[0]);
+    Object.defineProperty(accessorInput[field], "injected", { enumerable: true, get() { traps++; return "unsafe"; } });
+    assert.throws(() => watcher.sealWatcherCoherentActivationBundle(accessorInput, row.input.arguments[1]), { code: "GKX_WATCHER_CONTRACT_RECORD_INVALID" });
+    assert.equal(traps, 0);
+    const arrayInput = clone(row.input.arguments[0]);
+    arrayInput[field] = [];
+    assert.throws(() => watcher.sealWatcherCoherentActivationBundle(arrayInput, row.input.arguments[1]), { code: "GKX_WATCHER_CONTRACT_RECORD_INVALID" });
+  }
+  const corrupt = clone(row.input.arguments[0]);
+  corrupt.raw_graph.graph_artifact_digest = "sha256:" + "0".repeat(64);
+  assert.throws(() => watcher.sealWatcherCoherentActivationBundle(corrupt, row.input.arguments[1]), { code: "GKX_WATCHER_CONTRACT_DIGEST_INVALID" });
+});
+
 test("every durable incomplete transition prefix reseals without inventing a terminal state", () => {
   const transitions = readJson("watcher-conformance-fixture.json").semantic_cases.find((item) => item.case_id === "transition-chain-complete").input.arguments[0];
   for (let length = 1; length < transitions.length; length++) {
