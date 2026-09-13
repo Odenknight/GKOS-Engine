@@ -10,6 +10,9 @@ python -m unittest discover -s services/gkos-graphiti -p 'test_*.py' -v
 ```
 
 `Ledger` requires an existing canonical private directory on a local filesystem.
+`Ledger(directory, create=True)` explicitly initializes new state; ordinary
+opens refuse missing or empty state so database loss cannot silently permit
+re-extraction. Unrelated databases are refused.
 The operating account must exclusively control its directory, SQLite database
 and journal files. Provision OS permissions before opening it. A writable ledger
 is trusted host authority, not a cryptographically authenticated remote input;
@@ -62,3 +65,7 @@ projection, tests real ingestion/readback, ledger reopen, stale-policy denial,
 revocation and physical cleanup. Its receipt is integration-smoke evidence;
 performance budgets, model-artifact binding, crash/power-loss matrices and full
 Kosmos/Hermes acceptance remain separate gates.
+
+The private broker HTTP helper rejects redirects and bounds streamed UTF-8 JSON
+to 128 KiB. Monotonic elapsed-time checks reject responses after the deadline
+even when synchronous provider work delays the timer callback.

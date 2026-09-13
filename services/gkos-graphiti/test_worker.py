@@ -10,7 +10,7 @@ from worker import Worker, purge_job
 class WorkerTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.ledger = Ledger(Path(self.temp.name).resolve())
+        self.ledger = Ledger(Path(self.temp.name).resolve(), create=True)
         self.episodes = [{"name": "fixture", "episode_body": '{"fact":"relay"}', "source_description": "synthetic",
                           "reference_time": "2026-09-13T00:00:00Z"}]
         self.manifest = [{"source_id": "note", "source_digest": digest("source"), "episode_digest": digest(self.episodes[0])}]

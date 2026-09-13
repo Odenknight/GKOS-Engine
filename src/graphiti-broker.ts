@@ -29,6 +29,7 @@ export class GraphitiQueryBroker {
   }): Promise<GraphitiQueryResult | null> {
     const deadline = input.deadlineMs ?? 5000;
     if (this.stopped || input.signal.aborted || !Number.isSafeInteger(deadline) || deadline < 1 || deadline > 60000) return null;
+    const expires = performance.now() + deadline;
     const controller = new AbortController();
     const abort = () => controller.abort();
     input.signal.addEventListener("abort", abort, { once: true });
@@ -40,7 +41,7 @@ export class GraphitiQueryBroker {
     try {
       const valid = () => {
         try {
-          return !this.stopped && !controller.signal.aborted &&
+          return !this.stopped && !controller.signal.aborted && performance.now() < expires &&
             prepareGraphitiQueryRequest(input.query, input.limit, input.requestId, host.current()) !== null;
         } catch { return false; }
       };
@@ -60,9 +61,10 @@ export class GraphitiQueryBroker {
           if (controller.signal.aborted) resolve(null);
         }),
       ]);
-      if (response === null || controller.signal.aborted || this.stopped) return null;
+      if (response === null || !valid()) return null;
       // No await after current authority is reloaded and the result accepted.
-      return acceptGraphitiQueryResult(request, response, host.current());
+      const result = acceptGraphitiQueryResult(request, response, host.current());
+      return performance.now() < expires ? result : null;
     } catch {
       // Native fallback remains available; never forward backend diagnostics.
       return null;
@@ -78,3 +80,5 @@ export class GraphitiQueryBroker {
     }
   }
 }
+
+export { graphitiHttpQuery } from "./graphiti-query-http";
