@@ -4,6 +4,11 @@
 
 Current main source version; not yet a tagged or published 2.2.0 release.
 
+- Added the optional Graphiti query draft-1 contract with bounded response
+  validation, current scope/generation binding and authorized episode revision
+  checks. Synthetic adversarial fixtures cover its refusal boundary; a live
+  semantic broker and managed revocation remain unimplemented.
+
 - Updated the optional Graphiti profile to 0.30.2; corrected new-episode UUID
   handling in an Engine-owned external runner with durable retry refusal and
   persistence readback. Added independent source-byte SHA-256 evidence support.

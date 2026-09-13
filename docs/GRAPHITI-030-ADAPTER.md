@@ -50,8 +50,18 @@ and all bytes beyond an exported body truncation participate in the digest.
 The helper performs no reads, preserves the existing change keys, and marks
 semantic support unverified. Callers are responsible for supplying bytes from
 the same authorized revision as the projection. Missing bytes produce no evidence.
-Ordinary Kosmos exports do not yet supply raw source bytes, so they do not claim
-this stronger evidence automatically.
+Kosmos PR 70 adds opt-in `include_source_evidence` capture with revision and
+policy checks. Ordinary exports remain unchanged and do not claim this stronger
+evidence automatically.
+
+## Query contract boundary
+
+The additive [query draft 1](../contracts/graphiti/query-draft1/README.md) binds
+request/result/status coordinates to a trusted host's corpus, scope, policy,
+source snapshot, generation and configuration. Its pure preflight and response
+checks reject unavailable, stale or unauthorized contexts and invalid episode
+provenance. The host still owns authorization, dependency completeness and
+publication. This is not a deployed semantic broker or an ingestion ledger.
 
 ## Qualification and limits
 

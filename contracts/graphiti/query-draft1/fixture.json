@@ -1,0 +1,61 @@
+{
+  "status": {
+    "contract_version": "gkos-graphiti-query/1.0.0-draft.1",
+    "mode": "query-only",
+    "searchable": true,
+    "binding": {
+      "corpus_id": "synthetic-corpus",
+      "scope_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "policy_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "source_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "projection_id": "synthetic-generation-1",
+      "configuration_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+    }
+  },
+  "request": {
+    "contract_version": "gkos-graphiti-query/1.0.0-draft.1",
+    "request_id": "fixture-request-1",
+    "binding": {
+      "corpus_id": "synthetic-corpus",
+      "scope_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "policy_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "source_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "projection_id": "synthetic-generation-1",
+      "configuration_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "query": "Where is the synthetic relay?",
+    "limit": 5
+  },
+  "authorized_episodes": [
+    {
+      "projection_episode_id": "synthetic-episode-1",
+      "source_id": "synthetic-source-1",
+      "source_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+    }
+  ],
+  "result": {
+    "contract_version": "gkos-graphiti-query/1.0.0-draft.1",
+    "request_id": "fixture-request-1",
+    "binding": {
+      "corpus_id": "synthetic-corpus",
+      "scope_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "policy_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "source_snapshot_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "projection_id": "synthetic-generation-1",
+      "configuration_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    "hits": [
+      {
+        "fact": "The synthetic relay is in the test chamber.",
+        "semantic_support": "unverified",
+        "citations": [
+          {
+            "projection_episode_id": "synthetic-episode-1",
+            "source_id": "synthetic-source-1",
+            "source_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+          }
+        ]
+      }
+    ]
+  }
+}
