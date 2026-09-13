@@ -1,25 +1,13 @@
 """Private query driver for already published, indexed Graphiti projections."""
-import asyncio
 import copy
 import importlib.metadata
 import json
 import re
 import weakref
-from time import monotonic
+from deadline import await_before_deadline as _await_before_deadline
 from ledger import Refused
 
 _groups = weakref.WeakKeyDictionary()
-
-
-async def _await_before_deadline(operation, seconds):
-    deadline = monotonic() + seconds
-    result = await asyncio.wait_for(operation, seconds)
-    # wait_for can return after expiry when a provider blocks the loop or
-    # suppresses cancellation. Never accept that late result. Retain the await
-    # until physical cleanup finishes; this is not a hard process deadline.
-    if monotonic() >= deadline:
-        raise TimeoutError("query-deadline-exceeded")
-    return result
 
 
 def create_readonly_driver(group, client):
