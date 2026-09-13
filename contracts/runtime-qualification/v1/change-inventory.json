@@ -504,6 +504,12 @@
       "rationale": "Preserve exact pinned upstream v0.81 schema, transitive definitions, Apache license/notice or explicit provenance for isolated schema validation; no standard modification."
     },
     {
+      "path": "contracts/graphiti/benchmark-draft1/plan.json",
+      "before": null,
+      "after": "aeb05e37fa186eab3bbab425191b0e3d002e0613a9c80fee9d980c46df3ec84d",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "contracts/graphiti/query-draft1/README.md",
       "before": null,
       "after": "ac72bea0ce5b6d519b8c608ba68805f447c2b7e452e5db6600fa8beec0416616",
@@ -694,6 +700,12 @@
       "before": null,
       "after": "2dfd346f88408dae7d2cd85383b8d5c2bd98cff72175be844f8ae9adc9303409",
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
+    },
+    {
+      "path": "docs/GRAPHITI-BENCHMARKS.md",
+      "before": null,
+      "after": "c6f36636e15a338319416424779bad8814944c17cbacae5a38b3dfccb693696f",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "docs/GRAPHITI-MANAGED-HOST.md",
@@ -904,6 +916,12 @@
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
       "after": "bf0bd6edb2e94ff5eeb24c4d019cae6d0d1e97024826b08073500477e8ba8382",
       "rationale": "Expose the generated-runner regression command without new dependencies or product version changes."
+    },
+    {
+      "path": "scripts/benchmark-graphiti-native.mjs",
+      "before": null,
+      "after": "8794b6bd292d0186c939b745445579a700a10b6ae93ebb2805596133664abec5",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "scripts/benchmark-managed-moc.mjs",
