@@ -91,8 +91,10 @@ try {
   }
   const ordered = [...latencies].sort((a, b) => a - b);
   receipt.single_edit_p95_ms = ordered[Math.max(0, Math.ceil(ordered.length * .95) - 1)] ?? null;
-  receipt.status = stopped ? 'INTERRUPTED' : duration < 86400 ? 'SHORT_SMOKE_ONLY' :
-    receipt.cycles >= 1000 && receipt.single_edit_p95_ms <= receipt.budgets.single_edit_p95_ms ? 'PASS_24H_WATCHER_SCOPE' : 'FAIL_BUDGET';
+  receipt.budget_pass = receipt.cycles > 0 && receipt.single_edit_p95_ms !== null &&
+    receipt.single_edit_p95_ms <= receipt.budgets.single_edit_p95_ms;
+  receipt.status = stopped ? 'INTERRUPTED' : !receipt.budget_pass ? 'FAIL_BUDGET' :
+    duration < 86400 ? 'SHORT_SMOKE_ONLY' : receipt.cycles >= 1000 ? 'PASS_24H_WATCHER_SCOPE' : 'FAIL_BUDGET';
 } catch (error) { receipt.status = 'FAIL'; receipt.error = error.message; }
 finally {
   if (host) {
