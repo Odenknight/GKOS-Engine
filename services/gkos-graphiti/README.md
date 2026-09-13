@@ -87,3 +87,16 @@ automatic retry policy.
 The private broker HTTP helper rejects redirects and bounds streamed UTF-8 JSON
 to 128 KiB. Monotonic elapsed-time checks reject responses after the deadline
 even when synchronous provider work delays the timer callback.
+
+`readonly_query.py` supplies a private Graphiti 0.30.2 query driver for one
+already published and indexed projection. Its client exposes only a bounded
+`GRAPH.RO_QUERY` route, refuses cross-graph selection/cloning and suppresses the
+SDK constructor's automatic index creation. Its query override preserves result
+conversion without the SDK's query/parameter exception logger. Search uses a
+detached edge-RRF recipe with the advanced public `search_` API because the
+convenience `search` method mutates a shared recipe's limit.
+
+The returned SDK edges remain untrusted. This helper does not publish a graph,
+authorize citations, authenticate an HTTP endpoint, bound SDK peak allocations,
+or enable product search. Current ledger bindings, response/citation validation,
+transport limits and product acceptance remain host integration requirements.
