@@ -458,8 +458,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "b91d1980eca28bd64d0120a0c8d3240943a41f8a4652710d5cbb64490e7a69c8",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "9c1ebc8377f76c7fcbc7f796774110a55e0671901eeec3a47246ad5a291d2043",
+      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
     },
     {
       "path": "ROADMAP.md",
@@ -790,6 +790,12 @@
       "before": null,
       "after": "ea2e3708a9722571071873377fe1c6bfe072f2bf2c90b12f32d87d6d8d0ef2b8",
       "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities."
+    },
+    {
+      "path": "docs/SCOPED-LINEAGE-INSPECTION.md",
+      "before": null,
+      "after": "5f32c56394cbe9e62772ac3e5a96a995b84c82d95b130d275dd56a4a0ec6cb0c",
+      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
     },
     {
       "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",
@@ -1256,14 +1262,20 @@
     {
       "path": "src/index.ts",
       "before": "b4550c73992d38f7fc3e52383efde0de276ae27d",
-      "after": "76e958a89e81530f75a166a34a19b6b1fc63a827d806a2f6a5c79035900fae77",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "578aac085765804da6398ab56284725a5d4e18e3850ff46fc4afb5dfcaa58ce3",
+      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
     },
     {
       "path": "src/ingest/source-scan.ts",
       "before": "c36a98bc8e379177475b5bef7d0df1c95cf45313",
       "after": "388f4fe24dfb76f6df6d7c3d8b22c614a9bfdddb6a6f2e3e844c7ab6b590a493",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "src/lineage-inspection.ts",
+      "before": null,
+      "after": "a9b66d3be17a1ed08d90ab7f82aa17e8b0dd8c37cf80343eeca16575dafcfa22",
+      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
     },
     {
       "path": "src/navigation-effects/assistance.ts",
@@ -1460,8 +1472,8 @@
     {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "fbd4882e14ad16ec81b0c88055b8df85e2bae33b4472af2df9921e1a05337f4f",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "936dcf747790b051f70b5b24c4a1fef1c29839f100b7e84a10156821109d7927",
+      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
     },
     {
       "path": "test/determinism.test.mjs",
@@ -1552,6 +1564,12 @@
       "before": "12a1cb2b59421c5466e5e285655f6d150fb956f8",
       "after": "f54cceb4517719eef7b8e6b22819e8438a48cbb80fb6aad73827b43644fa47a2",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "test/lineage-inspection.test.mjs",
+      "before": null,
+      "after": "4bb272745a396ec2e51e05afe8672ab98e64fa494285a149571cb140836696e5",
+      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
     },
     {
       "path": "test/managed-moc-no-change.test.mjs",
