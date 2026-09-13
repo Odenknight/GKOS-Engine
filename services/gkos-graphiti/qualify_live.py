@@ -104,7 +104,7 @@ async def main(*, probe_readonly_search=False):
                     client.select_graph(group).delete()
             checks["fixture_cleanup"] = all(group not in client.list_graphs() for group in groups)
     passed = error_type is None and len(checks) == (13 if probe_readonly_search else 9) and all(checks.values())
-    sources = ["ledger.py", "worker.py", "backend.py", "qualify_live.py"]
+    sources = ["ledger.py", "worker.py", "backend.py", "deadline.py", "qualify_live.py"]
     if probe_readonly_search:
         sources += ["readonly_query.py", "qualify_readonly_search.py"]
     print(json.dumps({"schema": "gkos-graphiti-managed-qualification/1", "timestamp": datetime.now(timezone.utc).isoformat(),

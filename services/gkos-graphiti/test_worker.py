@@ -1,7 +1,11 @@
 import asyncio
 import copy
 import tempfile
+import sys
+import types
 import unittest
+from unittest.mock import patch
+from backend import GraphitiBackend
 from pathlib import Path
 from ledger import Ledger, Refused, digest
 from worker import Worker, purge_job
@@ -105,6 +109,42 @@ class WorkerTests(unittest.IsolatedAsyncioTestCase):
             await self.worker.run(lambda: (self.bound, self.manifest, self.episodes), lambda group: called.append(group))
         self.assertEqual(called, [])
         self.assertEqual(self.ledger.db.execute('SELECT COUNT(*) FROM jobs').fetchone()[0], 0)
+
+    async def test_late_backend_phases_quarantine_and_close_both_clients(self):
+        for phase in ("initialize", "add", "read", "close"):
+            with self.subTest(phase=phase):
+                now, calls = [0.0], []
+                self.bound["configuration_digest"] = digest(phase)
+                def mark(name):
+                    calls.append(name)
+                    if name == phase:
+                        now[0] += 121  # Simulate provider elapsed time without a slow test.
+                class Graphiti:
+                    async def build_indices_and_constraints(self): mark("initialize")
+                    async def add_episode(self, **kwargs):
+                        mark("add")
+                        return types.SimpleNamespace(episode=types.SimpleNamespace(uuid="episode"))
+                    async def close(self): mark("close")
+                class ReadClient:
+                    def select_graph(self, group): return self
+                    async def ro_query(self, *args, **kwargs):
+                        mark("read")
+                        return types.SimpleNamespace(result_set=[[True, True]])
+                    async def aclose(self): calls.append("read-close")
+                def factory(group): return GraphitiBackend(group, lambda _: Graphiti(), ReadClient())
+                modules = {"graphiti_core.nodes": types.SimpleNamespace(EpisodeType=types.SimpleNamespace(json="json"))}
+                with patch("importlib.metadata.version", return_value="0.30.2"), patch.dict(sys.modules, modules), \
+                        patch("deadline.monotonic", lambda: now[0]):
+                    with self.assertRaises(TimeoutError):
+                        await self.worker.run(self.current, factory)
+                self.assertIn("close", calls)
+                self.assertEqual(calls[-1], "read-close")
+                self.assertFalse(self.worker.active)
+                self.assertEqual([row[0] for row in self.ledger.db.execute("SELECT DISTINCT state FROM jobs")], ["quarantined"])
+                if phase == "initialize": self.assertNotIn("add", calls)
+                if phase == "add": self.assertNotIn("read", calls)
+                with self.assertRaises(Refused):
+                    await self.worker.run(self.current, lambda _: self.fail("Ambiguous job retried"))
 
 
 if __name__ == "__main__":

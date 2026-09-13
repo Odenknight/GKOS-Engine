@@ -3,7 +3,7 @@
 Factories are configured by the trusted host using its pinned local-model
 configuration. This module never chooses provider credentials or fallbacks.
 """
-import asyncio
+from deadline import await_before_deadline
 import importlib.metadata
 import json
 import re
@@ -36,12 +36,12 @@ class GraphitiBackend:
         self.readonly_client = readonly_client
 
     async def initialize(self):
-        await asyncio.wait_for(self.graphiti.build_indices_and_constraints(), 60)
+        await await_before_deadline(self.graphiti.build_indices_and_constraints(), 60)
 
     async def add(self, episode):
         from graphiti_core.nodes import EpisodeType
         reference = validate_episode(episode)
-        result = await asyncio.wait_for(self.graphiti.add_episode(
+        result = await await_before_deadline(self.graphiti.add_episode(
             name=episode["name"], episode_body=episode["episode_body"], source=EpisodeType.json,
             source_description=episode["source_description"], reference_time=reference, group_id=self.group), 120)
         uid = result.episode.uuid
@@ -50,13 +50,13 @@ class GraphitiBackend:
         return uid
 
     async def matches(self, uid, episode):
-        result = await asyncio.wait_for(self.readonly_client.select_graph(self.group).ro_query(
+        result = await await_before_deadline(self.readonly_client.select_graph(self.group).ro_query(
             "MATCH (e:Episodic {uuid: $uuid}) RETURN e.content = $body, e.group_id = $group LIMIT 2",
             params={"uuid": uid, "body": episode["episode_body"], "group": self.group}, timeout=30000), 30)
         return result.result_set == [[True, True]]
 
     async def close(self):
         try:
-            await asyncio.wait_for(self.graphiti.close(), 10)
+            await await_before_deadline(self.graphiti.close(), 10)
         finally:
-            await asyncio.wait_for(self.readonly_client.aclose(), 10)
+            await await_before_deadline(self.readonly_client.aclose(), 10)

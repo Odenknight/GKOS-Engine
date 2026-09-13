@@ -96,7 +96,24 @@ conversion without the SDK's query/parameter exception logger. Search uses a
 detached edge-RRF recipe with the advanced public `search_` API because the
 convenience `search` method mutates a shared recipe's limit.
 
-The returned SDK edges remain untrusted. This helper does not publish a graph,
-authorize citations, authenticate an HTTP endpoint, bound SDK peak allocations,
-or enable product search. Current ledger bindings, response/citation validation,
-transport limits and product acceptance remain host integration requirements.
+The returned SDK edges remain untrusted. `query_published` checks fresh trusted
+host bindings against the published ledger and constructs bounded responses
+using ledger-owned citation mappings. Authentication, complete principal scope,
+SDK peak allocations and product integration remain host responsibilities.
+
+`deadline.py` supplies the shared monotonic deadline check for ingestion and
+read-only query operations. Late index creation, extraction, readback or close
+success cannot produce an observed generation. The worker quarantines the
+ambiguous attempt and closes both clients; it does not retry it automatically.
+Awaiting cleanup may exceed the deadline for an uncooperative provider, so a
+host still needs process supervision. Forty local tests pass, including all four
+late ingestion phase cases and cancellation/outage checks. These local fault
+injections do not establish production outage or physical power-loss qualification.
+
+Public runtime source `06f379117dbb39b5e25bacc8d9fd2b487746cc1d` passed all
+40 tests on the actual Python 3.12.14 host at 2026-09-13T11:39:52.774110Z
+with zero failures/errors. Exact source/test hashes matched the dispatch; tests
+used temporary local storage. The same source passed all thirteen synthetic
+live SDK checks at 11:39:05.903608Z with verified fixture cleanup. Local evidence:
+`graphiti-host-tests-20260913T113950Z/receipt.json` and
+`graphiti-readonly-search-live-20260913T113858Z/receipt.json`.

@@ -130,7 +130,7 @@ class ReadOnlyTests(unittest.IsolatedAsyncioTestCase):
         started = time.monotonic()
         def accelerated_clock():
             return (time.monotonic() - started) * 3000
-        with patch("readonly_query.asyncio.wait_for", short_wait), patch("readonly_query.monotonic", accelerated_clock):
+        with patch("deadline.asyncio.wait_for", short_wait), patch("deadline.monotonic", accelerated_clock):
             with self.assertRaises(TimeoutError):
                 await search_readonly(self.graphiti, self.driver, "fixture")
 
@@ -143,7 +143,7 @@ class ReadOnlyTests(unittest.IsolatedAsyncioTestCase):
                 await asyncio.sleep(0)
                 cleanup.set()
                 return "late private result"
-        with self.assertRaisesRegex(TimeoutError, "query-deadline-exceeded"):
+        with self.assertRaisesRegex(TimeoutError, "operation-deadline-exceeded"):
             await _await_before_deadline(operation(), 0.01)
         self.assertTrue(cleanup.is_set())
 
