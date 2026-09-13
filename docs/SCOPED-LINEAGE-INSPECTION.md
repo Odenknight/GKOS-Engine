@@ -24,3 +24,8 @@ decision record. It does not change graph edges or canonical source bytes.
 Tests cover resolved/missing/self, unavailable receipts, denied source,
 hidden-versus-absent equality and ambiguity with one or two readable candidates.
 Kosmos integration and installed-runtime qualification are separate gates.
+
+When using `gkos-engine/adapter`, call `adapter.inspectScopedLineage` on
+graphs created by that adapter. The separately bundled root entry point does
+not own the adapter bundle's private receipts. No private receipt transfer or
+global registry is introduced.

@@ -1,6 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildGraph, inspectScopedLineage } from '../dist/gkos-engine.mjs';
+import { createGkosEngineAdapter } from 'gkos-engine/adapter';
+
+test('published adapter inspects receipts owned by its separate package bundle', () => {
+  const adapter = createGkosEngineAdapter();
+  const graph = adapter.buildGraph([source, old], []);
+  const readable = new Set(['file:New.md', 'file:Old.md']);
+  assert.equal(inspectScopedLineage(graph, 'file:New.md', readable).available, false);
+  assert.deepEqual(adapter.inspectScopedLineage(graph, 'file:New.md', readable).declarations.map(x => x.status), ['resolved', 'unresolved', 'self']);
+});
 
 const source = { relativePath: 'New.md', content: '---\nsupersedes: [Old, Missing, New]\n---\nnew' };
 const old = { relativePath: 'Old.md', content: 'old' };

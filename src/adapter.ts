@@ -9,6 +9,7 @@ import { GkxIndex } from "./incremental";
 import type { Gkx23ProjectionOptions } from "./gkx23";
 import type { GkxGraph, SourceFile } from "./types";
 import { ENGINE_NAME, ENGINE_VERSION } from "./version";
+import { inspectScopedLineage } from "./lineage-inspection";
 
 export interface GkosEngineAdapterOptions {
   /** Deterministic projection policy shared by full and incremental builds. */
@@ -21,6 +22,7 @@ export interface GkosEngineAdapter {
   parseSourceFile(file: SourceFile): NoteRecord;
   buildGraph(files: SourceFile[], folders?: string[], now?: number): GkxGraph;
   createIndex(): GkxIndex;
+  inspectScopedLineage: typeof inspectScopedLineage;
 }
 
 /**
@@ -39,5 +41,6 @@ export function createGkosEngineAdapter(
     buildGraph: (files: SourceFile[], folders: string[] = [], now?: number) =>
       buildGraph(files, folders, now, projection),
     createIndex: () => new GkxIndex(projection),
+    inspectScopedLineage,
   });
 }

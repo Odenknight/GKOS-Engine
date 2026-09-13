@@ -794,8 +794,8 @@
     {
       "path": "docs/SCOPED-LINEAGE-INSPECTION.md",
       "before": null,
-      "after": "5f32c56394cbe9e62772ac3e5a96a995b84c82d95b130d275dd56a4a0ec6cb0c",
-      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
+      "after": "3ba4216f9804ac11efe87748e6728a5636ac65061656cce98224e2426c26ade8",
+      "rationale": "Adapter-owned scoped lineage inspection preserves private receipt ownership across published package bundles; exact subpath regression and documentation."
     },
     {
       "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",
@@ -1218,6 +1218,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/adapter.ts",
+      "before": "153ceac4a878772d3c51e6dcf12bf02d3af0fbd8",
+      "after": "f4500c4a6ac08c93cc489fede53b63d63073873d14e70e193bbf488df9b8839a",
+      "rationale": "Adapter-owned scoped lineage inspection preserves private receipt ownership across published package bundles; exact subpath regression and documentation."
+    },
+    {
       "path": "src/graphiti-adapter.ts",
       "before": "bf95b6a858645c82c832dbb68d06e6ff2d7dec3e",
       "after": "ded6584934c1d3b947e389064921ddb7c830fc169b7205ea69d0ec8d43a10b71",
@@ -1568,8 +1574,8 @@
     {
       "path": "test/lineage-inspection.test.mjs",
       "before": null,
-      "after": "4bb272745a396ec2e51e05afe8672ab98e64fa494285a149571cb140836696e5",
-      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
+      "after": "badaf1bca35dec78b8545df90d591f3be5a3c057ebf8ba1111b64db58d1a1abe",
+      "rationale": "Adapter-owned scoped lineage inspection preserves private receipt ownership across published package bundles; exact subpath regression and documentation."
     },
     {
       "path": "test/managed-moc-no-change.test.mjs",
