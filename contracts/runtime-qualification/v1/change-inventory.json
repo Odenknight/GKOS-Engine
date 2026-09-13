@@ -1244,8 +1244,8 @@
     {
       "path": "src/graphiti-query-contract.ts",
       "before": null,
-      "after": "497b49a78c364a64ec34a5f1c4af3e28e8e450212ec5df1afe6e06fbeeb55595",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "a4b2c1d71e779ec03ddd425e38b8a71946ccd8cc19ef67a7d48088bc12be2e4f",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "src/graphiti-query-http.ts",
@@ -1556,8 +1556,8 @@
     {
       "path": "test/graphiti-query-contract.test.mjs",
       "before": null,
-      "after": "133dfd194172bc58633ed955d8c0bccac6ab37ff538b47b711305c50790d7295",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "4660e813757de75cbea14d467967382df153de6b40d22a5dc3d5b78d49b6a07c",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "test/graphiti-query-http.test.mjs",

@@ -60,6 +60,29 @@ test("request limits and strict binding digest coordinates fail closed", () => {
   assert.notEqual(request.binding.policy_digest, current.status.binding.policy_digest, "request owns its binding snapshot");
 });
 
+test("text fields reject unpaired surrogates while preserving Unicode scalar values", () => {
+  for (const malformed of ["\ud800", "\udfff", "x\ud800y", "\ud800\ud800"]) {
+    assert.equal(prepareGraphitiQueryRequest(malformed, 5, "id", context()), null);
+    assert.equal(prepareGraphitiQueryRequest("query", 5, malformed, context()), null);
+    for (const key of ["corpus_id", "projection_id"]) {
+      const current = context(); current.status.binding[key] = malformed;
+      assert.equal(prepareGraphitiQueryRequest("query", 5, "id", current), null);
+    }
+    const result = clone(fixture.result); result.hits[0].fact = malformed;
+    assert.equal(accept(result), null);
+    for (const key of ["projection_episode_id", "source_id"]) {
+      const result = clone(fixture.result), current = context();
+      const citation = result.hits[0].citations[0]; citation[key] = malformed;
+      current.authorized_episodes.set(citation.projection_episode_id, citation);
+      assert.equal(accept(result, current), null);
+    }
+  }
+  const query = "😀界e\u0301";
+  assert.equal(prepareGraphitiQueryRequest(query, 5, "id", context()).query, query);
+  const result = clone(fixture.result); result.hits[0].fact = query;
+  assert.deepEqual(accept(result), result);
+});
+
 test("each generation coordinate must match both request and fresh host context", () => {
   for (const key of Object.keys(fixture.request.binding)) {
     const value = key.endsWith("digest") ? digest : "other";
