@@ -25,6 +25,22 @@ graphiti-watcher-artifact-smoke/receipt.json. Earlier single observations were
 faster; no end-to-end speedup or full qualification is claimed. Broader paired
 measurement is still needed. No 24-hour soak has passed.
 
+Three subsequent clean-main/candidate pairs alternated execution order, using
+the same runner and unchanged budget on isolated 2,000-note corpora:
+
+| Pair | Main activation ms | Candidate activation ms |
+| --- | ---: | ---: |
+| 1 | 17,869.72 | 18,130.02 |
+| 2 (candidate first) | 16,742.74 | 16,421.15 |
+| 3 | 17,949.92 | 16,483.34 |
+
+Every run failed the 2,000 ms gate. Candidate mean was approximately 2.9% lower,
+but this small, variable sample does not establish a reliable end-to-end gain.
+The duplicate-serialization operation improves in isolation; the dominant
+activation cost remains unresolved. Exact source/artifact bindings and raw
+receipts remain in watcher-artifact-pair-{1,2,3}-{baseline,candidate}; aggregate
+summary: watcher-artifact-paired-summary.json. The follow-up remains a draft.
+
 A separate UTF-16 validation experiment showed overlapping timings and was not
 adopted. The canonical validation implementation and its rejection policy are
 unchanged. Current main's managed live integration pass remains separate from
