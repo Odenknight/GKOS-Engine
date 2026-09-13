@@ -6,6 +6,7 @@ Expired workers are quarantined, never granted an automatic backend retry.
 """
 import hashlib
 import json
+import os
 import re
 import secrets
 import sqlite3
@@ -60,15 +61,20 @@ def validate_manifest(current, manifest):
 class Ledger:
     # ponytail: one local SQLite writer; split by independent corpus only after
     # measured queue contention warrants it. Network filesystems unsupported.
-    def __init__(self, directory, *, capacity=128, clock=time.time):
+    def __init__(self, directory, *, capacity=128, clock=time.time, create=False):
         root = Path(directory)
         if str(root).startswith(("\\\\", "//")) or not root.is_absolute() or root.is_symlink() or root.resolve() != root:
             raise Refused("private-local-root-required")
-        if not root.is_dir() or type(capacity) is not int or not 1 <= capacity <= 10000:
+        if type(create) is not bool or not root.is_dir() or type(capacity) is not int or not 1 <= capacity <= 10000:
             raise Refused("configuration-invalid")
         target = root / "graphiti-ledger.sqlite"
         if target.is_symlink() or (target.exists() and not target.is_file()):
             raise Refused("state-file-invalid")
+        if not target.exists():
+            if not create:
+                raise Refused("ledger-missing-explicit-initialization-required")
+            descriptor = os.open(target, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+            os.close(descriptor)
         self.clock, self.capacity = clock, capacity
         self.db = sqlite3.connect(target, timeout=5, isolation_level=None)
         self.db.row_factory = sqlite3.Row
@@ -85,6 +91,10 @@ class Ledger:
         if version not in (0, 1):
             self.close()
             raise Refused("ledger-version-unsupported")
+        if version == 0:
+            if not create or self.db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchone():
+                self.close()
+                raise Refused("ledger-uninitialized-or-unrelated")
         self.db.executescript("""
           BEGIN IMMEDIATE;
           CREATE TABLE IF NOT EXISTS jobs (

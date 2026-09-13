@@ -27,7 +27,7 @@ async def main():
              "policy_digest": digest("synthetic-policy"), "configuration_digest": digest(versions),
              "source_snapshot_digest": digest(manifest)}
     with tempfile.TemporaryDirectory() as directory:
-        ledger = Ledger(Path(directory).resolve())
+        ledger = Ledger(Path(directory).resolve(), create=True)
         worker = Worker(ledger)
         def backend(group):
             groups.append(group)

@@ -13,7 +13,7 @@ class TransactionCrashTests(unittest.TestCase):
     def test_corpus_revocation_survives_reopen_and_covers_every_active_state(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
-            store = Ledger(root)
+            store = Ledger(root, create=True)
             jobs = []
             manifest = [{"source_id": "fixture", "source_digest": digest("source"), "episode_digest": digest("episode")}]
             mappings = [{"source_id": "fixture", "source_digest": digest("source"), "projection_episode_id": "episode"}]
@@ -60,7 +60,7 @@ class TransactionCrashTests(unittest.TestCase):
             for committed in (False, True):
                 with self.subTest(operation=operation, committed=committed), tempfile.TemporaryDirectory() as directory:
                     root = Path(directory).resolve()
-                    store = Ledger(root)
+                    store = Ledger(root, create=True)
                     manifest = [{"source_id": "fixture", "source_digest": digest("source"), "episode_digest": digest("episode")}]
                     bound = {"corpus_id": "fixture", "scope_digest": digest("scope"), "policy_digest": digest("policy"),
                              "configuration_digest": digest("config"), "source_snapshot_digest": digest(manifest)}
