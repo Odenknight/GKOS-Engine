@@ -41,8 +41,26 @@ local receipt graphiti-readonly-search-live-20260913T111449Z/receipt.json.
 The default managed smoke still runs its original nine checks; this additional
 lane is selected by running qualify_readonly_search.py explicitly.
 
+At 2026-09-13T11:25:00.343501Z, source
+519aca8cf7c81672c4a40fe3b8ad5dd7ee6ed5af passed thirteen live checks through
+the new host-only `query_published` boundary. It checks the published ledger and
+fresh host binding before search, after the await, and after response conversion;
+maps all citations through ledger-owned mappings; refuses revoked generations;
+redacts backend errors; and caps encoded responses at 128 KiB. All six executed
+source hashes matched the dispatch. Cleanup passed. The default smoke remains
+nine checks; the opt-in semantic lane now runs thirteen.
+
+The managed-host suite passed 34 tests. A separate interoperability check fed
+the actual Python response into the existing TypeScript
+`acceptGraphitiQueryResult`: acceptance passed, and missing citation authority,
+stale policy and incomplete scope were each refused. The live receipt SHA-256
+is `0ccb2b3fa92497ac90011f0f3d8b10a425796cac28060f7576a838c3f6f1a7a4`;
+the checked TypeScript source SHA-256 is
+`497b49a78c364a64ec34a5f1c4af3e28e8e450212ec5df1afe6e06fbeeb55595`.
+
 This is a private SDK/database and synthetic semantic-path qualification.
-Fresh product-host ledger/citation authorization, authenticated service wiring, response
-bounds, SDK peak-memory qualification, outage integration and product acceptance
-remain open. Returned edges are untrusted; this module creates no searchability
-or source-authority grant and enables no product endpoint.
+The caller still owns authentication and complete source-scope authorization;
+`current` must derive fresh trusted host authority, never request fields.
+Authenticated product wiring, SDK peak-memory qualification, outage integration
+and product acceptance remain open. This module creates no searchability or
+source-authority grant and enables no product endpoint.
