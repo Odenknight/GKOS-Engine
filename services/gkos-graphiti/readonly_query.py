@@ -2,6 +2,7 @@
 import asyncio
 import copy
 import importlib.metadata
+import json
 import re
 import weakref
 from ledger import Refused
@@ -77,3 +78,56 @@ async def search_readonly(graphiti, driver, query, limit=10):
     config.limit = limit
     result = await asyncio.wait_for(graphiti.search_(query, config=config, group_ids=[group], driver=driver), 30)
     return result.edges
+
+
+def _bounded_text(value, limit):
+    if type(value) is not str or not value.strip() or re.search(r"[\x00-\x1f\x7f]", value):
+        return False
+    try:
+        return len(value.encode("utf-8")) <= limit
+    except UnicodeEncodeError:
+        return False
+
+
+async def query_published(ledger, job, current, graphiti, driver, request):
+    """Host-only boundary: current derives fresh authority, never request fields.
+
+    Return bounded UTF-8 draft-contract bytes. Authentication and complete source
+    scope belong to the caller; a published ledger alone is not a user grant.
+    """
+    version = "gkos-graphiti-query/1.0.0-draft.1"
+    if type(request) is not dict or set(request) != {"contract_version", "request_id", "binding", "query", "limit"} or \
+            request["contract_version"] != version or type(request["binding"]) is not dict or not _bounded_text(request["request_id"], 128) or \
+            not _bounded_text(request["query"], 4096) or type(request["limit"]) is not int or not 1 <= request["limit"] <= 50:
+        raise Refused("query-invalid")
+    request_id, query, limit = request["request_id"], request["query"], request["limit"]
+    initial = ledger.read(job, current())
+    if request["binding"] != initial["binding"] or _groups.get(driver) != initial["binding"]["projection_id"]:
+        raise Refused("query-binding-mismatch")
+    try:
+        edges = await search_readonly(graphiti, driver, query, limit)
+    except Exception:
+        raise Refused("query-backend-unavailable") from None
+    if ledger.read(job, current()) != initial:
+        raise Refused("query-authority-changed")
+    if type(edges) is not list or len(edges) > limit:
+        raise Refused("query-result-invalid")
+    mappings = {item["projection_episode_id"]: item for item in initial["mappings"]}
+    hits = []
+    for edge in edges:
+        try:
+            fact, episodes, group = edge.fact, edge.episodes, edge.group_id
+        except Exception:
+            raise Refused("query-result-invalid") from None
+        if group != initial["binding"]["projection_id"] or not _bounded_text(fact, 4096) or \
+                type(episodes) is not list or not 1 <= len(episodes) <= 16 or \
+                any(type(uid) is not str or uid not in mappings for uid in episodes) or len(set(episodes)) != len(episodes):
+            raise Refused("query-result-invalid")
+        hits.append({"fact": fact, "semantic_support": "unverified", "citations": [dict(mappings[uid]) for uid in episodes]})
+    body = json.dumps({"contract_version": version, "request_id": request_id, "binding": initial["binding"], "hits": hits},
+                      ensure_ascii=False, allow_nan=False, separators=(",", ":")).encode("utf-8")
+    if len(body) > 128 * 1024:
+        raise Refused("query-response-too-large")
+    if ledger.read(job, current()) != initial:
+        raise Refused("query-authority-changed")
+    return body

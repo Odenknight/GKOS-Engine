@@ -19,6 +19,7 @@ async def main(*, probe_readonly_search=False):
     error_type = None
     groups = []
     instances = []
+    contract_fixture = None
     client = graph_client()
     versions = {name: importlib.metadata.version(name) for name in ("graphiti-core", "falkordb", "redis")}
     episodes = [{"name": "GKOS managed synthetic relay", "episode_body": '{"fact":"The synthetic relay is in the test chamber."}',
@@ -45,18 +46,24 @@ async def main(*, probe_readonly_search=False):
             checks["exact_mapping_published"] = published["mappings"][0]["source_id"] == "synthetic-relay"
             if probe_readonly_search:
                 from graphiti_core import Graphiti
-                from readonly_query import create_readonly_driver, search_readonly
+                from readonly_query import create_readonly_driver, query_published
                 prior = instances[0]
                 driver = create_readonly_driver(groups[0], FalkorDB(host=HOST, socket_timeout=30, socket_connect_timeout=10))
                 reader = Graphiti(graph_driver=driver, llm_client=prior.llm_client, embedder=prior.embedder,
                                   cross_encoder=prior.cross_encoder, max_coroutines=2)
+                request = {"contract_version": "gkos-graphiti-query/1.0.0-draft.1", "request_id": "synthetic-published-query",
+                           "binding": published["binding"], "query": "synthetic relay test chamber", "limit": 5}
                 try:
-                    hits = await search_readonly(reader, driver, "synthetic relay test chamber", 5)
+                    response = await query_published(ledger, job, lambda: bound, reader, driver, request)
+                    decoded = json.loads(response)
+                    hits = decoded["hits"]
+                    checks["bounded_query_contract_response"] = len(response) <= 128 * 1024 and decoded["binding"] == published["binding"]
                     checks["readonly_semantic_search_returned_facts"] = bool(hits) and len(hits) <= 5 and all(
-                        isinstance(hit.fact, str) and "relay" in hit.fact.lower() for hit in hits)
+                        "relay" in hit["fact"].lower() and hit["semantic_support"] == "unverified" for hit in hits)
                     allowed = {mapping["projection_episode_id"] for mapping in ledger.read(job, bound)["mappings"]}
                     checks["readonly_semantic_citations_match_published_mapping"] = bool(hits) and all(
-                        hit.group_id == groups[0] and hit.episodes and set(hit.episodes) <= allowed for hit in hits)
+                        hit["citations"] and all(citation["projection_episode_id"] in allowed for citation in hit["citations"]) for hit in hits)
+                    contract_fixture = {"request": request, "result": decoded, "authorized_episodes": published["mappings"]}
                 finally:
                     await reader.close()
             try:
@@ -75,6 +82,11 @@ async def main(*, probe_readonly_search=False):
                 ledger.read(job, bound)
             except Refused:
                 checks["revocation_denied_before_purge"] = True
+            if probe_readonly_search:
+                try:
+                    await query_published(ledger, job, lambda: bound, reader, driver, request)
+                except Refused as error:
+                    checks["revoked_published_query_refused"] = str(error) == "generation-unavailable"
             async def delete(group):
                 assert group in groups
                 if group in client.list_graphs():
@@ -91,13 +103,14 @@ async def main(*, probe_readonly_search=False):
                 if group in client.list_graphs():
                     client.select_graph(group).delete()
             checks["fixture_cleanup"] = all(group not in client.list_graphs() for group in groups)
-    passed = error_type is None and len(checks) == (11 if probe_readonly_search else 9) and all(checks.values())
+    passed = error_type is None and len(checks) == (13 if probe_readonly_search else 9) and all(checks.values())
     sources = ["ledger.py", "worker.py", "backend.py", "qualify_live.py"]
     if probe_readonly_search:
         sources += ["readonly_query.py", "qualify_readonly_search.py"]
     print(json.dumps({"schema": "gkos-graphiti-managed-qualification/1", "timestamp": datetime.now(timezone.utc).isoformat(),
         "status": "PASS" if passed else "FAIL", "error_type": error_type,
         "python": platform.python_version(), "packages": versions, "checks": checks,
+        **({"contract_fixture": contract_fixture} if probe_readonly_search else {}),
         "source_sha256": {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
                           for name in sources},
         "scope": "synthetic integration smoke; not performance, model-artifact or production qualification"}, indent=2))
