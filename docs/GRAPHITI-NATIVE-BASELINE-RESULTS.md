@@ -26,6 +26,15 @@ SHORT_SMOKE_ONLY despite that failure; the subsequent fix applies the latency
 gate to short runs too. The original receipt is retained unchanged and must
 be interpreted as a latency failure. This run is not a 24-hour soak.
 
+The corrected short-run gate was exercised against e0ba9a6: one edit took
+25,263 ms and the runner correctly exited 1 with FAIL_BUDGET. Further source
+inspection found that the immediate manual reconcile(event), before a scoped
+filesystem hint arrives, selects full set_files validation. These two runs
+measure explicit full reconciliation, not actual watcher event latency. The
+next harness revision waits for a real file event to change the committed
+source snapshot, with a 120-second failure deadline, and records execution
+kinds. Its measurements must remain distinct from these earlier failures.
+
 Raw synthetic receipts and profiling code remain in the task workspace:
 graphiti-native-baseline/native-1000.json, profile-native-retrieval.mjs,
 profile-native-retrieval.log, and graphiti-watcher-smoke/{receipt.json,samples.jsonl}.

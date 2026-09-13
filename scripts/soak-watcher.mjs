@@ -30,9 +30,11 @@ function note(index, revision) {
 for (let i = 0; i < count; i++) writeFileSync(join(vault, `note-${i}.md`), note(i, 0), { mode: 0o600 });
 const digest = 'sha256:' + 'a'.repeat(64);
 const execution = [];
+let activationListener = null;
 const options = { vault_root: vault, status_file: join(statusDirectory, 'status.json'), vault_id: 'synthetic-watcher-soak',
   configuration_digest: digest, policy_digest: digest, periodic_reconciliation_ms: 60000,
   on_index_execution: value => execution.push(value),
+  on_status_change: status => activationListener?.(status),
   coordinator_options: { discoverability_policy: () => 'allow', source_discoverability_policy: () => 'allow' } };
 const receipt = { version: 'gkos-watcher-soak/1', started_at: new Date().toISOString(), requested_seconds: duration,
   engine_commit: head, artifact_sha256: sha(readFileSync(artifact)), runner_sha256: sha(readFileSync(fileURLToPath(import.meta.url))),
@@ -64,8 +66,21 @@ try {
     const before = host.status().source_snapshot_digest;
     execution.length = 0;
     const editStart = performance.now();
-    writeFileSync(join(vault, `note-${receipt.cycles % count}.md`), note(receipt.cycles % count, receipt.cycles + 1));
-    await host.reconcile('event');
+    // Observe the real platform watcher, including detection/debounce latency.
+    // An immediate manual reconcile has no scoped hint and forces set_files.
+    await new Promise((resolveActivation, rejectActivation) => {
+      const timer = setTimeout(() => {
+        activationListener = null;
+        rejectActivation(new Error('File event did not activate within 120 seconds'));
+      }, 120000);
+      activationListener = status => {
+        if (status.source_snapshot_digest === before) return;
+        clearTimeout(timer); activationListener = null; resolveActivation();
+      };
+      try {
+        writeFileSync(join(vault, `note-${receipt.cycles % count}.md`), note(receipt.cycles % count, receipt.cycles + 1));
+      } catch (error) { clearTimeout(timer); activationListener = null; rejectActivation(error); }
+    });
     const elapsed = performance.now() - editStart;
     const status = host.status();
     assert.equal(status.document_count, count);
@@ -75,6 +90,7 @@ try {
     const sample = { cycle: receipt.cycles, elapsed_ms: elapsed, rss_mib: process.memoryUsage().rss / 1024 ** 2,
       state_bytes: stateSize(join(vault, '.gkx')), active_resources: process.getActiveResourcesInfo().length,
       reparsed_sources: execution.reduce((sum, item) => sum + item.reparsed_source_count, 0),
+      execution_kinds: execution.map(item => item.execution_kind),
       source_snapshot_digest: status.source_snapshot_digest };
     appendFileSync(samplesPath, JSON.stringify(sample) + '\n');
     assert.ok(sample.rss_mib <= receipt.budgets.max_rss_mib, 'RSS budget exceeded');

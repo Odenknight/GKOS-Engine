@@ -722,7 +722,7 @@
     {
       "path": "docs/GRAPHITI-NATIVE-BASELINE-RESULTS.md",
       "before": null,
-      "after": "779e03f81dab675c1933a632853c641ae82bd96f46d6c5904bc8a9b09dd814d9",
+      "after": "ed768a10336fea233086df01711818ff4cd42e9ad8f2179337da7122ab7bfdcb",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1040,7 +1040,7 @@
     {
       "path": "scripts/soak-watcher.mjs",
       "before": null,
-      "after": "0ac838f9ba259c3d7cc7a7fd933f64928bb24517ed90da87a3e04269e88739bd",
+      "after": "f3f9db3bbba395b6d24491a21b011013866220b627581ee13a834e42d3748137",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
