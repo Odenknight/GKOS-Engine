@@ -123,6 +123,23 @@ test("secure scans bound concurrent opens across nested directories and preserve
   assert.deepEqual(actual, expected, "completion order cannot change files, identities or namespace digest");
 });
 
+test("a slow file does not idle the other bounded scanner slots", async (t) => {
+  const root = vault(t);
+  for (let i = 0; i < 8; i++) put(root, `note-${i}.md`, `# Note ${i}\n`);
+  let release, firstPending = false, fifthStartedBeforeFirstFinished = false;
+  const gate = new Promise(resolve => { release = resolve; });
+  const timer = setTimeout(release, 1000);
+  try {
+    await secureWatcherSourceScan(root, {
+      async on_after_file_open(path) {
+        if (path === "note-0.md") { firstPending = true; await gate; firstPending = false; }
+        if (path === "note-4.md") { fifthStartedBeforeFirstFinished = firstPending; release(); }
+      },
+    });
+    assert.equal(fifthStartedBeforeFirstFinished, true);
+  } finally { clearTimeout(timer); release(); }
+});
+
 test("a failed concurrent secure scan drains file work before returning refusal", async (t) => {
   const root = vault(t);
   for (let i = 0; i < 8; i++) put(root, `note-${i}.md`, `# Note ${i}\n`);

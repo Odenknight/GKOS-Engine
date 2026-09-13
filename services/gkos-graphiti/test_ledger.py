@@ -15,7 +15,7 @@ class ManagedLedgerTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name).resolve()
         self.now = 1000.0
-        self.store = Ledger(self.root, clock=lambda: self.now, capacity=2)
+        self.store = Ledger(self.root, clock=lambda: self.now, capacity=2, create=True)
         self.manifest = [{"source_id": "note-1", "source_digest": digest("source"), "episode_digest": digest("episode")}]
         self.bound = {"corpus_id": "fixture", "scope_digest": digest("scope"), "policy_digest": digest("policy"),
                       "configuration_digest": digest("config"), "source_snapshot_digest": digest(self.manifest)}
@@ -167,6 +167,34 @@ time.sleep(60)
                 child.wait(timeout=5)
             child.stdout.close()
             child.stderr.close()
+
+
+
+class InitializationTests(unittest.TestCase):
+    def test_missing_and_empty_state_require_explicit_creation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            with self.assertRaisesRegex(Refused, "initialization"):
+                Ledger(root)
+            target = root / "graphiti-ledger.sqlite"
+            self.assertFalse(target.exists())
+            target.touch()
+            with self.assertRaisesRegex(Refused, "uninitialized"):
+                Ledger(root)
+            store = Ledger(root, create=True)
+            store.close()
+            reopened = Ledger(root)
+            reopened.close()
+
+    def test_unrelated_database_is_not_adopted(self):
+        import sqlite3
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            database = sqlite3.connect(root / "graphiti-ledger.sqlite")
+            database.execute("CREATE TABLE unrelated (id INTEGER)")
+            database.close()
+            with self.assertRaisesRegex(Refused, "unrelated"):
+                Ledger(root, create=True)
 
 
 if __name__ == "__main__":

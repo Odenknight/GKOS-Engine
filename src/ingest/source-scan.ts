@@ -523,23 +523,25 @@ async function scanCorpus(dir: string, options: Phase3CorpusScanOptions, fileCon
     // filesystem waits. Drain before descending so the bound applies to the
     // whole scan, including nested directories. Drain failures too: no file
     // operation may outlive a rejected scan or race the caller's recovery.
-    let pending: Promise<void>[] = [];
-    const drain = async (): Promise<void> => {
-      const results = await Promise.allSettled(pending);
-      pending = [];
-      const rejected = results.find((result) => result.status === "rejected");
-      if (rejected?.status === "rejected") throw rejected.reason;
-    };
-    for (const entry of entries) {
-      if (entry.isDirectory()) {
-        await drain();
-        await inspectEntry(entry);
-      } else {
-        pending.push(inspectEntry(entry));
-        if (pending.length === fileConcurrency) await drain();
+    let cursor = 0;
+    while (cursor < entries.length) {
+      if (entries[cursor].isDirectory()) {
+        await inspectEntry(entries[cursor++]);
+        continue;
       }
+      const start = cursor;
+      while (cursor < entries.length && !entries[cursor].isDirectory()) cursor++;
+      let next = start;
+      const failures: Array<{ index: number; error: unknown }> = [];
+      await Promise.all(Array.from({ length: Math.min(fileConcurrency, cursor - start) }, async () => {
+        while (next < cursor && failures.length === 0) {
+          const index = next++;
+          try { await inspectEntry(entries[index]); }
+          catch (error) { failures.push({ index, error }); }
+        }
+      }));
+      if (failures.length) throw failures.sort((left, right) => left.index - right.index)[0].error;
     }
-    await drain();
   }
 
   await walk(actualRoot, "");

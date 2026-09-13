@@ -10,6 +10,9 @@ python -m unittest discover -s services/gkos-graphiti -p 'test_*.py' -v
 ```
 
 `Ledger` requires an existing canonical private directory on a local filesystem.
+`Ledger(directory, create=True)` explicitly initializes new state; ordinary
+opens refuse missing or empty state so database loss cannot silently permit
+re-extraction. Unrelated databases are refused.
 The operating account must exclusively control its directory, SQLite database
 and journal files. Provision OS permissions before opening it. A writable ledger
 is trusted host authority, not a cryptographically authenticated remote input;
@@ -78,4 +81,9 @@ reopen and repeated revocation does not append duplicate events.
 On September 13, 2026, all 21 standard-library managed-host tests passed locally
 on Windows. These are synthetic local process-crash checks. They do not simulate
 device power loss, certify physical backend deletion, or close the complete G3
-production recovery gate. No runtime behavior or automatic retry policy changed.
+production recovery gate. That test increment changed no runtime behavior or
+automatic retry policy.
+
+The private broker HTTP helper rejects redirects and bounds streamed UTF-8 JSON
+to 128 KiB. Monotonic elapsed-time checks reject responses after the deadline
+even when synchronous provider work delays the timer callback.
