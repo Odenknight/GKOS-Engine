@@ -1008,6 +1008,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "scripts/check-graphiti-http-chain.mjs",
+      "before": null,
+      "after": "2465b14c3d7b09f4dafa12c0b50afd6d273cfcab30bc5c83d228859fffad388a",
+      "rationale": "Synthetic cross-process qualification of authenticated Engine route, TypeScript HTTP transport, Python adapter, real published ledger and revocation; SDK and source-scope authority remain fixture-controlled."
+    },
+    {
       "path": "scripts/check-graphiti-manifest-python.mjs",
       "before": null,
       "after": "e002ff02a71a3c5e9e9c674074eed4aaaafe0ca28855da05dd4749c4f82f4bd0",
@@ -1150,6 +1156,12 @@
       "before": null,
       "after": "05e61cfe7b68192f9f44b5aa88d47f4b3b9c7c13cbc1ae339666959d710691c8",
       "rationale": "Allow distinct managed episodes from one consistent source version; reject duplicate episodes and conflicting raw source digests, with ledger publication and producer tests."
+    },
+    {
+      "path": "services/gkos-graphiti/qualify_http_chain.py",
+      "before": null,
+      "after": "7a8397709deee863ebb299e00fc6ed755e2ac53d2c171c649bed68799167f8bd",
+      "rationale": "Synthetic cross-process qualification of authenticated Engine route, TypeScript HTTP transport, Python adapter, real published ledger and revocation; SDK and source-scope authority remain fixture-controlled."
     },
     {
       "path": "services/gkos-graphiti/qualify_live.py",
