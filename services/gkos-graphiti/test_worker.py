@@ -96,6 +96,16 @@ class WorkerTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(Refused):
             self.ledger.publish(job, self.bound)
 
+    async def test_oversized_input_is_refused_before_copy_or_backend_initialization(self):
+        class CopyBomb(str):
+            def __deepcopy__(self, memo): raise AssertionError('copied before validating size')
+        self.episodes[0]['episode_body'] = CopyBomb('x' * 1048577)
+        called = []
+        with self.assertRaisesRegex(Refused, 'episode-invalid'):
+            await self.worker.run(lambda: (self.bound, self.manifest, self.episodes), lambda group: called.append(group))
+        self.assertEqual(called, [])
+        self.assertEqual(self.ledger.db.execute('SELECT COUNT(*) FROM jobs').fetchone()[0], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

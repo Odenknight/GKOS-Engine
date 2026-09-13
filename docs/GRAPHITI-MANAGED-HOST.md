@@ -10,11 +10,16 @@ revocation/purge coordination. The private TypeScript broker reuses the existing
 query contract and service scheduler. No new public package export or remote
 mutation endpoint is introduced.
 
-Local checks: 17 standard-library Python tests passed, covering ledger reopen,
+Local checks: 18 standard-library Python tests passed, covering ledger reopen,
 competing workers, expiry, stale authority, incomplete mappings, cancellation,
-cleanup and read-only readback API use. Eighteen broker, contract and scheduler
+cleanup, pre-copy input bounds and read-only readback API use. Eighteen broker, contract and scheduler
 tests passed, including late revocation and cancelled providers retaining their
 physical capacity. Typecheck, build and package checks passed.
+
+The original cc3da85 candidate passed all 1,122 local Windows runtime tests with
+no failures or skips. Subsequent Python-only resource hardening bounds metadata
+and episodes before copying and caps SQLite pages at 256 MiB; its focused Python
+suite passed. Full hosted checks bind the final candidate separately.
 
 An actual synthetic managed ingestion was attempted in the existing Hive lab.
 Graphiti reached extraction but the configured model request timed out. The
