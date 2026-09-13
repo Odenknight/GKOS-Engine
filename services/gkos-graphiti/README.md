@@ -136,3 +136,13 @@ four requests by default (configurable from one to sixteen), without a waiting
 queue. A backend that suppresses cancellation retains its slot until it settles.
 The tests now include actual loopback HTTP with a temporary published ledger;
 SDK search is synthetic. This does not qualify a live model or deployed host.
+
+The private Node service bundle provides `buildServiceGraphitiManifest` for
+ingestion preparation. It derives all episodes from the existing authorized
+service view and requires unique source UIDs and original UTF-8 bytes matching
+the indexed snapshot. Only permitted note bodies enter the existing bounded
+content export; raw-byte hashes cover the full source, including frontmatter and
+line endings. It uses the worker's exact four-string envelope and ordered ledger
+manifest encoding. The host must recheck source and credential authority after
+awaiting preparation, before ingestion and publication. This helper neither
+publishes a ledger generation nor establishes a query grant or live readiness.

@@ -1136,8 +1136,8 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "ec6329dd5d4084304c1d37646008e6f69812330902ee866d5aec737edc34174a",
-      "rationale": "Bound private HTTP adapter admission without queueing; retain physical capacity through suppressed cancellation and test release after backend settles."
+      "after": "c5e4ae07ceb7cbd518b8f08ce58144e746e131cd6982a3f320d9f9176f02baba",
+      "rationale": "Derive managed ingestion manifest from authorized service snapshot and matching original source bytes; qualify denial and snapshot capture."
     },
     {
       "path": "services/gkos-graphiti/backend.py",
@@ -1482,10 +1482,22 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/service/graphiti-manifest.ts",
+      "before": null,
+      "after": "2cfde9f1091fc085099b5b15e98365196ffd93fe23920494f7fadca7938e1792",
+      "rationale": "Derive managed ingestion manifest from authorized service snapshot and matching original source bytes; qualify denial and snapshot capture."
+    },
+    {
       "path": "src/service/mcp.ts",
       "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
       "after": "edabbbb66c52c3698a4941195fa7ccb3f406280947a453fbde79253a54d6377e",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/service/node.ts",
+      "before": "a66997dc3e0248ddd9988149a224ec462ce74f57",
+      "after": "b2d8be62d9580fd8364a79621f3368d7739e736d2810d3b8149836d8d737ccfb",
+      "rationale": "Derive managed ingestion manifest from authorized service snapshot and matching original source bytes; qualify denial and snapshot capture."
     },
     {
       "path": "src/service/server.ts",
@@ -1762,6 +1774,12 @@
       "before": "e02ed007f6a0b7adb361cfedacb33adcd781043e",
       "after": "da9ab7435151982e968ee9c5eb75039fcc9e8824c35f48e50e69de39f1f5614f",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/service-graphiti-manifest.test.mjs",
+      "before": null,
+      "after": "6b9c07ed02d7de60281e8ba406941e47fdb0d3bcc9052011dbb73b80fc0c780b",
+      "rationale": "Derive managed ingestion manifest from authorized service snapshot and matching original source bytes; qualify denial and snapshot capture."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",
