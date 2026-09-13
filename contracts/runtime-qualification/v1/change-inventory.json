@@ -1136,8 +1136,8 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "6cce4b63c7f16086693b3ba000de611c78bef56e46b6d61b0fcdc961245a86f2",
-      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
+      "after": "47570fd021e64af3d899567212e10b05b6f31fa0c9cfec4de8fca33304deaabc",
+      "rationale": "Add explicitly configured live synthetic qualification of Engine-generated service manifests, published read-only queries and scoped cleanup."
     },
     {
       "path": "services/gkos-graphiti/backend.py",
@@ -1180,6 +1180,12 @@
       "before": null,
       "after": "74e7d9b84d57938eff4a043183d97a1bf55b25a8a5893ba8e22ca1b9c50bcf0f",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/qualify_service_manifest.py",
+      "before": null,
+      "after": "b27682ec266d0a9591ce3584235dccd745da0a1d2c78719b1f4067f9883f333e",
+      "rationale": "Add explicitly configured live synthetic qualification of Engine-generated service manifests, published read-only queries and scoped cleanup."
     },
     {
       "path": "services/gkos-graphiti/query_http.py",

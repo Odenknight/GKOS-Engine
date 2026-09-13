@@ -177,3 +177,13 @@ An authenticated HTTP test exercises this adapter against actual temporary Pytho
 ledger evidence, including invalidation during source reads, publication reads
 and queries. Query facts remain synthetic; production source/ledger configuration
 and live backend qualification are still required.
+
+For an explicit live synthetic check, `qualify_service_manifest.py` accepts an
+Engine-generated worker payload via `--input`, a host-owned `--factory-module`
+and an isolated database `--socket`. It requires the fixed synthetic corpus ID
+`synthetic-service-host-qualification`. It ingests and verifies persistence,
+requires read-only search results before publication, runs five published queries
+with citations, then verifies revocation. Cleanup deletes only its ledger-generated
+group after the worker completes; an unconfirmed writer leaves cleanup deferred.
+The report includes the publication and query result for validation against the
+original service manifest. This is a qualification runner, not a deployed service.
