@@ -77,6 +77,26 @@ function fixture(options) {
   return { host, runs, get stored() { return stored; }, coordinator: new ManagedMocCoordinator(host, options) };
 }
 
+test('periodic reconciliation refuses exhausted revisions before persistence or execution', async () => {
+  const f = fixture();
+  f.host.loadIntent = async () => ({ revision: Number.MAX_SAFE_INTEGER - 1, full: true, paths: [], firstAt: 0, lastAt: 0 });
+  const saved = [];
+  const save = f.host.saveIntent;
+  f.host.saveIntent = async value => { saved.push(structuredClone(value)); await save(value); };
+  assert.equal(await f.coordinator.start(0), true);
+  assert.equal(f.runs[0].revision, Number.MAX_SAFE_INTEGER);
+  assert.equal(saved.length, 2);
+  for (const now of [300000, 600000]) {
+    await assert.rejects(f.coordinator.tick(now), /COORDINATOR_SEQUENCE_EXHAUSTED/);
+    assert.equal(saved.length, 2);
+    assert.equal(f.runs.length, 1);
+    assert.equal(f.coordinator.status.active, false);
+  }
+  await assert.rejects(f.coordinator.notify('a.md', 600001), /COORDINATOR_SEQUENCE_EXHAUSTED/);
+  assert.equal(saved.length, 2);
+  await f.coordinator.stop();
+});
+
 test('startup reconciles before readiness, coalesces events and respects maximum delay', async () => {
   const f = fixture();
   assert.equal(await f.coordinator.start(0), true);

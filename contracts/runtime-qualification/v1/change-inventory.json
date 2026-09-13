@@ -1298,8 +1298,8 @@
     {
       "path": "src/navigation-effects/coordinator.ts",
       "before": null,
-      "after": "8ba161b4dfe2c918fa2dee7d859e8bc90c1acbd6132993300c736b264f46b16c",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "a44c51cb82370a9013b15c8594db522e951474779a9c56b05abbbb72b2e2fdca",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "src/navigation-effects/in-memory-adapter.ts",
@@ -1592,8 +1592,8 @@
     {
       "path": "test/navigation-effects-assistance.test.mjs",
       "before": null,
-      "after": "aaf3794f1c37b05d2b600abbd948f0be6836d78052280cb07ee927d638078f6e",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "2e6099c7d6925c4fa989e561337707ef66800c3911827f568703e17c30b3c73b",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "test/navigation-effects-contract.test.mjs",
