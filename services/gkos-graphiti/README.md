@@ -146,3 +146,14 @@ line endings. It uses the worker's exact four-string envelope and ordered ledger
 manifest encoding. The host must recheck source and credential authority after
 awaiting preparation, before ingestion and publication. This helper neither
 publishes a ledger generation nor establishes a query grant or live readiness.
+
+`buildServiceGraphitiQueryContext` reconciles that current authorized manifest
+with a host-read published ledger receipt. It requires exact source snapshot,
+policy, configuration and host-selected scope bindings, complete ordered source
+mappings with unique projection episode IDs, and the worker observation digest.
+Tests create and publish a temporary database using the actual Python ledger and
+check both successful reconciliation and altered authority/receipt denials.
+The caller must obtain publication from its trusted ledger, enforce the live
+search/configuration gate before publishing, and recheck generations after every
+await. Passing a provider-supplied receipt is not authorization. Deployment and
+the service host callback wiring remain separate unfinished integration work.

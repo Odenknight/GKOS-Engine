@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
 import {buildGraph} from '../dist/gkos-engine.mjs';
-import {buildServiceGraphitiManifest} from '../dist/service-node.mjs';
+import {buildServiceGraphitiManifest,buildServiceGraphitiQueryContext} from '../dist/service-node.mjs';
 const at='2026-09-13T00:00:00.000Z';
 const hash=bytes=>'sha256:'+createHash('sha256').update(bytes).digest('hex');
 function fixture(){
@@ -46,4 +47,53 @@ test('source bytes and export envelopes are captured before asynchronous hashing
   f.bytes.get('public.md').fill(0);
   f.input.corpus.sourceRecords[0].content='changed';
   assert.deepEqual(await pending,expected);
+});
+
+async function publishedFixture(){
+  const f=fixture();
+  const prepared=await buildServiceGraphitiManifest(f.input,f.bytes);
+  const authority={corpus_id:'synthetic-service',scope_digest:'sha256:'+'b'.repeat(64),configuration_digest:'sha256:'+'c'.repeat(64)};
+  const binding={...authority,policy_digest:f.input.authorization.policyDigest,source_snapshot_digest:prepared.source_snapshot_digest};
+  const run=spawnSync('python',['-X','utf8','-c',`
+import sys,json,tempfile
+from ledger import Ledger,digest
+data=json.load(sys.stdin)
+with tempfile.TemporaryDirectory() as directory:
+ ledger=Ledger(directory,create=True)
+ binding,manifest=data['binding'],data['manifest']
+ job=ledger.enqueue(binding,manifest)
+ lease=ledger.claim(job,binding)
+ mappings=[dict(source_id=item['source_id'],source_digest=item['source_digest'],projection_episode_id='episode:'+str(i)) for i,item in enumerate(manifest)]
+ receipt=dict(binding=binding,projection_id=lease['projection_id'],mappings=mappings,milestone='persistence-verified',searchability='unverified')
+ ledger.observe(job,lease['token'],binding,mappings,digest(receipt))
+ ledger.publish(job,binding)
+ print(json.dumps(ledger.read(job,binding)))
+ ledger.close()
+`],{cwd:new URL('../services/gkos-graphiti/',import.meta.url),input:JSON.stringify({binding,manifest:prepared.manifest}),encoding:'utf8'});
+  assert.equal(run.status,0,run.stderr);
+  return {...f,authority,publication:JSON.parse(run.stdout)};
+}
+test('published Python ledger reconciles with the current authorized service manifest',async()=>{
+  const f=await publishedFixture();
+  const context=await buildServiceGraphitiQueryContext(f.input,f.bytes,f.authority,f.publication);
+  assert.equal(context?.complete_dependency_scope,true);
+  assert.equal(context.status.searchable,true);
+  assert.equal(context.authorized_episodes.size,1);
+  assert.equal(context.authorized_episodes.get('episode:0').source_digest,hash(f.bytes.get('public.md')));
+});
+test('published service reconciliation rejects changed authority, incomplete mappings and forged receipts',async()=>{
+  const base=await publishedFixture();
+  for(const mutate of [
+    f=>{f.authority.configuration_digest='sha256:'+'d'.repeat(64);},
+    f=>{f.input.authorization.policyDigest='sha256:'+'d'.repeat(64);},
+    f=>{f.publication.mappings=[];},
+    f=>{f.publication.observation='sha256:'+'d'.repeat(64);},
+    f=>{f.publication.mappings[0].source_id='other';},
+    f=>{f.publication.binding.source_snapshot_digest='sha256:'+'d'.repeat(64);},
+    f=>{f.bytes.set('public.md',Buffer.from('stale'));},
+    f=>{f.input.identity.revoked=true;},
+  ]){
+    const f=structuredClone(base);mutate(f);
+    assert.equal(await buildServiceGraphitiQueryContext(f.input,f.bytes,f.authority,f.publication),null);
+  }
 });

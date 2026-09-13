@@ -1136,8 +1136,8 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "c5e4ae07ceb7cbd518b8f08ce58144e746e131cd6982a3f320d9f9176f02baba",
-      "rationale": "Derive managed ingestion manifest from authorized service snapshot and matching original source bytes; qualify denial and snapshot capture."
+      "after": "1d2222b3bddd94d45a2871b2fd88aaa4536773fc7c2fe99d78c6b66b68314825",
+      "rationale": "Reconcile actual published ledger receipt with current authorized source manifest, exact mappings and worker observation digest; exercise Python ledger integration and denials."
     },
     {
       "path": "services/gkos-graphiti/backend.py",
@@ -1484,8 +1484,8 @@
     {
       "path": "src/service/graphiti-manifest.ts",
       "before": null,
-      "after": "2cfde9f1091fc085099b5b15e98365196ffd93fe23920494f7fadca7938e1792",
-      "rationale": "Derive managed ingestion manifest from authorized service snapshot and matching original source bytes; qualify denial and snapshot capture."
+      "after": "0fc617a6f4cf3cc5837a76da1bac1991f2366340f3bcc8af59a382d3ddd2cde8",
+      "rationale": "Reconcile actual published ledger receipt with current authorized source manifest, exact mappings and worker observation digest; exercise Python ledger integration and denials."
     },
     {
       "path": "src/service/mcp.ts",
@@ -1778,8 +1778,8 @@
     {
       "path": "test/service-graphiti-manifest.test.mjs",
       "before": null,
-      "after": "6b9c07ed02d7de60281e8ba406941e47fdb0d3bcc9052011dbb73b80fc0c780b",
-      "rationale": "Derive managed ingestion manifest from authorized service snapshot and matching original source bytes; qualify denial and snapshot capture."
+      "after": "1b6020f2909f83ff719032f717d63801cbadebecf0cd0c1f96626e3f1d911e56",
+      "rationale": "Reconcile actual published ledger receipt with current authorized source manifest, exact mappings and worker observation digest; exercise Python ledger integration and denials."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",
