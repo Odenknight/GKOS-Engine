@@ -127,5 +127,36 @@ class QueryHttpTests(unittest.IsolatedAsyncioTestCase):
                     response = await self.client.post('/query', headers=self.headers, json=body)
                     self.assertEqual(response.status, 503)
                     search.assert_not_awaited()
+                    native = {"query":"relay", "request_id":"native-ledger", "limit":5}
+                    response = await self.client.post('/search', headers=self.headers, json=native)
+                    self.assertEqual(response.status, 200)
+                    result = await response.json()
+                    self.assertEqual(result['binding'], binding)
+                    self.assertEqual(result['request_id'], 'native-ledger')
+                    self.assertEqual(result['hits'][0]['citations'], [mapping])
+                    search.reset_mock()
+                    for invalid in [{**native, 'binding':binding}, {**native, 'job':'another'}, {}, []]:
+                        response = await self.client.post('/search', headers=self.headers, json=invalid)
+                        self.assertEqual(response.status, 400)
+                    search.assert_not_awaited()
+                    ledger.revoke(bound['corpus_id'])
+                    response = await self.client.post('/search', headers=self.headers, json=native)
+                    self.assertEqual(response.status, 503)
+                    search.assert_not_awaited()
             finally:
                 ledger.close()
+
+    async def test_native_binding_lookup_cannot_bypass_deadline_or_revocation(self):
+        for mode in ['deadline', 'revocation']:
+            def read(*args):
+                if mode == 'deadline':
+                    time.sleep(.12)
+                else:
+                    self.live = None
+                return {'binding':{}}
+            self.live = QuerySession(types.SimpleNamespace(read=read), 'host-job', lambda: {}, None, None)
+            with patch('query_http.query_published', new_callable=AsyncMock) as query:
+                response = await self.client.post('/search', headers=self.headers,
+                                                  json={'query':'relay','request_id':'native','limit':5})
+                self.assertEqual(response.status, 503 if mode == 'deadline' else 401)
+                query.assert_not_awaited()

@@ -65,6 +65,14 @@ def create_query_app(resolve_session, *, timeout=30, max_active=4):
                 # binding supplied in the wire request. Re-resolve after upload.
                 if resolve_session(header[0][7:]) is not session:
                     return web.json_response({"error": "unauthorized"}, status=401)
+                if request.path == "/search":
+                    if type(body) is not dict or set(body) != {"query", "request_id", "limit"}:
+                        return web.json_response({"error": "bad_request"}, status=400)
+                    publication = session.ledger.read(session.job, session.current())
+                    body = {"contract_version": "gkos-graphiti-query/1.0.0-draft.1",
+                            "binding": publication["binding"], **body}
+                    if resolve_session(header[0][7:]) is not session:
+                        return web.json_response({"error": "unauthorized"}, status=401)
                 if monotonic() >= deadline:
                     raise TimeoutError("query-deadline")
                 response = await query_published(session.ledger, session.job, session.current,
@@ -89,4 +97,5 @@ def create_query_app(resolve_session, *, timeout=30, max_active=4):
 
     app = web.Application(client_max_size=16384)
     app.router.add_post("/query", query)
+    app.router.add_post("/search", query)
     return app

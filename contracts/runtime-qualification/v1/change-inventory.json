@@ -1142,8 +1142,8 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "82ce602251244639f876f2270f7dc6072a3f4af74603a69bd90b5efbd9877fe8",
-      "rationale": "Add loopback published-query host with fixed local authority, credential/configuration/ledger invalidation and cleanup tests on Windows and Linux."
+      "after": "57b889fa13fe3c35eaa03eae3f6557e9cfd6411e83c73171b9f615792a058d27",
+      "rationale": "Native three-field search route derives binding from authenticated published ledger, preserving shared deadline/capacity and revocation controls; exact Windows/Linux synthetic tests."
     },
     {
       "path": "services/gkos-graphiti/backend.py",
@@ -1196,8 +1196,8 @@
     {
       "path": "services/gkos-graphiti/query_http.py",
       "before": null,
-      "after": "59a34ae3fe79f10fee03e9153655c0986ff76baecd2a1a1378eb4e65dfdeda3b",
-      "rationale": "Bound private HTTP adapter admission without queueing; retain physical capacity through suppressed cancellation and test release after backend settles."
+      "after": "6c8b4efcce055cd561f805ed77b8744d0aef31e164eb8307526dc8612f803a34",
+      "rationale": "Native three-field search route derives binding from authenticated published ledger, preserving shared deadline/capacity and revocation controls; exact Windows/Linux synthetic tests."
     },
     {
       "path": "services/gkos-graphiti/readonly_query.py",
@@ -1244,8 +1244,8 @@
     {
       "path": "services/gkos-graphiti/test_query_http.py",
       "before": null,
-      "after": "44d8879457d1fdbca02e7aa2d3d9db4035a32967f2d5dc476e0a5ee287e81880",
-      "rationale": "Bound private HTTP adapter admission without queueing; retain physical capacity through suppressed cancellation and test release after backend settles."
+      "after": "fdedf499dc3d20bfcba00fc35b42d1631827771f105794f5ea6a06fb6838dee0",
+      "rationale": "Native three-field search route derives binding from authenticated published ledger, preserving shared deadline/capacity and revocation controls; exact Windows/Linux synthetic tests."
     },
     {
       "path": "services/gkos-graphiti/test_readonly_query.py",

@@ -211,3 +211,16 @@ HTTP dispatch and reader cleanup. Deployment still owns publication qualificatio
 source invalidation, private configuration, and the upstream Engine service that
 reconciles fresh source bytes. The entry point does not imply deployment or live
 consumer acceptance.
+
+Native clients may use `POST /search` with exactly `query`, `request_id`, and
+`limit`. Authentication selects the host session. The route reads that
+session's published ledger binding and constructs the complete internal query.
+Caller-selected bindings and jobs are rejected. The existing `POST /query`
+complete-envelope route remains available.
+
+Both routes share authentication, upload bounds, physical capacity, deadline,
+publication, and post-query revocation checks. A slow binding lookup cannot
+start retrieval after the deadline. Native clients still verify their own
+current source manifest and trusted publication before accepting results.
+Changing this adapter changes the qualified runtime configuration; deployments
+must reconcile that identity and publish an appropriately qualified generation.
