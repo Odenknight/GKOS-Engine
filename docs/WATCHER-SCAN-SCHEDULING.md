@@ -40,3 +40,7 @@ latency check on both internal attempts; its dependent audit lacked the expected
 measurement artifact. Original logs are retained as main-0a1dbfc-ci-failure.log.
 A single fresh-runner retry of failed jobs was requested without changing source
 or thresholds. That pending retry is not evidence that the failure was invalid.
+
+The retry subsequently completed successfully, including the artifact audit
+(verified September 13 at 11:45 UTC). The original failure remains recorded;
+this CI result does not qualify the separate 2,000-note activation budget.
