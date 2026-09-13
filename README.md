@@ -436,3 +436,8 @@ First-party software is Apache-2.0. Documentation and original graphics are
 CC BY 4.0 as described in [LICENSE](LICENSE). See [NOTICE](NOTICE),
 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md), and
 [TRADEMARKS.md](TRADEMARKS.md).
+
+Private managed Graphiti host work is described in
+[the service guide](services/gkos-graphiti/README.md). It requires explicit ledger
+initialization and supplies a bounded query transport; it does not activate
+semantic retrieval in products.
