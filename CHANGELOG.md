@@ -4,6 +4,13 @@
 
 Current main source version; not yet a tagged or published 2.2.0 release.
 
+- Added private managed Graphiti host components: a bounded SQLite ledger,
+  worker leases, immutable scoped publication, revocation/purge coordination and
+  a query broker reusing the existing fair scheduler and query contract checks.
+  These remain experimental host integration, with no live product activation.
+- Recorded the owner-selected common product Engine policy using the existing
+  public adapter and exact-artifact consumer qualification workflow.
+
 - Added FalkorDB read-only reconciliation observations to the optional Graphiti
   runner. Existing receipts and ambiguous retry refusal are preserved; mapped
   episodes can be checked without model/index/ingestion calls or publication.
@@ -12,7 +19,8 @@ Current main source version; not yet a tagged or published 2.2.0 release.
 - Added the optional Graphiti query draft-1 contract with bounded response
   validation, current scope/generation binding and authorized episode revision
   checks. Synthetic adversarial fixtures cover its refusal boundary; a live
-  semantic broker and managed revocation remain unimplemented.
+  product semantic endpoint remains inactive; private managed integration is
+  tracked separately from this contract.
 
 - Updated the optional Graphiti profile to 0.30.2; corrected new-episode UUID
   handling in an Engine-owned external runner with durable retry refusal and

@@ -71,6 +71,8 @@ try {
   // package export gate is explicitly revised.
   writeFileSync(resolve(root, "dist/service-node.mjs"), await bundle("src/service/node.ts", { platform: "node" }));
   console.log("built dist/service-node.mjs");
+  writeFileSync(resolve(root, "dist/graphiti-broker.mjs"), await bundle("src/graphiti-broker.ts", { platform: "node" }));
+  console.log("built dist/graphiti-broker.mjs");
   // Private compatibility transport for the gkos-mcp-stdio executable. It
   // delegates to the authenticated loopback service and is not exported.
   writeFileSync(resolve(root, "dist/service-stdio.mjs"), await bundle("src/service/stdio.ts", { platform: "node" }));
