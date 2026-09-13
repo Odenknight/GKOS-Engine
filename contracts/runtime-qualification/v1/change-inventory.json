@@ -752,7 +752,7 @@
     {
       "path": "docs/PRODUCT-ENGINE-POLICY.md",
       "before": null,
-      "after": "ca9db913f01a97e0bf22b8002af6ba03d22767e608a8ec2c0a444184635ce7e2",
+      "after": "eb619cf604a549ace0954528d7117278666b3e2097eab9b740df2ee295711330",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -904,6 +904,12 @@
       "before": null,
       "after": "1d8c0787db64e800730f1243d61f731b8eef6a75ae871fc411160f66934ebeda",
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
+    },
+    {
+      "path": "examples/check-product-engine.mjs",
+      "before": null,
+      "after": "c31740aa1c56b73f8ec6b7e30eff1238e4632e3dba583365e96684098b1be0a4",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "examples/managed-moc.mjs",
@@ -1486,6 +1492,12 @@
       "before": null,
       "after": "f0377dbe44efbbba4ff8dc8fcd95001de648954248a36329f7441f9538adb9d1",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/product-engine-adoption.test.mjs",
+      "before": null,
+      "after": "a77494bec7a7abfed8f5f3b9ae2c291a1d76333fc1c69cbc0279652e68103dee",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "test/public-api.test.mjs",
