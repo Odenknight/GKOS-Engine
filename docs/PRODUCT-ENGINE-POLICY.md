@@ -33,3 +33,15 @@ The shared implementation does not count as multiple independent Standard
 implementations. Preserve the Standard's existing conformance and independence
 requirements. Future product scaffolds should link this policy and include their
 Engine pin and qualification command in the product README.
+
+The packaged `examples/check-product-engine.mjs` supplies a reusable npm
+consumer smoke check:
+
+```sh
+node node_modules/gkos-engine/examples/check-product-engine.mjs --product . --commit QUALIFIED_ENGINE_SHA
+```
+
+It checks the expected repository and immutable commit in the manifest and lock,
+then exercises the installed public adapter with a synthetic policy-bound note.
+Its digest receipt is explicitly a pin/adapter smoke result, not full product or
+source-integrity qualification. Retain the product's independent test suite.

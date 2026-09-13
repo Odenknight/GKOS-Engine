@@ -1,0 +1,29 @@
+{
+  "version": "gkos-graphiti-benchmark/1.0.0-draft.1",
+  "status": "predeclared-diagnostic-budgets",
+  "seed": 13092026,
+  "scales": [1000, 10000, 50000],
+  "measured_runs": 5,
+  "query_concurrency": [1, 4, 16],
+  "queries_per_run": 20,
+  "limit": 10,
+  "budgets": {
+    "native_query_p95_ms": 2000,
+    "native_build_ms": {"1000": 30000, "10000": 180000, "50000": 600000},
+    "process_peak_rss_mib": 1536,
+    "query_errors": 0,
+    "synthetic_exact_recall_at_10": 1,
+    "synthetic_exact_ndcg_at_10": 1,
+    "forbidden_disclosures": 0,
+    "paid_provider_cost": 0
+  },
+  "semantic": {
+    "execution": "deferred-by-owner-2026-09-13",
+    "quality_gate": "needs-reviewed-semantic-relevance-set; exact-identifier corpus is diagnostic only",
+    "maximum_relative_p95_overhead": 0.25,
+    "minimum_relative_recall_gain_when_baseline_nonzero": 0.10,
+    "ingestion_lag_ms": 3600000,
+    "paid_provider_cost": 0
+  },
+  "interpretation": "A synthetic native baseline is not semantic value, production qualification, startup/frame-time evidence or a 24-hour soak. Preserve failed runs and budget failures."
+}
