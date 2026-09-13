@@ -109,3 +109,11 @@ Awaiting cleanup may exceed the deadline for an uncooperative provider, so a
 host still needs process supervision. Forty local tests pass, including all four
 late ingestion phase cases and cancellation/outage checks. These local fault
 injections do not establish production outage or physical power-loss qualification.
+
+Public runtime source `06f379117dbb39b5e25bacc8d9fd2b487746cc1d` passed all
+40 tests on the actual Python 3.12.14 host at 2026-09-13T11:39:52.774110Z
+with zero failures/errors. Exact source/test hashes matched the dispatch; tests
+used temporary local storage. The same source passed all thirteen synthetic
+live SDK checks at 11:39:05.903608Z with verified fixture cleanup. Local evidence:
+`graphiti-host-tests-20260913T113950Z/receipt.json` and
+`graphiti-readonly-search-live-20260913T113858Z/receipt.json`.
