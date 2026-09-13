@@ -1,4 +1,5 @@
 import copy
+import asyncio
 import json
 import tempfile
 import types
@@ -107,3 +108,21 @@ class PublishedQueryTests(unittest.IsolatedAsyncioTestCase):
         self.search.side_effect = RuntimeError("private query canary")
         with self.assertRaisesRegex(Refused, "^query-backend-unavailable$"):
             await self.query()
+
+    async def test_outage_preserves_published_generation_and_explicit_retry(self):
+        before = self.ledger.read(self.job, self.bound)
+        for error in (ConnectionError("private endpoint"), TimeoutError("private query")):
+            self.search.side_effect = error
+            with self.assertRaisesRegex(Refused, "^query-backend-unavailable$"):
+                await self.query()
+            self.assertEqual(self.ledger.read(self.job, self.bound), before)
+        self.assertEqual(self.search.await_count, 2)  # No automatic retries.
+        self.search.side_effect = None
+        self.assertEqual(len(json.loads(await self.query())["hits"]), 1)
+
+    async def test_cancellation_returns_no_response_and_preserves_ledger(self):
+        before = self.ledger.read(self.job, self.bound)
+        self.search.side_effect = asyncio.CancelledError()
+        with self.assertRaises(asyncio.CancelledError):
+            await self.query()
+        self.assertEqual(self.ledger.read(self.job, self.bound), before)

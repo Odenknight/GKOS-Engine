@@ -64,3 +64,18 @@ The caller still owns authentication and complete source-scope authorization;
 Authenticated product wiring, SDK peak-memory qualification, outage integration
 and product acceptance remain open. This module creates no searchability or
 source-authority grant and enables no product endpoint.
+
+The outage sweep reproduced a late-result bug: `asyncio.wait_for` alone can
+return after its deadline when a provider blocks the event loop or suppresses
+cancellation. Query, database read and close awaits now also check monotonic
+elapsed time and reject late success. They keep awaiting physical cleanup;
+this does not impose a hard process-termination deadline. The local Python
+3.14 suite passes 39 tests, including the previously failing blocked-loop
+case, cancellation suppression, caller cancellation, outage redaction, unchanged
+published state and successful explicit retry. No automatic retry was added.
+
+The corrected public source `820197e` also passed all thirteen live checks on
+Python 3.12.14 at 2026-09-13T11:34:05.403682Z. Exact dispatched file hashes and
+fixture cleanup were verified in the local receipt
+`graphiti-readonly-search-live-20260913T113358Z/receipt.json`. This live run
+checks the actual SDK/service path; the adversarial outage cases are local tests.

@@ -1,10 +1,11 @@
 import asyncio
 import sys
+import time
 import types
 import unittest
 from unittest.mock import patch
 from ledger import Refused
-from readonly_query import create_readonly_driver, search_readonly
+from readonly_query import _await_before_deadline, create_readonly_driver, search_readonly
 
 
 class ReadOnlyTests(unittest.IsolatedAsyncioTestCase):
@@ -114,3 +115,49 @@ class ReadOnlyTests(unittest.IsolatedAsyncioTestCase):
         with patch("importlib.metadata.version", return_value="0.31.0"):
             with self.assertRaisesRegex(Refused, "unsupported"):
                 create_readonly_driver(self.group, object())
+
+    async def test_late_search_result_is_refused_when_provider_blocks_event_loop(self):
+        async def search(*args, **kwargs):
+            time.sleep(0.03)
+            return types.SimpleNamespace(edges=["late"])
+
+        self.graphiti.search_ = search
+        wait_for = asyncio.wait_for
+        async def short_wait(awaitable, timeout):
+            return await wait_for(awaitable, 0.01)
+        # Shorten the wall-clock fixture, including the host monotonic clock,
+        # while preserving the production 30-second API deadline.
+        started = time.monotonic()
+        def accelerated_clock():
+            return (time.monotonic() - started) * 3000
+        with patch("readonly_query.asyncio.wait_for", short_wait), patch("readonly_query.monotonic", accelerated_clock):
+            with self.assertRaises(TimeoutError):
+                await search_readonly(self.graphiti, self.driver, "fixture")
+
+    async def test_suppressed_timeout_keeps_await_until_cleanup_then_refuses(self):
+        cleanup = asyncio.Event()
+        async def operation():
+            try:
+                await asyncio.Event().wait()
+            except asyncio.CancelledError:
+                await asyncio.sleep(0)
+                cleanup.set()
+                return "late private result"
+        with self.assertRaisesRegex(TimeoutError, "query-deadline-exceeded"):
+            await _await_before_deadline(operation(), 0.01)
+        self.assertTrue(cleanup.is_set())
+
+    async def test_caller_cancellation_propagates_after_cleanup(self):
+        started, cleaned = asyncio.Event(), asyncio.Event()
+        async def operation():
+            started.set()
+            try:
+                await asyncio.Event().wait()
+            finally:
+                cleaned.set()
+        task = asyncio.create_task(_await_before_deadline(operation(), 30))
+        await asyncio.wait_for(started.wait(), 1)
+        task.cancel()
+        with self.assertRaises(asyncio.CancelledError):
+            await task
+        self.assertTrue(cleaned.is_set())

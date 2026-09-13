@@ -740,7 +740,7 @@
     {
       "path": "docs/GRAPHITI-READONLY-DRIVER.md",
       "before": null,
-      "after": "e15b696b8e852f29aa54d70442425e0b3f0863c6b2f5cd7d5cf8cf3bead99f94",
+      "after": "9f7af9c4852e031d39ad7fc65fb4ef98096975c55f83fe242402a9825984b708",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1142,7 +1142,7 @@
     {
       "path": "services/gkos-graphiti/readonly_query.py",
       "before": null,
-      "after": "dc2823c2678fa479d39cb5d315eab868ff44f1481cf4e35eeb4a2757de5cfa50",
+      "after": "e15235811aadea076a988745f25f695ef28110cc092668d1c4dbec6d990d4d90",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1166,13 +1166,13 @@
     {
       "path": "services/gkos-graphiti/test_published_query.py",
       "before": null,
-      "after": "a104acf8b8154f2f8a4a12c24d40aac69c32405fbdf8651d1eab97a0b9de11c4",
+      "after": "c7f7b4708f00da399477d1cd368b2f9a8565250162018e0de5090d4f3f8a295f",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "services/gkos-graphiti/test_readonly_query.py",
       "before": null,
-      "after": "5602b8e21841aa4de696dcae77af7f1afd8b9a1562209b2f81c901cf24deadc5",
+      "after": "87ea8c7ab85b66e9cb9edb8bf3cc6578d01c969869bd3d01b7051cf34459f7a2",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
