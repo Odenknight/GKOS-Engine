@@ -31,8 +31,18 @@ to all three executed source hashes. The dispatcher initially missed JSON at
 the start of stdout; the original output was parsed and its hashes verified
 without repeating effects. The runtime inventory check passed.
 
-This is a private SDK/database transport qualification. Actual semantic search,
-fresh host ledger/citation authorization, authenticated service wiring, response
+At 2026-09-13T11:14:56.614932Z, the opt-in semantic probe also passed all eleven
+checks at source 4a0173c. It reused the trusted host's configured model clients,
+performed actual edge-RRF search through the read-only driver, and required
+nonempty fixture facts whose group and every cited episode matched the published
+synthetic ledger. The original stale-policy, duplicate, reopen, revocation,
+purge and cleanup checks also passed. All six executed source hashes match the
+local receipt graphiti-readonly-search-live-20260913T111449Z/receipt.json.
+The default managed smoke still runs its original nine checks; this additional
+lane is selected by running qualify_readonly_search.py explicitly.
+
+This is a private SDK/database and synthetic semantic-path qualification.
+Fresh product-host ledger/citation authorization, authenticated service wiring, response
 bounds, SDK peak-memory qualification, outage integration and product acceptance
 remain open. Returned edges are untrusted; this module creates no searchability
 or source-authority grant and enables no product endpoint.
