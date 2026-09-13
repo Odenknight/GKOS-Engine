@@ -1196,8 +1196,8 @@
     {
       "path": "src/ingest/source-scan.ts",
       "before": "c36a98bc8e379177475b5bef7d0df1c95cf45313",
-      "after": "43a0cad6a92bde0fe7445dc707452fc50503aacf10dc6cac27456bcfb5f63c41",
-      "rationale": "Bound independent secure watcher file probes to four; retain serial public Phase3 scanning, every capability/TOCTOU check, both complete snapshots and deterministic ordering; drain work before descent or failure."
+      "after": "388f4fe24dfb76f6df6d7c3d8b22c614a9bfdddb6a6f2e3e844c7ab6b590a493",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "src/navigation-effects/assistance.ts",
@@ -1682,8 +1682,8 @@
     {
       "path": "test/watcher-source-scan.test.mjs",
       "before": "a4d4b5f55a18e28b2bd209d5278685b39dd8123c",
-      "after": "6b78d365c46b4ec85dfd885f50863052da780242b85ce9dda5d302a162a222a3",
-      "rationale": "Assert bounded concurrent opens across nested directories, exact stable scan evidence and no pending file work after refusal."
+      "after": "285aa8dd884a90cb459375f9d6b59ed46d84c914f007f92dd453b5b454a0eade",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     }
   ]
 }
