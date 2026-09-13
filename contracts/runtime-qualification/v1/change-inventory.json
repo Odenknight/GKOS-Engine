@@ -1356,6 +1356,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/watcher/coordinator.ts",
+      "before": "4c2d09a947f81fc28e3ccf3806b348fcaff672ec",
+      "after": "06c55a8c85a44ea8a782db7ed2d469083d9d64d8f40e9539cc534feeb7fd937b",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "src/watcher/host.ts",
       "before": "552145be95b14ac22a07760c7922a85d038b225c",
       "after": "3ef7de7452926384168c7152b3f0d8da6a4ba28079a89ab4c95397cba8753555",
@@ -1616,8 +1622,8 @@
     {
       "path": "test/watcher-coordinator.test.mjs",
       "before": "ce95634d71454e60ab43d1f0cb33551aac392aa8",
-      "after": "8a7a1f9cb29601db967db931bac7faf6cd2cd0dbcd7bfb6204f03403a531e200",
-      "rationale": "Q-GUARD coverage closure: register the native POSIX ownership assertion only where that operating-system capability exists."
+      "after": "cd5b4460846720780fe6ee44998fa04272ab45ca47bcece69a43b5bb8ceac780",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "test/watcher-journal-host.test.mjs",

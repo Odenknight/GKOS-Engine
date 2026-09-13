@@ -30,6 +30,7 @@ import {
   takeWatcherIndexValidationOutcome,
   watcherDigest,
   watcherRawDigest,
+  watcherCanonicalBytes,
   unlinkWatcherPublicationFile,
   withAuthorizedWatcherPublication,
 } from "../dist/watcher-host.mjs";
@@ -41,6 +42,18 @@ const CONFORMANCE = JSON.parse(readFileSync(new URL(
   "../contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-conformance-fixture.json",
   import.meta.url,
 ), "utf8"));
+
+test("artifact coordinate bytes exactly match canonical persistence for every artifact kind", () => {
+  const fields = { observation: "observation_digest", plan: "plan_digest", topology: "topology_snapshot_digest", graph: "graph_artifact_digest" };
+  for (const [kind, field] of Object.entries(fields)) {
+    const value = { [field]: D, z: ["astral 😀", null, -0], a: { "10": true, "2": false, "é": "line\nend" } };
+    const coordinate = watcherArtifactCoordinate(kind, value);
+    const expected = watcherCanonicalBytes(value);
+    assert.deepEqual(Buffer.from(coordinate.bytes, "utf8"), expected);
+    assert.equal(coordinate.byte_size, expected.length);
+    assert.equal(coordinate.raw_sha256, watcherRawDigest(expected));
+  }
+});
 
 function roots(t) {
   const root = mkdtempSync(join(tmpdir(), "gkos-watcher-coordinator-"));
