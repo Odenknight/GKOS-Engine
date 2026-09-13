@@ -2,14 +2,14 @@
 
 September 13, 2026. Owner: FAC; assigned implementation identity: Astra-Oden.
 FAC requested continuous implementation, debugging and normal tested main merges,
-followed by adoption of the Engine across future products. Later owner direction
-defers live model qualification while existing GPU workloads remain active.
+followed by adoption of the Engine across future products. FAC subsequently
+reopened live qualification; the managed synthetic smoke passed nine checks.
 
 | Plan / gate | Current disposition | Next required evidence |
 | --- | --- | --- |
 | Graphiti G2 compatibility and contract | 0.30.2 runner and draft query contract merged; packaged consumer fixture passes | Exact managed-service/model configuration and migration qualification |
-| G3 managed ingestion and safety | Private ledger, worker, scoped publication and purge coordination in Engine PR57 | Successful live managed run, crash/recovery and complete revocation qualification; ambiguous retries remain refused |
-| G4 performance/value | Frozen native 1k diagnostic failed concurrency16 latency; exact synthetic recall passed | Repair latency, then qualify 1k/10k/50k; reviewed semantic relevance set; live comparison deferred by owner |
+| G3 managed ingestion and safety | Managed code merged; live synthetic ingestion/readback, reopen, revocation and purge passed nine checks | Broader crash/recovery and complete revocation qualification; ambiguous retries remain refused |
+| G4 performance/value | Frozen native 1k diagnostic failed concurrency16 latency; exact synthetic recall passed | Repair latency, then qualify 1k/10k/50k; reviewed semantic relevance set and live comparison |
 | G5 broker | Private bounded query broker in PR57, contract and cancellation tests pass | Authenticated product transport, read-only backend instrumentation and outage integration |
 | G6 Kosmos | 0.8.3 export/status/source evidence and identity fixes merged and installed | Governed result/evidence UI, exact consumer qualification and actual Hermes traversal |
 | G7 Graphiti promotion | Not promoted | All preceding gates, operational ownership, rollback rehearsal and exact release decision |

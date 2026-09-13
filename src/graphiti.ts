@@ -215,6 +215,13 @@ export function buildGraphitiEpisodes(graph: GkxGraph, options: GraphitiOptions 
   const processingTime = options.processingTime || graph.stats.indexedAt;
   const byId = new Map(graph.nodes.map((node) => [node.id, node]));
   const label = (id: string): string => byId.get(id)?.label ?? id;
+  const semanticBySource = new Map<string, Set<string>>();
+  for (const link of graph.links) {
+    if (link.kind !== "semantic") continue;
+    let related = semanticBySource.get(link.source);
+    if (!related) semanticBySource.set(link.source, related = new Set<string>());
+    related.add(label(link.target));
+  }
   const output: GraphitiEpisode[] = [];
 
   for (const node of graph.nodes) {
@@ -226,11 +233,7 @@ export function buildGraphitiEpisodes(graph: GkxGraph, options: GraphitiOptions 
     const sourceOrigin = typeof (projection?.authored.authorship as any)?.origin === "string"
       ? String((projection?.authored.authorship as any).origin)
       : "unknown";
-    const semantic = [...new Set(
-      graph.links
-        .filter((link) => link.kind === "semantic" && link.source === node.id)
-        .map((link) => label(link.target))
-    )];
+    const semantic = [...(semanticBySource.get(node.id) ?? [])];
     const saga = options.sagaMapping ? sagaFor(node) : null;
     const metadata: Record<string, string | number | boolean | null> = {
       vault_identity: contentHash(namespace),
