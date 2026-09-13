@@ -187,3 +187,27 @@ with citations, then verifies revocation. Cleanup deletes only its ledger-genera
 group after the worker completes; an unconfirmed writer leaves cleanup deferred.
 The report includes the publication and query result for validation against the
 original service manifest. This is a qualification runner, not a deployed service.
+
+## Persistent loopback query host
+
+Run `python service_host.py --profile /absolute/path/profile.json` to serve one
+already published generation on loopback only. The private profile has exactly
+`ledger_directory`, `job`, `binding`, `token_file`, `factory_module`, and `port`.
+The ledger and token paths must be absolute; the token file contains 32–512 ASCII
+bearer characters without a newline. Keep both files private to the service user.
+The binding is the host-authorized ingestion binding, not a request-selected scope.
+
+The local factory module implements `configuration_digest()` and
+`open_readonly(projection_id)`, returning `(graphiti, driver)` created through
+`create_readonly_driver`. Its digest must freshly identify the same qualified
+configuration as the published binding. This host never ingests or publishes.
+It checks profile/token revisions, configuration and the exact ledger receipt
+before and after query work. A detected change permanently invalidates the
+session until restart; restoring an old token cannot revive that session.
+Shutdown closes the reader and ledger, and HTTP access logging is disabled.
+
+Tests cover token rotation, configuration/profile changes, ledger revocation,
+HTTP dispatch and reader cleanup. Deployment still owns publication qualification,
+source invalidation, private configuration, and the upstream Engine service that
+reconciles fresh source bytes. The entry point does not imply deployment or live
+consumer acceptance.

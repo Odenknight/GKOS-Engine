@@ -1136,8 +1136,8 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "47570fd021e64af3d899567212e10b05b6f31fa0c9cfec4de8fca33304deaabc",
-      "rationale": "Add explicitly configured live synthetic qualification of Engine-generated service manifests, published read-only queries and scoped cleanup."
+      "after": "82ce602251244639f876f2270f7dc6072a3f4af74603a69bd90b5efbd9877fe8",
+      "rationale": "Add loopback published-query host with fixed local authority, credential/configuration/ledger invalidation and cleanup tests on Windows and Linux."
     },
     {
       "path": "services/gkos-graphiti/backend.py",
@@ -1206,6 +1206,12 @@
       "rationale": "Optional private authenticated Graphiti HTTP adapter with bounded decoding, live session checks, deadline enforcement, pinned aiohttp dependency, and real-ledger loopback tests; no deployed host qualification."
     },
     {
+      "path": "services/gkos-graphiti/service_host.py",
+      "before": null,
+      "after": "37f773630bb83d86f508ea7fb7861a7e5591ad54e049ec445445a0fefa7dc4aa",
+      "rationale": "Add loopback published-query host with fixed local authority, credential/configuration/ledger invalidation and cleanup tests on Windows and Linux."
+    },
+    {
       "path": "services/gkos-graphiti/test_backend.py",
       "before": null,
       "after": "28519b95f6014d311ce8fd6da72faf70dc086d12024d09cce86b5beb4b35910c",
@@ -1240,6 +1246,12 @@
       "before": null,
       "after": "8d3f5baa3809c3b359eccb658240a1a87d6a588d5089e496fd6046fbe1890bb1",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/test_service_host.py",
+      "before": null,
+      "after": "953fae5304e7e2df582b260d7f16f550ab81a2e4fe4294d7036db813a4f02318",
+      "rationale": "Add loopback published-query host with fixed local authority, credential/configuration/ledger invalidation and cleanup tests on Windows and Linux."
     },
     {
       "path": "services/gkos-graphiti/test_worker.py",
