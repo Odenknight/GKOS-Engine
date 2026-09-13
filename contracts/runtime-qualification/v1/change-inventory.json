@@ -798,6 +798,24 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "docs/WATCHER-ACTIVATION-PHASES.md",
+      "before": null,
+      "after": "34ede05a8f0808a802d98afb3ebaf714472a77fd68c2b23959d94dde38102ffa",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "docs/WATCHER-ARTIFACT-SERIALIZATION.md",
+      "before": null,
+      "after": "641119dd1379cb4dbe606ae0eea3063652a6ffd63b2bb793a474eb3cea185a6c",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "docs/WATCHER-SCAN-SCHEDULING.md",
+      "before": null,
+      "after": "7639b9c23482b69e9609c70a5d5d4da926edcb1428c7caab268b753a5f8813f3",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "docs/WINDOWS-QUALIFICATION-REMEDIATION-20260908.md",
       "before": null,
       "after": "35730828ad967521c1f2b0e70206fcab0cc3941b74360ddd62f0b8e231f6be41",
@@ -1190,8 +1208,8 @@
     {
       "path": "src/ingest/source-scan.ts",
       "before": "c36a98bc8e379177475b5bef7d0df1c95cf45313",
-      "after": "43a0cad6a92bde0fe7445dc707452fc50503aacf10dc6cac27456bcfb5f63c41",
-      "rationale": "Bound independent secure watcher file probes to four; retain serial public Phase3 scanning, every capability/TOCTOU check, both complete snapshots and deterministic ordering; drain work before descent or failure."
+      "after": "388f4fe24dfb76f6df6d7c3d8b22c614a9bfdddb6a6f2e3e844c7ab6b590a493",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "src/navigation-effects/assistance.ts",
@@ -1360,6 +1378,18 @@
       "before": "84281708509ede5eb277b229386db17bec577e6b",
       "after": "35ae5c9508494a00a37567ddb9e326b7694e335bfa0b5148456622770b53d31f",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "src/watcher/contracts.ts",
+      "before": "0cc72b3c8776dd9421798b157102ae4f8fba3ac4",
+      "after": "6a71f9efbe56e4b71b46f272ef56bb8c2f3b0fff65a33a542ea56abcf2266a3a",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "src/watcher/coordinator.ts",
+      "before": "4c2d09a947f81fc28e3ccf3806b348fcaff672ec",
+      "after": "06c55a8c85a44ea8a782db7ed2d469083d9d64d8f40e9539cc534feeb7fd937b",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "src/watcher/host.ts",
@@ -1622,8 +1652,8 @@
     {
       "path": "test/watcher-coordinator.test.mjs",
       "before": "ce95634d71454e60ab43d1f0cb33551aac392aa8",
-      "after": "8a7a1f9cb29601db967db931bac7faf6cd2cd0dbcd7bfb6204f03403a531e200",
-      "rationale": "Q-GUARD coverage closure: register the native POSIX ownership assertion only where that operating-system capability exists."
+      "after": "cd5b4460846720780fe6ee44998fa04272ab45ca47bcece69a43b5bb8ceac780",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "test/watcher-journal-host.test.mjs",
@@ -1650,6 +1680,12 @@
       "rationale": "Q-GUARD coverage closure: register the native POSIX file-authority assertions only where those ownership and mode capabilities exist."
     },
     {
+      "path": "test/watcher-recovery-contracts.test.mjs",
+      "before": "2519ed9ed3e66f5f216afe76ebe5547110b06a30",
+      "after": "2734992d864fee1e237bc22b63b9b1eca39eb10cccb6205dbfe215d46d953632",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "test/watcher-service-cli.test.mjs",
       "before": "064563e6a26da7e90e76591fe907463bc29f3a0c",
       "after": "bb99d4a0794ad37141a096aaaad62b2d74155f7cb33a9176a7ac94525ef11a18",
@@ -1658,8 +1694,8 @@
     {
       "path": "test/watcher-source-scan.test.mjs",
       "before": "a4d4b5f55a18e28b2bd209d5278685b39dd8123c",
-      "after": "6b78d365c46b4ec85dfd885f50863052da780242b85ce9dda5d302a162a222a3",
-      "rationale": "Assert bounded concurrent opens across nested directories, exact stable scan evidence and no pending file work after refusal."
+      "after": "285aa8dd884a90cb459375f9d6b59ed46d84c914f007f92dd453b5b454a0eade",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     }
   ]
 }

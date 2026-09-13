@@ -1210,10 +1210,9 @@ export function persistWatcherResetReconciliationArtifacts(
 function persistExact(
   directory: WatcherDirectoryCapability,
   leaf: string,
-  value: unknown,
+  bytes: Buffer,
   maximumBytes = 536_870_912,
 ): void {
-  const bytes = watcherCanonicalBytes(value);
   if (bytes.byteLength < 1 || bytes.byteLength > maximumBytes) fail("GKX_WATCHER_ARTIFACT_LIMIT_EXCEEDED");
   if (!watcherLeafExists(directory, leaf)) writeNewWatcherFile(directory, leaf, bytes, maximumBytes);
   const reopened = readWatcherFile(directory, leaf, { maximum_bytes: maximumBytes });
@@ -1229,11 +1228,11 @@ function persistCoordinateArtifact(
 ): void {
   const coordinate = watcherArtifactCoordinate(kind, value as JsonRecord);
   const maximum = kind === "observation" ? 4_194_304 : 536_870_912;
-  const bytes = watcherCanonicalBytes(value);
+  const bytes = Buffer.from(String(coordinate.bytes), "utf8");
   if (coordinate.byte_size !== bytes.byteLength || coordinate.raw_sha256 !== watcherRawDigest(bytes)) {
     fail("GKX_WATCHER_ARTIFACT_COORDINATE_INVALID");
   }
-  persistExact(directory, String(coordinate.file), value, maximum);
+  persistExact(directory, String(coordinate.file), bytes, maximum);
 }
 
 function watcherAuthorityFor(bundle: Readonly<JsonRecord>): Readonly<JsonRecord> {
@@ -1283,7 +1282,7 @@ function watcherCoherentPublicationFiles(bundle: Readonly<JsonRecord>): readonly
     value: Readonly<JsonRecord>,
   ): WatcherPublicationFileSpec => {
     const artifact = watcherArtifactCoordinate(kind, value as JsonRecord);
-    const bytes = watcherCanonicalBytes(value);
+    const bytes = Buffer.from(String(artifact.bytes), "utf8");
     if (artifact.byte_size !== bytes.byteLength || artifact.raw_sha256 !== watcherRawDigest(bytes)) {
       fail("GKX_WATCHER_ARTIFACT_COORDINATE_INVALID");
     }
@@ -1553,7 +1552,7 @@ export function readWatcherTopology(
   const topology = sealWatcherRecoveryRecord(parseCanonicalWatcherJson(file));
   const expected = watcherArtifactCoordinate("topology", topology as JsonRecord);
   if (expected.file !== manifest.topology_artifact_file || expected.raw_sha256 !== manifest.topology_artifact_raw_sha256 ||
-      topology.topology_snapshot_digest !== manifest.topology_snapshot_digest || !file.bytes.equals(watcherCanonicalBytes(topology))) {
+      topology.topology_snapshot_digest !== manifest.topology_snapshot_digest || !file.bytes.equals(Buffer.from(String(expected.bytes), "utf8"))) {
     fail("GKX_WATCHER_TOPOLOGY_INVALID");
   }
   return topology;
@@ -1571,7 +1570,7 @@ export function readWatcherRawGraph(
   if (coordinate.file !== leaf || coordinate.raw_sha256 !== file.raw_sha256 || coordinate.byte_size !== file.bytes.byteLength
       || rawGraph.graph_artifact_digest !== state.graph_artifact_digest
       || rawGraph.topology_snapshot_digest !== manifest.topology_snapshot_digest
-      || !file.bytes.equals(watcherCanonicalBytes(rawGraph))) fail("GKX_WATCHER_GRAPH_INVALID");
+      || !file.bytes.equals(Buffer.from(String(coordinate.bytes), "utf8"))) fail("GKX_WATCHER_GRAPH_INVALID");
   return rawGraph;
 }
 
