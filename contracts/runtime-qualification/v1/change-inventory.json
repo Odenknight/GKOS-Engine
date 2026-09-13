@@ -666,6 +666,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "docs/BUILD-COMPLETION-REGISTER.md",
+      "before": null,
+      "after": "4307fd658d7788ce8d61e543fef0fd4dc05611b539b5bbec26725e0abf30534d",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
       "before": null,
       "after": "d0d8c7ac5884f3dfa13027a024f033259db64b534e51da8cc794085f4cb27e39",
@@ -704,7 +710,7 @@
     {
       "path": "docs/GRAPHITI-BENCHMARKS.md",
       "before": null,
-      "after": "c6f36636e15a338319416424779bad8814944c17cbacae5a38b3dfccb693696f",
+      "after": "8c4c58d132f762746b671702fccaf476b3636c09869afb1d04dbc773debe2dce",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1018,6 +1024,12 @@
       "before": null,
       "after": "d1120a52f538437548fd444cbd7f929efbef49c23b30ea99547881324d8f85bf",
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
+    },
+    {
+      "path": "scripts/soak-watcher.mjs",
+      "before": null,
+      "after": "9bf622bcb42701a0ef109c64f919d3dc4cc1e5fc50cc6d0b6425578bee163cf3",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "scripts/test-graphiti-runner.mjs",

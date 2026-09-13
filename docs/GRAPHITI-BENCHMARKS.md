@@ -29,3 +29,18 @@ durability or a 24-hour soak. Those plan criteria require separate fixtures. Liv
 semantic execution is explicitly deferred by the owner while existing GPU workloads
 remain active. A reviewed semantic relevance set and exact model configuration are
 required before evaluating the semantic gain/overhead thresholds.
+
+## Watcher soak
+
+`scripts/soak-watcher.mjs --engine EXACT_CHECKOUT --seconds 86400 --output NEW_DIRECTORY`
+keeps the actual watcher host running over 2,000 synthetic notes, edits one note
+per cycle, records parsing/resource/state measurements and reopens the host every
+60 cycles. Bounds are fixed in the recorded runner: 1,536 MiB RSS, 4 GiB retained
+state, 256 active resources and 2-second single-edit p95. A full pass also needs
+at least 1,000 cycles. Short invocations are explicitly `SHORT_SMOKE_ONLY`.
+
+The fixture and receipts remain available for inspection. This is a watcher-scope
+process/restart test, not physical power-loss evidence or complete managed-MOC
+write convergence qualification. Run it separately from the benchmark timing
+lane; its exact watcher bundle hash must match any later artifact claiming that
+coverage.
