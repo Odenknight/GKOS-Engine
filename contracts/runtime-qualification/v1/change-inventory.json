@@ -1430,7 +1430,7 @@
     {
       "path": "src/watcher/contracts.ts",
       "before": "0cc72b3c8776dd9421798b157102ae4f8fba3ac4",
-      "after": "6a71f9efbe56e4b71b46f272ef56bb8c2f3b0fff65a33a542ea56abcf2266a3a",
+      "after": "70fa450a181358403db04cb708064d4350e35af700891ab474817a9eb3bfa6ee",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
@@ -1736,7 +1736,7 @@
     {
       "path": "test/watcher-recovery-contracts.test.mjs",
       "before": "2519ed9ed3e66f5f216afe76ebe5547110b06a30",
-      "after": "2734992d864fee1e237bc22b63b9b1eca39eb10cccb6205dbfe215d46d953632",
+      "after": "58d82d0d28f3704565d6b529ede0fabda974b7ba2fb7d9cb50004959adec2afb",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {

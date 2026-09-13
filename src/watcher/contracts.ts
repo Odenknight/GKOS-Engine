@@ -1,4 +1,4 @@
-import { types as utilTypes } from "node:util";
+import { isDeepStrictEqual, types as utilTypes } from "node:util";
 import { canonicalCandidateSourceDescriptor } from "../canonical-candidates";
 import { isValidGkxAuthoredUid } from "../gkx23";
 import { buildGraphitiEpisodes } from "../graphiti";
@@ -484,7 +484,9 @@ function sealCommonRelations(item: JsonRecord): void {
     case "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1": {
       const graph = record(item.normalized_graph, "canonical GKX graph");
       const resealed = normalizeAlreadyCanonicalGkxGraph(graph);
-      if (stableJson(item) !== stableJson(resealed)) {
+      // Both operands are detached inert JSON; canonicalization already
+      // normalized numeric values and rejected accessors/proxies/exotic data.
+      if (!isDeepStrictEqual(item, resealed)) {
         fail("GKX_WATCHER_CONTRACT_GRAPH_INVALID", "canonical GKX graph ordering/timing normalization is invalid.");
       }
       break;
@@ -1692,8 +1694,8 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
       || stableJson(rawFilePaths.slice().sort(retrievalCodeUnitCompare)) !== stableJson(acceptedPaths.slice().sort(retrievalCodeUnitCompare))
       || rawStats.files !== acceptedPaths.length || rawDiagnostics.notes !== acceptedPaths.length
       || rawDiagnostics.attachments !== (topology.attachment_paths as unknown[]).length
-      || stableJson(canonicalGraph) !== stableJson(expectedCanonicalGraph)
-      || stableJson(graphitiProjection) !== stableJson(expectedGraphitiProjection)
+      || !isDeepStrictEqual(canonicalGraph, expectedCanonicalGraph)
+      || !isDeepStrictEqual(graphitiProjection, expectedGraphitiProjection)
       || graphState.graph_artifact_file !== rawGraphCoordinate.file || graphState.graph_artifact_digest !== rawGraph.graph_artifact_digest
       || graphState.canonical_graph_digest !== retrievalCanonicalDigest(canonicalGraph as JsonRecord)
       || graphState.gkx_delta_digest !== retrievalCanonicalDigest(normalizedGraphDelta as JsonRecord)

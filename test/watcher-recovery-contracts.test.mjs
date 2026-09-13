@@ -835,6 +835,25 @@ test("bundle child fast validation cannot admit caller proxies, accessors, array
   assert.throws(() => watcher.sealWatcherCoherentActivationBundle(corrupt, row.input.arguments[1]), { code: "GKX_WATCHER_CONTRACT_DIGEST_INVALID" });
 });
 
+test("graph comparisons preserve canonical object order, null prototypes and negative zero", () => {
+  const row = readJson("watcher-conformance-fixture.json").semantic_cases.find(item => item.case_id === "coherent-activation-complete");
+  function permute(value) {
+    if (Array.isArray(value)) return value.map(permute);
+    if (value !== null && typeof value === "object") {
+      const result = Object.create(null);
+      for (const key of Object.keys(value).reverse()) result[key] = permute(value[key]);
+      return result;
+    }
+    return value === 0 ? -0 : value;
+  }
+  const expected = watcher.sealWatcherCoherentActivationBundle(...row.input.arguments);
+  const actual = watcher.sealWatcherCoherentActivationBundle(...row.input.arguments.map(permute));
+  assert.deepEqual(actual, expected);
+  const unordered = clone(row.input.arguments[0].canonical_graph);
+  unordered.normalized_graph.nodes = ["z", "a"].map(id => ({ ...unordered.normalized_graph.nodes[0], id }));
+  assert.throws(() => watcher.sealWatcherRecoveryRecord(unordered), { code: "GKX_WATCHER_CONTRACT_GRAPH_INVALID" });
+});
+
 test("every durable incomplete transition prefix reseals without inventing a terminal state", () => {
   const transitions = readJson("watcher-conformance-fixture.json").semantic_cases.find((item) => item.case_id === "transition-chain-complete").input.arguments[0];
   for (let length = 1; length < transitions.length; length++) {
