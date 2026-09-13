@@ -1124,7 +1124,7 @@
     {
       "path": "services/gkos-graphiti/qualify_readonly.py",
       "before": null,
-      "after": "9e5a8fa88034b96e652961f3eadf2e6e60ab219b3b78fd2ac81e74018b064c7a",
+      "after": "52d1bbca0fb1eeadc5fc0c1504727442ad9896e43fc4bd0b9acce30307485acb",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {

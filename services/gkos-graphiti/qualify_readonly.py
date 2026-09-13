@@ -61,16 +61,23 @@ async def main():
     except Exception as error:
         error_type = type(error).__name__
     finally:
-        if driver is not None:
-            await driver.close()
-        else:
-            await client.aclose()
-        if group in fixture.list_graphs():
-            fixture.select_graph(group).delete()
-        checks["fixture_cleanup"] = group not in fixture.list_graphs()
+        try:
+            if driver is not None:
+                await driver.close()
+            else:
+                await client.aclose()
+        except Exception as error:
+            error_type = error_type or type(error).__name__
+        try:
+            if group in fixture.list_graphs():
+                fixture.select_graph(group).delete()
+            checks["fixture_cleanup"] = group not in fixture.list_graphs()
+        except Exception as error:
+            checks["fixture_cleanup"] = False
+            error_type = error_type or type(error).__name__
     passed = error_type is None and len(checks) == 7 and all(checks.values()) and calls == ["GRAPH.RO_QUERY"] * 3
     receipt = {"schema": "gkos-graphiti-readonly-probe/1", "timestamp": datetime.now(timezone.utc).isoformat(),
-               "status": "PASS" if passed else "FAIL", "checks": checks, "error_type": error_type,
+               "status": "PASS" if passed else "FAIL", "checks": checks, "error_type": error_type, "fixture_group": group,
                "query_commands": calls, "source_sha256": {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
                    for name in ("ledger.py", "readonly_query.py", "qualify_readonly.py")},
                "scope": "synthetic SDK/database read-only transport probe; not semantic relevance or product authorization"}
