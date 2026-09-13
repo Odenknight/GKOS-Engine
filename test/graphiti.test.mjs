@@ -47,6 +47,26 @@ test("episodes are chronologically ordered by reference_time", () => {
   assert.deepEqual(episodes.filter((e) => e.source === "json").map((e) => e.name), ["Engine v1", "Fuel", "Engine v2"]);
 });
 
+test("semantic lookup preserves per-source first-label order, duplicates and missing targets", () => {
+  const graph = fixtureGraph();
+  const files = graph.nodes.filter(node => node.kind === 'file');
+  const [source, target, other] = files;
+  graph.links = [
+    { source: source.id, target: other.id, kind: 'semantic' },
+    { source: target.id, target: source.id, kind: 'semantic' },
+    { source: source.id, target: target.id, kind: 'semantic' },
+    { source: source.id, target: other.id, kind: 'semantic' },
+    { source: source.id, target: 'unresolved-target', kind: 'semantic' },
+    { source: source.id, target: source.id, kind: 'wikilink' },
+  ];
+  const bodies = buildGraphitiEpisodes(graph).filter(e => e.source === 'json').map(e => JSON.parse(e.episode_body));
+  for (const file of files) {
+    const expected = [...new Set(graph.links.filter(link => link.kind === 'semantic' && link.source === file.id)
+      .map(link => graph.nodes.find(node => node.id === link.target)?.label ?? link.target))];
+    assert.deepEqual(bodies.find(body => body.path === file.path).related_to, expected);
+  }
+});
+
 test("episode bodies carry forward lineage only and never leak later state backward", () => {
   const episodes = buildGraphitiEpisodes(fixtureGraph());
   const v1 = JSON.parse(episodes.find((e) => e.name === "Engine v1").episode_body);

@@ -726,6 +726,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "docs/GRAPHITI-PROJECTION-PERFORMANCE.md",
+      "before": null,
+      "after": "a0b6d81602411833abfad353333ac2c117191d9331ef1696d3284aeaa81ca707",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
       "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
       "before": null,
       "after": "42b2ec2c53ad2866c3a78e524dfdeac54b5e01b1e633d8f21b16c909ee43ac2f",
@@ -1154,8 +1160,8 @@
     {
       "path": "src/graphiti.ts",
       "before": "b674c65babba76399689dccd897d31a777423c6e",
-      "after": "aa85fb0f91342f3c18f2d391e8d03515808257f9926b6059167f6e558a97f02d",
-      "rationale": "Update optional Graphiti target/low-level surface name; add exact-byte SHA-256 evidence separate from change keys."
+      "after": "36084eca6422c4a93183e0259c63fa84110322536bf386192402aac23b3df055",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "src/incremental.ts",
@@ -1442,8 +1448,8 @@
     {
       "path": "test/graphiti.test.mjs",
       "before": "12a1cb2b59421c5466e5e285655f6d150fb956f8",
-      "after": "18c6178fb6c460325344ad4fc1dfb4b93fe8bd5c36ab126af9bd9127648cc20f",
-      "rationale": "Retain export semantics and test the 0.30.2 profile plus exact-byte digest/truncation/revision separation."
+      "after": "f54cceb4517719eef7b8e6b22819e8438a48cbb80fb6aad73827b43644fa47a2",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
       "path": "test/managed-moc-no-change.test.mjs",
