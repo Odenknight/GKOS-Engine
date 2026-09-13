@@ -726,6 +726,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "docs/GRAPHITI-MANIFEST-CONSUMERS.md",
+      "before": null,
+      "after": "baecfbcdd3b34a80ee43d7eaf5f35d096598a4a50c88101effe1bd868e9b965b",
+      "rationale": "Expose existing pure Graphiti manifest identity helpers for governed native consumers; preserve historical export fixture and explicitly test additive API scope."
+    },
+    {
       "path": "docs/GRAPHITI-NATIVE-BASELINE-RESULTS.md",
       "before": null,
       "after": "486b23ba9cbb8fa6eb41d5f1c3c357f0303f1a4aa0f1ae4eb9d75d48daf4fab0",
@@ -1286,8 +1292,8 @@
     {
       "path": "src/graphiti-adapter.ts",
       "before": "bf95b6a858645c82c832dbb68d06e6ff2d7dec3e",
-      "after": "ded6584934c1d3b947e389064921ddb7c830fc169b7205ea69d0ec8d43a10b71",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "d8750f2b7cd48cde944fcc9115de935f2eacea3da245cda72ce6d277fc2c47a8",
+      "rationale": "Expose existing pure Graphiti manifest identity helpers for governed native consumers; preserve historical export fixture and explicitly test additive API scope."
     },
     {
       "path": "src/graphiti-broker.ts",
@@ -1562,8 +1568,8 @@
     {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "936dcf747790b051f70b5b24c4a1fef1c29839f100b7e84a10156821109d7927",
-      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
+      "after": "2f86f95ec3f1708e99ee74d5fdf0be6e636698007108520a1bda2f9a3f97fa57",
+      "rationale": "Expose existing pure Graphiti manifest identity helpers for governed native consumers; preserve historical export fixture and explicitly test additive API scope."
     },
     {
       "path": "test/determinism.test.mjs",
@@ -1640,8 +1646,8 @@
     {
       "path": "test/graphiti-manifest.test.mjs",
       "before": null,
-      "after": "2da055a834e994a7feabc19f72092dca393b0431b67c7e681e2c770c52838aae",
-      "rationale": "Allow distinct managed episodes from one consistent source version; reject duplicate episodes and conflicting raw source digests, with ledger publication and producer tests."
+      "after": "cffb5b670e76581f2172259915e25d4b9156ec87c1448749771a166feba5fab2",
+      "rationale": "Expose existing pure Graphiti manifest identity helpers for governed native consumers; preserve historical export fixture and explicitly test additive API scope."
     },
     {
       "path": "test/graphiti-query-contract.test.mjs",

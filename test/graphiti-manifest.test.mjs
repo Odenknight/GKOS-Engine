@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {buildManagedGraphitiManifest, managedEpisodeJson} from '../dist/graphiti-broker.mjs';
+import {buildManagedGraphitiManifest, managedEpisodeJson} from 'gkos-engine/graphiti';
 
 const episode = () => ({name:'é😀', episode_body:'{"x":"雪"}', source_description:'a\r\nb\rc\n\u007f', reference_time:'2026-09-13T00:00:00Z'});
 const hash = bytes => 'sha256:' + createHash('sha256').update(bytes).digest('hex');
