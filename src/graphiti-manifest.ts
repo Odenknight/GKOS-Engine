@@ -1,4 +1,5 @@
 import { sha256Bytes } from "./canonical";
+import type {GraphitiQueryBinding} from "./graphiti-query-contract";
 
 export interface ManagedGraphitiEpisode {
   name: string;
@@ -52,4 +53,52 @@ export async function buildManagedGraphitiManifest(inputs: readonly {
     manifest.push({episode_digest, source_digest, source_id: input.id});
   }
   return {manifest, source_snapshot_digest: await sha256Bytes(JSON.stringify(manifest))};
+}
+
+/** Match a host-read publication to a freshly authorized manifest. This checks
+ * identity and ledger evidence only; the caller must retain and recheck its
+ * own authority. Provider status and untrusted wire data are not grants.
+ * The bounded publication is detached before calling the async host preparer. */
+export async function reconcileManagedGraphitiPublication(
+  prepareManifest: () => Promise<Awaited<ReturnType<typeof buildManagedGraphitiManifest>>>,
+  authority: {corpus_id:string; scope_digest:string; configuration_digest:string; policy_digest:string},
+  publication: unknown,
+): Promise<{binding:GraphitiQueryBinding; episodes:Map<string,{source_id:string; source_digest:string}>} | null> {
+  try {
+    const digest = (value: unknown): value is string => typeof value === "string" && /^sha256:[0-9a-f]{64}$/.test(value);
+    const id = (value: unknown): value is string => typeof value === "string" && /^[A-Za-z0-9._:-]{1,128}$/.test(value);
+    const record = (value: any, keys: string[]): boolean => value !== null && typeof value === "object" &&
+      !Array.isArray(value) && Object.keys(value).length === keys.length && keys.every(key => Object.hasOwn(value, key));
+    const expected = { corpus_id: authority.corpus_id, scope_digest: authority.scope_digest,
+      configuration_digest: authority.configuration_digest, policy_digest: authority.policy_digest };
+    if (!id(expected.corpus_id) || !digest(expected.scope_digest) || !digest(expected.configuration_digest) || !digest(expected.policy_digest)) return null;
+    // Detach the small bounded receipt before the first await.
+    const value = publication as any;
+    if (!record(value, ["binding", "mappings", "observation", "sequence"]) ||
+      !record(value.binding, ["corpus_id", "scope_digest", "configuration_digest", "policy_digest", "source_snapshot_digest", "projection_id"]) ||
+      !digest(value.binding.source_snapshot_digest) || typeof value.binding.projection_id !== "string" || !/^gkos_[0-9a-f]{32}$/.test(value.binding.projection_id) ||
+      !digest(value.observation) || !Number.isSafeInteger(value.sequence) || value.sequence < 1 ||
+      !Array.isArray(value.mappings) || value.mappings.length < 1 || value.mappings.length > 50000) return null;
+    if (Object.entries(expected).some(([key, valueExpected]) => value.binding[key] !== valueExpected)) return null;
+    const binding = { ...value.binding };
+    const mappings = [];
+    const seen = new Set<string>();
+    for (const item of value.mappings) {
+      if (!record(item, ["projection_episode_id", "source_id", "source_digest"]) ||
+        !id(item.projection_episode_id) || !id(item.source_id) || !digest(item.source_digest) || seen.has(item.projection_episode_id)) return null;
+      seen.add(item.projection_episode_id);
+      mappings.push({ projection_episode_id: item.projection_episode_id, source_digest: item.source_digest, source_id: item.source_id });
+    }
+    const observation = value.observation;
+    const manifest = await prepareManifest();
+    if (manifest.source_snapshot_digest !== binding.source_snapshot_digest || mappings.length !== manifest.manifest.length ||
+      mappings.some((item, index) => item.source_id !== manifest.manifest[index].source_id || item.source_digest !== manifest.manifest[index].source_digest)) return null;
+    // All values here are validated ASCII; ordered keys reproduce ledger.canonical.
+    const receipt = { binding: { configuration_digest: binding.configuration_digest, corpus_id: binding.corpus_id,
+      policy_digest: binding.policy_digest, scope_digest: binding.scope_digest, source_snapshot_digest: binding.source_snapshot_digest },
+      mappings, milestone: "persistence-verified", projection_id: binding.projection_id, searchability: "unverified" };
+    if (await sha256Bytes(JSON.stringify(receipt)) !== observation) return null;
+    return {binding: binding as GraphitiQueryBinding,
+      episodes: new Map(mappings.map(item => [item.projection_episode_id, { source_id: item.source_id, source_digest: item.source_digest }]))};
+  } catch { return null; }
 }

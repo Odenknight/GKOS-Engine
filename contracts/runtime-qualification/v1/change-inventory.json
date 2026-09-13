@@ -728,8 +728,8 @@
     {
       "path": "docs/GRAPHITI-MANIFEST-CONSUMERS.md",
       "before": null,
-      "after": "baecfbcdd3b34a80ee43d7eaf5f35d096598a4a50c88101effe1bd868e9b965b",
-      "rationale": "Expose existing pure Graphiti manifest identity helpers for governed native consumers; preserve historical export fixture and explicitly test additive API scope."
+      "after": "4f2651237b2827e701c1d7b49005f72e4afe19d28012a48e0f1ecec48e8880c0",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "docs/GRAPHITI-NATIVE-BASELINE-RESULTS.md",
@@ -1292,8 +1292,8 @@
     {
       "path": "src/graphiti-adapter.ts",
       "before": "bf95b6a858645c82c832dbb68d06e6ff2d7dec3e",
-      "after": "d8750f2b7cd48cde944fcc9115de935f2eacea3da245cda72ce6d277fc2c47a8",
-      "rationale": "Expose existing pure Graphiti manifest identity helpers for governed native consumers; preserve historical export fixture and explicitly test additive API scope."
+      "after": "6659288851e06ec8a0195227229c7ca1582963637f188289e2a62b3b099074ba",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "src/graphiti-broker.ts",
@@ -1310,8 +1310,8 @@
     {
       "path": "src/graphiti-manifest.ts",
       "before": null,
-      "after": "36c3c14ec4f4e8aed1410c308ce925ab37c497f9b9c3a99b0d57791283098e90",
-      "rationale": "Allow distinct managed episodes from one consistent source version; reject duplicate episodes and conflicting raw source digests, with ledger publication and producer tests."
+      "after": "0591de4929d7b319b469cf940047d6cd64b0e5812a7061cf2a974c2ee8001c97",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "src/graphiti-query-contract.ts",
@@ -1514,8 +1514,8 @@
     {
       "path": "src/service/graphiti-manifest.ts",
       "before": null,
-      "after": "0fc617a6f4cf3cc5837a76da1bac1991f2366340f3bcc8af59a382d3ddd2cde8",
-      "rationale": "Reconcile actual published ledger receipt with current authorized source manifest, exact mappings and worker observation digest; exercise Python ledger integration and denials."
+      "after": "aa6010f6b0ac4c39199094803be3ede07eb6bc852b2429086d493673c6330b46",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "src/service/mcp.ts",
@@ -1568,8 +1568,8 @@
     {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "2f86f95ec3f1708e99ee74d5fdf0be6e636698007108520a1bda2f9a3f97fa57",
-      "rationale": "Expose existing pure Graphiti manifest identity helpers for governed native consumers; preserve historical export fixture and explicitly test additive API scope."
+      "after": "72af7bf92ffc19a230d382c2271eb1f475273ee8ecb2d73fde240b5fead29bd9",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "test/determinism.test.mjs",
@@ -1646,8 +1646,8 @@
     {
       "path": "test/graphiti-manifest.test.mjs",
       "before": null,
-      "after": "cffb5b670e76581f2172259915e25d4b9156ec87c1448749771a166feba5fab2",
-      "rationale": "Expose existing pure Graphiti manifest identity helpers for governed native consumers; preserve historical export fixture and explicitly test additive API scope."
+      "after": "bd2bef494b27f31829e784ad317fe14680fcae1b4c932625b42563f2d5ef6e08",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "test/graphiti-query-contract.test.mjs",

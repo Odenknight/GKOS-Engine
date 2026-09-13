@@ -35,5 +35,5 @@ export type {
 
 // Pure manifest identity helpers. Callers supply authorized source bytes;
 // these functions neither authorize retrieval nor attest publication.
-export { managedEpisodeJson, buildManagedGraphitiManifest } from "./graphiti-manifest";
+export { managedEpisodeJson, buildManagedGraphitiManifest, reconcileManagedGraphitiPublication } from "./graphiti-manifest";
 export type { ManagedGraphitiEpisode } from "./graphiti-manifest";

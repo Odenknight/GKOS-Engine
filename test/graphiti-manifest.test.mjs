@@ -1,10 +1,27 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {buildManagedGraphitiManifest, managedEpisodeJson} from 'gkos-engine/graphiti';
+import {buildManagedGraphitiManifest, managedEpisodeJson, reconcileManagedGraphitiPublication} from 'gkos-engine/graphiti';
 
 const episode = () => ({name:'é😀', episode_body:'{"x":"雪"}', source_description:'a\r\nb\rc\n\u007f', reference_time:'2026-09-13T00:00:00Z'});
 const hash = bytes => 'sha256:' + createHash('sha256').update(bytes).digest('hex');
+
+test('public reconciliation captures receipt before host work and does not turn malformed status into publication', async () => {
+  const manifest=await buildManagedGraphitiManifest([{source_id:'source',raw:Buffer.from('original'),episode:episode()}]);
+  const authority={corpus_id:'corpus',scope_digest:hash('scope'),configuration_digest:hash('config'),policy_digest:hash('policy')};
+  const projection_id=`gkos_${'a'.repeat(32)}`;
+  const mappings=[{projection_episode_id:'episode',source_digest:manifest.manifest[0].source_digest,source_id:'source'}];
+  const binding={configuration_digest:authority.configuration_digest,corpus_id:authority.corpus_id,policy_digest:authority.policy_digest,
+    scope_digest:authority.scope_digest,source_snapshot_digest:manifest.source_snapshot_digest};
+  const observation=hash(JSON.stringify({binding,mappings,milestone:'persistence-verified',projection_id,searchability:'unverified'}));
+  const publication={binding:{...binding,projection_id},mappings,observation,sequence:1};
+  const result=await reconcileManagedGraphitiPublication(async()=>{
+    publication.mappings[0].source_id='changed'; authority.corpus_id='changed'; return manifest;
+  },authority,publication);
+  assert.equal(result.binding.corpus_id,'corpus');
+  assert.equal(result.episodes.get('episode').source_id,'source');
+  assert.equal(await reconcileManagedGraphitiPublication(async()=>assert.fail('malformed receipt invoked source preparation'),authority,{searchable:true}),null);
+});
 
 test('managed manifest preserves raw bytes and Python ledger string canonicalization', async () => {
   const value = episode();
