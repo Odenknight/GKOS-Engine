@@ -1490,8 +1490,8 @@
     {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
-      "after": "93d6f89b36139a7b0be73f5f6d76ec820b375645cfbd187f871c4e1e60a157f6",
-      "rationale": "Reject synchronous host work past total query deadline before binding, provider invocation and publication; regression reproduced original late binding and now passes."
+      "after": "c5e0d3eaa66aace6a7fda83a68615dd54deb567055430186866cb4b9822185ac",
+      "rationale": "Authenticated semantic query readiness requires complete host scope and matching policy; unavailable states expose no binding and status never invokes provider."
     },
     {
       "path": "src/version.ts",
@@ -1778,8 +1778,8 @@
     {
       "path": "test/service-runtime.test.mjs",
       "before": "c3ad015d1e157f57cfc7b4f9d99a5e9601ae33bc",
-      "after": "dea9bd93817cfa656294f11a91e3dc971d4fb10fc8d31e6e3faf9319154b9a94",
-      "rationale": "Reject synchronous host work past total query deadline before binding, provider invocation and publication; regression reproduced original late binding and now passes."
+      "after": "a1ad250103e9fa40b594bf2550253161145111d16cc586eeedcc2346b762d06e",
+      "rationale": "Authenticated semantic query readiness requires complete host scope and matching policy; unavailable states expose no binding and status never invokes provider."
     },
     {
       "path": "test/service-stdio-package.test.mjs",

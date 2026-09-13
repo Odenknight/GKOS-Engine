@@ -499,3 +499,25 @@ test("semantic query rejects synchronous authority work past the total deadline"
     assert.equal(calls,0,'expired service authority must not reach host query binding');
   } finally {await close(fixture.server);}
 });
+
+test("semantic readiness requires complete host scope and matching service policy", async () => {
+  for(const state of ['missing','incomplete','policy-mismatch','ready']) {
+    let providerCalls=0;
+    const binding={corpus_id:'fixture',scope_digest:`sha256:${'a'.repeat(64)}`,policy_digest:`sha256:${(state==='policy-mismatch'?'f':'b').repeat(64)}`,
+      source_snapshot_digest:`sha256:${'c'.repeat(64)}`,projection_id:'projection',configuration_digest:`sha256:${'d'.repeat(64)}`};
+    const fixture=await fixtureServer({graphitiHost:state==='missing'?undefined:()=>({
+      current:()=>({status:{contract_version:'gkos-graphiti-query/1.0.0-draft.1',mode:'managed',searchable:true,binding},decision:'allow',
+        complete_dependency_scope:state!=='incomplete',authorized_episodes:new Map()}),
+      query:async()=>{providerCalls++; throw Error('status must not query');},
+    })});
+    try {
+      assert.equal((await request(fixture.port,'/graphiti/query/status')).status,401);
+      const result=await request(fixture.port,'/graphiti/query/status',{token:VIEWER_TOKEN});
+      assert.equal(result.status,200);
+      const status=JSON.parse(result.body);
+      assert.equal(status.searchable,state==='ready');
+      assert.deepEqual(status.binding,state==='ready'?binding:null);
+      assert.equal(providerCalls,0);
+    } finally {await close(fixture.server);}
+  }
+});

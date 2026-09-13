@@ -11,7 +11,7 @@ import type {
 } from "./types";
 import { ServiceCredentialRegistry } from "./auth";
 import { GraphitiQueryBroker, type GraphitiBrokerHost } from "../graphiti-broker";
-import { acceptGraphitiQueryResult } from "../graphiti-query-contract";
+import { acceptGraphitiQueryResult, prepareGraphitiQueryRequest, GRAPHITI_QUERY_CONTRACT_VERSION, type GraphitiQueryStatus } from "../graphiti-query-contract";
 
 const GENERIC_DENIAL = Object.freeze({ error: "unauthorized" });
 const GENERIC_FORBIDDEN = Object.freeze({ error: "forbidden" });
@@ -264,6 +264,23 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
       response.once("close", onDisconnect);
       try {
         if ([...url.searchParams.keys()].length > 0) { send(response, 400, { error: "bad_request" }, requestOrigin); return; }
+        if (route === "/graphiti/query/status") {
+          if (request.method !== "GET") { send(response, 405, { error: "method_not_allowed" }, requestOrigin); return; }
+          const authorized = await view(identity, "graphiti_episodes");
+          const host = options.graphitiHost?.({ identity, ...authorized });
+          let status: GraphitiQueryStatus = { contract_version: GRAPHITI_QUERY_CONTRACT_VERSION, mode: "unavailable",
+            searchable: false, binding: null };
+          try {
+            const context = host?.current();
+            if (context && context.status.binding?.policy_digest === authorized.authorization.policyDigest &&
+                prepareGraphitiQueryRequest("readiness", 1, "readiness", context)) {
+              status = { contract_version: GRAPHITI_QUERY_CONTRACT_VERSION, mode: context.status.mode,
+                searchable: true, binding: { ...context.status.binding! } };
+            }
+          } catch { /* Unavailable host state never becomes a readiness claim. */ }
+          send(response, 200, status, requestOrigin);
+          return;
+        }
         if (route === "/graphiti/query") {
           if (request.method !== "POST") { send(response, 405, { error: "method_not_allowed" }, requestOrigin); return; }
           const expires = performance.now() + requestTimeoutMs;
