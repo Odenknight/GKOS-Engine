@@ -101,7 +101,7 @@ test("semantic query route uses host authority and rejects caller-supplied bindi
   let calls = 0;
   const binding = {corpus_id:'fixture',scope_digest:`sha256:${'a'.repeat(64)}`,policy_digest:`sha256:${'b'.repeat(64)}`,
     source_snapshot_digest:`sha256:${'c'.repeat(64)}`,projection_id:'projection',configuration_digest:`sha256:${'d'.repeat(64)}`};
-  const fixture = await fixtureServer({graphitiHost: ({view}) => {
+  const fixture = await fixtureServer({graphitiHost: async ({view}) => {
     assert.equal(view.notes.some(note => note.path.includes(CANARY)),false);
     return {current: () => ({status:{contract_version:'gkos-graphiti-query/1.0.0-draft.1',mode:'managed',searchable:true,binding},
       decision:'allow',complete_dependency_scope:true,authorized_episodes:new Map()}),
@@ -486,6 +486,45 @@ test("semantic query deadline includes a stalled authority lookup", async () => 
     assert.equal(result.status,503);
     assert.deepEqual(JSON.parse(result.body),{error:'semantic_query_unavailable'});
   } finally {releaseAuthority(); await close(fixture.server);}
+});
+
+test("query and readiness deadlines abort asynchronous host preparation", async () => {
+  for (const route of ['/graphiti/query','/graphiti/query/status']) {
+    let finish, signal;
+    const pending=new Promise(resolve=>{finish=resolve;});
+    const fixture=await fixtureServer({requestTimeoutMs:40,graphitiHost:async input=>{
+      signal=input.signal;
+      await pending;
+      return null;
+    }});
+    try {
+      const result=await request(fixture.port,route,{token:VIEWER_TOKEN,
+        ...(route.endsWith('/status')?{}:{method:'POST',body:{query:'relay',request_id:'one',limit:5}})});
+      assert.equal(result.status,503);
+      assert.equal(signal?.aborted,true);
+      assert.deepEqual(JSON.parse(result.body),{error:'semantic_query_unavailable'});
+    } finally {finish();await close(fixture.server);}
+  }
+});
+
+test("credentials revoked during async host preparation cannot query or report readiness", async () => {
+  for (const route of ['/graphiti/query','/graphiti/query/status']) {
+    let fixture, calls=0;
+    const binding={corpus_id:'fixture',scope_digest:`sha256:${'a'.repeat(64)}`,policy_digest:`sha256:${'b'.repeat(64)}`,
+      source_snapshot_digest:`sha256:${'c'.repeat(64)}`,projection_id:'projection',configuration_digest:`sha256:${'d'.repeat(64)}`};
+    fixture=await fixtureServer({graphitiHost:async()=>{
+      await Promise.resolve();
+      fixture.credentials.setRevoked('credential:legacy-viewer',true);
+      return {current:()=>({status:{contract_version:'gkos-graphiti-query/1.0.0-draft.1',mode:'managed',searchable:true,binding},
+        decision:'allow',complete_dependency_scope:true,authorized_episodes:new Map()}),query:async()=>{calls++;return '';}};
+    }});
+    try {
+      const result=await request(fixture.port,route,{token:VIEWER_TOKEN,
+        ...(route.endsWith('/status')?{}:{method:'POST',body:{query:'relay',request_id:'one',limit:5}})});
+      assert.equal(result.status,route.endsWith('/status')?401:503);
+      assert.equal(calls,0);
+    } finally {await close(fixture.server);}
+  }
 });
 
 test("semantic query rejects synchronous authority work past the total deadline", async () => {

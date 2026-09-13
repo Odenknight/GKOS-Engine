@@ -38,9 +38,12 @@ export interface LocalServiceOptions {
   streamHeartbeatMs?: number;
   workQueueWaitMs?: number;
   /** Private host binding to a published ledger and complete dependency scope.
-   * Never derive this authority from request fields. current() must recheck it. */
+   * Never derive this authority from request fields. Preparation may await source
+   * bytes/ledger evidence; honor signal. current() must synchronously recheck
+   * source, policy and publication generations after preparation and queries. */
   graphitiHost?: (input: { identity: ServiceCredentialIdentity; view: GkosAuthorizedView;
-    snapshot: ServiceCorpusSnapshot; authorization: ServiceAuthorizationConfiguration }) => GraphitiBrokerHost | null;
+    snapshot: ServiceCorpusSnapshot; authorization: ServiceAuthorizationConfiguration;
+    signal: AbortSignal }) => GraphitiBrokerHost | null | Promise<GraphitiBrokerHost | null>;
 }
 
 interface RateState { tokens: number; lastRefill: number; active: number }
@@ -264,10 +267,25 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
       response.once("close", onDisconnect);
       try {
         if ([...url.searchParams.keys()].length > 0) { send(response, 400, { error: "bad_request" }, requestOrigin); return; }
+        const expires = performance.now() + requestTimeoutMs;
+        const expired = (): boolean => {
+          if (!disconnected.signal.aborted && performance.now() < expires) return false;
+          disconnected.abort();
+          if (!response.headersSent && !response.destroyed) send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin);
+          return true;
+        };
+        if (route === "/graphiti/query" || route === "/graphiti/query/status") {
+          queryTimer = setTimeout(() => {
+            disconnected.abort();
+            if (!response.headersSent && !response.destroyed) send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin);
+          }, requestTimeoutMs);
+        }
         if (route === "/graphiti/query/status") {
           if (request.method !== "GET") { send(response, 405, { error: "method_not_allowed" }, requestOrigin); return; }
           const authorized = await view(identity, "graphiti_episodes");
-          const host = options.graphitiHost?.({ identity, ...authorized });
+          if (expired()) return;
+          const host = await options.graphitiHost?.({ identity, ...authorized, signal: disconnected.signal });
+          if (expired()) return;
           let status: GraphitiQueryStatus = { contract_version: GRAPHITI_QUERY_CONTRACT_VERSION, mode: "unavailable",
             searchable: false, binding: null };
           try {
@@ -278,22 +296,11 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
                 searchable: true, binding: { ...context.status.binding! } };
             }
           } catch { /* Unavailable host state never becomes a readiness claim. */ }
-          send(response, 200, status, requestOrigin);
+          if (!expired()) send(response, 200, status, requestOrigin);
           return;
         }
         if (route === "/graphiti/query") {
           if (request.method !== "POST") { send(response, 405, { error: "method_not_allowed" }, requestOrigin); return; }
-          const expires = performance.now() + requestTimeoutMs;
-          const expired = (): boolean => {
-            if (!disconnected.signal.aborted && performance.now() < expires) return false;
-            disconnected.abort();
-            if (!response.headersSent && !response.destroyed) send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin);
-            return true;
-          };
-          queryTimer = setTimeout(() => {
-            disconnected.abort();
-            if (!response.headersSent && !response.destroyed) send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin);
-          }, requestTimeoutMs);
           const body = await readJson(request, requestTimeoutMs) as Record<string, unknown>;
           if (expired()) return;
           if (!body || Array.isArray(body) || Object.keys(body).length !== 3 ||
@@ -303,7 +310,7 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
           }
           const authorized = await view(identity, "graphiti_episodes");
           if (expired()) return;
-          const host = options.graphitiHost?.({ identity, ...authorized });
+          const host = await options.graphitiHost?.({ identity, ...authorized, signal: disconnected.signal });
           if (expired()) return;
           if (!host) { send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin); return; }
           const guardedHost: GraphitiBrokerHost = { query: (request, signal) => {
@@ -325,7 +332,8 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
           if (expired()) return;
           const final = await view(identity, "graphiti_episodes");
           if (expired()) return;
-          const current = options.graphitiHost?.({ identity, ...final });
+          const current = await options.graphitiHost?.({ identity, ...final, signal: disconnected.signal });
+          if (expired()) return;
           if (!result || !current || final.snapshot.generation !== authorized.snapshot.generation ||
               final.authorization.generation !== authorized.authorization.generation ||
               final.authorization.policyDigest !== authorized.authorization.policyDigest ||

@@ -157,3 +157,11 @@ The caller must obtain publication from its trusted ledger, enforce the live
 search/configuration gate before publishing, and recheck generations after every
 await. Passing a provider-supplied receipt is not authorization. Deployment and
 the service host callback wiring remain separate unfinished integration work.
+
+The Node service accepts asynchronous `graphitiHost` preparation and passes its
+request abort signal. Preparation and authority lookup share the total query or
+readiness deadline. A timed-out preparation cannot report readiness or invoke
+the provider later; an uncooperative preparation retains its ingress slot until
+it settles. The returned `current()` callback must still synchronously check
+fresh source, policy and publication generations. Async preparation does not
+make a cached authorization context safe to reuse.
