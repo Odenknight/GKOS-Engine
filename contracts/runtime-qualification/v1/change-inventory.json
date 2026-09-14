@@ -704,8 +704,8 @@
     {
       "path": "docs/EFFECTS-HOST-API-PROGRESS.md",
       "before": null,
-      "after": "eafce74307b020d1a7a4743bd963c3ca3e922ad7b819a07f905e9e1af3a158f4",
-      "rationale": "Effects split preparation/execution, deadline shutdown, read-only recovery inspection, and current authority revalidation before noncommitted recovery changes. 144 component tests; complete host authorization and native qualification remain open."
+      "after": "f2eb10ba317460c5d3731f040c84ecdb948cdbab2d21f57af105b44ade7a3518",
+      "rationale": "Effects preparation, shutdown and inspection API progress; interrupted recovery now revalidates current authority before cleanup and again under a held target lock, with finally release. 148 component tests passed; complete host authorization and native qualification remain open."
     },
     {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
@@ -1412,8 +1412,8 @@
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "83d577155dd03f445e585305929ccd1ebd92d4d7b3fc4e81dd9649e4cd4e3203",
-      "rationale": "Effects split preparation/execution, deadline shutdown, read-only recovery inspection, and current authority revalidation before noncommitted recovery changes. 144 component tests; complete host authorization and native qualification remain open."
+      "after": "069454d388f484bfd1ac21ac070fc82fd38c08e20cc3df182603e8f0a4c46256",
+      "rationale": "Effects preparation, shutdown and inspection API progress; interrupted recovery now revalidates current authority before cleanup and again under a held target lock, with finally release. 148 component tests passed; complete host authorization and native qualification remain open."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
@@ -1724,8 +1724,8 @@
     {
       "path": "test/navigation-effects-node.test.mjs",
       "before": null,
-      "after": "1512187430f110ee7c5686251153d60f858d2a6d13529e36368497787eed7b19",
-      "rationale": "Effects split preparation/execution, deadline shutdown, read-only recovery inspection, and current authority revalidation before noncommitted recovery changes. 144 component tests; complete host authorization and native qualification remain open."
+      "after": "799a08c11f2a2c50c67f79c79b032059657070d1b12eceaf34159fe68273ad33",
+      "rationale": "Effects preparation, shutdown and inspection API progress; interrupted recovery now revalidates current authority before cleanup and again under a held target lock, with finally release. 148 component tests passed; complete host authorization and native qualification remain open."
     },
     {
       "path": "test/navigation-effects-performance.test.mjs",

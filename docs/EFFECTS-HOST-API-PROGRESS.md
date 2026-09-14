@@ -127,5 +127,19 @@ Lease and checkpoint bookkeeping may still change during recovery.
 The regression failed against the earlier implementation before the fix.
 
 This is a correction to the existing recovery path. It does not provide the
-complete inspection-bound host authorization API, target-lock revalidation
-through every recovery step, or native-host qualification. Those remain open.
+complete inspection-bound host authorization API or native-host qualification.
+Those remain open.
+
+Recovery now acquires the existing per-target lock after authorized stale-lock
+cleanup. It checks authority again while holding that lock. The lock stays held
+through classification, source promotion, and receipt/journal finalization.
+Every return, refusal, and exception releases it through the same finally block.
+Read-only inspection acquires no target lock and still changes no files.
+
+All 148 Navigation Effects tests passed on Windows. New tests inspect the live
+target lock from the authority callback. They cover allowed recovery, authority
+revoked after initial admission, and a provider exception under the lock.
+Denied operations preserve the target and journal, and all three release the
+lock. These tests failed against the previous implementation before the fix.
+The cooperative-vault threat model still applies. Current host policy binding
+and complete native qualification are separate requirements.

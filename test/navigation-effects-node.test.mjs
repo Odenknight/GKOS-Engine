@@ -610,6 +610,44 @@ test("recovery refuses source promotion and commit finalization without current 
   }
 });
 
+test("recovery rechecks authority with the target lock held and always releases it", async (t) => {
+  for (const mode of ["allow", "revoke", "throw"]) await t.test(mode, async t => {
+    const root = await fixture(t, `recovery-lock-${mode}`);
+    await writeFile(join(root, "topics/index.md"), "before");
+    const planned = await makePlan("before");
+    const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+      faultInjector: point => { if (point === "after-temporary-write") throw new SimulatedEffectCrash(point); } });
+    await assert.rejects(writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes }), /SIMULATED_EFFECT_CRASH/);
+    await writer.releaseVaultLease();
+    const lockDirectory = join(root, ".gkx/effects/locks");
+    const lockPath = join(lockDirectory, `${(await sha256Bytes(planned.plan.targetPath)).slice(7)}.lock`);
+    const journalPath = join(root, ".gkx/effects/journal.jsonl");
+    const journalBefore = await readFile(journalPath, "utf8");
+    let checks = 0;
+    const recovery = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: async plan => {
+      checks++;
+      if (checks === 1) return [];
+      const lock = JSON.parse(await readFile(lockPath, "utf8"));
+      assert.equal(lock.effectId, plan.effectId); assert.equal(lock.targetPath, plan.targetPath);
+      assert.equal(lock.pid, process.pid);
+      if (mode === "throw") throw new Error("AUTHORITY_PROVIDER_OFFLINE");
+      return mode === "revoke" ? ["AUTHORITY_REVOKED_UNDER_LOCK"] : [];
+    } });
+    try {
+      if (mode === "throw") await assert.rejects(recovery.recoverStartup(), /AUTHORITY_PROVIDER_OFFLINE/);
+      else {
+        const report = await recovery.recoverStartup();
+        assert.equal(report.safeToEnableWrites, mode === "allow");
+        if (mode === "revoke") assert.ok(report.results[0].reasonCodes.includes("AUTHORITY_REVOKED_UNDER_LOCK"));
+      }
+      assert.ok(checks >= 2);
+      assert.deepEqual(await readdir(lockDirectory), []);
+      assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), mode === "allow" ? planned.proposedBytes : "before");
+      if (mode !== "allow") assert.equal(await readFile(journalPath, "utf8"), journalBefore);
+    } finally { await recovery.releaseVaultLease(); }
+  });
+});
+
 test("startup recovery classifies every injected transition without silent overwrite", async (t) => {
   const points = ["after-received", "after-planned", "after-prepared", "after-archive", "after-temporary-write", "after-replace", "after-verified", "after-receipt"];
   for (const point of points) await t.test(point, async (t) => {

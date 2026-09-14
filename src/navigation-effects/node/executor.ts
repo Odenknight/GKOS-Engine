@@ -1131,7 +1131,8 @@ export class NodeNavigationEffectsExecutor {
         await this.validateCommittedOperation(operationEntries, liveCommittedEffectByTarget.get(plan.targetPath)?.effectId === effectId);
         continue;
       }
-      if (!inspectOnly) {
+      const authorityCurrent = async (): Promise<boolean> => {
+        if (inspectOnly) return true;
         // Retained intent proves what was planned, not that the authority is
         // still current. Check before stale-lock cleanup or any recovery write.
         const reasons = this.preconditionValidator ? await this.preconditionValidator(plan) : ["PRECONDITION_PROVIDER_MISSING"];
@@ -1141,135 +1142,143 @@ export class NodeNavigationEffectsExecutor {
             classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false,
             reasonCodes: ["RECOVERY_AUTHORITY_REVALIDATION_FAILED", ...(valid ? [...new Set(reasons)].sort(codeUnitCompare) : ["PRECONDITION_PROVIDER_RESULT_INVALID"])],
             observed: { proposedDigest: plan.proposedDigest } });
-          continue;
+          return false;
         }
-      }
-      if (!inspectOnly) await this.cleanupStaleTargetLock(plan);
-      const planDigest = await canonicalSha256(plan);
-      if (latest.state === "STALE") {
-        await this.validateTerminalReceipt(operationEntries);
-        if (latest.reasonCode === "CONFLICTING_EXTERNAL_BYTES") {
-          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: false, reasonCodes: ["CONFLICTING_EXTERNAL_BYTES"], observed: { proposedDigest: plan.proposedDigest } });
-          continue;
-        }
-        let staleTemporary = operationEntries.map((entry) => entry.temporaryPath).filter(Boolean).at(-1);
-        if (staleTemporary) {
-          const stalePath = await this.safeAbsolute(staleTemporary);
-          const staleBytes = await this.readTarget(stalePath);
-          if (staleBytes !== null) {
-            const staleDigest = await sha256Bytes(staleBytes);
-            if (staleDigest !== plan.proposedDigest) {
-              results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["STALE_TEMP_DIGEST_MISMATCH"], observed: { temporaryDigest: staleDigest, proposedDigest: plan.proposedDigest } });
-              continue;
-            }
-            if (inspectOnly) {
-              results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: false, reasonCodes: ["VERIFIED_STALE_TEMP_PRESENT"], observed: { temporaryDigest: staleDigest, proposedDigest: plan.proposedDigest } });
-              continue;
-            }
-            await rm(stalePath, { force: true });
-            await this.writeDurable(resolve(this.stateRoot, "recovery", `${effectFileStem(effectId)}.cleanup.json`), `${canonicalJson({ artifactKind: "engine.effect-recovery-cleanup-receipt", effectId, operation: "remove-verified-stale-temporary", temporaryDigest: staleDigest, occurredAt: this.clock(), sourceContentIncluded: false })}\n`);
-            results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: true, reasonCodes: ["VERIFIED_STALE_TEMP_REMOVED"], observed: { temporaryDigest: staleDigest, proposedDigest: plan.proposedDigest } });
-          }
-        }
-        continue;
-      }
-      if (latest.state === "ABORTED") { await this.validateTerminalReceipt(operationEntries); continue; }
-      if (latest.state === "RECOVERY_REQUIRED") await this.validateTerminalReceipt(operationEntries);
-      const targetPath = await this.safeAbsolute(plan.targetPath);
-      let recordedTemporary: string | undefined;
-      for (let index = operationEntries.length - 1; index >= 0; index -= 1) if (operationEntries[index].temporaryPath) { recordedTemporary = operationEntries[index].temporaryPath; break; }
-      const temporaryRelative = recordedTemporary ?? this.temporaryRelative(plan);
-      const temporaryPath = await this.safeAbsolute(temporaryRelative);
-      const target = await this.readTarget(targetPath);
-      const temporary = await this.readTarget(temporaryPath);
-      const targetDigest = target === null ? undefined : await sha256Bytes(target);
-      const temporaryDigest = temporary === null ? undefined : await sha256Bytes(temporary);
-      const expectedPresent = plan.precondition.target === "present" ? plan.precondition.priorDigest : undefined;
-      const targetIsExpected = plan.precondition.target === "absent" ? target === null : targetDigest === expectedPresent;
-      const archive = await this.validateArchiveBinding(plan);
-      const archiveBeforeDigest = archive.beforeDigest;
-      const archiveValid = archive.valid;
-      const observed = {
-        ...(targetDigest ? { targetDigest } : {}),
-        ...(temporaryDigest ? { temporaryDigest } : {}),
-        ...(archiveBeforeDigest ? { archiveBeforeDigest } : {}),
-        proposedDigest: plan.proposedDigest,
+        return true;
       };
+      if (!await authorityCurrent()) continue;
+      if (!inspectOnly) await this.cleanupStaleTargetLock(plan);
+      const recoveryLock = inspectOnly ? null : await this.acquireTargetLock(plan);
+      try {
+        if (!await authorityCurrent()) continue;
+        const planDigest = await canonicalSha256(plan);
+        if (latest.state === "STALE") {
+          await this.validateTerminalReceipt(operationEntries);
+          if (latest.reasonCode === "CONFLICTING_EXTERNAL_BYTES") {
+            results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: false, reasonCodes: ["CONFLICTING_EXTERNAL_BYTES"], observed: { proposedDigest: plan.proposedDigest } });
+            continue;
+          }
+          let staleTemporary = operationEntries.map((entry) => entry.temporaryPath).filter(Boolean).at(-1);
+          if (staleTemporary) {
+            const stalePath = await this.safeAbsolute(staleTemporary);
+            const staleBytes = await this.readTarget(stalePath);
+            if (staleBytes !== null) {
+              const staleDigest = await sha256Bytes(staleBytes);
+              if (staleDigest !== plan.proposedDigest) {
+                results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["STALE_TEMP_DIGEST_MISMATCH"], observed: { temporaryDigest: staleDigest, proposedDigest: plan.proposedDigest } });
+                continue;
+              }
+              if (inspectOnly) {
+                results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: false, reasonCodes: ["VERIFIED_STALE_TEMP_PRESENT"], observed: { temporaryDigest: staleDigest, proposedDigest: plan.proposedDigest } });
+                continue;
+              }
+              await rm(stalePath, { force: true });
+              await this.writeDurable(resolve(this.stateRoot, "recovery", `${effectFileStem(effectId)}.cleanup.json`), `${canonicalJson({ artifactKind: "engine.effect-recovery-cleanup-receipt", effectId, operation: "remove-verified-stale-temporary", temporaryDigest: staleDigest, occurredAt: this.clock(), sourceContentIncluded: false })}\n`);
+              results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: true, reasonCodes: ["VERIFIED_STALE_TEMP_REMOVED"], observed: { temporaryDigest: staleDigest, proposedDigest: plan.proposedDigest } });
+            }
+          }
+          continue;
+        }
+        if (latest.state === "ABORTED") { await this.validateTerminalReceipt(operationEntries); continue; }
+        if (latest.state === "RECOVERY_REQUIRED") await this.validateTerminalReceipt(operationEntries);
+        const targetPath = await this.safeAbsolute(plan.targetPath);
+        let recordedTemporary: string | undefined;
+        for (let index = operationEntries.length - 1; index >= 0; index -= 1) if (operationEntries[index].temporaryPath) { recordedTemporary = operationEntries[index].temporaryPath; break; }
+        const temporaryRelative = recordedTemporary ?? this.temporaryRelative(plan);
+        const temporaryPath = await this.safeAbsolute(temporaryRelative);
+        const target = await this.readTarget(targetPath);
+        const temporary = await this.readTarget(temporaryPath);
+        const targetDigest = target === null ? undefined : await sha256Bytes(target);
+        const temporaryDigest = temporary === null ? undefined : await sha256Bytes(temporary);
+        const expectedPresent = plan.precondition.target === "present" ? plan.precondition.priorDigest : undefined;
+        const targetIsExpected = plan.precondition.target === "absent" ? target === null : targetDigest === expectedPresent;
+        const archive = await this.validateArchiveBinding(plan);
+        const archiveBeforeDigest = archive.beforeDigest;
+        const archiveValid = archive.valid;
+        const observed = {
+          ...(targetDigest ? { targetDigest } : {}),
+          ...(temporaryDigest ? { temporaryDigest } : {}),
+          ...(archiveBeforeDigest ? { archiveBeforeDigest } : {}),
+          proposedDigest: plan.proposedDigest,
+        };
 
-      if (targetDigest === plan.proposedDigest && plan.precondition.priorDigest === plan.proposedDigest &&
-          plan.idempotencyKey.startsWith("moc-no-change:") && temporary === null &&
-          ["RECEIVED", "PLANNED", "PREPARED"].includes(latest.state)) {
-        if (inspectOnly) {
-          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: false, reasonCodes: ["NO_CHANGE_AWAITS_AUTHORIZED_RECOVERY"], observed });
+        if (targetDigest === plan.proposedDigest && plan.precondition.priorDigest === plan.proposedDigest &&
+            plan.idempotencyKey.startsWith("moc-no-change:") && temporary === null &&
+            ["RECEIVED", "PLANNED", "PREPARED"].includes(latest.state)) {
+          if (inspectOnly) {
+            results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: false, reasonCodes: ["NO_CHANGE_AWAITS_AUTHORIZED_RECOVERY"], observed });
+            continue;
+          }
+          if (!this.preconditionValidator || (await this.preconditionValidator(plan)).length) {
+            results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["NO_CHANGE_AUTHORITY_REVALIDATION_FAILED"], observed });
+            continue;
+          }
+          const receipt = await this.writeReceipt(plan, planDigest, "no-op", plan.proposedDigest, undefined, ["BYTE_IDENTICAL"]);
+          await this.journal.append(effectId, "COMMITTED", planDigest, { reasonCode: "BYTE_IDENTICAL", receiptDigest: await canonicalSha256(receipt) });
+          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: true, reasonCodes: ["NO_CHANGE_RECOVERED"], observed });
           continue;
         }
-        if (!this.preconditionValidator || (await this.preconditionValidator(plan)).length) {
-          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["NO_CHANGE_AUTHORITY_REVALIDATION_FAILED"], observed });
+        if (targetDigest === plan.proposedDigest) {
+          if (inspectOnly) {
+            results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: archiveValid ? "effect-present-verified" : "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: [archiveValid ? "AFTER_IMAGE_AWAITS_AUTHORIZED_RECOVERY" : "ARCHIVE_BEFORE_INVALID"], observed });
+            continue;
+          }
+          if (!archiveValid) {
+            await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "ARCHIVE_BEFORE_INVALID" });
+            const receipt = await this.writeReceipt(plan, planDigest, "recovery-required", plan.precondition.priorDigest, undefined, ["ARCHIVE_BEFORE_INVALID"]);
+            await this.sealTerminalReceipt(plan, planDigest, "RECOVERY_REQUIRED", "ARCHIVE_BEFORE_INVALID", receipt);
+            results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["ARCHIVE_BEFORE_INVALID"], observed });
+            continue;
+          }
+          if (latest.state !== "VERIFIED") await this.journal.append(effectId, "VERIFIED", planDigest, { reasonCode: "RECOVERY_VERIFIED_AFTER_IMAGE" });
+          await this.writeArchiveAfter(plan, plan.precondition.target === "present" ? await readFile(resolve(await this.safeAbsolute(plan.archiveRunPath!, true), "before", ...normalizeVaultRelative(plan.targetPath).split("/")), "utf8") : null, target!);
+          const receipt = await this.writeReceipt(plan, planDigest, "committed", plan.precondition.priorDigest, archive.manifestDigest, ["RECOVERY_FINISHED_COMMIT"]);
+          await this.journal.append(effectId, "COMMITTED", planDigest, { reasonCode: "RECOVERY_FINISHED_COMMIT", receiptDigest: await canonicalSha256(receipt) });
+          if (temporary !== null) await rm(temporaryPath, { force: true });
+          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: true, reasonCodes: ["RECOVERY_FINISHED_COMMIT"], observed });
           continue;
         }
-        const receipt = await this.writeReceipt(plan, planDigest, "no-op", plan.proposedDigest, undefined, ["BYTE_IDENTICAL"]);
-        await this.journal.append(effectId, "COMMITTED", planDigest, { reasonCode: "BYTE_IDENTICAL", receiptDigest: await canonicalSha256(receipt) });
-        results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: true, reasonCodes: ["NO_CHANGE_RECOVERED"], observed });
-        continue;
+        if (targetIsExpected && temporaryDigest === plan.proposedDigest) {
+          if (inspectOnly) {
+            results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: archiveValid ? "effect-absent-retryable" : "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: [archiveValid ? "VERIFIED_TEMP_AWAITS_AUTHORIZED_RECOVERY" : "ARCHIVE_BEFORE_INVALID"], observed });
+            continue;
+          }
+          if (!archiveValid) {
+            await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "ARCHIVE_BEFORE_INVALID" });
+            const receipt = await this.writeReceipt(plan, planDigest, "recovery-required", plan.precondition.priorDigest, undefined, ["ARCHIVE_BEFORE_INVALID"]);
+            await this.sealTerminalReceipt(plan, planDigest, "RECOVERY_REQUIRED", "ARCHIVE_BEFORE_INVALID", receipt);
+            results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["ARCHIVE_BEFORE_INVALID"], observed });
+            continue;
+          }
+          await rename(temporaryPath, targetPath);
+          const verified = await this.readTarget(targetPath);
+          if (verified === null || await sha256Bytes(verified) !== plan.proposedDigest) throw new Error(`RECOVERY_AMBIGUOUS:${effectId}`);
+          await this.journal.append(effectId, "VERIFIED", planDigest, { reasonCode: "RECOVERY_APPLIED_PREPARED_TEMP" });
+          const recoveredBefore = plan.precondition.target === "present" ? await readFile(resolve(await this.safeAbsolute(plan.archiveRunPath!, true), "before", ...normalizeVaultRelative(plan.targetPath).split("/")), "utf8") : null;
+          await this.writeArchiveAfter(plan, recoveredBefore, verified);
+          const receipt = await this.writeReceipt(plan, planDigest, "committed", plan.precondition.priorDigest, archive.manifestDigest, ["RECOVERY_APPLIED_PREPARED_TEMP"]);
+          await this.journal.append(effectId, "COMMITTED", planDigest, { reasonCode: "RECOVERY_APPLIED_PREPARED_TEMP", receiptDigest: await canonicalSha256(receipt) });
+          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: true, reasonCodes: ["RECOVERY_APPLIED_PREPARED_TEMP"], observed });
+          continue;
+        }
+        if (targetIsExpected && temporary === null) {
+          if (!inspectOnly && latest.state !== "RECOVERY_REQUIRED") {
+            await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "REPLAN_REQUIRED" });
+            const receipt = await this.writeReceipt(plan, planDigest, "recovery-required", plan.precondition.priorDigest, undefined, ["REPLAN_REQUIRED"]);
+            await this.sealTerminalReceipt(plan, planDigest, "RECOVERY_REQUIRED", "REPLAN_REQUIRED", receipt);
+          }
+          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-absent-retryable", writeCapabilityMayEnable: false, reasonCodes: ["REPLAN_REQUIRED"], observed });
+          continue;
+        }
+        if (!inspectOnly) {
+          await this.journal.append(effectId, "STALE", planDigest, { reasonCode: "CONFLICTING_EXTERNAL_BYTES" });
+          const receipt = await this.writeReceipt(plan, planDigest, "stale", targetDigest, archive.manifestDigest, ["CONFLICTING_EXTERNAL_BYTES"]);
+          await this.sealTerminalReceipt(plan, planDigest, "STALE", "CONFLICTING_EXTERNAL_BYTES", receipt);
+        }
+        results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: false, reasonCodes: ["CONFLICTING_EXTERNAL_BYTES"], observed });
+      } finally {
+        await recoveryLock?.release();
       }
-      if (targetDigest === plan.proposedDigest) {
-        if (inspectOnly) {
-          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: archiveValid ? "effect-present-verified" : "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: [archiveValid ? "AFTER_IMAGE_AWAITS_AUTHORIZED_RECOVERY" : "ARCHIVE_BEFORE_INVALID"], observed });
-          continue;
-        }
-        if (!archiveValid) {
-          await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "ARCHIVE_BEFORE_INVALID" });
-          const receipt = await this.writeReceipt(plan, planDigest, "recovery-required", plan.precondition.priorDigest, undefined, ["ARCHIVE_BEFORE_INVALID"]);
-          await this.sealTerminalReceipt(plan, planDigest, "RECOVERY_REQUIRED", "ARCHIVE_BEFORE_INVALID", receipt);
-          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["ARCHIVE_BEFORE_INVALID"], observed });
-          continue;
-        }
-        if (latest.state !== "VERIFIED") await this.journal.append(effectId, "VERIFIED", planDigest, { reasonCode: "RECOVERY_VERIFIED_AFTER_IMAGE" });
-        await this.writeArchiveAfter(plan, plan.precondition.target === "present" ? await readFile(resolve(await this.safeAbsolute(plan.archiveRunPath!, true), "before", ...normalizeVaultRelative(plan.targetPath).split("/")), "utf8") : null, target!);
-        const receipt = await this.writeReceipt(plan, planDigest, "committed", plan.precondition.priorDigest, archive.manifestDigest, ["RECOVERY_FINISHED_COMMIT"]);
-        await this.journal.append(effectId, "COMMITTED", planDigest, { reasonCode: "RECOVERY_FINISHED_COMMIT", receiptDigest: await canonicalSha256(receipt) });
-        if (temporary !== null) await rm(temporaryPath, { force: true });
-        results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: true, reasonCodes: ["RECOVERY_FINISHED_COMMIT"], observed });
-        continue;
-      }
-      if (targetIsExpected && temporaryDigest === plan.proposedDigest) {
-        if (inspectOnly) {
-          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: archiveValid ? "effect-absent-retryable" : "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: [archiveValid ? "VERIFIED_TEMP_AWAITS_AUTHORIZED_RECOVERY" : "ARCHIVE_BEFORE_INVALID"], observed });
-          continue;
-        }
-        if (!archiveValid) {
-          await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "ARCHIVE_BEFORE_INVALID" });
-          const receipt = await this.writeReceipt(plan, planDigest, "recovery-required", plan.precondition.priorDigest, undefined, ["ARCHIVE_BEFORE_INVALID"]);
-          await this.sealTerminalReceipt(plan, planDigest, "RECOVERY_REQUIRED", "ARCHIVE_BEFORE_INVALID", receipt);
-          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["ARCHIVE_BEFORE_INVALID"], observed });
-          continue;
-        }
-        await rename(temporaryPath, targetPath);
-        const verified = await this.readTarget(targetPath);
-        if (verified === null || await sha256Bytes(verified) !== plan.proposedDigest) throw new Error(`RECOVERY_AMBIGUOUS:${effectId}`);
-        await this.journal.append(effectId, "VERIFIED", planDigest, { reasonCode: "RECOVERY_APPLIED_PREPARED_TEMP" });
-        const recoveredBefore = plan.precondition.target === "present" ? await readFile(resolve(await this.safeAbsolute(plan.archiveRunPath!, true), "before", ...normalizeVaultRelative(plan.targetPath).split("/")), "utf8") : null;
-        await this.writeArchiveAfter(plan, recoveredBefore, verified);
-        const receipt = await this.writeReceipt(plan, planDigest, "committed", plan.precondition.priorDigest, archive.manifestDigest, ["RECOVERY_APPLIED_PREPARED_TEMP"]);
-        await this.journal.append(effectId, "COMMITTED", planDigest, { reasonCode: "RECOVERY_APPLIED_PREPARED_TEMP", receiptDigest: await canonicalSha256(receipt) });
-        results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: true, reasonCodes: ["RECOVERY_APPLIED_PREPARED_TEMP"], observed });
-        continue;
-      }
-      if (targetIsExpected && temporary === null) {
-        if (!inspectOnly && latest.state !== "RECOVERY_REQUIRED") {
-          await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "REPLAN_REQUIRED" });
-          const receipt = await this.writeReceipt(plan, planDigest, "recovery-required", plan.precondition.priorDigest, undefined, ["REPLAN_REQUIRED"]);
-          await this.sealTerminalReceipt(plan, planDigest, "RECOVERY_REQUIRED", "REPLAN_REQUIRED", receipt);
-        }
-        results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-absent-retryable", writeCapabilityMayEnable: false, reasonCodes: ["REPLAN_REQUIRED"], observed });
-        continue;
-      }
-      if (!inspectOnly) {
-        await this.journal.append(effectId, "STALE", planDigest, { reasonCode: "CONFLICTING_EXTERNAL_BYTES" });
-        const receipt = await this.writeReceipt(plan, planDigest, "stale", targetDigest, archive.manifestDigest, ["CONFLICTING_EXTERNAL_BYTES"]);
-        await this.sealTerminalReceipt(plan, planDigest, "STALE", "CONFLICTING_EXTERNAL_BYTES", receipt);
-      }
-      results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: false, reasonCodes: ["CONFLICTING_EXTERNAL_BYTES"], observed });
     }
     const safeToEnableWrites = !inspectOnly && results.every((result) => result.writeCapabilityMayEnable);
     if (!inspectOnly) await this.writeCheckpoint(false);
