@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { closeSync, mkdirSync, mkdtempSync, openSync, readFileSync, renameSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import { closeSync, copyFileSync, mkdirSync, mkdtempSync, openSync, readFileSync, renameSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
@@ -58,7 +58,7 @@ test('native guard refuses conflicting writers and invalid inputs before callbac
   const writer = openSync(file, 'r+');
   try { assert.throws(() => guard.withReadGuards([file], () => assert.fail('must not run')), /GUARD_UNAVAILABLE/); }
   finally { closeSync(writer); }
-  for (const paths of [[], Array(4097).fill(file), [null], ['relative.txt'], [file + '\0bad'], [file + ':stream']]) {
+  for (const paths of [[], Array(100002).fill(file), [null], ['relative.txt'], [file + '\0bad'], [file + ':stream']]) {
     assert.throws(() => guard.withReadGuards(paths, () => assert.fail('must not run')), /GUARD_UNAVAILABLE/);
   }
   const child = join(directory, 'child'); mkdirSync(child);
@@ -117,4 +117,33 @@ test('directory guards permit child promotion but block empty-directory replacem
     assert.throws(() => renameSync(directory, directory + '.held'), error => ['EBUSY', 'EPERM', 'EACCES'].includes(error.code));
   });
   renameSync(directory, directory + '.held'); renameSync(directory + '.held', directory);
+});
+
+test('watcher loader refuses missing or altered build-bound native bytes before creating a leaf', t => {
+  const { directory } = fixture(t);
+  for (const mode of ['missing', 'altered', 'valid']) {
+    const installation = join(directory, mode); mkdirSync(installation);
+    copyFileSync(join(root, 'dist/watcher-host.mjs'), join(installation, 'watcher-host.mjs'));
+    const native = join(installation, 'native'); mkdirSync(native);
+    if (mode !== 'missing') copyFileSync(binary, join(native, manifest.filename));
+    if (mode === 'altered') writeFileSync(join(native, manifest.filename), 'not the admitted executable');
+    const vault = join(installation, 'vault'); mkdirSync(vault);
+    const run = spawnSync(process.execPath, ['--input-type=module', '-e', `
+      import assert from 'node:assert/strict';
+      import { existsSync, readFileSync } from 'node:fs';
+      import { join } from 'node:path';
+      import { pathToFileURL } from 'node:url';
+      const [installation, vault, mode] = process.argv.slice(1);
+      const api = await import(pathToFileURL(join(installation, 'watcher-host.mjs')));
+      const directory = api.openWatcherDirectory(vault);
+      const write = () => api.writeNewWatcherFile(directory, 'created.txt', Buffer.from('authorized'));
+      if (mode === 'valid') {
+        write(); assert.equal(readFileSync(join(vault, 'created.txt'), 'utf8'), 'authorized');
+      } else {
+        assert.throws(write, { message: 'GKX_WATCHER_NATIVE_GUARD_UNAVAILABLE' });
+        assert.equal(existsSync(join(vault, 'created.txt')), false);
+      }
+    `, installation, vault, mode], { encoding: 'utf8', timeout: 30000, windowsHide: true });
+    assert.ifError(run.error); assert.equal(run.status, 0, run.stderr);
+  }
 });

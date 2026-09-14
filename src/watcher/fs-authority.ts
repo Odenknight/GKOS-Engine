@@ -23,6 +23,7 @@ import { basename, dirname, join, parse, resolve } from "node:path";
 
 import { canonicalPathSync, sameCanonicalPath } from "../retrieval/path-security";
 import { retrievalCanonicalDigest, retrievalSha256, stableJson } from "../retrieval/digest";
+import { withWindowsRetainedGuards } from "./windows-retained-guard";
 
 export const WATCHER_DIRECTORY_MODE = 0o700;
 export const WATCHER_FILE_MODE = 0o600;
@@ -583,32 +584,46 @@ export function withAuthorizedWatcherLeafTransition<T>(
   const includeAffectedFileDigests = options.include_affected_file_digests ?? true;
   const proof = beginWatcherLeafTransition(directory, affectedLeaves, maximum, includeAffectedFileDigests);
   try {
-    const authenticateIntermediate = (
-      presentLeaves: readonly string[],
-      assertIntermediateRelation: (snapshot: WatcherLeafTransitionSnapshot) => void,
-    ): WatcherDirectoryCapability => {
-      const first = validateWatcherLeafTransition(proof, presentLeaves, maximum, includeAffectedFileDigests);
-      assertIntermediateRelation(Object.freeze({ before: proof.affected_before, after: first.affected }));
-      const second = validateWatcherLeafTransition(proof, presentLeaves, maximum, includeAffectedFileDigests);
-      assertIntermediateRelation(Object.freeze({ before: proof.affected_before, after: second.affected }));
-      if (stableJson([...first.affected]) !== stableJson([...second.affected]) || stableJson(first.seal) !== stableJson(second.seal)) {
+    return withWindowsRetainedGuards([
+      directory.path, ...proof.retained_before.map(row => join(directory.path, row.basename)),
+    ], () => {
+      // Bind the held paths to the inspected proof before admitting mutation.
+      const initialPresent = [...proof.affected_before].filter(([, row]) => row !== null).map(([leaf]) => leaf);
+      const initial = validateWatcherLeafTransition(proof, initialPresent, maximum, includeAffectedFileDigests);
+      if (stableJson([...initial.affected]) !== stableJson([...proof.affected_before]) ||
+          stableJson(initial.seal) !== stableJson(proof.before_seal)) fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+      const authenticateIntermediate = (
+        presentLeaves: readonly string[],
+        assertIntermediateRelation: (snapshot: WatcherLeafTransitionSnapshot) => void,
+      ): WatcherDirectoryCapability => {
+        const first = validateWatcherLeafTransition(proof, presentLeaves, maximum, includeAffectedFileDigests);
+        assertIntermediateRelation(Object.freeze({ before: proof.affected_before, after: first.affected }));
+        const second = validateWatcherLeafTransition(proof, presentLeaves, maximum, includeAffectedFileDigests);
+        assertIntermediateRelation(Object.freeze({ before: proof.affected_before, after: second.affected }));
+        if (stableJson([...first.affected]) !== stableJson([...second.affected]) || stableJson(first.seal) !== stableJson(second.seal)) {
+          fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+        }
+        return createDirectoryCapability(directory.path, second.seal);
+      };
+      const result = mutate(proof.affected_before, authenticateIntermediate);
+      const present = typeof expectedPresentLeaves === "function" ? expectedPresentLeaves(result) : expectedPresentLeaves;
+      const after = validateWatcherLeafTransition(proof, present, maximum, includeAffectedFileDigests);
+      assertRelation(Object.freeze({ before: proof.affected_before, after: after.affected }));
+      options.on_before_seal_refresh?.();
+      const final = validateWatcherLeafTransition(proof, present, maximum, includeAffectedFileDigests);
+      assertRelation(Object.freeze({ before: proof.affected_before, after: final.affected }));
+      if (stableJson([...after.affected]) !== stableJson([...final.affected]) || stableJson(after.seal) !== stableJson(final.seal)) {
         fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
       }
-      return createDirectoryCapability(directory.path, second.seal);
-    };
-    const result = mutate(proof.affected_before, authenticateIntermediate);
-    const present = typeof expectedPresentLeaves === "function" ? expectedPresentLeaves(result) : expectedPresentLeaves;
-    const after = validateWatcherLeafTransition(proof, present, maximum, includeAffectedFileDigests);
-    assertRelation(Object.freeze({ before: proof.affected_before, after: after.affected }));
-    options.on_before_seal_refresh?.();
-    const final = validateWatcherLeafTransition(proof, present, maximum, includeAffectedFileDigests);
-    assertRelation(Object.freeze({ before: proof.affected_before, after: final.affected }));
-    if (stableJson([...after.affected]) !== stableJson([...final.affected]) || stableJson(after.seal) !== stableJson(final.seal)) {
-      fail("GKX_WATCHER_FS_DIRECTORY_CHANGED");
+      refreshDirectorySeal(directory, final.seal);
+      revalidateWatcherDirectory(directory);
+      return result;
+    });
+  } catch (error) {
+    if (process.platform === "win32" && ["EBUSY", "EPERM", "EACCES"].includes((error as NodeJS.ErrnoException)?.code)) {
+      throw new Error("GKX_WATCHER_FS_DIRECTORY_CHANGED", { cause: error });
     }
-    refreshDirectorySeal(directory, final.seal);
-    revalidateWatcherDirectory(directory);
-    return result;
+    throw error;
   } finally {
     closeOpenedDirectory(proof.opened_parent);
   }

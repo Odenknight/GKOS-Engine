@@ -47,7 +47,8 @@ static napi_value withReadGuards(napi_env env, napi_callback_info info) {
     need(a.napi_get_cb_info(env, info, &count, args, nullptr, nullptr) == napi_ok && count == 2);
     need(a.napi_is_array(env, args[0], &array) == napi_ok && array);
     uint32_t length = 0; napi_valuetype callbackType;
-    need(a.napi_get_array_length(env, args[0], &length) == napi_ok && length > 0 && length <= 4096);
+    // The watcher admits up to 100,000 direct entries plus their parent.
+    need(a.napi_get_array_length(env, args[0], &length) == napi_ok && length > 0 && length <= 100001);
     need(a.napi_typeof(env, args[1], &callbackType) == napi_ok && callbackType == napi_function);
     std::vector<std::wstring> paths;
     for (uint32_t i = 0; i < length; i++) {

@@ -860,8 +860,8 @@
     {
       "path": "docs/WINDOWS-RETAINED-GUARD.md",
       "before": null,
-      "after": "7281d68519047783ac201112187ea4a59d4c5c449c97dab39601b17d659fbe67",
-      "rationale": "Directory guards share writes to permit authorized child promotion while denying directory deletion; opened kind must match selected sharing flags. Five native tests include 800 cross-process refusals and empty-directory replacement. Watcher integration and full qualification remain open."
+      "after": "3e51018435809256ea3b173882efb4c85a97dce86993b0d8d52033351a767ee4",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
@@ -1034,8 +1034,8 @@
     {
       "path": "native/windows/retained-guard.cpp",
       "before": null,
-      "after": "46b8356234acd768293d18f9cc0841a700c164ee1b966936800b1590bd19bf90",
-      "rationale": "Directory guards share writes to permit authorized child promotion while denying directory deletion; opened kind must match selected sharing flags. Five native tests include 800 cross-process refusals and empty-directory replacement. Watcher integration and full qualification remain open."
+      "after": "4ad3004d3aa4fac57d661c8bacb4a2f9e9293bf073738d638b9fe15ad7602b85",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "package-lock.json",
@@ -1046,8 +1046,8 @@
     {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "bf0bd6edb2e94ff5eeb24c4d019cae6d0d1e97024826b08073500477e8ba8382",
-      "rationale": "Expose the generated-runner regression command without new dependencies or product version changes."
+      "after": "cafd6474a549d0da572a7c739512c01d4203932ab19a7b49c198f3e54134315d",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "scripts/benchmark-graphiti-native.mjs",
@@ -1070,8 +1070,8 @@
     {
       "path": "scripts/build.mjs",
       "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
-      "after": "76278821f22cf2a1c1f72308dc87cadfe6ddeb0d09b8871a0e4da96a203f0eab",
-      "rationale": "Generate exact JavaScript bundle identities and esbuild input graphs; runtime bundle bytes unchanged in recorded comparison."
+      "after": "dfe821cbd8e80316ae9f174f1a6bfb9c0ebb056881b7471af8f2d392ea051dff",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "scripts/check-graphiti-http-chain.mjs",
@@ -1136,8 +1136,8 @@
     {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
-      "after": "5161ce1e3092df97f187e1476f94ef2e8ad8ca2e411a01f8afa26b798b79c848",
-      "rationale": "Windows reliability: retry the singleton watcher observation once only after its sole complete TAP latency failure."
+      "after": "88b398de7d41055d68f3caca40379d8f3c6f71e6d76e80f7b773d9bffa00edfa",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "scripts/run-retrieval-observation-qualification-2.2.mjs",
@@ -1614,10 +1614,22 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "src/watcher/fs-authority.ts",
+      "before": "bfb8adc527329086a0d3135ef65bdc163d1281f3",
+      "after": "43e3cac6f546b50aa1f7942a5d577189e21123b86d385e0cf6b0a062f9e74432",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+    },
+    {
       "path": "src/watcher/host.ts",
       "before": "552145be95b14ac22a07760c7922a85d038b225c",
       "after": "3ef7de7452926384168c7152b3f0d8da6a4ba28079a89ab4c95397cba8753555",
       "rationale": "CI repair: bind the runtime-selected concrete lexical backend so official Node 23 uses the existing manifest-bound compatibility scan."
+    },
+    {
+      "path": "src/watcher/windows-retained-guard.ts",
+      "before": null,
+      "after": "b34a9f5558c92e500662a5361c7fa73a29c68174273d65d5bf8693ff9310861e",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "test/agent-identity-mcp-contract-draft2.test.mjs",
@@ -1748,8 +1760,8 @@
     {
       "path": "test/native/windows-retained-guard.mjs",
       "before": null,
-      "after": "395fcb6c57d6d235fb82bed83763e13a51769eb97568d76db3e8d2a36f228ef4",
-      "rationale": "Directory guards share writes to permit authorized child promotion while denying directory deletion; opened kind must match selected sharing flags. Five native tests include 800 cross-process refusals and empty-directory replacement. Watcher integration and full qualification remain open."
+      "after": "7de5edac87122faa250a56efcdfca260fc12b28611289d48ae93b0785bc33bc2",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "test/navigation-architecture.test.mjs",
