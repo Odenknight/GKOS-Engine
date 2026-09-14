@@ -860,8 +860,8 @@
     {
       "path": "docs/WINDOWS-RETAINED-GUARD.md",
       "before": null,
-      "after": "25d6f72ff602569644f26622405392e0014af64b38dc366a508841d1f662c86b",
-      "rationale": "Native Windows cross-process retained-file and authorized output transition tests; records directory-guard child-rename restriction. Component evidence only; watcher integration and full qualification remain open."
+      "after": "7281d68519047783ac201112187ea4a59d4c5c449c97dab39601b17d659fbe67",
+      "rationale": "Directory guards share writes to permit authorized child promotion while denying directory deletion; opened kind must match selected sharing flags. Five native tests include 800 cross-process refusals and empty-directory replacement. Watcher integration and full qualification remain open."
     },
     {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
@@ -1034,8 +1034,8 @@
     {
       "path": "native/windows/retained-guard.cpp",
       "before": null,
-      "after": "b6686e54e9a6bbde9595e117b36f6728159f86d28c11bc57b4b081d7f723dbc5",
-      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+      "after": "46b8356234acd768293d18f9cc0841a700c164ee1b966936800b1590bd19bf90",
+      "rationale": "Directory guards share writes to permit authorized child promotion while denying directory deletion; opened kind must match selected sharing flags. Five native tests include 800 cross-process refusals and empty-directory replacement. Watcher integration and full qualification remain open."
     },
     {
       "path": "package-lock.json",
@@ -1748,8 +1748,8 @@
     {
       "path": "test/native/windows-retained-guard.mjs",
       "before": null,
-      "after": "308485bbc59bf6276309120d650243dd9e5b5caab296b70f180a3e7edd7c0413",
-      "rationale": "Native Windows cross-process retained-file and authorized output transition tests; records directory-guard child-rename restriction. Component evidence only; watcher integration and full qualification remain open."
+      "after": "395fcb6c57d6d235fb82bed83763e13a51769eb97568d76db3e8d2a36f228ef4",
+      "rationale": "Directory guards share writes to permit authorized child promotion while denying directory deletion; opened kind must match selected sharing flags. Five native tests include 800 cross-process refusals and empty-directory replacement. Watcher integration and full qualification remain open."
     },
     {
       "path": "test/navigation-architecture.test.mjs",

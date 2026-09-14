@@ -17,8 +17,11 @@ a signature or independent build attestation. No module loads on import.
 The native test is an explicit Windows lane, outside the general test runner.
 
 `withReadGuards(paths, callback)` opens all requested paths before calling the
-synchronous callback. It permits read sharing and denies conflicting data-write
-and delete access while the handles remain held. It checks the resolved names
+synchronous callback. Files permit read sharing and deny conflicting data-write
+and delete access while the handles remain held. Directories also share write
+access, allowing child transitions while denying deletion of the directory
+itself. The opened handle's kind must match the kind used to choose sharing
+flags. It checks the resolved names
 and refuses reparse targets, nonlocal paths, missing paths, and more than 4,096
 handles. Partial acquisition failure closes handles already acquired.
 Return and callback exceptions also release the handles.
@@ -28,17 +31,18 @@ guarded rename/write refusals and successful rename operations after release.
 Other tests cover conflicting writers, callback exceptions, partial acquisition,
 input limits, and malformed paths. Synthetic file bytes remain unchanged.
 
-A subsequent five-test run adds a separate Node process. With two retained
-files guarded, all 800 attempted writes and file or parent-directory renames
+A subsequent five-test run adds a separate Node process. With the parent,
+a retained subdirectory, and two retained files guarded, all 800 attempted writes and file or parent-directory renames
 were refused. The caller could still create, write, rename, and remove its
 unguarded output leaf. The original retained bytes stayed unchanged.
 
-An integration probe also exposed a restriction: holding a directory guard
-permits creating a child but blocks renaming that child until release. A
-dedicated regression preserves this observation. Do not indiscriminately hold
-directory guards across transitions that require child renames. The retained
-file test demonstrates one nonempty tree; it does not establish coverage for
-empty directories, every ancestor topology, or unguarded descendants.
+The earlier read-sharing-only directory guard blocked authorized child renames.
+That observation remains in Git history at `1c351ac`. Directory write sharing
+corrects this restriction. A dedicated regression now permits child creation,
+promotion, and removal, but refuses renaming the empty guarded directory.
+The tests do not establish coverage for every ancestor topology or unguarded
+descendants. Retained files need their own guards; directory sharing does not
+make the contents of a directory immutable.
 
 This implements the [CreateFileW sharing rules](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew).
 Those rules do not block every metadata-only operation. The caller still needs

@@ -57,15 +57,20 @@ static napi_value withReadGuards(napi_env env, napi_callback_info info) {
     Handles held;
     held.values.reserve(paths.size());
     for (const auto& path : paths) {
-      // Read sharing permits inspection, while denying new data writers and
-      // delete/rename access. A conflicting existing handle refuses acquisition.
-      HANDLE handle = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr,
+      const DWORD attributes = GetFileAttributesW(path.c_str());
+      need(attributes != INVALID_FILE_ATTRIBUTES);
+      const bool directory = (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+      // Files deny data writers and delete access. Directories share writes so
+      // authorized child transitions work, but still deny their own deletion.
+      // The opened identity must match the kind used to select sharing flags.
+      HANDLE handle = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ | (directory ? FILE_SHARE_WRITE : 0), nullptr,
         OPEN_EXISTING, FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, nullptr);
       need(handle != INVALID_HANDLE_VALUE);
       held.values.push_back(handle);
       BY_HANDLE_FILE_INFORMATION identity{};
       need(GetFileType(handle) == FILE_TYPE_DISK && GetFileInformationByHandle(handle, &identity));
       need((identity.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) == 0);
+      need(((identity.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) == directory);
       std::vector<wchar_t> finalPath(32768);
       DWORD size = GetFinalPathNameByHandleW(handle, finalPath.data(), static_cast<DWORD>(finalPath.size()), FILE_NAME_NORMALIZED | VOLUME_NAME_DOS);
       need(size > 0 && size < finalPath.size());

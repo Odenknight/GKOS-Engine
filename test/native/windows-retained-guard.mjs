@@ -66,7 +66,7 @@ test('native guard refuses conflicting writers and invalid inputs before callbac
   renameSync(file, file + '.held'); renameSync(file + '.held', file);
 });
 
-test('retained file guards allow an authorized leaf transition and block another process', t => {
+test('parent and retained guards allow an authorized leaf transition and block another process', t => {
   const { directory, file } = fixture(t);
   const retainedDirectory = join(directory, 'retained-directory'); mkdirSync(retainedDirectory);
   const descendant = join(retainedDirectory, 'descendant.txt'); writeFileSync(descendant, 'descendant');
@@ -86,7 +86,7 @@ test('retained file guards allow an authorized leaf transition and block another
     }
     process.stdout.write('800 mutations refused');
   `;
-  guard.withReadGuards([file, descendant], () => {
+  guard.withReadGuards([directory, file, retainedDirectory, descendant], () => {
     // The affected leaf is excluded from guards. Its existing writer must not
     // prevent retaining the unaffected files.
     const writer = openSync(target, 'wx');
@@ -106,13 +106,15 @@ test('retained file guards allow an authorized leaf transition and block another
   renameSync(directory, directory + '.held'); renameSync(directory + '.held', directory);
 });
 
-test('directory guards permit child creation but block child promotion until release', t => {
+test('directory guards permit child promotion but block empty-directory replacement', t => {
   const { directory } = fixture(t);
   const target = join(directory, 'authorized.txt');
   guard.withReadGuards([directory], () => {
     writeFileSync(target, 'authorized', { flag: 'wx' });
     assert.equal(readFileSync(target, 'utf8'), 'authorized');
-    assert.throws(() => renameSync(target, target + '.promoted'), error => ['EBUSY', 'EPERM', 'EACCES'].includes(error.code));
+    renameSync(target, target + '.promoted'); unlinkSync(target + '.promoted');
+    // Also covers an empty directory, where no retained file anchors the parent.
+    assert.throws(() => renameSync(directory, directory + '.held'), error => ['EBUSY', 'EPERM', 'EACCES'].includes(error.code));
   });
-  renameSync(target, target + '.promoted'); unlinkSync(target + '.promoted');
+  renameSync(directory, directory + '.held'); renameSync(directory + '.held', directory);
 });
