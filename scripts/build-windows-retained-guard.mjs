@@ -18,7 +18,7 @@ const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const provenance=JSON.parse(readFileSync(join(headers,'sources.json'),'utf8'));
 for(const item of provenance)if(sha(readFileSync(join(headers,item.file)))!==item.sha256)throw Error('Node-API header provenance mismatch.');
 const source=join(root,'native/windows/retained-guard.cpp'),binary=join(output,'retained-guard.node');
-execFileSync(compiler,['/nologo','/std:c++17','/O2','/MT','/EHsc','/W4','/WX','/LD',source,'/Fo'+join(output,'retained-guard.obj'),'/Fe'+binary],{env,windowsHide:true,stdio:['ignore','pipe','pipe']});
+execFileSync(compiler,['/nologo','/std:c++17','/O2','/MT','/EHsc','/W4','/WX','/LD',source,'/Fo'+join(output,'retained-guard.obj'),'/Fe'+binary,'/link','/Brepro'],{env,windowsHide:true,stdio:['ignore','pipe','pipe']});
 const digest=sha(readFileSync(binary)),filename='retained-guard-'+digest+'.node';
 const target=join(output,filename);
 if(existsSync(target)){if(sha(readFileSync(target))!==digest)throw Error('Existing content-addressed module changed.');}
