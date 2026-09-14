@@ -1544,7 +1544,7 @@
     {
       "path": "src/watcher/contracts.ts",
       "before": "0cc72b3c8776dd9421798b157102ae4f8fba3ac4",
-      "after": "19e3ba9f75811c119226e43b8a1683ea398498578d68c0f6b3e83522a6f8af55",
+      "after": "7f7ebc93781784c68df5a6f1f94c3bbbd122707db7d5b2ec4e9eac62bff42a0f",
       "rationale": "Reuse one canonical digest of the detached, validated graph delta across transition and graph-state comparisons within an activation check; preserve all validation boundaries. Canonical assessment and diagnostic sort keys are computed once per item; ordering and input preservation are checked."
     },
     {
@@ -1834,6 +1834,12 @@
       "before": "5e302462792e360747bf0254d336f8d747f55e4c",
       "after": "99e10a2d3613cc429ba954332a88846268cffe6bdef46548c73b510c04d329e3",
       "rationale": "Make package setup abort-aware with bounded phase diagnostics, one explicit build, ordered cleanup and safe npm report parsing; retain real authenticated installed-package assertions and unchanged deadlines."
+    },
+    {
+      "path": "test/watcher-artifact-input.test.mjs",
+      "before": null,
+      "after": "e3515364f03e6579aae3992b871131b4857fc3631e4d0dd2b164fa042dd4dba4",
+      "rationale": "Artifact coordinate input regression: reject accessors and proxies before reading the digest; preserve valid artifact bytes."
     },
     {
       "path": "test/watcher-coordinator.test.mjs",

@@ -3396,13 +3396,14 @@ export function deriveWatcherGraphitiProjection(graph: GkxGraph, vaultId: string
 }
 
 export function watcherArtifactCoordinate(kind: "observation" | "plan" | "topology" | "graph", value: JsonRecord): Readonly<JsonRecord> {
+  const inert = JSON.parse(stableJson(value));
   const digestField = kind === "observation" ? "observation_digest"
     : kind === "plan" ? "plan_digest"
       : kind === "topology" ? "topology_snapshot_digest"
         : "graph_artifact_digest";
-  const digest = value[digestField];
+  const digest = inert[digestField];
   if (!isDigest(digest)) fail("GKX_WATCHER_CONTRACT_DIGEST_INVALID", `${kind} artifact digest is invalid.`);
-  const bytes = `${JSON.stringify(JSON.parse(stableJson(value)), null, 2)}\n`;
+  const bytes = `${JSON.stringify(inert, null, 2)}\n`;
   const cap = kind === "observation" ? 4 * 1024 * 1024 : 512 * 1024 * 1024;
   const byteSize = Buffer.byteLength(bytes);
   if (byteSize > cap) fail("GKX_WATCHER_CONTRACT_RELATION_INVALID", `${kind} artifact exceeds its byte cap.`);
