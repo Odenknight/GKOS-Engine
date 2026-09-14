@@ -19,7 +19,8 @@ test('actual Windows SEA loads its embedded guard without adjacent native files'
   t.after(() => {
     assert.equal(dirname(fixture), parent);
     assert.ok(fixture.startsWith(join(parent, 'gkos-guard-sea-')));
-    rmSync(fixture, { recursive: true, force: true });
+    // Windows can briefly retain an exited executable; persistent locks still fail.
+    rmSync(fixture, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
   });
   for (const folder of ['scripts', 'dist/native', 'native/windows', 'runtime', 'runtime/temp']) mkdirSync(join(fixture, folder), { recursive: true });
   for (const name of ['build-sea.mjs', 'sea-target.mjs', 'sea-native-assets.mjs', 'sea-build-inputs.mjs']) copyFileSync(join(root, 'scripts', name), join(fixture, 'scripts', name));

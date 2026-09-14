@@ -81,7 +81,10 @@ test("watcher observation runner emits exactly one sealed governed measurement",
     assert.equal(child.status, 0, child.stderr);
     const { result, failure } = JSON.parse(child.stdout);
 
-    if (failure !== null && failure.message !== "GKX_WATCHER_QUALIFICATION_FTS5_REQUIRED") throw failure;
+    if (failure !== null && failure.message !== "GKX_WATCHER_QUALIFICATION_FTS5_REQUIRED") {
+      process.stderr.write(child.stderr);
+      throw failure;
+    }
 
     assert.deepEqual(readdirSync(artifactRoot), ["watcher-observation-measurement.json"]);
     const bytes = readFileSync(join(artifactRoot, "watcher-observation-measurement.json"));
