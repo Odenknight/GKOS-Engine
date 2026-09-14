@@ -1628,14 +1628,14 @@
     {
       "path": "src/watcher/contracts.ts",
       "before": "0cc72b3c8776dd9421798b157102ae4f8fba3ac4",
-      "after": "7f7ebc93781784c68df5a6f1f94c3bbbd122707db7d5b2ec4e9eac62bff42a0f",
-      "rationale": "Reuse one canonical digest of the detached, validated graph delta across transition and graph-state comparisons within an activation check; preserve all validation boundaries. Canonical assessment and diagnostic sort keys are computed once per item; ordering and input preservation are checked."
+      "after": "0ba8400ed2f63d2cbb3d4c2afa278736dd93f22931d8e070bad77fd52467ac2d",
+      "rationale": "Return the four encodings already checked during detached coherent activation validation; preserve the existing sealing API and all semantic checks."
     },
     {
       "path": "src/watcher/coordinator.ts",
       "before": "4c2d09a947f81fc28e3ccf3806b348fcaff672ec",
-      "after": "06c55a8c85a44ea8a782db7ed2d469083d9d64d8f40e9539cc534feeb7fd937b",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "98b76b5ea24bdf827cf8bcbd91669be22c34aa76da08833805dea8c0f6addcbe",
+      "rationale": "Publish the exact artifact encodings returned by the same validation call instead of re-encoding detached records; retain byte/hash checks and physical readback."
     },
     {
       "path": "src/watcher/fs-authority.ts",
@@ -1994,8 +1994,8 @@
     {
       "path": "test/watcher-recovery-contracts.test.mjs",
       "before": "2519ed9ed3e66f5f216afe76ebe5547110b06a30",
-      "after": "a4a17a6199032ecbc1bd02022aaf128f026509fe165c5452978f2f00d099a847",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search. Canonical assessment and diagnostic sort keys are computed once per item; ordering and input preservation are checked."
+      "after": "90d89e96bc93a186dac89c136ba87552f9f29b40bb2949030cbf11fffd234c92",
+      "rationale": "Verify prepared artifact byte/hash equality, immutable detachment, fresh-call validation and corrupt-input refusal."
     },
     {
       "path": "test/watcher-service-cli.test.mjs",

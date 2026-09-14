@@ -1586,6 +1586,14 @@ export function sealWatcherTransitionPrefix(value: unknown): readonly Readonly<J
 }
 
 export function sealWatcherCoherentActivationBundle(value: unknown, outerPointerGuardValue: unknown): Readonly<JsonRecord> {
+  return prepareWatcherCoherentActivationBundle(value, outerPointerGuardValue).bundle;
+}
+
+/** Encodings belong to this detached, validated bundle only; no cross-call cache or write authority. */
+export function prepareWatcherCoherentActivationBundle(value: unknown, outerPointerGuardValue: unknown): Readonly<{
+  bundle: Readonly<JsonRecord>;
+  artifacts: Readonly<Record<"observation" | "plan" | "topology" | "graph", Readonly<JsonRecord>>>;
+}> {
   const bundle = canonicalRecord(value, "coherent activation bundle");
   exactKeys(bundle, [
     "batch", "observation", "observation_authority", "pre_scan_state", "plan", "plan_authority", "topology", "transitions",
@@ -1762,7 +1770,11 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
   })) {
     fail("GKX_WATCHER_CONTRACT_SOURCE_REMOVAL_INVALID", "coherent activation physical removal/outbox relation differs.");
   }
-  return deepFreeze(bundle);
+  return Object.freeze({
+    bundle: deepFreeze(bundle),
+    artifacts: Object.freeze({ observation: observationCoordinate, plan: planCoordinate,
+      topology: topologyCoordinate, graph: rawGraphCoordinate }),
+  });
 }
 
 function sealWatcherFailureRetryBundleInner(value: unknown): Readonly<JsonRecord> {
