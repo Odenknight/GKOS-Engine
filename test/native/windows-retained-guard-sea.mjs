@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
@@ -22,7 +22,8 @@ test('actual Windows SEA loads its embedded guard without adjacent native files'
     rmSync(fixture, { recursive: true, force: true });
   });
   for (const folder of ['scripts', 'dist/native', 'native/windows', 'runtime', 'runtime/temp']) mkdirSync(join(fixture, folder), { recursive: true });
-  for (const name of ['build-sea.mjs', 'sea-target.mjs', 'sea-native-assets.mjs']) copyFileSync(join(root, 'scripts', name), join(fixture, 'scripts', name));
+  for (const name of ['build-sea.mjs', 'sea-target.mjs', 'sea-native-assets.mjs', 'sea-build-inputs.mjs']) copyFileSync(join(root, 'scripts', name), join(fixture, 'scripts', name));
+  for (const name of ['package.json', 'package-lock.json']) copyFileSync(join(root, name), join(fixture, name));
   copyFileSync(join(root, 'native/windows/retained-guard.cpp'), join(fixture, 'native/windows/retained-guard.cpp'));
   writeFileSync(join(fixture, 'dist/native', manifest.filename), binary);
   writeFileSync(join(fixture, 'dist/native/retained-guard.json'), JSON.stringify(manifest));
@@ -69,7 +70,11 @@ test('actual Windows SEA loads its embedded guard without adjacent native files'
   // Fault-inject only the isolated builder's asset selector. Production
   // packaging rejects these inputs; runtime must also refuse a bad container.
   for (const mode of ['missing', 'altered']) {
-    const badAsset = join(fixture, 'bad.node'); writeFileSync(badAsset, 'altered native bytes');
+    // Preserve each prior inventory before constructing a different container.
+    renameSync(join(fixture, 'dist', executable + '.build-inputs.json'),
+      join(fixture, 'dist', mode + '.previous-build-inputs.json'));
+    const badAsset = join(fixture, 'dist/native', manifest.filename);
+    if (mode === 'altered') writeFileSync(badAsset, 'altered native bytes');
     const assets = mode === 'missing' ? {} : { [manifest.filename]: badAsset };
     writeFileSync(join(fixture, 'scripts/sea-native-assets.mjs'),
       `export function retainedGuardSeaAssets() { return ${JSON.stringify(assets)}; }`);
