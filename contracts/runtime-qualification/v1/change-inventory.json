@@ -1058,8 +1058,8 @@
     {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "cafd6474a549d0da572a7c739512c01d4203932ab19a7b49c198f3e54134315d",
-      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+      "after": "6e5337f66e6103fb5bdbfbe86599c861eab763e31d3b76dfb01c89e4b2f24e2d",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required. Preserve existing root notices and their referenced governance documents in npm distributions."
     },
     {
       "path": "scripts/benchmark-graphiti-native.mjs",
@@ -1108,6 +1108,12 @@
       "before": null,
       "after": "e002ff02a71a3c5e9e9c674074eed4aaaafe0ca28855da05dd4749c4f82f4bd0",
       "rationale": "Private managed Graphiti manifest binding: preserve raw source bytes, match Python ledger canonicalization, and verify Unicode and asynchronous input capture; no product query capability activation."
+    },
+    {
+      "path": "scripts/check-pack.mjs",
+      "before": "e2d0d1d76389cae3a759f9802308cbc75da6404d",
+      "after": "711343c28c44dc163620491a575405bfc221fc5bfddf0dd59b115587e2d8584e",
+      "rationale": "Preserve existing root notices and their referenced governance documents in npm distributions."
     },
     {
       "path": "scripts/current-test-plan.mjs",
