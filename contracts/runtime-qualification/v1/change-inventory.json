@@ -392,8 +392,8 @@
     {
       "path": ".github/workflows/ci.yml",
       "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
-      "after": "ded98f6627c4487a4e814de22de2dc4cd308ac019526a917f2691e6fd24dfa6f",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "bd249b09498b7cfd07536e938bd983086821fde6df315df5809adfdb246e04a6",
+      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure."
     },
     {
       "path": ".github/workflows/managed-moc-audit-2.2.yml",
@@ -702,6 +702,12 @@
       "rationale": "Document executed isolated OD-02 scope, commands, upstream pins, Supersedes none and explicit lack of release/profile/registration claims."
     },
     {
+      "path": "docs/EFFECTS-HOST-API-PROGRESS.md",
+      "before": null,
+      "after": "c005bbed28f122376d00d2fae9b0127a5dd05452db4264a21e1bee0d789f20ec",
+      "rationale": "Effects host API and descriptor-bound exact reads: refuse aliases/non-files, bind opened and post-read identity/bytes, preserve UTF-8, and close handles. Combined watcher/Effects component suite 178 passed; full combined and native host qualification remain open."
+    },
+    {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
       "before": null,
       "after": "38e7a280d18b34b7b005892b755126fcfbd4baf083eabb260b46fac51f66cd92",
@@ -860,8 +866,8 @@
     {
       "path": "docs/WINDOWS-RETAINED-GUARD.md",
       "before": null,
-      "after": "3e51018435809256ea3b173882efb4c85a97dce86993b0d8d52033351a767ee4",
-      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+      "after": "170c4f2444ae883e6c1d2c52981d4de7f93b6372226de226d03fe437827ca23f",
+      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure."
     },
     {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
@@ -1060,6 +1066,12 @@
       "before": null,
       "after": "33548fa366021262741469c80409226df95933f8c0feccbbd35630c101eff0ee",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "scripts/build-watcher-observation-runner.mjs",
+      "before": null,
+      "after": "3252d968bf4f74ce2a4c5bb8639bd2276fbbfc41391ada46e5013acdca7f8bb3",
+      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure."
     },
     {
       "path": "scripts/build-windows-retained-guard.mjs",
@@ -1460,8 +1472,8 @@
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "ece4d38d2c93f58f2a72029253e26cd8fa33cbfb3ba77e82e363589d33fee0be",
-      "rationale": "Persist separate versioned NO_CHANGE audits before terminal completion; verify on replay, revalidate interrupted no-ops, retain exact failure/refusal semantics."
+      "after": "766740dcae970a82226a57dcaa668f2209f75b5d2c5121802be046f18d86135f",
+      "rationale": "Effects host API and descriptor-bound exact reads: refuse aliases/non-files, bind opened and post-read identity/bytes, preserve UTF-8, and close handles. Combined watcher/Effects component suite 178 passed; full combined and native host qualification remain open."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
@@ -1472,8 +1484,8 @@
     {
       "path": "src/navigation-effects/node/journal.ts",
       "before": null,
-      "after": "3825c05ae0a5ee560fe080e4fedf6d60d94589d9b50391be4cc0603d6e2fc2a9",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "f952958b76f45306692451ead35b3de4fc9f4bbdfc194606e5055f06df376815",
+      "rationale": "Effects host API progress: inspected recovery verifies fresh evidence under writer lease, reloads journal from disk, and uses current authority and per-target locks. 155 component tests; Kosmos host integration and release qualification remain open."
     },
     {
       "path": "src/navigation-effects/node/moc-host.ts",
@@ -1790,8 +1802,8 @@
     {
       "path": "test/navigation-effects-node.test.mjs",
       "before": null,
-      "after": "3db867bd4309bbfdc67a644cf083286e6cc8d6b9a8047ec4a7e8f3df2263cd90",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "84ba8fc9c6208cb2eb4f6de69d53c5427b069f6e6de7a1f9feaf0a6f175c0d8d",
+      "rationale": "Effects host API and descriptor-bound exact reads: refuse aliases/non-files, bind opened and post-read identity/bytes, preserve UTF-8, and close handles. Combined watcher/Effects component suite 178 passed; full combined and native host qualification remain open."
     },
     {
       "path": "test/navigation-effects-performance.test.mjs",
@@ -1946,8 +1958,8 @@
     {
       "path": "test/watcher-observation-qualification.test.mjs",
       "before": "10ee043507f86d913c95ddcd11869390b68d6f6f",
-      "after": "d62bd00d49686a7743c1b50eff71f63cb2bf86d4944e3cd4d5ed31c3e2dc20ce",
-      "rationale": "CI repair: prove only the two Node-owned warnings are suppressed and unrelated stderr remains fail-closed."
+      "after": "2672bb379013ff6718995a9856f8bfd62ecb4142feaffbd29b3316507ce41ce9",
+      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure."
     },
     {
       "path": "test/watcher-pointer-host.test.mjs",

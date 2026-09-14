@@ -19,6 +19,13 @@ export class DurableEffectJournal {
     private readonly clock: () => string = () => new Date().toISOString(),
   ) {}
 
+  /** Caller must hold the writer lease and exclude concurrent journal users. */
+  async reload(): Promise<readonly EffectJournalEntry[]> {
+    await this.appendQueue;
+    this.entries = null;
+    return this.load();
+  }
+
   async load(): Promise<readonly EffectJournalEntry[]> {
     if (this.entries) return deepFreeze(this.entries.map((entry) => structuredClone(entry)));
     let text = "";

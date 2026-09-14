@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
-import { mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
+import { spawn, spawnSync } from "node:child_process";
+import { link, lstat, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { hostname, tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -62,6 +62,266 @@ async function fixture(t, name) {
 test("Node executor requires an explicit cooperative-vault path threat model", async (t) => {
   const root = await fixture(t, "threat-model");
   assert.throws(() => new RawNodeNavigationEffectsExecutor({ vaultRoot: root }), /PATH_THREAT_MODEL_ACKNOWLEDGEMENT_REQUIRED/);
+});
+
+test("readSource preserves exact UTF-8 bytes and performs no Effects initialization", async (t) => {
+  const root = await fixture(t, "read-only-source");
+  const source = Buffer.from("\ufeff# Exact\r\nCaf\u00e9\r\n", "utf8");
+  await writeFile(join(root, "topics/index.md"), source);
+  await writeFile(join(root, "topics/invalid.md"), Buffer.from([0xc3, 0x28]));
+  const before = (await readdir(root, { recursive: true })).sort();
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  assert.deepEqual(Buffer.from(await executor.readSource("topics/index.md"), "utf8"), source);
+  assert.equal(await executor.readSource("topics/absent.md"), null);
+  await assert.rejects(executor.readSource("topics/invalid.md"), /SOURCE_NOT_VALID_UTF8/);
+  for (const path of ["../outside.md", ".gkx/effects/journal.jsonl", "_archive/moc-runs/test.md"]) {
+    await assert.rejects(executor.readSource(path), /PATH_DENIED/);
+  }
+  assert.deepEqual((await readdir(root, { recursive: true })).sort(), before);
+  assert.deepEqual(await readFile(join(root, "topics/index.md")), source);
+  assert.deepEqual(await readFile(join(root, "topics/invalid.md")), Buffer.from([0xc3, 0x28]));
+});
+
+test("source reads refuse hardlinked bytes and non-file targets without initializing Effects", async t => {
+  const root = await fixture(t, "source-alias");
+  const original = join(root, "original.md");
+  await writeFile(original, "outside granted target");
+  await link(original, join(root, "topics/linked.md"));
+  const before = await exactTree(root);
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  await assert.rejects(executor.readSource("topics/linked.md"), /PATH_DENIED:SOURCE_FILE_ALIAS/);
+  await assert.rejects(executor.readSource("topics"), /PATH_DENIED:SOURCE_FILE_ALIAS/);
+  assert.deepEqual(await exactTree(root), before);
+});
+
+test("source reads reject replacement and growth during the read and close the descriptor", async t => {
+  for (const mode of ["replace", "grow"]) await t.test(mode, async t => {
+    const root = await fixture(t, `source-race-${mode}`);
+    await writeFile(join(root, "topics/index.md"), "original");
+    const child = spawnSync(process.execPath, ["--input-type=module", "-e", `
+      import assert from 'node:assert/strict';
+      import fs from 'node:fs/promises';
+      import { syncBuiltinESMExports } from 'node:module';
+      import { join } from 'node:path';
+      import { pathToFileURL } from 'node:url';
+      const [root, mode, modulePath] = process.argv.slice(1), target = join(root, 'topics/index.md');
+      const originalOpen = fs.open; let closed = 0;
+      fs.open = async (...args) => {
+        const handle = await originalOpen(...args);
+        if (args[0] === target) {
+          const read = handle.readFile.bind(handle), close = handle.close.bind(handle);
+          handle.readFile = async (...readArgs) => {
+            const bytes = await read(...readArgs);
+            if (mode === 'replace') { await fs.rename(target, target + '.held'); await fs.writeFile(target, 'external'); }
+            else await fs.appendFile(target, '-external');
+            return bytes;
+          };
+          handle.close = async () => { closed++; return close(); };
+        }
+        return handle;
+      };
+      syncBuiltinESMExports();
+      const { NodeNavigationEffectsExecutor } = await import(pathToFileURL(modulePath));
+      const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, pathThreatModel: 'cooperative-vault' });
+      await assert.rejects(executor.readSource('topics/index.md'), /SOURCE_FILE_CHANGED/);
+      assert.equal(closed, 1);
+      assert.equal(await fs.readFile(target, 'utf8'), mode === 'replace' ? 'external' : 'original-external');
+    `, root, mode, join(process.cwd(), "dist/navigation-effects-node.mjs")], { encoding: "utf8", timeout: 30000, windowsHide: true });
+    assert.ifError(child.error); assert.equal(child.status, 0, child.stderr);
+  });
+});
+
+test("split preparation retains exact private bytes and requires its own single-use handle", async (t) => {
+  const root = await fixture(t, "split-prepare");
+  const before = "# Before\r\n";
+  await writeFile(join(root, "topics/index.md"), before);
+  const planned = await makePlan(before, "topics/index.md", "run-split", "# Proposed\r\n");
+  const expected = planned.proposedBytes;
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  const other = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  t.after(() => executor.releaseVaultLease());
+  const request = { plan: structuredClone(planned.plan), proposedBytes: planned.proposedBytes };
+  const pending = executor.prepare(request);
+  request.proposedBytes = "changed by caller";
+  request.plan.targetPath = "topics/changed.md";
+  const result = await pending;
+  assert.equal(result.status, "prepared");
+  assert.equal(Object.isFrozen(result.prepared), true);
+  assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
+  assert.deepEqual((await executor.journal.load()).map(entry => entry.state), ["RECEIVED", "PLANNED", "PREPARED"]);
+  assert.equal((await readdir(root)).includes("_archive"), false);
+  await assert.rejects(other.executePrepared(result.prepared), /PREPARED_HANDLE_INVALID/);
+  await assert.rejects(executor.executePrepared({ ...result.prepared }), /PREPARED_HANDLE_INVALID/);
+  assert.equal((await executor.executePrepared(result.prepared)).status, "committed");
+  assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), expected);
+  await assert.rejects(executor.executePrepared(result.prepared), /PREPARED_HANDLE_INVALID/);
+});
+
+test("split execution rechecks external bytes and current authority after preparation", async (t) => {
+  for (const change of ["source", "authority"]) {
+    const root = await fixture(t, `split-stale-${change}`);
+    const before = "# Before\n";
+    await writeFile(join(root, "topics/index.md"), before);
+    const planned = await makePlan(before);
+    let allowed = true;
+    const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root,
+      preconditionValidator: () => allowed ? [] : ["AUTHORITY_REVOKED"] });
+    t.after(() => executor.releaseVaultLease());
+    const result = await executor.prepare({ plan: planned.plan, proposedBytes: planned.proposedBytes });
+    assert.equal(result.status, "prepared");
+    if (change === "source") await writeFile(join(root, "topics/index.md"), "# External change\n");
+    else allowed = false;
+    const executed = await executor.executePrepared(result.prepared);
+    assert.equal(executed.status, change === "source" ? "stale" : "denied");
+    assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), change === "source" ? "# External change\n" : before);
+  }
+});
+
+test("pending prepared intents survive shutdown without a false clean checkpoint", async (t) => {
+  const root = await fixture(t, "split-shutdown");
+  const before = "# Before\n";
+  await writeFile(join(root, "topics/index.md"), before);
+  const planned = await makePlan(before);
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  const result = await executor.prepare({ plan: planned.plan, proposedBytes: planned.proposedBytes });
+  assert.equal(result.status, "prepared");
+  await executor.shutdown();
+  const checkpoint = JSON.parse(await readFile(join(root, ".gkx/effects/checkpoints/latest.json"), "utf8"));
+  assert.equal(checkpoint.cleanShutdown, false);
+  assert.equal((await executor.journal.load()).at(-1).state, "PREPARED");
+  const rejected = await executor.executePrepared(result.prepared);
+  assert.equal(rejected.status, "denied");
+  assert.deepEqual(rejected.reasonCodes, ["EXECUTOR_SHUTTING_DOWN"]);
+  assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
+  const status = await executor.shutdownByDeadline(new AbortController().signal);
+  assert.equal(status.status, "blocked");
+  assert.deepEqual(status.reasonCodes, ["NONTERMINAL_EFFECTS_REMAIN"]);
+  assert.equal(status.checkpointVerified, true);
+  assert.equal(status.leaseReleased, true);
+});
+
+test("shutdown deadline returns while the active writer keeps its lease and finishes safely", { timeout: 10_000 }, async (t) => {
+  const root = await fixture(t, "shutdown-deadline");
+  await writeFile(join(root, "topics/index.md"), "before");
+  const planned = await makePlan("before");
+  let reachedResolve, releaseResolve;
+  const reached = new Promise(resolve => { reachedResolve = resolve; });
+  const release = new Promise(resolve => { releaseResolve = resolve; });
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+    faultInjector: async point => { if (point === "after-temporary-write") { reachedResolve(); await release; } } });
+  const execution = executor.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes });
+  try {
+    await reached;
+    const deadline = new AbortController();
+    const closing = executor.shutdownByDeadline(deadline.signal);
+    deadline.abort();
+    assert.deepEqual(await closing, { status: "deadline-exceeded", admissionStopped: true,
+      checkpointVerified: false, leaseReleased: false, reasonCodes: ["SHUTDOWN_DEADLINE_EXCEEDED"] });
+    const competitor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+    await assert.rejects(competitor.acquireVaultLease(), /VAULT_LEASE_HELD/);
+    releaseResolve();
+    assert.equal((await execution).status, "committed");
+    const completed = await executor.shutdownByDeadline(new AbortController().signal);
+    assert.deepEqual(completed, { status: "complete", admissionStopped: true,
+      checkpointVerified: true, leaseReleased: true, reasonCodes: [] });
+    assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), planned.proposedBytes);
+    assert.deepEqual((await executor.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes })).reasonCodes,
+      ["EXECUTOR_SHUTTING_DOWN"]);
+    const checkpoint = await readFile(join(root, ".gkx/effects/checkpoints/latest.json"));
+    await assert.rejects(executor.recoverStartup(), /EXECUTOR_SHUTTING_DOWN/);
+    assert.deepEqual((await executor.rollback({ effectId: planned.plan.effectId, authority: authority("moc:rollback"),
+      archiveDate: "2026-08-20", runId: "closed" })).reasonCodes, ["EXECUTOR_SHUTTING_DOWN"]);
+    assert.deepEqual(await readFile(join(root, ".gkx/effects/checkpoints/latest.json")), checkpoint);
+  } finally { releaseResolve(); await execution; await executor.shutdown(); }
+});
+
+test("shutdown failure does not report checkpoint verification or release its lease", async (t) => {
+  const root = await fixture(t, "shutdown-failure");
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  await executor.acquireVaultLease();
+  t.after(() => executor.releaseVaultLease());
+  await mkdir(join(root, ".gkx/effects/checkpoints/latest.json"), { recursive: true });
+  const status = await executor.shutdownByDeadline(new AbortController().signal);
+  assert.deepEqual(status, { status: "blocked", admissionStopped: true, checkpointVerified: false,
+    leaseReleased: false, reasonCodes: ["SHUTDOWN_DRAIN_FAILED"] });
+  await readFile(join(root, ".gkx/effects/vault.lease"));
+});
+
+test("an already-expired shutdown deadline still stops admission and drains", async (t) => {
+  const root = await fixture(t, "expired-shutdown");
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  const deadline = new AbortController();
+  deadline.abort();
+  assert.equal((await executor.shutdownByDeadline(deadline.signal)).status, "deadline-exceeded");
+  await executor.shutdown();
+  assert.equal((await executor.shutdownByDeadline(new AbortController().signal)).status, "complete");
+});
+
+async function exactTree(root) {
+  const result = {};
+  for (const name of (await readdir(root, { recursive: true })).sort()) {
+    const path = join(root, name), stat = await lstat(path);
+    result[name] = stat.isDirectory() ? "directory" : { bytes: (await readFile(path)).toString("base64"), mtime: stat.mtimeMs };
+  }
+  return result;
+}
+
+test("recovery inspection performs no writes at every interrupted execution boundary", async (t) => {
+  for (const point of ["after-received", "after-planned", "after-prepared", "after-archive", "after-temporary-write", "after-replace", "after-verified", "after-receipt"]) {
+    await t.test(point, async (t) => {
+      const root = await fixture(t, `inspect-${point}`);
+      await writeFile(join(root, "topics/index.md"), "before");
+      const planned = await makePlan("before");
+      const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+        faultInjector: at => { if (at === point) throw new SimulatedEffectCrash(at); } });
+      await assert.rejects(writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes }), /SIMULATED_EFFECT_CRASH/);
+      await writer.releaseVaultLease();
+      const before = await exactTree(root);
+      const observer = new NodeNavigationEffectsExecutor({ vaultRoot: root,
+        preconditionValidator: () => { throw new Error("inspection must not invoke authority callbacks"); } });
+      const report = await observer.inspectRecovery();
+      assert.equal(report.writeCapabilityMayEnable, false);
+      assert.equal(report.sourceContentIncluded, false);
+      assert.equal(report.results.length, 1);
+      assert.equal(report.results[0].writeCapabilityMayEnable, false);
+      assert.match(report.inspectionDigest, /^sha256:[0-9a-f]{64}$/);
+      assert.equal(Object.isFrozen(report), true);
+      assert.deepEqual(await observer.inspectRecovery(), report);
+      assert.deepEqual(await exactTree(root), before);
+    });
+  }
+});
+
+test("recovery inspection uses fresh disk evidence and never initializes an empty vault", async (t) => {
+  const root = await fixture(t, "inspect-fresh");
+  const observer = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  const empty = await exactTree(root);
+  const report = await observer.inspectRecovery();
+  assert.deepEqual(report.results, []);
+  assert.equal(report.journalDigest, null);
+  assert.deepEqual(await exactTree(root), empty);
+  await mkdir(join(root, ".gkx/effects"), { recursive: true });
+  await writeFile(join(root, ".gkx/effects/journal.jsonl"), "{broken\n");
+  const corrupt = await exactTree(root);
+  await assert.rejects(observer.inspectRecovery(), /JOURNAL_CORRUPT/);
+  assert.deepEqual(await exactTree(root), corrupt);
+});
+
+test("repeated inspection sees newly committed receipts without stale writer caches", async (t) => {
+  const root = await fixture(t, "inspect-new-commit");
+  const observer = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  const empty = await observer.inspectRecovery();
+  await writeFile(join(root, "topics/index.md"), "before");
+  const planned = await makePlan("before");
+  const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  t.after(() => writer.releaseVaultLease());
+  await writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes });
+  const before = await exactTree(root);
+  const current = await observer.inspectRecovery();
+  assert.notEqual(current.journalDigest, empty.journalDigest);
+  assert.deepEqual(current.results, []);
+  assert.equal(current.writeCapabilityMayEnable, false);
+  assert.deepEqual(await exactTree(root), before);
 });
 
 test("Node executor journals, archives exact bytes, atomically replaces, verifies, receipts, and replays idempotently", async (t) => {
@@ -365,6 +625,120 @@ test("rollback is a separately authorized, preconditioned, archived effect", asy
   assert.deepEqual(await restarted.recoverStartup(), { safeToEnableWrites: true, results: [] });
   assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
   await restarted.releaseVaultLease();
+});
+
+test("recovery refuses source promotion and commit finalization without current authority", async (t) => {
+  for (const point of ["after-temporary-write", "after-replace", "after-verified"]) {
+    for (const mode of ["missing", "revoked", "malformed"]) await t.test(`${point}:${mode}`, async t => {
+      const root = await fixture(t, `recovery-authority-${mode}`);
+      await writeFile(join(root, "topics/index.md"), "before");
+      const planned = await makePlan("before");
+      const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+        faultInjector: at => { if (at === point) throw new SimulatedEffectCrash(at); } });
+      await assert.rejects(writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes }), /SIMULATED_EFFECT_CRASH/);
+      await writer.releaseVaultLease();
+      const before = await exactTree(root);
+      const recovery = new NodeNavigationEffectsExecutor({ vaultRoot: root,
+        ...(mode === "revoked" ? { preconditionValidator: () => ["AUTHORITY_REVOKED"] } :
+          mode === "malformed" ? { preconditionValidator: () => null } : {}) });
+      try {
+        const report = await recovery.recoverStartup();
+        assert.equal(report.safeToEnableWrites, false);
+        assert.ok(report.results[0].reasonCodes.includes("RECOVERY_AUTHORITY_REVALIDATION_FAILED"));
+        const after = await exactTree(root);
+        // Lease/checkpoint bookkeeping may change; source, archive, temporary
+        // bytes, journal and receipts must remain exactly as observed.
+        const protectedTree = tree => Object.fromEntries(Object.entries(tree).filter(([path]) => {
+          const normalized = path.replaceAll("\\", "/");
+          return normalized !== ".gkx/effects/vault.lease" && normalized !== ".gkx/effects/checkpoints" &&
+            !normalized.startsWith(".gkx/effects/checkpoints/");
+        }));
+        assert.deepEqual(protectedTree(after), protectedTree(before));
+      } finally { await recovery.releaseVaultLease(); }
+    });
+  }
+});
+
+test("inspected recovery binds fresh evidence and still requires current authority", async t => {
+  for (const mode of ["valid-cached-reader", "revoked", "source-changed", "temporary-changed", "wrong-digest", "invalid-digest"]) {
+    await t.test(mode, async t => {
+      const root = await fixture(t, `inspected-${mode}`);
+      await writeFile(join(root, "topics/index.md"), "before");
+      let authorityCalls = 0;
+      const recovery = new NodeNavigationEffectsExecutor({ vaultRoot: root,
+        preconditionValidator: () => { authorityCalls++; return mode === "revoked" ? ["AUTHORITY_REVOKED"] : []; } });
+      // Populate this instance's old empty cache before another writer records
+      // the interrupted operation. Recovery must reload disk under its lease.
+      assert.deepEqual(await recovery.journal.load(), []);
+      const planned = await makePlan("before");
+      const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+        faultInjector: point => { if (point === "after-temporary-write") throw new SimulatedEffectCrash(point); } });
+      await assert.rejects(writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes }), /SIMULATED_EFFECT_CRASH/);
+      await writer.releaseVaultLease();
+      const inspection = await recovery.inspectRecovery();
+      assert.equal(authorityCalls, 0);
+      if (mode === "source-changed") await writeFile(join(root, "topics/index.md"), "external source");
+      if (mode === "temporary-changed") {
+        const entries = await writer.journal.load();
+        const temporary = entries.map(entry => entry.temporaryPath).filter(Boolean).at(-1);
+        assert.ok(temporary); await writeFile(join(root, temporary), "external temporary");
+      }
+      const digest = mode === "invalid-digest" ? "not-a-digest" : mode === "wrong-digest" ? `sha256:${"0".repeat(64)}` : inspection.inspectionDigest;
+      const journalBefore = await readFile(join(root, ".gkx/effects/journal.jsonl"), "utf8");
+      try {
+        if (["valid-cached-reader", "revoked"].includes(mode)) {
+          const result = await recovery.recoverInspected(digest);
+          assert.equal(result.safeToEnableWrites, mode === "valid-cached-reader");
+          assert.equal(result.results.length, 1);
+          assert.ok(authorityCalls > 0);
+        } else {
+          await assert.rejects(recovery.recoverInspected(digest), mode === "invalid-digest" ? /RECOVERY_INSPECTION_DIGEST_INVALID/ : /RECOVERY_INSPECTION_CHANGED/);
+          assert.equal(authorityCalls, 0);
+        }
+        assert.equal(await readFile(join(root, "topics/index.md"), "utf8"),
+          mode === "valid-cached-reader" ? planned.proposedBytes : mode === "source-changed" ? "external source" : "before");
+        if (mode !== "valid-cached-reader") assert.equal(await readFile(join(root, ".gkx/effects/journal.jsonl"), "utf8"), journalBefore);
+      } finally { await recovery.releaseVaultLease(); }
+    });
+  }
+});
+
+test("recovery rechecks authority with the target lock held and always releases it", async (t) => {
+  for (const mode of ["allow", "revoke", "throw"]) await t.test(mode, async t => {
+    const root = await fixture(t, `recovery-lock-${mode}`);
+    await writeFile(join(root, "topics/index.md"), "before");
+    const planned = await makePlan("before");
+    const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+      faultInjector: point => { if (point === "after-temporary-write") throw new SimulatedEffectCrash(point); } });
+    await assert.rejects(writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes }), /SIMULATED_EFFECT_CRASH/);
+    await writer.releaseVaultLease();
+    const lockDirectory = join(root, ".gkx/effects/locks");
+    const lockPath = join(lockDirectory, `${(await sha256Bytes(planned.plan.targetPath)).slice(7)}.lock`);
+    const journalPath = join(root, ".gkx/effects/journal.jsonl");
+    const journalBefore = await readFile(journalPath, "utf8");
+    let checks = 0;
+    const recovery = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: async plan => {
+      checks++;
+      if (checks === 1) return [];
+      const lock = JSON.parse(await readFile(lockPath, "utf8"));
+      assert.equal(lock.effectId, plan.effectId); assert.equal(lock.targetPath, plan.targetPath);
+      assert.equal(lock.pid, process.pid);
+      if (mode === "throw") throw new Error("AUTHORITY_PROVIDER_OFFLINE");
+      return mode === "revoke" ? ["AUTHORITY_REVOKED_UNDER_LOCK"] : [];
+    } });
+    try {
+      if (mode === "throw") await assert.rejects(recovery.recoverStartup(), /AUTHORITY_PROVIDER_OFFLINE/);
+      else {
+        const report = await recovery.recoverStartup();
+        assert.equal(report.safeToEnableWrites, mode === "allow");
+        if (mode === "revoke") assert.ok(report.results[0].reasonCodes.includes("AUTHORITY_REVOKED_UNDER_LOCK"));
+      }
+      assert.ok(checks >= 2);
+      assert.deepEqual(await readdir(lockDirectory), []);
+      assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), mode === "allow" ? planned.proposedBytes : "before");
+      if (mode !== "allow") assert.equal(await readFile(journalPath, "utf8"), journalBefore);
+    } finally { await recovery.releaseVaultLease(); }
+  });
 });
 
 test("startup recovery classifies every injected transition without silent overwrite", async (t) => {
