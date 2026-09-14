@@ -1856,8 +1856,8 @@
     {
       "path": "test/navigation-effects-host.test.mjs",
       "before": null,
-      "after": "d48f12e94cb34fb4a0ed2a2592537f5091cf8390375b199a86b40b9aee89a2f4",
-      "rationale": "Regression exercises the registered rename callback against a completed self-write and requires durable reconciliation admission."
+      "after": "4a1653955057098e2d9e1010f8bd1afac22a30602dea79d3a64d13ca06e0614b",
+      "rationale": "Regression exercises the registered rename callback against a completed self-write and requires durable reconciliation admission. Retain runtime status when native event convergence misses the unchanged deadline."
     },
     {
       "path": "test/navigation-effects-node.test.mjs",
@@ -2054,8 +2054,8 @@
     {
       "path": "test/watcher-observation-qualification.test.mjs",
       "before": "10ee043507f86d913c95ddcd11869390b68d6f6f",
-      "after": "2672bb379013ff6718995a9856f8bfd62ecb4142feaffbd29b3316507ce41ce9",
-      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure."
+      "after": "a72685e6d77ce7e74bee47f4b65d9ecfa64b82d2ce4cf69059a3461ef45bbab2",
+      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure. Preserve child stderr latency breakdown on failure; no limit or retry changes."
     },
     {
       "path": "test/watcher-pointer-host.test.mjs",

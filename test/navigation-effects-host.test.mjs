@@ -100,7 +100,7 @@ test('runtime observes file edits and closes resources within shutdown budget', 
     await writeFile(join(root, 'topics/a.md'), 'Watched title');
     const deadline = Date.now() + 6000;
     while (!/Watched title/.test(await readFile(join(root, 'topics/index.md'), 'utf8')) && Date.now() < deadline) await new Promise(r => setTimeout(r, 50));
-    assert.match(await readFile(join(root, 'topics/index.md'), 'utf8'), /Watched title/);
+    assert.match(await readFile(join(root, 'topics/index.md'), 'utf8'), /Watched title/, JSON.stringify(runtime.status));
   } finally {
     assert.deepEqual(await runtime.shutdown(), { clean: true });
     assert.equal(runtime.status.running, false);
