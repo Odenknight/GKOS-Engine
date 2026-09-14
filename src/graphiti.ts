@@ -345,6 +345,7 @@ export function buildGraphitiEpisodes(graph: GkxGraph, options: GraphitiOptions 
         episode_body: JSON.stringify({
           schema: GRAPHITI_ADAPTER_SCHEMA,
           subject_uid: subjectUid,
+          source_path: node.path,
           subject: title,
           predicate: relationship.relation,
           object_ref: relationship.target,
@@ -410,9 +411,9 @@ export async function attachGraphitiSourceEvidence(
   episodes: GraphitiEpisode[], sources: ReadonlyMap<string, Uint8Array>
 ): Promise<GraphitiEpisode[]> {
   for (const episode of episodes) {
-    if (episode.source !== "json") continue;
+    if (episode.source !== "json" && episode.source !== "fact_triple") continue;
     const body = JSON.parse(episode.episode_body);
-    const source = sources.get(body.path);
+    const source = sources.get(episode.source === "json" ? body.path : body.source_path);
     if (!source) {
       delete body.source_evidence;
       episode.episode_body = JSON.stringify(body);

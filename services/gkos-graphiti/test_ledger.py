@@ -42,6 +42,18 @@ class ManagedLedgerTests(unittest.TestCase):
         self.store = Ledger(self.root)
         self.assertEqual(self.store.read(job, self.bound), result)
 
+    def test_one_source_can_publish_distinct_episodes_but_not_mixed_versions(self):
+        self.manifest.append({**self.manifest[0], "episode_digest": digest("relationship")})
+        self.bound["source_snapshot_digest"] = digest(self.manifest)
+        self.mappings.append({**self.mappings[0], "projection_episode_id": "episode-2"})
+        job = self.observed()
+        self.store.publish(job, self.bound)
+        self.assertEqual(self.store.read(job, self.bound)["mappings"], self.mappings)
+        for manifest in ([self.manifest[0], self.manifest[0]],
+                         [self.manifest[0], {**self.manifest[1], "source_digest": digest("changed source")} ]):
+            with self.assertRaisesRegex(Refused, "source-invalid"):
+                self.store.enqueue({**self.bound, "source_snapshot_digest": digest(manifest)}, manifest)
+
     def test_two_connections_cannot_claim_same_job(self):
         job = self.store.enqueue(self.bound, self.manifest)
         other = Ledger(self.root, clock=lambda: self.now)

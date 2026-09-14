@@ -386,7 +386,7 @@
     {
       "path": ".gitattributes",
       "before": "0f3ffed343d2c7ed7aad2e67be2ef4e47ae6ff15",
-      "after": "321f7a806ba0d421bb103cc45d78937fbfa7dd2d398d486eb4da59ba6f4dbcbe",
+      "after": "c58b92cb659065ff9d5f53bb0bbe00e60f40a86856b3812198d688a23fd7d301",
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
@@ -672,6 +672,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "docs/BUNDLE-INPUT-INVENTORY.md",
+      "before": null,
+      "after": "53ddb42e5925a1eb4d89630b64a0d0ce5e9abb4f251504f2a4da7d90d51d0856",
+      "rationale": "Document bundle input evidence, consumer use and remaining SBOM/release limitations."
+    },
+    {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
       "before": null,
       "after": "d0d8c7ac5884f3dfa13027a024f033259db64b534e51da8cc794085f4cb27e39",
@@ -724,6 +730,12 @@
       "before": null,
       "after": "7be85ea97a08b449074b59c1962026a1fab525f66b0c05b670705b196df9b1d8",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "docs/GRAPHITI-MANIFEST-CONSUMERS.md",
+      "before": null,
+      "after": "4f2651237b2827e701c1d7b49005f72e4afe19d28012a48e0f1ecec48e8880c0",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "docs/GRAPHITI-NATIVE-BASELINE-RESULTS.md",
@@ -844,6 +856,12 @@
       "before": null,
       "after": "35730828ad967521c1f2b0e70206fcab0cc3941b74360ddd62f0b8e231f6be41",
       "rationale": "Record exact failed candidate evidence, measured secure scan bottleneck, bounded implementation repair and remaining exact-head qualification gates without relaxing limits."
+    },
+    {
+      "path": "docs/WINDOWS-RETAINED-GUARD.md",
+      "before": null,
+      "after": "3e51018435809256ea3b173882efb4c85a97dce86993b0d8d52033351a767ee4",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
@@ -978,6 +996,48 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "native/windows/node-api-v22.22.1/LICENSE",
+      "before": null,
+      "after": "c738ae413cf561f174e34f6961f8ca458aae2369a73640dda6234c629b98bcc4",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/js_native_api.h",
+      "before": null,
+      "after": "582e64ead4d5fdf663e2bd934f2fc97e8e155a7740d28995830393d19d089705",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/js_native_api_types.h",
+      "before": null,
+      "after": "05e3d86e24c814f94a8b52b6a70cec11d7e91c810008253553528637e3a15b2f",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/node_api.h",
+      "before": null,
+      "after": "2d4560831e525b47b060ec8a0864ab73993df9e20215ce9f0fe7b24cd31af32a",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/node_api_types.h",
+      "before": null,
+      "after": "088766b3cf1f0cd9b292c361ad30f7a04e7cc6db35a20ca52c572c1adf9635e7",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/sources.json",
+      "before": null,
+      "after": "c35c5673bf745e1222e3ec424e4aea47f0015b8149787b737119fead0411842f",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/retained-guard.cpp",
+      "before": null,
+      "after": "4ad3004d3aa4fac57d661c8bacb4a2f9e9293bf073738d638b9fe15ad7602b85",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+    },
+    {
       "path": "package-lock.json",
       "before": "723712151b00f9988194a4bac2b875c53c8f6d19",
       "after": "dce860396993870d6d133bc527dd80ebeb1055df24529e8e040ccbd90ed3d54d",
@@ -986,8 +1046,8 @@
     {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "bf0bd6edb2e94ff5eeb24c4d019cae6d0d1e97024826b08073500477e8ba8382",
-      "rationale": "Expose the generated-runner regression command without new dependencies or product version changes."
+      "after": "cafd6474a549d0da572a7c739512c01d4203932ab19a7b49c198f3e54134315d",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "scripts/benchmark-graphiti-native.mjs",
@@ -1002,10 +1062,28 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "scripts/build-windows-retained-guard.mjs",
+      "before": null,
+      "after": "e0f97c95e2a320c345c6308eea5619d7edefb8ecf1e95a7cab94d16dcd63879e",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
       "path": "scripts/build.mjs",
       "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
-      "after": "f73428e3243f652764f08325e5ed5ce1c9ae54e15868d19c5acca60e8fbf7ec6",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "dfe821cbd8e80316ae9f174f1a6bfb9c0ebb056881b7471af8f2d392ea051dff",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+    },
+    {
+      "path": "scripts/check-graphiti-http-chain.mjs",
+      "before": null,
+      "after": "2465b14c3d7b09f4dafa12c0b50afd6d273cfcab30bc5c83d228859fffad388a",
+      "rationale": "Synthetic cross-process qualification of authenticated Engine route, TypeScript HTTP transport, Python adapter, real published ledger and revocation; SDK and source-scope authority remain fixture-controlled."
+    },
+    {
+      "path": "scripts/check-graphiti-manifest-python.mjs",
+      "before": null,
+      "after": "e002ff02a71a3c5e9e9c674074eed4aaaafe0ca28855da05dd4749c4f82f4bd0",
+      "rationale": "Private managed Graphiti manifest binding: preserve raw source bytes, match Python ledger canonicalization, and verify Unicode and asynchronous input capture; no product query capability activation."
     },
     {
       "path": "scripts/current-test-plan.mjs",
@@ -1058,8 +1136,8 @@
     {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
-      "after": "5161ce1e3092df97f187e1476f94ef2e8ad8ca2e411a01f8afa26b798b79c848",
-      "rationale": "Windows reliability: retry the singleton watcher observation once only after its sole complete TAP latency failure."
+      "after": "88b398de7d41055d68f3caca40379d8f3c6f71e6d76e80f7b773d9bffa00edfa",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "scripts/run-retrieval-observation-qualification-2.2.mjs",
@@ -1124,8 +1202,8 @@
     {
       "path": "services/gkos-graphiti/README.md",
       "before": null,
-      "after": "279500b7bd303679d73f1d7611734bee4ee7e956701ed57fca6a0e8d1dad76b5",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "57b889fa13fe3c35eaa03eae3f6557e9cfd6411e83c73171b9f615792a058d27",
+      "rationale": "Native three-field search route derives binding from authenticated published ledger, preserving shared deadline/capacity and revocation controls; exact Windows/Linux synthetic tests."
     },
     {
       "path": "services/gkos-graphiti/backend.py",
@@ -1142,8 +1220,14 @@
     {
       "path": "services/gkos-graphiti/ledger.py",
       "before": null,
-      "after": "1d40c1872d1daeb2879feecff16a08f859f65c045cc6d13e93ce03613bf0c546",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "05e61cfe7b68192f9f44b5aa88d47f4b3b9c7c13cbc1ae339666959d710691c8",
+      "rationale": "Allow distinct managed episodes from one consistent source version; reject duplicate episodes and conflicting raw source digests, with ledger publication and producer tests."
+    },
+    {
+      "path": "services/gkos-graphiti/qualify_http_chain.py",
+      "before": null,
+      "after": "7a8397709deee863ebb299e00fc6ed755e2ac53d2c171c649bed68799167f8bd",
+      "rationale": "Synthetic cross-process qualification of authenticated Engine route, TypeScript HTTP transport, Python adapter, real published ledger and revocation; SDK and source-scope authority remain fixture-controlled."
     },
     {
       "path": "services/gkos-graphiti/qualify_live.py",
@@ -1164,10 +1248,34 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "services/gkos-graphiti/qualify_service_manifest.py",
+      "before": null,
+      "after": "b27682ec266d0a9591ce3584235dccd745da0a1d2c78719b1f4067f9883f333e",
+      "rationale": "Add explicitly configured live synthetic qualification of Engine-generated service manifests, published read-only queries and scoped cleanup."
+    },
+    {
+      "path": "services/gkos-graphiti/query_http.py",
+      "before": null,
+      "after": "6c8b4efcce055cd561f805ed77b8744d0aef31e164eb8307526dc8612f803a34",
+      "rationale": "Native three-field search route derives binding from authenticated published ledger, preserving shared deadline/capacity and revocation controls; exact Windows/Linux synthetic tests."
+    },
+    {
       "path": "services/gkos-graphiti/readonly_query.py",
       "before": null,
       "after": "72493bb98cf76c0ab20e77dae519730ec81147aaf10a9b2e6ed364fdfe60abef",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "services/gkos-graphiti/requirements-query.txt",
+      "before": null,
+      "after": "a945d0dd64976f30283dc6647ff363a1c6bc3a6b73f84ee7fefb154052958a32",
+      "rationale": "Optional private authenticated Graphiti HTTP adapter with bounded decoding, live session checks, deadline enforcement, pinned aiohttp dependency, and real-ledger loopback tests; no deployed host qualification."
+    },
+    {
+      "path": "services/gkos-graphiti/service_host.py",
+      "before": null,
+      "after": "37f773630bb83d86f508ea7fb7861a7e5591ad54e049ec445445a0fefa7dc4aa",
+      "rationale": "Add loopback published-query host with fixed local authority, credential/configuration/ledger invalidation and cleanup tests on Windows and Linux."
     },
     {
       "path": "services/gkos-graphiti/test_backend.py",
@@ -1184,8 +1292,8 @@
     {
       "path": "services/gkos-graphiti/test_ledger.py",
       "before": null,
-      "after": "60557e5f629d7342ea8e4bf4c6187061926ae4731e0d34fb3f5b2d64f46abd2a",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "f7f8c4663e8aa3b9b1c41db111037eb1406f49cba5c0df71390828cbe8597f4a",
+      "rationale": "Allow distinct managed episodes from one consistent source version; reject duplicate episodes and conflicting raw source digests, with ledger publication and producer tests."
     },
     {
       "path": "services/gkos-graphiti/test_published_query.py",
@@ -1194,16 +1302,28 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "services/gkos-graphiti/test_query_http.py",
+      "before": null,
+      "after": "fdedf499dc3d20bfcba00fc35b42d1631827771f105794f5ea6a06fb6838dee0",
+      "rationale": "Native three-field search route derives binding from authenticated published ledger, preserving shared deadline/capacity and revocation controls; exact Windows/Linux synthetic tests."
+    },
+    {
       "path": "services/gkos-graphiti/test_readonly_query.py",
       "before": null,
       "after": "8d3f5baa3809c3b359eccb658240a1a87d6a588d5089e496fd6046fbe1890bb1",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "services/gkos-graphiti/test_service_host.py",
+      "before": null,
+      "after": "953fae5304e7e2df582b260d7f16f550ab81a2e4fe4294d7036db813a4f02318",
+      "rationale": "Add loopback published-query host with fixed local authority, credential/configuration/ledger invalidation and cleanup tests on Windows and Linux."
+    },
+    {
       "path": "services/gkos-graphiti/test_worker.py",
       "before": null,
-      "after": "3abdd18a227dd9f16e017781213b9981ce81aae82d2d62038744f44c9b2d70ac",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "d8d4e8e82272b058f55d4564864268eff821633a985acf30c779be488eb61cfa",
+      "rationale": "Exercise two episodes from one source through worker readback, published ledger, and query citation conversion; semantic support remains unverified."
     },
     {
       "path": "services/gkos-graphiti/worker.py",
@@ -1232,20 +1352,26 @@
     {
       "path": "src/graphiti-adapter.ts",
       "before": "bf95b6a858645c82c832dbb68d06e6ff2d7dec3e",
-      "after": "ded6584934c1d3b947e389064921ddb7c830fc169b7205ea69d0ec8d43a10b71",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "6659288851e06ec8a0195227229c7ca1582963637f188289e2a62b3b099074ba",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "src/graphiti-broker.ts",
       "before": null,
-      "after": "46fd957c52079513c234fed2b5c9802095eabd09ce038ee35a3f3af45057f01a",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "a89fcafc6ea2c56ca144ccb655fb3196331ac85ad53dc4a3ddd434722559d7e7",
+      "rationale": "Private managed Graphiti manifest binding: preserve raw source bytes, match Python ledger canonicalization, and verify Unicode and asynchronous input capture; no product query capability activation."
     },
     {
       "path": "src/graphiti-ingest-script.ts",
       "before": null,
       "after": "489f1ff0ad5d2e1a8606f00a9d2f00a3248b10233cf72622b796ae602890d0d1",
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
+    },
+    {
+      "path": "src/graphiti-manifest.ts",
+      "before": null,
+      "after": "0591de4929d7b319b469cf940047d6cd64b0e5812a7061cf2a974c2ee8001c97",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "src/graphiti-query-contract.ts",
@@ -1262,8 +1388,8 @@
     {
       "path": "src/graphiti.ts",
       "before": "b674c65babba76399689dccd897d31a777423c6e",
-      "after": "36084eca6422c4a93183e0259c63fa84110322536bf386192402aac23b3df055",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "7211e0bc4dcc41266e78a6eaa457c3a112482dc94b42c54325463fc6a136617d",
+      "rationale": "Relationship episodes name their originating source path and can carry exact source-byte evidence without copying note content; absent bytes remove stale evidence."
     },
     {
       "path": "src/incremental.ts",
@@ -1440,16 +1566,34 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/service/graphiti-host.ts",
+      "before": null,
+      "after": "1bf6ff7f9825ac8f2b596fd2d2662b6f41249184e1a9161016a3854dd468e60e",
+      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
+    },
+    {
+      "path": "src/service/graphiti-manifest.ts",
+      "before": null,
+      "after": "aa6010f6b0ac4c39199094803be3ede07eb6bc852b2429086d493673c6330b46",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
+    },
+    {
       "path": "src/service/mcp.ts",
       "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
       "after": "edabbbb66c52c3698a4941195fa7ccb3f406280947a453fbde79253a54d6377e",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/service/node.ts",
+      "before": "a66997dc3e0248ddd9988149a224ec462ce74f57",
+      "after": "42a258e4ce25bd06c13a07776f800623fdbf53326287797050d60a7686565b15",
+      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
+    },
+    {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
-      "after": "20459a43c4816009ed72f2972edf2d107140a8b62df6824beb97c6634880e217",
-      "rationale": "Recheck current credential before all successful JSON responses after asynchronous host work; deny revoked or changed identities without returning protected data."
+      "after": "6384e390fc744d5ceedc88a1070ab607a06bcc7825723a8383b7f0621ed37bec",
+      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
     },
     {
       "path": "src/version.ts",
@@ -1460,8 +1604,8 @@
     {
       "path": "src/watcher/contracts.ts",
       "before": "0cc72b3c8776dd9421798b157102ae4f8fba3ac4",
-      "after": "70fa450a181358403db04cb708064d4350e35af700891ab474817a9eb3bfa6ee",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "7f7ebc93781784c68df5a6f1f94c3bbbd122707db7d5b2ec4e9eac62bff42a0f",
+      "rationale": "Reuse one canonical digest of the detached, validated graph delta across transition and graph-state comparisons within an activation check; preserve all validation boundaries. Canonical assessment and diagnostic sort keys are computed once per item; ordering and input preservation are checked."
     },
     {
       "path": "src/watcher/coordinator.ts",
@@ -1470,10 +1614,22 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "src/watcher/fs-authority.ts",
+      "before": "bfb8adc527329086a0d3135ef65bdc163d1281f3",
+      "after": "43e3cac6f546b50aa1f7942a5d577189e21123b86d385e0cf6b0a062f9e74432",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+    },
+    {
       "path": "src/watcher/host.ts",
       "before": "552145be95b14ac22a07760c7922a85d038b225c",
       "after": "3ef7de7452926384168c7152b3f0d8da6a4ba28079a89ab4c95397cba8753555",
       "rationale": "CI repair: bind the runtime-selected concrete lexical backend so official Node 23 uses the existing manifest-bound compatibility scan."
+    },
+    {
+      "path": "src/watcher/windows-retained-guard.ts",
+      "before": null,
+      "after": "b34a9f5558c92e500662a5361c7fa73a29c68174273d65d5bf8693ff9310861e",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "test/agent-identity-mcp-contract-draft2.test.mjs",
@@ -1482,10 +1638,16 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "test/bundle-inputs.test.mjs",
+      "before": null,
+      "after": "138dc466e4ce18d5398c45d95d53042a6c2a77d22651279fc5e16b36c0a04189",
+      "rationale": "Verify generated JavaScript bundle coverage, exact output bytes and compilation bindings."
+    },
+    {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "936dcf747790b051f70b5b24c4a1fef1c29839f100b7e84a10156821109d7927",
-      "rationale": "Scoped lineage inspection: additive read-only public API over parser-owned candidate tiers; trusted readable-set filtering, hidden/absent equality tests, and documented limits. Frozen historical export fixture remains unchanged."
+      "after": "72af7bf92ffc19a230d382c2271eb1f475273ee8ecb2d73fde240b5fead29bd9",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
     },
     {
       "path": "test/determinism.test.mjs",
@@ -1560,6 +1722,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "test/graphiti-manifest.test.mjs",
+      "before": null,
+      "after": "bd2bef494b27f31829e784ad317fe14680fcae1b4c932625b42563f2d5ef6e08",
+      "rationale": "Shared managed Graphiti publication reconciliation for service and native consumers, preserving existing source authority and Python ledger identity checks; additive public API explicitly locked."
+    },
+    {
       "path": "test/graphiti-query-contract.test.mjs",
       "before": null,
       "after": "4660e813757de75cbea14d467967382df153de6b40d22a5dc3d5b78d49b6a07c",
@@ -1574,8 +1742,8 @@
     {
       "path": "test/graphiti.test.mjs",
       "before": "12a1cb2b59421c5466e5e285655f6d150fb956f8",
-      "after": "f54cceb4517719eef7b8e6b22819e8438a48cbb80fb6aad73827b43644fa47a2",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "5b5cf727c3924eaf6283bb955fbfe74f80c67a67a5ac8cb6c9ef6bde2e539457",
+      "rationale": "Relationship episodes name their originating source path and can carry exact source-byte evidence without copying note content; absent bytes remove stale evidence."
     },
     {
       "path": "test/lineage-inspection.test.mjs",
@@ -1588,6 +1756,12 @@
       "before": null,
       "after": "7b1c4db7185c3096da7df6c299fdc1356e2f1958f8716d9036cdf19fe029a1e4",
       "rationale": "Native no-change receipts, idempotency, five process-exit recovery phases, corrupt-audit refusal and actual destination write failure."
+    },
+    {
+      "path": "test/native/windows-retained-guard.mjs",
+      "before": null,
+      "after": "7de5edac87122faa250a56efcdfca260fc12b28611289d48ae93b0785bc33bc2",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "test/navigation-architecture.test.mjs",
@@ -1716,6 +1890,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "test/service-graphiti-manifest.test.mjs",
+      "before": null,
+      "after": "9369d03a8024da3e23395c51291d81417f43c2299d1a16ed82c5663b0421eeb2",
+      "rationale": "Wire authorized byte and publication preparation into revision-invalidated Graphiti service host; exercise actual Python ledger over authenticated service HTTP."
+    },
+    {
       "path": "test/service-reference-freshness.test.mjs",
       "before": null,
       "after": "f4c45d6c1085acd0bc6743a1161c8b0615c0e74507acf0a01c048fcf3c66484c",
@@ -1730,14 +1910,20 @@
     {
       "path": "test/service-runtime.test.mjs",
       "before": "c3ad015d1e157f57cfc7b4f9d99a5e9601ae33bc",
-      "after": "4cd6979a7da88dd6d8d0d1f7614b0f123f8bb905adfb9c0736f6601372c0931d",
-      "rationale": "Regression for revocation during asynchronous authorization across health, capabilities, notes, graph and Graphiti episode REST routes."
+      "after": "eeed33571acd891855ce700e2d644393738592d19cbee4f5b1caa0d3c3abfb2b",
+      "rationale": "Support abortable asynchronous Graphiti host preparation within query and readiness total deadlines; verify revocation and stalled preparation denial."
     },
     {
       "path": "test/service-stdio-package.test.mjs",
       "before": "5e302462792e360747bf0254d336f8d747f55e4c",
       "after": "99e10a2d3613cc429ba954332a88846268cffe6bdef46548c73b510c04d329e3",
       "rationale": "Make package setup abort-aware with bounded phase diagnostics, one explicit build, ordered cleanup and safe npm report parsing; retain real authenticated installed-package assertions and unchanged deadlines."
+    },
+    {
+      "path": "test/watcher-artifact-input.test.mjs",
+      "before": null,
+      "after": "e3515364f03e6579aae3992b871131b4857fc3631e4d0dd2b164fa042dd4dba4",
+      "rationale": "Artifact coordinate input regression: reject accessors and proxies before reading the digest; preserve valid artifact bytes."
     },
     {
       "path": "test/watcher-coordinator.test.mjs",
@@ -1772,8 +1958,8 @@
     {
       "path": "test/watcher-recovery-contracts.test.mjs",
       "before": "2519ed9ed3e66f5f216afe76ebe5547110b06a30",
-      "after": "58d82d0d28f3704565d6b529ede0fabda974b7ba2fb7d9cb50004959adec2afb",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "a4a17a6199032ecbc1bd02022aaf128f026509fe165c5452978f2f00d099a847",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search. Canonical assessment and diagnostic sort keys are computed once per item; ordering and input preservation are checked."
     },
     {
       "path": "test/watcher-service-cli.test.mjs",

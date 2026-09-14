@@ -998,3 +998,20 @@ test("Slice A is private and contains no host execution authority", () => {
   assert.equal(typeof watcher.sealWatcherTransitionChain, "function");
   assert.equal(typeof watcher.sealWatcherTransitionPrefix, "function");
 });
+
+
+test("graph normalization preserves canonical assessment and diagnostic ordering across permutations", () => {
+  const row = readJson("watcher-conformance-fixture.json").semantic_cases.find(item => item.case_id === "coherent-activation-complete");
+  const original = row.input.arguments[0].raw_graph.graph;
+  const values = Array.from({length: 600}, (_, index) => ({label: ["z", "a", "\u00e9", "\ud83d\ude00"][index % 4], details: {z: index % 13, a: [index % 7, null]}, id: String(index % 97)}));
+  for (const items of [[], values.slice(0, 1), values, values.slice().reverse(), [...values, ...values.slice(0, 20)]]) {
+    const graph = clone(original);graph.gkxAssessments = clone(items);graph.gkxDiagnostics = clone(items);
+    const before = clone(graph);
+    const expected = clone(items).sort((left, right) => codeUnitCompare(canonicalJson(left), canonicalJson(right)));
+    const normalized = watcher.normalizeWatcherCanonicalGkxGraph(graph);
+    assert.deepEqual(normalized.normalized_graph.gkxAssessments, expected);
+    assert.deepEqual(normalized.normalized_graph.gkxDiagnostics, expected);
+    assert.deepEqual(graph, before);
+    assert.equal(Object.isFrozen(normalized.normalized_graph.gkxAssessments), true);
+  }
+});

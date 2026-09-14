@@ -152,3 +152,18 @@ test("source evidence hashes exact bytes independently of truncated body and cha
   await attachGraphitiSourceEvidence(episodes, new Map());
   assert.equal(JSON.parse(fuel.episode_body).source_evidence, undefined, "missing revision bytes cannot retain prior evidence");
 });
+
+test('relationship episodes bind their originating source bytes without copying note bodies',async()=>{
+  const source=Buffer.from('\ufeffsource\r\n');
+  const graph=fixtureGraph();
+  const episodes=buildGraphitiEpisodesWithContent(graph,new Map([['Ideas/Engine v2.md','PRIVATE_SOURCE_BODY']]));
+  const triple=episodes.find(e=>e.source==='fact_triple' && JSON.parse(e.episode_body).source_path==='Ideas/Engine v2.md');
+  assert.ok(triple);
+  await attachGraphitiSourceEvidence(episodes,new Map([['Ideas/Engine v2.md',source]]));
+  const body=JSON.parse(triple.episode_body);
+  assert.equal(body.source_evidence.sha256,createHash('sha256').update(source).digest('hex'));
+  assert.equal(body.source_evidence.semantic_support,'unverified');
+  assert.equal(triple.episode_body.includes('PRIVATE_SOURCE_BODY'),false);
+  await attachGraphitiSourceEvidence(episodes,new Map());
+  assert.equal(JSON.parse(triple.episode_body).source_evidence,undefined);
+});

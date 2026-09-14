@@ -117,3 +117,110 @@ used temporary local storage. The same source passed all thirteen synthetic
 live SDK checks at 11:39:05.903608Z with verified fixture cleanup. Local evidence:
 `graphiti-host-tests-20260913T113950Z/receipt.json` and
 `graphiti-readonly-search-live-20260913T113858Z/receipt.json`.
+
+## Private query HTTP adapter
+
+`query_http.create_query_app` provides an optional aiohttp application; it does not
+start a listener or select credentials. Install the separately pinned
+`requirements-query.txt` for this adapter and its HTTP tests (Python 3.11+).
+The host supplies a synchronous credential resolver returning a stable
+`QuerySession` object; replacement or revocation must stop returning that object.
+Its current callback must derive fresh complete principal scope. Wire bindings
+are checked against that host-selected published ledger, never used to select it.
+
+The adapter bounds request bodies to 16 KiB, rejects duplicate JSON object keys,
+rechecks the session after upload and query, and rejects late success using a
+monotonic deadline. Backend failures return generic errors. Deployment still
+owns TLS, listener confinement and credential storage. The adapter admits at most
+four requests by default (configurable from one to sixteen), without a waiting
+queue. A backend that suppresses cancellation retains its slot until it settles.
+The tests now include actual loopback HTTP with a temporary published ledger;
+SDK search is synthetic. This does not qualify a live model or deployed host.
+
+The private Node service bundle provides `buildServiceGraphitiManifest` for
+ingestion preparation. It derives all episodes from the existing authorized
+service view and requires unique source UIDs and original UTF-8 bytes matching
+the indexed snapshot. Only permitted note bodies enter the existing bounded
+content export; raw-byte hashes cover the full source, including frontmatter and
+line endings. It uses the worker's exact four-string envelope and ordered ledger
+manifest encoding. The host must recheck source and credential authority after
+awaiting preparation, before ingestion and publication. This helper neither
+publishes a ledger generation nor establishes a query grant or live readiness.
+
+`buildServiceGraphitiQueryContext` reconciles that current authorized manifest
+with a host-read published ledger receipt. It requires exact source snapshot,
+policy, configuration and host-selected scope bindings, complete ordered source
+mappings with unique projection episode IDs, and the worker observation digest.
+Tests create and publish a temporary database using the actual Python ledger and
+check both successful reconciliation and altered authority/receipt denials.
+The caller must obtain publication from its trusted ledger, enforce the live
+search/configuration gate before publishing, and recheck generations after every
+await. Passing a provider-supplied receipt is not authorization. Deployment and
+the service host callback wiring remain separate unfinished integration work.
+
+The Node service accepts asynchronous `graphitiHost` preparation and passes its
+request abort signal. Preparation and authority lookup share the total query or
+readiness deadline. A timed-out preparation cannot report readiness or invoke
+the provider later; an uncooperative preparation retains its ingress slot until
+it settles. The returned `current()` callback must still synchronously check
+fresh source, policy and publication generations. Async preparation does not
+make a cached authorization context safe to reuse.
+
+`createServiceGraphitiHost` supplies that service callback. The deployment provides
+bounded source reads, a trusted publication reader, its fixed query transport,
+and a synchronous current revision covering source/policy/configuration/publication
+state. Revisions must never be reused, and the resolver must reject stale service
+snapshots. The adapter reads only authorized paths, enforces a shared 64 MiB byte
+budget, reconciles the receipt and checks revision/abort state after each await.
+Its returned context cannot be mutated to alter the retained authority map.
+An authenticated HTTP test exercises this adapter against actual temporary Python
+ledger evidence, including invalidation during source reads, publication reads
+and queries. Query facts remain synthetic; production source/ledger configuration
+and live backend qualification are still required.
+
+For an explicit live synthetic check, `qualify_service_manifest.py` accepts an
+Engine-generated worker payload via `--input`, a host-owned `--factory-module`
+and an isolated database `--socket`. It requires the fixed synthetic corpus ID
+`synthetic-service-host-qualification`. It ingests and verifies persistence,
+requires read-only search results before publication, runs five published queries
+with citations, then verifies revocation. Cleanup deletes only its ledger-generated
+group after the worker completes; an unconfirmed writer leaves cleanup deferred.
+The report includes the publication and query result for validation against the
+original service manifest. This is a qualification runner, not a deployed service.
+
+## Persistent loopback query host
+
+Run `python service_host.py --profile /absolute/path/profile.json` to serve one
+already published generation on loopback only. The private profile has exactly
+`ledger_directory`, `job`, `binding`, `token_file`, `factory_module`, and `port`.
+The ledger and token paths must be absolute; the token file contains 32–512 ASCII
+bearer characters without a newline. Keep both files private to the service user.
+The binding is the host-authorized ingestion binding, not a request-selected scope.
+
+The local factory module implements `configuration_digest()` and
+`open_readonly(projection_id)`, returning `(graphiti, driver)` created through
+`create_readonly_driver`. Its digest must freshly identify the same qualified
+configuration as the published binding. This host never ingests or publishes.
+It checks profile/token revisions, configuration and the exact ledger receipt
+before and after query work. A detected change permanently invalidates the
+session until restart; restoring an old token cannot revive that session.
+Shutdown closes the reader and ledger, and HTTP access logging is disabled.
+
+Tests cover token rotation, configuration/profile changes, ledger revocation,
+HTTP dispatch and reader cleanup. Deployment still owns publication qualification,
+source invalidation, private configuration, and the upstream Engine service that
+reconciles fresh source bytes. The entry point does not imply deployment or live
+consumer acceptance.
+
+Native clients may use `POST /search` with exactly `query`, `request_id`, and
+`limit`. Authentication selects the host session. The route reads that
+session's published ledger binding and constructs the complete internal query.
+Caller-selected bindings and jobs are rejected. The existing `POST /query`
+complete-envelope route remains available.
+
+Both routes share authentication, upload bounds, physical capacity, deadline,
+publication, and post-query revocation checks. A slow binding lookup cannot
+start retrieval after the deadline. Native clients still verify their own
+current source manifest and trusted publication before accepting results.
+Changing this adapter changes the qualified runtime configuration; deployments
+must reconcile that identity and publish an appropriately qualified generation.

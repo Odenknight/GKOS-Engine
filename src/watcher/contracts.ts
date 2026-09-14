@@ -1604,6 +1604,7 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
   const transitions = preparedOnly ? sealWatcherTransitionPrefix(transitionInput) : sealWatcherTransitionChain(transitionInput);
   if (transitions.length !== (preparedOnly ? 6 : 7)) fail("GKX_WATCHER_CONTRACT_TRANSITION_INVALID", "coherent activation requires prepared5 or complete6 progression.");
   const normalizedGraphDelta = sealCanonicalRecoveryRecord(bundle.normalized_graph_delta);
+  const normalizedGraphDeltaDigest = retrievalCanonicalDigest(normalizedGraphDelta as JsonRecord);
   const canonicalGraph = sealCanonicalRecoveryRecord(bundle.canonical_graph);
   const rawGraph = sealCanonicalRecoveryRecord(bundle.raw_graph);
   const graphitiProjection = sealCanonicalRecoveryRecord(bundle.graphiti_projection);
@@ -1667,7 +1668,7 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
   }
   if (transitions.some((transition) => transition.batch_id !== batch.batch_id || transition.observation_digest !== observation.observation_digest)
       || transitions.slice(1).some((transition) => transition.plan_digest !== plan.plan_digest)
-      || transitions.slice(2).some((transition) => transition.gkx_delta_digest !== retrievalCanonicalDigest(normalizedGraphDelta as JsonRecord))) {
+      || transitions.slice(2).some((transition) => transition.gkx_delta_digest !== normalizedGraphDeltaDigest)) {
     fail("GKX_WATCHER_CONTRACT_TRANSITION_INVALID", "coherent activation transition authority differs.");
   }
   if ((plan.intended_source_mutations as unknown[]).length === 0 && plan.folder_set_changed === false
@@ -1698,7 +1699,7 @@ export function sealWatcherCoherentActivationBundle(value: unknown, outerPointer
       || !isDeepStrictEqual(graphitiProjection, expectedGraphitiProjection)
       || graphState.graph_artifact_file !== rawGraphCoordinate.file || graphState.graph_artifact_digest !== rawGraph.graph_artifact_digest
       || graphState.canonical_graph_digest !== retrievalCanonicalDigest(canonicalGraph as JsonRecord)
-      || graphState.gkx_delta_digest !== retrievalCanonicalDigest(normalizedGraphDelta as JsonRecord)
+      || graphState.gkx_delta_digest !== normalizedGraphDeltaDigest
       || graphState.graphiti_projection_digest !== retrievalCanonicalDigest(graphitiProjection as JsonRecord)
       || stableJson(manifest.retrieval_projection_state) !== stableJson(retrievalState)
       || stableJson(manifest.graph_projection_state) !== stableJson(graphState)
@@ -3282,6 +3283,15 @@ function canonicalizeGraphValue(value: unknown, key: string | null = null): unkn
   return value;
 }
 
+// Values are freshly canonicalized above. Encode each comparison key once per sort.
+// Nothing survives the call, and equal canonical keys retain their original order.
+function sortCanonicalValues(values: unknown[]): unknown[] {
+  if (values.length < 2) return values;
+  return values.map(value => ({value, key: stableJson(value)}))
+    .sort((left, right) => retrievalCodeUnitCompare(left.key, right.key))
+    .map(item => item.value);
+}
+
 export function normalizeWatcherCanonicalGkxGraph(graph: GkxGraph): Readonly<JsonRecord> {
   const source = assertRawGraphShape(graph, true);
   const rawStats = source.stats as JsonRecord;
@@ -3296,9 +3306,9 @@ export function normalizeWatcherCanonicalGkxGraph(graph: GkxGraph): Readonly<Jso
       `${String(right.id)}\u0000${String(right.source)}\u0000${String(right.target)}\u0000${String(right.kind)}`,
     ));
   const assessments = Array.isArray(source.gkxAssessments)
-    ? source.gkxAssessments.map((item) => canonicalizeGraphValue(item)).sort((left, right) => retrievalCodeUnitCompare(stableJson(left), stableJson(right))) : [];
+    ? sortCanonicalValues(source.gkxAssessments.map((item) => canonicalizeGraphValue(item))) : [];
   const diagnostics = Array.isArray(source.gkxDiagnostics)
-    ? source.gkxDiagnostics.map((item) => canonicalizeGraphValue(item)).sort((left, right) => retrievalCodeUnitCompare(stableJson(left), stableJson(right))) : [];
+    ? sortCanonicalValues(source.gkxDiagnostics.map((item) => canonicalizeGraphValue(item))) : [];
   const normalizedGraph = {
     nodes,
     links,
@@ -3330,10 +3340,8 @@ function normalizeAlreadyCanonicalGkxGraph(graph: unknown): Readonly<JsonRecord>
       `${String(left.id)}\u0000${String(left.source)}\u0000${String(left.target)}\u0000${String(left.kind)}`,
       `${String(right.id)}\u0000${String(right.source)}\u0000${String(right.target)}\u0000${String(right.kind)}`,
     ));
-  const assessments = (source.gkxAssessments as unknown[]).map((item) => canonicalizeGraphValue(item))
-    .sort((left, right) => retrievalCodeUnitCompare(stableJson(left), stableJson(right)));
-  const diagnostics = (source.gkxDiagnostics as unknown[]).map((item) => canonicalizeGraphValue(item))
-    .sort((left, right) => retrievalCodeUnitCompare(stableJson(left), stableJson(right)));
+  const assessments = sortCanonicalValues((source.gkxAssessments as unknown[]).map((item) => canonicalizeGraphValue(item)));
+  const diagnostics = sortCanonicalValues((source.gkxDiagnostics as unknown[]).map((item) => canonicalizeGraphValue(item)));
   return deepFreeze({
     contract_version: "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1",
     normalized_graph: {
@@ -3388,13 +3396,14 @@ export function deriveWatcherGraphitiProjection(graph: GkxGraph, vaultId: string
 }
 
 export function watcherArtifactCoordinate(kind: "observation" | "plan" | "topology" | "graph", value: JsonRecord): Readonly<JsonRecord> {
+  const inert = JSON.parse(stableJson(value));
   const digestField = kind === "observation" ? "observation_digest"
     : kind === "plan" ? "plan_digest"
       : kind === "topology" ? "topology_snapshot_digest"
         : "graph_artifact_digest";
-  const digest = value[digestField];
+  const digest = inert[digestField];
   if (!isDigest(digest)) fail("GKX_WATCHER_CONTRACT_DIGEST_INVALID", `${kind} artifact digest is invalid.`);
-  const bytes = `${JSON.stringify(JSON.parse(stableJson(value)), null, 2)}\n`;
+  const bytes = `${JSON.stringify(inert, null, 2)}\n`;
   const cap = kind === "observation" ? 4 * 1024 * 1024 : 512 * 1024 * 1024;
   const byteSize = Buffer.byteLength(bytes);
   if (byteSize > cap) fail("GKX_WATCHER_CONTRACT_RELATION_INVALID", `${kind} artifact exceeds its byte cap.`);

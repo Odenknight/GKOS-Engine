@@ -32,3 +32,8 @@ export type {
   GraphitiQueryBinding, GraphitiQueryRequest, GraphitiQueryCitation,
   GraphitiQueryResult, GraphitiQueryStatus, GraphitiQueryContext,
 } from "./graphiti-query-contract";
+
+// Pure manifest identity helpers. Callers supply authorized source bytes;
+// these functions neither authorize retrieval nor attest publication.
+export { managedEpisodeJson, buildManagedGraphitiManifest, reconcileManagedGraphitiPublication } from "./graphiti-manifest";
+export type { ManagedGraphitiEpisode } from "./graphiti-manifest";

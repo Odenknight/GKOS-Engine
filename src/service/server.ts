@@ -10,6 +10,8 @@ import type {
   ServiceAuthorizationConfiguration, ServiceCorpusSnapshot, ServiceCredentialIdentity, ServiceTraversalEvent,
 } from "./types";
 import { ServiceCredentialRegistry } from "./auth";
+import { GraphitiQueryBroker, type GraphitiBrokerHost } from "../graphiti-broker";
+import { acceptGraphitiQueryResult, prepareGraphitiQueryRequest, GRAPHITI_QUERY_CONTRACT_VERSION, type GraphitiQueryStatus } from "../graphiti-query-contract";
 
 const GENERIC_DENIAL = Object.freeze({ error: "unauthorized" });
 const GENERIC_FORBIDDEN = Object.freeze({ error: "forbidden" });
@@ -35,6 +37,13 @@ export interface LocalServiceOptions {
   requestTimeoutMs?: number;
   streamHeartbeatMs?: number;
   workQueueWaitMs?: number;
+  /** Private host binding to a published ledger and complete dependency scope.
+   * Never derive this authority from request fields. Preparation may await source
+   * bytes/ledger evidence; honor signal. current() must synchronously recheck
+   * source, policy and publication generations after preparation and queries. */
+  graphitiHost?: (input: { identity: ServiceCredentialIdentity; view: GkosAuthorizedView;
+    snapshot: ServiceCorpusSnapshot; authorization: ServiceAuthorizationConfiguration;
+    signal: AbortSignal; vaultName?: string }) => GraphitiBrokerHost | null | Promise<GraphitiBrokerHost | null>;
 }
 
 interface RateState { tokens: number; lastRefill: number; active: number }
@@ -121,6 +130,7 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
   const rates = new Map<string, RateState>();
   const workRates = new Map<string, RateState>();
   const scheduler = new ServiceWorkScheduler(options.workQueueWaitMs);
+  const graphitiBroker = new GraphitiQueryBroker();
   let ingressActive = 0;
   const origins = options.corsAllowlist ?? [];
   const requestTimeoutMs = options.requestTimeoutMs ?? 30_000;
@@ -250,12 +260,90 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
       };
       let ingressHeld = true;
       let releaseWork: (() => void) | undefined;
+      let queryTimer: ReturnType<typeof setTimeout> | undefined;
       const relinquishIngress = (): void => { if (ingressHeld) { ingressHeld = false; release(identity); } };
       const disconnected = new AbortController();
       const onDisconnect = (): void => disconnected.abort();
       response.once("close", onDisconnect);
       try {
         if ([...url.searchParams.keys()].length > 0) { send(response, 400, { error: "bad_request" }, requestOrigin); return; }
+        const expires = performance.now() + requestTimeoutMs;
+        const expired = (): boolean => {
+          if (!disconnected.signal.aborted && performance.now() < expires) return false;
+          disconnected.abort();
+          if (!response.headersSent && !response.destroyed) send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin);
+          return true;
+        };
+        if (route === "/graphiti/query" || route === "/graphiti/query/status") {
+          queryTimer = setTimeout(() => {
+            disconnected.abort();
+            if (!response.headersSent && !response.destroyed) send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin);
+          }, requestTimeoutMs);
+        }
+        if (route === "/graphiti/query/status") {
+          if (request.method !== "GET") { send(response, 405, { error: "method_not_allowed" }, requestOrigin); return; }
+          const authorized = await view(identity, "graphiti_episodes");
+          if (expired()) return;
+          const host = await options.graphitiHost?.({ identity, ...authorized, signal: disconnected.signal, vaultName: options.vaultName });
+          if (expired()) return;
+          let status: GraphitiQueryStatus = { contract_version: GRAPHITI_QUERY_CONTRACT_VERSION, mode: "unavailable",
+            searchable: false, binding: null };
+          try {
+            const context = host?.current();
+            if (context && context.status.binding?.policy_digest === authorized.authorization.policyDigest &&
+                prepareGraphitiQueryRequest("readiness", 1, "readiness", context)) {
+              status = { contract_version: GRAPHITI_QUERY_CONTRACT_VERSION, mode: context.status.mode,
+                searchable: true, binding: { ...context.status.binding! } };
+            }
+          } catch { /* Unavailable host state never becomes a readiness claim. */ }
+          if (!expired()) send(response, 200, status, requestOrigin);
+          return;
+        }
+        if (route === "/graphiti/query") {
+          if (request.method !== "POST") { send(response, 405, { error: "method_not_allowed" }, requestOrigin); return; }
+          const body = await readJson(request, requestTimeoutMs) as Record<string, unknown>;
+          if (expired()) return;
+          if (!body || Array.isArray(body) || Object.keys(body).length !== 3 ||
+              typeof body.query !== "string" || typeof body.request_id !== "string" ||
+              !Number.isInteger(body.limit) || Number(body.limit) < 1 || Number(body.limit) > 50) {
+            send(response, 400, { error: "bad_request" }, requestOrigin); return;
+          }
+          const authorized = await view(identity, "graphiti_episodes");
+          if (expired()) return;
+          const host = await options.graphitiHost?.({ identity, ...authorized, signal: disconnected.signal, vaultName: options.vaultName });
+          if (expired()) return;
+          if (!host) { send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin); return; }
+          const guardedHost: GraphitiBrokerHost = { query: (request, signal) => {
+            if (performance.now() >= expires || signal.aborted) throw new GkosServiceDeniedError();
+            return host.query(request, signal);
+          }, current: () => {
+            if (performance.now() >= expires) throw new GkosServiceDeniedError();
+            const currentIdentity = token ? options.credentials.resolve(token) : null;
+            if (!currentIdentity || currentIdentity.revoked || currentIdentity.credentialId !== identity.credentialId ||
+                currentIdentity.agentId !== identity.agentId || currentIdentity.sensitivityCeiling !== identity.sensitivityCeiling ||
+                JSON.stringify(currentIdentity.capabilities) !== JSON.stringify(identity.capabilities)) throw new GkosServiceDeniedError();
+            const context = host.current();
+            if (context.status.binding?.policy_digest !== authorized.authorization.policyDigest) throw new GkosServiceDeniedError();
+            return context;
+          } };
+          const result = await graphitiBroker.search(guardedHost, { credential: identity.credentialId,
+            session: identity.credentialId, requestId: body.request_id, query: body.query,
+            limit: Number(body.limit), signal: disconnected.signal, deadlineMs: requestTimeoutMs });
+          if (expired()) return;
+          const final = await view(identity, "graphiti_episodes");
+          if (expired()) return;
+          const current = await options.graphitiHost?.({ identity, ...final, signal: disconnected.signal, vaultName: options.vaultName });
+          if (expired()) return;
+          if (!result || !current || final.snapshot.generation !== authorized.snapshot.generation ||
+              final.authorization.generation !== authorized.authorization.generation ||
+              final.authorization.policyDigest !== authorized.authorization.policyDigest ||
+              !acceptGraphitiQueryResult({ contract_version: result.contract_version, request_id: body.request_id,
+                binding: result.binding, query: body.query, limit: Number(body.limit) }, JSON.stringify(result), current.current())) {
+            send(response, 503, { error: "semantic_query_unavailable" }, requestOrigin); return;
+          }
+          if (!expired() && !response.destroyed) send(response, 200, result, requestOrigin);
+          return;
+        }
         if (route === "/events") {
           if (request.method !== "GET") { send(response, 405, { error: "method_not_allowed" }, requestOrigin); return; }
           await view(identity, "events");
@@ -429,11 +517,12 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
         if (error instanceof WorkScheduleError && !response.headersSent && !response.destroyed) { send(response, 429, { error: "rate_limited", reason: error.reason }, requestOrigin, { "Retry-After": "1" }); return; }
         if (!response.headersSent && !response.destroyed) send(response, error instanceof GkosServiceDeniedError ? 403 : 400, error instanceof GkosServiceDeniedError ? GENERIC_FORBIDDEN : { error: "bad_request" }, requestOrigin);
         else if (!response.destroyed) response.end();
-      } finally { response.off("close", onDisconnect); relinquishIngress(); releaseWork?.(); }
+      } finally { clearTimeout(queryTimer); response.off("close", onDisconnect); relinquishIngress(); releaseWork?.(); }
     })();
     return true;
   }) as LocalServiceRequestHandler;
   handler.closeStreams = (): void => {
+    graphitiBroker.close();
     scheduler.close();
     for (const stream of [...streams.values()]) stream.close();
   };
