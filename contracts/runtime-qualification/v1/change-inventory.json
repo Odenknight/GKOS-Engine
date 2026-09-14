@@ -386,7 +386,7 @@
     {
       "path": ".gitattributes",
       "before": "0f3ffed343d2c7ed7aad2e67be2ef4e47ae6ff15",
-      "after": "321f7a806ba0d421bb103cc45d78937fbfa7dd2d398d486eb4da59ba6f4dbcbe",
+      "after": "c58b92cb659065ff9d5f53bb0bbe00e60f40a86856b3812198d688a23fd7d301",
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
@@ -1028,7 +1028,7 @@
     {
       "path": "native/windows/node-api-v22.22.1/sources.json",
       "before": null,
-      "after": "8a30eaad7a4a9ddf52139cad7e33f56e756db0c4b84e3d0fbe4f127c99e57721",
+      "after": "c35c5673bf745e1222e3ec424e4aea47f0015b8149787b737119fead0411842f",
       "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
     },
     {
