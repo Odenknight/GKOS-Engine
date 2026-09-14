@@ -1015,3 +1015,29 @@ test("graph normalization preserves canonical assessment and diagnostic ordering
     assert.equal(Object.isFrozen(normalized.normalized_graph.gkxAssessments), true);
   }
 });
+
+
+test("prepared activation encodings bind the exact detached bundle without a persistent cache", () => {
+  const row = readJson("watcher-conformance-fixture.json").semantic_cases.find(item => item.case_id === "coherent-activation-complete");
+  const original = clone(row.input.arguments[0]);
+  const prepared = watcher.prepareWatcherCoherentActivationBundle(original, row.input.arguments[1]);
+  assert.deepEqual(prepared.bundle, watcher.sealWatcherCoherentActivationBundle(...row.input.arguments));
+  assert.ok(Object.isFrozen(prepared));
+  assert.ok(Object.isFrozen(prepared.artifacts));
+  for (const [kind, field] of [["observation", "observation"], ["plan", "plan"], ["topology", "topology"], ["graph", "raw_graph"]]) {
+    const artifact = prepared.artifacts[kind];
+    assert.deepEqual(artifact, watcher.watcherArtifactCoordinate(kind, prepared.bundle[field]));
+    assert.ok(Object.isFrozen(artifact));
+    assert.equal(Buffer.byteLength(artifact.bytes), artifact.byte_size);
+    assert.equal(`sha256:${createHash("sha256").update(artifact.bytes).digest("hex")}`, artifact.raw_sha256);
+  }
+  const graphBytes = prepared.artifacts.graph.bytes;
+  original.raw_graph.graph_artifact_digest = "sha256:" + "0".repeat(64);
+  assert.equal(prepared.artifacts.graph.bytes, graphBytes);
+  assert.throws(() => watcher.prepareWatcherCoherentActivationBundle(original, row.input.arguments[1]),
+    { code: "GKX_WATCHER_CONTRACT_DIGEST_INVALID" });
+  const repeated = watcher.prepareWatcherCoherentActivationBundle(...row.input.arguments);
+  assert.notEqual(repeated.bundle, prepared.bundle);
+  assert.notEqual(repeated.artifacts, prepared.artifacts);
+  assert.deepEqual(repeated.artifacts, prepared.artifacts);
+});

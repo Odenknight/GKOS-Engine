@@ -5,7 +5,7 @@ import {
   deriveWatcherGraphitiProjection,
   normalizeWatcherCanonicalGkxGraph,
   normalizeWatcherGraphDelta,
-  sealWatcherCoherentActivationBundle,
+  prepareWatcherCoherentActivationBundle,
   sealWatcherFailureRetryBundle,
   sealWatcherFailureRetryNoopBundle,
   sealWatcherJournalResetReconciliationAdoptionBundle,
@@ -1275,13 +1275,15 @@ interface WatcherPublicationFileSpec {
   readonly maximum_bytes: number;
 }
 
-function watcherCoherentPublicationFiles(bundle: Readonly<JsonRecord>): readonly WatcherPublicationFileSpec[] {
+function watcherCoherentPublicationFiles(
+  bundle: Readonly<JsonRecord>,
+  artifacts: ReturnType<typeof prepareWatcherCoherentActivationBundle>["artifacts"],
+): readonly WatcherPublicationFileSpec[] {
   const coordinate = (
     stepId: string,
     kind: "observation" | "plan" | "topology" | "graph",
-    value: Readonly<JsonRecord>,
   ): WatcherPublicationFileSpec => {
-    const artifact = watcherArtifactCoordinate(kind, value as JsonRecord);
+    const artifact = artifacts[kind];
     const bytes = Buffer.from(String(artifact.bytes), "utf8");
     if (artifact.byte_size !== bytes.byteLength || artifact.raw_sha256 !== watcherRawDigest(bytes)) {
       fail("GKX_WATCHER_ARTIFACT_COORDINATE_INVALID");
@@ -1295,10 +1297,10 @@ function watcherCoherentPublicationFiles(bundle: Readonly<JsonRecord>): readonly
   };
   const manifest = sealWatcherRecoveryRecord(bundle.manifest);
   return Object.freeze([
-    coordinate("artifact:observation", "observation", record(bundle.observation, "GKX_WATCHER_OBSERVATION_INVALID")),
-    coordinate("artifact:plan", "plan", record(bundle.plan, "GKX_WATCHER_PLAN_INVALID")),
-    coordinate("artifact:topology", "topology", record(bundle.topology, "GKX_WATCHER_TOPOLOGY_INVALID")),
-    coordinate("artifact:graph", "graph", record(bundle.raw_graph, "GKX_WATCHER_GRAPH_INVALID")),
+    coordinate("artifact:observation", "observation"),
+    coordinate("artifact:plan", "plan"),
+    coordinate("artifact:topology", "topology"),
+    coordinate("artifact:graph", "graph"),
     Object.freeze({
       step_id: "artifact:manifest",
       leaf: `watcher-coherent-${String(manifest.coherent_manifest_digest).slice("sha256:".length)}.json`,
@@ -1367,12 +1369,12 @@ export function publishWatcherCoherentActivation(options: {
     operation_intent_digest: String(intent.intent_digest),
     target_commit_digest: String(complete.transition_digest),
   });
-  const bundle = sealWatcherCoherentActivationBundle(input, preparedGuard);
+  const { bundle, artifacts } = prepareWatcherCoherentActivationBundle(input, preparedGuard);
   const preScan = record(bundle.pre_scan_state, "GKX_WATCHER_PRE_SCAN_STATE_INVALID");
   if ((oldPointer === null ? null : oldPointer.pointer_digest) !== preScan.active_pointer_digest) {
     fail("GKX_WATCHER_PRIOR_POINTER_CHANGED");
   }
-  const files = watcherCoherentPublicationFiles(bundle);
+  const files = watcherCoherentPublicationFiles(bundle, artifacts);
   const pointerArtifact = watcherPointerArtifact("outer", bundle.pointer);
   const pointerBytes = pointerArtifact.bytes;
   const guardBytes = watcherCanonicalBytes(preparedGuard);
