@@ -474,6 +474,12 @@
       "rationale": "Update the declared optional Graphiti target to the actually smoke-tested 0.30.2 version."
     },
     {
+      "path": "TRACEABILITY.md",
+      "before": "50105e0ff658f8eae6b767a1baad9b2d77f326df",
+      "after": "6c69ea8d1c92627c8c78af8afc146a0b43372733617762d02a1bd07f6c7734d9",
+      "rationale": "September 14 editorial audit remediation: correct source identity, bind current hosted evidence, and record exact PR ancestry without qualification or release promotion."
+    },
+    {
       "path": "contracts/documentation-verifier/v0.81/LICENSE.txt",
       "before": null,
       "after": "c40538b67a5de4054b116e900b6bfcfeaec2fa4de594e28ca444ba952c5938d2",
@@ -774,6 +780,12 @@
       "rationale": "Document distinct historical/current identities, workload, digest derivation and limitations."
     },
     {
+      "path": "docs/PR-DISPOSITION-20260914.md",
+      "before": null,
+      "after": "8994e70c5846fee2125f47277fbe8855089420bd2f8672dba779d42e9ebd40a1",
+      "rationale": "September 14 editorial audit remediation: correct source identity, bind current hosted evidence, and record exact PR ancestry without qualification or release promotion."
+    },
+    {
       "path": "docs/PRODUCT-ENGINE-POLICY.md",
       "before": null,
       "after": "eb619cf604a549ace0954528d7117278666b3e2097eab9b740df2ee295711330",
@@ -788,8 +800,8 @@
     {
       "path": "docs/RELEASE-STATUS.md",
       "before": null,
-      "after": "ea2e3708a9722571071873377fe1c6bfe072f2bf2c90b12f32d87d6d8d0ef2b8",
-      "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities."
+      "after": "0a04ea25d79742a5d66b2df2950837fdcd5b890c04116abda967020b3e0dd404",
+      "rationale": "September 14 editorial audit remediation: correct source identity, bind current hosted evidence, and record exact PR ancestry without qualification or release promotion."
     },
     {
       "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",
