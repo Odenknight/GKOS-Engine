@@ -157,6 +157,7 @@ jobs:
           set -euo pipefail
           mkdir -p out
           cp "dist/${{ matrix.expect_asset }}" out/
+          cp "dist/${{ matrix.expect_asset }}.build-inputs.json" out/
           ls -la out/
 
       - name: Upload run artifact

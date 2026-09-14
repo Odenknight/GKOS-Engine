@@ -42,6 +42,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import { assertSameSeaAssets, observedFile, writeSeaBuildInputs } from "./sea-build-inputs.mjs";
 import {
   findExpectedSha256,
   nodeBinaryPathInTarball,
@@ -183,6 +184,8 @@ async function fetchCrossNodeBinary({ version, platform, arch, destPath }) {
   } finally {
     rmSync(work, { recursive: true, force: true });
   }
+  return { tarball: tarName, sha256: actual, expectedSha256: expected,
+    shasumsUrl: shasumsUrl(version), shasumsSha256: createHash("sha256").update(shasumsText).digest("hex") };
 }
 
 const { targetArch, nodeVersion } = parseArgs(process.argv.slice(2));
@@ -199,9 +202,35 @@ const target = resolveTarget(targetPlatform, targetArch);
 const { macho } = target;
 const outName = outputName(target);
 const outPath = resolve(dist, outName);
+const inventoryPath = resolve(dist, `${outName}.build-inputs.json`);
+if (existsSync(inventoryPath)) throw new Error(`SEA build input inventory already exists: ${inventoryPath}`);
 console.log(
   `SEA target: ${target.triple} (${source.mode} node) — host ${process.platform}/${process.arch}`,
 );
+
+const postjectCli = resolvePostject();
+const packageInput = observedFile(resolve(root, "package.json"), "package.json");
+const lockInput = observedFile(resolve(root, "package-lock.json"), "package-lock.json");
+const buildScriptInput = observedFile(fileURLToPath(import.meta.url), "scripts/build-sea.mjs");
+const nativeScriptInput = observedFile(resolve(root, "scripts/sea-native-assets.mjs"), "scripts/sea-native-assets.mjs");
+const targetScriptInput = observedFile(resolve(root, "scripts/sea-target.mjs"), "scripts/sea-target.mjs");
+const helperScriptInput = observedFile(resolve(root, "scripts/sea-build-inputs.mjs"), "scripts/sea-build-inputs.mjs");
+const bundleInventoryInput = observedFile(resolve(root, "dist/bundle-inputs.json"), "dist/bundle-inputs.json");
+const cjsInput = observedFile(cjsEntry, "dist/gkos-desktop-agent.cjs");
+const bundleInventory = JSON.parse(readFileSync(resolve(root, "dist/bundle-inputs.json"), "utf8"));
+const cjsRows = bundleInventory.artifacts?.filter(row => row.path === cjsInput.logicalName);
+if (cjsRows?.length !== 1 || cjsRows[0].bytes !== cjsInput.bytes || cjsRows[0].sha256 !== cjsInput.sha256) {
+  throw new Error("SEA desktop entry does not match bundle input inventory");
+}
+const initialAssets = retainedGuardSeaAssets(root, targetPlatform, targetArch);
+const assetEntries = Object.entries(initialAssets).sort(([a], [b]) => a.localeCompare(b));
+const assetInputs = assetEntries.map(([name, path]) => observedFile(path, `dist/native/${name}`));
+if (targetPlatform === "win32") assetInputs.push(observedFile(resolve(root, "dist/native/retained-guard.json"), "dist/native/retained-guard.json"));
+const postjectCliInput = observedFile(postjectCli, "tool/postject-cli.js");
+const postjectPackagePath = require.resolve("postject/package.json");
+const postjectPackageInput = observedFile(postjectPackagePath, "tool/postject-package.json");
+const postjectPackage = JSON.parse(readFileSync(postjectPackagePath, "utf8"));
+const hostBlobGeneratorExecutable = observedFile(process.execPath, "host-node-executable");
 
 // 1. sea-config.json
 const seaConfigPath = resolve(dist, "sea-config.json");
@@ -211,7 +240,7 @@ writeFileSync(
   JSON.stringify(
     {
       main: cjsEntry,
-      assets: retainedGuardSeaAssets(root, targetPlatform, targetArch),
+      assets: initialAssets,
       output: blobPath,
       disableExperimentalSEAWarning: true,
       useSnapshot: false,
@@ -221,25 +250,29 @@ writeFileSync(
     2,
   ),
 );
+const configInput = observedFile(seaConfigPath, "dist/sea-config.json");
 
 // 2. generate the blob
 console.log("generating SEA blob…");
 execFileSync(process.execPath, ["--experimental-sea-config", seaConfigPath], { stdio: "inherit" });
+const blobInput = observedFile(blobPath, "dist/sea-prep.blob");
 
 // 3. obtain the base node binary for the target
+let downloadProvenance = null;
 if (source.mode === "host") {
   console.log(`copying node binary → ${outName}`);
   copyFileSync(process.execPath, outPath);
 } else {
   const crossVersion = resolveCrossNodeVersion(nodeVersion);
   console.log(`cross build: downloading node ${crossVersion} for ${targetPlatform}/${targetArch}`);
-  await fetchCrossNodeBinary({
+  downloadProvenance = await fetchCrossNodeBinary({
     version: crossVersion,
     platform: targetPlatform,
     arch: targetArch,
     destPath: outPath,
   });
 }
+const baseNodeInput = observedFile(outPath, "base-node-before-signature-removal");
 
 // 3b. On Windows the official node.exe is signed; strip it so postject can
 // find the fuse sentinel. On macOS, injection invalidates whatever signature
@@ -252,10 +285,10 @@ if (targetPlatform === "win32") {
 } else if (macho) {
   removeMachoSignature(outPath);
 }
+const preInjectionInput = observedFile(outPath, "base-node-pre-injection");
 
 // 4. postject inject
 const fuse = detectFuse(outPath);
-const postjectCli = resolvePostject();
 const injectArgs = [
   postjectCli,
   outPath,
@@ -272,6 +305,30 @@ execFileSync(process.execPath, injectArgs, { stdio: "inherit" });
 if (macho) {
   adhocSignMacho(outPath);
 }
+
+const observedInputs = [configInput, blobInput, packageInput, lockInput, buildScriptInput, nativeScriptInput,
+  targetScriptInput, helperScriptInput, bundleInventoryInput, cjsInput, postjectCliInput, postjectPackageInput, hostBlobGeneratorExecutable, ...assetInputs];
+const recheck = () => {
+  const currentAssets = retainedGuardSeaAssets(root, targetPlatform, targetArch);
+  assertSameSeaAssets(initialAssets, currentAssets);
+  return { observedInputs: [
+  observedFile(seaConfigPath, "dist/sea-config.json"), observedFile(blobPath, "dist/sea-prep.blob"),
+  observedFile(resolve(root, "package.json"), "package.json"), observedFile(resolve(root, "package-lock.json"), "package-lock.json"),
+  observedFile(fileURLToPath(import.meta.url), "scripts/build-sea.mjs"), observedFile(resolve(root, "scripts/sea-native-assets.mjs"), "scripts/sea-native-assets.mjs"),
+  observedFile(resolve(root, "scripts/sea-target.mjs"), "scripts/sea-target.mjs"), observedFile(resolve(root, "scripts/sea-build-inputs.mjs"), "scripts/sea-build-inputs.mjs"),
+  observedFile(resolve(root, "dist/bundle-inputs.json"), "dist/bundle-inputs.json"), observedFile(cjsEntry, "dist/gkos-desktop-agent.cjs"),
+  observedFile(postjectCli, "tool/postject-cli.js"), observedFile(postjectPackagePath, "tool/postject-package.json"), observedFile(process.execPath, "host-node-executable"),
+  ...assetInputs.map(item => observedFile(resolve(root, item.logicalName), item.logicalName)),
+], finalExecutable: observedFile(outPath, `dist/${outName}`) };
+};
+writeSeaBuildInputs(inventoryPath, {
+  target: target.triple, sourceMode: source.mode, hostBlobGeneratorNodeVersion: process.version,
+  targetNodeVersion: source.mode === "host" ? process.version : resolveCrossNodeVersion(nodeVersion),
+  postjectVersion: postjectPackage.version,
+  downloadedChecksumProvenance: downloadProvenance,
+  baseNodeBeforeSignatureRemoval: baseNodeInput, preInjectionBinary: preInjectionInput,
+  finalExecutable: observedFile(outPath, `dist/${outName}`), observedInputs,
+}, recheck);
 
 const sizeMb = (statSync(outPath).size / (1024 * 1024)).toFixed(1);
 console.log(`built ${outPath} (${sizeMb} MB)`);

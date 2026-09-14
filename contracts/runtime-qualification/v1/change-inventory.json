@@ -428,8 +428,8 @@
     {
       "path": ".github/workflows/sidecar-release.yml",
       "before": "4e8b5e5eb49ceabcfdf048b3d3cf7163725e2554",
-      "after": "d9effe53e0f61158b3238a4f70c41dfa07e464f43bf86c4aeebbdd3f468151a1",
-      "rationale": "Preserve binary builds and artifacts; prevent v2.2.0 sidecar uploads from prematurely creating or rewriting official stable release notes."
+      "after": "36fc405e184e354ee914db4a278d0fa9281f1e29083f8a3ed733090f404f9abc",
+      "rationale": "Preserve binary builds and artifacts; prevent v2.2.0 sidecar uploads from prematurely creating or rewriting official stable release notes. Collect the generated SEA composition inventory alongside its exact sidecar executable."
     },
     {
       "path": ".gitignore",
@@ -822,6 +822,12 @@
       "rationale": "Adapter-owned scoped lineage inspection preserves private receipt ownership across published package bundles; exact subpath regression and documentation."
     },
     {
+      "path": "docs/SEA-BUILD-INPUTS.md",
+      "before": null,
+      "rationale": "Document producer inventory observations, provenance limits, and remaining complete SBOM and consumer work.",
+      "after": "c919ec8e874c9eac3bae9b8145488c058e3ede9866297007f1504752f52235a2"
+    },
+    {
       "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",
       "before": null,
       "after": "89935024c69ad6edef09a40b24eeed073d50c2614bf4ad2ac5d1c147e599de6f",
@@ -1070,8 +1076,8 @@
     {
       "path": "scripts/build-sea.mjs",
       "before": "e4f8e77ecae7cdcc2ec0915875d704f08f7cb13d",
-      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup.",
-      "after": "f2321a2f119551f3aa4722a20c0f085c1b853459a9e28aaefbb4ff555512d11b"
+      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup. Record observed SEA inputs and binary transformation hashes; refuse stale bindings and preserve existing inventory before output mutation.",
+      "after": "2937973277488471478acbf9e27fa7fc8a478823c51f8537dd9336b4a3747a95"
     },
     {
       "path": "scripts/build-watcher-observation-runner.mjs",
@@ -1186,6 +1192,12 @@
       "before": null,
       "after": "d1120a52f538437548fd444cbd7f929efbef49c23b30ea99547881324d8f85bf",
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
+    },
+    {
+      "path": "scripts/sea-build-inputs.mjs",
+      "before": null,
+      "rationale": "Bounded SEA inventory publication and exact asset-map equality checks; explicitly incomplete SBOM scope.",
+      "after": "d040ede9c34735f180d5852b38e54031750f256c8c6052ba802f2ecf43eab14b"
     },
     {
       "path": "scripts/sea-native-assets.mjs",
@@ -1808,8 +1820,8 @@
     {
       "path": "test/native/windows-retained-guard-sea.mjs",
       "before": null,
-      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup.",
-      "after": "d4c61071529d71a3ba5a1b44e8a6367287c51d0ce44964a406fd8390ca3aaaeb"
+      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup. Adapt isolated SEA fixture to required composition inputs and retain prior inventories while preserving native guard and malformed-container assertions.",
+      "after": "bd7e5198d2862493ee7cabba72d30d1ad84fcf70468d02f23cb129d170d943bc"
     },
     {
       "path": "test/native/windows-retained-guard.mjs",
@@ -1954,6 +1966,12 @@
       "before": "e02ed007f6a0b7adb361cfedacb33adcd781043e",
       "after": "da9ab7435151982e968ee9c5eb75039fcc9e8824c35f48e50e69de39f1f5614f",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/sea-build-inputs.test.mjs",
+      "before": null,
+      "rationale": "Check physical input/output mutation refusal, scope protection, asset-map changes, and actual build-command preflight preservation.",
+      "after": "c87703144cee63daf1f21aec718608493486ceb3d5190a4928d9c99e2259a867"
     },
     {
       "path": "test/sea-native-assets.test.mjs",
