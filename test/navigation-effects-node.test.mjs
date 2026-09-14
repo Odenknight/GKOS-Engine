@@ -64,6 +64,24 @@ test("Node executor requires an explicit cooperative-vault path threat model", a
   assert.throws(() => new RawNodeNavigationEffectsExecutor({ vaultRoot: root }), /PATH_THREAT_MODEL_ACKNOWLEDGEMENT_REQUIRED/);
 });
 
+test("readSource preserves exact UTF-8 bytes and performs no Effects initialization", async (t) => {
+  const root = await fixture(t, "read-only-source");
+  const source = Buffer.from("\ufeff# Exact\r\nCaf\u00e9\r\n", "utf8");
+  await writeFile(join(root, "topics/index.md"), source);
+  await writeFile(join(root, "topics/invalid.md"), Buffer.from([0xc3, 0x28]));
+  const before = (await readdir(root, { recursive: true })).sort();
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  assert.deepEqual(Buffer.from(await executor.readSource("topics/index.md"), "utf8"), source);
+  assert.equal(await executor.readSource("topics/absent.md"), null);
+  await assert.rejects(executor.readSource("topics/invalid.md"), /SOURCE_NOT_VALID_UTF8/);
+  for (const path of ["../outside.md", ".gkx/effects/journal.jsonl", "_archive/moc-runs/test.md"]) {
+    await assert.rejects(executor.readSource(path), /PATH_DENIED/);
+  }
+  assert.deepEqual((await readdir(root, { recursive: true })).sort(), before);
+  assert.deepEqual(await readFile(join(root, "topics/index.md")), source);
+  assert.deepEqual(await readFile(join(root, "topics/invalid.md")), Buffer.from([0xc3, 0x28]));
+});
+
 test("Node executor journals, archives exact bytes, atomically replaces, verifies, receipts, and replays idempotently", async (t) => {
   const root = await fixture(t, "commit");
   const before = "# Before\r\nHuman bytes\r\n";

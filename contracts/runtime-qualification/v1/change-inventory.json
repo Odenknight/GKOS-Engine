@@ -702,6 +702,12 @@
       "rationale": "Document executed isolated OD-02 scope, commands, upstream pins, Supersedes none and explicit lack of release/profile/registration claims."
     },
     {
+      "path": "docs/EFFECTS-HOST-API-PROGRESS.md",
+      "before": null,
+      "after": "5e4241c3edfc48c8095a26d43dc3c14086560ddc6407e6e9b1111a175bb26a80",
+      "rationale": "Read-only native Effects source-reader evidence and explicit remaining host API requirements; no source-write activation or qualification claim."
+    },
+    {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
       "before": null,
       "after": "38e7a280d18b34b7b005892b755126fcfbd4baf083eabb260b46fac51f66cd92",
@@ -1718,8 +1724,8 @@
     {
       "path": "test/navigation-effects-node.test.mjs",
       "before": null,
-      "after": "3db867bd4309bbfdc67a644cf083286e6cc8d6b9a8047ec4a7e8f3df2263cd90",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "7a2e35c23e2ff47d8ab02deec3057fd5cf54d1c69aa98217d2b9fc89e20dc33e",
+      "rationale": "Read-only native Effects source-reader evidence and explicit remaining host API requirements; no source-write activation or qualification claim."
     },
     {
       "path": "test/navigation-effects-performance.test.mjs",
