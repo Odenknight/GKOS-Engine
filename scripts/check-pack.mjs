@@ -204,6 +204,11 @@ for (const required of identityPackFiles) {
   if (!files.includes(required)) throw new Error(`npm package is missing ${required}`);
 }
 for (const required of [
+  "LICENSE",
+  "NOTICE",
+  "THIRD-PARTY-NOTICES.md",
+  "TRADEMARKS.md",
+  "ACKNOWLEDGMENTS.md",
   "dist/gkos-engine.mjs",
   "dist/adapter.mjs",
   "dist/gkx.mjs",
