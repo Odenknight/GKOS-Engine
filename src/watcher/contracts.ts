@@ -3283,6 +3283,15 @@ function canonicalizeGraphValue(value: unknown, key: string | null = null): unkn
   return value;
 }
 
+// Values are freshly canonicalized above. Encode each comparison key once per sort.
+// Nothing survives the call, and equal canonical keys retain their original order.
+function sortCanonicalValues(values: unknown[]): unknown[] {
+  if (values.length < 2) return values;
+  return values.map(value => ({value, key: stableJson(value)}))
+    .sort((left, right) => retrievalCodeUnitCompare(left.key, right.key))
+    .map(item => item.value);
+}
+
 export function normalizeWatcherCanonicalGkxGraph(graph: GkxGraph): Readonly<JsonRecord> {
   const source = assertRawGraphShape(graph, true);
   const rawStats = source.stats as JsonRecord;
@@ -3297,9 +3306,9 @@ export function normalizeWatcherCanonicalGkxGraph(graph: GkxGraph): Readonly<Jso
       `${String(right.id)}\u0000${String(right.source)}\u0000${String(right.target)}\u0000${String(right.kind)}`,
     ));
   const assessments = Array.isArray(source.gkxAssessments)
-    ? source.gkxAssessments.map((item) => canonicalizeGraphValue(item)).sort((left, right) => retrievalCodeUnitCompare(stableJson(left), stableJson(right))) : [];
+    ? sortCanonicalValues(source.gkxAssessments.map((item) => canonicalizeGraphValue(item))) : [];
   const diagnostics = Array.isArray(source.gkxDiagnostics)
-    ? source.gkxDiagnostics.map((item) => canonicalizeGraphValue(item)).sort((left, right) => retrievalCodeUnitCompare(stableJson(left), stableJson(right))) : [];
+    ? sortCanonicalValues(source.gkxDiagnostics.map((item) => canonicalizeGraphValue(item))) : [];
   const normalizedGraph = {
     nodes,
     links,
@@ -3331,10 +3340,8 @@ function normalizeAlreadyCanonicalGkxGraph(graph: unknown): Readonly<JsonRecord>
       `${String(left.id)}\u0000${String(left.source)}\u0000${String(left.target)}\u0000${String(left.kind)}`,
       `${String(right.id)}\u0000${String(right.source)}\u0000${String(right.target)}\u0000${String(right.kind)}`,
     ));
-  const assessments = (source.gkxAssessments as unknown[]).map((item) => canonicalizeGraphValue(item))
-    .sort((left, right) => retrievalCodeUnitCompare(stableJson(left), stableJson(right)));
-  const diagnostics = (source.gkxDiagnostics as unknown[]).map((item) => canonicalizeGraphValue(item))
-    .sort((left, right) => retrievalCodeUnitCompare(stableJson(left), stableJson(right)));
+  const assessments = sortCanonicalValues((source.gkxAssessments as unknown[]).map((item) => canonicalizeGraphValue(item)));
+  const diagnostics = sortCanonicalValues((source.gkxDiagnostics as unknown[]).map((item) => canonicalizeGraphValue(item)));
   return deepFreeze({
     contract_version: "gkos-watcher-canonical-gkx-graph/1.0.0-draft.1",
     normalized_graph: {

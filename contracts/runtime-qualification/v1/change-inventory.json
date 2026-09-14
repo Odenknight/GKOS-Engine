@@ -1544,8 +1544,8 @@
     {
       "path": "src/watcher/contracts.ts",
       "before": "0cc72b3c8776dd9421798b157102ae4f8fba3ac4",
-      "after": "672071478794dceaa0df3fff163c0f03a74f5ab0368ca4f58ef80724a774c623",
-      "rationale": "Reuse one canonical digest of the detached, validated graph delta across transition and graph-state comparisons within an activation check; preserve all validation boundaries."
+      "after": "19e3ba9f75811c119226e43b8a1683ea398498578d68c0f6b3e83522a6f8af55",
+      "rationale": "Reuse one canonical digest of the detached, validated graph delta across transition and graph-state comparisons within an activation check; preserve all validation boundaries. Canonical assessment and diagnostic sort keys are computed once per item; ordering and input preservation are checked."
     },
     {
       "path": "src/watcher/coordinator.ts",
@@ -1868,8 +1868,8 @@
     {
       "path": "test/watcher-recovery-contracts.test.mjs",
       "before": "2519ed9ed3e66f5f216afe76ebe5547110b06a30",
-      "after": "58d82d0d28f3704565d6b529ede0fabda974b7ba2fb7d9cb50004959adec2afb",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "a4a17a6199032ecbc1bd02022aaf128f026509fe165c5452978f2f00d099a847",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search. Canonical assessment and diagnostic sort keys are computed once per item; ordering and input preservation are checked."
     },
     {
       "path": "test/watcher-service-cli.test.mjs",
