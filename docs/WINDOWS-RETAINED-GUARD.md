@@ -80,3 +80,21 @@ cases in fresh processes. These results do not replace full qualification.
 
 Rerun the original swap-and-restore regression, adversarial transitions,
 native resource-cleanup checks, and full Engine qualification after integration.
+
+## Qualification runner packaging
+
+Full Windows qualification at `6f1486f` passed 1,168 of 1,169 tests, with
+no skips. The original reserved-derivation regression passed. The remaining
+failure was a separately bundled observation runner missing its compiled
+native digest. Its receipt and both command-log hashes were verified.
+
+Tests and all three CI runner-build sites now use
+`scripts/build-watcher-observation-runner.mjs OUTPUT`. It verifies the current
+native manifest, source hash, and binary hash; embeds the binding; and stages
+the matching native module adjacent to the runner. Existing output is never
+overwritten. A changed existing native module refuses packaging.
+
+The measurement test runs in a child process so Windows releases its mapped
+DLL before package cleanup. Measurement thresholds and authority checks remain
+unchanged. The corrected measurement/audit pair and packaging regression passed.
+Full combined qualification is still required.

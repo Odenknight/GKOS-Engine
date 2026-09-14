@@ -278,7 +278,7 @@ jobs:
           test/watcher-observation-qualification.test.mjs
 
       - name: Bundle private Phase 5 watcher qualification runner
-        run: ./node_modules/.bin/esbuild scripts/run-watcher-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$RUNNER_TEMP/phase5-watcher-qualification.mjs"
+        run: node scripts/build-watcher-observation-runner.mjs "$RUNNER_TEMP/phase5-watcher-qualification.mjs"
 
       - name: Create private watcher observation root
         run: mkdir -m 700 "$RUNNER_TEMP/phase5-watcher-observation-node-${{ matrix.node }}"
@@ -341,7 +341,7 @@ jobs:
           npm run pack:check
 
       - name: Bundle private Phase 5 watcher qualification runner
-        run: .\node_modules\.bin\esbuild.cmd scripts/run-watcher-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$env:RUNNER_TEMP/phase5-watcher-qualification.mjs"
+        run: node scripts/build-watcher-observation-runner.mjs "$env:RUNNER_TEMP/phase5-watcher-qualification.mjs"
 
       - name: Create private watcher observation root
         shell: pwsh
@@ -472,7 +472,7 @@ jobs:
           npm ci
           npm run typecheck
           npm run build
-          ./node_modules/.bin/esbuild scripts/run-watcher-observation-qualification.mjs --bundle --platform=node --format=esm --target=node22 --outfile="$RUNNER_TEMP/phase5-watcher-qualification.mjs"
+          node scripts/build-watcher-observation-runner.mjs "$RUNNER_TEMP/phase5-watcher-qualification.mjs"
 
       - name: Download exact six watcher observation archives
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0

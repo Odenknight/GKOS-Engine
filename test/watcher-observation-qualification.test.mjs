@@ -7,7 +7,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import test from "node:test";
 
-import esbuild from "esbuild";
+import { buildWatcherObservationRunner } from "../scripts/build-watcher-observation-runner.mjs";
 import { watcherCanonicalBytes, watcherDigest } from "../dist/watcher-host.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -16,6 +16,29 @@ function rawSha(bytes) {
   return `sha256:${createHash("sha256").update(bytes).digest("hex")}`;
 }
 
+test("watcher runner packaging preserves existing output and validates its staged native bytes", async () => {
+  const temporary = mkdtempSync(join(tmpdir(), "gkos-watcher-runner-package-"));
+  const output = join(temporary, "runner.mjs");
+  try {
+    await buildWatcherObservationRunner(output);
+    const original = readFileSync(output);
+    await assert.rejects(buildWatcherObservationRunner(output), { code: "EEXIST" });
+    assert.deepEqual(readFileSync(output), original);
+    if (process.platform === "win32") {
+      const manifest = JSON.parse(readFileSync(join(ROOT, "dist/native/retained-guard.json"), "utf8"));
+      const staged = join(temporary, "native", manifest.filename);
+      assert.equal(rawSha(readFileSync(staged)), `sha256:${manifest.sha256}`);
+      writeFileSync(staged, "changed native bytes");
+      await assert.rejects(buildWatcherObservationRunner(join(temporary, "second.mjs")));
+      assert.equal(readFileSync(staged, "utf8"), "changed native bytes");
+      assert.equal(readdirSync(temporary).includes("second.mjs"), false);
+    }
+  } finally {
+    assert.equal(dirname(resolve(temporary)), resolve(tmpdir()));
+    rmSync(temporary, { recursive: true, force: true });
+  }
+});
+
 test("watcher observation runner emits exactly one sealed governed measurement", { timeout: 120_000 }, async () => {
   const temporary = mkdtempSync(join(tmpdir(), "gkos-watcher-observation-test-"));
   const artifactRoot = join(temporary, "artifacts");
@@ -23,15 +46,7 @@ test("watcher observation runner emits exactly one sealed governed measurement",
   try {
     await import("node:fs/promises").then(({ mkdir }) => mkdir(artifactRoot, { mode: 0o700 }));
     if (process.platform !== "win32") chmodSync(artifactRoot, 0o700);
-    await esbuild.build({
-      entryPoints: [join(ROOT, "scripts", "run-watcher-observation-qualification.mjs")],
-      bundle: true,
-      platform: "node",
-      format: "esm",
-      target: "node22",
-      outfile: bundlePath,
-      logLevel: "silent",
-    });
+    await buildWatcherObservationRunner(bundlePath);
     const runner = await import(pathToFileURL(bundlePath).href);
     assert.deepEqual(runner.EXTERNAL_SEARCH_NODE_WARNING_ARGS, [
       "--disable-warning=ExperimentalWarning", "--disable-warning=UNDICI-EHPA",
@@ -53,10 +68,18 @@ test("watcher observation runner emits exactly one sealed governed measurement",
     assert.throws(() => runner.parseExternalSearchChildOutputForTest(
       Buffer.from('{"hits":[]}\n', "utf8"), Buffer.from("warning\n", "utf8"),
     ), /GKX_WATCHER_QUALIFICATION_QUERY_INVALID/u);
-    let result = null;
-    let failure = null;
-    try { result = await runner.runWatcherObservationMeasurementForTest(ROOT, artifactRoot); }
-    catch (error) { failure = error; }
+    // Native modules remain mapped until process exit on Windows. Run the
+    // measurement in its own process, then verify and remove its full package.
+    const child = spawnSync(process.execPath, ["--input-type=module", "-e", `
+      import { pathToFileURL } from 'node:url';
+      const [bundle, root, artifacts] = process.argv.slice(2);
+      const runner = await import(pathToFileURL(bundle));
+      try { process.stdout.write(JSON.stringify({ result: await runner.runWatcherObservationMeasurementForTest(root, artifacts), failure: null })); }
+      catch (error) { process.stdout.write(JSON.stringify({ result: null, failure: { message: error.message, stack: error.stack } })); }
+    `, "measurement-child", bundlePath, ROOT, artifactRoot], { encoding: "utf8", timeout: 110_000, windowsHide: true });
+    assert.ifError(child.error);
+    assert.equal(child.status, 0, child.stderr);
+    const { result, failure } = JSON.parse(child.stdout);
 
     if (failure !== null && failure.message !== "GKX_WATCHER_QUALIFICATION_FTS5_REQUIRED") throw failure;
 
@@ -114,10 +137,7 @@ test("terminal watcher observation audit accepts all-and-only six exact governed
   const bundlePath = join(temporary, "runner.mjs");
   try {
     mkdirSync(archiveRoot);
-    await esbuild.build({
-      entryPoints: [join(ROOT, "scripts", "run-watcher-observation-qualification.mjs")],
-      bundle: true, platform: "node", format: "esm", target: "node22", outfile: bundlePath, logLevel: "silent",
-    });
+    await buildWatcherObservationRunner(bundlePath);
     const runner = await import(pathToFileURL(bundlePath).href);
     const fixture = JSON.parse(readFileSync(join(
       ROOT, "contracts", "watcher", "gkos-watcher-recovery-1.0.0-draft.1", "watcher-conformance-fixture.json",
