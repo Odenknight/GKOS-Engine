@@ -10,7 +10,7 @@ import {
 } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { hostname } from "node:os";
-import { canonicalJson, canonicalSha256, sha256Bytes } from "../../canonical";
+import { canonicalJson, canonicalSha256, deepFreeze, sha256Bytes } from "../../canonical";
 import { codeUnitCompare, normalizeVaultRelative, posixDirname } from "../../paths";
 import { shouldIgnoreNavigationArchivePath } from "../../navigation";
 import { validateVaultRelativePath } from "../path-policy";
@@ -195,13 +195,13 @@ export class NodeNavigationEffectsExecutor {
     if (await readFile(path, "utf8") !== bytes) throw new Error("CHECKPOINT_WRITE_VERIFICATION_FAILED");
   }
 
-  private async validateCheckpoint(): Promise<void> {
+  private async validateCheckpoint(journal = this.journal): Promise<void> {
     const path = resolve(this.stateRoot, "checkpoints", "latest.json");
     if (!await exists(path)) return;
     let checkpoint: { sequence: number; entryDigest: string | null };
     try { checkpoint = JSON.parse(await readFile(path, "utf8")); }
     catch { throw new Error("CHECKPOINT_CORRUPT:invalid-json"); }
-    const entries = await this.journal.load();
+    const entries = await journal.load();
     if (checkpoint.sequence === -1 && checkpoint.entryDigest === null) return;
     const referenced = entries[checkpoint.sequence];
     if (!referenced || referenced.entryDigest !== checkpoint.entryDigest) throw new Error("CHECKPOINT_CORRUPT:binding");
@@ -1036,6 +1036,38 @@ export class NodeNavigationEffectsExecutor {
     return this.executeSerial({ plan: rollbackPlan, proposedBytes: before });
   }
 
+  /** Observes recovery evidence without acquiring a lease, deleting files,
+   * writing receipts/checkpoints, or invoking the authorization provider.
+   * This is not an atomic vault snapshot or permission to recover.
+   */
+  inspectRecovery() {
+    return this.enqueue(async () => {
+      // A fresh reader also keeps archive/receipt helpers off the writer's
+      // cached journal. Constructor setup performs no filesystem writes.
+      const observer = new NodeNavigationEffectsExecutor({ vaultRoot: this.vaultRoot,
+        stateRoot: this.stateRoot, pathThreatModel: "cooperative-vault", clock: this.clock });
+      await observer.validateStateRoot();
+      const journalPath = this.journal.path;
+      const checkpointPath = resolve(this.stateRoot, "checkpoints", "latest.json");
+      const journal = await this.readTarget(journalPath);
+      const checkpoint = await this.readTarget(checkpointPath);
+      const summary = await observer.recoverStartupSerial(true);
+      if (journal !== await this.readTarget(journalPath) || checkpoint !== await this.readTarget(checkpointPath)) {
+        throw new Error("RECOVERY_INSPECTION_CHANGED");
+      }
+      const evidence = {
+        artifactKind: "engine.effect-recovery-inspection" as const,
+        effectsContract: "1.0.0" as const,
+        journalDigest: journal === null ? null : await sha256Bytes(journal),
+        checkpointDigest: checkpoint === null ? null : await sha256Bytes(checkpoint),
+        results: summary.results,
+        writeCapabilityMayEnable: false as const,
+        sourceContentIncluded: false as const,
+      };
+      return deepFreeze({ ...evidence, inspectionDigest: await canonicalSha256(evidence) });
+    });
+  }
+
   recoverStartup(): Promise<RecoverySummary> {
     return this.enqueue(async () => {
       if (!this.acceptingWrites) throw new Error("EXECUTOR_SHUTTING_DOWN");
@@ -1065,10 +1097,11 @@ export class NodeNavigationEffectsExecutor {
     }
   }
 
-  private async recoverStartupSerial(): Promise<RecoverySummary> {
-    await this.acquireVaultLease();
-    await this.validateCheckpoint();
-    const entries = [...await this.journal.load()];
+  private async recoverStartupSerial(inspectOnly = false): Promise<RecoverySummary> {
+    if (!inspectOnly) await this.acquireVaultLease();
+    const journal = inspectOnly ? new DurableEffectJournal(this.journal.path, this.clock) : this.journal;
+    await this.validateCheckpoint(journal);
+    const entries = [...await journal.load()];
     const byEffect = new Map<string, typeof entries>();
     for (const entry of entries) byEffect.set(entry.effectId, [...(byEffect.get(entry.effectId) ?? []), entry]);
     const liveCommittedEffectByTarget = new Map<string, { effectId: string; sequence: number }>();
@@ -1098,7 +1131,7 @@ export class NodeNavigationEffectsExecutor {
         await this.validateCommittedOperation(operationEntries, liveCommittedEffectByTarget.get(plan.targetPath)?.effectId === effectId);
         continue;
       }
-      await this.cleanupStaleTargetLock(plan);
+      if (!inspectOnly) await this.cleanupStaleTargetLock(plan);
       const planDigest = await canonicalSha256(plan);
       if (latest.state === "STALE") {
         await this.validateTerminalReceipt(operationEntries);
@@ -1114,6 +1147,10 @@ export class NodeNavigationEffectsExecutor {
             const staleDigest = await sha256Bytes(staleBytes);
             if (staleDigest !== plan.proposedDigest) {
               results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["STALE_TEMP_DIGEST_MISMATCH"], observed: { temporaryDigest: staleDigest, proposedDigest: plan.proposedDigest } });
+              continue;
+            }
+            if (inspectOnly) {
+              results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: false, reasonCodes: ["VERIFIED_STALE_TEMP_PRESENT"], observed: { temporaryDigest: staleDigest, proposedDigest: plan.proposedDigest } });
               continue;
             }
             await rm(stalePath, { force: true });
@@ -1149,6 +1186,10 @@ export class NodeNavigationEffectsExecutor {
       if (targetDigest === plan.proposedDigest && plan.precondition.priorDigest === plan.proposedDigest &&
           plan.idempotencyKey.startsWith("moc-no-change:") && temporary === null &&
           ["RECEIVED", "PLANNED", "PREPARED"].includes(latest.state)) {
+        if (inspectOnly) {
+          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-present-verified", writeCapabilityMayEnable: false, reasonCodes: ["NO_CHANGE_AWAITS_AUTHORIZED_RECOVERY"], observed });
+          continue;
+        }
         if (!this.preconditionValidator || (await this.preconditionValidator(plan)).length) {
           results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: ["NO_CHANGE_AUTHORITY_REVALIDATION_FAILED"], observed });
           continue;
@@ -1159,6 +1200,10 @@ export class NodeNavigationEffectsExecutor {
         continue;
       }
       if (targetDigest === plan.proposedDigest) {
+        if (inspectOnly) {
+          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: archiveValid ? "effect-present-verified" : "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: [archiveValid ? "AFTER_IMAGE_AWAITS_AUTHORIZED_RECOVERY" : "ARCHIVE_BEFORE_INVALID"], observed });
+          continue;
+        }
         if (!archiveValid) {
           await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "ARCHIVE_BEFORE_INVALID" });
           const receipt = await this.writeReceipt(plan, planDigest, "recovery-required", plan.precondition.priorDigest, undefined, ["ARCHIVE_BEFORE_INVALID"]);
@@ -1175,6 +1220,10 @@ export class NodeNavigationEffectsExecutor {
         continue;
       }
       if (targetIsExpected && temporaryDigest === plan.proposedDigest) {
+        if (inspectOnly) {
+          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: archiveValid ? "effect-absent-retryable" : "ambiguous-or-corrupt", writeCapabilityMayEnable: false, reasonCodes: [archiveValid ? "VERIFIED_TEMP_AWAITS_AUTHORIZED_RECOVERY" : "ARCHIVE_BEFORE_INVALID"], observed });
+          continue;
+        }
         if (!archiveValid) {
           await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "ARCHIVE_BEFORE_INVALID" });
           const receipt = await this.writeReceipt(plan, planDigest, "recovery-required", plan.precondition.priorDigest, undefined, ["ARCHIVE_BEFORE_INVALID"]);
@@ -1194,7 +1243,7 @@ export class NodeNavigationEffectsExecutor {
         continue;
       }
       if (targetIsExpected && temporary === null) {
-        if (latest.state !== "RECOVERY_REQUIRED") {
+        if (!inspectOnly && latest.state !== "RECOVERY_REQUIRED") {
           await this.journal.append(effectId, "RECOVERY_REQUIRED", planDigest, { reasonCode: "REPLAN_REQUIRED" });
           const receipt = await this.writeReceipt(plan, planDigest, "recovery-required", plan.precondition.priorDigest, undefined, ["REPLAN_REQUIRED"]);
           await this.sealTerminalReceipt(plan, planDigest, "RECOVERY_REQUIRED", "REPLAN_REQUIRED", receipt);
@@ -1202,13 +1251,15 @@ export class NodeNavigationEffectsExecutor {
         results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "effect-absent-retryable", writeCapabilityMayEnable: false, reasonCodes: ["REPLAN_REQUIRED"], observed });
         continue;
       }
-      await this.journal.append(effectId, "STALE", planDigest, { reasonCode: "CONFLICTING_EXTERNAL_BYTES" });
-      const receipt = await this.writeReceipt(plan, planDigest, "stale", targetDigest, archive.manifestDigest, ["CONFLICTING_EXTERNAL_BYTES"]);
-      await this.sealTerminalReceipt(plan, planDigest, "STALE", "CONFLICTING_EXTERNAL_BYTES", receipt);
+      if (!inspectOnly) {
+        await this.journal.append(effectId, "STALE", planDigest, { reasonCode: "CONFLICTING_EXTERNAL_BYTES" });
+        const receipt = await this.writeReceipt(plan, planDigest, "stale", targetDigest, archive.manifestDigest, ["CONFLICTING_EXTERNAL_BYTES"]);
+        await this.sealTerminalReceipt(plan, planDigest, "STALE", "CONFLICTING_EXTERNAL_BYTES", receipt);
+      }
       results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId, classification: "conflicting-external-bytes", writeCapabilityMayEnable: false, reasonCodes: ["CONFLICTING_EXTERNAL_BYTES"], observed });
     }
-    const safeToEnableWrites = results.every((result) => result.writeCapabilityMayEnable);
-    await this.writeCheckpoint(false);
+    const safeToEnableWrites = !inspectOnly && results.every((result) => result.writeCapabilityMayEnable);
+    if (!inspectOnly) await this.writeCheckpoint(false);
     return { safeToEnableWrites, results };
   }
 }

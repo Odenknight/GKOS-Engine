@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
+import { lstat, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { hostname, tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -206,6 +206,73 @@ test("an already-expired shutdown deadline still stops admission and drains", as
   assert.equal((await executor.shutdownByDeadline(deadline.signal)).status, "deadline-exceeded");
   await executor.shutdown();
   assert.equal((await executor.shutdownByDeadline(new AbortController().signal)).status, "complete");
+});
+
+async function exactTree(root) {
+  const result = {};
+  for (const name of (await readdir(root, { recursive: true })).sort()) {
+    const path = join(root, name), stat = await lstat(path);
+    result[name] = stat.isDirectory() ? "directory" : { bytes: (await readFile(path)).toString("base64"), mtime: stat.mtimeMs };
+  }
+  return result;
+}
+
+test("recovery inspection performs no writes at every interrupted execution boundary", async (t) => {
+  for (const point of ["after-received", "after-planned", "after-prepared", "after-archive", "after-temporary-write", "after-replace", "after-verified", "after-receipt"]) {
+    await t.test(point, async (t) => {
+      const root = await fixture(t, `inspect-${point}`);
+      await writeFile(join(root, "topics/index.md"), "before");
+      const planned = await makePlan("before");
+      const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+        faultInjector: at => { if (at === point) throw new SimulatedEffectCrash(at); } });
+      await assert.rejects(writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes }), /SIMULATED_EFFECT_CRASH/);
+      await writer.releaseVaultLease();
+      const before = await exactTree(root);
+      const observer = new NodeNavigationEffectsExecutor({ vaultRoot: root,
+        preconditionValidator: () => { throw new Error("inspection must not invoke authority callbacks"); } });
+      const report = await observer.inspectRecovery();
+      assert.equal(report.writeCapabilityMayEnable, false);
+      assert.equal(report.sourceContentIncluded, false);
+      assert.equal(report.results.length, 1);
+      assert.equal(report.results[0].writeCapabilityMayEnable, false);
+      assert.match(report.inspectionDigest, /^sha256:[0-9a-f]{64}$/);
+      assert.equal(Object.isFrozen(report), true);
+      assert.deepEqual(await observer.inspectRecovery(), report);
+      assert.deepEqual(await exactTree(root), before);
+    });
+  }
+});
+
+test("recovery inspection uses fresh disk evidence and never initializes an empty vault", async (t) => {
+  const root = await fixture(t, "inspect-fresh");
+  const observer = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  const empty = await exactTree(root);
+  const report = await observer.inspectRecovery();
+  assert.deepEqual(report.results, []);
+  assert.equal(report.journalDigest, null);
+  assert.deepEqual(await exactTree(root), empty);
+  await mkdir(join(root, ".gkx/effects"), { recursive: true });
+  await writeFile(join(root, ".gkx/effects/journal.jsonl"), "{broken\n");
+  const corrupt = await exactTree(root);
+  await assert.rejects(observer.inspectRecovery(), /JOURNAL_CORRUPT/);
+  assert.deepEqual(await exactTree(root), corrupt);
+});
+
+test("repeated inspection sees newly committed receipts without stale writer caches", async (t) => {
+  const root = await fixture(t, "inspect-new-commit");
+  const observer = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  const empty = await observer.inspectRecovery();
+  await writeFile(join(root, "topics/index.md"), "before");
+  const planned = await makePlan("before");
+  const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  t.after(() => writer.releaseVaultLease());
+  await writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes });
+  const before = await exactTree(root);
+  const current = await observer.inspectRecovery();
+  assert.notEqual(current.journalDigest, empty.journalDigest);
+  assert.deepEqual(current.results, []);
+  assert.equal(current.writeCapabilityMayEnable, false);
+  assert.deepEqual(await exactTree(root), before);
 });
 
 test("Node executor journals, archives exact bytes, atomically replaces, verifies, receipts, and replays idempotently", async (t) => {

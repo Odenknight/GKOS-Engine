@@ -67,7 +67,7 @@ changed source bytes, revoked authority, pending shutdown and existing crash rec
 The current full candidate qualification is separate from this component result.
 
 The Kosmos host adapter is not yet wired to this API.
-It still needs authorized snapshot and path-safety receipts, recovery inspection,
+It still needs authorized snapshot and path-safety receipts, host mapping of recovery inspection,
 authorized recovery actions, and mapping of shutdown results to host receipts.
 Directory durability and the platform threat model still need qualification.
 This change does not enable source writes in Kosmos or establish release readiness.
@@ -85,3 +85,27 @@ After release, the writer completes and the checkpoint is verified before lease 
 Other fixtures cover an already-expired deadline, pending intent, checkpoint-write failure,
 and refused recovery or rollback after shutdown.
 Directory-entry power-loss durability remains outside the current proof.
+
+## Read-only recovery inspection
+
+`inspectRecovery()` now observes the existing recovery classifier without taking a lease.
+It does not run cleanup, replace source bytes, write receipts or checkpoints,
+or invoke the host's authorization callback.
+It reads fresh journal evidence, including through archive and receipt validators.
+The report binds journal and checkpoint digests to the observed results.
+It always reports writeCapabilityMayEnable=false and sourceContentIncluded=false.
+It rejects journal or checkpoint changes detected during the inspection.
+This is not an atomic snapshot against another process changing the vault.
+The cooperative-vault threat model still applies.
+
+All 134 Navigation Effects tests passed on Windows with no failures or skips.
+The package build, package check and candidate inventory check passed.
+Tests compare exact file bytes, file modification times and directory entries
+before and after inspection at all eight interrupted execution boundaries.
+They also cover an empty vault, fresh corruption and newly committed receipts.
+The test record does not establish full native-host or release qualification.
+
+A separately authorized recovery action is still required.
+The inspection digest is evidence, not a credential or an execution grant.
+Kosmos must map it to its host receipt and resolve fresh authority before acting.
+The existing direct recovery API is not yet that complete authorized host boundary.
