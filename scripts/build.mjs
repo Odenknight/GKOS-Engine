@@ -20,12 +20,15 @@
  *   node scripts/build.mjs        build dist/gkos-engine.mjs + declarations
  */
 import esbuild from "esbuild";
+import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const compilations = [];
+const sha256 = bytes => createHash("sha256").update(bytes).digest("hex");
 
 // A breaking namespace migration must not leave stale generated modules in
 // the published package. Recreate dist from source on every build.
@@ -34,6 +37,7 @@ mkdirSync(resolve(root, "dist"), { recursive: true });
 
 async function bundle(entry, opts = {}) {
   const res = await esbuild.build({
+    absWorkingDir: root,
     entryPoints: [resolve(root, entry)],
     bundle: true,
     write: false,
@@ -44,7 +48,11 @@ async function bundle(entry, opts = {}) {
     sourcemap: false,
     logLevel: "silent",
     ...opts,
+    metafile: true,
   });
+  compilations.push({ entry, platform: opts.platform ?? "neutral", format: opts.format ?? "esm",
+    sha256: sha256(res.outputFiles[0].contents), bytes: res.outputFiles[0].contents.length,
+    metafile: res.metafile });
   return res.outputFiles[0].text;
 }
 
@@ -134,6 +142,18 @@ try {
   const tscJs = resolve(root, "node_modules/typescript/bin/tsc");
   execFileSync(process.execPath, [tscJs, "-p", "tsconfig.declarations.json"], { cwd: root, stdio: "inherit" });
   console.log("built dist/*.d.ts");
+  const artifacts = readdirSync(resolve(root, "dist")).filter(name => /\.(?:mjs|cjs)$/.test(name)).sort().map(name => {
+    const bytes = readFileSync(resolve(root, "dist", name)), digest = sha256(bytes);
+    const matching = compilations.map((compilation, index) => compilation.sha256 === digest ? index : -1).filter(index => index >= 0);
+    if (!matching.length) throw new Error(`bundle inventory has no compilation for ${name}`);
+    return { path: `dist/${name}`, bytes: bytes.length, sha256: digest, compilations: matching };
+  });
+  writeFileSync(resolve(root, "dist/bundle-inputs.json"), JSON.stringify({ schemaVersion: 1,
+    scope: "javascript-bundles-only", completeSbom: false, esbuildVersion: esbuild.version,
+    packageManifestSha256: sha256(readFileSync(resolve(root, "package.json"))),
+    lockfileSha256: sha256(readFileSync(resolve(root, "package-lock.json"))),
+    buildScriptSha256: sha256(readFileSync(fileURLToPath(import.meta.url))),
+    artifacts, compilations }, null, 2) + "\n");
 } catch (e) {
   console.error(e);
   process.exit(1);

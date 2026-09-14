@@ -672,6 +672,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "docs/BUNDLE-INPUT-INVENTORY.md",
+      "before": null,
+      "after": "53ddb42e5925a1eb4d89630b64a0d0ce5e9abb4f251504f2a4da7d90d51d0856",
+      "rationale": "Document bundle input evidence, consumer use and remaining SBOM/release limitations."
+    },
+    {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
       "before": null,
       "after": "d0d8c7ac5884f3dfa13027a024f033259db64b534e51da8cc794085f4cb27e39",
@@ -1010,8 +1016,8 @@
     {
       "path": "scripts/build.mjs",
       "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
-      "after": "f73428e3243f652764f08325e5ed5ce1c9ae54e15868d19c5acca60e8fbf7ec6",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "76278821f22cf2a1c1f72308dc87cadfe6ddeb0d09b8871a0e4da96a203f0eab",
+      "rationale": "Generate exact JavaScript bundle identities and esbuild input graphs; runtime bundle bytes unchanged in recorded comparison."
     },
     {
       "path": "scripts/check-graphiti-http-chain.mjs",
@@ -1564,6 +1570,12 @@
       "before": "4f99d8100ca34835bab6f1058fecb818a46c3be7",
       "after": "4bb27d8591f774d2fd5bb80e7dc399d4221b2ec6a98fa4d11d60f78ee91a0662",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/bundle-inputs.test.mjs",
+      "before": null,
+      "after": "138dc466e4ce18d5398c45d95d53042a6c2a77d22651279fc5e16b36c0a04189",
+      "rationale": "Verify generated JavaScript bundle coverage, exact output bytes and compilation bindings."
     },
     {
       "path": "test/compatibility-baseline.test.mjs",
