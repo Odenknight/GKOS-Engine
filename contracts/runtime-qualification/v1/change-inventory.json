@@ -704,8 +704,8 @@
     {
       "path": "docs/EFFECTS-HOST-API-PROGRESS.md",
       "before": null,
-      "after": "f2eb10ba317460c5d3731f040c84ecdb948cdbab2d21f57af105b44ade7a3518",
-      "rationale": "Effects preparation, shutdown and inspection API progress; interrupted recovery now revalidates current authority before cleanup and again under a held target lock, with finally release. 148 component tests passed; complete host authorization and native qualification remain open."
+      "after": "08f802decadf483e0f0f178993d09d7c6feeb39bb1a2f6b45697a91b1fe9ebff",
+      "rationale": "Effects host API progress: inspected recovery verifies fresh evidence under writer lease, reloads journal from disk, and uses current authority and per-target locks. 155 component tests; Kosmos host integration and release qualification remain open."
     },
     {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
@@ -1412,8 +1412,8 @@
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "069454d388f484bfd1ac21ac070fc82fd38c08e20cc3df182603e8f0a4c46256",
-      "rationale": "Effects preparation, shutdown and inspection API progress; interrupted recovery now revalidates current authority before cleanup and again under a held target lock, with finally release. 148 component tests passed; complete host authorization and native qualification remain open."
+      "after": "59298695e772896703b796c4596bb75b61afd868259b03e4822323ebeaeb66d0",
+      "rationale": "Effects host API progress: inspected recovery verifies fresh evidence under writer lease, reloads journal from disk, and uses current authority and per-target locks. 155 component tests; Kosmos host integration and release qualification remain open."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
@@ -1424,8 +1424,8 @@
     {
       "path": "src/navigation-effects/node/journal.ts",
       "before": null,
-      "after": "3825c05ae0a5ee560fe080e4fedf6d60d94589d9b50391be4cc0603d6e2fc2a9",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "f952958b76f45306692451ead35b3de4fc9f4bbdfc194606e5055f06df376815",
+      "rationale": "Effects host API progress: inspected recovery verifies fresh evidence under writer lease, reloads journal from disk, and uses current authority and per-target locks. 155 component tests; Kosmos host integration and release qualification remain open."
     },
     {
       "path": "src/navigation-effects/node/moc-host.ts",
@@ -1724,8 +1724,8 @@
     {
       "path": "test/navigation-effects-node.test.mjs",
       "before": null,
-      "after": "799a08c11f2a2c50c67f79c79b032059657070d1b12eceaf34159fe68273ad33",
-      "rationale": "Effects preparation, shutdown and inspection API progress; interrupted recovery now revalidates current authority before cleanup and again under a held target lock, with finally release. 148 component tests passed; complete host authorization and native qualification remain open."
+      "after": "17d5bd8763b87fa30aae75ff99c053f9acb0fc3f114d34206815d6755cdb8673",
+      "rationale": "Effects host API progress: inspected recovery verifies fresh evidence under writer lease, reloads journal from disk, and uses current authority and per-target locks. 155 component tests; Kosmos host integration and release qualification remain open."
     },
     {
       "path": "test/navigation-effects-performance.test.mjs",

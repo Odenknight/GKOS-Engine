@@ -610,6 +610,50 @@ test("recovery refuses source promotion and commit finalization without current 
   }
 });
 
+test("inspected recovery binds fresh evidence and still requires current authority", async t => {
+  for (const mode of ["valid-cached-reader", "revoked", "source-changed", "temporary-changed", "wrong-digest", "invalid-digest"]) {
+    await t.test(mode, async t => {
+      const root = await fixture(t, `inspected-${mode}`);
+      await writeFile(join(root, "topics/index.md"), "before");
+      let authorityCalls = 0;
+      const recovery = new NodeNavigationEffectsExecutor({ vaultRoot: root,
+        preconditionValidator: () => { authorityCalls++; return mode === "revoked" ? ["AUTHORITY_REVOKED"] : []; } });
+      // Populate this instance's old empty cache before another writer records
+      // the interrupted operation. Recovery must reload disk under its lease.
+      assert.deepEqual(await recovery.journal.load(), []);
+      const planned = await makePlan("before");
+      const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+        faultInjector: point => { if (point === "after-temporary-write") throw new SimulatedEffectCrash(point); } });
+      await assert.rejects(writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes }), /SIMULATED_EFFECT_CRASH/);
+      await writer.releaseVaultLease();
+      const inspection = await recovery.inspectRecovery();
+      assert.equal(authorityCalls, 0);
+      if (mode === "source-changed") await writeFile(join(root, "topics/index.md"), "external source");
+      if (mode === "temporary-changed") {
+        const entries = await writer.journal.load();
+        const temporary = entries.map(entry => entry.temporaryPath).filter(Boolean).at(-1);
+        assert.ok(temporary); await writeFile(join(root, temporary), "external temporary");
+      }
+      const digest = mode === "invalid-digest" ? "not-a-digest" : mode === "wrong-digest" ? `sha256:${"0".repeat(64)}` : inspection.inspectionDigest;
+      const journalBefore = await readFile(join(root, ".gkx/effects/journal.jsonl"), "utf8");
+      try {
+        if (["valid-cached-reader", "revoked"].includes(mode)) {
+          const result = await recovery.recoverInspected(digest);
+          assert.equal(result.safeToEnableWrites, mode === "valid-cached-reader");
+          assert.equal(result.results.length, 1);
+          assert.ok(authorityCalls > 0);
+        } else {
+          await assert.rejects(recovery.recoverInspected(digest), mode === "invalid-digest" ? /RECOVERY_INSPECTION_DIGEST_INVALID/ : /RECOVERY_INSPECTION_CHANGED/);
+          assert.equal(authorityCalls, 0);
+        }
+        assert.equal(await readFile(join(root, "topics/index.md"), "utf8"),
+          mode === "valid-cached-reader" ? planned.proposedBytes : mode === "source-changed" ? "external source" : "before");
+        if (mode !== "valid-cached-reader") assert.equal(await readFile(join(root, ".gkx/effects/journal.jsonl"), "utf8"), journalBefore);
+      } finally { await recovery.releaseVaultLease(); }
+    });
+  }
+});
+
 test("recovery rechecks authority with the target lock held and always releases it", async (t) => {
   for (const mode of ["allow", "revoke", "throw"]) await t.test(mode, async t => {
     const root = await fixture(t, `recovery-lock-${mode}`);

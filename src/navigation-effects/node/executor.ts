@@ -1041,47 +1041,66 @@ export class NodeNavigationEffectsExecutor {
    * This is not an atomic vault snapshot or permission to recover.
    */
   inspectRecovery() {
-    return this.enqueue(async () => {
-      // A fresh reader also keeps archive/receipt helpers off the writer's
-      // cached journal. Constructor setup performs no filesystem writes.
-      const observer = new NodeNavigationEffectsExecutor({ vaultRoot: this.vaultRoot,
-        stateRoot: this.stateRoot, pathThreatModel: "cooperative-vault", clock: this.clock });
-      await observer.validateStateRoot();
-      const journalPath = this.journal.path;
-      const checkpointPath = resolve(this.stateRoot, "checkpoints", "latest.json");
-      const journal = await this.readTarget(journalPath);
-      const checkpoint = await this.readTarget(checkpointPath);
-      const summary = await observer.recoverStartupSerial(true);
-      if (journal !== await this.readTarget(journalPath) || checkpoint !== await this.readTarget(checkpointPath)) {
-        throw new Error("RECOVERY_INSPECTION_CHANGED");
-      }
-      const evidence = {
-        artifactKind: "engine.effect-recovery-inspection" as const,
-        effectsContract: "1.0.0" as const,
-        journalDigest: journal === null ? null : await sha256Bytes(journal),
-        checkpointDigest: checkpoint === null ? null : await sha256Bytes(checkpoint),
-        results: summary.results,
-        writeCapabilityMayEnable: false as const,
-        sourceContentIncluded: false as const,
-      };
-      return deepFreeze({ ...evidence, inspectionDigest: await canonicalSha256(evidence) });
-    });
+    return this.enqueue(() => this.inspectRecoverySerial());
+  }
+
+  private async inspectRecoverySerial() {
+    // A fresh reader also keeps archive/receipt helpers off the writer's
+    // cached journal. Constructor setup performs no filesystem writes.
+    const observer = new NodeNavigationEffectsExecutor({ vaultRoot: this.vaultRoot,
+      stateRoot: this.stateRoot, pathThreatModel: "cooperative-vault", clock: this.clock });
+    await observer.validateStateRoot();
+    const journalPath = this.journal.path;
+    const checkpointPath = resolve(this.stateRoot, "checkpoints", "latest.json");
+    const journal = await this.readTarget(journalPath);
+    const checkpoint = await this.readTarget(checkpointPath);
+    const summary = await observer.recoverStartupSerial(true);
+    if (journal !== await this.readTarget(journalPath) || checkpoint !== await this.readTarget(checkpointPath)) {
+      throw new Error("RECOVERY_INSPECTION_CHANGED");
+    }
+    const evidence = {
+      artifactKind: "engine.effect-recovery-inspection" as const,
+      effectsContract: "1.0.0" as const,
+      journalDigest: journal === null ? null : await sha256Bytes(journal),
+      checkpointDigest: checkpoint === null ? null : await sha256Bytes(checkpoint),
+      results: summary.results,
+      writeCapabilityMayEnable: false as const,
+      sourceContentIncluded: false as const,
+    };
+    return deepFreeze({ ...evidence, inspectionDigest: await canonicalSha256(evidence) });
   }
 
   recoverStartup(): Promise<RecoverySummary> {
+    return this.enqueue(() => this.recoverChecked());
+  }
+
+  /** The digest binds reviewed evidence; the current provider still supplies authority. */
+  recoverInspected(inspectionDigest: string): Promise<RecoverySummary> {
     return this.enqueue(async () => {
-      if (!this.acceptingWrites) throw new Error("EXECUTOR_SHUTTING_DOWN");
-      try {
-        const summary = await this.recoverStartupSerial();
-        this.startupRecoveryChecked = true;
-        this.recoveryWriteLatched = !summary.safeToEnableWrites;
-        return summary;
-      } catch (error) {
-        this.startupRecoveryChecked = true;
-        this.recoveryWriteLatched = true;
-        throw error;
+      if (typeof inspectionDigest !== "string" || !/^sha256:[0-9a-f]{64}$/.test(inspectionDigest)) {
+        throw new Error("RECOVERY_INSPECTION_DIGEST_INVALID");
       }
+      return this.recoverChecked(inspectionDigest);
     });
+  }
+
+  private async recoverChecked(inspectionDigest?: string): Promise<RecoverySummary> {
+    if (!this.acceptingWrites) throw new Error("EXECUTOR_SHUTTING_DOWN");
+    try {
+      if (inspectionDigest !== undefined) {
+        await this.acquireVaultLease();
+        const current = await this.inspectRecoverySerial();
+        if (current.inspectionDigest !== inspectionDigest) throw new Error("RECOVERY_INSPECTION_CHANGED");
+      }
+      const summary = await this.recoverStartupSerial();
+      this.startupRecoveryChecked = true;
+      this.recoveryWriteLatched = !summary.safeToEnableWrites;
+      return summary;
+    } catch (error) {
+      this.startupRecoveryChecked = true;
+      this.recoveryWriteLatched = true;
+      throw error;
+    }
   }
 
   private async ensureStartupRecovery(): Promise<void> {
@@ -1098,7 +1117,10 @@ export class NodeNavigationEffectsExecutor {
   }
 
   private async recoverStartupSerial(inspectOnly = false): Promise<RecoverySummary> {
-    if (!inspectOnly) await this.acquireVaultLease();
+    if (!inspectOnly) {
+      await this.acquireVaultLease();
+      await this.journal.reload();
+    }
     const journal = inspectOnly ? new DurableEffectJournal(this.journal.path, this.clock) : this.journal;
     await this.validateCheckpoint(journal);
     const entries = [...await journal.load()];

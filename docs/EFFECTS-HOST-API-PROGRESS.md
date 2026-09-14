@@ -143,3 +143,29 @@ Denied operations preserve the target and journal, and all three release the
 lock. These tests failed against the previous implementation before the fix.
 The cooperative-vault threat model still applies. Current host policy binding
 and complete native qualification are separate requirements.
+
+## Recovery bound to inspected evidence
+
+`recoverInspected(inspectionDigest)` now supplies the Engine entry point for a
+host that has reviewed `inspectRecovery()`. It validates the digest format,
+acquires the vault writer lease, and repeats inspection against current disk
+evidence. A different digest refuses recovery and closes the write latch.
+The supplied digest is evidence, not a grant. Matching evidence still requires
+the current authority provider and the per-target checks described above.
+
+Mutating recovery reloads the journal from disk while holding the writer lease.
+An old cached journal can no longer hide an interrupted operation observed by
+the fresh inspection reader. `DurableEffectJournal.reload()` requires its
+caller to hold that lease and exclude concurrent journal users.
+
+The focused checks cover matching evidence with an older empty journal cache,
+revoked authority, changed source bytes, changed temporary bytes, a wrong
+digest, and an invalid digest. Rejected attempts preserve the source and journal.
+The existing direct startup API remains available for Engine hosts. Kosmos must
+use the inspection-bound entry point and map its result to its own authority,
+lease, shutdown, and recovery receipts before exposing source writes.
+The implementation retains the cooperative-vault threat model and does not
+claim an atomic snapshot against a process that ignores the writer lease.
+
+All 155 Navigation Effects tests passed on Windows with no failures or skips.
+This is component evidence, not native-host or release qualification.
