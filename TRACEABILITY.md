@@ -1,13 +1,19 @@
 # GKOS-Engine traceability
 
-**Code line:** GKOS-Engine 2.1.1
+**Code line:** GKOS-Engine 2.2.0 (unreleased source)
 
-**Package metadata:** `2.1.1`; release target `v2.1.1`
+**Package metadata:** `2.2.0`; prospective release target `v2.2.0`.
+The source version is not evidence of a published artifact. See
+[release status](docs/RELEASE-STATUS.md) for exact source and release coordinates.
 
 **Standard traceability:** active IDs at pinned commit
 `f3a3a1695263f162d2660b0f7b37116bba7db12e`; implementation evidence only.
 
-## Navigation 2.1 / R15 mapping
+## Historical Navigation 2.1 / R15 mapping
+
+The following mapping records the original 2.1.1 implementation against the
+pinned Standard above. It is not a complete 2.2.0 or current-Standard coverage
+claim; historical version statements below retain their original scope.
 
 | Active requirement ID | Non-normative Engine evidence |
 | --- | --- |
