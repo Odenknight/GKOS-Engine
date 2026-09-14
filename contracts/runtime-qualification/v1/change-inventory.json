@@ -1548,6 +1548,12 @@
       "rationale": "Bound only Engine-native, unique-path eligible source reads to four after policy/filter/time admission; preserve custom/repeated-path serial semantics, every freshness check and deterministic result processing."
     },
     {
+      "path": "src/retrieval/digest.ts",
+      "before": "6b876d940e1705dae7ed15b7b5faa243b185958f",
+      "after": "75455e5f72b39bd33d24aa5f558751364c222f93dde992d5d5e866b3fbd39fb6",
+      "rationale": "Use the supported Node native UTF-16 well-formedness check while preserving canonical bytes, TypeError text and all hostile-input validation."
+    },
+    {
       "path": "src/retrieval/evaluation-executor.ts",
       "before": "6d4b67855536f91ba995e58ebb6c3b301d067c3d",
       "after": "be53fcb837b8b62e4b73df509665927f2244be219e9031099a393129d7a04dc3",
@@ -1870,6 +1876,12 @@
       "before": null,
       "after": "bc2214c5c44b159128bdb9db1b5d225e622c1b11ae16129babb5ac5dfea88a17",
       "rationale": "Negative and positive preflight tests for mandatory gates, source identity, soak length, archive digests and package inventory."
+    },
+    {
+      "path": "test/retrieval-core.test.mjs",
+      "before": "2f10714e532815d2710e0c38908896fb0e289d16",
+      "after": "0dd1636b9299c01d37c0b8f655af4ad1a71a47717544028e9fa72ce0d0101f33",
+      "rationale": "Check every individual UTF-16 code unit and mixed surrogate boundaries against the former scan; existing canonical/hostile-input fixtures remain unchanged."
     },
     {
       "path": "test/retrieval-evaluation-cli.test.mjs",

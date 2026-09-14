@@ -10,16 +10,8 @@ export function retrievalCodeUnitCompare(a: string, b: string): number {
 }
 
 function assertWellFormedUtf16(value: string): void {
-  for (let index = 0; index < value.length; index++) {
-    const code = value.charCodeAt(index);
-    if (code >= 0xd800 && code <= 0xdbff) {
-      const next = value.charCodeAt(index + 1);
-      if (!(next >= 0xdc00 && next <= 0xdfff)) throw new TypeError("Retrieval canonical JSON rejects unpaired UTF-16 surrogates.");
-      index++;
-    } else if (code >= 0xdc00 && code <= 0xdfff) {
-      throw new TypeError("Retrieval canonical JSON rejects unpaired UTF-16 surrogates.");
-    }
-  }
+  if (!(value as string & { isWellFormed(): boolean }).isWellFormed())
+    throw new TypeError("Retrieval canonical JSON rejects unpaired UTF-16 surrogates.");
 }
 
 function stableJsonValue(value: unknown, ancestors: Set<object>): string {
