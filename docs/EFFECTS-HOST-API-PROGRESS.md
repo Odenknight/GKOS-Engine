@@ -21,19 +21,43 @@ It does not return the required vault, grant, digest and path-safety receipt bin
 It does not prove safety against hostile concurrent path replacement.
 The host must retain its unavailable status until those requirements are met.
 
-## Remaining API work
+## Split preparation and execution
 
-The current `executeSerial` persists PREPARED and then applies the effect in one call.
-It does not expose a separate prepared handle that a host can execute later.
-Implement the split against that existing transaction and recovery machinery.
-Do not create a second journal format or bypass the existing preconditions.
-Prepared handles must bind exact bytes and current authority to their executor instance.
-Execution must recheck preconditions and preserve external changes.
-Recovery inspection must remain separate from an authorized recovery action.
-Shutdown must honor the host deadline without claiming unfinished work is durable.
-Directory durability and the platform threat model still need explicit qualification.
+The executor now exposes `prepare(request)` and `executePrepared(handle)`.
+Preparation captures the caller's exact request before entering the execution queue.
+It checks current preconditions and records RECEIVED, PLANNED and PREPARED.
+It does not replace source bytes or create a source archive.
+The journal uses its existing file-flush behavior and durability limits.
 
-The complete Node executor test file passed 67 tests with no failures or skips on Windows.
-The package build and candidate inventory check also passed.
-This is component evidence. The full candidate qualification remains separate.
-The read-only test does not close these gaps or enable source writes.
+A prepared result contains a frozen, single-use handle.
+The executor keeps the captured request privately in an instance-bound WeakMap.
+Copied, reconstructed, cross-instance and consumed handles are rejected.
+Handles are not transport credentials and cannot be restored after process restart.
+The persisted plan and proposed digest remain available to existing recovery.
+A retry after restart still needs fresh planning and authorization.
+
+Execution verifies that the journal still ends in the matching PREPARED state.
+It rechecks current authority and source preconditions under the existing target lock.
+External source changes produce stale results and are preserved.
+Authority changes deny execution.
+The normal one-call execute API uses the same preparation and application code.
+Single and batch calls capture inputs without normalizing source line endings.
+
+Shutdown retains pending intent and records cleanShutdown=false for nonterminal work.
+A shutdown executor rejects later use of its prepared handles.
+This does not implement deadline cancellation or the authorized recovery interface.
+
+## Evidence and remaining work
+
+The Windows build and all 120 Navigation Effects tests passed with no failures or skips.
+The broader test run caught a CRLF-normalizing copy regression before commit.
+The corrected copy preserves exact source strings.
+Tests cover caller mutation, handle copying and reuse, cross-instance refusal,
+changed source bytes, revoked authority, pending shutdown and existing crash recovery.
+The current full candidate qualification is separate from this component result.
+
+The Kosmos host adapter is not yet wired to this API.
+It still needs authorized snapshot and path-safety receipts, recovery inspection,
+authorized recovery actions, and deadline shutdown behavior.
+Directory durability and the platform threat model still need qualification.
+This change does not enable source writes in Kosmos or establish release readiness.

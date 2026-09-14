@@ -82,6 +82,70 @@ test("readSource preserves exact UTF-8 bytes and performs no Effects initializat
   assert.deepEqual(await readFile(join(root, "topics/invalid.md")), Buffer.from([0xc3, 0x28]));
 });
 
+test("split preparation retains exact private bytes and requires its own single-use handle", async (t) => {
+  const root = await fixture(t, "split-prepare");
+  const before = "# Before\r\n";
+  await writeFile(join(root, "topics/index.md"), before);
+  const planned = await makePlan(before, "topics/index.md", "run-split", "# Proposed\r\n");
+  const expected = planned.proposedBytes;
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  const other = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  t.after(() => executor.releaseVaultLease());
+  const request = { plan: structuredClone(planned.plan), proposedBytes: planned.proposedBytes };
+  const pending = executor.prepare(request);
+  request.proposedBytes = "changed by caller";
+  request.plan.targetPath = "topics/changed.md";
+  const result = await pending;
+  assert.equal(result.status, "prepared");
+  assert.equal(Object.isFrozen(result.prepared), true);
+  assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
+  assert.deepEqual((await executor.journal.load()).map(entry => entry.state), ["RECEIVED", "PLANNED", "PREPARED"]);
+  assert.equal((await readdir(root)).includes("_archive"), false);
+  await assert.rejects(other.executePrepared(result.prepared), /PREPARED_HANDLE_INVALID/);
+  await assert.rejects(executor.executePrepared({ ...result.prepared }), /PREPARED_HANDLE_INVALID/);
+  assert.equal((await executor.executePrepared(result.prepared)).status, "committed");
+  assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), expected);
+  await assert.rejects(executor.executePrepared(result.prepared), /PREPARED_HANDLE_INVALID/);
+});
+
+test("split execution rechecks external bytes and current authority after preparation", async (t) => {
+  for (const change of ["source", "authority"]) {
+    const root = await fixture(t, `split-stale-${change}`);
+    const before = "# Before\n";
+    await writeFile(join(root, "topics/index.md"), before);
+    const planned = await makePlan(before);
+    let allowed = true;
+    const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root,
+      preconditionValidator: () => allowed ? [] : ["AUTHORITY_REVOKED"] });
+    t.after(() => executor.releaseVaultLease());
+    const result = await executor.prepare({ plan: planned.plan, proposedBytes: planned.proposedBytes });
+    assert.equal(result.status, "prepared");
+    if (change === "source") await writeFile(join(root, "topics/index.md"), "# External change\n");
+    else allowed = false;
+    const executed = await executor.executePrepared(result.prepared);
+    assert.equal(executed.status, change === "source" ? "stale" : "denied");
+    assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), change === "source" ? "# External change\n" : before);
+  }
+});
+
+test("pending prepared intents survive shutdown without a false clean checkpoint", async (t) => {
+  const root = await fixture(t, "split-shutdown");
+  const before = "# Before\n";
+  await writeFile(join(root, "topics/index.md"), before);
+  const planned = await makePlan(before);
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
+  const result = await executor.prepare({ plan: planned.plan, proposedBytes: planned.proposedBytes });
+  assert.equal(result.status, "prepared");
+  await executor.shutdown();
+  const checkpoint = JSON.parse(await readFile(join(root, ".gkx/effects/checkpoints/latest.json"), "utf8"));
+  assert.equal(checkpoint.cleanShutdown, false);
+  assert.equal((await executor.journal.load()).at(-1).state, "PREPARED");
+  const rejected = await executor.executePrepared(result.prepared);
+  assert.equal(rejected.status, "denied");
+  assert.deepEqual(rejected.reasonCodes, ["EXECUTOR_SHUTTING_DOWN"]);
+  assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
+});
+
 test("Node executor journals, archives exact bytes, atomically replaces, verifies, receipts, and replays idempotently", async (t) => {
   const root = await fixture(t, "commit");
   const before = "# Before\r\nHuman bytes\r\n";

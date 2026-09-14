@@ -58,6 +58,19 @@ export interface NodeEffectsExecutorOptions {
   ioFaultInjector?: (operation: "archive" | "temporary-write" | "replace" | "verify" | "receipt", effectId: string) => void | Promise<void>;
 }
 
+declare const PREPARED_NODE_EFFECT: unique symbol;
+
+/** In-memory executor-instance capability. Never serialize or reconstruct it. */
+export interface PreparedNodeEffect {
+  readonly [PREPARED_NODE_EFFECT]: true;
+  readonly effectId: string;
+  readonly planDigest: string;
+  readonly proposedDigest: string;
+}
+
+export type NodeEffectPreparationResult = EffectExecutionResult
+  | { status: "prepared"; prepared: PreparedNodeEffect };
+
 interface RecoverySummary {
   safeToEnableWrites: boolean;
   results: RecoveryResult[];
@@ -89,6 +102,7 @@ export class NodeNavigationEffectsExecutor {
   private recoveryWriteLatched = false;
   private startupRecoveryChecked = false;
   private executionQueue: Promise<unknown> = Promise.resolve();
+  private readonly preparedRequests = new WeakMap<PreparedNodeEffect, EffectExecutionRequest>();
 
   constructor(options: NodeEffectsExecutorOptions) {
     if (!isAbsolute(options.vaultRoot)) throw new Error("Vault root must be absolute.");
@@ -188,7 +202,10 @@ export class NodeNavigationEffectsExecutor {
   async shutdown(): Promise<void> {
     this.acceptingWrites = false;
     await this.enqueue(async () => {
-      await this.writeCheckpoint(true);
+      const latest = new Map<string, string>();
+      for (const entry of await this.journal.load()) latest.set(entry.effectId, entry.state);
+      const clean = [...latest.values()].every(state => ["COMMITTED", "ABORTED", "STALE"].includes(state));
+      await this.writeCheckpoint(clean);
       await this.releaseVaultLease();
     });
   }
@@ -754,10 +771,25 @@ export class NodeNavigationEffectsExecutor {
   }
 
   execute(request: EffectExecutionRequest): Promise<EffectExecutionResult> {
-    return this.enqueue(() => this.executeSerial(request));
+    const captured = structuredClone(request);
+    return this.enqueue(() => this.executeSerial(captured));
+  }
+
+  prepare(request: EffectExecutionRequest): Promise<NodeEffectPreparationResult> {
+    const captured = structuredClone(request);
+    return this.enqueue(() => this.prepareSerial(captured, true));
+  }
+
+  executePrepared(prepared: PreparedNodeEffect): Promise<EffectExecutionResult> {
+    return this.enqueue(() => this.applyPreparedSerial(prepared));
   }
 
   private async executeSerial(request: EffectExecutionRequest): Promise<EffectExecutionResult> {
+    const result = await this.prepareSerial(request, false);
+    return result.status === "prepared" ? this.applyPreparedSerial(result.prepared) : result;
+  }
+
+  private async prepareSerial(request: EffectExecutionRequest, split: boolean): Promise<NodeEffectPreparationResult> {
     const { plan, proposedBytes } = request;
     if (!CANONICAL_EFFECT_ID.test(plan.effectId)) return { status: "denied", effectId: plan.effectId, reasonCodes: ["EFFECT_ID_INVALID"] };
     if (!this.acceptingWrites) return { status: "denied", effectId: plan.effectId, reasonCodes: ["EXECUTOR_SHUTTING_DOWN"] };
@@ -789,12 +821,40 @@ export class NodeNavigationEffectsExecutor {
       if (latest.state !== "RECOVERY_REQUIRED") return { status: "recovery-required", effectId: plan.effectId, reasonCodes: ["NONTERMINAL_OPERATION_EXISTS"] };
       await this.validateTerminalReceipt(priorEntries);
     }
+    if (split) {
+      const reasons = [...await this.preconditionValidator(plan)].sort(codeUnitCompare);
+      if (reasons.length) return { status: "denied", effectId: plan.effectId, reasonCodes: reasons };
+      const before = await this.readTarget(await this.safeAbsolute(plan.targetPath));
+      const matches = plan.precondition.target === "absent"
+        ? before === null : before !== null && await sha256Bytes(before) === plan.precondition.priorDigest;
+      if (!matches) return { status: "stale", effectId: plan.effectId, reasonCodes: ["TARGET_PRECONDITION_MISMATCH"] };
+    }
     await this.journal.append(plan.effectId, "RECEIVED", planDigest, { plan });
     await this.fault("after-received", plan.effectId);
     await this.journal.append(plan.effectId, "PLANNED", planDigest);
     await this.fault("after-planned", plan.effectId);
     await this.journal.append(plan.effectId, "PREPARED", planDigest);
     await this.fault("after-prepared", plan.effectId);
+    const prepared = Object.freeze({ effectId: plan.effectId, planDigest, proposedDigest: plan.proposedDigest }) as PreparedNodeEffect;
+    this.preparedRequests.set(prepared, request);
+    return { status: "prepared", prepared };
+  }
+
+  private async applyPreparedSerial(prepared: PreparedNodeEffect): Promise<EffectExecutionResult> {
+    const request = this.preparedRequests.get(prepared);
+    if (!request) throw new Error("PREPARED_HANDLE_INVALID");
+    this.preparedRequests.delete(prepared);
+    const { plan, proposedBytes } = request;
+    const planDigest = await canonicalSha256(plan);
+    if (!this.acceptingWrites) return { status: "denied", effectId: plan.effectId, reasonCodes: ["EXECUTOR_SHUTTING_DOWN"] };
+    if (this.recoveryWriteLatched) return { status: "recovery-required", effectId: plan.effectId, reasonCodes: ["RECOVERY_WRITE_LATCHED"] };
+    await this.acquireVaultLease();
+    await this.validateStateRoot();
+    const entries = (await this.journal.load()).filter(entry => entry.effectId === plan.effectId);
+    if (entries.at(-1)?.state !== "PREPARED" || entries.some(entry => entry.planDigest !== planDigest)) {
+      return { status: "recovery-required", effectId: plan.effectId, reasonCodes: ["PREPARED_JOURNAL_CHANGED"] };
+    }
+    if (!this.preconditionValidator) return { status: "denied", effectId: plan.effectId, reasonCodes: ["PRECONDITION_PROVIDER_MISSING"] };
 
     let lock: Awaited<ReturnType<NodeNavigationEffectsExecutor["acquireTargetLock"]>> | null = null;
     let archiveManifestDigest: string | undefined;
@@ -885,7 +945,8 @@ export class NodeNavigationEffectsExecutor {
   }
 
   async executeMany(requests: readonly EffectExecutionRequest[]): Promise<EffectExecutionResult[]> {
-    return this.enqueue(() => this.executeManySerial(requests));
+    const captured = structuredClone(requests);
+    return this.enqueue(() => this.executeManySerial(captured));
   }
 
   private async executeManySerial(requests: readonly EffectExecutionRequest[]): Promise<EffectExecutionResult[]> {

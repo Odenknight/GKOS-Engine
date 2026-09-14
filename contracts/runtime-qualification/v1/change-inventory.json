@@ -704,8 +704,8 @@
     {
       "path": "docs/EFFECTS-HOST-API-PROGRESS.md",
       "before": null,
-      "after": "5e4241c3edfc48c8095a26d43dc3c14086560ddc6407e6e9b1111a175bb26a80",
-      "rationale": "Read-only native Effects source-reader evidence and explicit remaining host API requirements; no source-write activation or qualification claim."
+      "after": "4e66dfaee35694d39dd83787a8ecd093453026950737a5ff8f11d36866de0cf5",
+      "rationale": "Split native Effects preparation/application using the existing journal and checks; exact captured bytes, instance-bound one-use handles, and honest pending shutdown; component tests only, no Kosmos host activation."
     },
     {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
@@ -1412,8 +1412,8 @@
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "ece4d38d2c93f58f2a72029253e26cd8fa33cbfb3ba77e82e363589d33fee0be",
-      "rationale": "Persist separate versioned NO_CHANGE audits before terminal completion; verify on replay, revalidate interrupted no-ops, retain exact failure/refusal semantics."
+      "after": "021f624a3185025a838279c088136a91adbccd9d8165e8644216c53ccd4a3282",
+      "rationale": "Split native Effects preparation/application using the existing journal and checks; exact captured bytes, instance-bound one-use handles, and honest pending shutdown; component tests only, no Kosmos host activation."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
@@ -1724,8 +1724,8 @@
     {
       "path": "test/navigation-effects-node.test.mjs",
       "before": null,
-      "after": "7a2e35c23e2ff47d8ab02deec3057fd5cf54d1c69aa98217d2b9fc89e20dc33e",
-      "rationale": "Read-only native Effects source-reader evidence and explicit remaining host API requirements; no source-write activation or qualification claim."
+      "after": "ab6323a1420a5869940b426caac9765f7e104b2f137b6a6709e6f944eb76e32f",
+      "rationale": "Split native Effects preparation/application using the existing journal and checks; exact captured bytes, instance-bound one-use handles, and honest pending shutdown; component tests only, no Kosmos host activation."
     },
     {
       "path": "test/navigation-effects-performance.test.mjs",
