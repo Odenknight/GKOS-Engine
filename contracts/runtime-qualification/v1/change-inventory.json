@@ -422,8 +422,8 @@
     {
       "path": ".github/workflows/runtime-qualification.yml",
       "before": null,
-      "after": "c93be5a6a0a342b1bc7124b9df3a0c908b6c3e1d8b7a48ab5f4c8a81a6d12053",
-      "rationale": "Q-GUARD: preserve the frozen Node 22/23/24 historical replay while qualifying current Node 22 and 24 as blocking and Node 26 as informative on Ubuntu and Windows. Windows hosted runtime qualification uses a canonical temporary directory; native guards and ledger still reject short-path aliases."
+      "after": "3f04a7e129fb723dc6982bfb66e8876f343b790702a2a044bb8c0364074c5688",
+      "rationale": "Q-GUARD: preserve the frozen Node 22/23/24 historical replay while qualifying current Node 22 and 24 as blocking and Node 26 as informative on Ubuntu and Windows. Windows hosted runtime qualification uses a canonical temporary directory; native guards and ledger still reject short-path aliases. Preserve the original Windows temporary volume so mandatory native 8.3-alias coverage remains available."
     },
     {
       "path": ".github/workflows/sidecar-release.yml",

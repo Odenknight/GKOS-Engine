@@ -81,8 +81,7 @@ jobs:
         shell: pwsh
         run: >-
           node -e "const fs=require('node:fs'),path=require('node:path');
-          const base=path.join(process.env.GITHUB_WORKSPACE,'.ci-current-runtime-temp');
-          fs.mkdirSync(base);
+          const base=fs.mkdtempSync(path.join(fs.realpathSync.native(require('node:os').tmpdir()),'gkos-current-runtime-'));
           const canonical=fs.realpathSync.native(base);
           if(/[\r\n]/.test(canonical))throw Error('Invalid temporary path');
           fs.appendFileSync(process.env.GITHUB_ENV,'TEMP='+canonical+'\nTMP='+canonical+'\n');"
