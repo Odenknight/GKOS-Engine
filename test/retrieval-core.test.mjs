@@ -128,6 +128,37 @@ test("canonical JSON, portable path, and timestamp filter fixtures are exact", a
   for (const item of fixture.timestamp_filters) assert.equal(isValidGkxTimestamp(item.value), item.accepted, item.value);
 });
 
+test("canonical JSON native UTF-16 validation matches the reference boundaries", () => {
+  const reference = value => {
+    for (let index = 0; index < value.length; index++) {
+      const code = value.charCodeAt(index);
+      if (code >= 0xd800 && code <= 0xdbff) {
+        const next = value.charCodeAt(++index);
+        if (!(next >= 0xdc00 && next <= 0xdfff)) return false;
+      } else if (code >= 0xdc00 && code <= 0xdfff) return false;
+    }
+    return true;
+  };
+  const accepted = value => {
+    try { stableJson(value); return true; } catch { return false; }
+  };
+  for (let code = 0; code <= 0xffff; code++) {
+    const value = String.fromCharCode(code);
+    assert.equal(accepted(value), reference(value), `single code unit 0x${code.toString(16)}`);
+  }
+  const high = [0xd800,0xda00,0xdbff], low = [0xdc00,0xde00,0xdfff];
+  for (const first of high) for (const second of low) {
+    const value = String.fromCharCode(first,second);
+    assert.equal(accepted(value),reference(value),`pair 0x${first.toString(16)} 0x${second.toString(16)}`);
+  }
+  for (const value of [
+    String.fromCharCode(0xd7ff,0xd800,0xdc00,0xe000),
+    String.fromCharCode(0xd800,0xdc00,0xdbff,0xdfff),
+    String.fromCharCode(0xd800,0xd800,0xdc00),
+    String.fromCharCode(0xd800,0xdc00,0xdc00),
+  ]) assert.equal(accepted(value),reference(value));
+});
+
 test("a one-section edit preserves every unaffected stable chunk identity", () => {
   const base = {
     source_id: "018f0000-0000-7000-8000-000000000120",
