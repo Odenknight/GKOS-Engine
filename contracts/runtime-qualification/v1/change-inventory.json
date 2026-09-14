@@ -866,8 +866,8 @@
     {
       "path": "docs/WINDOWS-RETAINED-GUARD.md",
       "before": null,
-      "after": "170c4f2444ae883e6c1d2c52981d4de7f93b6372226de226d03fe437827ca23f",
-      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure."
+      "after": "a5cf49b55c27309834b0123df34b913409e9a567ed753ee2c58cad994be3df4a",
+      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure. Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup."
     },
     {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
@@ -1068,6 +1068,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "scripts/build-sea.mjs",
+      "before": "e4f8e77ecae7cdcc2ec0915875d704f08f7cb13d",
+      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup.",
+      "after": "f2321a2f119551f3aa4722a20c0f085c1b853459a9e28aaefbb4ff555512d11b"
+    },
+    {
       "path": "scripts/build-watcher-observation-runner.mjs",
       "before": null,
       "after": "3252d968bf4f74ce2a4c5bb8639bd2276fbbfc41391ada46e5013acdca7f8bb3",
@@ -1148,8 +1154,8 @@
     {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
-      "after": "88b398de7d41055d68f3caca40379d8f3c6f71e6d76e80f7b773d9bffa00edfa",
-      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+      "after": "46205e77fba2624ade6ba265c60d70a46167da63f35fccad545c7b40bb863c97",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required. Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup."
     },
     {
       "path": "scripts/run-retrieval-observation-qualification-2.2.mjs",
@@ -1180,6 +1186,12 @@
       "before": null,
       "after": "d1120a52f538437548fd444cbd7f929efbef49c23b30ea99547881324d8f85bf",
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence with measured process headroom; no release qualification."
+    },
+    {
+      "path": "scripts/sea-native-assets.mjs",
+      "before": null,
+      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup.",
+      "after": "737286156505649ad54fe3ae936129f7e70c32e1e71367270d4c8f2745f0763b"
     },
     {
       "path": "scripts/soak-watcher.mjs",
@@ -1640,8 +1652,8 @@
     {
       "path": "src/watcher/windows-retained-guard.ts",
       "before": null,
-      "after": "b34a9f5558c92e500662a5361c7fa73a29c68174273d65d5bf8693ff9310861e",
-      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+      "after": "ec7db7adcf518594fb6164b32291b304b0164f24c334e654cd7969bfe64ad06a",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required. Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup."
     },
     {
       "path": "test/agent-identity-mcp-contract-draft2.test.mjs",
@@ -1768,6 +1780,12 @@
       "before": null,
       "after": "7b1c4db7185c3096da7df6c299fdc1356e2f1958f8716d9036cdf19fe029a1e4",
       "rationale": "Native no-change receipts, idempotency, five process-exit recovery phases, corrupt-audit refusal and actual destination write failure."
+    },
+    {
+      "path": "test/native/windows-retained-guard-sea.mjs",
+      "before": null,
+      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup.",
+      "after": "d4c61071529d71a3ba5a1b44e8a6367287c51d0ce44964a406fd8390ca3aaaeb"
     },
     {
       "path": "test/native/windows-retained-guard.mjs",
@@ -1900,6 +1918,12 @@
       "before": "e02ed007f6a0b7adb361cfedacb33adcd781043e",
       "after": "da9ab7435151982e968ee9c5eb75039fcc9e8824c35f48e50e69de39f1f5614f",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/sea-native-assets.test.mjs",
+      "before": null,
+      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup.",
+      "after": "ef62e60bb84719500dd5c822b39136f0348369a3c1f09c829df41e6fe426d5a1"
     },
     {
       "path": "test/service-graphiti-manifest.test.mjs",

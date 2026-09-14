@@ -1,3 +1,4 @@
+import { retainedGuardSeaAssets } from "./sea-native-assets.mjs";
 /**
  * Build a Node SEA (Single Executable Application) of the desktop-agent
  * sidecar, for the host platform/arch or — on macOS — for the other arch.
@@ -210,6 +211,7 @@ writeFileSync(
   JSON.stringify(
     {
       main: cjsEntry,
+      assets: retainedGuardSeaAssets(root, targetPlatform, targetArch),
       output: blobPath,
       disableExperimentalSEAWarning: true,
       useSnapshot: false,

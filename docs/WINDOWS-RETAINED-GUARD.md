@@ -98,3 +98,37 @@ The measurement test runs in a child process so Windows releases its mapped
 DLL before package cleanup. Measurement thresholds and authority checks remain
 unchanged. The corrected measurement/audit pair and packaging regression passed.
 Full combined qualification is still required.
+
+
+## Single-executable Windows packaging
+
+The SEA builder now embeds the content-addressed native module as an asset.
+`scripts/sea-native-assets.mjs` checks Windows x64, Node-API 8, current native
+source bytes, module bytes, and the desktop CJS bundle against its build inventory.
+An altered bundle, module, source, or conflicting artifact entry refuses packaging.
+Other target platforms do not embed the Windows module.
+
+Inside a SEA, the loader reads the asset by its compiled digest-derived name.
+It verifies the asset hash before creating an extraction directory or loading code.
+It writes exclusively into one uniquely named temporary directory per process,
+then applies the existing regular-file, canonical-path and hash checks before
+`process.dlopen`. Ordinary Node bundles continue using adjacent native files.
+There is no environment variable or runtime manifest override for module identity.
+
+Windows retains a mapped DLL until the process exits. The loader leaves its small
+extraction directory for normal OS/user temporary-file cleanup. It does not claim
+successful in-process deletion, share a previous process's extraction, or launch
+an unqualified cleanup helper. These files contain module code, not source notes
+or credentials. Trusted host storage remains required; this is not isolation from
+a hostile writer controlling the same user account or installation.
+
+This follows Node's [documented native-addon SEA mechanism](https://nodejs.org/api/single-executable-applications.html#using-native-addons-in-the-injected-main-script).
+A Windows Node 24.18.0 test built and ran actual executables through the real SEA
+builder. Without adjacent native files, the valid executable blocked 100 guarded
+rename/write attempts, preserved source bytes and reused one extraction package.
+Two fault-injected containers with missing or altered assets failed before native
+extraction. All eight selected native/assets tests passed. The production desktop
+SEA also built successfully. These checks do not qualify the complete desktop
+service, Node 22 executable, consumer installation, or release. Full qualification
+at `c8a6348` passed 1,213 tests before this SEA change; it is historical evidence
+for this newer source, not an exact-revision pass.
