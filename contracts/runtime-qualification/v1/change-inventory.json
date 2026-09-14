@@ -1082,8 +1082,8 @@
     {
       "path": "scripts/build-windows-retained-guard.mjs",
       "before": null,
-      "after": "e0f97c95e2a320c345c6308eea5619d7edefb8ecf1e95a7cab94d16dcd63879e",
-      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+      "after": "21af3a71f772f7d715dd30342e8bbe7d492c9597345f34627aad885889f423dc",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification. Windows x64 retained-guard build now passes the installed MSVC linker /Brepro option; two fresh time-separated roots must produce exact native bytes. This focused host evidence is not a blanket toolchain guarantee or release qualification."
     },
     {
       "path": "scripts/build.mjs",
@@ -1154,8 +1154,8 @@
     {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
-      "after": "46205e77fba2624ade6ba265c60d70a46167da63f35fccad545c7b40bb863c97",
-      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required. Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup."
+      "after": "acde2da599aec66e7220b81c98ef4735adfa5ac736324f2a192cb7780b452911",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required. Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup. The current Windows native group now also registers the retained-guard repeatability regression; unsupported hosts remain explicitly unqualified."
     },
     {
       "path": "scripts/run-retrieval-observation-qualification-2.2.mjs",
@@ -1798,6 +1798,12 @@
       "before": null,
       "after": "7b1c4db7185c3096da7df6c299fdc1356e2f1958f8716d9036cdf19fe029a1e4",
       "rationale": "Native no-change receipts, idempotency, five process-exit recovery phases, corrupt-audit refusal and actual destination write failure."
+    },
+    {
+      "path": "test/native/windows-retained-guard-reproducibility.mjs",
+      "before": null,
+      "after": "f0df29237a6a10c94634ba0e2896a17971e5b67cbd745076b80bed8ee79f01da",
+      "rationale": "Invoke the actual retained-guard build script from two fresh, time-separated roots bound to the candidate script, source and pinned headers; require raw binary equality and matching manifest native hashes on Windows, while unsupported hosts explicitly skip as not qualified."
     },
     {
       "path": "test/native/windows-retained-guard-sea.mjs",

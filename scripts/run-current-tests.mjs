@@ -15,7 +15,7 @@ for (const exemption of plan.exemptions) {
 }
 const priority = new Set(STABILITY_PRIORITY_TESTS);
 const groups = [
-  ...(process.platform === 'win32' ? [['native/windows-retained-guard.mjs', 'native/windows-retained-guard-sea.mjs']] : []),
+  ...(process.platform === 'win32' ? [['native/windows-retained-guard.mjs', 'native/windows-retained-guard-sea.mjs', 'native/windows-retained-guard-reproducibility.mjs']] : []),
   ...STABILITY_PRIORITY_TESTS.filter((name) => files.includes(name)).map((name) => [name]),
   files.filter((name) => !priority.has(name)),
 ].filter((group) => group.length);
