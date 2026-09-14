@@ -858,6 +858,12 @@
       "rationale": "Record exact failed candidate evidence, measured secure scan bottleneck, bounded implementation repair and remaining exact-head qualification gates without relaxing limits."
     },
     {
+      "path": "docs/WINDOWS-RETAINED-GUARD.md",
+      "before": null,
+      "after": "0700e412b5ec7c31802ec2b82f6b10b996bf38f04bda6ef923a514e3fbd53d56",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
       "before": null,
       "after": "78544e2083552ee8c4b8588db753530bb0c575a5fc5135013bdc5640c2b28124",
@@ -990,6 +996,48 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "native/windows/node-api-v22.22.1/LICENSE",
+      "before": null,
+      "after": "c738ae413cf561f174e34f6961f8ca458aae2369a73640dda6234c629b98bcc4",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/js_native_api.h",
+      "before": null,
+      "after": "582e64ead4d5fdf663e2bd934f2fc97e8e155a7740d28995830393d19d089705",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/js_native_api_types.h",
+      "before": null,
+      "after": "05e3d86e24c814f94a8b52b6a70cec11d7e91c810008253553528637e3a15b2f",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/node_api.h",
+      "before": null,
+      "after": "2d4560831e525b47b060ec8a0864ab73993df9e20215ce9f0fe7b24cd31af32a",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/node_api_types.h",
+      "before": null,
+      "after": "088766b3cf1f0cd9b292c361ad30f7a04e7cc6db35a20ca52c572c1adf9635e7",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/sources.json",
+      "before": null,
+      "after": "8a30eaad7a4a9ddf52139cad7e33f56e756db0c4b84e3d0fbe4f127c99e57721",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/retained-guard.cpp",
+      "before": null,
+      "after": "b6686e54e9a6bbde9595e117b36f6728159f86d28c11bc57b4b081d7f723dbc5",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
       "path": "package-lock.json",
       "before": "723712151b00f9988194a4bac2b875c53c8f6d19",
       "after": "dce860396993870d6d133bc527dd80ebeb1055df24529e8e040ccbd90ed3d54d",
@@ -1012,6 +1060,12 @@
       "before": null,
       "after": "33548fa366021262741469c80409226df95933f8c0feccbbd35630c101eff0ee",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "scripts/build-windows-retained-guard.mjs",
+      "before": null,
+      "after": "e0f97c95e2a320c345c6308eea5619d7edefb8ecf1e95a7cab94d16dcd63879e",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
     },
     {
       "path": "scripts/build.mjs",
@@ -1690,6 +1744,12 @@
       "before": null,
       "after": "7b1c4db7185c3096da7df6c299fdc1356e2f1958f8716d9036cdf19fe029a1e4",
       "rationale": "Native no-change receipts, idempotency, five process-exit recovery phases, corrupt-audit refusal and actual destination write failure."
+    },
+    {
+      "path": "test/native/windows-retained-guard.mjs",
+      "before": null,
+      "after": "9811bcba1b800b5f5459b6a17c65ed9ef3c2c076dd5c43b1bbd5c49ed753beb0",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
     },
     {
       "path": "test/navigation-architecture.test.mjs",
