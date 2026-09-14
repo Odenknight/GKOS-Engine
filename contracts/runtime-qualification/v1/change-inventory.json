@@ -392,8 +392,8 @@
     {
       "path": ".github/workflows/ci.yml",
       "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
-      "after": "bd249b09498b7cfd07536e938bd983086821fde6df315df5809adfdb246e04a6",
-      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure."
+      "after": "9ad4e3a2a9cf6212de9601d9de901cf7f02e84ffd4efaa5d9e966bfc20b31c56",
+      "rationale": "Package native guard binding and sidecar for private watcher observation runner in tests and CI; isolate measurement process for Windows DLL cleanup; install the existing pinned Graphiti HTTP test dependency before Graphiti unittest discovery; preserve all measurement/authority gates and existing output. Records verified 6f1486f full failure and hosted 3cab7a2 Graphiti import failure."
     },
     {
       "path": ".github/workflows/managed-moc-audit-2.2.yml",
@@ -422,8 +422,8 @@
     {
       "path": ".github/workflows/runtime-qualification.yml",
       "before": null,
-      "after": "e8a7cf804ade3f03b3caf0616f73f1bcd726d2b42a32239503ae0ba543c1915c",
-      "rationale": "Q-GUARD: preserve the frozen Node 22/23/24 historical replay while qualifying current Node 22 and 24 as blocking and Node 26 as informative on Ubuntu and Windows."
+      "after": "3f04a7e129fb723dc6982bfb66e8876f343b790702a2a044bb8c0364074c5688",
+      "rationale": "Q-GUARD: preserve the frozen Node 22/23/24 historical replay while qualifying current Node 22 and 24 as blocking and Node 26 as informative on Ubuntu and Windows. Windows hosted runtime qualification uses a canonical temporary directory; native guards and ledger still reject short-path aliases. Preserve the original Windows temporary volume so mandatory native 8.3-alias coverage remains available."
     },
     {
       "path": ".github/workflows/sidecar-release.yml",
@@ -1778,8 +1778,8 @@
     {
       "path": "test/ingest-authority-rename-retry.test.mjs",
       "before": null,
-      "after": "80825d9430ba9376ac112aa706b25e6dc6ed0624322fc273185e900e776cbc6e",
-      "rationale": "Deterministic Windows coverage for transient and persistent EPERM plus temporary, witness, lock, pointer, namespace and during-wait drift refusal."
+      "after": "7cf7874b93122be61e229e5fa03683c13cd199089efcceab1e6ea9da3403df27",
+      "rationale": "Deterministic Windows coverage for transient and persistent EPERM plus temporary, witness, lock, pointer, namespace and during-wait drift refusal; non-Windows persistent EPERM proves the intended single-attempt fail-closed state without omitting platform coverage."
     },
     {
       "path": "test/lineage-inspection.test.mjs",

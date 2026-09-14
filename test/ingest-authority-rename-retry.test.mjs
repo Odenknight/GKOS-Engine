@@ -18,7 +18,19 @@ function runScenario(scenario) {
   return JSON.parse(child.stdout);
 }
 
-test('Windows active authority-witness rename retries remain atomic and fail closed', { skip: process.platform !== 'win32' }, () => {
+test('active authority-witness rename failures follow platform retry policy and fail closed', () => {
+  if (process.platform !== 'win32') {
+    const persistent = runScenario('persistent');
+    assert.equal(persistent.attempts, 1);
+    assert.equal(persistent.result_status, null);
+    assert.equal(persistent.error.code, 'EPERM');
+    assert.equal(persistent.error.message, 'injected authority rename failure 1');
+    assert.equal(JSON.parse(persistent.authority).state, 'activating');
+    assert.equal(persistent.entries.filter((name) => name.endsWith('.tmp')).length, 1);
+    assert.equal(persistent.entries.includes('active-ingest.json'), true);
+    return;
+  }
+
   const transient = runScenario('transient');
   assert.equal(transient.attempts, 2);
   assert.equal(transient.result_status, 'published');
