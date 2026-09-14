@@ -34,6 +34,14 @@ const sha256 = bytes => createHash("sha256").update(bytes).digest("hex");
 // the published package. Recreate dist from source on every build.
 rmSync(resolve(root, "dist"), { recursive: true, force: true });
 mkdirSync(resolve(root, "dist"), { recursive: true });
+let retainedGuardSha256 = "";
+if (process.platform === "win32") {
+  execFileSync(process.execPath, [resolve(root, "scripts/build-windows-retained-guard.mjs")], { cwd: root, stdio: "inherit" });
+  const guard = JSON.parse(readFileSync(resolve(root, "dist/native/retained-guard.json"), "utf8"));
+  if (!/^[0-9a-f]{64}$/.test(guard.sha256) || guard.filename !== `retained-guard-${guard.sha256}.node` ||
+      sha256(readFileSync(resolve(root, "dist/native", guard.filename))) !== guard.sha256) throw new Error("Native guard build binding failed");
+  retainedGuardSha256 = guard.sha256;
+}
 
 async function bundle(entry, opts = {}) {
   const res = await esbuild.build({
@@ -47,6 +55,7 @@ async function bundle(entry, opts = {}) {
     minify: false,
     sourcemap: false,
     logLevel: "silent",
+    define: { GKOS_RETAINED_GUARD_SHA256: JSON.stringify(retainedGuardSha256) },
     ...opts,
     metafile: true,
   });
@@ -150,6 +159,7 @@ try {
   });
   writeFileSync(resolve(root, "dist/bundle-inputs.json"), JSON.stringify({ schemaVersion: 1,
     scope: "javascript-bundles-only", completeSbom: false, esbuildVersion: esbuild.version,
+    retainedGuardSha256: retainedGuardSha256 || null,
     packageManifestSha256: sha256(readFileSync(resolve(root, "package.json"))),
     lockfileSha256: sha256(readFileSync(resolve(root, "package-lock.json"))),
     buildScriptSha256: sha256(readFileSync(fileURLToPath(import.meta.url))),

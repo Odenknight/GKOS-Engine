@@ -169,3 +169,13 @@ claim an atomic snapshot against a process that ignores the writer lease.
 
 All 155 Navigation Effects tests passed on Windows with no failures or skips.
 This is component evidence, not native-host or release qualification.
+
+## Combined Engine candidate
+
+The Effects branch now incorporates the watcher branch through `6f1486f`.
+The merge preserved both the native retained-guard implementation and these
+Effects APIs. The combined Windows build passed. All 174 focused tests passed
+with no failures or skips: Effects, native retained guards, watcher pointer
+transitions, and JavaScript bundle inventory. The source qualification inventory
+check passed. These checks do not replace a full run on the combined candidate.
+The separate full qualification of `6f1486f` remains distinct evidence.

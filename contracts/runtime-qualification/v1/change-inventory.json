@@ -386,7 +386,7 @@
     {
       "path": ".gitattributes",
       "before": "0f3ffed343d2c7ed7aad2e67be2ef4e47ae6ff15",
-      "after": "321f7a806ba0d421bb103cc45d78937fbfa7dd2d398d486eb4da59ba6f4dbcbe",
+      "after": "c58b92cb659065ff9d5f53bb0bbe00e60f40a86856b3812198d688a23fd7d301",
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
@@ -704,8 +704,8 @@
     {
       "path": "docs/EFFECTS-HOST-API-PROGRESS.md",
       "before": null,
-      "after": "08f802decadf483e0f0f178993d09d7c6feeb39bb1a2f6b45697a91b1fe9ebff",
-      "rationale": "Effects host API progress: inspected recovery verifies fresh evidence under writer lease, reloads journal from disk, and uses current authority and per-target locks. 155 component tests; Kosmos host integration and release qualification remain open."
+      "after": "9cdb6a203d977f8d8d86645ad8b95cd57d16dc546873982b416f8b81abff8d49",
+      "rationale": "Effects host API and combined watcher integration checkpoint; 174 focused Windows tests, not full combined candidate qualification."
     },
     {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
@@ -864,6 +864,12 @@
       "rationale": "Record exact failed candidate evidence, measured secure scan bottleneck, bounded implementation repair and remaining exact-head qualification gates without relaxing limits."
     },
     {
+      "path": "docs/WINDOWS-RETAINED-GUARD.md",
+      "before": null,
+      "after": "3e51018435809256ea3b173882efb4c85a97dce86993b0d8d52033351a767ee4",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+    },
+    {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
       "before": null,
       "after": "78544e2083552ee8c4b8588db753530bb0c575a5fc5135013bdc5640c2b28124",
@@ -996,6 +1002,48 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "native/windows/node-api-v22.22.1/LICENSE",
+      "before": null,
+      "after": "c738ae413cf561f174e34f6961f8ca458aae2369a73640dda6234c629b98bcc4",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/js_native_api.h",
+      "before": null,
+      "after": "582e64ead4d5fdf663e2bd934f2fc97e8e155a7740d28995830393d19d089705",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/js_native_api_types.h",
+      "before": null,
+      "after": "05e3d86e24c814f94a8b52b6a70cec11d7e91c810008253553528637e3a15b2f",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/node_api.h",
+      "before": null,
+      "after": "2d4560831e525b47b060ec8a0864ab73993df9e20215ce9f0fe7b24cd31af32a",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/node_api_types.h",
+      "before": null,
+      "after": "088766b3cf1f0cd9b292c361ad30f7a04e7cc6db35a20ca52c572c1adf9635e7",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/node-api-v22.22.1/sources.json",
+      "before": null,
+      "after": "c35c5673bf745e1222e3ec424e4aea47f0015b8149787b737119fead0411842f",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
+      "path": "native/windows/retained-guard.cpp",
+      "before": null,
+      "after": "4ad3004d3aa4fac57d661c8bacb4a2f9e9293bf073738d638b9fe15ad7602b85",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+    },
+    {
       "path": "package-lock.json",
       "before": "723712151b00f9988194a4bac2b875c53c8f6d19",
       "after": "dce860396993870d6d133bc527dd80ebeb1055df24529e8e040ccbd90ed3d54d",
@@ -1004,8 +1052,8 @@
     {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "bf0bd6edb2e94ff5eeb24c4d019cae6d0d1e97024826b08073500477e8ba8382",
-      "rationale": "Expose the generated-runner regression command without new dependencies or product version changes."
+      "after": "cafd6474a549d0da572a7c739512c01d4203932ab19a7b49c198f3e54134315d",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "scripts/benchmark-graphiti-native.mjs",
@@ -1020,10 +1068,16 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "scripts/build-windows-retained-guard.mjs",
+      "before": null,
+      "after": "e0f97c95e2a320c345c6308eea5619d7edefb8ecf1e95a7cab94d16dcd63879e",
+      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+    },
+    {
       "path": "scripts/build.mjs",
       "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
-      "after": "76278821f22cf2a1c1f72308dc87cadfe6ddeb0d09b8871a0e4da96a203f0eab",
-      "rationale": "Generate exact JavaScript bundle identities and esbuild input graphs; runtime bundle bytes unchanged in recorded comparison."
+      "after": "dfe821cbd8e80316ae9f174f1a6bfb9c0ebb056881b7471af8f2d392ea051dff",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "scripts/check-graphiti-http-chain.mjs",
@@ -1088,8 +1142,8 @@
     {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
-      "after": "5161ce1e3092df97f187e1476f94ef2e8ad8ca2e411a01f8afa26b798b79c848",
-      "rationale": "Windows reliability: retry the singleton watcher observation once only after its sole complete TAP latency failure."
+      "after": "88b398de7d41055d68f3caca40379d8f3c6f71e6d76e80f7b773d9bffa00edfa",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "scripts/run-retrieval-observation-qualification-2.2.mjs",
@@ -1566,10 +1620,22 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "src/watcher/fs-authority.ts",
+      "before": "bfb8adc527329086a0d3135ef65bdc163d1281f3",
+      "after": "43e3cac6f546b50aa1f7942a5d577189e21123b86d385e0cf6b0a062f9e74432",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
+    },
+    {
       "path": "src/watcher/host.ts",
       "before": "552145be95b14ac22a07760c7922a85d038b225c",
       "after": "3ef7de7452926384168c7152b3f0d8da6a4ba28079a89ab4c95397cba8753555",
       "rationale": "CI repair: bind the runtime-selected concrete lexical backend so official Node 23 uses the existing manifest-bound compatibility scan."
+    },
+    {
+      "path": "src/watcher/windows-retained-guard.ts",
+      "before": null,
+      "after": "b34a9f5558c92e500662a5361c7fa73a29c68174273d65d5bf8693ff9310861e",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "test/agent-identity-mcp-contract-draft2.test.mjs",
@@ -1696,6 +1762,12 @@
       "before": null,
       "after": "7b1c4db7185c3096da7df6c299fdc1356e2f1958f8716d9036cdf19fe029a1e4",
       "rationale": "Native no-change receipts, idempotency, five process-exit recovery phases, corrupt-audit refusal and actual destination write failure."
+    },
+    {
+      "path": "test/native/windows-retained-guard.mjs",
+      "before": null,
+      "after": "7de5edac87122faa250a56efcdfca260fc12b28611289d48ae93b0785bc33bc2",
+      "rationale": "Windows direct-leaf transition integration: build-bound native loader, retained parent/direct-child guards held through proof refresh, native rejection/resource tests in current qualification, and packaged binary/license scope. Full runtime and deployment qualification still required."
     },
     {
       "path": "test/navigation-architecture.test.mjs",
