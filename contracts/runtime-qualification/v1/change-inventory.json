@@ -704,8 +704,8 @@
     {
       "path": "docs/EFFECTS-HOST-API-PROGRESS.md",
       "before": null,
-      "after": "4e66dfaee35694d39dd83787a8ecd093453026950737a5ff8f11d36866de0cf5",
-      "rationale": "Split native Effects preparation/application using the existing journal and checks; exact captured bytes, instance-bound one-use handles, and honest pending shutdown; component tests only, no Kosmos host activation."
+      "after": "ba4bdfb91bd6a2bbb18d2f94d84df0ca07960bb8782c20c5d1c84ad4b8aeb088",
+      "rationale": "Native split preparation plus deadline-bounded drain, exact checkpoint readback and stopped recovery/rollback admission; component evidence only, no Kosmos host activation."
     },
     {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
@@ -1412,8 +1412,8 @@
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "021f624a3185025a838279c088136a91adbccd9d8165e8644216c53ccd4a3282",
-      "rationale": "Split native Effects preparation/application using the existing journal and checks; exact captured bytes, instance-bound one-use handles, and honest pending shutdown; component tests only, no Kosmos host activation."
+      "after": "1f485b10878a75661c9d538f50c55b31cf3160afc07c8a12d7b6bd06662f4603",
+      "rationale": "Native split preparation plus deadline-bounded drain, exact checkpoint readback and stopped recovery/rollback admission; component evidence only, no Kosmos host activation."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
@@ -1724,8 +1724,8 @@
     {
       "path": "test/navigation-effects-node.test.mjs",
       "before": null,
-      "after": "ab6323a1420a5869940b426caac9765f7e104b2f137b6a6709e6f944eb76e32f",
-      "rationale": "Split native Effects preparation/application using the existing journal and checks; exact captured bytes, instance-bound one-use handles, and honest pending shutdown; component tests only, no Kosmos host activation."
+      "after": "2f4161590406175f365dbb070c3036756e0b5832fca8f895e5ce2ddd6824397d",
+      "rationale": "Native split preparation plus deadline-bounded drain, exact checkpoint readback and stopped recovery/rollback admission; component evidence only, no Kosmos host activation."
     },
     {
       "path": "test/navigation-effects-performance.test.mjs",

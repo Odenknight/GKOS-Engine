@@ -144,6 +144,68 @@ test("pending prepared intents survive shutdown without a false clean checkpoint
   assert.equal(rejected.status, "denied");
   assert.deepEqual(rejected.reasonCodes, ["EXECUTOR_SHUTTING_DOWN"]);
   assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
+  const status = await executor.shutdownByDeadline(new AbortController().signal);
+  assert.equal(status.status, "blocked");
+  assert.deepEqual(status.reasonCodes, ["NONTERMINAL_EFFECTS_REMAIN"]);
+  assert.equal(status.checkpointVerified, true);
+  assert.equal(status.leaseReleased, true);
+});
+
+test("shutdown deadline returns while the active writer keeps its lease and finishes safely", { timeout: 10_000 }, async (t) => {
+  const root = await fixture(t, "shutdown-deadline");
+  await writeFile(join(root, "topics/index.md"), "before");
+  const planned = await makePlan("before");
+  let reachedResolve, releaseResolve;
+  const reached = new Promise(resolve => { reachedResolve = resolve; });
+  const release = new Promise(resolve => { releaseResolve = resolve; });
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+    faultInjector: async point => { if (point === "after-temporary-write") { reachedResolve(); await release; } } });
+  const execution = executor.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes });
+  try {
+    await reached;
+    const deadline = new AbortController();
+    const closing = executor.shutdownByDeadline(deadline.signal);
+    deadline.abort();
+    assert.deepEqual(await closing, { status: "deadline-exceeded", admissionStopped: true,
+      checkpointVerified: false, leaseReleased: false, reasonCodes: ["SHUTDOWN_DEADLINE_EXCEEDED"] });
+    const competitor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+    await assert.rejects(competitor.acquireVaultLease(), /VAULT_LEASE_HELD/);
+    releaseResolve();
+    assert.equal((await execution).status, "committed");
+    const completed = await executor.shutdownByDeadline(new AbortController().signal);
+    assert.deepEqual(completed, { status: "complete", admissionStopped: true,
+      checkpointVerified: true, leaseReleased: true, reasonCodes: [] });
+    assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), planned.proposedBytes);
+    assert.deepEqual((await executor.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes })).reasonCodes,
+      ["EXECUTOR_SHUTTING_DOWN"]);
+    const checkpoint = await readFile(join(root, ".gkx/effects/checkpoints/latest.json"));
+    await assert.rejects(executor.recoverStartup(), /EXECUTOR_SHUTTING_DOWN/);
+    assert.deepEqual((await executor.rollback({ effectId: planned.plan.effectId, authority: authority("moc:rollback"),
+      archiveDate: "2026-08-20", runId: "closed" })).reasonCodes, ["EXECUTOR_SHUTTING_DOWN"]);
+    assert.deepEqual(await readFile(join(root, ".gkx/effects/checkpoints/latest.json")), checkpoint);
+  } finally { releaseResolve(); await execution; await executor.shutdown(); }
+});
+
+test("shutdown failure does not report checkpoint verification or release its lease", async (t) => {
+  const root = await fixture(t, "shutdown-failure");
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  await executor.acquireVaultLease();
+  t.after(() => executor.releaseVaultLease());
+  await mkdir(join(root, ".gkx/effects/checkpoints/latest.json"), { recursive: true });
+  const status = await executor.shutdownByDeadline(new AbortController().signal);
+  assert.deepEqual(status, { status: "blocked", admissionStopped: true, checkpointVerified: false,
+    leaseReleased: false, reasonCodes: ["SHUTDOWN_DRAIN_FAILED"] });
+  await readFile(join(root, ".gkx/effects/vault.lease"));
+});
+
+test("an already-expired shutdown deadline still stops admission and drains", async (t) => {
+  const root = await fixture(t, "expired-shutdown");
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  const deadline = new AbortController();
+  deadline.abort();
+  assert.equal((await executor.shutdownByDeadline(deadline.signal)).status, "deadline-exceeded");
+  await executor.shutdown();
+  assert.equal((await executor.shutdownByDeadline(new AbortController().signal)).status, "complete");
 });
 
 test("Node executor journals, archives exact bytes, atomically replaces, verifies, receipts, and replays idempotently", async (t) => {

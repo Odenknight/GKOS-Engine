@@ -71,6 +71,14 @@ export interface PreparedNodeEffect {
 export type NodeEffectPreparationResult = EffectExecutionResult
   | { status: "prepared"; prepared: PreparedNodeEffect };
 
+export interface NodeEffectShutdownResult {
+  status: "complete" | "deadline-exceeded" | "blocked";
+  admissionStopped: true;
+  checkpointVerified: boolean;
+  leaseReleased: boolean;
+  reasonCodes: readonly string[];
+}
+
 interface RecoverySummary {
   safeToEnableWrites: boolean;
   results: RecoveryResult[];
@@ -99,6 +107,10 @@ export class NodeNavigationEffectsExecutor {
   private leaseHandle: Awaited<ReturnType<typeof open>> | null = null;
   private vaultRealPath: string | null = null;
   private acceptingWrites = true;
+  private shutdownTask: Promise<void> | null = null;
+  private shutdownCheckpointVerified = false;
+  private shutdownLeaseReleased = false;
+  private shutdownHasPending = false;
   private recoveryWriteLatched = false;
   private startupRecoveryChecked = false;
   private executionQueue: Promise<unknown> = Promise.resolve();
@@ -177,7 +189,10 @@ export class NodeNavigationEffectsExecutor {
       cleanShutdown,
       recordedAt: this.clock(),
     };
-    await this.writeDurable(resolve(this.stateRoot, "checkpoints", "latest.json"), `${canonicalJson(checkpoint)}\n`);
+    const path = resolve(this.stateRoot, "checkpoints", "latest.json");
+    const bytes = `${canonicalJson(checkpoint)}\n`;
+    await this.writeDurable(path, bytes);
+    if (await readFile(path, "utf8") !== bytes) throw new Error("CHECKPOINT_WRITE_VERIFICATION_FAILED");
   }
 
   private async validateCheckpoint(): Promise<void> {
@@ -199,14 +214,41 @@ export class NodeNavigationEffectsExecutor {
     await rm(resolve(this.stateRoot, "vault.lease"), { force: true });
   }
 
-  async shutdown(): Promise<void> {
+  shutdown(): Promise<void> {
     this.acceptingWrites = false;
-    await this.enqueue(async () => {
+    this.shutdownTask ??= this.enqueue(async () => {
+      await this.acquireVaultLease();
       const latest = new Map<string, string>();
       for (const entry of await this.journal.load()) latest.set(entry.effectId, entry.state);
-      const clean = [...latest.values()].every(state => ["COMMITTED", "ABORTED", "STALE"].includes(state));
-      await this.writeCheckpoint(clean);
+      this.shutdownHasPending = [...latest.values()].some(state => !["COMMITTED", "ABORTED", "STALE"].includes(state));
+      await this.writeCheckpoint(!this.shutdownHasPending);
+      this.shutdownCheckpointVerified = true;
       await this.releaseVaultLease();
+      this.shutdownLeaseReleased = true;
+    });
+    return this.shutdownTask;
+  }
+
+  /** The deadline bounds observation, never interrupts an in-flight replacement.
+   * Drain continues with admission stopped and the lease held until checkpointed.
+   */
+  shutdownByDeadline(deadline: AbortSignal): Promise<NodeEffectShutdownResult> {
+    const drain = this.shutdown();
+    return new Promise(resolve => {
+      let settled = false;
+      const finish = (status: NodeEffectShutdownResult["status"], reasonCodes: string[]) => {
+        if (settled) return;
+        settled = true;
+        deadline.removeEventListener("abort", expired);
+        resolve({ status, admissionStopped: true, checkpointVerified: this.shutdownCheckpointVerified,
+          leaseReleased: this.shutdownLeaseReleased, reasonCodes });
+      };
+      const expired = () => finish("deadline-exceeded", ["SHUTDOWN_DEADLINE_EXCEEDED"]);
+      deadline.addEventListener("abort", expired, { once: true });
+      drain.then(() => finish(this.shutdownHasPending ? "blocked" : "complete",
+        this.shutdownHasPending ? ["NONTERMINAL_EFFECTS_REMAIN"] : []),
+        () => finish("blocked", ["SHUTDOWN_DRAIN_FAILED"]));
+      if (deadline.aborted) expired();
     });
   }
 
@@ -962,6 +1004,7 @@ export class NodeNavigationEffectsExecutor {
   }
 
   private async rollbackSerial(input: { effectId: string; authority: EffectAuthorityBinding; archiveDate: string; runId: string }): Promise<EffectExecutionResult> {
+    if (!this.acceptingWrites) return { status: "denied", effectId: input.effectId, reasonCodes: ["EXECUTOR_SHUTTING_DOWN"] };
     if (input.authority.capability !== "moc:rollback") return { status: "denied", effectId: input.effectId, reasonCodes: ["ROLLBACK_CAPABILITY_DENIED"] };
     const entries = (await this.journal.load()).filter((entry) => entry.effectId === input.effectId);
     const original = entries.find((entry) => entry.plan)?.plan;
@@ -995,6 +1038,7 @@ export class NodeNavigationEffectsExecutor {
 
   recoverStartup(): Promise<RecoverySummary> {
     return this.enqueue(async () => {
+      if (!this.acceptingWrites) throw new Error("EXECUTOR_SHUTTING_DOWN");
       try {
         const summary = await this.recoverStartupSerial();
         this.startupRecoveryChecked = true;

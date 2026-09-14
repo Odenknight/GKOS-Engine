@@ -45,11 +45,21 @@ Single and batch calls capture inputs without normalizing source line endings.
 
 Shutdown retains pending intent and records cleanShutdown=false for nonterminal work.
 A shutdown executor rejects later use of its prepared handles.
-This does not implement deadline cancellation or the authorized recovery interface.
+`shutdownByDeadline(signal)` bounds the wait without interrupting a replacement.
+Admission stops immediately. The queued drain continues after a deadline expires.
+The lease stays held until the checkpoint has been written, flushed and read back.
+The result distinguishes complete, deadline-exceeded and blocked states.
+Pending prepared work reports blocked even after its checkpoint is verified.
+A failed drain does not claim checkpoint verification or lease release.
+Repeated shutdown calls observe the same drain.
+New recovery and rollback work is refused after admission stops.
+This is a drain deadline, not cancellation of filesystem operations.
+The authorized recovery interface remains unfinished.
 
 ## Evidence and remaining work
 
-The Windows build and all 120 Navigation Effects tests passed with no failures or skips.
+The split-API checkpoint passed all 120 Navigation Effects tests on Windows.
+The current deadline extension is checked separately below.
 The broader test run caught a CRLF-normalizing copy regression before commit.
 The corrected copy preserves exact source strings.
 Tests cover caller mutation, handle copying and reuse, cross-instance refusal,
@@ -58,6 +68,20 @@ The current full candidate qualification is separate from this component result.
 
 The Kosmos host adapter is not yet wired to this API.
 It still needs authorized snapshot and path-safety receipts, recovery inspection,
-authorized recovery actions, and deadline shutdown behavior.
+authorized recovery actions, and mapping of shutdown results to host receipts.
 Directory durability and the platform threat model still need qualification.
 This change does not enable source writes in Kosmos or establish release readiness.
+
+## Deadline checks
+
+The deadline extension passed all 123 Navigation Effects tests on Windows, with no failures or skips.
+Build, package and candidate inventory checks also passed.
+These results do not replace full candidate or native host qualification.
+
+The tests hold an active writer at a temporary-file boundary.
+Deadline expiry returns before that writer is released.
+A competing executor cannot acquire the lease during the drain.
+After release, the writer completes and the checkpoint is verified before lease release.
+Other fixtures cover an already-expired deadline, pending intent, checkpoint-write failure,
+and refused recovery or rollback after shutdown.
+Directory-entry power-loss durability remains outside the current proof.
