@@ -578,6 +578,38 @@ test("rollback is a separately authorized, preconditioned, archived effect", asy
   await restarted.releaseVaultLease();
 });
 
+test("recovery refuses source promotion and commit finalization without current authority", async (t) => {
+  for (const point of ["after-temporary-write", "after-replace", "after-verified"]) {
+    for (const mode of ["missing", "revoked", "malformed"]) await t.test(`${point}:${mode}`, async t => {
+      const root = await fixture(t, `recovery-authority-${mode}`);
+      await writeFile(join(root, "topics/index.md"), "before");
+      const planned = await makePlan("before");
+      const writer = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [],
+        faultInjector: at => { if (at === point) throw new SimulatedEffectCrash(at); } });
+      await assert.rejects(writer.execute({ plan: planned.plan, proposedBytes: planned.proposedBytes }), /SIMULATED_EFFECT_CRASH/);
+      await writer.releaseVaultLease();
+      const before = await exactTree(root);
+      const recovery = new NodeNavigationEffectsExecutor({ vaultRoot: root,
+        ...(mode === "revoked" ? { preconditionValidator: () => ["AUTHORITY_REVOKED"] } :
+          mode === "malformed" ? { preconditionValidator: () => null } : {}) });
+      try {
+        const report = await recovery.recoverStartup();
+        assert.equal(report.safeToEnableWrites, false);
+        assert.ok(report.results[0].reasonCodes.includes("RECOVERY_AUTHORITY_REVALIDATION_FAILED"));
+        const after = await exactTree(root);
+        // Lease/checkpoint bookkeeping may change; source, archive, temporary
+        // bytes, journal and receipts must remain exactly as observed.
+        const protectedTree = tree => Object.fromEntries(Object.entries(tree).filter(([path]) => {
+          const normalized = path.replaceAll("\\", "/");
+          return normalized !== ".gkx/effects/vault.lease" && normalized !== ".gkx/effects/checkpoints" &&
+            !normalized.startsWith(".gkx/effects/checkpoints/");
+        }));
+        assert.deepEqual(protectedTree(after), protectedTree(before));
+      } finally { await recovery.releaseVaultLease(); }
+    });
+  }
+});
+
 test("startup recovery classifies every injected transition without silent overwrite", async (t) => {
   const points = ["after-received", "after-planned", "after-prepared", "after-archive", "after-temporary-write", "after-replace", "after-verified", "after-receipt"];
   for (const point of points) await t.test(point, async (t) => {

@@ -704,8 +704,8 @@
     {
       "path": "docs/EFFECTS-HOST-API-PROGRESS.md",
       "before": null,
-      "after": "588f5288fa6b84cbc9c67e1016b976b21659f2f1f5b9ae9253105592cfa537a0",
-      "rationale": "Split Effects preparation, deadline drain and nonmutating recovery inspection using fresh disk evidence; component tests without Kosmos host activation or release claim."
+      "after": "eafce74307b020d1a7a4743bd963c3ca3e922ad7b819a07f905e9e1af3a158f4",
+      "rationale": "Effects split preparation/execution, deadline shutdown, read-only recovery inspection, and current authority revalidation before noncommitted recovery changes. 144 component tests; complete host authorization and native qualification remain open."
     },
     {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
@@ -1412,8 +1412,8 @@
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "48c2db9b4f75d3def684ee5f3f1809a4a2ad8199261d3ca215e4b45e2be26589",
-      "rationale": "Split Effects preparation, deadline drain and nonmutating recovery inspection using fresh disk evidence; component tests without Kosmos host activation or release claim."
+      "after": "83d577155dd03f445e585305929ccd1ebd92d4d7b3fc4e81dd9649e4cd4e3203",
+      "rationale": "Effects split preparation/execution, deadline shutdown, read-only recovery inspection, and current authority revalidation before noncommitted recovery changes. 144 component tests; complete host authorization and native qualification remain open."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
@@ -1724,8 +1724,8 @@
     {
       "path": "test/navigation-effects-node.test.mjs",
       "before": null,
-      "after": "455eb18312a17dcfe0c7e5289b2fcd8f794f72089ad38351b9ea5ad72383b245",
-      "rationale": "Split Effects preparation, deadline drain and nonmutating recovery inspection using fresh disk evidence; component tests without Kosmos host activation or release claim."
+      "after": "1512187430f110ee7c5686251153d60f858d2a6d13529e36368497787eed7b19",
+      "rationale": "Effects split preparation/execution, deadline shutdown, read-only recovery inspection, and current authority revalidation before noncommitted recovery changes. 144 component tests; complete host authorization and native qualification remain open."
     },
     {
       "path": "test/navigation-effects-performance.test.mjs",

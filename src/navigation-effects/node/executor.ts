@@ -1131,6 +1131,19 @@ export class NodeNavigationEffectsExecutor {
         await this.validateCommittedOperation(operationEntries, liveCommittedEffectByTarget.get(plan.targetPath)?.effectId === effectId);
         continue;
       }
+      if (!inspectOnly) {
+        // Retained intent proves what was planned, not that the authority is
+        // still current. Check before stale-lock cleanup or any recovery write.
+        const reasons = this.preconditionValidator ? await this.preconditionValidator(plan) : ["PRECONDITION_PROVIDER_MISSING"];
+        const valid = Array.isArray(reasons) && reasons.every(reason => typeof reason === "string" && reason.length > 0);
+        if (!valid || reasons.length !== 0) {
+          results.push({ artifactKind: "engine.navigation-effect-recovery-result", effectsContract: "1.0.0", effectId,
+            classification: "ambiguous-or-corrupt", writeCapabilityMayEnable: false,
+            reasonCodes: ["RECOVERY_AUTHORITY_REVALIDATION_FAILED", ...(valid ? [...new Set(reasons)].sort(codeUnitCompare) : ["PRECONDITION_PROVIDER_RESULT_INVALID"])],
+            observed: { proposedDigest: plan.proposedDigest } });
+          continue;
+        }
+      }
       if (!inspectOnly) await this.cleanupStaleTargetLock(plan);
       const planDigest = await canonicalSha256(plan);
       if (latest.state === "STALE") {

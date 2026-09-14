@@ -109,3 +109,23 @@ A separately authorized recovery action is still required.
 The inspection digest is evidence, not a credential or an execution grant.
 Kosmos must map it to its host receipt and resolve fresh authority before acting.
 The existing direct recovery API is not yet that complete authorized host boundary.
+
+## Recovery authority correction
+
+The previous recovery path could promote a verified temporary file, or finish
+its commit receipts, without calling the current authority provider.
+Stored intent and valid bytes do not prove that the grant remains current.
+Recovery now revalidates noncommitted operations before stale-lock cleanup or
+effect recovery writes. Missing, revoked, or malformed provider results block
+that operation and keep the write latch closed. Read-only inspection still
+does not call the provider. Existing committed effects are validated as history.
+
+All 144 Navigation Effects tests passed on Windows. Nine new authority cases
+cover interruption after temporary write, source replacement, and verification.
+They preserve source, archives, temporary files, journal, receipts, and locks.
+Lease and checkpoint bookkeeping may still change during recovery.
+The regression failed against the earlier implementation before the fix.
+
+This is a correction to the existing recovery path. It does not provide the
+complete inspection-bound host authorization API, target-lock revalidation
+through every recovery step, or native-host qualification. Those remain open.
