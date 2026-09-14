@@ -127,6 +127,13 @@ interface ArtifactNamespaceSnapshot {
   entries: readonly ArtifactNamespaceEntry[];
   digest: string;
 }
+interface AllowedAuthorityTemporary {
+  finalName: string;
+  name: string;
+  path: string;
+  state: Stats;
+  bytes: Buffer;
+}
 const AUTHORITY_NAMESPACES = new WeakMap<object, ArtifactNamespaceSnapshot>();
 
 export interface IngestAuthorityPreflight {
@@ -365,11 +372,24 @@ function acceptedArtifactName(name: string): boolean {
     /^(?:ingest-(?:rejections|generation|migration)-[0-9a-f]{64}\.json|retrieval-[0-9a-f]{64}\.sqlite)$/u.test(name);
 }
 
-function captureArtifactNamespace(directory: string, allowAuthorityRecoveryClaim = false): ArtifactNamespaceSnapshot {
+function captureArtifactNamespace(
+  directory: string,
+  allowAuthorityRecoveryClaim = false,
+  allowedTemporary?: AllowedAuthorityTemporary,
+): ArtifactNamespaceSnapshot {
   const entries = readdirSync(directory, { withFileTypes: true });
   if (entries.length > 100_000) throw new Error("GKX_INGEST_STATE_DIRECTORY_ENTRY_LIMIT_EXCEEDED");
   const sealed: ArtifactNamespaceEntry[] = [];
   for (const entry of entries) {
+    if (entry.name === allowedTemporary?.name) {
+      const suffix = entry.name.slice(allowedTemporary.finalName.length);
+      if (!entry.name.startsWith(`${allowedTemporary.finalName}.`) ||
+          !/^\.[1-9][0-9]*(?:\.[1-9][0-9]*)?\.tmp$/u.test(suffix) ||
+          allowedTemporary.path !== join(directory, entry.name)) throw new Error("GKX_INGEST_AUTHORITY_TEMP_CHANGED");
+      assertUnchangedCanonicalFile(allowedTemporary.path, directory, allowedTemporary.state, allowedTemporary.bytes,
+        "GKX_INGEST_AUTHORITY_TEMP");
+      continue;
+    }
     if (!controlledArtifactName(entry.name)) continue;
     if (!acceptedArtifactName(entry.name)) throw new Error("GKX_INGEST_STATE_ARTIFACT_NAME_INVALID");
     if (entry.name === AUTHORITY_LOCK_FILE) continue;
@@ -601,6 +621,36 @@ function replaceCanonicalJson(finalPath: string, directory: string, value: unkno
   hardenFile(finalPath);
   syncFile(finalPath);
   syncDirectory(directory);
+}
+
+const WINDOWS_AUTHORITY_RENAME_DELAYS_MS = [25, 50, 100, 200, 400, 800] as const;
+const WINDOWS_AUTHORITY_RENAME_BUDGET_NS = 3_000_000_000n;
+
+function waitSynchronous(milliseconds: number): void {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliseconds);
+}
+
+function discardUnchangedTemporary(
+  temporary: string,
+  directory: string,
+  expectedState: Stats,
+  expectedBytes: Buffer,
+): void {
+  assertUnchangedCanonicalFile(temporary, directory, expectedState, expectedBytes, "GKX_INGEST_AUTHORITY_TEMP");
+  unlinkSync(temporary);
+}
+
+function assertUnchangedCanonicalFile(
+  path: string,
+  directory: string,
+  expectedState: Stats,
+  expectedBytes: Buffer,
+  code: string,
+): void {
+  assertPlainContainedFile(path, directory);
+  if (!sameFileState(initialFileState(path, code), expectedState)) throw new Error(`${code}_CHANGED`);
+  if (!readSealedBytes(path, directory, expectedBytes.length, code).equals(expectedBytes)) throw new Error(`${code}_CHANGED`);
+  if (!sameFileState(initialFileState(path, code), expectedState)) throw new Error(`${code}_CHANGED`);
 }
 
 function readCanonicalJson<T>(path: string, directory: string, maximum: number, code: string): { value: T; digest: string } {
@@ -2541,7 +2591,8 @@ function recoverActivatingAuthority(
   const activeWitness = witnessFor("active", firstManifestFromPointer(directory, firstPointer), migration, tombstone, firstPointer,
     witness.authority_lock_digest);
   assertRecoveryAuthorityLock(directory, authorityLock);
-  replaceCanonicalJson(join(directory, AUTHORITY_WITNESS_FILE), directory, activeWitness);
+  replaceActiveAuthorityWitness(directory, witness, activeWitness, tombstone, firstPointer,
+    () => assertRecoveryAuthorityLock(directory, authorityLock), true);
   return activeWitness;
 }
 
@@ -2670,7 +2721,8 @@ function completeBoundActivationIntent(directory: string, lock: IngestAuthorityL
     }
   } else replaceCanonicalJson(activePath, directory, pointer);
   assertRecoveryAuthorityLock(directory, lock);
-  replaceCanonicalJson(witnessPath, directory, active);
+  replaceActiveAuthorityWitness(directory, activating, active, tombstone, pointer,
+    () => assertRecoveryAuthorityLock(directory, lock), true);
 }
 
 function readAttemptStatus(
@@ -2930,6 +2982,68 @@ function bindAuthorityLockIntent(
   if (!sameJson(reopened.lock, lock)) throw new Error("GKX_INGEST_AUTHORITY_LOCK_INTENT_REOPEN_FAILED");
   AUTHORITY_LOCKS.set(snapshot, reopened);
   return lock;
+}
+
+function replaceActiveAuthorityWitness(
+  directory: string,
+  activating: IngestAuthorityWitness,
+  active: IngestAuthorityWitness,
+  tombstone: IngestLegacyPointerTombstone,
+  pointer: IngestActivePointer,
+  assertAuthority: () => void,
+  allowAuthorityRecoveryClaim = false,
+): void {
+  const witnessPath = join(directory, AUTHORITY_WITNESS_FILE);
+  const priorState = initialFileState(witnessPath, "GKX_INGEST_AUTHORITY_WITNESS");
+  const priorBytes = canonicalBytes(activating);
+  const expectedBytes = canonicalBytes(active);
+  const namespace = captureArtifactNamespace(directory, allowAuthorityRecoveryClaim);
+  const started = process.hrtime.bigint();
+  let firstRenameError: unknown;
+  const revalidatePhase = (allowedTemporary?: AllowedAuthorityTemporary): void => {
+    assertUnchangedCanonicalFile(witnessPath, directory, priorState, priorBytes, "GKX_INGEST_AUTHORITY_WITNESS");
+    assertAuthority();
+    const currentWitness = readWitness(directory);
+    if (!sameJson(currentWitness, activating) || currentWitness.state !== "activating") {
+      throw new Error("GKX_INGEST_AUTHORITY_WITNESS_CHANGED");
+    }
+    verifyWitnessHistory(directory, currentWitness);
+    const legacy = readCanonicalJson<unknown>(join(directory, ACTIVE_RETRIEVAL_FILE), directory,
+      MAX_POINTER_BYTES, "GKX_INGEST_LEGACY_TOMBSTONE");
+    if (!sameJson(sealTombstone(legacy.value), tombstone)) throw new Error("GKX_INGEST_AUTHORITY_TOMBSTONE_CHANGED");
+    const currentPointer = readActivePointer(directory);
+    if (!sameJson(currentPointer.pointer, pointer) || currentPointer.digest !== rawCanonicalDigest(pointer)) {
+      throw new Error("GKX_INGEST_AUTHORITY_POINTER_CHANGED");
+    }
+    const currentNamespace = captureArtifactNamespace(directory, allowAuthorityRecoveryClaim, allowedTemporary);
+    if (currentNamespace.digest !== namespace.digest) throw new Error("GKX_INGEST_STATE_ARTIFACT_NAMESPACE_CHANGED");
+    assertAuthority();
+  };
+  for (let attempt = 0; ; attempt += 1) {
+    if (attempt > 0) revalidatePhase();
+    const temporary = writeCanonicalTemporary(witnessPath, directory, active);
+    const temporaryState = initialFileState(temporary, "GKX_INGEST_AUTHORITY_TEMP");
+    try {
+      renameSync(temporary, witnessPath);
+    } catch (error) {
+      if (process.platform !== "win32" || (error as NodeJS.ErrnoException).code !== "EPERM") throw error;
+      firstRenameError ??= error;
+      assertUnchangedCanonicalFile(temporary, directory, temporaryState, expectedBytes, "GKX_INGEST_AUTHORITY_TEMP");
+      revalidatePhase({
+        finalName: AUTHORITY_WITNESS_FILE,
+        name: basename(temporary), path: temporary, state: temporaryState, bytes: expectedBytes,
+      });
+      if (attempt >= WINDOWS_AUTHORITY_RENAME_DELAYS_MS.length ||
+          process.hrtime.bigint() - started >= WINDOWS_AUTHORITY_RENAME_BUDGET_NS) throw firstRenameError;
+      discardUnchangedTemporary(temporary, directory, temporaryState, expectedBytes);
+      waitSynchronous(WINDOWS_AUTHORITY_RENAME_DELAYS_MS[attempt]);
+      continue;
+    }
+    hardenFile(witnessPath);
+    syncFile(witnessPath);
+    syncDirectory(directory);
+    return;
+  }
 }
 
 function removeAuthorityGuard(snapshot: IngestAuthorityPreflight): void {
@@ -3254,7 +3368,8 @@ export function activateStagedGkxIngestGeneration(
   replaceCanonicalJson(activePath, directory, pointer);
   options.on_boundary?.("outer_pointer_published");
   assertAuthorityLockUnchanged(authority);
-  replaceCanonicalJson(witnessPath, directory, active);
+  replaceActiveAuthorityWitness(directory, activating, active, tombstone, pointer,
+    () => assertAuthorityLockUnchanged(authority));
   options.on_boundary?.("witness_active");
   const opened = openActiveIngestGeneration(directory);
   finalizeIngestAuthorityTransition(authority, "activation");
