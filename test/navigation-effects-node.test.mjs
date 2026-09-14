@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
-import { lstat, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
+import { spawn, spawnSync } from "node:child_process";
+import { link, lstat, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { hostname, tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -80,6 +80,55 @@ test("readSource preserves exact UTF-8 bytes and performs no Effects initializat
   assert.deepEqual((await readdir(root, { recursive: true })).sort(), before);
   assert.deepEqual(await readFile(join(root, "topics/index.md")), source);
   assert.deepEqual(await readFile(join(root, "topics/invalid.md")), Buffer.from([0xc3, 0x28]));
+});
+
+test("source reads refuse hardlinked bytes and non-file targets without initializing Effects", async t => {
+  const root = await fixture(t, "source-alias");
+  const original = join(root, "original.md");
+  await writeFile(original, "outside granted target");
+  await link(original, join(root, "topics/linked.md"));
+  const before = await exactTree(root);
+  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root });
+  await assert.rejects(executor.readSource("topics/linked.md"), /PATH_DENIED:SOURCE_FILE_ALIAS/);
+  await assert.rejects(executor.readSource("topics"), /PATH_DENIED:SOURCE_FILE_ALIAS/);
+  assert.deepEqual(await exactTree(root), before);
+});
+
+test("source reads reject replacement and growth during the read and close the descriptor", async t => {
+  for (const mode of ["replace", "grow"]) await t.test(mode, async t => {
+    const root = await fixture(t, `source-race-${mode}`);
+    await writeFile(join(root, "topics/index.md"), "original");
+    const child = spawnSync(process.execPath, ["--input-type=module", "-e", `
+      import assert from 'node:assert/strict';
+      import fs from 'node:fs/promises';
+      import { syncBuiltinESMExports } from 'node:module';
+      import { join } from 'node:path';
+      import { pathToFileURL } from 'node:url';
+      const [root, mode, modulePath] = process.argv.slice(1), target = join(root, 'topics/index.md');
+      const originalOpen = fs.open; let closed = 0;
+      fs.open = async (...args) => {
+        const handle = await originalOpen(...args);
+        if (args[0] === target) {
+          const read = handle.readFile.bind(handle), close = handle.close.bind(handle);
+          handle.readFile = async (...readArgs) => {
+            const bytes = await read(...readArgs);
+            if (mode === 'replace') { await fs.rename(target, target + '.held'); await fs.writeFile(target, 'external'); }
+            else await fs.appendFile(target, '-external');
+            return bytes;
+          };
+          handle.close = async () => { closed++; return close(); };
+        }
+        return handle;
+      };
+      syncBuiltinESMExports();
+      const { NodeNavigationEffectsExecutor } = await import(pathToFileURL(modulePath));
+      const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, pathThreatModel: 'cooperative-vault' });
+      await assert.rejects(executor.readSource('topics/index.md'), /SOURCE_FILE_CHANGED/);
+      assert.equal(closed, 1);
+      assert.equal(await fs.readFile(target, 'utf8'), mode === 'replace' ? 'external' : 'original-external');
+    `, root, mode, join(process.cwd(), "dist/navigation-effects-node.mjs")], { encoding: "utf8", timeout: 30000, windowsHide: true });
+    assert.ifError(child.error); assert.equal(child.status, 0, child.stderr);
+  });
 });
 
 test("split preparation retains exact private bytes and requires its own single-use handle", async (t) => {

@@ -179,3 +179,22 @@ with no failures or skips: Effects, native retained guards, watcher pointer
 transitions, and JavaScript bundle inventory. The source qualification inventory
 check passed. These checks do not replace a full run on the combined candidate.
 The separate full qualification of `6f1486f` remains distinct evidence.
+
+## Descriptor-bound exact reads
+
+The shared Effects reader now rejects hardlinked and non-file targets. It
+inspects the file, opens a read descriptor, compares its identity, and checks
+that descriptor and the path again after reading. Byte length and UTF-8
+round-trip checks must also pass. Every opened descriptor closes in finally.
+Only absence at the initial inspection returns null; later failures do not
+become an absent snapshot. This applies to the shared reader used by source
+inspection, execution, and recovery.
+
+The hardlink regression failed before the correction. Deterministic child
+process tests replace or grow the file after the descriptor read, verify
+SOURCE_FILE_CHANGED, preserve the external bytes, and observe descriptor
+closure. Exact BOM, CRLF, Unicode and invalid-UTF-8 checks remain in the suite.
+The combined Windows run passed 178 tests, including all 159 Effects tests.
+The cooperative-vault threat model still applies. This does not prove hostile
+ancestor-race exclusion, mount/collision checks, or the complete Kosmos
+path-safety receipt. Full combined qualification remains open.

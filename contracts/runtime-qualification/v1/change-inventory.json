@@ -704,8 +704,8 @@
     {
       "path": "docs/EFFECTS-HOST-API-PROGRESS.md",
       "before": null,
-      "after": "9cdb6a203d977f8d8d86645ad8b95cd57d16dc546873982b416f8b81abff8d49",
-      "rationale": "Effects host API and combined watcher integration checkpoint; 174 focused Windows tests, not full combined candidate qualification."
+      "after": "c005bbed28f122376d00d2fae9b0127a5dd05452db4264a21e1bee0d789f20ec",
+      "rationale": "Effects host API and descriptor-bound exact reads: refuse aliases/non-files, bind opened and post-read identity/bytes, preserve UTF-8, and close handles. Combined watcher/Effects component suite 178 passed; full combined and native host qualification remain open."
     },
     {
       "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
@@ -1466,8 +1466,8 @@
     {
       "path": "src/navigation-effects/node/executor.ts",
       "before": null,
-      "after": "59298695e772896703b796c4596bb75b61afd868259b03e4822323ebeaeb66d0",
-      "rationale": "Effects host API progress: inspected recovery verifies fresh evidence under writer lease, reloads journal from disk, and uses current authority and per-target locks. 155 component tests; Kosmos host integration and release qualification remain open."
+      "after": "766740dcae970a82226a57dcaa668f2209f75b5d2c5121802be046f18d86135f",
+      "rationale": "Effects host API and descriptor-bound exact reads: refuse aliases/non-files, bind opened and post-read identity/bytes, preserve UTF-8, and close handles. Combined watcher/Effects component suite 178 passed; full combined and native host qualification remain open."
     },
     {
       "path": "src/navigation-effects/node/index.ts",
@@ -1796,8 +1796,8 @@
     {
       "path": "test/navigation-effects-node.test.mjs",
       "before": null,
-      "after": "17d5bd8763b87fa30aae75ff99c053f9acb0fc3f114d34206815d6755cdb8673",
-      "rationale": "Effects host API progress: inspected recovery verifies fresh evidence under writer lease, reloads journal from disk, and uses current authority and per-target locks. 155 component tests; Kosmos host integration and release qualification remain open."
+      "after": "84ba8fc9c6208cb2eb4f6de69d53c5427b069f6e6de7a1f9feaf0a6f175c0d8d",
+      "rationale": "Effects host API and descriptor-bound exact reads: refuse aliases/non-files, bind opened and post-read identity/bytes, preserve UTF-8, and close handles. Combined watcher/Effects component suite 178 passed; full combined and native host qualification remain open."
     },
     {
       "path": "test/navigation-effects-performance.test.mjs",

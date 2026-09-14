@@ -10,6 +10,7 @@ import {
 } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { hostname } from "node:os";
+import { constants, type BigIntStats } from "node:fs";
 import { canonicalJson, canonicalSha256, deepFreeze, sha256Bytes } from "../../canonical";
 import { codeUnitCompare, normalizeVaultRelative, posixDirname } from "../../paths";
 import { shouldIgnoreNavigationArchivePath } from "../../navigation";
@@ -295,15 +296,29 @@ export class NodeNavigationEffectsExecutor {
   }
 
   private async readTarget(path: string): Promise<string | null> {
+    let before: BigIntStats;
     try {
-      const bytes = await readFile(path);
-      const text = bytes.toString("utf8");
-      if (!Buffer.from(text, "utf8").equals(bytes)) throw new Error("SOURCE_NOT_VALID_UTF8");
-      return text;
+      before = await lstat(path, { bigint: true });
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
       throw error;
     }
+    if (!before.isFile() || before.isSymbolicLink() || before.nlink !== 1n) throw new Error("PATH_DENIED:SOURCE_FILE_ALIAS");
+    const same = (state: BigIntStats) => state.isFile() &&
+      (state.dev === before.dev || process.platform === "win32" && (state.dev === 0n || before.dev === 0n)) &&
+      state.ino === before.ino && state.mode === before.mode && state.nlink === before.nlink &&
+      state.size === before.size && state.mtimeNs === before.mtimeNs && state.ctimeNs === before.ctimeNs &&
+      state.uid === before.uid && state.gid === before.gid;
+    const handle = await open(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+    try {
+      if (!same(await handle.stat({ bigint: true }))) throw new Error("SOURCE_FILE_CHANGED");
+      const bytes = await handle.readFile();
+      if (BigInt(bytes.length) !== before.size || !same(await handle.stat({ bigint: true })) ||
+          !same(await lstat(path, { bigint: true }))) throw new Error("SOURCE_FILE_CHANGED");
+      const text = bytes.toString("utf8");
+      if (!Buffer.from(text, "utf8").equals(bytes)) throw new Error("SOURCE_NOT_VALID_UTF8");
+      return text;
+    } finally { await handle.close(); }
   }
 
   /** Guarded byte snapshot for an explicitly configured Effects host. */
