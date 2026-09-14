@@ -28,6 +28,18 @@ guarded rename/write refusals and successful rename operations after release.
 Other tests cover conflicting writers, callback exceptions, partial acquisition,
 input limits, and malformed paths. Synthetic file bytes remain unchanged.
 
+A subsequent five-test run adds a separate Node process. With two retained
+files guarded, all 800 attempted writes and file or parent-directory renames
+were refused. The caller could still create, write, rename, and remove its
+unguarded output leaf. The original retained bytes stayed unchanged.
+
+An integration probe also exposed a restriction: holding a directory guard
+permits creating a child but blocks renaming that child until release. A
+dedicated regression preserves this observation. Do not indiscriminately hold
+directory guards across transitions that require child renames. The retained
+file test demonstrates one nonempty tree; it does not establish coverage for
+empty directories, every ancestor topology, or unguarded descendants.
+
 This implements the [CreateFileW sharing rules](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew).
 Those rules do not block every metadata-only operation. The caller still needs
 the existing authority snapshots and exact identity checks. Unlisted ancestors

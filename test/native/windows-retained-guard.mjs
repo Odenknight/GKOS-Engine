@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { closeSync, mkdirSync, mkdtempSync, openSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
+import { closeSync, mkdirSync, mkdtempSync, openSync, readFileSync, renameSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import test from 'node:test';
@@ -63,4 +64,55 @@ test('native guard refuses conflicting writers and invalid inputs before callbac
   const child = join(directory, 'child'); mkdirSync(child);
   assert.throws(() => guard.withReadGuards([child + '\\..\\retained.txt'], () => assert.fail('must not run')), /GUARD_UNAVAILABLE/);
   renameSync(file, file + '.held'); renameSync(file + '.held', file);
+});
+
+test('retained file guards allow an authorized leaf transition and block another process', t => {
+  const { directory, file } = fixture(t);
+  const retainedDirectory = join(directory, 'retained-directory'); mkdirSync(retainedDirectory);
+  const descendant = join(retainedDirectory, 'descendant.txt'); writeFileSync(descendant, 'descendant');
+  const target = join(directory, 'authorized.txt');
+  const childSource = `
+    const fs = require('node:fs');
+    const [directory, file, descendant] = process.argv.slice(1);
+    const refused = operation => {
+      try { operation(); throw new Error('mutation unexpectedly accepted'); }
+      catch (error) { if (!['EBUSY', 'EPERM', 'EACCES'].includes(error.code)) throw error; }
+    };
+    for (let i = 0; i < 200; i++) {
+      refused(() => fs.renameSync(file, file + '.held'));
+      refused(() => fs.writeFileSync(file, 'changed'));
+      refused(() => fs.renameSync(descendant, descendant + '.held'));
+      refused(() => fs.renameSync(directory, directory + '.held'));
+    }
+    process.stdout.write('800 mutations refused');
+  `;
+  guard.withReadGuards([file, descendant], () => {
+    // The affected leaf is excluded from guards. Its existing writer must not
+    // prevent retaining the unaffected files.
+    const writer = openSync(target, 'wx');
+    try {
+      const child = spawnSync(process.execPath, ['-e', childSource, directory, file, descendant], {
+        encoding: 'utf8', timeout: 30000, windowsHide: true,
+      });
+      assert.ifError(child.error); assert.equal(child.status, 0, child.stderr);
+      assert.equal(child.stdout, '800 mutations refused');
+      writeFileSync(writer, 'authorized');
+    } finally { closeSync(writer); }
+    assert.equal(readFileSync(target, 'utf8'), 'authorized');
+    renameSync(target, target + '.promoted'); unlinkSync(target + '.promoted');
+    assert.equal(readFileSync(file, 'utf8'), 'sealed\r\n');
+    assert.equal(readFileSync(descendant, 'utf8'), 'descendant');
+  });
+  renameSync(directory, directory + '.held'); renameSync(directory + '.held', directory);
+});
+
+test('directory guards permit child creation but block child promotion until release', t => {
+  const { directory } = fixture(t);
+  const target = join(directory, 'authorized.txt');
+  guard.withReadGuards([directory], () => {
+    writeFileSync(target, 'authorized', { flag: 'wx' });
+    assert.equal(readFileSync(target, 'utf8'), 'authorized');
+    assert.throws(() => renameSync(target, target + '.promoted'), error => ['EBUSY', 'EPERM', 'EACCES'].includes(error.code));
+  });
+  renameSync(target, target + '.promoted'); unlinkSync(target + '.promoted');
 });

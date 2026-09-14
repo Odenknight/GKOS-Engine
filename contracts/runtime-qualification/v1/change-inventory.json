@@ -860,8 +860,8 @@
     {
       "path": "docs/WINDOWS-RETAINED-GUARD.md",
       "before": null,
-      "after": "0700e412b5ec7c31802ec2b82f6b10b996bf38f04bda6ef923a514e3fbd53d56",
-      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+      "after": "25d6f72ff602569644f26622405392e0014af64b38dc366a508841d1f662c86b",
+      "rationale": "Native Windows cross-process retained-file and authorized output transition tests; records directory-guard child-rename restriction. Component evidence only; watcher integration and full qualification remain open."
     },
     {
       "path": "docs/adr/0001-additive-navigation-effects-plane.md",
@@ -1748,8 +1748,8 @@
     {
       "path": "test/native/windows-retained-guard.mjs",
       "before": null,
-      "after": "9811bcba1b800b5f5459b6a17c65ed9ef3c2c076dd5c43b1bbd5c49ed753beb0",
-      "rationale": "Explicit Windows native retained-handle guard component and pinned Node-API header provenance; synthetic native qualification only, not integrated watcher authority or full release qualification."
+      "after": "308485bbc59bf6276309120d650243dd9e5b5caab296b70f180a3e7edd7c0413",
+      "rationale": "Native Windows cross-process retained-file and authorized output transition tests; records directory-guard child-rename restriction. Component evidence only; watcher integration and full qualification remain open."
     },
     {
       "path": "test/navigation-architecture.test.mjs",
