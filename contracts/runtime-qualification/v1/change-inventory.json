@@ -1598,8 +1598,8 @@
     {
       "path": "src/retrieval/sqlite-store.ts",
       "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
-      "after": "c3a0c5c066545ef9e88c41116bd7e5ff8bb46e2e335598b463596263276922b4",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "0be822b339b548681f470c756848eb336c09dd14311cc4f03706775fffe8882c",
+      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged. Group already validated candidate chunks once by physical record key before unchanged parent checks, replacing repeated full-list scans while preserving record/chunk and error order."
     },
     {
       "path": "src/service/graphiti-host.ts",
@@ -1882,6 +1882,12 @@
       "before": null,
       "after": "bc2214c5c44b159128bdb9db1b5d225e622c1b11ae16129babb5ac5dfea88a17",
       "rationale": "Negative and positive preflight tests for mandatory gates, source identity, soak length, archive digests and package inventory."
+    },
+    {
+      "path": "test/retrieval-candidate-store.test.mjs",
+      "before": "5d04a3baed3f7f9c33c031241cadf75597fa6f57",
+      "after": "9c9f1d9ad2e68f91b395c15635cef2f55736d7d70b108d71077bd3e7002edf67",
+      "rationale": "Verify interleaved physical records sharing an authored UID remain parent-isolated and explicit parent mismatch refuses before state directory creation."
     },
     {
       "path": "test/retrieval-core.test.mjs",
