@@ -1826,8 +1826,8 @@
     {
       "path": "test/native/windows-retained-guard-sea.mjs",
       "before": null,
-      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup. Adapt isolated SEA fixture to required composition inputs and retain prior inventories while preserving native guard and malformed-container assertions.",
-      "after": "bd7e5198d2862493ee7cabba72d30d1ad84fcf70468d02f23cb129d170d943bc"
+      "rationale": "Windows SEA packages the source/bundle-bound native guard as an embedded asset; runtime verifies before exclusive temporary extraction and loading. Actual executable tests cover valid, missing and altered assets; mapped DLL temporary files remain for OS/user cleanup. Adapt isolated SEA fixture to required composition inputs and retain prior inventories while preserving native guard and malformed-container assertions. Bound cleanup retries for transient Windows executable locks; persistent locks still fail, all runtime guard assertions unchanged.",
+      "after": "a6cd2f3302e6d84605983f559fbff1fae561cb5c1d2477d20afb990b3a6778a3"
     },
     {
       "path": "test/native/windows-retained-guard.mjs",
