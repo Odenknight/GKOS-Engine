@@ -1376,8 +1376,8 @@
     {
       "path": "src/retrieval/coordinator.ts",
       "before": "f7fe89a328c61bebfbfee87eb3d4bb3efdf89111",
-      "after": "58d0a15f3599a3bb4ae0d282431f39e3a4acf705ad6fd84736f5302205d4dd2c",
-      "rationale": "Bound only Engine-native, unique-path eligible source reads to four after policy/filter/time admission; preserve custom/repeated-path serial semantics, every freshness check and deterministic result processing."
+      "after": "8fb6d7b2be27a5859cb097c8fc9f52c34eef019ac5241bea3e2923b32f10ee0a",
+      "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
     },
     {
       "path": "src/retrieval/evaluation-executor.ts",
@@ -1410,6 +1410,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/retrieval/host.ts",
+      "before": "dd1df55f27565668e395995d6d2d31dacec6b562",
+      "after": "4639306ea263049580bc3885f2a2eec6d81954bba760d4c542c75282785526a9",
+      "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
+    },
+    {
       "path": "src/retrieval/manifest.ts",
       "before": "9c8517d5c14fdbac1164f05681b875ffb6fa26f0",
       "after": "0b1a5e1acc36dfb8c6ba213736d93c3d03abe87fc7ec52623cebd61b6c9a4ab0",
@@ -1424,8 +1430,8 @@
     {
       "path": "src/retrieval/sqlite-store.ts",
       "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
-      "after": "c3a0c5c066545ef9e88c41116bd7e5ff8bb46e2e335598b463596263276922b4",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "7d763a20bf5b25c5454ac3562eb351bc4cbb0f21477a110a5f606343432e9c67",
+      "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
     },
     {
       "path": "src/service/mcp.ts",
@@ -1680,6 +1686,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "test/retrieval-store.test.mjs",
+      "before": "12abb4a3a5f5ae429ad278e855877cb6b5093018",
+      "after": "ec39f7a96b21034bb16ba054d3123f065dd1f703c56458119dc12360ac41717f",
+      "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
+    },
+    {
       "path": "test/retrieval-windows-path-security.test.mjs",
       "before": "02f6efced1d43c639fb636996efca5d9e516e9d4",
       "after": "e5769ac63408cd6cc51ab78928e9e7422379980896b636f7e4988d7b11d5f5a0",
@@ -1706,8 +1718,8 @@
     {
       "path": "test/service-retrieval.test.mjs",
       "before": "83f14477ca28e80cfc990f603e19b73251b6aec6",
-      "after": "f13506904fe1e7f99e7a941c619a4b22988ec4908629c42f5458ccccd7ca56f1",
-      "rationale": "CI repair: execute the native service retrieval contract on the runtime-selected backend without skipping the FTS5 or compatibility-scan paths."
+      "after": "469908cc51fbccd88d3a882f8697c3734cc466bf5fb11a6a1442b6bc43490ae7",
+      "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
     },
     {
       "path": "test/service-runtime.test.mjs",

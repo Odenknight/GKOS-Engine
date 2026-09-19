@@ -47,6 +47,7 @@ import type { RankedInput } from "./fusion";
 import type { AnyRetrievalProjectionManifest, GkxRetrievalProjectionManifest, GkxRetrievalStoredSourceProvenance, RetrievalChunk, RetrievalProjectionManifest, SqliteLexicalBackend } from "./types";
 
 const RETRIEVAL_EVALUATION_DATABASE = Symbol("gkos.retrieval.evaluation-database");
+const VERIFIED_RETRIEVAL_SESSION_STORE = Symbol("gkos.retrieval.verified-session-store");
 
 function databaseRuntimePath(path: string, evaluation: boolean): string {
   return evaluation && process.platform === "win32" ? toNamespacedPath(path) : path;
@@ -1375,10 +1376,16 @@ export function openActiveRetrievalStore(stateDirectory: string): SqliteRetrieva
 
 export class SqliteRetrievalStore {
   readonly #database: DatabaseSync;
+  readonly #file_identity: string;
+  readonly #retainValidatedRows: boolean;
+  #validatedCandidateSources: readonly GkxRetrievalCandidateSource[] | null = null;
+  #validatedCandidateDeclarations: readonly GkxRetrievalCandidateDeclaration[] | null = null;
+  #validatedCandidateChunks: readonly GkxRetrievalCandidateChunk[] | null = null;
+  #validatedEligibleCandidateKeys: ReadonlySet<string> | null = null;
   readonly manifest: AnyRetrievalProjectionManifest;
   readonly fts5_available: boolean;
   readonly database_path: string;
-  constructor(database_path: string, authority?: typeof RETRIEVAL_EVALUATION_DATABASE) {
+  constructor(database_path: string, authority?: typeof RETRIEVAL_EVALUATION_DATABASE | typeof VERIFIED_RETRIEVAL_SESSION_STORE) {
     if (database_path.includes("\0") || !statSafe(resolve(database_path))) throw new Error("RETRIEVAL_DATABASE_MISSING");
     const databasePath = canonicalPathSync(database_path, { alias_error: "RETRIEVAL_DATABASE_ALIAS_REJECTED" });
     this.database_path = databasePath;
@@ -1386,6 +1393,8 @@ export class SqliteRetrievalStore {
     if (!link.isFile() || link.isSymbolicLink() || statSync(databasePath).nlink > 1) throw new Error("RETRIEVAL_DATABASE_ALIAS_REJECTED");
     if (pathExists(`${databasePath}-wal`) || pathExists(`${databasePath}-shm`)) throw new Error("RETRIEVAL_DATABASE_SIDECAR_REJECTED");
     hardenFilePermissions(databasePath);
+    this.#retainValidatedRows = authority === VERIFIED_RETRIEVAL_SESSION_STORE;
+    const initialIdentity = this.currentFileIdentity();
     // Published generations are immutable derived artifacts.  Open them
     // read-only so verification and search cannot create WAL/SHM sidecars or
     // mutate a generation after its manifest digest has been accepted.
@@ -1395,6 +1404,7 @@ export class SqliteRetrievalStore {
     ), { readOnly: true });
     try {
       this.#database.exec("PRAGMA foreign_keys = ON; PRAGMA temp_store = MEMORY;");
+      if (this.#retainValidatedRows) this.#database.exec("BEGIN;");
       const version = Number((this.#database.prepare("PRAGMA user_version").get() as SqliteRow).user_version);
       if (version !== RETRIEVAL_PROJECTION_SCHEMA_VERSION && version !== RETRIEVAL_LINEAGE_PROJECTION_SCHEMA_VERSION) throw new Error("RETRIEVAL_SCHEMA_MISMATCH");
       const row = this.#database.prepare("SELECT * FROM projection_manifest WHERE singleton = 1").get() as SqliteRow | undefined;
@@ -1414,6 +1424,8 @@ export class SqliteRetrievalStore {
       if (integrity.length !== 1 || integrity[0].integrity_check !== "ok") throw new Error("RETRIEVAL_SQLITE_INTEGRITY_FAILED");
       if ((this.#database.prepare("PRAGMA foreign_key_check").all() as SqliteRow[]).length) throw new Error("RETRIEVAL_SQLITE_FOREIGN_KEY_FAILED");
       this.verifyPersistedProjection();
+      if (this.currentFileIdentity() !== initialIdentity) throw new Error("RETRIEVAL_DATABASE_CHANGED");
+      this.#file_identity = initialIdentity;
     } catch (error) {
       try { this.#database.close(); } catch { /* retain the original verification error */ }
       // Some SQLite operations (notably integrity_check) may resolve a virtual
@@ -1424,6 +1436,30 @@ export class SqliteRetrievalStore {
         throw new Error("SQLITE_FTS5_UNAVAILABLE", { cause: error });
       }
       throw error;
+    }
+  }
+
+  /** Hold one verified immutable generation and reject path or byte changes before reuse. */
+  holdImmutableSnapshot(): void {
+    this.assertImmutableIdentity();
+  }
+
+  assertImmutableIdentity(): void {
+    if (this.currentFileIdentity() !== this.#file_identity) throw new Error("RETRIEVAL_DATABASE_CHANGED");
+  }
+
+  private currentFileIdentity(): string {
+    try {
+      const link = lstatSync(this.database_path);
+      const state = statSync(this.database_path);
+      if (!link.isFile() || link.isSymbolicLink() || state.nlink > 1 ||
+          pathExists(`${this.database_path}-wal`) || pathExists(`${this.database_path}-shm`)) {
+        throw new Error("RETRIEVAL_DATABASE_CHANGED");
+      }
+      return stableJson({ dev: String(state.dev), ino: String(state.ino), size: String(state.size), mtime_ms: String(state.mtimeMs), ctime_ms: String(state.ctimeMs) });
+    } catch (error) {
+      if ((error as Error).message === "RETRIEVAL_DATABASE_CHANGED") throw error;
+      throw new Error("RETRIEVAL_DATABASE_CHANGED", { cause: error });
     }
   }
   close(): void { this.#database.close(); }
@@ -1437,15 +1473,21 @@ export class SqliteRetrievalStore {
   }
   listCandidateSources(): GkxRetrievalCandidateSource[] {
     if (!isGkxRetrievalProjectionManifest(this.manifest)) throw new Error("RETRIEVAL_CANDIDATE_PROJECTION_UNAVAILABLE");
+    if (this.#validatedCandidateSources) return structuredClone([...this.#validatedCandidateSources]);
     return (this.#database.prepare("SELECT * FROM candidate_sources ORDER BY record_key").all() as SqliteRow[]).map(rowToCandidateSource);
   }
   listCandidateDeclarations(): GkxRetrievalCandidateDeclaration[] {
     if (!isGkxRetrievalProjectionManifest(this.manifest)) throw new Error("RETRIEVAL_CANDIDATE_PROJECTION_UNAVAILABLE");
+    if (this.#validatedCandidateDeclarations) return structuredClone([...this.#validatedCandidateDeclarations]);
     return (this.#database.prepare("SELECT * FROM candidate_declarations ORDER BY declaration_digest").all() as SqliteRow[]).map(rowToCandidateDeclaration);
   }
   listCandidateDeclarationsForRecordKeys(recordKeys: readonly string[]): GkxRetrievalCandidateDeclaration[] {
     if (!isGkxRetrievalProjectionManifest(this.manifest)) throw new Error("RETRIEVAL_CANDIDATE_PROJECTION_UNAVAILABLE");
     if (!recordKeys.length) return [];
+    if (this.#validatedCandidateDeclarations) {
+      const allowed = new Set(recordKeys);
+      return structuredClone(this.#validatedCandidateDeclarations.filter(item => allowed.has(item.source_record_key)));
+    }
     this.setCandidateRecordKeys(recordKeys);
     return (this.#database.prepare(`
       SELECT d.* FROM candidate_declarations AS d
@@ -1455,11 +1497,16 @@ export class SqliteRetrievalStore {
   }
   listCandidateChunks(): GkxRetrievalCandidateChunk[] {
     if (!isGkxRetrievalProjectionManifest(this.manifest)) throw new Error("RETRIEVAL_CANDIDATE_PROJECTION_UNAVAILABLE");
+    if (this.#validatedCandidateChunks) return structuredClone([...this.#validatedCandidateChunks]);
     return (this.#database.prepare("SELECT * FROM candidate_chunks ORDER BY candidate_chunk_key").all() as SqliteRow[]).map(rowToCandidateChunk);
   }
   listCandidateChunksForRecordKeys(recordKeys: readonly string[]): GkxRetrievalCandidateChunk[] {
     if (!isGkxRetrievalProjectionManifest(this.manifest)) throw new Error("RETRIEVAL_CANDIDATE_PROJECTION_UNAVAILABLE");
     if (!recordKeys.length) return [];
+    if (this.#validatedCandidateChunks) {
+      const allowed = new Set(recordKeys);
+      return structuredClone(this.#validatedCandidateChunks.filter(item => allowed.has(item.record_key)));
+    }
     this.setCandidateRecordKeys(recordKeys);
     return (this.#database.prepare(`
       SELECT c.* FROM candidate_chunks AS c
@@ -1470,6 +1517,10 @@ export class SqliteRetrievalStore {
   listCandidateChunksForKeys(candidateChunkKeys: readonly string[]): GkxRetrievalCandidateChunk[] {
     if (!isGkxRetrievalProjectionManifest(this.manifest)) throw new Error("RETRIEVAL_CANDIDATE_PROJECTION_UNAVAILABLE");
     if (!candidateChunkKeys.length) return [];
+    if (this.#validatedCandidateChunks) {
+      const allowed = new Set(candidateChunkKeys);
+      return structuredClone(this.#validatedCandidateChunks.filter(item => allowed.has(item.candidate_chunk_key)));
+    }
     this.setEligibleChunkIds(candidateChunkKeys);
     return (this.#database.prepare(`
       SELECT c.* FROM candidate_chunks AS c
@@ -1625,6 +1676,12 @@ export class SqliteRetrievalStore {
     if (calculateLineageProjectionDigest(base, sources, declarations, chunks, eligibleKeys, vectors) !== manifest.projection_digest) {
       throw new Error("RETRIEVAL_PROJECTION_DIGEST_MISMATCH");
     }
+    if (this.#retainValidatedRows) {
+      this.#validatedCandidateSources = sources;
+      this.#validatedCandidateDeclarations = declarations;
+      this.#validatedCandidateChunks = chunks;
+      this.#validatedEligibleCandidateKeys = new Set(eligibleKeys);
+    }
   }
   lexicalSearch(query: string, eligibleChunkIds: readonly string[], limit: number): RankedInput[] {
     if (!Number.isSafeInteger(limit) || limit < 1) throw new RangeError("lexical limit must be positive.");
@@ -1740,6 +1797,7 @@ export class SqliteRetrievalStore {
 
   candidateVectorEligibilityCovers(authorizedCandidateChunkKeys: readonly string[]): boolean {
     if (!isGkxRetrievalProjectionManifest(this.manifest)) throw new Error("RETRIEVAL_CANDIDATE_PROJECTION_UNAVAILABLE");
+    if (this.#validatedEligibleCandidateKeys) return authorizedCandidateChunkKeys.every(key => this.#validatedEligibleCandidateKeys!.has(key));
     const contains = this.#database.prepare("SELECT 1 AS present FROM embedding_eligible_candidate_chunks WHERE candidate_chunk_key = ?");
     return authorizedCandidateChunkKeys.every((candidateChunkKey) => contains.get(candidateChunkKey) !== undefined);
   }
@@ -1760,4 +1818,9 @@ export class SqliteRetrievalStore {
 /** Trusted private-evaluation seam: preserve canonical identity while opening long Windows paths. */
 export function openRetrievalEvaluationSqliteStore(databasePath: string): SqliteRetrievalStore {
   return new SqliteRetrievalStore(databasePath, RETRIEVAL_EVALUATION_DATABASE);
+}
+
+/** Module-private constructor authority for a serialized verified-generation session. */
+export function openVerifiedRetrievalSessionStore(databasePath: string): SqliteRetrievalStore {
+  return new SqliteRetrievalStore(databasePath, VERIFIED_RETRIEVAL_SESSION_STORE);
 }
