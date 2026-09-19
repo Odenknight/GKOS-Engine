@@ -12,7 +12,7 @@ import { lexicalCitationSpans, lexicalQueryClauses } from "./lexical";
 import { canonicalPath, canonicalPathContains } from "./path-security";
 import { buildGkxRetrievalProvenance, normalizeRetrievalAsOf } from "./provenance";
 import { buildGkxRetrievalAuthorizedCandidateView } from "./authorized-view";
-import { buildGkxRetrievalGenerationWithWriter, buildRetrievalGenerationWithWriter, type BuiltRetrievalGeneration, type GkxRetrievalGenerationInput, type RetrievalGenerationInput, isGkxRetrievalProjectionManifest, openActiveRetrievalStore, openRetrievalEvaluationSqliteStore, preflightGkxRetrievalIndexInput, preflightRetrievalIndexInput, SqliteRetrievalStore } from "./sqlite-store";
+import { buildGkxRetrievalGenerationWithWriter, buildRetrievalGenerationWithWriter, type BuiltRetrievalGeneration, type GkxRetrievalGenerationInput, type RetrievalGenerationInput, isGkxRetrievalProjectionManifest, openActiveRetrievalStore, openRetrievalEvaluationSqliteStore, openVerifiedRetrievalSessionStore, preflightGkxRetrievalIndexInput, preflightRetrievalIndexInput, SqliteRetrievalStore } from "./sqlite-store";
 import { openIngestAwareActiveRetrievalStore } from "../ingest/storage";
 import {
   acquireLegacyRetrievalWriter,
@@ -742,22 +742,25 @@ export function vaultSourceReader(vaultRoot: string): (sourcePath: string) => Pr
 export class RetrievalCoordinator {
   readonly #store: SqliteRetrievalStore;
   readonly #options: RetrievalCoordinatorOptions;
+  readonly #ownsStore: boolean;
   readonly #evaluationObserver: RetrievalEvaluationCoordinatorObserver | undefined;
   readonly #evaluationScanPresentationFts5Available: boolean | undefined;
 
   constructor(databasePath: string, options: RetrievalCoordinatorOptions);
   constructor(databasePathOrStore: SqliteRetrievalStore, options: RetrievalCoordinatorOptions, capability: typeof VERIFIED_STORE);
-  constructor(databasePathOrStore: string | SqliteRetrievalStore, options: RetrievalCoordinatorOptions, capability?: symbol) {
+  constructor(databasePathOrStore: SqliteRetrievalStore, options: RetrievalCoordinatorOptions, capability: typeof VERIFIED_STORE, ownsStore: false);
+  constructor(databasePathOrStore: string | SqliteRetrievalStore, options: RetrievalCoordinatorOptions, capability?: symbol, ownsStore = true) {
     validateCoordinatorOptions(options);
     if (typeof databasePathOrStore === "string") this.#store = new SqliteRetrievalStore(databasePathOrStore);
     else if (capability === VERIFIED_STORE) this.#store = databasePathOrStore;
     else throw new TypeError("Raw retrieval stores are not accepted by the public coordinator API.");
+    this.#ownsStore = ownsStore;
     if (isGkxRetrievalProjectionManifest(this.#store.manifest) && typeof options.source_discoverability_policy !== "function") {
-      this.#store.close();
+      if (this.#ownsStore) this.#store.close();
       throw new TypeError("A source discoverability policy is required for schema-3 lineage retrieval.");
     }
     if (isGkxRetrievalProjectionManifest(this.#store.manifest) && options.runtime_policy_digest !== this.#store.manifest.policy_digest) {
-      this.#store.close();
+      if (this.#ownsStore) this.#store.close();
       throw new Error("RETRIEVAL_RUNTIME_POLICY_DIGEST_MISMATCH");
     }
     this.#options = options;
@@ -777,7 +780,7 @@ export class RetrievalCoordinator {
     catch (error) { try { store.close(); } catch { /* constructor may already have closed it */ } throw error; }
   }
 
-  close(): void { this.#store.close(); }
+  close(): void { if (this.#ownsStore) this.#store.close(); }
 
   async search(request: RetrievalSearchRequest): Promise<RetrievalSearchResult> {
     validateSearchRequest(request);
@@ -1158,6 +1161,82 @@ export class RetrievalCoordinator {
       acceptedIntervals.push({ source_id: chunk.source_id, start_byte: chunk.start_byte, end_byte: chunk.end_byte });
     }
     return assembleResult(hits, true);
+  }
+}
+
+export interface VerifiedRetrievalSessionSearchOptions {
+  readonly signal?: AbortSignal;
+}
+
+/**
+ * Trusted host session for one immutable generation. The complete store is
+ * verified once; every serialized search still receives fresh authorization,
+ * source-reading, policy-digest, filtering, temporal, and citation guards.
+ */
+export class VerifiedRetrievalSession {
+  readonly #store: SqliteRetrievalStore;
+  #tail: Promise<void> = Promise.resolve();
+  #closed = false;
+  #closePromise: Promise<void> | null = null;
+  #queued = 0;
+
+  constructor(databasePath: string) {
+    this.#store = openVerifiedRetrievalSessionStore(databasePath);
+    try { this.#store.holdImmutableSnapshot(); }
+    catch (error) { this.#store.close(); throw error; }
+  }
+
+  search(
+    request: RetrievalSearchRequest,
+    options: RetrievalCoordinatorOptions,
+    controls: VerifiedRetrievalSessionSearchOptions = {},
+  ): Promise<RetrievalSearchResult> {
+    if (this.#closed) return Promise.reject(new Error("RETRIEVAL_VERIFIED_SESSION_CLOSED"));
+    if (this.#queued >= 32) return Promise.reject(new Error("RETRIEVAL_VERIFIED_SESSION_CAPACITY"));
+    validateCoordinatorOptions(options);
+    const signal = controls.signal;
+    if (signal !== undefined && !(signal instanceof AbortSignal)) {
+      return Promise.reject(new TypeError("RETRIEVAL_VERIFIED_SESSION_SIGNAL_INVALID"));
+    }
+    if (signal?.aborted) return Promise.reject(new Error("RETRIEVAL_VERIFIED_SESSION_SEARCH_ABORTED"));
+    validateSearchRequest(request);
+    let queuedRequest: RetrievalSearchRequest;
+    try { queuedRequest = structuredClone(request); }
+    catch (error) { return Promise.reject(new TypeError("RETRIEVAL_VERIFIED_SESSION_REQUEST_INVALID", { cause: error })); }
+    const queuedOptions = Object.freeze({ ...options });
+    this.#queued += 1;
+    let started = false;
+    let cancelled = false;
+    const result = new Promise<RetrievalSearchResult>((resolveSearch, rejectSearch) => {
+      const run = async () => {
+        started = true;
+        this.#queued -= 1;
+        signal?.removeEventListener("abort", abort);
+        if (cancelled) return;
+        if (this.#closed) return rejectSearch(new Error("RETRIEVAL_VERIFIED_SESSION_CLOSED"));
+        try {
+          this.#store.assertImmutableIdentity();
+          const coordinator = new RetrievalCoordinator(this.#store, queuedOptions, VERIFIED_STORE, false);
+          resolveSearch(await coordinator.search(queuedRequest));
+        } catch (error) { rejectSearch(error); }
+      };
+      const abort = () => {
+        if (started || cancelled) return;
+        cancelled = true;
+        rejectSearch(new Error("RETRIEVAL_VERIFIED_SESSION_SEARCH_ABORTED"));
+      };
+      signal?.addEventListener("abort", abort, { once: true });
+      this.#tail = this.#tail.then(run, run);
+    });
+    void result.catch(() => {});
+    return result;
+  }
+
+  close(): Promise<void> {
+    if (this.#closePromise) return this.#closePromise;
+    this.#closed = true;
+    this.#closePromise = this.#tail.then(() => { this.#store.close(); });
+    return this.#closePromise;
   }
 }
 

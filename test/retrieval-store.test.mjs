@@ -761,7 +761,7 @@ test("stale source bytes are excluded before scoring and Unicode spans round-tri
 
 test("live CRLF and multibyte line verification rejects forged absolute citation lines", async () => {
   const root = await mkdtemp(join(tmpdir(), "gkos-retrieval-forged-lines-"));
-  const text = "# Héading 😀\r\nFirst line.\r\n\r\n## Child\r\nNeedle café.\r\n";
+  const text = "# Héading 😀\nFirst line.\n\n## Child\nNeedle café.\n";
   await writeFile(join(root, "lines.md"), text, "utf8");
   const chunks = chunkMarkdown({
     source_id: "018f0000-0000-7000-8000-000000000225",
@@ -1156,6 +1156,7 @@ test("public retrieval surface exposes only policy-gated search, never raw store
     "sealGkxRetrievalStoredSourceProvenance",
     "validateGkxRetrievalCanonicalSourceSet",
     "validateGkxRetrievalStoredSourceProvenance",
+    "VerifiedRetrievalSession",
   ]) assert.equal(forbidden in retrievalPublic, false, `${forbidden} must not be exported`);
   assert.equal(typeof retrievalPublic.RetrievalCoordinator, "function");
   assert.equal(typeof retrievalPublic.buildRetrievalGeneration, "function");

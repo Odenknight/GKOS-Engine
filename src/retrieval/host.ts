@@ -20,8 +20,9 @@ export {
   isGkxRetrievalWriterAuthorityError,
   preflightActiveRetrievalStore,
   releaseActiveRetrievalStorePreflight,
+  VerifiedRetrievalSession,
 } from "./coordinator";
-export type { ActiveRetrievalStorePreflight } from "./coordinator";
+export type { ActiveRetrievalStorePreflight, VerifiedRetrievalSessionSearchOptions } from "./coordinator";
 export { buildGkxRetrievalGeneration, deriveGkxRetrievalProjectionManifest, openActiveRetrievalStore, SqliteRetrievalStore } from "./sqlite-store";
 // Qualification/recovery seams for the cross-generation writer handshake.
 // The retrieval-host bundle is repository-private and absent from package exports.

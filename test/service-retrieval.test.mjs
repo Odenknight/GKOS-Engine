@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,rm} from 'node:fs/promises';
+import {mkdtemp,rm,stat,utimes} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 import {once} from 'node:events';
@@ -8,6 +8,7 @@ import {GkxIndex} from '../dist/gkos-engine.mjs';
 import {createLocalServiceServer,defaultMcpAgentBinding,ServiceCredentialRegistry,MCP_PROTOCOL_VERSION} from '../dist/service-node.mjs';
 import {RetrievalCoordinator,chunkMarkdown,retrievalCanonicalDigest,detectSqliteLexicalCapability} from '../dist/retrieval.mjs';
 import {bindGkxRetrievalCandidateChunks,buildGkxRetrievalGeneration,projectGkxRetrievalCorpus} from '../dist/retrieval-host.mjs';
+import {VerifiedRetrievalSession} from '../dist/retrieval-host.mjs';
 const AT='2026-08-30T12:00:00.000Z';
 const HIDDEN='RETRIEVALHIDDENCANARY9931';
 const POLICY=retrievalCanonicalDigest({identity:'test-agent',query_ceiling:'per-authenticated-identity'});
@@ -71,6 +72,56 @@ test('native policy excludes hidden-only query from candidates/counts/citations 
   assert.ok(result.hits.every(h=>h.citation.verified&&h.citation.matched_spans.length));
   assert.equal(f.reads.some(path=>path.includes(HIDDEN)),false);
  } finally {await f.close();}
+});
+test('verified generation session serializes fresh schema-3 guards without clearance or citation bleed',async()=>{
+ const f=await retrievalFixture(),session=new VerifiedRetrievalSession(f.generation.database_path);
+ const options=ceiling=>({
+  discoverability_policy:r=>['public',...(ceiling==='secret'?['internal','secret']:ceiling==='internal'?['internal']:[])].includes(r.metadata.sensitivity)?'allow':'deny',
+  source_discoverability_policy:r=>['public',...(ceiling==='secret'?['internal','secret']:ceiling==='internal'?['internal']:[])].includes(r.metadata.sensitivity)?'allow':'deny',
+  runtime_policy_digest:POLICY,lineage_view_freshness:'fresh',
+  source_reader:async path=>Buffer.from(f.sources.find(s=>s.relativePath===path).content)
+ });
+ try {
+  const internal=await session.search({query:HIDDEN,limit:20},options('internal'));
+  assert.deepEqual(internal.hits,[]);assert.equal(internal.eligible_result_count,2);
+  assert.deepEqual(internal,await f.coordinator.search({query:HIDDEN,limit:20}),'session result is byte-for-byte equivalent to the existing verified coordinator path');
+  await session.search({query:'ceramic',limit:20},{...options('secret'),source_discoverability_policy:r=>{try{r.metadata.sensitivity='public';}catch{}return 'deny';}});
+  const secret=await session.search({query:HIDDEN,limit:20},options('secret'));
+  assert.equal(secret.hits.length,1);assert.equal(secret.hits[0].chunk.source_path,HIDDEN+'.md');assert.equal(secret.eligible_result_count,3);
+  const publicAgain=await session.search({query:'internalbodyneedle',limit:20},options('public'));
+  assert.deepEqual(publicAgain.hits,[]);assert.equal(publicAgain.eligible_result_count,1);
+  await assert.rejects(session.search({query:'ceramic',limit:20},{...options('secret'),runtime_policy_digest:retrievalCanonicalDigest({wrong:true})}),/RUNTIME_POLICY_DIGEST_MISMATCH/);
+  f.sources[0].content+=' changed after generation';
+  const stale=await session.search({query:'ceramic',limit:20},options('public'));
+  assert.deepEqual(stale.hits,[]);assert.equal(stale.projection_freshness,'stale');
+ } finally {await session.close();await f.close();}
+});
+test('verified generation session cancels queued work, drains active work, closes, and rejects generation changes',async()=>{
+ const f=await retrievalFixture(),session=new VerifiedRetrievalSession(f.generation.database_path);
+ let release;const blocked=new Promise(resolve=>{release=resolve;});let entered;
+ const started=new Promise(resolve=>{entered=resolve;});
+ const options={discoverability_policy:()=> 'allow',source_discoverability_policy:()=> 'allow',runtime_policy_digest:POLICY,lineage_view_freshness:'fresh',source_reader:async path=>{entered();await blocked;return Buffer.from(f.sources.find(s=>s.relativePath===path).content);}};
+ try {
+  const active=session.search({query:'ceramic',limit:20},options);await started;
+  const abort=new AbortController(),queued=session.search({query:'ceramic',limit:20},options,{signal:abort.signal});abort.abort();
+  await assert.rejects(queued,/SEARCH_ABORTED/);
+  const controllers=Array.from({length:31},()=>new AbortController());
+  const pending=controllers.map(controller=>session.search({query:'ceramic',limit:20},options,{signal:controller.signal}));
+  await assert.rejects(session.search({query:'ceramic',limit:20},options),/SESSION_CAPACITY/);
+  controllers.forEach(controller=>controller.abort());
+  await Promise.all(pending.map(search=>assert.rejects(search,/SEARCH_ABORTED/)));
+  await assert.rejects(session.search({query:'ceramic',limit:20},options),/SESSION_CAPACITY/);
+  const closing=session.close();
+  await assert.rejects(session.search({query:'ceramic',limit:20},options),/SESSION_CLOSED/);
+  release();assert.ok((await active).hits.length);await closing;
+ } finally {release();await session.close();await f.close();}
+
+ const changed=await retrievalFixture(),changedSession=new VerifiedRetrievalSession(changed.generation.database_path);
+ try {
+  const before=await stat(changed.generation.database_path);
+  await utimes(changed.generation.database_path,before.atime,new Date(before.mtimeMs+2000));
+  await assert.rejects(changedSession.search({query:'ceramic',limit:20},{discoverability_policy:()=> 'allow',source_discoverability_policy:()=> 'allow',runtime_policy_digest:POLICY,lineage_view_freshness:'fresh',source_reader:async path=>Buffer.from(changed.sources.find(s=>s.relativePath===path).content)}),/DATABASE_CHANGED/);
+ } finally {await changedSession.close();await changed.close();}
 });
 async function mcpFixture(sourceFiles,sensitivityCeiling='internal') {
  const f=await retrievalFixture(sourceFiles);
