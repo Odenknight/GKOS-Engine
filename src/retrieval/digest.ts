@@ -10,6 +10,11 @@ export function retrievalCodeUnitCompare(a: string, b: string): number {
 }
 
 function assertWellFormedUtf16(value: string): void {
+  const native = (value as string & { isWellFormed?: () => boolean }).isWellFormed;
+  if (native !== undefined) {
+    if (!native.call(value)) throw new TypeError("Retrieval canonical JSON rejects unpaired UTF-16 surrogates.");
+    return;
+  }
   for (let index = 0; index < value.length; index++) {
     const code = value.charCodeAt(index);
     if (code >= 0xd800 && code <= 0xdbff) {
@@ -20,6 +25,59 @@ function assertWellFormedUtf16(value: string): void {
       throw new TypeError("Retrieval canonical JSON rejects unpaired UTF-16 surrogates.");
     }
   }
+}
+
+function validateStableJsonValue(value: unknown, ancestors: Set<object>): void {
+  if (value !== null && typeof value === "object" && utilTypes.isProxy(value)) {
+    throw new TypeError("Retrieval canonical JSON rejects proxies.");
+  }
+  if (value === null || typeof value === "boolean") return;
+  if (typeof value === "string") {
+    assertWellFormedUtf16(value);
+    return;
+  }
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) throw new TypeError("Retrieval canonical JSON rejects non-finite numbers.");
+    if (Number.isInteger(value) && !Number.isSafeInteger(value)) throw new TypeError("Retrieval canonical JSON rejects unsafe integer-valued numbers.");
+    return;
+  }
+  if (typeof value !== "object") throw new TypeError(`Retrieval canonical JSON rejects ${typeof value}.`);
+  const array = Array.isArray(value);
+  if (!array) {
+    const prototype = Object.getPrototypeOf(value);
+    if (prototype !== Object.prototype && prototype !== null) throw new TypeError("Retrieval canonical JSON rejects exotic objects.");
+  }
+  if (ancestors.has(value)) throw new TypeError("Retrieval canonical JSON rejects cycles.");
+  const keys = Reflect.ownKeys(value);
+  if (array) {
+    if (keys.some((key) => typeof key !== "string" || (key !== "length" && !/^(?:0|[1-9][0-9]*)$/u.test(key))) ||
+        Object.keys(value).length !== value.length) throw new TypeError("Retrieval canonical JSON rejects sparse or extended arrays.");
+  } else if (keys.some((key) => typeof key !== "string")) {
+    throw new TypeError("Retrieval canonical JSON rejects symbol keys.");
+  }
+  ancestors.add(value);
+  try {
+    const validateProperty = (key: string): void => {
+      assertWellFormedUtf16(key);
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      if (!descriptor?.enumerable || !("value" in descriptor)) {
+        throw new TypeError(`Retrieval canonical JSON rejects accessor or non-enumerable ${array ? "array items" : "object properties"}.`);
+      }
+      validateStableJsonValue(descriptor.value, ancestors);
+    };
+    if (array) {
+      for (let index = 0; index < value.length; index++) validateProperty(String(index));
+    } else {
+      for (const key of keys as string[]) validateProperty(key);
+    }
+  } finally {
+    ancestors.delete(value);
+  }
+}
+
+/** Validate the canonical JSON data model without allocating canonical bytes. */
+export function validateStableJson(value: unknown): void {
+  validateStableJsonValue(value, new Set<object>());
 }
 
 function stableJsonValue(value: unknown, ancestors: Set<object>): string {

@@ -1374,10 +1374,22 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/retrieval/candidate-types.ts",
+      "before": "f2d0a4c401c15f579fdd20d05c08362018fd962a",
+      "after": "33408d46a5e1bb99518518d04cb8284b761b7e192b3d572c130148bf2d23623b",
+      "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
+    },
+    {
       "path": "src/retrieval/coordinator.ts",
       "before": "f7fe89a328c61bebfbfee87eb3d4bb3efdf89111",
       "after": "8fb6d7b2be27a5859cb097c8fc9f52c34eef019ac5241bea3e2923b32f10ee0a",
       "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
+    },
+    {
+      "path": "src/retrieval/digest.ts",
+      "before": "6b876d940e1705dae7ed15b7b5faa243b185958f",
+      "after": "2f481a53757bc337ce0182d73a1b6a466a9eeee93dd0abb2c14adafcd76a99dd",
+      "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
     },
     {
       "path": "src/retrieval/evaluation-executor.ts",
@@ -1430,8 +1442,8 @@
     {
       "path": "src/retrieval/sqlite-store.ts",
       "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
-      "after": "7d763a20bf5b25c5454ac3562eb351bc4cbb0f21477a110a5f606343432e9c67",
-      "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
+      "after": "fb4cebef565b394c133e4a4affc5b9c64a36196aa0e62c1a08bbf774e4d48919",
+      "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
     },
     {
       "path": "src/service/mcp.ts",
@@ -1642,6 +1654,12 @@
       "before": null,
       "after": "bc2214c5c44b159128bdb9db1b5d225e622c1b11ae16129babb5ac5dfea88a17",
       "rationale": "Negative and positive preflight tests for mandatory gates, source identity, soak length, archive digests and package inventory."
+    },
+    {
+      "path": "test/retrieval-candidate-store.test.mjs",
+      "before": "5d04a3baed3f7f9c33c031241cadf75597fa6f57",
+      "after": "b494386b90bc14769500fb373ce7339ba2eed982b316f53046c0d9ba0559915b",
+      "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
     },
     {
       "path": "test/retrieval-evaluation-cli.test.mjs",

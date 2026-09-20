@@ -154,6 +154,72 @@ test("schema-3 retains duplicate UID/path/exact multiplicity and binds parents w
   try { assert.equal(store.listCandidateSources().length, 3); } finally { store.close(); }
 });
 
+test("schema-3 candidate validation preserves the exact canonical JSON domain without invoking traps", async () => {
+  const reject = async (mutate) => {
+    const state = await mkdtemp(join(tmpdir(), "gkos-candidate-domain-"));
+    const input = await fixture(state);
+    mutate(input);
+    assert.throws(() => buildGkxRetrievalGeneration(input));
+  };
+
+  let accessorReads = 0;
+  await reject((input) => Object.defineProperty(input.candidate_chunks[0].chunk.metadata, "trap", {
+    enumerable: true,
+    get() { accessorReads++; return "never"; },
+  }));
+  assert.equal(accessorReads, 0);
+
+  let proxyReads = 0;
+  await reject((input) => {
+    input.candidate_chunks[0].chunk.metadata = new Proxy(input.candidate_chunks[0].chunk.metadata, {
+      ownKeys(target) { proxyReads++; return Reflect.ownKeys(target); },
+    });
+  });
+  assert.equal(proxyReads, 0);
+
+  await reject((input) => { delete input.candidate_chunks[0].chunk.heading_path[0]; });
+  await reject((input) => { input.candidate_chunks[0].chunk.heading_path.extra = "extended"; });
+  await reject((input) => { input.candidate_chunks[0].chunk.metadata[Symbol("hidden")] = true; });
+  await reject((input) => Object.defineProperty(input.candidate_chunks[0].chunk.metadata, "hidden", { value: true }));
+  await reject((input) => { input.candidate_chunks[0].chunk.quality_score = Number.NaN; });
+  await reject((input) => { input.candidate_chunks[0].chunk.quality_score = 9_007_199_254_740_992; });
+  await reject((input) => { input.candidate_chunks[0].chunk.metadata.title = "bad\ud800value"; });
+  await reject((input) => { input.candidate_chunks[0].chunk.metadata["bad\ud800key"] = true; });
+
+  const state = await mkdtemp(join(tmpdir(), "gkos-candidate-domain-valid-"));
+  const valid = await fixture(state);
+  const metadata = Object.assign(Object.create(null), valid.candidate_sources[0].source_metadata);
+  valid.candidate_sources[0].source_metadata = metadata;
+  for (const candidate of valid.candidate_chunks.filter((item) => item.record_key === valid.candidate_sources[0].record_key)) {
+    candidate.chunk.metadata = metadata;
+  }
+  assert.doesNotThrow(() => buildGkxRetrievalGeneration(valid), "null-prototype shared acyclic values remain valid");
+});
+
+test("schema-3 keeps interleaved duplicate-UID parent groups isolated and preserves explicit parent error priority", async () => {
+  const root = await mkdtemp(join(tmpdir(), "gkos-candidate-interleaved-"));
+  const content = note(OLD, "Repeated", "", "parent\n## Child\nchild");
+  const input = generationInput(join(root, "valid"), [
+    { relativePath: "same.md", content, createdTime: 1 },
+    { relativePath: "same.md", content, createdTime: 1 },
+  ]);
+  assert.equal(input.candidate_sources[0].source_id, input.candidate_sources[1].source_id);
+  const groups = input.candidate_sources.map((source) =>
+    input.candidate_chunks.filter((candidate) => candidate.record_key === source.record_key));
+  assert.ok(groups.every((group) => group.length >= 2));
+  input.candidate_chunks = groups[0].flatMap((_, index) => groups.flatMap((group) => group[index] ? [group[index]] : []));
+  const built = buildGkxRetrievalGeneration(input);
+  assert.equal(built.manifest.represented_candidate_source_count, 2);
+
+  const malformed = structuredClone(input);
+  const child = malformed.candidate_chunks.find((candidate) => candidate.parent_candidate_chunk_key !== null);
+  assert.ok(child);
+  child.parent_candidate_chunk_key = null;
+  malformed.state_directory = join(root, "invalid");
+  assert.throws(() => buildGkxRetrievalGeneration(malformed), /CANDIDATE_PARENT_BINDING_MISMATCH/u);
+  await assert.rejects(readdir(malformed.state_directory), { code: "ENOENT" });
+});
+
 test("schema-3 duplicate-content candidates require one identical vector payload", async () => {
   const files = [
     { relativePath: "same.md", content: note(OLD, "Repeated", "", "same body"), createdTime: 1 },
