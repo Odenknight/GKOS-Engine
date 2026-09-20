@@ -1376,7 +1376,7 @@
     {
       "path": "src/retrieval/candidate-types.ts",
       "before": "f2d0a4c401c15f579fdd20d05c08362018fd962a",
-      "after": "33408d46a5e1bb99518518d04cb8284b761b7e192b3d572c130148bf2d23623b",
+      "after": "e65761576974a1e055ebac209d4c7ae7514d0535a8c0d6eed7ff11d4f4b9f11d",
       "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
     },
     {
@@ -1388,7 +1388,7 @@
     {
       "path": "src/retrieval/digest.ts",
       "before": "6b876d940e1705dae7ed15b7b5faa243b185958f",
-      "after": "2f481a53757bc337ce0182d73a1b6a466a9eeee93dd0abb2c14adafcd76a99dd",
+      "after": "d4987308f6e4b38e3e04bd872432b0ae2f84c3e0fc4ec07d752c7a8873a7ee88",
       "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
     },
     {
@@ -1442,7 +1442,7 @@
     {
       "path": "src/retrieval/sqlite-store.ts",
       "before": "b589fd9670548ea457a3c7f733b6017809c750fd",
-      "after": "fb4cebef565b394c133e4a4affc5b9c64a36196aa0e62c1a08bbf774e4d48919",
+      "after": "194f9171fcf53a27ac6def1694af759cd1cc0ec19b173cc78d3443c2837e2328",
       "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
     },
     {
@@ -1658,7 +1658,7 @@
     {
       "path": "test/retrieval-candidate-store.test.mjs",
       "before": "5d04a3baed3f7f9c33c031241cadf75597fa6f57",
-      "after": "b494386b90bc14769500fb373ce7339ba2eed982b316f53046c0d9ba0559915b",
+      "after": "8fce0b04a281af791e9a6c4c7b731cfdefa28e82a0c82d9c1f7d2e593ea35b7a",
       "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
     },
     {
