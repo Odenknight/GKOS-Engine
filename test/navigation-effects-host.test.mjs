@@ -107,6 +107,89 @@ test('runtime observes file edits and closes resources within shutdown budget', 
   }
 });
 
+test('runtime degrades readiness on reconciliation failure and restores it after a successful retry', { timeout: 10_000 }, async t => {
+  const { options } = await fixture(t);
+  let fail = false;
+  let block = false, entered, release;
+  const blocked = new Promise(resolve => { release = resolve; });
+  const atSnapshot = new Promise(resolve => { entered = resolve; });
+  const runtime = new NodeManagedMocRuntime({ ...options, snapshot: async intent => {
+    if (fail) throw new Error('synthetic snapshot failure');
+    if (block) { entered(); await blocked; }
+    return options.snapshot(intent);
+  } });
+  const requestReconciliation = runtime.host.coordinator.requestReconciliation;
+  try {
+    assert.equal(await runtime.start(), true);
+    fail = true;
+    await assert.rejects(runtime.reconcileNow(), /synthetic snapshot failure/);
+    assert.equal(runtime.status.ready, false);
+    assert.equal(runtime.status.errorCode, 'RECONCILIATION_FAILED');
+    await new Promise(resolve => setTimeout(resolve, 150));
+    assert.equal(runtime.status.ready, false);
+    assert.equal(runtime.status.errorCode, 'RECONCILIATION_FAILED');
+    fail = false;
+    block = true;
+    const olderTick = runtime.host.coordinator.tick(0, true);
+    await atSnapshot;
+    let admitted;
+    const intentAdmitted = new Promise(resolve => { admitted = resolve; });
+    runtime.host.coordinator.requestReconciliation = async now => {
+      await requestReconciliation.call(runtime.host.coordinator, now);
+      admitted();
+    };
+    const recovery = runtime.reconcileNow();
+    await intentAdmitted;
+    release();
+    await olderTick;
+    await recovery;
+    assert.equal(runtime.status.ready, true);
+    assert.equal(runtime.status.errorCode, null);
+    assert.equal(runtime.status.pending, false);
+  } finally {
+    runtime.host.coordinator.requestReconciliation = requestReconciliation;
+    release();
+    await runtime.shutdown();
+  }
+});
+
+test('runtime requires an explicit full reconciliation to clear an event persistence failure', { timeout: 10_000 }, async t => {
+  const { options } = await fixture(t);
+  const runtime = new NodeManagedMocRuntime(options);
+  const requestReconciliation = runtime.host.coordinator.requestReconciliation;
+  try {
+    assert.equal(await runtime.start(), true);
+    runtime.host.coordinator.requestReconciliation = async () => { throw new Error('synthetic admission failure'); };
+    await assert.rejects(runtime.reconcileNow(), /synthetic admission failure/);
+    await new Promise(resolve => setTimeout(resolve, 150));
+    assert.equal(runtime.status.ready, false);
+    assert.equal(runtime.status.errorCode, 'EVENT_PERSIST_FAILED');
+    runtime.host.coordinator.requestReconciliation = requestReconciliation;
+    await runtime.reconcileNow();
+    assert.equal(runtime.status.ready, true);
+    assert.equal(runtime.status.errorCode, null);
+  } finally {
+    runtime.host.coordinator.requestReconciliation = requestReconciliation;
+    await runtime.shutdown();
+  }
+});
+
+test('runtime closes a failed watcher and continues with durable passive reconciliation', { timeout: 10_000 }, async t => {
+  const { options } = await fixture(t);
+  const runtime = new NodeManagedMocRuntime(options);
+  try {
+    assert.equal(await runtime.start(), true);
+    if (!runtime.status.watcherActive) return;
+    runtime.watcher.emit('error', new Error('synthetic watcher failure'));
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(runtime.status.watcherActive, false);
+    assert.equal(runtime.status.errorCode, 'WATCHER_FAILED');
+    assert.equal(runtime.status.running, true);
+    await runtime.reconcileNow();
+    assert.equal(runtime.status.ready, true);
+  } finally { await runtime.shutdown(); }
+});
+
 test('host preserves human bytes through successive region-managed updates', async t => {
   const { root, context, options } = await fixture(t);
   const before = 'Human prefix\r\n' + renderGeneratedMocRegion('old links', context.config.digest) + '\r\nHuman suffix\r\n';

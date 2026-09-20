@@ -1,0 +1,220 @@
+{
+  "kind": "managed-moc-qualification/1",
+  "node": "v24.18.0",
+  "platform": "win32",
+  "generated_at": "2026-09-20T19:53:38.882Z",
+  "release_qualified": false,
+  "source": {
+    "commit": "03724fd997fd11b0ebc382e23aa8c21cd0cfb1ec",
+    "dirty": true,
+    "worktree_status_sha256": "sha256:954bbbada61da9b1c18068db9f012d5f08d8f6a847d9a8d6dd739ab7411fcb8a",
+    "worktree_content_sha256": "sha256:2af3c78335d349307d299864749fca50d558e8e7584d2638da76dfa86e3dfbcb",
+    "runner_sha256": "sha256:703ccb7cb1a5d203ef8fe353e921db77f915e468a994ecc7db4f86872635652b",
+    "navigation_dist_sha256": "sha256:3d21278a4b042d8db7912ab1cb99ad5b4c9418990e60aa2e8dc272f89b4a8edb",
+    "effects_dist_sha256": "sha256:215a06cef5582d3da488212fe2727e9642ec20d5e4b317a9dcd5f1af7ae75dde",
+    "effects_node_dist_sha256": "sha256:cef9f26800b420e03491ca9d823e611881a91905151e3b1a1a56373c8ecd7ea5"
+  },
+  "limits": {
+    "synthetic_fixture_only": true,
+    "event_samples_are_sequential": true,
+    "latency_samples_retained_maximum": 10000,
+    "coordinator_queue_depth_is_status_sampled_not_internal_introspection": true,
+    "source_reads_are_not_parser_or_incremental_qualification": true,
+    "no_release_acceptance_budgets": true
+  },
+  "rows": [
+    {
+      "notes": 100,
+      "status": "OBSERVED_SCALE_SAMPLES",
+      "requested_samples": 3,
+      "completed_samples": 3,
+      "requested_soak_seconds": 0,
+      "observation_seconds": 0,
+      "restarts": 0,
+      "event_to_convergence_ms": {
+        "total_count": 3,
+        "retained_first_count": 3,
+        "retained_first_samples": [
+          1062.0873000000001,
+          1011.3438999999998,
+          1021.7605999999996
+        ],
+        "retained_first_p50": 1021.7605999999996,
+        "retained_first_p95": 1062.0873000000001,
+        "retained_first_max": 1062.0873000000001
+      },
+      "source_scanning": {
+        "snapshot_calls": 10,
+        "source_reads": 1000,
+        "source_bytes": 32954,
+        "parser_qualified": false,
+        "incremental_scanning_qualified": false
+      },
+      "coordinator_queue": {
+        "samples": 388,
+        "pendingSamples": 375,
+        "activeSamples": 94,
+        "maxOutstanding": 2,
+        "activeResourcesPeak": 68
+      },
+      "memory": {
+        "samples": 388,
+        "rss_initial_bytes": 61198336,
+        "rss_peak_bytes": 70516736
+      },
+      "final_runtime_status": {
+        "ready": true,
+        "pending": false,
+        "active": false,
+        "running": true,
+        "watcherActive": true,
+        "errorCode": null
+      }
+    },
+    {
+      "notes": 2000,
+      "status": "OBSERVED_SCALE_SAMPLES",
+      "requested_samples": 3,
+      "completed_samples": 3,
+      "requested_soak_seconds": 0,
+      "observation_seconds": 0,
+      "restarts": 0,
+      "event_to_convergence_ms": {
+        "total_count": 3,
+        "retained_first_count": 3,
+        "retained_first_samples": [
+          1359.4388,
+          1335.0150999999987,
+          1241.1666999999998
+        ],
+        "retained_first_p50": 1335.0150999999987,
+        "retained_first_p95": 1359.4388,
+        "retained_first_max": 1359.4388
+      },
+      "source_scanning": {
+        "snapshot_calls": 10,
+        "source_reads": 20000,
+        "source_bytes": 688954,
+        "parser_qualified": false,
+        "incremental_scanning_qualified": false
+      },
+      "coordinator_queue": {
+        "samples": 640,
+        "pendingSamples": 554,
+        "activeSamples": 275,
+        "maxOutstanding": 2,
+        "activeResourcesPeak": 68
+      },
+      "memory": {
+        "samples": 640,
+        "rss_initial_bytes": 70782976,
+        "rss_peak_bytes": 165765120
+      },
+      "final_runtime_status": {
+        "ready": true,
+        "pending": false,
+        "active": false,
+        "running": true,
+        "watcherActive": true,
+        "errorCode": null
+      }
+    },
+    {
+      "notes": 10000,
+      "status": "OBSERVED_SCALE_SAMPLES",
+      "requested_samples": 3,
+      "completed_samples": 3,
+      "requested_soak_seconds": 0,
+      "observation_seconds": 0,
+      "restarts": 0,
+      "event_to_convergence_ms": {
+        "total_count": 3,
+        "retained_first_count": 3,
+        "retained_first_samples": [
+          3023.246500000001,
+          2694.0805,
+          2670.5857000000033
+        ],
+        "retained_first_p50": 2694.0805,
+        "retained_first_p95": 3023.246500000001,
+        "retained_first_max": 3023.246500000001
+      },
+      "source_scanning": {
+        "snapshot_calls": 10,
+        "source_reads": 100000,
+        "source_bytes": 3488954,
+        "parser_qualified": false,
+        "incremental_scanning_qualified": false
+      },
+      "coordinator_queue": {
+        "samples": 1687,
+        "pendingSamples": 1263,
+        "activeSamples": 1072,
+        "maxOutstanding": 2,
+        "activeResourcesPeak": 68
+      },
+      "memory": {
+        "samples": 1687,
+        "rss_initial_bytes": 187068416,
+        "rss_peak_bytes": 320102400
+      },
+      "final_runtime_status": {
+        "ready": true,
+        "pending": false,
+        "active": false,
+        "running": true,
+        "watcherActive": true,
+        "errorCode": null
+      }
+    },
+    {
+      "notes": 50000,
+      "status": "OBSERVED_SCALE_SAMPLES",
+      "requested_samples": 3,
+      "completed_samples": 3,
+      "requested_soak_seconds": 0,
+      "observation_seconds": 0,
+      "restarts": 0,
+      "event_to_convergence_ms": {
+        "total_count": 3,
+        "retained_first_count": 3,
+        "retained_first_samples": [
+          12664.903300000005,
+          9872.342100000009,
+          10165.143699999986
+        ],
+        "retained_first_p50": 10165.143699999986,
+        "retained_first_p95": 12664.903300000005,
+        "retained_first_max": 12664.903300000005
+      },
+      "source_scanning": {
+        "snapshot_calls": 10,
+        "source_reads": 500000,
+        "source_bytes": 17888954,
+        "parser_qualified": false,
+        "incremental_scanning_qualified": false
+      },
+      "coordinator_queue": {
+        "samples": 7705,
+        "pendingSamples": 5433,
+        "activeSamples": 5276,
+        "maxOutstanding": 2,
+        "activeResourcesPeak": 68
+      },
+      "memory": {
+        "samples": 7705,
+        "rss_initial_bytes": 300638208,
+        "rss_peak_bytes": 739516416
+      },
+      "final_runtime_status": {
+        "ready": true,
+        "pending": false,
+        "active": false,
+        "running": true,
+        "watcherActive": true,
+        "errorCode": null
+      }
+    }
+  ],
+  "receipt_sha256": "sha256:c784ff0f838251875ee8ff2a2b65e855b363ccff7d9056baeff2fbd1df160459"
+}
