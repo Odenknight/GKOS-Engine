@@ -101,6 +101,9 @@ export class NodeManagedMocRuntime {
     }
     try {
       await this.host.coordinator.tick(this.now(), true);
+      // The first call may only have joined an older active pass. In that case
+      // one more pass necessarily includes our already-durable full intent.
+      if (this.host.coordinator.status.pending) await this.host.coordinator.tick(this.now(), true);
       this.clearRecoveredError(true);
     } catch (error) {
       if (this.errorCode !== "EVENT_PERSIST_FAILED") this.errorCode = "RECONCILIATION_FAILED";

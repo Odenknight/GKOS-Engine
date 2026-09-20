@@ -110,10 +110,15 @@ test('runtime observes file edits and closes resources within shutdown budget', 
 test('runtime degrades readiness on reconciliation failure and restores it after a successful retry', { timeout: 10_000 }, async t => {
   const { options } = await fixture(t);
   let fail = false;
+  let block = false, entered, release;
+  const blocked = new Promise(resolve => { release = resolve; });
+  const atSnapshot = new Promise(resolve => { entered = resolve; });
   const runtime = new NodeManagedMocRuntime({ ...options, snapshot: async intent => {
     if (fail) throw new Error('synthetic snapshot failure');
+    if (block) { entered(); await blocked; }
     return options.snapshot(intent);
   } });
+  const requestReconciliation = runtime.host.coordinator.requestReconciliation;
   try {
     assert.equal(await runtime.start(), true);
     fail = true;
@@ -124,10 +129,28 @@ test('runtime degrades readiness on reconciliation failure and restores it after
     assert.equal(runtime.status.ready, false);
     assert.equal(runtime.status.errorCode, 'RECONCILIATION_FAILED');
     fail = false;
-    await runtime.reconcileNow();
+    block = true;
+    const olderTick = runtime.host.coordinator.tick(0, true);
+    await atSnapshot;
+    let admitted;
+    const intentAdmitted = new Promise(resolve => { admitted = resolve; });
+    runtime.host.coordinator.requestReconciliation = async now => {
+      await requestReconciliation.call(runtime.host.coordinator, now);
+      admitted();
+    };
+    const recovery = runtime.reconcileNow();
+    await intentAdmitted;
+    release();
+    await olderTick;
+    await recovery;
     assert.equal(runtime.status.ready, true);
     assert.equal(runtime.status.errorCode, null);
-  } finally { await runtime.shutdown(); }
+    assert.equal(runtime.status.pending, false);
+  } finally {
+    runtime.host.coordinator.requestReconciliation = requestReconciliation;
+    release();
+    await runtime.shutdown();
+  }
 });
 
 test('runtime requires an explicit full reconciliation to clear an event persistence failure', { timeout: 10_000 }, async t => {

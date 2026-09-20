@@ -22,6 +22,14 @@ fixtures even when assertions fail. A later independent review found source-drif
 errors lost original bindings/partial rows; a regression now verifies preservation.
 These failed draft attempts are not qualification passes.
 
+Hosted native audit at initial candidate `cd77485` passed Linux Node 22/24 but
+failed Windows Node 22/24 in readiness recovery ([run 35533969755](https://github.com/Odenknight/GKOS-Engine/actions/runs/35533969755)).
+`reconcileNow()` could join an older active pass and return before consuming its
+own newly persisted full intent. The correction allows one additional forced
+pass when still pending, not an unbounded drain loop. A controlled regression
+holds the older snapshot until the new full intent is durably admitted. The
+superseded full local/hosted runs were stopped; no full pass is claimed for them.
+
 ## Measured synthetic observations
 
 Native Windows, Node v24.18.0, one managed MOC. All observations verified the
