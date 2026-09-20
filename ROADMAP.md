@@ -1,6 +1,6 @@
 # GKOS-Engine roadmap
 
-Updated 2026-09-06 for the 2.2.0 source line. This is a delivery roadmap, not a release announcement or a promise of dates. See [current capabilities](docs/CURRENT_CAPABILITIES.md) for what the code can do today.
+Updated 2026-09-20 for the 2.2.0 source line. This is a delivery roadmap, not a release announcement or a promise of dates. See [current capabilities](docs/CURRENT_CAPABILITIES.md) for what the code can do today.
 
 The goal is dependable, local knowledge tooling with one deterministic interpretation of structured notes. Models are optional. Permission to change a note is separate from generating a suggestion.
 
@@ -17,6 +17,7 @@ The goal is dependable, local knowledge tooling with one deterministic interpret
 - Separately versioned, opt-in Effects planning and a cooperative-vault Node transaction executor.
 - Deterministic managed-MOC batches, generated-region preservation, before-image archives, receipts, rollback and recovery.
 - Durable event coordination, startup/passive reconciliation, ownership advancement recovery and an explicit Node host/runtime.
+- Dedicated durable `NO_CHANGE` audit receipts for byte-identical managed-MOC host passes, including idempotent replay, process-exit recovery and corrupt/missing-artifact refusal. The bounded file-sync/readback protocol is implemented; broader native durability remains unqualified.
 - Model-free tag/link/MOC proposals and bounded optional LLM assistance, off by default and review-only.
 - Synthetic host examples, purity/security/recovery tests and cross-platform CI. These do not complete the remaining qualification gates.
 
@@ -24,7 +25,6 @@ The goal is dependable, local knowledge tooling with one deterministic interpret
 
 | Work | Why it matters | Completion evidence |
 | --- | --- | --- |
-| Dedicated durable no-op audit receipts | Explain unchanged MOC runs without rewriting source | Bounded idempotent records, replay/corruption tests, no false write claims |
 | End-to-end performance and incremental parsing | Measure actual edits, not only planner speed | Raw samples, parsing counts, queue/memory/handle data at 100, 2,000, 10,000 and 50,000 notes |
 | 24-hour watcher/reconciliation soak | Find loops, missed work, leaks and journal growth | Reproducible synthetic workload, restart evidence and bounded resources |
 | Native durability qualification | State what each filesystem/OS guarantees | File/directory flush and replace evidence, failure matrices, unsupported cases |
@@ -34,7 +34,14 @@ Proposed targets: P95 below 2 seconds for a single ordinary edit in a 2,000-note
 
 Track Engine work in [issue #44](https://github.com/Odenknight/GKOS-Engine/issues/44) and settings wiring in [issue #36](https://github.com/Odenknight/GKOS-Engine/issues/36). Merging experimental source and publishing a supported release are separate decisions.
 
+The durable no-change item formerly listed here is implemented in current source; see the [protocol and limits](docs/MANAGED-MOC-NO-CHANGE-AUDIT.md). It does not satisfy the scale, soak, platform durability or consumer gates above. A related derived-state watcher smoke at 2,000 notes took 12,648.90 ms and failed its 2,000 ms budget, but it was not an end-to-end managed-MOC measurement. No qualifying 100/2,000/10,000/50,000-note managed-MOC result or 24-hour soak is claimed. See the [remaining-work review](evidence/2026-09-20-moc-remaining-work-review.md).
+
 ## Consumer work: Kosmos-Oden
+
+A bounded synthetic managed-MOC observation runner now measures all four scale
+tiers and restart smoke behavior. [September 20 raw observations](evidence/2026-09-20-moc-observation-review.md)
+do not close the release gates: they are sequential edits with a full-reading
+fixture provider, not incremental-parser, burst, resource-budget or 24-hour proof.
 
 Kosmos has existing Effects settings, adoption and adapter foundations. Extend them rather than recreate Engine semantics:
 
@@ -45,6 +52,8 @@ Kosmos has existing Effects settings, adoption and adapter foundations. Extend t
 5. Platform/browser/security/soak acceptance and an exact released Engine pin.
 
 These are **not enabled Engine MCP write tools today**. Deletion, cross-agent writes and direct agent MOC writes remain denied by default. Follow the [Kosmos handoff](https://github.com/Odenknight/Kosmos-Oden/issues/40); no Kosmos product version, release or owner-vault activation is inferred here.
+
+Prepared Effects execution and inspection-bound recovery are already proposed in open Engine [PR #74](https://github.com/Odenknight/GKOS-Engine/pull/74), stacked on PRs #72-#73 and feeding open PR #75 and the #77-#85 chain. Reconcile that open stack against current `main` before implementing overlapping host APIs; its branch evidence does not qualify current `main`, Kosmos or a released artifact.
 
 ## Rust and interoperability
 

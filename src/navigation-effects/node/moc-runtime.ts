@@ -22,6 +22,16 @@ export class NodeManagedMocRuntime {
     } });
   }
   private now() { return Math.floor(performance.now()); }
+  private closeSignals() {
+    this.running = false;
+    this.watcher?.close();
+    this.watcher = undefined;
+    if (this.timer) clearInterval(this.timer);
+    this.timer = undefined;
+  }
+  private clearRecoveredError(explicitFull = false) {
+    if (!this.host.coordinator.status.pending && (this.errorCode === "RECONCILIATION_FAILED" || explicitFull && this.errorCode === "EVENT_PERSIST_FAILED")) this.errorCode = null;
+  }
   async start(): Promise<boolean> {
     if (this.running) throw new Error("MOC_RUNTIME_ALREADY_STARTED");
     if (!await this.host.start(this.now())) return false;
@@ -57,29 +67,49 @@ export class NodeManagedMocRuntime {
           finally { this.eventPending = false; }
         })();
       });
-      this.watcher.on("error", () => { this.errorCode = "WATCHER_FAILED"; void this.host.coordinator.requestReconciliation(this.now()).catch(() => {}); });
+      this.watcher.on("error", () => {
+        this.watcher?.close();
+        this.watcher = undefined;
+        this.errorCode = "WATCHER_FAILED";
+        void this.host.coordinator.requestReconciliation(this.now()).catch(() => { this.errorCode = "EVENT_PERSIST_FAILED"; });
+      });
     } catch {
       // Passive reconciliation remains useful on hosts without recursive watch.
       this.errorCode = "WATCHER_UNAVAILABLE";
-      await this.host.coordinator.requestReconciliation(this.now());
+      try { await this.host.coordinator.requestReconciliation(this.now()); }
+      catch (error) {
+        this.closeSignals();
+        await this.host.shutdown().catch(() => {});
+        throw error;
+      }
     }
     this.timer = setInterval(() => {
       if (this.tickActive || !this.running) return;
       this.tickActive = true;
-      void this.host.coordinator.tick(this.now()).catch(() => { this.errorCode = "RECONCILIATION_FAILED"; }).finally(() => { this.tickActive = false; });
+      void this.host.coordinator.tick(this.now())
+        .then(() => { this.clearRecoveredError(); })
+        .catch(() => { if (this.errorCode !== "EVENT_PERSIST_FAILED") this.errorCode = "RECONCILIATION_FAILED"; })
+        .finally(() => { this.tickActive = false; });
     }, 100);
     return true;
   }
   async reconcileNow(): Promise<void> {
-    await this.host.coordinator.requestReconciliation(this.now());
-    await this.host.coordinator.tick(this.now(), true);
+    try { await this.host.coordinator.requestReconciliation(this.now()); }
+    catch (error) {
+      this.errorCode = "EVENT_PERSIST_FAILED";
+      throw error;
+    }
+    try {
+      await this.host.coordinator.tick(this.now(), true);
+      this.clearRecoveredError(true);
+    } catch (error) {
+      if (this.errorCode !== "EVENT_PERSIST_FAILED") this.errorCode = "RECONCILIATION_FAILED";
+      throw error;
+    }
   }
   async shutdown(budgetMs = 5000): Promise<{ clean: boolean }> {
     if (!Number.isFinite(budgetMs) || budgetMs < 1 || budgetMs > 60_000) throw new Error("INVALID_SHUTDOWN_BUDGET");
-    this.running = false;
-    this.watcher?.close();
-    this.watcher = undefined;
-    if (this.timer) clearInterval(this.timer);
+    this.closeSignals();
     let timeout: ReturnType<typeof setTimeout> | undefined;
     try {
       return await Promise.race([
@@ -92,5 +122,8 @@ export class NodeManagedMocRuntime {
       ]);
     } finally { if (timeout) clearTimeout(timeout); }
   }
-  get status() { return { ...this.host.coordinator.status, running: this.running, watcherActive: !!this.watcher, errorCode: this.errorCode }; }
+  get status() {
+    const coordinator = this.host.coordinator.status;
+    return { ...coordinator, ready: coordinator.ready && this.running && this.errorCode !== "RECONCILIATION_FAILED" && this.errorCode !== "EVENT_PERSIST_FAILED", running: this.running, watcherActive: !!this.watcher, errorCode: this.errorCode };
+  }
 }
