@@ -920,9 +920,13 @@ function validateCandidateGenerationBindings(
       if (!parent || parent.record_key !== candidate.record_key || parent.chunk.chunk_id !== nestedParent) throw new Error("CANDIDATE_PARENT_BINDING_MISMATCH");
     }
   }
-  for (const recordKey of representedRecordKeys) {
-    validateParentBindings(chunks.filter((item) => item.record_key === recordKey).map((item) => item.chunk));
+  const chunksByRecord = new Map<string, RetrievalChunk[]>();
+  for (const candidate of chunks) {
+    const recordChunks = chunksByRecord.get(candidate.record_key) ?? [];
+    recordChunks.push(candidate.chunk);
+    chunksByRecord.set(candidate.record_key, recordChunks);
   }
+  for (const recordChunks of chunksByRecord.values()) validateParentBindings(recordChunks);
 
   if (eligibleKeys.some((key) => typeof key !== "string" || !GENERATION_CANDIDATE_CHUNK_KEY_RE.test(key)) ||
       new Set(eligibleKeys).size !== eligibleKeys.length || eligibleKeys.some((key) => !chunkByKey.has(key))) {

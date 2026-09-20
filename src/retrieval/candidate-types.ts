@@ -4,7 +4,7 @@ import { types as utilTypes } from "node:util";
 import type { GkxOrigin } from "../types";
 import type { GkxCanonicalResolutionBasis } from "../lineage-receipts";
 import { isValidRetrievalSourcePath, validateRetrievalChunk, validateRetrievalChunkMetadata } from "./chunker";
-import { retrievalCanonicalDigest, retrievalCodeUnitCompare, stableJson } from "./digest";
+import { retrievalCanonicalDigest, retrievalCodeUnitCompare, stableJson, validateStableJson } from "./digest";
 import type {
   GkxRetrievalAssertionOrigin,
   GkxRetrievalValidityOrigin,
@@ -50,12 +50,12 @@ function exactPlainRecord(value: unknown, fields: readonly string[], code: strin
   }
   // Recursively reject proxies, accessors, sparse arrays, cycles, exotic
   // objects, unsafe numbers, and malformed UTF-16 before semantic reads.
-  try { stableJson(value); } catch { throw new TypeError(code); }
+  try { validateStableJson(value); } catch { throw new TypeError(code); }
 }
 
 function denseArray(value: unknown, code: string): unknown[] {
   if (!Array.isArray(value)) throw new TypeError(code);
-  try { stableJson(value); } catch { throw new TypeError(code); }
+  try { validateStableJson(value); } catch { throw new TypeError(code); }
   return value;
 }
 
