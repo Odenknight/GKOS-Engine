@@ -1,5 +1,5 @@
 import { validateRetrievalFilters } from "../retrieval/filters";
-import { lexicalQueryClauses } from "../retrieval/lexical";
+import { lexicalCitationSpans, lexicalQueryClauses, lexicalScanMatches } from "../retrieval/lexical";
 import type { ServiceRetrievalSearch } from "./retrieval";
 import type { ServiceGraphitiExecutionSearch } from "./graphiti-search";
 import { GRAPHITI_QUERY_CONTRACT_VERSION, type GraphitiQueryResult } from "../graphiti-query-contract";
@@ -84,7 +84,7 @@ const PARAM_HELP: Readonly<Record<string, { expected: string; hint: string }>> =
 });
 
 function parameterHelp(tool: string, field: string): { expected: string; hint: string } {
-  const key = field === "limit" && (tool === "gkos_search" || tool === "gkos_graphiti_search") ? "search_limit" :
+  const key = field === "limit" && (tool === "gkos_search" || tool === "gkos_search_lexical_v1" || tool === "gkos_graphiti_search") ? "search_limit" :
     field === "scope_ref" && tool === "gkos_navigation_discover" ? "discovery_scope" : field;
   return Object.hasOwn(PARAM_HELP, key) ? PARAM_HELP[key] : PARAM_HELP.$;
 }
@@ -100,6 +100,7 @@ export const SERVICE_MCP_TOOLS: readonly ServiceMcpTool[] = Object.freeze([
   { name: "gkos_note_read", title: "Read an authorized note body", description: "Observatory extension: paginated raw Markdown from a current authorized source snapshot, using a session-issued record reference. cursor is required and nullable. References bind the MCP session, generation and source bytes; recover a known canonical path with gkos_record_resolve. Includes frontmatter; record-level authorization, no per-span redaction.", inputSchema: { type: "object", additionalProperties: false, properties: { record_ref: recordRefSchema, cursor: { type: ["string", "null"] }, limit_bytes: { type: "integer", minimum: 4, maximum: 16384 } }, required: ["record_ref", "cursor", "limit_bytes"] }, annotations },
   { name: "gkos_record_resolve", title: "Resolve an admitted canonical path", description: "Observatory extension: resolve an exact known canonical vault-relative path to a current session-issued read reference, without enumeration. A path is a locator, not identity: renames/path reuse can change its meaning. Optional expected_uid guards a previously known UID; UIDs are not proof of uniqueness or authorship. Missing, restricted, moved and UID-mismatched targets share one non-disclosing refusal.", inputSchema: { type: "object", additionalProperties: false, properties: { canonical_path: { type: "string", minLength: 1, maxLength: 4096 }, expected_uid: { type: ["string", "null"], minLength: 1, maxLength: 128 } }, required: ["canonical_path"] }, annotations },
   { name: "gkos_search", title: "Search authorized note text", description: "Observatory extension: native Engine retrieval over authorized indexed chunks, with verified citations and actual ranking/stage confidence. Optional path_include explicitly narrows the search using native portable globs; omitted means the complete authorized view. Paginates a bounded top-100 retrieval window; only an operator-configured local ONNX embedding provider may be enabled; remote providers and reranking remain disabled.", inputSchema: { type: "object", additionalProperties: false, properties: { path_include: { type: "array", minItems: 1, maxItems: 16, items: { type: "string", minLength: 1, maxLength: 512 } }, query: { type: "string", minLength: 1, maxLength: 256 }, cursor: { type: ["string", "null"] }, limit: { type: "integer", minimum: 1, maximum: 50 } }, required: ["query", "cursor", "limit"] }, annotations },
+  { name: "gkos_search_lexical_v1", title: "Exhaust authorized note text lexically", description: "Explicit content-only lexical discovery over every source in the current authorized snapshot. It is independently paginated and never a fallback from strict native retrieval. Source identity and exact bytes remain bound and verified; lineage/currentness are deliberately unknown because this route does not relax or reinterpret strict authorized-view consistency.", inputSchema: { type: "object", additionalProperties: false, properties: { query: { type: "string", minLength: 1, maxLength: 256 }, cursor: { type: ["string", "null"] }, limit: { type: "integer", minimum: 1, maximum: 50 } }, required: ["query", "cursor", "limit"] }, annotations },
 ].map(tool => ({ ...tool, inputSchema: { ...tool.inputSchema, "x-gkos-param-help": PARAM_HELP.$, properties: Object.fromEntries(
   Object.entries(tool.inputSchema.properties).map(([field, schema]) => [field, {
     ...schema, "x-gkos-param-help": parameterHelp(tool.name, field),
@@ -618,7 +619,7 @@ export class ServiceMcpRuntime {
       if (!exactObject(args, [])) return fail("GKOS_P6_INVALID_PARAMS");
       const navigationReady = !!context.navigationConfig && !!context.sourceRecords;
       const names = navigationReady ? CAPABILITY_NAMES : ["capability.read.self"];
-      const contentNames = context.sourceRecords ? ["note.content.read", "record.locator.resolve", ...(context.retrievalSearch ? ["note.fulltext.search"] : [])] : [];
+      const contentNames = context.sourceRecords ? ["note.content.read", "record.locator.resolve", "note.lexical.exhaustive.v1", ...(context.retrievalSearch ? ["note.fulltext.search"] : [])] : [];
       const discovery = {
         version: "observatory.discovery/1",
         invalid_params_contract: { contract_version: PARAM_ERROR_CONTRACT_VERSION, max_param_errors: PARAM_ERROR_LIMIT,
@@ -739,6 +740,47 @@ export class ServiceMcpRuntime {
       if (!checked) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
       return { result: seal({ ...common(context, requestId), extension_version: "observatory.mcp-graphiti.v0",
         binding: checked.result.binding, semantic_support: "unverified", items: checked.result.hits }), paths: checked.paths, isError: false };
+    }
+    if (tool === "gkos_search_lexical_v1") {
+      if (!exactObject(args, ["query", "cursor", "limit"]) || typeof input.query !== "string" || !input.query.trim() || input.query.length > 256 ||
+          Buffer.byteLength(input.query, "utf8") > 1024 || !(input.cursor === null || typeof input.cursor === "string") ||
+          !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 50 ||
+          Buffer.from(input.query, "utf8").toString("utf8") !== input.query || /[\u0000-\u001f\u007f]/u.test(input.query)) return fail("GKOS_P6_INVALID_PARAMS");
+      const query = input.query.trim();
+      if (query.split(/\s+/u).length > 8) return fail("GKOS_P6_INVALID_PARAMS");
+      try { lexicalQueryClauses(query); } catch { return fail("GKOS_P6_INVALID_PARAMS"); }
+      if (!context.policyDigest) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
+      const records = authorizedContent(context).sort((left, right) => left.node.path < right.node.path ? -1 : left.node.path > right.node.path ? 1 : 0);
+      const identities = new Set<string>();
+      for (const record of records) {
+        const uid = record.node.gkx?.uid;
+        if (typeof uid !== "string" || !uid || identities.has(uid)) return fail("GKOS_P6_AUTHORIZED_VIEW_CONFLICT");
+        identities.add(uid);
+      }
+      const binding = {
+        identity_digest: digest(authorityBinding(context)), policy_digest: context.policyDigest,
+        source_snapshot_digest: contentSnapshot(context, records), query_digest: digest({ query, ordering: "canonical_path_code_unit_v1" }),
+        ordering: "canonical_path_code_unit_v1",
+      };
+      const scope = digest(binding);
+      const pagination = paginationStart(session, input.cursor, "search_lexical_v1", scope, context.generation, binding.source_snapshot_digest);
+      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+      const matches = records.filter((record) => lexicalScanMatches({ text: record.content, token_count: 0 }, query));
+      const selected = matches.slice(pagination.offset, pagination.offset + Number(input.limit));
+      const items = selected.map((record) => ({
+        record_ref: issueRecord(session, record.node, context, bindings), canonical_path: record.node.path,
+        source_id: record.node.gkx!.uid, source_digest: record.sourceDigest,
+        matched_spans: lexicalCitationSpans(record.content, query),
+        authored_status: "unknown", visible_lineage_status: "unknown", currentness_basis: "not_evaluated",
+        resolution_complete_within_scope: false,
+      }));
+      const nextOffset = pagination.offset + items.length < matches.length ? pagination.offset + items.length : undefined;
+      const complete = nextOffset === undefined;
+      return { result: seal({ ...common(context, requestId), extension_version: "observatory.mcp-lexical.v1",
+        route_status: matches.length ? "succeeded" : "empty", query, binding, items,
+        truncated: !complete, complete_within_scope: complete,
+        page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "search_lexical_v1", scope, nextOffset, "", binding.source_snapshot_digest),
+      }), paths: items.map((item) => item.canonical_path), isError: false };
     }
     if (tool === "gkos_search") {
       if ((!exactObject(args, ["query", "cursor", "limit"]) && !exactObject(args, ["query", "cursor", "limit", "path_include"])) || typeof input.query !== "string" || !input.query.trim() || input.query.length > 256 || Buffer.byteLength(input.query, "utf8") > 1024 || !(input.cursor === null || typeof input.cursor === "string") || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 50) return fail("GKOS_P6_INVALID_PARAMS");

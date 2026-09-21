@@ -97,7 +97,7 @@ function sortedUnique(values: readonly string[]): string[] {
  * is reparsed, no candidate identity is invented, and no physical key escapes
  * the returned internal eligibility sets.
  */
-export function buildGkxRetrievalAuthorizedCandidateView(
+function buildAuthorizedCandidateViewInternal(
   candidateSources: readonly GkxRetrievalCandidateSource[],
   declarations: readonly GkxRetrievalCandidateDeclaration[],
   candidateChunks: readonly GkxRetrievalCandidateChunk[],
@@ -286,13 +286,24 @@ export function buildGkxRetrievalAuthorizedCandidateView(
   };
 }
 
+export function buildGkxRetrievalAuthorizedCandidateView(
+  candidateSources: readonly GkxRetrievalCandidateSource[], declarations: readonly GkxRetrievalCandidateDeclaration[],
+  candidateChunks: readonly GkxRetrievalCandidateChunk[], normalizedAsOf: string | null,
+): GkxRetrievalAuthorizedCandidateView {
+  try { return buildAuthorizedCandidateViewInternal(candidateSources, declarations, candidateChunks, normalizedAsOf); }
+  catch (error) {
+    if (error instanceof AuthorizedViewConflictError) throw new Error(AUTHORIZED_VIEW_CONFLICT);
+    throw error;
+  }
+}
+
 /** Trusted-host-only diagnostic. Keep this out of participant-visible bundles and logs. */
 export function diagnoseGkxRetrievalAuthorizedCandidateView(
   candidateSources: readonly GkxRetrievalCandidateSource[], declarations: readonly GkxRetrievalCandidateDeclaration[],
   candidateChunks: readonly GkxRetrievalCandidateChunk[], normalizedAsOf: string | null,
 ): GkxRetrievalAuthorizedViewDiagnostic {
   try {
-    buildGkxRetrievalAuthorizedCandidateView(candidateSources, declarations, candidateChunks, normalizedAsOf);
+    buildAuthorizedCandidateViewInternal(candidateSources, declarations, candidateChunks, normalizedAsOf);
     return { contract_version: "gkos-retrieval-authorized-view-diagnostic/1.0.0", outcome: "valid", conflict_class: null, offending_record_keys: [] };
   } catch (error) {
     if (!(error instanceof AuthorizedViewConflictError)) throw error;

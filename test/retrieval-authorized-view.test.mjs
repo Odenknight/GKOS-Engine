@@ -140,6 +140,23 @@ test("protected offline diagnostic names the synthetic conflict while participan
   await assertGenericConflict(built);
 });
 
+test("protected diagnostic identifies an authored relationship ambiguous at basename/title", async () => {
+  const built = await buildCorpus([
+    source("Project One/Decision.md", note(OLD, "Shared Decision", "2026-07-01T00:00:00Z"), "2026-07-01T00:00:00Z"),
+    source("Project_Two/Decision.md", note(NEW, "Shared Decision", "2026-07-02T00:00:00Z"), "2026-07-02T00:00:00Z"),
+    source("review.md", note("018f0000-0000-7000-8000-000000000803", "Review", "2026-08-01T00:00:00Z", {
+      extra: "relationships:\n  related_to:\n    - target: \"Shared Decision\"\n      origin: \"authored\"\n",
+    }), "2026-08-01T00:00:00Z"),
+  ]);
+  const result = diagnoseGkxRetrievalAuthorizedCandidateView(
+    built.input.candidate_sources, built.input.candidate_declarations, built.input.candidate_chunks,
+    "2026-10-01T00:00:00.000Z",
+  );
+  assert.equal(result.conflict_class, "ambiguous_declaration");
+  assert.equal(result.offending_record_keys.length, 3);
+  await assertGenericConflict(built);
+});
+
 function coordinator(built, {
   sourcePolicy = (record) => record.metadata.sensitivity === "public" ? "allow" : "deny",
   chunkPolicy = (record) => record.metadata.sensitivity === "public" ? "allow" : "deny",
@@ -241,7 +258,8 @@ test("Decision-A all-visible lineage branch returns one generic conflict before 
   const opened = coordinator(built, { counters, vectorProvider, rerankProvider });
   await assert.rejects(
     opened.service.search({ query: "Needle", as_of: "2026-10-01T00:00Z" }),
-    (error) => error instanceof Error && error.message === "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT",
+    (error) => error instanceof Error && error.message === "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT" &&
+      Object.keys(error).length === 0 && JSON.stringify(error) === "{}",
   );
   assert.deepEqual(counters, { source_reads: 0, vector_calls: 0, rerank_calls: 0 });
   opened.service.close();

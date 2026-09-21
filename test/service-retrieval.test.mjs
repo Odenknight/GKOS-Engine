@@ -175,6 +175,29 @@ test('MCP delegates to the actual native lexical pipeline, preserves ranked veri
   assert.equal(JSON.stringify(hidden.structuredContent.retrieval).includes(HIDDEN),false);
  } finally {await f.close();}
 });
+test('explicit lexical v1 exhausts more than 100 authorized sources with stable complete paging',async()=>{
+ const many=Array.from({length:125},(_,index)=>{
+  const suffix=(index+1).toString(16).padStart(12,'0');
+  return {relativePath:`Corpus/Record-${String(index+1).padStart(3,'0')}.md`,extension:'md',createdTime:Date.parse(AT),
+   content:note(`550e8400-e29b-41d4-a716-${suffix}`,`Record ${index+1}`,'public',`meridian exhaustive marker ${index+1}.`)};
+ });
+ const f=await mcpFixture(many,'internal');
+ try {
+  const paths=[];let cursor=null;let last;
+  do {
+   const response=await f.call('gkos_search_lexical_v1',{query:'meridian exhaustive marker',cursor,limit:17});
+   assert.equal(response.isError,false);last=response.structuredContent;
+   assert.equal(last.extension_version,'observatory.mcp-lexical.v1');
+   assert.ok(last.items.every(item=>item.visible_lineage_status==='unknown'&&item.resolution_complete_within_scope===false));
+   paths.push(...last.items.map(item=>item.canonical_path));cursor=last.page.next_cursor;
+  } while(cursor);
+  assert.equal(paths.length,125);assert.equal(new Set(paths).size,125);
+  assert.deepEqual(paths,[...paths].sort());
+  assert.equal(last.complete_within_scope,true);assert.equal(last.truncated,false);
+  const changed=await f.call('gkos_search_lexical_v1',{query:'different',cursor:last.page.next_cursor,limit:17});
+  assert.equal(changed.isError,false,'null final cursor starts a new query');
+ } finally {await f.close();}
+});
 test('native MCP paging preserves rank and refuses changed-query and changed-source cursors',async()=>{
  const f=await mcpFixture();
  try {
@@ -204,6 +227,9 @@ test('explicit native path scope can avoid authored conflicts without changing w
   const unscoped=await f.call('gkos_search',{query:'ceramic resonance',cursor:null,limit:10});
   assert.equal(unscoped.isError,true,'default whole-vault scope must preserve refusal, not silently omit conflicts');
   assert.equal(unscoped.structuredContent.error_code,'GKOS_P6_AUTHORIZED_VIEW_CONFLICT');
+  const lexical=await f.call('gkos_search_lexical_v1',{query:'ceramic resonance',cursor:null,limit:10});
+  assert.equal(lexical.isError,true,'content discovery retains shared source identity conflicts');
+  assert.equal(lexical.structuredContent.error_code,'GKOS_P6_AUTHORIZED_VIEW_CONFLICT');
   for(const path_include of [[], null, "Healthy/**", ["../outside"], ["/absolute"], ["Healthy\\bad"], Array(17).fill("Healthy/**")]) {
    const invalid=await f.call('gkos_search',{query:'ceramic resonance',cursor:null,limit:10,path_include});
    assert.equal(invalid.isError,true);assert.equal(invalid.structuredContent.error_code,'GKOS_P6_INVALID_PARAMS');
