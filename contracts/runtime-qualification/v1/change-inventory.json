@@ -672,6 +672,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "docs/AUTHORIZED-LEXICAL-DISCOVERY-V1.md",
+      "before": null,
+      "after": "9cfa77acba73c205cc9d3434a7fdeb209bb938326f8f0723f13545ec94c4079e",
+      "rationale": "Document the explicit content-only lexical route, its guarded candidate scope, opaque refusal boundary, paging bindings, and deliberately incomplete lineage semantics."
+    },
+    {
       "path": "docs/BUILD-COMPLETION-REGISTER.md",
       "before": null,
       "after": "ef558097012f9f95a03a92cff8171dd97911afe0d00df917273c035fdd2ac1b4",
@@ -1410,6 +1416,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/retrieval/authorized-view.ts",
+      "before": "0a3b16b11734dc8a548b741b0362c9a42a8bd8f1",
+      "after": "9e0269b0b2d7b23103c51912c88b9d4de7dacdce8ec70fe3c037027e13e981ab",
+      "rationale": "Add protected authorized-view conflict diagnostics while preserving the opaque public refusal and exact declaration resolution rules."
+    },
+    {
       "path": "src/retrieval/candidate-types.ts",
       "before": "f2d0a4c401c15f579fdd20d05c08362018fd962a",
       "after": "e65761576974a1e055ebac209d4c7ae7514d0535a8c0d6eed7ff11d4f4b9f11d",
@@ -1418,7 +1430,7 @@
     {
       "path": "src/retrieval/coordinator.ts",
       "before": "f7fe89a328c61bebfbfee87eb3d4bb3efdf89111",
-      "after": "8fb6d7b2be27a5859cb097c8fc9f52c34eef019ac5241bea3e2923b32f10ee0a",
+      "after": "9e05d6c8175a33cd4df58957263b4b3d86b40bd35135106710ba4fe35d888cbb",
       "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
     },
     {
@@ -1460,7 +1472,7 @@
     {
       "path": "src/retrieval/host.ts",
       "before": "dd1df55f27565668e395995d6d2d31dacec6b562",
-      "after": "4639306ea263049580bc3885f2a2eec6d81954bba760d4c542c75282785526a9",
+      "after": "302ba57ceace06f22bb1394d9dfc496d3ecfbae8a52ade119071574f21220c76",
       "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
     },
     {
@@ -1482,6 +1494,12 @@
       "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
     },
     {
+      "path": "src/service/authorized-view.ts",
+      "before": "c439559fd30ece82bd43985ffff042a809e89486",
+      "after": "05d427294498cb6f1aff6e918988c4cffe990dffd83e57d0be2b54606f2dc541",
+      "rationale": "Validate the exact eligible authorized source and chunk bindings required by the opt-in lexical route without weakening strict retrieval."
+    },
+    {
       "path": "src/service/graphiti-search.ts",
       "before": null,
       "after": "8992103bdab59a856a9591a7f21aa9856b1e3896276ae599b7ac7aa453cd44bb",
@@ -1490,7 +1508,7 @@
     {
       "path": "src/service/mcp.ts",
       "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
-      "after": "25a2a44f8fc8a8cb31261d254fedaf010c86b9369c16b59dfc368f752a4bc2cc",
+      "after": "a901cdd39e43df42b32df32119e8aebd6aeb0455e4a75a3717e66ea99f993b32",
       "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
     },
     {
@@ -1500,10 +1518,22 @@
       "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
     },
     {
+      "path": "src/service/retrieval.ts",
+      "before": "45311d7ca3fe7aac49b3357395397f49c972bf29",
+      "after": "014ed5fa5f0d1e6c7d4468ea7af6a5a933750646e93e367ee625a4e6f350270d",
+      "rationale": "Expose retained-session validation for guarded content-only discovery and add exact authored and visible lineage metadata with conservative completeness."
+    },
+    {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
-      "after": "2de3223a963bc907ea21ab48380a80f04bc067cc86555404716df99ae7e36577",
+      "after": "c40da6db706108748a7f5551b6d2b07a0e303e426f89f6fedaa4b5a62ab02816",
       "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
+    },
+    {
+      "path": "src/types.ts",
+      "before": "9cae8dac0a9d86bab59e4043ed5f3a1c1546ea79",
+      "after": "6dfeb444e6e8e9d3f627f9732369c17bc4365a188ecb5ab04eba0ed9c2e8947e",
+      "rationale": "Add versioned authored and visible lineage result fields while retaining the legacy superseded field semantics."
     },
     {
       "path": "src/version.ts",
@@ -1710,6 +1740,12 @@
       "rationale": "Negative and positive preflight tests for mandatory gates, source identity, soak length, archive digests and package inventory."
     },
     {
+      "path": "test/retrieval-authorized-view.test.mjs",
+      "before": "3e78901b4ebb94cc7210fa2bb135514ea92d9eaf",
+      "after": "53afb8895dadab72f16dbd49ab719e6082a9fbcb5ccdb06e0fe3d00f094392b4",
+      "rationale": "Cover opaque public conflicts, protected diagnostic classes, and the exact synthetic typed-relationship ambiguity trigger."
+    },
+    {
       "path": "test/retrieval-candidate-store.test.mjs",
       "before": "5d04a3baed3f7f9c33c031241cadf75597fa6f57",
       "after": "8fce0b04a281af791e9a6c4c7b731cfdefa28e82a0c82d9c1f7d2e593ea35b7a",
@@ -1796,7 +1832,7 @@
     {
       "path": "test/service-retrieval.test.mjs",
       "before": "83f14477ca28e80cfc990f603e19b73251b6aec6",
-      "after": "469908cc51fbccd88d3a882f8697c3734cc466bf5fb11a6a1442b6bc43490ae7",
+      "after": "a05193091d8aca3a28f0c8483b7e7b6044b710248dd2ed096f6b9f743548a957",
       "rationale": "Add a host-only verified retrieval session that pins and verifies one immutable generation once, serializes searches, retains defensively cloned validated rows, and reapplies fresh authorization, policy, source, and citation guards for every request; cover isolation, mutation, queue, cancellation, close, identity, and public-export boundaries."
     },
     {
