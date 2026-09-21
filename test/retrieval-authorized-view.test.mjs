@@ -286,6 +286,12 @@ async function assertGenericConflict(built, asOf = "2026-10-01T00:00Z") {
   opened.service.close();
 }
 
+function assertContentOnlyConflict(built) {
+  const opened = coordinator(built, { sourcePolicy: () => "allow", chunkPolicy: () => "allow" });
+  try { assert.throws(() => opened.service.validateContentOnlyAuthorizedView(), /^Error: RETRIEVAL_AUTHORIZED_VIEW_CONFLICT$/); }
+  finally { opened.service.close(); }
+}
+
 test("Decision-A all-visible identity, endpoint, declaration, and topology classes share one conflict", async (t) => {
   const third = "018f0000-0000-7000-8000-000000000803";
   const fourth = "018f0000-0000-7000-8000-000000000804";
@@ -442,10 +448,12 @@ test("Decision-A scoped parser-fingerprint collisions ignore hidden/future rows"
   ], (input) => setParserFingerprint(input, "same:fingerprint")), request);
   assert.deepEqual(hidden.result, baseline.result);
   assert.deepEqual(future.result, baseline.result);
-  await assertGenericConflict(await buildCorpus([
+  const visibleConflict = await buildCorpus([
     ...baseFiles,
     source("visible-two.md", note(third, "Visible Two", "2026-07-02T00:00:00Z", { body: "# Visible Two\nNeedle different.\n" }), "2026-07-02T00:00:00Z"),
-  ], (input) => setParserFingerprint(input, "same:fingerprint")), "2026-08-15T00:00Z");
+  ], (input) => setParserFingerprint(input, "same:fingerprint"));
+  await assertGenericConflict(visibleConflict, "2026-08-15T00:00Z");
+  assertContentOnlyConflict(visibleConflict);
 
 });
 
@@ -463,6 +471,7 @@ test("Decision-A public chunk collisions remain physical candidates and conflict
   const allVisible = await buildCorpus([...baselineFiles, exactDuplicate]);
   assert.equal(allVisible.generation.manifest.candidate_chunk_count, 2);
   await assertGenericConflict(allVisible, "2026-08-15T00:00Z");
+  assertContentOnlyConflict(allVisible);
 });
 
 test("Decision-A duplicate portable paths are scoped after policy/time partition", async () => {

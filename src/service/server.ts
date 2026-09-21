@@ -1,5 +1,5 @@
 import { ServiceWorkScheduler, WorkScheduleError } from "./work-scheduler";
-import type { ServiceRetrievalSearch } from "./retrieval";
+import type { ServiceRetrievalContentValidate, ServiceRetrievalSearch } from "./retrieval";
 import type { ServiceGraphitiSearch, ServiceGraphitiSource } from "./graphiti-search";
 import * as http from "node:http";
 import { createHash } from "node:crypto";
@@ -30,6 +30,7 @@ export interface LocalServiceOptions {
   vaultName?: string;
   vaultId?: string;
   retrievalSearch?: ServiceRetrievalSearch;
+  retrievalContentValidate?: ServiceRetrievalContentValidate;
   graphitiSearch?: ServiceGraphitiSearch;
   navigationConfig?: VaultNavigationConfig;
   capabilities?: ServiceCapabilityConfiguration;
@@ -392,7 +393,9 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
               const currentAuthorization = await authorization(after);
               if (after.generation !== snapshot.generation || currentAuthorization.generation !== authorized.authorization.generation || currentAuthorization.policyDigest !== authorized.authorization.policyDigest || !currentAuthorization.configured) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
               return result;
-            } : undefined, navigationConfig: options.navigationConfig, vaultId: options.vaultId ?? "vault:local",
+            } : undefined,
+            retrievalContentValidate: options.retrievalContentValidate ? async (guards) => options.retrievalContentValidate!(guards) : undefined,
+            navigationConfig: options.navigationConfig, vaultId: options.vaultId ?? "vault:local",
             graphitiSearch: options.graphitiSearch ? async request => {
               const corpusId = options.vaultId ?? "vault:local";
               const initialAuthority = graphitiAuthority(checkedIdentity, authorized.view, snapshot, authorized.authorization, corpusId);

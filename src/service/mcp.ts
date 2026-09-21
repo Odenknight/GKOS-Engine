@@ -1,6 +1,6 @@
 import { validateRetrievalFilters } from "../retrieval/filters";
 import { lexicalCitationSpans, lexicalQueryClauses, lexicalScanMatches } from "../retrieval/lexical";
-import type { ServiceRetrievalSearch } from "./retrieval";
+import type { ServiceRetrievalContentValidate, ServiceRetrievalSearch } from "./retrieval";
 import type { ServiceGraphitiExecutionSearch } from "./graphiti-search";
 import { GRAPHITI_QUERY_CONTRACT_VERSION, type GraphitiQueryResult } from "../graphiti-query-contract";
 import { createHash, createHmac, randomBytes } from "node:crypto";
@@ -139,6 +139,7 @@ export interface ServiceMcpExecutionContext {
   policyDigest?: string;
   sourceRecords?: readonly SourceFile[];
   retrievalSearch?: ServiceRetrievalSearch;
+  retrievalContentValidate?: ServiceRetrievalContentValidate;
   graphitiSearch?: ServiceGraphitiExecutionSearch;
   graphitiCorpusId?: string;
   navigationConfig?: VaultNavigationConfig;
@@ -376,13 +377,19 @@ function issueRecord(session: McpSession, node: GkxNode, context: ServiceMcpExec
 
 function recordSummary(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): Record<string, unknown> {
   const recordRef = issueRecord(session, node, context, bindings);
+  const authoredStatus = typeof node.status === "string" && node.status ? node.status : "unknown";
+  const visibleSuccessor = typeof node.gkx?.invalidAt === "string";
   return {
     record_ref: recordRef,
     uid: typeof node.gkx?.uid === "string" ? node.gkx.uid : null,
     canonical_path: node.path,
     valid_at: typeof node.validAt === "string" ? node.validAt : null,
     head: node.gkx?.head === true,
-    superseded: typeof node.gkx?.invalidAt === "string",
+    superseded: visibleSuccessor,
+    authored_status: authoredStatus,
+    visible_lineage_status: visibleSuccessor ? "resolved_successor" : "no_visible_successor",
+    currentness_basis: authoredStatus !== "unknown" ? "authored_status" : visibleSuccessor ? "visible_successor" : "no_visible_successor",
+    resolution_complete_within_scope: true,
   };
 }
 
@@ -749,8 +756,15 @@ export class ServiceMcpRuntime {
       const query = input.query.trim();
       if (query.split(/\s+/u).length > 8) return fail("GKOS_P6_INVALID_PARAMS");
       try { lexicalQueryClauses(query); } catch { return fail("GKOS_P6_INVALID_PARAMS"); }
-      if (!context.policyDigest) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
+      if (!context.policyDigest || !context.retrievalContentValidate) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
       const records = authorizedContent(context).sort((left, right) => left.node.path < right.node.path ? -1 : left.node.path > right.node.path ? 1 : 0);
+      const byPath = new Map(records.map((record) => [record.node.path, record]));
+      const permit = (value: { source_id: string; source_path: string; source_digest: string }) => {
+        const record = byPath.get(value.source_path);
+        return record && record.sourceDigest === value.source_digest && record.node.gkx?.uid === value.source_id ? "allow" as const : "deny" as const;
+      };
+      await context.retrievalContentValidate({ source_discoverability_policy: permit, discoverability_policy: permit,
+        source_reader: async (path) => new Uint8Array(byPath.get(path)?.bytes ?? Buffer.alloc(0)) });
       const identities = new Set<string>();
       for (const record of records) {
         const uid = record.node.gkx?.uid;

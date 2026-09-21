@@ -782,6 +782,32 @@ export class RetrievalCoordinator {
 
   close(): void { if (this.#ownsStore) this.#store.close(); }
 
+  /** Shared source/chunk identity gates for content-only discovery. */
+  validateContentOnlyAuthorizedView(): void {
+    if (!isGkxRetrievalProjectionManifest(this.#store.manifest)) return;
+    const sourcePolicy = this.#options.source_discoverability_policy!;
+    const candidates = this.#store.listCandidateSources().filter((source) => sourceAllowed(sourcePolicy, sourcePolicyRecord(source)));
+    const chunks = this.#store.listCandidateChunksForRecordKeys(candidates.map((source) => source.record_key));
+    const byRecord = new Map<string, typeof chunks>();
+    for (const chunk of chunks) byRecord.set(chunk.record_key, [...(byRecord.get(chunk.record_key) ?? []), chunk]);
+    const sources = candidates.filter((source) => (byRecord.get(source.record_key) ?? [])
+      .every((candidate) => allowed(this.#options.discoverability_policy, chunkPolicyRecord(candidate.chunk))));
+    const keys = new Set(sources.map((source) => source.record_key));
+    const authorizedChunks = chunks.filter((chunk) => keys.has(chunk.record_key));
+    const unique = (values: readonly string[]) => new Set(values).size === values.length;
+    const fingerprints = new Map<string, string>();
+    let fingerprintConflict = false;
+    for (const source of sources) {
+      const prior = fingerprints.get(source.parser_content_fingerprint);
+      if (prior !== undefined && prior !== source.source_digest) fingerprintConflict = true;
+      fingerprints.set(source.parser_content_fingerprint, source.source_digest);
+    }
+    if (!unique(sources.map((source) => source.source_id)) || !unique(sources.map((source) => source.source_path)) ||
+        fingerprintConflict || !unique(authorizedChunks.map((chunk) => chunk.chunk.chunk_id))) {
+      throw new Error("RETRIEVAL_AUTHORIZED_VIEW_CONFLICT");
+    }
+  }
+
   async search(request: RetrievalSearchRequest): Promise<RetrievalSearchResult> {
     validateSearchRequest(request);
     if (!request.query) throw new TypeError("query is required.");

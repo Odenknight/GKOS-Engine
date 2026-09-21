@@ -156,6 +156,7 @@ function safeFileNode(node: GkxNode, level: GkxSensitivity): GkxNode {
     updatedAt: text(node.updatedAt, 64),
     validAt: text(node.validAt, 64),
     type,
+    status: text(node.status, 160),
     priority: text(node.priority, 160),
     tags: Array.isArray(node.tags) ? node.tags.filter((item) => validIdentityPart(item, 160)).sort(compare) : [],
     aliases: Array.isArray(node.aliases) ? node.aliases.filter((item) => validIdentityPart(item, 512)).sort(compare) : [],
