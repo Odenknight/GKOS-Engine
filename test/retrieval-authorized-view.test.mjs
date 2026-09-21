@@ -12,6 +12,7 @@ import {
 import {
   bindGkxRetrievalCandidateChunks,
   buildGkxRetrievalGeneration,
+  diagnoseGkxRetrievalAuthorizedCandidateView,
   projectGkxRetrievalCorpus,
 } from "../dist/retrieval-host.mjs";
 
@@ -117,9 +118,27 @@ async function buildCorpus(files, mutate) {
   const generation = buildGkxRetrievalGeneration(input);
   return {
     generation,
+    input,
     contents: new Map(files.map((file) => [file.relativePath, Buffer.from(file.content, "utf8")])),
   };
 }
+
+test("protected offline diagnostic names the synthetic conflict while participant errors stay opaque", async () => {
+  const built = await buildCorpus([
+    source("old.md", note(OLD, "Old", "2026-07-01T00:00:00Z"), "2026-07-01T00:00:00Z"),
+    source("new-a.md", note(NEW, "New A", "2026-08-01T00:00:00Z", { extra: `supersedes:\n  - "${OLD}"\n` }), "2026-08-01T00:00:00Z"),
+    source("new-b.md", note("018f0000-0000-7000-8000-000000000803", "New B", "2026-09-01T00:00:00Z", { extra: `supersedes:\n  - "${OLD}"\n` }), "2026-09-01T00:00:00Z"),
+  ]);
+  const result = diagnoseGkxRetrievalAuthorizedCandidateView(
+    built.input.candidate_sources, built.input.candidate_declarations, built.input.candidate_chunks,
+    "2026-10-01T00:00:00.000Z",
+  );
+  assert.equal(result.outcome, "conflict");
+  assert.equal(result.conflict_class, "branching_successor");
+  assert.equal(result.offending_record_keys.length, 3);
+  assert.equal(JSON.stringify(result).includes("old.md"), false);
+  await assertGenericConflict(built);
+});
 
 function coordinator(built, {
   sourcePolicy = (record) => record.metadata.sensitivity === "public" ? "allow" : "deny",

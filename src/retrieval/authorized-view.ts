@@ -15,6 +15,25 @@ import type {
 
 const AUTHORIZED_VIEW_CONFLICT = "RETRIEVAL_AUTHORIZED_VIEW_CONFLICT";
 
+export type GkxRetrievalAuthorizedViewConflictClass =
+  | "duplicate_source_id" | "duplicate_source_path" | "parser_fingerprint_digest"
+  | "duplicate_chunk_id" | "unresolved_declaration" | "ambiguous_declaration"
+  | "prohibited_self_reference" | "invalid_declaration_resolution"
+  | "reverse_temporal_order" | "branching_successor" | "lineage_cycle";
+
+export interface GkxRetrievalAuthorizedViewDiagnostic {
+  contract_version: "gkos-retrieval-authorized-view-diagnostic/1.0.0";
+  outcome: "valid" | "conflict";
+  conflict_class: GkxRetrievalAuthorizedViewConflictClass | null;
+  offending_record_keys: string[];
+}
+
+class AuthorizedViewConflictError extends Error {
+  constructor(readonly conflictClass: GkxRetrievalAuthorizedViewConflictClass, readonly recordKeys: readonly string[]) {
+    super(AUTHORIZED_VIEW_CONFLICT);
+  }
+}
+
 export interface GkxRetrievalAuthorizedCandidateView {
   sources: GkxRetrievalStoredSourceProvenance[];
   temporal_sources: GkxRetrievalAuthorizedTemporalSource[];
@@ -24,18 +43,20 @@ export interface GkxRetrievalAuthorizedCandidateView {
   answerable_source_count: number;
 }
 
-function conflict(): never {
+function conflict(conflictClass: GkxRetrievalAuthorizedViewConflictClass, recordKeys: readonly string[]): never {
   // One deliberately non-content-bearing outcome covers every ratified
   // cross-record class. Do not attach a cause, UID, path, count, or receipt.
-  throw new Error(AUTHORIZED_VIEW_CONFLICT);
+  throw new AuthorizedViewConflictError(conflictClass, sortedUnique(recordKeys));
 }
 
-function assertUniqueBy<T>(items: readonly T[], key: (item: T) => string): void {
-  const seen = new Set<string>();
+function assertUniqueBy<T>(items: readonly T[], key: (item: T) => string,
+  recordKey: (item: T) => string, conflictClass: GkxRetrievalAuthorizedViewConflictClass): void {
+  const seen = new Map<string, string>();
   for (const item of items) {
     const value = key(item);
-    if (seen.has(value)) conflict();
-    seen.add(value);
+    const prior = seen.get(value);
+    if (prior !== undefined) conflict(conflictClass, [prior, recordKey(item)]);
+    seen.set(value, recordKey(item));
   }
 }
 
@@ -106,17 +127,19 @@ export function buildGkxRetrievalAuthorizedCandidateView(
   // removed future/unknown records. Hidden rows were removed by the caller's
   // three policy gates and therefore behave exactly like physical absence.
   const knownSources = candidateSources.filter((source) => knownCreated.has(source.record_key));
-  assertUniqueBy(knownSources, (source) => source.source_id);
-  assertUniqueBy(knownSources, (source) => source.source_path);
-  const digestByParserFingerprint = new Map<string, string>();
+  assertUniqueBy(knownSources, (source) => source.source_id, (source) => source.record_key, "duplicate_source_id");
+  assertUniqueBy(knownSources, (source) => source.source_path, (source) => source.record_key, "duplicate_source_path");
+  const digestByParserFingerprint = new Map<string, { digest: string; recordKey: string }>();
   for (const source of knownSources) {
     const prior = digestByParserFingerprint.get(source.parser_content_fingerprint);
-    if (prior !== undefined && prior !== source.source_digest) conflict();
-    digestByParserFingerprint.set(source.parser_content_fingerprint, source.source_digest);
+    if (prior !== undefined && prior.digest !== source.source_digest) conflict("parser_fingerprint_digest", [prior.recordKey, source.record_key]);
+    digestByParserFingerprint.set(source.parser_content_fingerprint, { digest: source.source_digest, recordKey: source.record_key });
   }
   assertUniqueBy(
     candidateChunks.filter((chunk) => knownCreated.has(chunk.record_key)),
     (chunk) => chunk.chunk.chunk_id,
+    (chunk) => chunk.record_key,
+    "duplicate_chunk_id",
   );
 
   const availability = { known_created: knownCreated, future, unknown };
@@ -131,12 +154,17 @@ export function buildGkxRetrievalAuthorizedCandidateView(
     if (!knownCreated.has(declaration.source_record_key) || declaration.category === "link") continue;
     const resolved = resolveGkxScopedCandidateDeclaration(declaration, availability);
     if (resolved.status === "suppressed_future" || resolved.status === "suppressed_unknown") continue;
-    if (resolved.status === "unresolved" || resolved.status === "ambiguous") conflict();
+    if (resolved.status === "unresolved") conflict("unresolved_declaration", [declaration.source_record_key]);
+    if (resolved.status === "ambiguous") {
+      const tier = declaration.resolution_tiers.find((item) => item.basis === resolved.basis);
+      const scoped = tier?.candidate_record_keys.filter((key) => knownCreated.has(key)) ?? [];
+      conflict("ambiguous_declaration", [declaration.source_record_key, ...scoped]);
+    }
     if (resolved.status === "self") {
       if (declaration.category === "relationship" && declaration.field === "relationships.related_to") continue;
-      conflict();
+      conflict("prohibited_self_reference", [declaration.source_record_key]);
     }
-    if (resolved.status !== "resolved") conflict();
+    if (resolved.status !== "resolved") conflict("invalid_declaration_resolution", [declaration.source_record_key]);
     if (declaration.category !== "lineage") continue;
     const edge = declaration.field === "supersedes"
       ? { newer: declaration.source_record_key, older: resolved.record_key }
@@ -156,9 +184,11 @@ export function buildGkxRetrievalAuthorizedCandidateView(
     predecessors.set(edge.newer, [...(predecessors.get(edge.newer) ?? []), edge.older]);
     const newer = sourceByKey.get(edge.newer)!;
     const older = sourceByKey.get(edge.older)!;
-    if (newer.valid_from !== null && older.valid_from !== null && Date.parse(newer.valid_from) < Date.parse(older.valid_from)) conflict();
+    if (newer.valid_from !== null && older.valid_from !== null && Date.parse(newer.valid_from) < Date.parse(older.valid_from)) conflict("reverse_temporal_order", [edge.newer, edge.older]);
   }
-  if ([...successors.values()].some((items) => new Set(items).size > 1) || hasCycle(edges)) conflict();
+  const branch = [...successors.entries()].find(([, items]) => new Set(items).size > 1);
+  if (branch) conflict("branching_successor", [branch[0], ...branch[1]]);
+  if (hasCycle(edges)) conflict("lineage_cycle", edges.flatMap((edge) => [edge.newer, edge.older]));
   for (const values of [...successors.values(), ...predecessors.values()]) values.sort(retrievalCodeUnitCompare);
 
   const includedKeys = at === null
@@ -254,4 +284,19 @@ export function buildGkxRetrievalAuthorizedCandidateView(
     authorized_source_count: includedSources.length,
     answerable_source_count: includedSources.filter((source) => source.valid_from !== null).length,
   };
+}
+
+/** Trusted-host-only diagnostic. Keep this out of participant-visible bundles and logs. */
+export function diagnoseGkxRetrievalAuthorizedCandidateView(
+  candidateSources: readonly GkxRetrievalCandidateSource[], declarations: readonly GkxRetrievalCandidateDeclaration[],
+  candidateChunks: readonly GkxRetrievalCandidateChunk[], normalizedAsOf: string | null,
+): GkxRetrievalAuthorizedViewDiagnostic {
+  try {
+    buildGkxRetrievalAuthorizedCandidateView(candidateSources, declarations, candidateChunks, normalizedAsOf);
+    return { contract_version: "gkos-retrieval-authorized-view-diagnostic/1.0.0", outcome: "valid", conflict_class: null, offending_record_keys: [] };
+  } catch (error) {
+    if (!(error instanceof AuthorizedViewConflictError)) throw error;
+    return { contract_version: "gkos-retrieval-authorized-view-diagnostic/1.0.0", outcome: "conflict",
+      conflict_class: error.conflictClass, offending_record_keys: [...error.recordKeys] };
+  }
 }

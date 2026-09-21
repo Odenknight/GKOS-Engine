@@ -8,6 +8,8 @@
  */
 export { projectGkxRetrievalCorpus } from "./gkx-provenance";
 export { bindGkxRetrievalCandidateChunks } from "./candidate-types";
+export { diagnoseGkxRetrievalAuthorizedCandidateView } from "./authorized-view";
+export type { GkxRetrievalAuthorizedViewDiagnostic, GkxRetrievalAuthorizedViewConflictClass } from "./authorized-view";
 // Trusted-host-only checkpoint seams for the canonical Decision-A adapter.
 // They are intentionally absent from the package root, /gkx and /retrieval.
 export { gkxCanonicalCandidateLedger as inspectCanonicalCandidateLedger } from "../lineage-receipts";
