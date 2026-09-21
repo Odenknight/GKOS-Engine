@@ -394,7 +394,15 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
               if (after.generation !== snapshot.generation || currentAuthorization.generation !== authorized.authorization.generation || currentAuthorization.policyDigest !== authorized.authorization.policyDigest || !currentAuthorization.configured) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
               return result;
             } : undefined,
-            retrievalContentValidate: options.retrievalContentValidate ? async (guards) => options.retrievalContentValidate!(guards) : undefined,
+            retrievalContentValidate: options.retrievalContentValidate ? async (guards) => {
+              const before = await options.snapshot();
+              if (before.generation !== snapshot.generation) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+              const result = await options.retrievalContentValidate!(guards);
+              const after = await options.snapshot(), currentAuthorization = await authorization(after);
+              if (after.generation !== snapshot.generation || currentAuthorization.generation !== authorized.authorization.generation ||
+                  currentAuthorization.policyDigest !== authorized.authorization.policyDigest || !currentAuthorization.configured) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+              return result;
+            } : undefined,
             navigationConfig: options.navigationConfig, vaultId: options.vaultId ?? "vault:local",
             graphitiSearch: options.graphitiSearch ? async request => {
               const corpusId = options.vaultId ?? "vault:local";

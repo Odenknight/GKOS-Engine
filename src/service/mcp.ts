@@ -377,8 +377,11 @@ function issueRecord(session: McpSession, node: GkxNode, context: ServiceMcpExec
 
 function recordSummary(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): Record<string, unknown> {
   const recordRef = issueRecord(session, node, context, bindings);
-  const authoredStatus = typeof node.status === "string" && node.status ? node.status : "unknown";
-  const visibleSuccessor = typeof node.gkx?.invalidAt === "string";
+  const epistemic = typeof node.gkx?.epistemicState === "string" && node.gkx.epistemicState ? node.gkx.epistemicState : null;
+  const authoredStatus = epistemic ?? (typeof node.status === "string" && node.status ? node.status : "unknown");
+  const visibleSuccessor = (node.gkx?.supersededByIds?.length ?? 0) > 0;
+  const evidence = context.view.record_evidence.find((item) => item.node_id === node.id);
+  const lineageConflict = evidence?.diagnostic_codes.some((item) => item.code.startsWith("GKX-LINEAGE") && ["error", "critical"].includes(item.severity)) === true;
   return {
     record_ref: recordRef,
     uid: typeof node.gkx?.uid === "string" ? node.gkx.uid : null,
@@ -387,9 +390,9 @@ function recordSummary(session: McpSession, node: GkxNode, context: ServiceMcpEx
     head: node.gkx?.head === true,
     superseded: visibleSuccessor,
     authored_status: authoredStatus,
-    visible_lineage_status: visibleSuccessor ? "resolved_successor" : "no_visible_successor",
+    visible_lineage_status: lineageConflict ? "conflicting" : visibleSuccessor ? "resolved_successor" : "no_visible_successor",
     currentness_basis: authoredStatus !== "unknown" ? "authored_status" : visibleSuccessor ? "visible_successor" : "no_visible_successor",
-    resolution_complete_within_scope: true,
+    resolution_complete_within_scope: !lineageConflict,
   };
 }
 
@@ -764,8 +767,13 @@ export class ServiceMcpRuntime {
         const record = byPath.get(value.source_path);
         return record && record.sourceDigest === value.source_digest && record.node.gkx?.uid === value.source_id ? "allow" as const : "deny" as const;
       };
-      await context.retrievalContentValidate({ source_discoverability_policy: permit, discoverability_policy: permit,
-        source_reader: async (path) => new Uint8Array(byPath.get(path)?.bytes ?? Buffer.alloc(0)) });
+      const validated = await context.retrievalContentValidate({ source_discoverability_policy: permit, discoverability_policy: permit,
+        source_reader: async (path) => {
+          const record = byPath.get(path); if (!record) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+          return new Uint8Array(record.bytes);
+        } });
+      const expectedBindings = records.map((record) => ({ source_id: record.node.gkx!.uid!, source_path: record.node.path, source_digest: record.sourceDigest }));
+      if (JSON.stringify(validated) !== JSON.stringify(expectedBindings)) return fail("GKOS_P6_AUTHORIZED_VIEW_CONFLICT");
       const identities = new Set<string>();
       for (const record of records) {
         const uid = record.node.gkx?.uid;

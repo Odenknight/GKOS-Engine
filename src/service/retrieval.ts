@@ -5,4 +5,5 @@ import type { RetrievalSearchRequest, RetrievalSearchResult } from "../retrieval
 export type ServiceRetrievalGuards = Required<Pick<RetrievalCoordinatorOptions,
   "discoverability_policy" | "source_discoverability_policy" | "source_reader">>;
 export type ServiceRetrievalSearch = (request: RetrievalSearchRequest, guards: ServiceRetrievalGuards) => Promise<RetrievalSearchResult>;
-export type ServiceRetrievalContentValidate = (guards: ServiceRetrievalGuards) => Promise<void>;
+export interface ServiceRetrievalAuthorizedSourceBinding { source_id: string; source_path: string; source_digest: string }
+export type ServiceRetrievalContentValidate = (guards: ServiceRetrievalGuards) => Promise<ServiceRetrievalAuthorizedSourceBinding[]>;

@@ -138,7 +138,7 @@ async function mcpFixture(sourceFiles,sensitivityCeiling='internal') {
   },
   retrievalContentValidate:async guards=>{
    const coordinator=new RetrievalCoordinator(f.generation.database_path,{...guards,runtime_policy_digest:POLICY,lineage_view_freshness:'fresh'});
-   try {coordinator.validateContentOnlyAuthorizedView();} finally {coordinator.close();}
+   try {return coordinator.validateContentOnlyAuthorizedView();} finally {coordinator.close();}
   },
  });
  server.listen(0,'127.0.0.1');await once(server,'listening');

@@ -783,8 +783,8 @@ export class RetrievalCoordinator {
   close(): void { if (this.#ownsStore) this.#store.close(); }
 
   /** Shared source/chunk identity gates for content-only discovery. */
-  validateContentOnlyAuthorizedView(): void {
-    if (!isGkxRetrievalProjectionManifest(this.#store.manifest)) return;
+  validateContentOnlyAuthorizedView(): Array<{ source_id: string; source_path: string; source_digest: string }> {
+    if (!isGkxRetrievalProjectionManifest(this.#store.manifest)) return [];
     const sourcePolicy = this.#options.source_discoverability_policy!;
     const candidates = this.#store.listCandidateSources().filter((source) => sourceAllowed(sourcePolicy, sourcePolicyRecord(source)));
     const chunks = this.#store.listCandidateChunksForRecordKeys(candidates.map((source) => source.record_key));
@@ -806,6 +806,8 @@ export class RetrievalCoordinator {
         fingerprintConflict || !unique(authorizedChunks.map((chunk) => chunk.chunk.chunk_id))) {
       throw new Error("RETRIEVAL_AUTHORIZED_VIEW_CONFLICT");
     }
+    return sources.map(({ source_id, source_path, source_digest }) => ({ source_id, source_path, source_digest }))
+      .sort((left, right) => retrievalCodeUnitCompare(left.source_path, right.source_path));
   }
 
   async search(request: RetrievalSearchRequest): Promise<RetrievalSearchResult> {
