@@ -20,7 +20,11 @@ export async function paramFixture(Runtime=ServiceMcpRuntime) {
   const authorization={configured:true,generation:1,policyDigest:'sha256:'+'b'.repeat(64)};
   const view=buildAuthorizedView({identity,sensitivityCeiling:'public',corpus:{graph:structuredClone(index.graph),sourceRecords:sources,generation:1},authorization,operation:'mcp',evaluationTime:AT});
   const navigationConfig=await buildVaultNavigationConfig({configId:'018f47a3-7b5e-7c9d-8a1b-123456789abf',version:1,vaultId:'vault:params',promotedMocNames:[],createdAt:AT,createdBy:'system:test',policy:{id:'policy:test',version:'1.0.0',digest:authorization.policyDigest}});
-  const context={identity,view,generation:1,policyDecisionId:'018f47a3-7b5e-7c9d-8a1b-123456789abd',sourceRecords:sources,navigationConfig,vaultId:'vault:params',retrievalSearch:async()=>({projection_freshness:'fresh',hits:[]})};
+  const retrievalContentValidate=async()=>view.notes.map(node=>({
+    source_id:node.gkx.uid,source_path:node.path,
+    source_digest:'sha256:'+crypto.createHash('sha256').update(sources.find(source=>source.relativePath===node.path).content).digest('hex'),
+  })).sort((left,right)=>left.source_path<right.source_path?-1:left.source_path>right.source_path?1:0);
+  const context={identity,view,generation:1,policyDecisionId:'018f47a3-7b5e-7c9d-8a1b-123456789abd',sourceRecords:sources,navigationConfig,vaultId:'vault:params',retrievalSearch:async()=>({projection_freshness:'fresh',hits:[]}),retrievalContentValidate};
   const events=new ServiceTraversalEventRing(2048,0,2097152,()=>0);
   const runtime=new Runtime(events);
   let id=0;
@@ -40,6 +44,7 @@ export async function paramFixture(Runtime=ServiceMcpRuntime) {
     gkos_note_read:{record_ref:ref,cursor:null,limit_bytes:600},
     gkos_record_resolve:{canonical_path:'index.md'},
     gkos_search:{query:'Synthetic',cursor:null,limit:10},
+    gkos_search_lexical_v1:{query:'Synthetic',cursor:null,limit:10},
   };
   return {call,raw,ref,scope,valid,context,events};
 }
@@ -52,7 +57,7 @@ export async function compatibilitySnapshot(Runtime=ServiceMcpRuntime) {
   Date.now=()=>Date.parse(AT);syncBuiltinESMExports();
   try {
     const f=await paramFixture(Runtime),responses={};
-    for(const [name,args] of Object.entries(f.valid))responses[name]=(await f.raw(name,args)).body;
+    for(const [name,args] of Object.entries(f.valid))if(name!=='gkos_search_lexical_v1')responses[name]=(await f.raw(name,args)).body;
     responses.unknown_ref=(await f.raw('gkos_note_read',{record_ref:'gkrec1_'+'A'.repeat(22),cursor:null,limit_bytes:100})).body;
     responses.unknown_cursor=(await f.raw('gkos_note_read',{record_ref:f.ref,cursor:'gkcur1_unavailable',limit_bytes:100})).body;
     f.context.retrievalSearch=async()=>{throw new Error('RETRIEVAL_AUTHORIZED_VIEW_CONFLICT');};

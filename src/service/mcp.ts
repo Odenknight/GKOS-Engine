@@ -400,6 +400,16 @@ function recordSummary(session: McpSession, node: GkxNode, context: ServiceMcpEx
   };
 }
 
+function legacyRecordDigest(node: GkxNode): string {
+  const projected = { ...node, gkx: node.gkx ? { ...node.gkx } : undefined };
+  delete projected.status;
+  if (projected.gkx) {
+    delete projected.gkx.authoredLineageDeclarationCount;
+    delete projected.gkx.authoredLineageUnresolved;
+  }
+  return digest(projected);
+}
+
 interface AuthorizedContent { node: GkxNode; content: string; bytes: Buffer; sourceDigest: string }
 function authorizedContent(context: ServiceMcpExecutionContext, target?: GkxNode): AuthorizedContent[] {
   if (!context.sourceRecords) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
@@ -867,7 +877,7 @@ export class ServiceMcpRuntime {
       const node = recordNode(input.record_ref);
       if (!node) return fail("GKOS_P6_REFERENCE_UNKNOWN");
       const evidence = context.view.record_evidence.find((item) => item.node_id === node.id);
-      const recordDigest = digest(node);
+      const recordDigest = legacyRecordDigest(node);
       if (tool === "gkos_record_validate") {
         const diagnostics = (evidence?.diagnostic_codes ?? []).map((item) => ({ ...item, record_ref: input.record_ref }));
         return { result: seal({ ...common(context, requestId), record_ref: input.record_ref, record_digest: recordDigest, valid: !diagnostics.some((item) => item.severity === "error" || item.severity === "critical"), diagnostics }), paths: [node.path], isError: false };

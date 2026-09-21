@@ -1508,7 +1508,7 @@
     {
       "path": "src/service/mcp.ts",
       "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
-      "after": "a901cdd39e43df42b32df32119e8aebd6aeb0455e4a75a3717e66ea99f993b32",
+      "after": "db814d75d27163b14bbfd54d2922b2738ee20da40d66a1f5bc59c1556bcc2db0",
       "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
     },
     {
@@ -1824,6 +1824,12 @@
       "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
     },
     {
+      "path": "test/service-param-errors.test.mjs",
+      "before": "0c353318addae9d8d496ddadd85f9cf52776acb8",
+      "after": "683cc1ac5b1a9cb39478942b2234eb572572183bab7a517a3a726dafbbb2ca92",
+      "rationale": "Preserve legacy operation bytes after removing additive lineage fields, and cover bounded invalid-parameter behavior for the eleventh versioned lexical tool."
+    },
+    {
       "path": "test/service-reference-freshness.test.mjs",
       "before": null,
       "after": "f4c45d6c1085acd0bc6743a1161c8b0615c0e74507acf0a01c048fcf3c66484c",
@@ -1846,6 +1852,12 @@
       "before": "5e302462792e360747bf0254d336f8d747f55e4c",
       "after": "99e10a2d3613cc429ba954332a88846268cffe6bdef46548c73b510c04d329e3",
       "rationale": "Make package setup abort-aware with bounded phase diagnostics, one explicit build, ordered cleanup and safe npm report parsing; retain real authenticated installed-package assertions and unchanged deadlines."
+    },
+    {
+      "path": "test/support/param-fixture.mjs",
+      "before": "d03197327839542ebba3b852e0d2a214f6354997",
+      "after": "895329e990d64558cbcea4c232972be812ee7e0f9fb6ab77d69602e564abc643",
+      "rationale": "Provide a guarded synthetic lexical callback and valid input while keeping legacy compatibility snapshot request sequencing stable."
     },
     {
       "path": "test/watcher-coordinator.test.mjs",

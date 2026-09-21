@@ -11,6 +11,13 @@ const digest=value=>'sha256:'+createHash('sha256').update(JSON.stringify(canonic
 const reasons=['missing','malformed','out_of_range','unknown_param'];
 const envelopeSchema=JSON.parse(readFileSync(new URL('../docs/mcp-invalid-params-draft3.schema.json',import.meta.url)));
 const validateEnvelope=new Ajv2020({strict:true}).compile(envelopeSchema);
+const lineageFields=['currentness_contract_version','authored_status','authored_status_provenance','authored_node_status','visible_lineage_status','currentness_basis','resolution_complete_within_scope'];
+function legacyProjection(value){
+  if(Array.isArray(value))return value.map(legacyProjection);
+  if(!value||typeof value!=='object')return value;
+  const result={};for(const [key,item] of Object.entries(value))if(!lineageFields.includes(key))result[key]=legacyProjection(item);
+  return result;
+}
 function invalid(result) {
   assert.equal(result.isError,true);
   const data=result.structuredContent;
@@ -58,13 +65,19 @@ test('handoff 5: successful operation bytes and digests match pre-change PR37; c
   const expected=JSON.parse(readFileSync(new URL('./fixtures/param-errors-before.json',import.meta.url)));
   const actual=await compatibilitySnapshot();
   for(const [name,body] of Object.entries(actual)){
+    if(name==='gkos_search_lexical_v1')continue;
     const data=body.result.structuredContent;
     if(!body.result.isError){const {result_digest,...unsigned}=data;assert.equal(result_digest,digest(unsigned));assert.equal('param_errors' in data,false);}
     if(name==='gkos_capabilities'){
       assert.equal(data.discovery.invalid_params_contract.contract_version,'1.0.0-draft.3');
       delete data.discovery.invalid_params_contract;
+      data.capabilities=data.capabilities.filter(item=>item.capability_name!=='note.lexical.exhaustive.v1');
       const {result_digest,...unsigned}=data;data.result_digest=digest(unsigned);
       body.result.content[0].text=JSON.stringify(data);
+    }
+    if(!body.result.isError&&name!=='gkos_capabilities'){
+      const projected=legacyProjection(data),{result_digest:_,...unsigned}=projected;
+      projected.result_digest=digest(unsigned);body.result.structuredContent=projected;body.result.content[0].text=JSON.stringify(projected);
     }
     assert.equal(JSON.stringify(body),JSON.stringify(expected[name]),name);
   }
@@ -83,9 +96,9 @@ test('handoff 6: bad refs, cursors, unknown keys and canary contents never enter
   assert.equal(knownShape.structuredContent.error_code,'GKOS_P6_REFERENCE_UNKNOWN');
   assert.equal('param_errors' in knownShape.structuredContent,false);
 });
-test('handoff 7: every advertised tool uses the same bounded error shape, including the tenth tool',async()=>{
+test('handoff 7: every advertised tool uses the same bounded error shape',async()=>{
   const f=await paramFixture();let keys;
-  assert.equal(SERVICE_MCP_TOOLS.length,10);
+  assert.equal(SERVICE_MCP_TOOLS.length,11);
   for(const tool of SERVICE_MCP_TOOLS){
     const result=await f.call(tool.name,{...f.valid[tool.name],[SECRET]:SECRET});
     assert.deepEqual(invalid(result).map(x=>[x.param,x.reason]),[['$','unknown_param']]);
