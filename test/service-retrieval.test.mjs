@@ -289,19 +289,22 @@ test('authored superseded status is preserved when its successor is hidden or ph
   .replace('epistemic_state: observation','epistemic_state: superseded')
   .replace('sensitivity: internal','sensitivity: internal\nsuperseded_by:\n  - "'+nextId+'"')};
  const successor={relativePath:'Secret-Next.md',extension:'md',createdTime:Date.parse(AT),content:note(nextId,'Next','secret','replacement.')};
- const absent=await mcpFixture([old]),hidden=await mcpFixture([old,successor]);
+ const other={relativePath:'Other.md',extension:'md',createdTime:Date.parse(AT),content:note('550e8400-e29b-41d4-a716-446655449313','Other','internal','other lineage.')
+  .replace('sensitivity: internal','sensitivity: internal\nsuperseded_by:\n  - "'+oldId+'"')};
+ const absent=await mcpFixture([old]),hidden=await mcpFixture([old,successor]),masked=await mcpFixture([old,other]);
  const summary=async fixture=>{
   const resolved=await fixture.call('gkos_record_resolve',{canonical_path:'Old.md'});
   const lineage=await fixture.call('gkos_lineage_get',{record_ref:resolved.structuredContent.record_ref,cursor:null,limit:10});
   return lineage.structuredContent.items.find(item=>item.canonical_path==='Old.md');
  };
  try {
-  const a=await summary(absent),h=await summary(hidden);
+  const a=await summary(absent),h=await summary(hidden),m=await summary(masked);
   for(const item of [a,h]) {
    assert.equal(item.currentness_contract_version,'observatory.lineage.v1');
    assert.equal(item.authored_status,'superseded');assert.equal(item.authored_status_provenance,'gkx.epistemic_state');
    assert.equal(item.visible_lineage_status,'no_visible_successor');assert.equal(item.resolution_complete_within_scope,false);
   }
   assert.deepEqual({...a,record_ref:null},{...h,record_ref:null},'hidden and absent successors have equivalent observable lineage semantics');
- } finally {await absent.close();await hidden.close();}
+  assert.equal(m.resolution_complete_within_scope,false,'an unrelated visible edge cannot prove the authored missing target resolved');
+ } finally {await absent.close();await hidden.close();await masked.close();}
 });

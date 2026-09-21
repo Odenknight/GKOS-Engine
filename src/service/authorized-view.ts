@@ -262,8 +262,9 @@ function projectGraph(graph: GkxGraph | null, ceiling: GkxSensitivity, evaluatio
   for (const node of nodes) if (node.kind === "file" && node.gkx) {
     node.gkx.supersedesIds = [...(supersedes.get(node.id) ?? [])].sort(compare);
     node.gkx.supersededByIds = [...(supersededBy.get(node.id) ?? [])].sort(compare);
-    node.gkx.authoredLineageUnresolved = (node.gkx.authoredLineageDeclarationCount ?? 0) >
-      node.gkx.supersedesIds.length + node.gkx.supersededByIds.length;
+    // This graph projection does not retain per-declaration resolution receipts.
+    // Never use an unrelated visible edge as proof that every authored target resolved.
+    node.gkx.authoredLineageUnresolved = (node.gkx.authoredLineageDeclarationCount ?? 0) > 0;
     const invalid = temporal.invalidAt.get(node.id);
     node.gkx.invalidAt = invalid == null ? null : new Date(invalid).toISOString();
     node.gkx.head = temporal.head.get(node.id) ?? false;
