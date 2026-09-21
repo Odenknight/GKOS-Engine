@@ -382,17 +382,21 @@ function recordSummary(session: McpSession, node: GkxNode, context: ServiceMcpEx
   const visibleSuccessor = (node.gkx?.supersededByIds?.length ?? 0) > 0;
   const evidence = context.view.record_evidence.find((item) => item.node_id === node.id);
   const lineageConflict = evidence?.diagnostic_codes.some((item) => item.code.startsWith("GKX-LINEAGE") && ["error", "critical"].includes(item.severity)) === true;
+  const lineageUnresolved = node.gkx?.authoredLineageUnresolved === true;
   return {
     record_ref: recordRef,
     uid: typeof node.gkx?.uid === "string" ? node.gkx.uid : null,
     canonical_path: node.path,
     valid_at: typeof node.validAt === "string" ? node.validAt : null,
     head: node.gkx?.head === true,
-    superseded: visibleSuccessor,
+    superseded: typeof node.gkx?.invalidAt === "string",
+    currentness_contract_version: "observatory.lineage.v1",
     authored_status: authoredStatus,
-    visible_lineage_status: lineageConflict ? "conflicting" : visibleSuccessor ? "resolved_successor" : "no_visible_successor",
+    authored_status_provenance: epistemic ? "gkx.epistemic_state" : typeof node.status === "string" && node.status ? "status" : "unavailable",
+    authored_node_status: typeof node.status === "string" && node.status ? node.status : null,
+    visible_lineage_status: lineageConflict && !lineageUnresolved ? "conflicting" : visibleSuccessor ? "resolved_successor" : "no_visible_successor",
     currentness_basis: authoredStatus !== "unknown" ? "authored_status" : visibleSuccessor ? "visible_successor" : "no_visible_successor",
-    resolution_complete_within_scope: !lineageConflict,
+    resolution_complete_within_scope: !lineageConflict && !lineageUnresolved,
   };
 }
 
@@ -795,6 +799,7 @@ export class ServiceMcpRuntime {
         source_id: record.node.gkx!.uid, source_digest: record.sourceDigest,
         matched_spans: lexicalCitationSpans(record.content, query),
         authored_status: "unknown", visible_lineage_status: "unknown", currentness_basis: "not_evaluated",
+        currentness_contract_version: "observatory.lineage.v1", authored_status_provenance: "not_evaluated", authored_node_status: null,
         resolution_complete_within_scope: false,
       }));
       const nextOffset = pagination.offset + items.length < matches.length ? pagination.offset + items.length : undefined;

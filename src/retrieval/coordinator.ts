@@ -1214,6 +1214,33 @@ export class VerifiedRetrievalSession {
     catch (error) { this.#store.close(); throw error; }
   }
 
+  validateContentOnlyAuthorizedView(
+    options: RetrievalCoordinatorOptions,
+    controls: VerifiedRetrievalSessionSearchOptions = {},
+  ): Promise<Array<{ source_id: string; source_path: string; source_digest: string }>> {
+    if (this.#closed) return Promise.reject(new Error("RETRIEVAL_VERIFIED_SESSION_CLOSED"));
+    if (this.#queued >= 32) return Promise.reject(new Error("RETRIEVAL_VERIFIED_SESSION_CAPACITY"));
+    validateCoordinatorOptions(options);
+    const signal = controls.signal;
+    if (signal !== undefined && !(signal instanceof AbortSignal)) return Promise.reject(new TypeError("RETRIEVAL_VERIFIED_SESSION_SIGNAL_INVALID"));
+    if (signal?.aborted) return Promise.reject(new Error("RETRIEVAL_VERIFIED_SESSION_SEARCH_ABORTED"));
+    const queuedOptions = Object.freeze({ ...options });
+    this.#queued += 1;
+    return new Promise((resolve, reject) => {
+      const run = () => {
+        this.#queued -= 1;
+        if (this.#closed) return reject(new Error("RETRIEVAL_VERIFIED_SESSION_CLOSED"));
+        if (signal?.aborted) return reject(new Error("RETRIEVAL_VERIFIED_SESSION_SEARCH_ABORTED"));
+        try {
+          this.#store.assertImmutableIdentity();
+          const coordinator = new RetrievalCoordinator(this.#store, queuedOptions, VERIFIED_STORE, false);
+          resolve(coordinator.validateContentOnlyAuthorizedView());
+        } catch (error) { reject(error); }
+      };
+      this.#tail = this.#tail.then(run, run);
+    });
+  }
+
   search(
     request: RetrievalSearchRequest,
     options: RetrievalCoordinatorOptions,

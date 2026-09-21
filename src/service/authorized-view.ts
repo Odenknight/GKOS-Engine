@@ -179,6 +179,8 @@ function safeFileNode(node: GkxNode, level: GkxSensitivity): GkxNode {
       relations: {},
       supersedesIds: [],
       supersededByIds: [],
+      authoredLineageDeclarationCount: (node.gkx?.supersedes.length ?? 0) + (node.gkx?.supersededBy.length ?? 0),
+      authoredLineageUnresolved: (node.gkx?.supersedes.length ?? 0) + (node.gkx?.supersededBy.length ?? 0) > 0,
     },
   };
   return Object.fromEntries(Object.entries(safe).filter(([, value]) => value !== undefined)) as unknown as GkxNode;
@@ -260,6 +262,8 @@ function projectGraph(graph: GkxGraph | null, ceiling: GkxSensitivity, evaluatio
   for (const node of nodes) if (node.kind === "file" && node.gkx) {
     node.gkx.supersedesIds = [...(supersedes.get(node.id) ?? [])].sort(compare);
     node.gkx.supersededByIds = [...(supersededBy.get(node.id) ?? [])].sort(compare);
+    node.gkx.authoredLineageUnresolved = (node.gkx.authoredLineageDeclarationCount ?? 0) >
+      node.gkx.supersedesIds.length + node.gkx.supersededByIds.length;
     const invalid = temporal.invalidAt.get(node.id);
     node.gkx.invalidAt = invalid == null ? null : new Date(invalid).toISOString();
     node.gkx.head = temporal.head.get(node.id) ?? false;

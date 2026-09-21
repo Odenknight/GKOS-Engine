@@ -173,6 +173,9 @@ export interface GkxData {
 
 /** Node-level GKX projection attached to graph nodes after lineage/temporal passes. */
 export interface GkxNodeState extends GkxData {
+  /** Authorized source declares lineage whose endpoint is not visible in this scoped graph. */
+  authoredLineageUnresolved?: boolean;
+  authoredLineageDeclarationCount?: number;
   /** Resolved node ids this note supersedes (canonical: this note is NEWER). */
   supersedesIds?: string[];
   /** Resolved node ids that supersede this note (canonical projection). */

@@ -82,6 +82,8 @@ test('verified generation session serializes fresh schema-3 guards without clear
   source_reader:async path=>Buffer.from(f.sources.find(s=>s.relativePath===path).content)
  });
  try {
+  const validated=await session.validateContentOnlyAuthorizedView(options('internal'));
+  assert.deepEqual(validated.map(item=>item.source_path),['Internal.md','Public.md']);
   const internal=await session.search({query:HIDDEN,limit:20},options('internal'));
   assert.deepEqual(internal.hits,[]);assert.equal(internal.eligible_result_count,2);
   assert.deepEqual(internal,await f.coordinator.search({query:HIDDEN,limit:20}),'session result is byte-for-byte equivalent to the existing verified coordinator path');
@@ -187,19 +189,22 @@ test('explicit lexical v1 exhausts more than 100 authorized sources with stable 
  });
  const f=await mcpFixture(many,'internal');
  try {
-  const paths=[];let cursor=null;let last;
+  const paths=[];let cursor=null;let last,firstCursor;
   do {
    const response=await f.call('gkos_search_lexical_v1',{query:'meridian exhaustive marker',cursor,limit:17});
    assert.equal(response.isError,false);last=response.structuredContent;
    assert.equal(last.extension_version,'observatory.mcp-lexical.v1');
    assert.ok(last.items.every(item=>item.visible_lineage_status==='unknown'&&item.resolution_complete_within_scope===false));
-   paths.push(...last.items.map(item=>item.canonical_path));cursor=last.page.next_cursor;
+   paths.push(...last.items.map(item=>item.canonical_path));cursor=last.page.next_cursor;firstCursor??=cursor;
   } while(cursor);
   assert.equal(paths.length,125);assert.equal(new Set(paths).size,125);
   assert.deepEqual(paths,[...paths].sort());
   assert.equal(last.complete_within_scope,true);assert.equal(last.truncated,false);
-  const changed=await f.call('gkos_search_lexical_v1',{query:'different',cursor:last.page.next_cursor,limit:17});
-  assert.equal(changed.isError,false,'null final cursor starts a new query');
+  const changedQuery=await f.call('gkos_search_lexical_v1',{query:'different',cursor:firstCursor,limit:17});
+  assert.equal(changedQuery.isError,true);assert.equal(changedQuery.structuredContent.error_code,'GKOS_P6_REFERENCE_UNKNOWN');
+  f.sources[0].content+=' changed bytes';
+  const changedSource=await f.call('gkos_search_lexical_v1',{query:'meridian exhaustive marker',cursor:firstCursor,limit:17});
+  assert.equal(changedSource.isError,true);assert.equal(changedSource.structuredContent.error_code,'GKOS_P6_AUTHORIZED_VIEW_CONFLICT');
  } finally {await f.close();}
 });
 test('native MCP paging preserves rank and refuses changed-query and changed-source cursors',async()=>{
@@ -277,4 +282,26 @@ test('explicit secret-ceiling MCP identity can search and read synthetic secret 
   assert.equal(all.isError,false);
   assert.deepEqual(new Set(all.structuredContent.items.map(i=>i.canonical_path)),new Set(['Public.md','Internal.md',HIDDEN+'.md']),'secret is an inclusive ceiling, not exact-only selection');
  } finally {await internal.close();await secret.close();}
+});
+test('authored superseded status is preserved when its successor is hidden or physically absent',async()=>{
+ const oldId='550e8400-e29b-41d4-a716-446655449311',nextId='550e8400-e29b-41d4-a716-446655449312';
+ const old={relativePath:'Old.md',extension:'md',createdTime:Date.parse(AT),content:note(oldId,'Old','internal','historical memo.')
+  .replace('epistemic_state: observation','epistemic_state: superseded')
+  .replace('sensitivity: internal','sensitivity: internal\nsuperseded_by:\n  - "'+nextId+'"')};
+ const successor={relativePath:'Secret-Next.md',extension:'md',createdTime:Date.parse(AT),content:note(nextId,'Next','secret','replacement.')};
+ const absent=await mcpFixture([old]),hidden=await mcpFixture([old,successor]);
+ const summary=async fixture=>{
+  const resolved=await fixture.call('gkos_record_resolve',{canonical_path:'Old.md'});
+  const lineage=await fixture.call('gkos_lineage_get',{record_ref:resolved.structuredContent.record_ref,cursor:null,limit:10});
+  return lineage.structuredContent.items.find(item=>item.canonical_path==='Old.md');
+ };
+ try {
+  const a=await summary(absent),h=await summary(hidden);
+  for(const item of [a,h]) {
+   assert.equal(item.currentness_contract_version,'observatory.lineage.v1');
+   assert.equal(item.authored_status,'superseded');assert.equal(item.authored_status_provenance,'gkx.epistemic_state');
+   assert.equal(item.visible_lineage_status,'no_visible_successor');assert.equal(item.resolution_complete_within_scope,false);
+  }
+  assert.deepEqual({...a,record_ref:null},{...h,record_ref:null},'hidden and absent successors have equivalent observable lineage semantics');
+ } finally {await absent.close();await hidden.close();}
 });
