@@ -566,7 +566,8 @@ export class ServiceMcpRuntime {
     }
     if (request.method === "ping") return { body: { jsonrpc: "2.0", id, result: {} } };
     if (!session.initialized) return this.protocolError(id, -32600, "Invalid Request");
-    const availableTools = context.graphitiSearch ? [...SERVICE_MCP_TOOLS, SERVICE_MCP_GRAPHITI_TOOL] : SERVICE_MCP_TOOLS;
+    const contentTools = context.retrievalContentValidate ? SERVICE_MCP_TOOLS : SERVICE_MCP_TOOLS.filter((item) => item.name !== "gkos_search_lexical_v1");
+    const availableTools = context.graphitiSearch ? [...contentTools, SERVICE_MCP_GRAPHITI_TOOL] : contentTools;
     if (request.method === "tools/list") return { body: { jsonrpc: "2.0", id, result: { tools: availableTools } } };
     if (request.method !== "tools/call") return this.protocolError(id, -32601, "Method not found");
     const params = request.params;
@@ -626,7 +627,7 @@ export class ServiceMcpRuntime {
       if (!exactObject(args, [])) return fail("GKOS_P6_INVALID_PARAMS");
       const navigationReady = !!context.navigationConfig && !!context.sourceRecords;
       const names = navigationReady ? CAPABILITY_NAMES : ["capability.read.self"];
-      const contentNames = context.sourceRecords ? ["note.content.read", "record.locator.resolve", "note.lexical.exhaustive.v1", ...(context.retrievalSearch ? ["note.fulltext.search"] : [])] : [];
+      const contentNames = context.sourceRecords ? ["note.content.read", "record.locator.resolve", ...(context.retrievalContentValidate ? ["note.lexical.exhaustive.v1"] : []), ...(context.retrievalSearch ? ["note.fulltext.search"] : [])] : [];
       const discovery = {
         version: "observatory.discovery/1",
         invalid_params_contract: { contract_version: PARAM_ERROR_CONTRACT_VERSION, max_param_errors: PARAM_ERROR_LIMIT,
