@@ -1,6 +1,8 @@
 import { validateRetrievalFilters } from "../retrieval/filters";
 import { lexicalQueryClauses } from "../retrieval/lexical";
 import type { ServiceRetrievalSearch } from "./retrieval";
+import type { ServiceGraphitiExecutionSearch } from "./graphiti-search";
+import { GRAPHITI_QUERY_CONTRACT_VERSION, type GraphitiQueryResult } from "../graphiti-query-contract";
 import { createHash, createHmac, randomBytes } from "node:crypto";
 import { canonicalJson } from "../canonical";
 import { ENGINE_VERSION } from "../version";
@@ -82,7 +84,7 @@ const PARAM_HELP: Readonly<Record<string, { expected: string; hint: string }>> =
 });
 
 function parameterHelp(tool: string, field: string): { expected: string; hint: string } {
-  const key = field === "limit" && tool === "gkos_search" ? "search_limit" :
+  const key = field === "limit" && (tool === "gkos_search" || tool === "gkos_graphiti_search") ? "search_limit" :
     field === "scope_ref" && tool === "gkos_navigation_discover" ? "discovery_scope" : field;
   return Object.hasOwn(PARAM_HELP, key) ? PARAM_HELP[key] : PARAM_HELP.$;
 }
@@ -103,6 +105,16 @@ export const SERVICE_MCP_TOOLS: readonly ServiceMcpTool[] = Object.freeze([
     ...schema, "x-gkos-param-help": parameterHelp(tool.name, field),
   }]),
 ) } })));
+
+export const SERVICE_MCP_GRAPHITI_TOOL: ServiceMcpTool = Object.freeze({
+  name: "gkos_graphiti_search", title: "Search authorized Graphiti facts",
+  description: "Optional managed Graphiti search over the complete current authorized clearance projection. Facts are non-authoritative and marked unverified; citations bind every result to an authorized source revision.",
+  inputSchema: { type: "object", additionalProperties: false, "x-gkos-param-help": PARAM_HELP.$,
+    properties: {
+      query: { type: "string", minLength: 1, maxLength: 256, "x-gkos-param-help": PARAM_HELP.query },
+      limit: { type: "integer", minimum: 1, maximum: 50, "x-gkos-param-help": PARAM_HELP.search_limit },
+    }, required: ["query", "limit"] }, annotations,
+});
 
 interface McpSession {
   id: string;
@@ -126,6 +138,8 @@ export interface ServiceMcpExecutionContext {
   policyDigest?: string;
   sourceRecords?: readonly SourceFile[];
   retrievalSearch?: ServiceRetrievalSearch;
+  graphitiSearch?: ServiceGraphitiExecutionSearch;
+  graphitiCorpusId?: string;
   navigationConfig?: VaultNavigationConfig;
   vaultId: string;
 }
@@ -171,7 +185,7 @@ interface ParameterIssue { field: string; code: string }
 // information about records outside the admitted view.
 function parameterIssues(tool: string, args: unknown): ParameterIssue[] {
   if (!args || typeof args !== "object" || Array.isArray(args)) return [{ field: "$", code: "INVALID_TYPE" }];
-  const schema = SERVICE_MCP_TOOLS.find(item => item.name === tool)!.inputSchema;
+  const schema = (tool === SERVICE_MCP_GRAPHITI_TOOL.name ? SERVICE_MCP_GRAPHITI_TOOL : SERVICE_MCP_TOOLS.find(item => item.name === tool)!).inputSchema;
   const properties = schema.properties as Record<string, Record<string, any>>;
   const input = args as Record<string, unknown>, issues: ParameterIssue[] = [];
   if (Object.keys(input).some(key => !Object.hasOwn(properties, key))) issues.push({ field: "$", code: "UNEXPECTED_FIELD" });
@@ -411,6 +425,45 @@ function contentSnapshot(context: ServiceMcpExecutionContext, records: Authorize
     records: records.map((record) => [record.node.id, record.node.path, record.sourceDigest]) });
 }
 
+function graphitiScopeDigest(context: ServiceMcpExecutionContext, records: AuthorizedContent[]): `sha256:${string}` {
+  const pairs = records.map(record => {
+    const uid = record.node.gkx?.uid;
+    if (typeof uid !== "string" || !uid) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+    return [uid, record.sourceDigest] as const;
+  }).sort((left, right) => left[0] < right[0] ? -1 : left[0] > right[0] ? 1 : left[1].localeCompare(right[1]));
+  if (new Set(pairs.map(pair => pair[0])).size !== pairs.length) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+  return `sha256:${createHash("sha256").update(JSON.stringify([context.identity.sensitivityCeiling, pairs]), "utf8").digest("hex")}`;
+}
+
+function checkedGraphitiResult(value: GraphitiQueryResult | null, context: ServiceMcpExecutionContext,
+  records: AuthorizedContent[], requestId: string, limit: number): { result: GraphitiQueryResult; paths: string[] } | null {
+  try { if (Buffer.byteLength(JSON.stringify(value), "utf8") > 131_072) return null; } catch { return null; }
+  if (!value || !exactObject(value, ["contract_version", "request_id", "binding", "hits"]) ||
+      value.contract_version !== GRAPHITI_QUERY_CONTRACT_VERSION || value.request_id !== requestId || !Array.isArray(value.hits) || value.hits.length > limit ||
+      !exactObject(value.binding, ["corpus_id", "scope_digest", "policy_digest", "source_snapshot_digest", "projection_id", "configuration_digest"])) return null;
+  const binding = value.binding, hash = /^sha256:[0-9a-f]{64}$/u;
+  if (binding.corpus_id !== context.graphitiCorpusId || binding.scope_digest !== graphitiScopeDigest(context, records) || binding.policy_digest !== context.policyDigest ||
+      !hash.test(binding.source_snapshot_digest) || !hash.test(binding.configuration_digest) || typeof binding.projection_id !== "string" || !/^[A-Za-z0-9._:-]{1,128}$/u.test(binding.projection_id)) return null;
+  const allowed = new Map<string, AuthorizedContent>();
+  for (const record of records) {
+    const uid = record.node.gkx?.uid;
+    if (typeof uid !== "string" || allowed.has(uid)) return null;
+    allowed.set(uid, record);
+  }
+  const paths = new Set<string>();
+  for (const hit of value.hits) {
+    if (!exactObject(hit, ["fact", "semantic_support", "citations"]) || typeof hit.fact !== "string" || !hit.fact.trim() || Buffer.byteLength(hit.fact, "utf8") > 4096 || /[\u0000-\u001f\u007f]/u.test(hit.fact) || hit.semantic_support !== "unverified" || !Array.isArray(hit.citations) || hit.citations.length < 1 || hit.citations.length > 16) return null;
+    const episodes = new Set<string>();
+    for (const citation of hit.citations) {
+      if (!exactObject(citation, ["projection_episode_id", "source_id", "source_digest"]) || typeof citation.projection_episode_id !== "string" || !/^[A-Za-z0-9._:-]{1,128}$/u.test(citation.projection_episode_id) || episodes.has(citation.projection_episode_id)) return null;
+      const record = allowed.get(citation.source_id);
+      if (!record || citation.source_digest !== record.sourceDigest) return null;
+      episodes.add(citation.projection_episode_id); paths.add(record.node.path);
+    }
+  }
+  return { result: structuredClone(value), paths: [...paths].sort() };
+}
+
 function common(context: ServiceMcpExecutionContext, requestId: string): Record<string, unknown> {
   return {
     contract_version: CONTRACT_VERSION,
@@ -505,12 +558,13 @@ export class ServiceMcpRuntime {
     }
     if (request.method === "ping") return { body: { jsonrpc: "2.0", id, result: {} } };
     if (!session.initialized) return this.protocolError(id, -32600, "Invalid Request");
-    if (request.method === "tools/list") return { body: { jsonrpc: "2.0", id, result: { tools: SERVICE_MCP_TOOLS } } };
+    const availableTools = context.graphitiSearch ? [...SERVICE_MCP_TOOLS, SERVICE_MCP_GRAPHITI_TOOL] : SERVICE_MCP_TOOLS;
+    if (request.method === "tools/list") return { body: { jsonrpc: "2.0", id, result: { tools: availableTools } } };
     if (request.method !== "tools/call") return this.protocolError(id, -32601, "Method not found");
     const params = request.params;
     if (!params || typeof params !== "object" || Array.isArray(params) || typeof (params as Record<string, unknown>).name !== "string") return this.protocolError(id, -32602, "Invalid params");
     const tool = String((params as Record<string, unknown>).name);
-    if (!SERVICE_MCP_TOOLS.some((item) => item.name === tool)) return this.protocolError(id, -32602, "Invalid params");
+    if (!availableTools.some((item) => item.name === tool)) return this.protocolError(id, -32602, "Invalid params");
     const args = (params as Record<string, unknown>).arguments ?? {};
     const operationId = uuidV7();
     let executed: { result: Record<string, unknown>; paths: string[]; isError: boolean; eventStatus?: ServiceTraversalEvent["status"] };
@@ -675,6 +729,16 @@ export class ServiceMcpRuntime {
         record_ref: input.record_ref, canonical_path: node.path, content_encoding: "utf-8", content,
         offset_bytes: start, returned_bytes: end - start, total_bytes: record.bytes.length, source_digest: record.sourceDigest,
         page: page(Number(input.limit_bytes), context.generation, pagination.snapshotId, session, "note_read", scope, nextOffset) }), paths: [node.path], isError: false };
+    }
+    if (tool === "gkos_graphiti_search") {
+      if (!exactObject(args, ["query", "limit"]) || typeof input.query !== "string" || !input.query.trim() || input.query.length > 256 || Buffer.byteLength(input.query, "utf8") > 1024 || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 50 || Buffer.from(input.query, "utf8").toString("utf8") !== input.query || /[\u0000-\u001f\u007f]/u.test(input.query)) return fail("GKOS_P6_INVALID_PARAMS");
+      if (!context.graphitiSearch || !context.graphitiCorpusId || !context.policyDigest) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
+      const records = authorizedContent(context), query = input.query.trim(), limit = Number(input.limit);
+      const provided = await context.graphitiSearch(Object.freeze({ requestId, query, limit }));
+      const checked = checkedGraphitiResult(provided, context, records, requestId, limit);
+      if (!checked) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
+      return { result: seal({ ...common(context, requestId), extension_version: "observatory.mcp-graphiti.v0",
+        binding: checked.result.binding, semantic_support: "unverified", items: checked.result.hits }), paths: checked.paths, isError: false };
     }
     if (tool === "gkos_search") {
       if ((!exactObject(args, ["query", "cursor", "limit"]) && !exactObject(args, ["query", "cursor", "limit", "path_include"])) || typeof input.query !== "string" || !input.query.trim() || input.query.length > 256 || Buffer.byteLength(input.query, "utf8") > 1024 || !(input.cursor === null || typeof input.cursor === "string") || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 50) return fail("GKOS_P6_INVALID_PARAMS");

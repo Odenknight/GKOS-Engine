@@ -3,5 +3,6 @@ export * from "./auth";
 export * from "./mcp";
 export * from "./server";
 export * from "./local-embedding";
+export * from "./graphiti-search";
 
 export * from "./work-scheduler";

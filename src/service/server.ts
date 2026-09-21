@@ -1,6 +1,8 @@
 import { ServiceWorkScheduler, WorkScheduleError } from "./work-scheduler";
 import type { ServiceRetrievalSearch } from "./retrieval";
+import type { ServiceGraphitiSearch, ServiceGraphitiSource } from "./graphiti-search";
 import * as http from "node:http";
+import { createHash } from "node:crypto";
 import type { VaultNavigationConfig } from "../navigation";
 import { buildAuthorizedView, GkosServiceDeniedError, type GkosAuthorizedView } from "./authorized-view";
 import { buildServiceCapabilities, type ServiceCapabilityConfiguration } from "./capabilities";
@@ -9,6 +11,7 @@ import { MCP_PROTOCOL_VERSION, MCP_REQUEST_BYTES, MCP_RESULT_BYTES, ServiceMcpRu
 import type {
   ServiceAuthorizationConfiguration, ServiceCorpusSnapshot, ServiceCredentialIdentity, ServiceTraversalEvent,
 } from "./types";
+import type { SourceFile } from "../types";
 import { ServiceCredentialRegistry } from "./auth";
 
 const GENERIC_DENIAL = Object.freeze({ error: "unauthorized" });
@@ -27,6 +30,7 @@ export interface LocalServiceOptions {
   vaultName?: string;
   vaultId?: string;
   retrievalSearch?: ServiceRetrievalSearch;
+  graphitiSearch?: ServiceGraphitiSearch;
   navigationConfig?: VaultNavigationConfig;
   capabilities?: ServiceCapabilityConfiguration;
   eventRing?: ServiceTraversalEventRing;
@@ -64,6 +68,31 @@ function waitForDrain(response: http.ServerResponse): Promise<void> {
 }
 
 function jsonBytes(value: unknown): Buffer { return Buffer.from(JSON.stringify(value), "utf8"); }
+function sha256(value: string): `sha256:${string}` { return `sha256:${createHash("sha256").update(value, "utf8").digest("hex")}`; }
+function graphitiAuthority(identity: ServiceCredentialIdentity, authorized: GkosAuthorizedView,
+  snapshot: ServiceCorpusSnapshot, authorization: ServiceAuthorizationConfiguration, corpusId: string) {
+  if (!authorization.configured || !authorization.policyDigest || !Number.isSafeInteger(authorization.generation) || authorization.generation! < 1 || !snapshot.sourceRecords) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+  const visible = new Map(authorized.notes.map(note => [note.path, note]));
+  if (visible.size !== authorized.notes.length) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+  const records = new Map<string, SourceFile>();
+  for (const source of snapshot.sourceRecords) if (visible.has(source.relativePath)) {
+    if (records.has(source.relativePath)) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+    records.set(source.relativePath, source);
+  }
+  const ids = new Set<string>(), sources: ServiceGraphitiSource[] = [];
+  for (const note of authorized.notes) {
+    const source = records.get(note.path);
+    if (!source || typeof source.content !== "string" || typeof note.uid !== "string" || !note.uid || ids.has(note.uid)) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+    const bytes = Buffer.from(source.content, "utf8");
+    if (bytes.toString("utf8") !== source.content) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+    ids.add(note.uid); sources.push(Object.freeze({ source_id: note.uid, source_digest: sha256(source.content), canonical_path: note.path }));
+  }
+  sources.sort((left, right) => left.source_id < right.source_id ? -1 : left.source_id > right.source_id ? 1 : left.source_digest.localeCompare(right.source_digest));
+  const authorizedScopeDigest = sha256(JSON.stringify([identity.sensitivityCeiling, sources.map(source => [source.source_id, source.source_digest])]));
+  return Object.freeze({ identity: Object.freeze({ credentialId: identity.credentialId, agentId: identity.agentId, sensitivityCeiling: identity.sensitivityCeiling }),
+    corpusId, generation: authorization.generation!, policyDigest: authorization.policyDigest, authorizedScopeDigest,
+    sources: Object.freeze(sources) });
+}
 function exactIso(value: unknown): value is string {
   if (typeof value !== "string") return false;
   const parsed = new Date(value);
@@ -364,6 +393,19 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
               if (after.generation !== snapshot.generation || currentAuthorization.generation !== authorized.authorization.generation || currentAuthorization.policyDigest !== authorized.authorization.policyDigest || !currentAuthorization.configured) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
               return result;
             } : undefined, navigationConfig: options.navigationConfig, vaultId: options.vaultId ?? "vault:local",
+            graphitiSearch: options.graphitiSearch ? async request => {
+              const corpusId = options.vaultId ?? "vault:local";
+              const initialAuthority = graphitiAuthority(checkedIdentity, authorized.view, snapshot, authorized.authorization, corpusId);
+              const result = await options.graphitiSearch!(Object.freeze({ ...request, signal: disconnected.signal, authority: initialAuthority }));
+              const currentIdentity = token ? options.credentials.resolve(token) : null;
+              if (!currentIdentity || currentIdentity.revoked || currentIdentity.credentialId !== checkedIdentity.credentialId || currentIdentity.agentId !== checkedIdentity.agentId || currentIdentity.sensitivityCeiling !== checkedIdentity.sensitivityCeiling || JSON.stringify(currentIdentity.capabilities) !== JSON.stringify(checkedIdentity.capabilities)) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+              const after = await options.snapshot(), currentAuthorization = await authorization(after), currentView = await view(currentIdentity, "mcp", after);
+              if (after.generation !== snapshot.generation) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+              const finalAuthority = graphitiAuthority(currentIdentity, currentView.view, after, currentAuthorization, corpusId);
+              if (JSON.stringify(finalAuthority) !== JSON.stringify(initialAuthority)) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+              return result;
+            } : undefined,
+            graphitiCorpusId: options.graphitiSearch ? (options.vaultId ?? "vault:local") : undefined,
           });
           const finalIdentity = token ? options.credentials.resolve(token) : null;
           if (!finalIdentity || finalIdentity.revoked || finalIdentity.credentialId !== checkedIdentity.credentialId || finalIdentity.agentId !== checkedIdentity.agentId || finalIdentity.sensitivityCeiling !== checkedIdentity.sensitivityCeiling || JSON.stringify(finalIdentity.capabilities) !== JSON.stringify(checkedIdentity.capabilities)) { mcp.closeCredentialSessions(checkedIdentity.credentialId); send(response, 401, GENERIC_DENIAL, requestOrigin); return; }
