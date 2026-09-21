@@ -445,3 +445,10 @@ Private managed Graphiti host work is described in
 [the service guide](services/gkos-graphiti/README.md). It requires explicit ledger
 initialization and supplies a bounded query transport; it does not activate
 semantic retrieval in products.
+
+## Proposed classifier module upgrade
+
+[Build instructions and discussion context](docs/classifier/README.md) cover the
+Disposition Sidecar, reusable assessments, bounded dispositions, and admitted
+metadata updates. This is a documented proposal linked to Standard draft PR #56;
+it does not claim implementation, qualification or runtime activation.
