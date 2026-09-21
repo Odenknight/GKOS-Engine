@@ -1446,16 +1446,28 @@
       "rationale": "Reduce verified retrieval startup cost without weakening validation: use native well-formed UTF-16 checks when available, validate canonical JSON data without allocating unused serialized bytes, group candidate chunks linearly for parent validation, and cover adversarial canonical-domain and interleaved parent bindings."
     },
     {
+      "path": "src/service/graphiti-search.ts",
+      "before": null,
+      "after": "8992103bdab59a856a9591a7f21aa9856b1e3896276ae599b7ac7aa453cd44bb",
+      "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
+    },
+    {
       "path": "src/service/mcp.ts",
       "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
-      "after": "edabbbb66c52c3698a4941195fa7ccb3f406280947a453fbde79253a54d6377e",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "25a2a44f8fc8a8cb31261d254fedaf010c86b9369c16b59dfc368f752a4bc2cc",
+      "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
+    },
+    {
+      "path": "src/service/node.ts",
+      "before": "a66997dc3e0248ddd9988149a224ec462ce74f57",
+      "after": "12fb49537a99d88a985f017ba90353c7aad4d58a7e80a857dfca4ad19ede7647",
+      "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
     },
     {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
-      "after": "be047a5f8d8ae6d65457c714e39e10c65b27e0bfb04296c3d31f1c7919537387",
-      "rationale": "T01: fail-closed references and authorized snapshot continuations; retain established successful wire bytes."
+      "after": "2de3223a963bc907ea21ab48380a80f04bc067cc86555404716df99ae7e36577",
+      "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
     },
     {
       "path": "src/version.ts",
@@ -1726,6 +1738,12 @@
       "before": "e02ed007f6a0b7adb361cfedacb33adcd781043e",
       "after": "da9ab7435151982e968ee9c5eb75039fcc9e8824c35f48e50e69de39f1f5614f",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/service-graphiti-search.test.mjs",
+      "before": null,
+      "after": "7a0c036ac2e100d73540d5d04e2a9f9781b88227d4f7b3255f5caeb644d14e71",
+      "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
     },
     {
       "path": "test/service-reference-freshness.test.mjs",
