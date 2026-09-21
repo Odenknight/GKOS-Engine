@@ -10,9 +10,9 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const read = path => readFileSync(resolve(root, path), 'utf8');
 
 test('current capability guide names the exact executable MCP tool inventory', () => {
-  const documented = [...read('docs/CURRENT_CAPABILITIES.md').matchAll(/^\| (gkos_[a-z_]+) \|/gm)].map(match => match[1]).sort();
+  const documented = [...read('docs/CURRENT_CAPABILITIES.md').matchAll(/^\| (gkos_[a-z0-9_]+) \|/gm)].map(match => match[1]).sort();
   assert.deepEqual(documented, SERVICE_MCP_TOOLS.map(tool => tool.name).sort());
-  assert.equal(documented.length, 10);
+  assert.equal(documented.length, 11);
   assert.ok(SERVICE_MCP_TOOLS.every(tool => tool.annotations.readOnlyHint === true));
 });
 

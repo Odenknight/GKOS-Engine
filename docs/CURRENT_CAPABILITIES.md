@@ -55,6 +55,7 @@ The executable inventory is `SERVICE_MCP_TOOLS` in `src/service/mcp.ts`. Authent
 | gkos_note_read | Paginated authorized Markdown, including frontmatter | Observatory content extension |
 | gkos_record_resolve | Resolve a known canonical path to a current read reference | Observatory content extension |
 | gkos_search | Authorized indexed search with verified citations | Observatory retrieval extension |
+| gkos_search_lexical_v1 | Explicit content-only lexical discovery over an exactly guarded authorized source scope, with lineage reported as unknown/incomplete | Observatory lexical v1 extension |
 
 References bind session, generation and source bytes; paths are locators, not immutable identity. Read authorization is record-level, not per-span redaction. Service search permits only operator-configured local ONNX embedding; remote providers and reranking stay disabled in that profile. Library provider availability must not be confused with service enablement.
 

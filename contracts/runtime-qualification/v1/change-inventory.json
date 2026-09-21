@@ -692,7 +692,7 @@
     {
       "path": "docs/CURRENT_CAPABILITIES.md",
       "before": "154d01ab1328d6f7a8cc10974cde6d8651402357",
-      "after": "d2625471b8237d47c4403921abd6fdf4848212cacb169dd5e234085c575ae827",
+      "after": "f678639cf0cae416a6a406fe2bf9b6b71b102ccfb5b998346b6e3eb7156a8633",
       "rationale": "Reconcile current main 2.2.0 source capabilities and exact passed baseline checks with separately verified npm/GitHub versions; preserve outstanding release gates and historical identities."
     },
     {
@@ -1580,7 +1580,7 @@
     {
       "path": "test/documentation-capabilities.test.mjs",
       "before": null,
-      "after": "4f7b532827ca28348b8a510237db6216a17dcb68d801ac5679dbf54ef06916de",
+      "after": "57fc8edc1f171f3dd4aa0f40813a1fe668985fa90226161b7ff0b0e2646122c4",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
