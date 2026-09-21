@@ -145,7 +145,7 @@ test("protected diagnostic identifies an authored relationship ambiguous at base
     source("Project One/Decision.md", note(OLD, "Shared Decision", "2026-07-01T00:00:00Z"), "2026-07-01T00:00:00Z"),
     source("Project_Two/Decision.md", note(NEW, "Shared Decision", "2026-07-02T00:00:00Z"), "2026-07-02T00:00:00Z"),
     source("review.md", note("018f0000-0000-7000-8000-000000000803", "Review", "2026-08-01T00:00:00Z", {
-      extra: "relationships:\n  related_to:\n    - target: \"Shared Decision\"\n      origin: \"authored\"\n",
+      extra: "relationships:\n  related_to:\n    - target: \"Decision\"\n      origin: \"authored\"\n",
     }), "2026-08-01T00:00:00Z"),
   ]);
   const result = diagnoseGkxRetrievalAuthorizedCandidateView(
