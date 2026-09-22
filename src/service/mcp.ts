@@ -183,11 +183,31 @@ function exactObject(value: unknown, required: readonly string[]): value is Reco
 }
 
 interface ParameterIssue { field: string; code: string }
+// One resolver for every advertised tool, including the optional Graphiti tool,
+// which is published outside SERVICE_MCP_TOOLS. Diagnostics must never depend on
+// whether a tool happens to live in the base catalog array.
+function toolInputSchema(tool: string): Record<string, any> {
+  const published = tool === SERVICE_MCP_GRAPHITI_TOOL.name ? SERVICE_MCP_GRAPHITI_TOOL : SERVICE_MCP_TOOLS.find(item => item.name === tool);
+  if (!published) throw new Error("GKOS_PARAM_SCHEMA_UNKNOWN");
+  return published.inputSchema as Record<string, any>;
+}
+// The declared lexical query contract, evaluated before any dispatch. Shared by
+// the generic parameter pass and by the lexical/Graphiti lanes so their rules
+// cannot drift apart. Returns the published issue code, or null when the query
+// satisfies the declared grammar.
+function lexicalQueryIssue(value: string): string | null {
+  if (!value.trim()) return "INVALID_VALUE";
+  if (Buffer.byteLength(value, "utf8") > 1024) return "INVALID_VALUE";
+  if (value.trim().split(/\s+/u).length > 8) return "INVALID_VALUE";
+  if (Buffer.from(value, "utf8").toString("utf8") !== value) return "INVALID_VALUE";
+  try { lexicalQueryClauses(value.trim()); } catch { return "INVALID_VALUE"; }
+  return null;
+}
 // Only schema-owned field names/codes: no caller values, unknown keys, or
 // information about records outside the admitted view.
 function parameterIssues(tool: string, args: unknown): ParameterIssue[] {
   if (!args || typeof args !== "object" || Array.isArray(args)) return [{ field: "$", code: "INVALID_TYPE" }];
-  const schema = (tool === SERVICE_MCP_GRAPHITI_TOOL.name ? SERVICE_MCP_GRAPHITI_TOOL : SERVICE_MCP_TOOLS.find(item => item.name === tool)!).inputSchema;
+  const schema = toolInputSchema(tool);
   const properties = schema.properties as Record<string, Record<string, any>>;
   const input = args as Record<string, unknown>, issues: ParameterIssue[] = [];
   if (Object.keys(input).some(key => !Object.hasOwn(properties, key))) issues.push({ field: "$", code: "UNEXPECTED_FIELD" });
@@ -212,10 +232,8 @@ function parameterIssues(tool: string, args: unknown): ParameterIssue[] {
     else if (field === "path_prefix" && typeof value === "string" && value !== "" && !canonicalLocator(value.replace(/\/$/u, ""))) issues.push({ field, code: "INVALID_PATH" });
     else if (field === "name_query" && typeof value === "string" && (!value.trim() || value.trim().split(/\s+/u).length > 8 || Buffer.from(value, "utf8").toString("utf8") !== value || /[\u0000-\u001f\u007f]/u.test(value))) issues.push({ field, code: "INVALID_VALUE" });
     else if (field === "query" && typeof value === "string") {
-      try {
-        if (!value.trim() || Buffer.byteLength(value, "utf8") > 1024 || value.trim().split(/\s+/u).length > 8 || Buffer.from(value, "utf8").toString("utf8") !== value) throw new Error();
-        lexicalQueryClauses(value.trim());
-      } catch { issues.push({ field, code: "INVALID_VALUE" }); }
+      const queryCode = lexicalQueryIssue(value);
+      if (queryCode) issues.push({ field, code: queryCode });
     } else if (field === "path_include" && Array.isArray(value)) {
       try { validateRetrievalFilters({ path_include: value }); }
       catch { issues.push({ field, code: "INVALID_ITEMS" }); }
@@ -228,7 +246,7 @@ function parameterIssues(tool: string, args: unknown): ParameterIssue[] {
 }
 
 function paramErrors(tool: string, args: unknown, issues: readonly ParameterIssue[]): ParamError[] {
-  const properties = SERVICE_MCP_TOOLS.find(item => item.name === tool)!.inputSchema.properties as Record<string, Record<string, any>>;
+  const properties = toolInputSchema(tool).properties as Record<string, Record<string, any>>;
   return issues.map(({ field, code }) => {
     const value = args && typeof args === "object" ? (args as Record<string, unknown>)[field] : undefined;
     const spec = Object.hasOwn(properties, field) ? properties[field] : {};
@@ -757,7 +775,13 @@ export class ServiceMcpRuntime {
         page: page(Number(input.limit_bytes), context.generation, pagination.snapshotId, session, "note_read", scope, nextOffset) }), paths: [node.path], isError: false };
     }
     if (tool === "gkos_graphiti_search") {
-      if (!exactObject(args, ["query", "limit"]) || typeof input.query !== "string" || !input.query.trim() || input.query.length > 256 || Buffer.byteLength(input.query, "utf8") > 1024 || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 50 || Buffer.from(input.query, "utf8").toString("utf8") !== input.query || /[\u0000-\u001f\u007f]/u.test(input.query)) return fail("GKOS_P6_INVALID_PARAMS");
+      // Broad shape first, then the declared lexical grammar, both before any
+      // backend dispatch. The Graphiti lane reuses the same validator as the
+      // lexical lane so a 9-term or malformed-quote query is refused as input,
+      // never reported as an operational fault.
+      if (!exactObject(args, ["query", "limit"]) || typeof input.query !== "string" || !input.query.trim() || input.query.length > 256 || Buffer.byteLength(input.query, "utf8") > 1024 || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 50 || Buffer.from(input.query, "utf8").toString("utf8") !== input.query || /[\u0000-\u001f\u007f]/u.test(input.query)) return fail("GKOS_P6_INVALID_PARAMS", [{ field: "query", code: "INVALID_VALUE" }]);
+      const lexicalCode = lexicalQueryIssue(input.query);
+      if (lexicalCode) return fail("GKOS_P6_INVALID_PARAMS", [{ field: "query", code: lexicalCode }]);
       if (!context.graphitiSearch || !context.graphitiCorpusId || !context.policyDigest) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
       const records = authorizedContent(context), query = input.query.trim(), limit = Number(input.limit);
       const provided = await context.graphitiSearch(Object.freeze({ requestId, query, limit }));
@@ -772,8 +796,8 @@ export class ServiceMcpRuntime {
           !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 50 ||
           Buffer.from(input.query, "utf8").toString("utf8") !== input.query || /[\u0000-\u001f\u007f]/u.test(input.query)) return fail("GKOS_P6_INVALID_PARAMS");
       const query = input.query.trim();
-      if (query.split(/\s+/u).length > 8) return fail("GKOS_P6_INVALID_PARAMS");
-      try { lexicalQueryClauses(query); } catch { return fail("GKOS_P6_INVALID_PARAMS"); }
+      const lexicalCode = lexicalQueryIssue(query);
+      if (lexicalCode) return fail("GKOS_P6_INVALID_PARAMS", [{ field: "query", code: lexicalCode }]);
       if (!context.policyDigest || !context.retrievalContentValidate) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
       const records = authorizedContent(context).sort((left, right) => left.node.path < right.node.path ? -1 : left.node.path > right.node.path ? 1 : 0);
       const byPath = new Map(records.map((record) => [record.node.path, record]));

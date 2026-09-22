@@ -1508,8 +1508,8 @@
     {
       "path": "src/service/mcp.ts",
       "before": "337c8dd80d0990c9bbc77a357fc57351c8412f83",
-      "after": "db814d75d27163b14bbfd54d2922b2738ee20da40d66a1f5bc59c1556bcc2db0",
-      "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
+      "after": "9359d363a503fd7458090a29e53c3ed8504b2eb18a7b92b983b4951c39d03dc6",
+      "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope. J2: resolve the Graphiti tool schema for parameter errors and enforce the declared lexical query grammar before dispatch, so an invalid query returns the established invalid-params envelope instead of an operation failure."
     },
     {
       "path": "src/service/node.ts",
@@ -1816,6 +1816,12 @@
       "before": "e02ed007f6a0b7adb361cfedacb33adcd781043e",
       "after": "da9ab7435151982e968ee9c5eb75039fcc9e8824c35f48e50e69de39f1f5614f",
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+    },
+    {
+      "path": "test/service-graphiti-invalid-params.test.mjs",
+      "before": null,
+      "after": "ae89259f584479d26f6d77d7dc79f63151f9f7cccdd4c624d885a2728bfecba2",
+      "rationale": "J2: prove the Graphiti query contract on the real HTTP tool path - invalid input never reaches the backend and returns a schema-valid invalid-params envelope, valid 7/8-term and quoted queries execute, and backend faults and authorization denials stay opaque and separate."
     },
     {
       "path": "test/service-graphiti-search.test.mjs",
