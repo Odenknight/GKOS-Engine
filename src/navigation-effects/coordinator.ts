@@ -45,6 +45,10 @@ export class ManagedMocCoordinator {
     return next;
   }
   private time(now: number) { if (!Number.isSafeInteger(now) || now < 0) throw new Error("INVALID_CLOCK"); }
+  private nextRevision(): number {
+    if (!Number.isSafeInteger(this.revision + 1)) throw new Error("COORDINATOR_SEQUENCE_EXHAUSTED");
+    return ++this.revision;
+  }
   private async persist(next: MocReconciliationIntent | null) {
     await this.host.saveIntent(next ? structuredClone(next) : null);
     this.intent = next;
@@ -60,7 +64,7 @@ export class ManagedMocCoordinator {
         || (saved.full && saved.paths.length !== 0))) throw new Error("CORRUPT_RECONCILIATION_INTENT");
       this.revision = saved?.revision ?? 0;
       // Startup always covers the complete vault, including any missed intent.
-      await this.persist({ revision: ++this.revision, full: true, paths: [], firstAt: now, lastAt: now });
+      await this.persist({ revision: this.nextRevision(), full: true, paths: [], firstAt: now, lastAt: now });
       if (!await this.host.recover()) return;
       this.ready = true;
     });
@@ -87,8 +91,7 @@ export class ManagedMocCoordinator {
         const paths = new Set(this.intent?.paths ?? []);
         for (const p of batch.paths) paths.add(p);
         const full = batch.full || this.intent?.full === true || paths.size > this.options.maxPaths;
-        if (!Number.isSafeInteger(this.revision + 1)) throw new Error("COORDINATOR_SEQUENCE_EXHAUSTED");
-        await this.persist({ revision: ++this.revision, full, paths: full ? [] : [...paths].sort(), firstAt: this.intent?.firstAt ?? batch.first, lastAt: Math.max(this.intent?.lastAt ?? 0, batch.last) });
+        await this.persist({ revision: this.nextRevision(), full, paths: full ? [] : [...paths].sort(), firstAt: this.intent?.firstAt ?? batch.first, lastAt: Math.max(this.intent?.lastAt ?? 0, batch.last) });
       });
     }
     const batch = this.admissions;
@@ -105,7 +108,7 @@ export class ManagedMocCoordinator {
     const run = async () => {
       const work = await this.serial(async () => {
         if (!this.ready || this.stopped) return null;
-        if (!this.intent && now - this.lastScan >= this.options.periodicMs) await this.persist({ revision: ++this.revision, full: true, paths: [], firstAt: now, lastAt: now });
+        if (!this.intent && now - this.lastScan >= this.options.periodicMs) await this.persist({ revision: this.nextRevision(), full: true, paths: [], firstAt: now, lastAt: now });
         const pending = this.intent;
         if (!pending || (!force && now - pending.lastAt < this.options.debounceMs && now - pending.firstAt < this.options.maxDelayMs)) return null;
         return structuredClone(pending);

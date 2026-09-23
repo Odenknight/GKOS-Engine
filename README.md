@@ -15,6 +15,10 @@ GKOS-Engine is designed to be the quiet machinery underneath products such as
 Kosmos-Oden: one interpretation of GKX, reusable from a library, CLI, headless
 service, or desktop sidecar.
 
+Native inspectors can use [scoped lineage inspection](docs/SCOPED-LINEAGE-INSPECTION.md)
+to distinguish resolved, unresolved, ambiguous and self-referencing declarations
+within a host-supplied readable node set, without exposing hidden candidates.
+
 FAC selected this as the common knowledge Engine for future products. Follow the
 [product Engine policy](docs/PRODUCT-ENGINE-POLICY.md) for the existing public
 adapter, immutable dependency pins and product-specific acceptance evidence.

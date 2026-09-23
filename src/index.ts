@@ -34,6 +34,7 @@ export * from "./gkx-exclusions";
 export * from "./gkx-network";
 export * from "./resolver";
 export * from "./lineage";
+export * from "./lineage-inspection";
 export * from "./temporal";
 export * from "./timestamps";
 export {

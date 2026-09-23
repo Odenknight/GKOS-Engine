@@ -54,7 +54,9 @@ export class NodeManagedMocRuntime {
         void (async () => {
           try {
             const own = path ? this.selfWrites.get(path) : undefined;
-            if (path && own) {
+            // A rename can also remove another path; matching target bytes do
+            // not prove that its complete topology change is our own write.
+            if (path && own && _event !== "rename") {
               const bytes = await this.host.executor.readSource(path);
               this.selfWrites.delete(path);
               if (bytes !== null && await sha256Bytes(bytes) === own.digest && /^effect:[0-9a-f]{32}$/.test(own.effectId)) return;

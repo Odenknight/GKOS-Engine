@@ -262,7 +262,22 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
     if (!identity || identity.revoked) { send(response, 401, GENERIC_DENIAL, requestOrigin); return true; }
     const limited = acquire(identity);
     if (limited) { send(response, 429, { error: "rate_limited", reason: limited.reason }, requestOrigin, { "Retry-After": String(limited.retry) }); return true; }
+    const sendResponse = send;
     void (async () => {
+      // Every successful JSON response rechecks the credential after host awaits.
+      // In particular, REST reads must not retain pre-snapshot authorization.
+      const send: typeof sendResponse = (res, code, body, allowedOrigin, headers) => {
+        if (code < 400) {
+          const current = token ? options.credentials.resolve(token) : null;
+          if (!current || current.revoked || current.credentialId !== identity.credentialId ||
+              current.agentId !== identity.agentId || current.sensitivityCeiling !== identity.sensitivityCeiling ||
+              JSON.stringify(current.capabilities) !== JSON.stringify(identity.capabilities)) {
+            sendResponse(res, 401, GENERIC_DENIAL, allowedOrigin);
+            return;
+          }
+        }
+        sendResponse(res, code, body, allowedOrigin, headers);
+      };
       let ingressHeld = true;
       let releaseWork: (() => void) | undefined;
       const relinquishIngress = (): void => { if (ingressHeld) { ingressHeld = false; release(identity); } };
