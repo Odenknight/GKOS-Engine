@@ -458,8 +458,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "9c1ebc8377f76c7fcbc7f796774110a55e0671901eeec3a47246ad5a291d2043",
-      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
+      "after": "dd92fad1399dd8fd143b96cb3dee73f749624a332b45a325546e3e48a9733d2b",
+      "rationale": "Classifier and Disposition Sidecar build plan: owner discussion context and version-bound build instructions for the TypeScript lane; documentation only, no runtime change (#90)."
     },
     {
       "path": "ROADMAP.md",
@@ -874,6 +874,24 @@
       "before": null,
       "after": "78544e2083552ee8c4b8588db753530bb0c575a5fc5135013bdc5640c2b28124",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "docs/classifier/GKOS-Classifier-Rust-TypeScript-Build-Plan.md",
+      "before": null,
+      "after": "a0300e6675cf5775e127d5a1a6a72bcefd9aea8b318bfedfeadcbf33f597908c",
+      "rationale": "Classifier and Disposition Sidecar build plan: owner discussion context and version-bound build instructions for the TypeScript lane; documentation only, no runtime change (#90)."
+    },
+    {
+      "path": "docs/classifier/GKOS-Disposition-Sidecar-Upgrade-Assessment.md",
+      "before": null,
+      "after": "cbe07639a76e033a621bc078e842e8f08a2bb61360e4f871ea84e1ac275beec3",
+      "rationale": "Classifier and Disposition Sidecar build plan: owner discussion context and version-bound build instructions for the TypeScript lane; documentation only, no runtime change (#90)."
+    },
+    {
+      "path": "docs/classifier/README.md",
+      "before": null,
+      "after": "6333075384ebdadc4b17398fd748de46de33a4cde671071f22a259d3aac423fa",
+      "rationale": "Classifier and Disposition Sidecar build plan: owner discussion context and version-bound build instructions for the TypeScript lane; documentation only, no runtime change (#90)."
     },
     {
       "path": "docs/decisions/0002-storage-and-provider-topology.md",
