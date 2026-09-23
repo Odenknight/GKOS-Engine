@@ -1022,8 +1022,8 @@
     {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "bf0bd6edb2e94ff5eeb24c4d019cae6d0d1e97024826b08073500477e8ba8382",
-      "rationale": "Expose the generated-runner regression command without new dependencies or product version changes."
+      "after": "dcede8332600e29403ae35cb24cae89044177a30f511cf1276c276ac151f10f4",
+      "rationale": "Package governance notices: ship the root NOTICE and the governance documents it references in the npm package, and require them in check-pack (landed from #84)."
     },
     {
       "path": "scripts/benchmark-graphiti-native.mjs",
@@ -1042,6 +1042,12 @@
       "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
       "after": "f73428e3243f652764f08325e5ed5ce1c9ae54e15868d19c5acca60e8fbf7ec6",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "scripts/check-pack.mjs",
+      "before": "e2d0d1d76389cae3a759f9802308cbc75da6404d",
+      "after": "711343c28c44dc163620491a575405bfc221fc5bfddf0dd59b115587e2d8584e",
+      "rationale": "Package governance notices: ship the root NOTICE and the governance documents it references in the npm package, and require them in check-pack (landed from #84)."
     },
     {
       "path": "scripts/current-test-plan.mjs",
