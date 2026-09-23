@@ -458,8 +458,8 @@
     {
       "path": "README.md",
       "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
-      "after": "b91d1980eca28bd64d0120a0c8d3240943a41f8a4652710d5cbb64490e7a69c8",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "9c1ebc8377f76c7fcbc7f796774110a55e0671901eeec3a47246ad5a291d2043",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "ROADMAP.md",
@@ -768,6 +768,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "docs/MOC-RENAME-RECONCILIATION.md",
+      "before": null,
+      "after": "c2841e8a242278f7686a9c526eaa4070fad4ce8628a0ee12b6ba1e450ae33716",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
+    },
+    {
       "path": "docs/NATIVE-RETRIEVAL-READ-REMEDIATION.md",
       "before": null,
       "after": "83523aee6d362b5f65a49aaf4648c16de21c57c01b96437a20fee0b1a4e53194",
@@ -814,6 +820,12 @@
       "before": null,
       "after": "0a04ea25d79742a5d66b2df2950837fdcd5b890c04116abda967020b3e0dd404",
       "rationale": "September 14 editorial audit remediation: correct source identity, bind current hosted evidence, and record exact PR ancestry without qualification or release promotion."
+    },
+    {
+      "path": "docs/SCOPED-LINEAGE-INSPECTION.md",
+      "before": null,
+      "after": "3ba4216f9804ac11efe87748e6728a5636ac65061656cce98224e2426c26ade8",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",
@@ -1118,8 +1130,8 @@
     {
       "path": "scripts/run-watcher-observation-qualification.mjs",
       "before": "a11d7081118cde88a8db2d8bbab6429805f61b2c",
-      "after": "75136af40d5f7728e01df46a16a62ab8c1d5bc0e868595816d6fbf1aba2ee599",
-      "rationale": "CI repair: preserve the strict child stderr protocol while suppressing only Node-owned SQLite and environment-proxy warnings."
+      "after": "e06b2576ee37d3091c496ff5f69398f1a3199460d6689f932ed9c81fa59d6cba",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "scripts/run-watcher-observation-with-retry.mjs",
@@ -1266,6 +1278,12 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "src/adapter.ts",
+      "before": "153ceac4a878772d3c51e6dcf12bf02d3af0fbd8",
+      "after": "f4500c4a6ac08c93cc489fede53b63d63073873d14e70e193bbf488df9b8839a",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
+    },
+    {
       "path": "src/graphiti-adapter.ts",
       "before": "bf95b6a858645c82c832dbb68d06e6ff2d7dec3e",
       "after": "ded6584934c1d3b947e389064921ddb7c830fc169b7205ea69d0ec8d43a10b71",
@@ -1286,8 +1304,8 @@
     {
       "path": "src/graphiti-query-contract.ts",
       "before": null,
-      "after": "497b49a78c364a64ec34a5f1c4af3e28e8e450212ec5df1afe6e06fbeeb55595",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "a4b2c1d71e779ec03ddd425e38b8a71946ccd8cc19ef67a7d48088bc12be2e4f",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "src/graphiti-query-http.ts",
@@ -1310,14 +1328,20 @@
     {
       "path": "src/index.ts",
       "before": "b4550c73992d38f7fc3e52383efde0de276ae27d",
-      "after": "76e958a89e81530f75a166a34a19b6b1fc63a827d806a2f6a5c79035900fae77",
-      "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+      "after": "578aac085765804da6398ab56284725a5d4e18e3850ff46fc4afb5dfcaa58ce3",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "src/ingest/source-scan.ts",
       "before": "c36a98bc8e379177475b5bef7d0df1c95cf45313",
       "after": "388f4fe24dfb76f6df6d7c3d8b22c614a9bfdddb6a6f2e3e844c7ab6b590a493",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "src/lineage-inspection.ts",
+      "before": null,
+      "after": "a9b66d3be17a1ed08d90ab7f82aa17e8b0dd8c37cf80343eeca16575dafcfa22",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "src/navigation-effects/assistance.ts",
@@ -1334,8 +1358,8 @@
     {
       "path": "src/navigation-effects/coordinator.ts",
       "before": null,
-      "after": "8ba161b4dfe2c918fa2dee7d859e8bc90c1acbd6132993300c736b264f46b16c",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "a44c51cb82370a9013b15c8594db522e951474779a9c56b05abbbb72b2e2fdca",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "src/navigation-effects/in-memory-adapter.ts",
@@ -1388,8 +1412,8 @@
     {
       "path": "src/navigation-effects/node/moc-runtime.ts",
       "before": null,
-      "after": "3d1b4efb3f427d82a2806c7b537f4aeea401c3224f0f578de33e2059ae399e15",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "8746bdfd1373267a3cfafc3d4d106b19966338af1dd38e384c931ac64cc7c213",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "src/navigation-effects/path-policy.ts",
@@ -1526,8 +1550,8 @@
     {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
-      "after": "c40da6db706108748a7f5551b6d2b07a0e303e426f89f6fedaa4b5a62ab02816",
-      "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
+      "after": "aec79df1cebdb571245d5ae4c36764b5e813c425351f923601dfa6ed6115a0ea",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "src/types.ts",
@@ -1568,8 +1592,8 @@
     {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "fbd4882e14ad16ec81b0c88055b8df85e2bae33b4472af2df9921e1a05337f4f",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "936dcf747790b051f70b5b24c4a1fef1c29839f100b7e84a10156821109d7927",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "test/determinism.test.mjs",
@@ -1646,8 +1670,8 @@
     {
       "path": "test/graphiti-query-contract.test.mjs",
       "before": null,
-      "after": "133dfd194172bc58633ed955d8c0bccac6ab37ff538b47b711305c50790d7295",
-      "rationale": "Graphiti query draft-1 contract: bounded scope/generation/provenance validation, additive compatibility, synthetic fixture and documented non-broker boundary."
+      "after": "4660e813757de75cbea14d467967382df153de6b40d22a5dc3d5b78d49b6a07c",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "test/graphiti-query-http.test.mjs",
@@ -1660,6 +1684,12 @@
       "before": "12a1cb2b59421c5466e5e285655f6d150fb956f8",
       "after": "f54cceb4517719eef7b8e6b22819e8438a48cbb80fb6aad73827b43644fa47a2",
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+    },
+    {
+      "path": "test/lineage-inspection.test.mjs",
+      "before": null,
+      "after": "badaf1bca35dec78b8545df90d591f3be5a3c057ebf8ba1111b64db58d1a1abe",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "test/managed-moc-no-change.test.mjs",
@@ -1682,8 +1712,8 @@
     {
       "path": "test/navigation-effects-assistance.test.mjs",
       "before": null,
-      "after": "aaf3794f1c37b05d2b600abbd948f0be6836d78052280cb07ee927d638078f6e",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "2e6099c7d6925c4fa989e561337707ef66800c3911827f568703e17c30b3c73b",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "test/navigation-effects-contract.test.mjs",
@@ -1694,8 +1724,8 @@
     {
       "path": "test/navigation-effects-host.test.mjs",
       "before": null,
-      "after": "05d1bd8cc3c9bab3eb74847565b4b1fdf79cd85abc51a467af0e3a1dea8da4f1",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "0d59ec8bf234c9a881c19c23a7ede97ac3f1225e417246d405dcc109461976d1",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "test/navigation-effects-node.test.mjs",
@@ -1850,8 +1880,8 @@
     {
       "path": "test/service-runtime.test.mjs",
       "before": "c3ad015d1e157f57cfc7b4f9d99a5e9601ae33bc",
-      "after": "b802dff09605f4d78d279b6444adc36e2247ff2933ecb99323a7b89ae09ce8c9",
-      "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
+      "after": "4cd6979a7da88dd6d8d0d1f7614b0f123f8bb905adfb9c0736f6601372c0931d",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
     },
     {
       "path": "test/service-stdio-package.test.mjs",

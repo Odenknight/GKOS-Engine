@@ -379,9 +379,20 @@ async function qualifiedMeasurement(repoRoot, plan, environment) {
       durableReplace(active.source, target, ordinal);
       const started = process.hrtime.bigint();
       const selected = await waitForPointer(watcherDirectory, prior.pointer_digest, signal, priorEpoch);
+      const pointerReady = process.hrtime.bigint();
       await externalSearch(repoRoot, active.vault, query, plan.fixture.source_id, plan, watcherDirectory, selected.pointer_digest);
-      const micros = Number((process.hrtime.bigint() - started + 999n) / 1_000n);
-      if (!Number.isSafeInteger(micros) || micros > MAX_LATENCY_MICROS) fail("GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED");
+      const completed = process.hrtime.bigint();
+      const micros = Number((completed - started + 999n) / 1_000n);
+      if (!Number.isSafeInteger(micros) || micros > MAX_LATENCY_MICROS) {
+        // Keep failed measurements diagnosable without exporting paths or query contents.
+        process.stderr.write(`${JSON.stringify({
+          code: "GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED", ordinal,
+          pointer_micros: Number((pointerReady - started + 999n) / 1_000n),
+          search_micros: Number((completed - pointerReady + 999n) / 1_000n),
+          total_micros: micros, maximum_micros: MAX_LATENCY_MICROS,
+        })}\n`);
+        fail("GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED");
+      }
       if (ordinal >= 2) samples.push(micros);
       queryCount += 1;
     }
