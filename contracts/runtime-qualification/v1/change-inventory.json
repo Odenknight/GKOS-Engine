@@ -386,8 +386,8 @@
     {
       "path": ".gitattributes",
       "before": "0f3ffed343d2c7ed7aad2e67be2ef4e47ae6ff15",
-      "after": "321f7a806ba0d421bb103cc45d78937fbfa7dd2d398d486eb4da59ba6f4dbcbe",
-      "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
+      "after": "81b010e2a434bffc2ade5649867b63d89ea7bbe00164a39eff2301b7ce56ebd4",
+      "rationale": "Byte-exact checkouts: files without a specific rule are never EOL-converted, so autocrlf checkouts cannot break the byte-hashing current-runtime gate (root cause found by JEFFREY on #91)."
     },
     {
       "path": ".github/workflows/ci.yml",
