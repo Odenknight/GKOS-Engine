@@ -884,7 +884,7 @@
     {
       "path": "docs/classifier/GKOS-Disposition-Sidecar-Upgrade-Assessment.md",
       "before": null,
-      "after": "cbe07639a76e033a621bc078e842e8f08a2bb61360e4f871ea84e1ac275beec3",
+      "after": "9724c835d8ec01e090db03dfd70cbec7cc48c297d494a7108d30a9c72b12a5cd",
       "rationale": "Classifier and Disposition Sidecar build plan: owner discussion context and version-bound build instructions for the TypeScript lane; documentation only, no runtime change (#90)."
     },
     {

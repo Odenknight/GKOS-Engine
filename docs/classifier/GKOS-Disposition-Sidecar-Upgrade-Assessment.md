@@ -23,7 +23,7 @@ The governed-state-change annex supplies two especially relevant rules: deployme
 
 R18 separately permits qualified independent-agent review, subject to explicit grants and mandatory escalation, while excluding activation of general knowledge disposition, protected source writing, and L7 execution. The draft therefore needs to name its applicable capability and activation route rather than infer one from a preset. [R18, §§3 and 7](https://github.com/Odenknight/GKOS-standard/blob/2d62b1d3b6d19aeb45477045c1fb5e2be842e76b/decisions/R18_Track_A_GCP45_and_Authorized_Independent_Review_Development_Decision_Record.md)
 
-The vault's `gkx_version: "2.3"` / `okf_version: "2.3"` remains a local compatibility question. Do not rename it to 2.0 and assume compatibility; identify its actual schema and migration rules. Likewise, `phi`, `kind: disposition_preset`, the sample edge syntax, and proposed fields must be validated against the intended contract. Use an experimental extension for new concepts. This assessment is plain Markdown and does not copy the draft's unverified GKX header or impersonate its original author.
+The vault's `gkx_version: "2.3"` (and its legacy-prefixed twin key) remains a local compatibility question. Do not rename it to 2.0 and assume compatibility; identify its actual schema and migration rules. Likewise, `phi`, `kind: disposition_preset`, the sample edge syntax, and proposed fields must be validated against the intended contract. Use an experimental extension for new concepts. This assessment is plain Markdown and does not copy the draft's unverified GKX header or impersonate its original author.
 
 ## 3. Section-by-section disposition of the proposal
 
