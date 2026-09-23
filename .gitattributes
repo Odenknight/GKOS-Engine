@@ -1,3 +1,8 @@
+# The current-runtime qualification gate byte-hashes every tracked file, so no
+# checkout may rewrite bytes. Files without a more specific rule below keep
+# their exact committed bytes on every platform, whatever core.autocrlf says.
+* -text
+
 # Phase 0 compatibility fixtures are byte-locked and must not be rewritten on
 # Windows checkouts with core.autocrlf enabled.
 test/compatibility-baseline.test.mjs text eol=lf
