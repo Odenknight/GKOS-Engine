@@ -422,8 +422,8 @@
     {
       "path": ".github/workflows/runtime-qualification.yml",
       "before": null,
-      "after": "e8a7cf804ade3f03b3caf0616f73f1bcd726d2b42a32239503ae0ba543c1915c",
-      "rationale": "Q-GUARD: preserve the frozen Node 22/23/24 historical replay while qualifying current Node 22 and 24 as blocking and Node 26 as informative on Ubuntu and Windows."
+      "after": "3f04a7e129fb723dc6982bfb66e8876f343b790702a2a044bb8c0364074c5688",
+      "rationale": "Windows authority-witness rename: bounded EPERM retry with full phase revalidation and fail-closed temporaries; Linux asserts single-attempt refusal; Windows runtime qualification uses canonical TEMP/TMP paths (landed from #78 and #79)."
     },
     {
       "path": ".github/workflows/sidecar-release.yml",
@@ -1344,6 +1344,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "src/ingest/storage.ts",
+      "before": "7745f7157191d77277bd659b192d95247a42ccc0",
+      "after": "91c680aa8dbbf3ce90fc26c88cc79bb50718c2ab05da3b7c04714b77cf0c2b45",
+      "rationale": "Windows authority-witness rename: bounded EPERM retry with full phase revalidation and fail-closed temporaries; Linux asserts single-attempt refusal; Windows runtime qualification uses canonical TEMP/TMP paths (landed from #78 and #79)."
+    },
+    {
       "path": "src/lineage-inspection.ts",
       "before": null,
       "after": "a9b66d3be17a1ed08d90ab7f82aa17e8b0dd8c37cf80343eeca16575dafcfa22",
@@ -1692,6 +1698,12 @@
       "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
     },
     {
+      "path": "test/ingest-authority-rename-retry.test.mjs",
+      "before": null,
+      "after": "7cf7874b93122be61e229e5fa03683c13cd199089efcceab1e6ea9da3403df27",
+      "rationale": "Windows authority-witness rename: bounded EPERM retry with full phase revalidation and fail-closed temporaries; Linux asserts single-attempt refusal; Windows runtime qualification uses canonical TEMP/TMP paths (landed from #78 and #79)."
+    },
+    {
       "path": "test/lineage-inspection.test.mjs",
       "before": null,
       "after": "badaf1bca35dec78b8545df90d591f3be5a3c057ebf8ba1111b64db58d1a1abe",
@@ -1894,6 +1906,18 @@
       "before": "5e302462792e360747bf0254d336f8d747f55e4c",
       "after": "99e10a2d3613cc429ba954332a88846268cffe6bdef46548c73b510c04d329e3",
       "rationale": "Make package setup abort-aware with bounded phase diagnostics, one explicit build, ordered cleanup and safe npm report parsing; retain real authenticated installed-package assertions and unchanged deadlines."
+    },
+    {
+      "path": "test/support/ingest-authority-rename-driver.mjs",
+      "before": null,
+      "after": "a4fadc991566c1a9b1c3dd1c2cd04fbd327873679f4869fd01a7a1fa23075743",
+      "rationale": "Windows authority-witness rename: bounded EPERM retry with full phase revalidation and fail-closed temporaries; Linux asserts single-attempt refusal; Windows runtime qualification uses canonical TEMP/TMP paths (landed from #78 and #79)."
+    },
+    {
+      "path": "test/support/ingest-authority-rename-fault.cjs",
+      "before": null,
+      "after": "ea34a1136b8ae272eb6e4f4460c67f9123d4e6d75a91bd02396e5cc37225c212",
+      "rationale": "Windows authority-witness rename: bounded EPERM retry with full phase revalidation and fail-closed temporaries; Linux asserts single-attempt refusal; Windows runtime qualification uses canonical TEMP/TMP paths (landed from #78 and #79)."
     },
     {
       "path": "test/support/param-fixture.mjs",
