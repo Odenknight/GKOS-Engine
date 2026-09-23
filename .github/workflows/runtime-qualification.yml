@@ -76,6 +76,15 @@ jobs:
           cache-dependency-path: candidate/package-lock.json
       - working-directory: candidate
         run: npm ci --ignore-scripts
+      - name: Use canonical Windows temporary paths
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: >-
+          node -e "const fs=require('node:fs'),path=require('node:path');
+          const base=fs.mkdtempSync(path.join(fs.realpathSync.native(require('node:os').tmpdir()),'gkos-current-runtime-'));
+          const canonical=fs.realpathSync.native(base);
+          if(/[\r\n]/.test(canonical))throw Error('Invalid temporary path');
+          fs.appendFileSync(process.env.GITHUB_ENV,'TEMP='+canonical+'\nTMP='+canonical+'\n');"
       - name: Current runtime qualification (source inventory and executed tests)
         shell: bash
         working-directory: candidate
