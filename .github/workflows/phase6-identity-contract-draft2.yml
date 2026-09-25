@@ -18,7 +18,7 @@ env:
 
 jobs:
   p6-d2-contract-linux-node22: &contract_linux
-    runs-on: ubuntu-24.04
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-24.04' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +41,7 @@ jobs:
           retention-days: 90
           if-no-files-found: error
   p6-d2-contract-linux-node23:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-24.04' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 30
     steps: &contract_steps
       - uses: actions/checkout@v4
@@ -65,7 +65,7 @@ jobs:
           if-no-files-found: error
 
   p6-d2-contract-linux-node24:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-24.04' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
@@ -186,7 +186,7 @@ jobs:
           if-no-files-found: error
 
   p6-d2-schema-adversarial:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-24.04' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -209,7 +209,7 @@ jobs:
           if-no-files-found: error
 
   p6-d2-pack-reproducibility:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-24.04' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -232,7 +232,7 @@ jobs:
           if-no-files-found: error
 
   p6-d2-secret-scan:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-24.04' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -256,7 +256,7 @@ jobs:
 
   p6-d2-artifact-audit:
     needs: [p6-d2-contract-linux-node22,p6-d2-contract-linux-node23,p6-d2-contract-linux-node24,p6-d2-contract-windows-node22,p6-d2-contract-windows-node23,p6-d2-contract-windows-node24,p6-d2-contract-macos-node22,p6-d2-schema-adversarial,p6-d2-pack-reproducibility,p6-d2-secret-scan]
-    runs-on: ubuntu-24.04
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-24.04' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
