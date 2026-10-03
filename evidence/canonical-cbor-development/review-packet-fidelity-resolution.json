@@ -1,0 +1,23 @@
+{
+  "original_source_sha256": "303f86129b8a2d0907321cc6f0117b74ecdcb598abe320bac4d5d425dd626b99",
+  "original_syntax_validated": true,
+  "raw_mask_sequence_present": false,
+  "decimal_literal_codepoints": [
+    49,
+    48,
+    49,
+    51,
+    57,
+    48,
+    52,
+    50,
+    50,
+    51
+  ],
+  "equivalent_hex_literal": "0x3c6ef35f",
+  "arithmetic_identity_verified": true,
+  "reason": "tool output redacted a nonsecret ten-digit test corpus constant; source parsed and full tests passed before any change. Same-value hexadecimal test-only refactor prevents misleading transport syntax. Original blocking review retained, not silently changed.",
+  "before_exit": 0,
+  "after_exit": 0,
+  "final_source_sha256": "08a975c3c2566dba9fd1861065c7ac53b6eef0864d16ae3807ab3e95efa390dd"
+}

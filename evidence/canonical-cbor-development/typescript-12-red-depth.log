@@ -1,0 +1,42 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (5.4508ms)
+✔ boolean values preserve their distinct canonical encodings (1.7388ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (3.9938ms)
+✔ floats retain their type and use shortest exact half single or double bytes (3.8137ms)
+✔ byte strings preserve source bytes separately from text (1.2172ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (1.4545ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (532.8492ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.9065ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (2.7052ms)
+✔ binary and typed boundaries reject malformed unsupported values (1.686ms)
+✔ encoded-byte hard limit is enforced before allocating oversized payloads (51.6504ms)
+✖ nesting depth is bounded with root depth zero (3.587ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 808.1291
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:125:1
+✖ nesting depth is bounded with root depth zero (3.587ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at refuses (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:19:52)
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:130:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }

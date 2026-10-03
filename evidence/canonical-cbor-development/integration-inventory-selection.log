@@ -1,0 +1,10 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/_AI/programs/pi-agent/node.exe", "--input-type=module", "-e", "import assert from 'node:assert/strict';\nimport {readdirSync} from 'node:fs';\nimport {selectCurrentTests} from './scripts/current-test-plan.mjs';\nconst plan=selectCurrentTests(readdirSync('test'));\nassert.ok(plan.files.includes('canonical-cbor-runtime.test.mjs'));\nassert.equal(plan.files.includes('canonical-cbor-unicode17.mjs'),false);\nassert.equal(plan.files.includes('canonical-cbor.test.mjs'),false);\nconsole.log(JSON.stringify({scope:'DEVELOPMENT inventory inspection only; no current suite run',canonical_selected:plan.files.filter(n=>n.includes('canonical-cbor')),full_corpus_explicit_only:true}));"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 0
+actual exit: 0
+stdout:
+{"scope":"DEVELOPMENT inventory inspection only; no current suite run","canonical_selected":["canonical-cbor-runtime.test.mjs"],"full_corpus_explicit_only":true}
+
+stderr:

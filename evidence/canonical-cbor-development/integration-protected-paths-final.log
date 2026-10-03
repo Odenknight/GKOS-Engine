@@ -1,0 +1,18 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\canonical-cbor-integration-check.py"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 0
+actual exit: 0
+stdout:
+
+stderr:
+test_dedicated_development_ci (__main__.IntegrationChecks.test_dedicated_development_ci) ... ok
+test_explicit_corpus_preserves_original_bytes (__main__.IntegrationChecks.test_explicit_corpus_preserves_original_bytes) ... ok
+test_protected_paths_unchanged (__main__.IntegrationChecks.test_protected_paths_unchanged) ... ok
+test_python_temp_root_and_explicit_source (__main__.IntegrationChecks.test_python_temp_root_and_explicit_source) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.029s
+
+OK

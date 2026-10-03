@@ -1,0 +1,26 @@
+COMMAND: python test/test_canonical_cbor_python.py
+EXIT: 1
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... FAIL
+
+======================================================================
+FAIL: test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 48, in test_null_cli_and_sha256
+    self.accept('f6', {'kind': 'null'})
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 28, in accept
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "C:\\Users\\Oden\\AppData\\Local\\Program[188 chars]ry\n" != ''
+- C:\Users\Oden\AppData\Local\Programs\cbor-verifier\Scripts\python.exe: can't open file 'C:\\Users\\Oden\\Documents\\github\\GKOS-Engine\\scripts\\verify-canonical-cbor.py': [Errno 2] No such file or directory
+ : C:\Users\Oden\AppData\Local\Programs\cbor-verifier\Scripts\python.exe: can't open file 'C:\\Users\\Oden\\Documents\\github\\GKOS-Engine\\scripts\\verify-canonical-cbor.py': [Errno 2] No such file or directory
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.129s
+
+FAILED (failures=1)

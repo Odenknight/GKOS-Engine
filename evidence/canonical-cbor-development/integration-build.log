@@ -1,0 +1,34 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/_AI/programs/pi-agent/node.exe", "scripts/build.mjs"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 0
+actual exit: 0
+stdout:
+built dist/gkos-engine.mjs
+built dist/adapter.mjs
+built dist/gkx.mjs
+built dist/graphiti-adapter.mjs
+built dist/navigation.mjs
+built dist/service.mjs
+built dist/navigation-effects.mjs
+built dist/governance.mjs
+built dist/admission-policy.mjs
+built dist/service-node.mjs
+built dist/canonical-cbor.mjs
+built dist/graphiti-broker.mjs
+built dist/service-stdio.mjs
+built dist/retrieval.mjs
+built dist/retrieval-host.mjs
+built dist/retrieval-path-security.mjs
+built dist/retrieval-evaluation-host.mjs
+built dist/ingest-host.mjs
+built dist/ingest-source-scan.mjs
+built dist/watcher-contracts.mjs
+built dist/watcher-host.mjs
+built dist/gkos-desktop-agent.mjs
+built dist/gkos-desktop-agent.cjs
+built dist/navigation-effects-node.mjs
+built dist/*.d.ts
+
+stderr:

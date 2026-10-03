@@ -1,0 +1,41 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (2.3614ms)
+✔ boolean values preserve their distinct canonical encodings (1.1604ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (1.2114ms)
+✔ floats retain their type and use shortest exact half single or double bytes (0.9107ms)
+✔ byte strings preserve source bytes separately from text (1.3865ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (0.6897ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (295.4717ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.8604ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (1.4796ms)
+✔ binary and typed boundaries reject malformed unsupported values (0.8191ms)
+✖ encoded-byte hard limit is enforced before allocating oversized payloads (1.9811ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 420.8136
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:112:1
+✖ encoded-byte hard limit is enforced before allocating oversized payloads (1.9811ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at refuses (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:19:52)
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:118:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'throws',
+    diff: 'simple'
+  }

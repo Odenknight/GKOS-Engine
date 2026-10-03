@@ -1,0 +1,32 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (1.7279ms)
+✔ boolean values preserve their distinct canonical encodings (0.6978ms)
+✖ bigint integers cover shortest heads and the unsigned64 domain (2.4014ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 107.0487
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:34:1
+✖ bigint integers cover shortest heads and the unsigned64 domain (2.4014ms)
+  Error [CanonicalCborError]: unsupported_node
+      at fail (file:///C:/Users/Oden/Documents/github/GKOS-Engine/dist/canonical-cbor.mjs:12:9)
+      at encodeCanonicalCbor (file:///C:/Users/Oden/Documents/github/GKOS-Engine/dist/canonical-cbor.mjs:17:3)
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:37:22)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    reason: 'unsupported_node',
+    code: 'GKOS-GATE-L6-001',
+    requirementId: 'GKOS-CANON-001'
+  }

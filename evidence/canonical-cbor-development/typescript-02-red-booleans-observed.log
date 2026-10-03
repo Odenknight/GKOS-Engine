@@ -1,0 +1,26 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (1.7631ms)
+✖ boolean values preserve their distinct canonical encodings (0.3154ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 138.3278
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:27:1
+✖ boolean values preserve their distinct canonical encodings (0.3154ms)
+  Error: unsupported node
+      at encodeCanonicalCbor (file:///C:/Users/Oden/Documents/github/GKOS-Engine/dist/canonical-cbor.mjs:4:9)
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:29:22)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

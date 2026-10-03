@@ -1,0 +1,10 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/_AI/programs/pi-agent/node.exe", "scripts/verify-canonical-cbor-cross-language.mjs"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 0
+actual exit: 0
+stdout:
+{"scope":"canonical-byte development adapter; no profile or pilot disposition","positive_vectors":20,"negative_vectors_and_tamper":14,"rendering_roundtrips":21,"paired_numeric_values":165,"node":"24.21.0","node_unicode":"17.0"}
+
+stderr:

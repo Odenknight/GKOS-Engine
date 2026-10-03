@@ -1,0 +1,43 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/_AI/programs/pi-agent/node.exe", "--import", "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\canonical-cbor-integration-unavailable.mjs", "--test", "test/canonical-cbor-runtime.test.mjs"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 0
+actual exit: 1
+stdout:
+node:internal/modules/esm/load:193
+    throw new ERR_UNSUPPORTED_ESM_URL_SCHEME(parsed, schemes);
+          ^
+
+Error [ERR_UNSUPPORTED_ESM_URL_SCHEME]: Only URLs with a scheme in: file, data, and node are supported by the default ESM loader. On Windows, absolute paths must be valid file:// URLs. Received protocol 'c:'
+    at throwIfUnsupportedURLScheme (node:internal/modules/esm/load:193:11)
+    at defaultLoadSync (node:internal/modules/esm/load:146:3)
+    at #loadAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:806:12)
+    at #loadSync (node:internal/modules/esm/loader:838:53)
+    at ModuleLoader.load (node:internal/modules/esm/loader:787:26)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:498:31)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:564:36)
+    at afterResolve (node:internal/modules/esm/loader:611:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:617:12)
+    at node:internal/modules/esm/loader:636:32 {
+  code: 'ERR_UNSUPPORTED_ESM_URL_SCHEME'
+}
+
+Node.js v24.21.0
+✖ test\canonical-cbor-runtime.test.mjs (82.391ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 93.0973
+
+✖ failing tests:
+
+test at test\canonical-cbor-runtime.test.mjs:1:1
+✖ test\canonical-cbor-runtime.test.mjs (82.391ms)
+  'test failed'
+
+stderr:

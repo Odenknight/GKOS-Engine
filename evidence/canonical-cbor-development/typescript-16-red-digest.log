@@ -1,0 +1,51 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (2.3614ms)
+✔ boolean values preserve their distinct canonical encodings (1.5874ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (2.2713ms)
+✔ floats retain their type and use shortest exact half single or double bytes (3.5561ms)
+✔ byte strings preserve source bytes separately from text (2.1008ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (1.2144ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (305.1512ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.9392ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (2.9176ms)
+✔ binary and typed boundaries reject malformed unsupported values (1.6422ms)
+✔ encoded-byte hard limit is enforced before allocating oversized payloads (26.3383ms)
+✔ nesting depth is bounded with root depth zero (2.3447ms)
+✔ total value-node budget includes map keys and preflights declared lengths (61.189ms)
+✔ cyclic inputs are refused explicitly while shared acyclic subtrees are allowed (0.4171ms)
+✔ explicit canonical timestamps enforce Gregorian dates and exact UTC microsecond grammar (0.7642ms)
+✖ digest hashes only verified canonical bytes and labels the bounded profile (1.7703ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 15
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 551.7147
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:172:1
+✖ digest hashes only verified canonical bytes and labels the bounded profile (1.7703ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:174:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

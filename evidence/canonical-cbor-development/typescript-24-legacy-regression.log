@@ -1,0 +1,108 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test --test-reporter=tap test/determinism.test.mjs test/timestamps.test.mjs test/public-api.test.mjs
+exit_code: 0
+TAP version 13
+# Subtest: codeUnitCompare is locale-independent: 'z' sorts before 'ä'
+ok 1 - codeUnitCompare is locale-independent: 'z' sorts before 'ä'
+  ---
+  duration_ms: 1.924
+  type: 'test'
+  ...
+# Subtest: emitted graph node order is code-unit order ('z.md' before 'ä.md')
+ok 2 - emitted graph node order is code-unit order ('z.md' before 'ä.md')
+  ---
+  duration_ms: 24.8935
+  type: 'test'
+  ...
+# Subtest: uniq'd aggregate tag list is code-unit ordered (ASCII tags before non-ASCII)
+ok 3 - uniq'd aggregate tag list is code-unit ordered (ASCII tags before non-ASCII)
+  ---
+  duration_ms: 2.2321
+  type: 'test'
+  ...
+# Subtest: two consecutive full builds of the same fixture are byte-identical
+ok 4 - two consecutive full builds of the same fixture are byte-identical
+  ---
+  duration_ms: 8.2383
+  type: 'test'
+  ...
+# Subtest: incremental edits preserve canonical link order and identities and converge with clean rebuild
+ok 5 - incremental edits preserve canonical link order and identities and converge with clean rebuild
+  ---
+  duration_ms: 10.8008
+  type: 'test'
+  ...
+# Subtest: canonical GKX API is available from the engine and package subpaths
+ok 6 - canonical GKX API is available from the engine and package subpaths
+  ---
+  duration_ms: 0.9775
+  type: 'test'
+  ...
+# Subtest: downstream adapter is immutable, policy-bound, and product-neutral
+ok 7 - downstream adapter is immutable, policy-bound, and product-neutral
+  ---
+  duration_ms: 16.7359
+  type: 'test'
+  ...
+# Subtest: portable timestamps use canonical UTC Zulu and preserve creation
+ok 8 - portable timestamps use canonical UTC Zulu and preserve creation
+  ---
+  duration_ms: 7.5478
+  type: 'test'
+  ...
+# Subtest: editable GKX 2.2 uses its compact timestamp and does not regain beta.10 boilerplate
+ok 9 - editable GKX 2.2 uses its compact timestamp and does not regain beta.10 boilerplate
+  ---
+  duration_ms: 0.2144
+  type: 'test'
+  ...
+# Subtest: local-offset timestamps carry an explicit numeric UTC offset and round-trip
+ok 10 - local-offset timestamps carry an explicit numeric UTC offset and round-trip
+  ---
+  duration_ms: 0.7139
+  type: 'test'
+  ...
+# Subtest: Zulu remains the default and is byte-for-byte unchanged
+ok 11 - Zulu remains the default and is byte-for-byte unchanged
+  ---
+  duration_ms: 0.163
+  type: 'test'
+  ...
+# Subtest: applyNoteTimestamps honors the local-timezone option
+ok 12 - applyNoteTimestamps honors the local-timezone option
+  ---
+  duration_ms: 0.2706
+  type: 'test'
+  ...
+# Subtest: applyNoteTimestamps writes custom keys when configured and leaves the canonical pair untouched
+ok 13 - applyNoteTimestamps writes custom keys when configured and leaves the canonical pair untouched
+  ---
+  duration_ms: 0.177
+  type: 'test'
+  ...
+# Subtest: stamping an already-current note is a no-op write (anti-loop)
+ok 14 - stamping an already-current note is a no-op write (anti-loop)
+  ---
+  duration_ms: 0.1531
+  type: 'test'
+  ...
+# Subtest: GKX timestamp validation accepts Zulu and numeric offsets, rejects naive wall-clock
+ok 15 - GKX timestamp validation accepts Zulu and numeric offsets, rejects naive wall-clock
+  ---
+  duration_ms: 0.2875
+  type: 'test'
+  ...
+# Subtest: timestamp eligibility excludes plugin and GKX internals
+ok 16 - timestamp eligibility excludes plugin and GKX internals
+  ---
+  duration_ms: 0.2425
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 183.8498

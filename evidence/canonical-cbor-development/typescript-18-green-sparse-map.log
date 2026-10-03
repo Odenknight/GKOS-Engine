@@ -1,0 +1,88 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" scripts/build.mjs && "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 0
+built dist/gkos-engine.mjs
+built dist/adapter.mjs
+built dist/gkx.mjs
+built dist/graphiti-adapter.mjs
+built dist/navigation.mjs
+built dist/service.mjs
+built dist/navigation-effects.mjs
+built dist/governance.mjs
+built dist/admission-policy.mjs
+built dist/service-node.mjs
+built dist/canonical-cbor.mjs
+built dist/graphiti-broker.mjs
+built dist/service-stdio.mjs
+built dist/retrieval.mjs
+built dist/retrieval-host.mjs
+built dist/retrieval-path-security.mjs
+built dist/retrieval-evaluation-host.mjs
+built dist/ingest-host.mjs
+built dist/ingest-source-scan.mjs
+built dist/watcher-contracts.mjs
+built dist/watcher-host.mjs
+built dist/gkos-desktop-agent.mjs
+built dist/gkos-desktop-agent.cjs
+built dist/navigation-effects-node.mjs
+built dist/*.d.ts
+✔ null has the fixed canonical bytes and decodes as a typed node (4.5962ms)
+✔ boolean values preserve their distinct canonical encodings (1.2524ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (1.407ms)
+✔ floats retain their type and use shortest exact half single or double bytes (1.8248ms)
+✔ byte strings preserve source bytes separately from text (1.2194ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (1.3965ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (387.8551ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.7341ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (1.7788ms)
+✔ binary and typed boundaries reject malformed unsupported values (1.7794ms)
+✔ encoded-byte hard limit is enforced before allocating oversized payloads (32.7318ms)
+✔ nesting depth is bounded with root depth zero (2.7992ms)
+✔ total value-node budget includes map keys and preflights declared lengths (63.1963ms)
+✔ cyclic inputs are refused explicitly while shared acyclic subtrees are allowed (0.4879ms)
+✔ explicit canonical timestamps enforce Gregorian dates and exact UTC microsecond grammar (0.7791ms)
+✔ digest hashes only verified canonical bytes and labels the bounded profile (1.5618ms)
+✔ shared positive: null (0.2043ms)
+✔ shared positive: false (0.1027ms)
+✔ shared positive: true (0.0747ms)
+✔ shared positive: zero (0.0962ms)
+✔ shared positive: 24 (0.1355ms)
+✔ shared positive: uint64 max (0.0761ms)
+✔ shared positive: minus one (0.0686ms)
+✔ shared positive: int negative64 edge (0.0642ms)
+✔ shared positive: float integral (0.0713ms)
+✔ shared positive: half 1.5 (0.0688ms)
+✔ shared positive: single 100000 (0.0691ms)
+✔ shared positive: double 1.1 (0.1912ms)
+✔ shared positive: empty text (0.1347ms)
+✔ shared positive: NFC text (0.1267ms)
+✔ shared positive: preserved BOM (0.1066ms)
+✔ shared positive: bytes (0.0886ms)
+✔ shared positive: empty array (0.1218ms)
+✔ shared positive: array type preservation (0.1226ms)
+✔ shared positive: empty map (0.0811ms)
+✔ shared positive: sorted map (0.2219ms)
+✔ shared refusal: nonshort integer (0.2131ms)
+✔ shared refusal: indefinite (0.1336ms)
+✔ shared refusal: duplicate map (0.1866ms)
+✔ shared refusal: unsorted map (0.1578ms)
+✔ shared refusal: negative zero (0.1562ms)
+✔ shared refusal: NaN (0.1405ms)
+✔ shared refusal: infinity (0.1066ms)
+✔ shared refusal: float nonshort (0.1113ms)
+✔ shared refusal: bad utf8 (0.1413ms)
+✔ shared refusal: nonNFC (0.1335ms)
+✔ shared refusal: trailing value (0.7587ms)
+✔ shared refusal: truncated text (0.189ms)
+✔ shared refusal: undeclared key type (0.1673ms)
+✔ all binary16 patterns preserve exact finite float bits or refuse prohibited values (314.791ms)
+ℹ {"binary16_patterns":65536,"accepted":63487,"refused":2049}
+﹣ official pinned Unicode17 normalization vectors execute through both text boundaries (0.1031ms) # GKOS_NORMALIZATION_TEST_PATH absent: official Unicode17 vectors unavailable
+✔ sparse map-entry arrays cannot bypass structured malformed-input refusal (0.422ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 51
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 984.2794

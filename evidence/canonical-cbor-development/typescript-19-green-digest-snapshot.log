@@ -1,0 +1,89 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" scripts/build.mjs && "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 0
+built dist/gkos-engine.mjs
+built dist/adapter.mjs
+built dist/gkx.mjs
+built dist/graphiti-adapter.mjs
+built dist/navigation.mjs
+built dist/service.mjs
+built dist/navigation-effects.mjs
+built dist/governance.mjs
+built dist/admission-policy.mjs
+built dist/service-node.mjs
+built dist/canonical-cbor.mjs
+built dist/graphiti-broker.mjs
+built dist/service-stdio.mjs
+built dist/retrieval.mjs
+built dist/retrieval-host.mjs
+built dist/retrieval-path-security.mjs
+built dist/retrieval-evaluation-host.mjs
+built dist/ingest-host.mjs
+built dist/ingest-source-scan.mjs
+built dist/watcher-contracts.mjs
+built dist/watcher-host.mjs
+built dist/gkos-desktop-agent.mjs
+built dist/gkos-desktop-agent.cjs
+built dist/navigation-effects-node.mjs
+built dist/*.d.ts
+✔ null has the fixed canonical bytes and decodes as a typed node (6.1438ms)
+✔ boolean values preserve their distinct canonical encodings (1.1939ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (1.278ms)
+✔ floats retain their type and use shortest exact half single or double bytes (1.1801ms)
+✔ byte strings preserve source bytes separately from text (0.7216ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (1.3548ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (330.6439ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.6738ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (1.1708ms)
+✔ binary and typed boundaries reject malformed unsupported values (1.8077ms)
+✔ encoded-byte hard limit is enforced before allocating oversized payloads (28.3007ms)
+✔ nesting depth is bounded with root depth zero (1.8235ms)
+✔ total value-node budget includes map keys and preflights declared lengths (66.3834ms)
+✔ cyclic inputs are refused explicitly while shared acyclic subtrees are allowed (0.4635ms)
+✔ explicit canonical timestamps enforce Gregorian dates and exact UTC microsecond grammar (0.8535ms)
+✔ digest hashes only verified canonical bytes and labels the bounded profile (1.6492ms)
+✔ shared positive: null (0.2216ms)
+✔ shared positive: false (0.1162ms)
+✔ shared positive: true (0.1153ms)
+✔ shared positive: zero (0.1283ms)
+✔ shared positive: 24 (0.1192ms)
+✔ shared positive: uint64 max (0.0838ms)
+✔ shared positive: minus one (0.0701ms)
+✔ shared positive: int negative64 edge (0.0692ms)
+✔ shared positive: float integral (0.0731ms)
+✔ shared positive: half 1.5 (0.0726ms)
+✔ shared positive: single 100000 (0.0676ms)
+✔ shared positive: double 1.1 (0.1389ms)
+✔ shared positive: empty text (0.1254ms)
+✔ shared positive: NFC text (0.0848ms)
+✔ shared positive: preserved BOM (0.0674ms)
+✔ shared positive: bytes (0.0771ms)
+✔ shared positive: empty array (0.1244ms)
+✔ shared positive: array type preservation (0.1256ms)
+✔ shared positive: empty map (0.0784ms)
+✔ shared positive: sorted map (0.1783ms)
+✔ shared refusal: nonshort integer (0.2446ms)
+✔ shared refusal: indefinite (0.1116ms)
+✔ shared refusal: duplicate map (0.1135ms)
+✔ shared refusal: unsorted map (0.288ms)
+✔ shared refusal: negative zero (0.1054ms)
+✔ shared refusal: NaN (0.0918ms)
+✔ shared refusal: infinity (0.0893ms)
+✔ shared refusal: float nonshort (0.1054ms)
+✔ shared refusal: bad utf8 (0.1292ms)
+✔ shared refusal: nonNFC (0.1244ms)
+✔ shared refusal: trailing value (0.5844ms)
+✔ shared refusal: truncated text (0.1626ms)
+✔ shared refusal: undeclared key type (0.1097ms)
+✔ all binary16 patterns preserve exact finite float bits or refuse prohibited values (295.182ms)
+ℹ {"binary16_patterns":65536,"accepted":63487,"refused":2049}
+﹣ official pinned Unicode17 normalization vectors execute through both text boundaries (0.0902ms) # GKOS_NORMALIZATION_TEST_PATH absent: official Unicode17 vectors unavailable
+✔ sparse map-entry arrays cannot bypass structured malformed-input refusal (0.3884ms)
+✔ digest validates and hashes one defensive snapshot rather than mutable caller bytes (0.4115ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 52
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 909.375

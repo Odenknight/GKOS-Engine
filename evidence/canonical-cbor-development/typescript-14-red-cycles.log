@@ -1,0 +1,52 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (3.3354ms)
+✔ boolean values preserve their distinct canonical encodings (0.8525ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (1.1478ms)
+✔ floats retain their type and use shortest exact half single or double bytes (2.457ms)
+✔ byte strings preserve source bytes separately from text (0.8213ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (1.473ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (329.7826ms)
+✔ arrays preserve order and distinguish empty null and integral float (1.1743ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (1.5159ms)
+✔ binary and typed boundaries reject malformed unsupported values (0.9897ms)
+✔ encoded-byte hard limit is enforced before allocating oversized payloads (29.6376ms)
+✔ nesting depth is bounded with root depth zero (2.6776ms)
+✔ total value-node budget includes map keys and preflights declared lengths (73.5322ms)
+✖ cyclic inputs are refused explicitly while shared acyclic subtrees are allowed (1.6914ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 13
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 633.2592
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:153:1
+✖ cyclic inputs are refused explicitly while shared acyclic subtrees are allowed (1.6914ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'depth_limit'
+  - 'cyclic_input'
+  
+      at Object.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:24:22)
+      at expectedException (node:assert:578:17)
+      at expectsError (node:assert:703:21)
+      at strict.throws (node:assert:759:3)
+      at refuses (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:19:52)
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:155:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'depth_limit',
+    expected: 'cyclic_input',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

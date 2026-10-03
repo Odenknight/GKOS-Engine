@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "C:/_AI/programs/pi-agent/node.exe",
+      "scripts/build.mjs"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "C:/_AI/programs/pi-agent/node.exe",
+      "scripts/verify-canonical-cbor-cross-language.mjs"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "C:/_AI/programs/pi-agent/node.exe",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "tsconfig.json"
+    ],
+    "exit_code": 0
+  }
+]

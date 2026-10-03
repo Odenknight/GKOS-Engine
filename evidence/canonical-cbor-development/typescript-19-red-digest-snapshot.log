@@ -1,0 +1,85 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (5.1924ms)
+✔ boolean values preserve their distinct canonical encodings (0.7683ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (0.9977ms)
+✔ floats retain their type and use shortest exact half single or double bytes (0.9533ms)
+✔ byte strings preserve source bytes separately from text (0.5893ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (0.8405ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (304.1414ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.6532ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (1.2174ms)
+✔ binary and typed boundaries reject malformed unsupported values (2.1078ms)
+✔ encoded-byte hard limit is enforced before allocating oversized payloads (27.9112ms)
+✔ nesting depth is bounded with root depth zero (1.8787ms)
+✔ total value-node budget includes map keys and preflights declared lengths (61.6935ms)
+✔ cyclic inputs are refused explicitly while shared acyclic subtrees are allowed (0.4332ms)
+✔ explicit canonical timestamps enforce Gregorian dates and exact UTC microsecond grammar (0.6434ms)
+✔ digest hashes only verified canonical bytes and labels the bounded profile (1.2224ms)
+✔ shared positive: null (0.1647ms)
+✔ shared positive: false (0.1273ms)
+✔ shared positive: true (0.0627ms)
+✔ shared positive: zero (0.0783ms)
+✔ shared positive: 24 (0.0979ms)
+✔ shared positive: uint64 max (0.0699ms)
+✔ shared positive: minus one (0.0618ms)
+✔ shared positive: int negative64 edge (0.0747ms)
+✔ shared positive: float integral (0.0637ms)
+✔ shared positive: half 1.5 (0.0638ms)
+✔ shared positive: single 100000 (0.0593ms)
+✔ shared positive: double 1.1 (0.1312ms)
+✔ shared positive: empty text (0.1478ms)
+✔ shared positive: NFC text (0.0977ms)
+✔ shared positive: preserved BOM (0.0587ms)
+✔ shared positive: bytes (0.0682ms)
+✔ shared positive: empty array (0.1032ms)
+✔ shared positive: array type preservation (0.1266ms)
+✔ shared positive: empty map (0.0789ms)
+✔ shared positive: sorted map (0.1571ms)
+✔ shared refusal: nonshort integer (0.2402ms)
+✔ shared refusal: indefinite (0.0846ms)
+✔ shared refusal: duplicate map (0.1105ms)
+✔ shared refusal: unsorted map (0.0957ms)
+✔ shared refusal: negative zero (0.0896ms)
+✔ shared refusal: NaN (0.131ms)
+✔ shared refusal: infinity (0.0864ms)
+✔ shared refusal: float nonshort (0.0959ms)
+✔ shared refusal: bad utf8 (0.1276ms)
+✔ shared refusal: nonNFC (0.1292ms)
+✔ shared refusal: trailing value (0.088ms)
+✔ shared refusal: truncated text (0.2003ms)
+✔ shared refusal: undeclared key type (0.2027ms)
+✔ all binary16 patterns preserve exact finite float bits or refuse prohibited values (259.5747ms)
+ℹ {"binary16_patterns":65536,"accepted":63487,"refused":2049}
+﹣ official pinned Unicode17 normalization vectors execute through both text boundaries (0.1141ms) # GKOS_NORMALIZATION_TEST_PATH absent: official Unicode17 vectors unavailable
+✔ sparse map-entry arrays cannot bypass structured malformed-input refusal (0.301ms)
+✖ digest validates and hashes one defensive snapshot rather than mutable caller bytes (1.3611ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 51
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 821.7592
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:252:1
+✖ digest validates and hashes one defensive snapshot rather than mutable caller bytes (1.3611ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb'
+  - '961b6dd3ede3cb8ecbaacbd68de040cd78eb2ed5889130cceb4c49268ea4d506'
+  
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:259:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'ca2fd00fa001190744c15c317643ab092e7048ce086a243e2be9437c898de1bb',
+    expected: '961b6dd3ede3cb8ecbaacbd68de040cd78eb2ed5889130cceb4c49268ea4d506',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

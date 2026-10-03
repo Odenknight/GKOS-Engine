@@ -1,0 +1,20 @@
+{
+  "paths": [
+    "scripts/build.mjs",
+    "src/canonical-cbor.ts",
+    "scripts/verify-canonical-cbor.py",
+    "scripts/requirements-canonical-cbor.txt",
+    "scripts/verify-canonical-cbor-cross-language.mjs",
+    "test/canonical-cbor.test.mjs",
+    "test/test_canonical_cbor_python.py"
+  ],
+  "findings": [
+    {
+      "path": "src/canonical-cbor.ts",
+      "line": 188,
+      "rule": "dynamic_eval",
+      "text": "  const match = /^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})\\.(\\d{6})Z$/.exec(text);"
+    }
+  ],
+  "scan_scope": "whole new files plus additive tracked file; static heuristics, not a security audit"
+}

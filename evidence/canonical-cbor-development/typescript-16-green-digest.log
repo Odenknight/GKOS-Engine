@@ -1,0 +1,51 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" scripts/build.mjs && "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 0
+built dist/gkos-engine.mjs
+built dist/adapter.mjs
+built dist/gkx.mjs
+built dist/graphiti-adapter.mjs
+built dist/navigation.mjs
+built dist/service.mjs
+built dist/navigation-effects.mjs
+built dist/governance.mjs
+built dist/admission-policy.mjs
+built dist/service-node.mjs
+built dist/canonical-cbor.mjs
+built dist/graphiti-broker.mjs
+built dist/service-stdio.mjs
+built dist/retrieval.mjs
+built dist/retrieval-host.mjs
+built dist/retrieval-path-security.mjs
+built dist/retrieval-evaluation-host.mjs
+built dist/ingest-host.mjs
+built dist/ingest-source-scan.mjs
+built dist/watcher-contracts.mjs
+built dist/watcher-host.mjs
+built dist/gkos-desktop-agent.mjs
+built dist/gkos-desktop-agent.cjs
+built dist/navigation-effects-node.mjs
+built dist/*.d.ts
+✔ null has the fixed canonical bytes and decodes as a typed node (3.5789ms)
+✔ boolean values preserve their distinct canonical encodings (1.0724ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (1.541ms)
+✔ floats retain their type and use shortest exact half single or double bytes (1.2813ms)
+✔ byte strings preserve source bytes separately from text (0.7875ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (1.1992ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (465.3267ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.8624ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (1.6111ms)
+✔ binary and typed boundaries reject malformed unsupported values (1.2423ms)
+✔ encoded-byte hard limit is enforced before allocating oversized payloads (35.5ms)
+✔ nesting depth is bounded with root depth zero (4.807ms)
+✔ total value-node budget includes map keys and preflights declared lengths (85.4506ms)
+✔ cyclic inputs are refused explicitly while shared acyclic subtrees are allowed (0.6771ms)
+✔ explicit canonical timestamps enforce Gregorian dates and exact UTC microsecond grammar (1.4685ms)
+✔ digest hashes only verified canonical bytes and labels the bounded profile (5.4899ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 792.9574

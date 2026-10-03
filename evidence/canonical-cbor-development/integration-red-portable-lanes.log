@@ -1,0 +1,45 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\canonical-cbor-integration-check.py"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 1
+actual exit: 1
+stdout:
+
+stderr:
+test_dedicated_development_ci (__main__.IntegrationChecks.test_dedicated_development_ci) ... FAIL
+test_explicit_corpus_preserves_original_bytes (__main__.IntegrationChecks.test_explicit_corpus_preserves_original_bytes) ... FAIL
+test_protected_paths_unchanged (__main__.IntegrationChecks.test_protected_paths_unchanged) ... ok
+test_python_temp_root_and_explicit_source (__main__.IntegrationChecks.test_python_temp_root_and_explicit_source) ... FAIL
+
+======================================================================
+FAIL: test_dedicated_development_ci (__main__.IntegrationChecks.test_dedicated_development_ci)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\AppData\Local\hermes\cache\scratch\canonical-cbor-integration-check.py", line 36, in test_dedicated_development_ci
+    self.assertTrue(path.is_file(), 'dedicated Unicode17 development CI missing')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : dedicated Unicode17 development CI missing
+
+======================================================================
+FAIL: test_explicit_corpus_preserves_original_bytes (__main__.IntegrationChecks.test_explicit_corpus_preserves_original_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\AppData\Local\hermes\cache\scratch\canonical-cbor-integration-check.py", line 19, in test_explicit_corpus_preserves_original_bytes
+    self.assertFalse(old.exists(), 'full corpus still auto-selected')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false : full corpus still auto-selected
+
+======================================================================
+FAIL: test_python_temp_root_and_explicit_source (__main__.IntegrationChecks.test_python_temp_root_and_explicit_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\AppData\Local\hermes\cache\scratch\canonical-cbor-integration-check.py", line 30, in test_python_temp_root_and_explicit_source
+    self.assertTrue('GKOS_NORMALIZATION_TEST_PATH' in source, 'explicit normalization environment absent')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : explicit normalization environment absent
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.037s
+
+FAILED (failures=3)

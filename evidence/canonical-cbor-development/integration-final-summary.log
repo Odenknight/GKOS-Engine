@@ -1,0 +1,66 @@
+{
+  "scope": "DEVELOPMENT ONLY; no qualification, acceptance, pilot or claims status changes",
+  "results": {
+    "runtime-unicode17": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 0
+    },
+    "runtime-unavailable-injection": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 0
+    },
+    "unicode17-full-ts": {
+      "tests": 57,
+      "pass": 57,
+      "fail": 0,
+      "skipped": 0
+    },
+    "python-full": {
+      "tests": 14,
+      "result": "OK, no skips"
+    },
+    "cross-language": {
+      "scope": "canonical-byte development adapter; no profile or pilot disposition",
+      "positive_vectors": 20,
+      "negative_vectors_and_tamper": 14,
+      "rendering_roundtrips": 21,
+      "paired_numeric_values": 165,
+      "node": "24.21.0",
+      "node_unicode": "17.0"
+    }
+  },
+  "full_corpus_byte_preserving_rename_sha256": "303f86129b8a2d0907321cc6f0117b74ecdcb598abe320bac4d5d425dd626b99",
+  "protected_paths_unchanged": {
+    "src/canonical-cbor.ts": true,
+    "scripts/verify-canonical-cbor.py": true,
+    "scripts/build.mjs": true,
+    "scripts/verify-canonical-cbor-cross-language.mjs": true,
+    ".github/workflows/ci.yml": true,
+    "scripts/current-test-plan.mjs": true,
+    "package.json": true,
+    "src/canonical.ts": true
+  },
+  "official_network_fetch_sha256": "5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db",
+  "workflow_validation": {
+    "yaml_parse": "PASS",
+    "extracted_bash_syntax_exit": 0,
+    "actual_Node24_profile_exit": 0,
+    "local_Python314_rejected_by_Python311_gate_exit": 1
+  },
+  "limitations": [
+    "GitHub Ubuntu/Windows Python3.11 CI lanes not executed locally",
+    "Local Python exercise used requested interpreter: Python3.14.7 with actual Unicode17 provider",
+    "Unavailable Unicode branch was fault-injected on Node24, not an actual Node22/26 run",
+    "Full current-runtime suite intentionally not run; no commit or push"
+  ],
+  "negative_controls": {
+    "unset_normalization_env": "explicit unavailable skip, exit0; not a Unicode validation pass",
+    "configured_missing_corpus": "exit1",
+    "tampered_corpus_sha256": "exit1"
+  },
+  "integration_regression": "Observed RED exit1, then GREEN exit0; original full corpus bytes preserved"
+}

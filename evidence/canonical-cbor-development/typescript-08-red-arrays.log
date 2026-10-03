@@ -1,0 +1,37 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (2.1214ms)
+✔ boolean values preserve their distinct canonical encodings (0.7933ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (0.9791ms)
+✔ floats retain their type and use shortest exact half single or double bytes (0.8711ms)
+✔ byte strings preserve source bytes separately from text (1.5728ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (0.9369ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (314.8398ms)
+✖ arrays preserve order and distinguish empty null and integral float (0.4462ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 440.5798
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:81:1
+✖ arrays preserve order and distinguish empty null and integral float (0.4462ms)
+  Error [CanonicalCborError]: unsupported_node
+      at fail (file:///C:/Users/Oden/Documents/github/GKOS-Engine/dist/canonical-cbor.mjs:13:9)
+      at encodeCanonicalCbor (file:///C:/Users/Oden/Documents/github/GKOS-Engine/dist/canonical-cbor.mjs:100:3)
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:83:22)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    reason: 'unsupported_node',
+    code: 'GKOS-GATE-L6-001',
+    requirementId: 'GKOS-CANON-001'
+  }

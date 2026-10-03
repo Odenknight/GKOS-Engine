@@ -1,0 +1,115 @@
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'C:\Users\Oden\Documents\github\GKOS-Engine\undefined'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v24.21.0
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: C:\_AI\programs\pi-agent\node.exe  pack --dry-run --json
+node:internal/modules/cjs/loader:1568
+
+  throw err;
+
+  ^
+
+
+
+Error: Cannot find module 'C:\Users\Oden\Documents\github\GKOS-Engine\undefined'
+
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+
+    at node:internal/main/run_main_module:33:47 {
+
+  code: 'MODULE_NOT_FOUND',
+
+  requireStack: []
+
+}
+
+
+
+Node.js v24.21.0
+
+
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execFileSync (node:child_process:978:15)
+    at file:///C:/Users/Oden/Documents/github/GKOS-Engine/scripts/check-pack.mjs:175:13
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 1,
+  signal: null,
+  output: [
+    null,
+    '',
+    'node:internal/modules/cjs/loader:1568\r\n' +
+      '  throw err;\r\n' +
+      '  ^\r\n' +
+      '\r\n' +
+      "Error: Cannot find module 'C:\\Users\\Oden\\Documents\\github\\GKOS-Engine\\undefined'\r\n" +
+      '    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)\r\n' +
+      '    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)\r\n' +
+      '    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)\r\n' +
+      '    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)\r\n' +
+      '    at Module._load (node:internal/modules/cjs/loader:1341:5)\r\n' +
+      '    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)\r\n' +
+      '    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\r\n' +
+      '    at node:internal/main/run_main_module:33:47 {\r\n' +
+      "  code: 'MODULE_NOT_FOUND',\r\n" +
+      '  requireStack: []\r\n' +
+      '}\r\n' +
+      '\r\n' +
+      'Node.js v24.21.0\r\n'
+  ],
+  pid: 3672,
+  stdout: '',
+  stderr: 'node:internal/modules/cjs/loader:1568\r\n' +
+    '  throw err;\r\n' +
+    '  ^\r\n' +
+    '\r\n' +
+    "Error: Cannot find module 'C:\\Users\\Oden\\Documents\\github\\GKOS-Engine\\undefined'\r\n" +
+    '    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)\r\n' +
+    '    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)\r\n' +
+    '    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)\r\n' +
+    '    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)\r\n' +
+    '    at Module._load (node:internal/modules/cjs/loader:1341:5)\r\n' +
+    '    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)\r\n' +
+    '    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\r\n' +
+    '    at node:internal/main/run_main_module:33:47 {\r\n' +
+    "  code: 'MODULE_NOT_FOUND',\r\n" +
+    '  requireStack: []\r\n' +
+    '}\r\n' +
+    '\r\n' +
+    'Node.js v24.21.0\r\n'
+}
+
+Node.js v24.21.0

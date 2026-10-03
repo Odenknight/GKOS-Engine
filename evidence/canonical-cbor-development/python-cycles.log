@@ -1,0 +1,1463 @@
+CYCLE null GREEN
+EXIT: 0
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.110s
+
+OK
+CYCLE scalar RED
+EXIT: 1
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... 
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='false') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='true') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='zero') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='24') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='uint64 max') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='minus one') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='int negative64 edge') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='bytes') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='zz') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='0') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='f600') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1800') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='190018') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1a00000018') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1b0000000000000018') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1c') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1d') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1e') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1f') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='40ff') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='5f') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='43aa') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='f7') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='f8ff') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='ff') ... FAIL
+  test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='c000') ... FAIL
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... FAIL
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='false')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 54, in test_scalar_heads_and_malformed_input
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 28, in accept
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='true')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 54, in test_scalar_heads_and_malformed_input
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 28, in accept
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='zero')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 54, in test_scalar_heads_and_malformed_input
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 28, in accept
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='24')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 54, in test_scalar_heads_and_malformed_input
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 28, in accept
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='uint64 max')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 54, in test_scalar_heads_and_malformed_input
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 28, in accept
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='minus one')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 54, in test_scalar_heads_and_malformed_input
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 28, in accept
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='int negative64 edge')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 54, in test_scalar_heads_and_malformed_input
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 28, in accept
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (v='bytes')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 54, in test_scalar_heads_and_malformed_input
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 28, in accept
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='zz')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[372 chars] 0\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 15, in main
+-     data = bytes.fromhex(sys.argv[2])
+- ValueError: non-hexadecimal number found in fromhex() arg at position 0
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 15, in main
+    data = bytes.fromhex(sys.argv[2])
+ValueError: non-hexadecimal number found in fromhex() arg at position 0
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='0')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[376 chars]ts\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 15, in main
+-     data = bytes.fromhex(sys.argv[2])
+- ValueError: fromhex() arg must contain an even number of hexadecimal digits
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 15, in main
+    data = bytes.fromhex(sys.argv[2])
+ValueError: fromhex() arg must contain an even number of hexadecimal digits
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='f600')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1800')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='190018')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1a00000018')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1b0000000000000018')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1c')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1d')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1e')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='1f')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='40ff')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='5f')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='43aa')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='f7')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='f8ff')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='ff')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) (raw='c000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 59, in test_scalar_heads_and_malformed_input
+    self.refuse(raw)
+    ~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 39, in refuse
+    status, result = self.cli('--hex', hex_value)
+                     ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[324 chars]ed\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+-     raise ValueError('unsupported')
+- ValueError: unsupported
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 17, in main
+    raise ValueError('unsupported')
+ValueError: unsupported
+
+
+======================================================================
+FAIL: test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 60, in test_scalar_heads_and_malformed_input
+    status, result = self.cli()
+                     ~~~~~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 20, in cli
+    self.assertEqual(proc.stderr, '', proc.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Traceback (most recent call last):\n  Fil[374 chars]ge\n' != ''
+- Traceback (most recent call last):
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+-     sys.exit(main())
+-              ~~~~^^
+-   File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 15, in main
+-     data = bytes.fromhex(sys.argv[2])
+-                          ~~~~~~~~^^^
+- IndexError: list index out of range
+ : Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 23, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 15, in main
+    data = bytes.fromhex(sys.argv[2])
+                         ~~~~~~~~^^^
+IndexError: list index out of range
+
+
+----------------------------------------------------------------------
+Ran 1 test in 6.816s
+
+FAILED (failures=28)
+CYCLE scalar GREEN
+EXIT: 0
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 2.755s
+
+OK
+CYCLE float RED
+EXIT: 1
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... FAIL
+
+======================================================================
+FAIL: test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 67, in test_float_width_type_and_prohibited_values
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 29, in accept
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'unsupported_simple_value'}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.113s
+
+FAILED (failures=1)
+CYCLE float GREEN
+EXIT: 0
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 5.044s
+
+OK
+CYCLE Unicode RED
+EXIT: 1
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... FAIL
+
+======================================================================
+FAIL: test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 89, in test_unicode17_text_and_missing_provider
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 29, in accept
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'unsupported_type'}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.090s
+
+FAILED (failures=1)
+CYCLE Unicode GREEN
+EXIT: 0
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 6.235s
+
+OK
+CYCLE containers RED
+EXIT: 1
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... FAIL
+
+======================================================================
+FAIL: test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 105, in test_containers_preserve_order_and_refuse_duplicate_keys
+    self.accept(v['hex'], v['node'])
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 29, in accept
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'unsupported_type'}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.101s
+
+FAILED (failures=1)
+CYCLE containers GREEN
+EXIT: 0
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 12.088s
+
+OK
+CYCLE resources RED
+EXIT: 1
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... 
+  test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) (size=66) ... FAIL
+  test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) (size=2001) ... ERROR
+  test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) (size=10003) ... FAIL
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... FAIL
+
+======================================================================
+ERROR: test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) (size=2001)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 119, in test_decode_resource_boundaries
+    module.decode_canonical(raw)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 130, in decode_canonical
+    node = decoder.node()
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 110, in node
+    return {'kind': 'array', 'items': [self.node() for _ in range(value)]}
+                                       ~~~~~~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 110, in node
+    return {'kind': 'array', 'items': [self.node() for _ in range(value)]}
+                                       ~~~~~~~~~^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 110, in node
+    return {'kind': 'array', 'items': [self.node() for _ in range(value)]}
+                                       ~~~~~~~~~^^
+  [Previous line repeated 983 more times]
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\scripts\verify-canonical-cbor.py", line 82, in node
+    initial = self.take(1)[0]
+              ~~~~~~~~~^^^
+RecursionError: maximum recursion depth exceeded
+
+======================================================================
+FAIL: test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) (size=66)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 118, in test_decode_resource_boundaries
+    with self.assertRaises(module.Refusal) as context:
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: Refusal not raised
+
+======================================================================
+FAIL: test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) (size=10003)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 118, in test_decode_resource_boundaries
+    with self.assertRaises(module.Refusal) as context:
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: Refusal not raised
+
+======================================================================
+FAIL: test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 128, in test_decode_resource_boundaries
+    with self.assertRaises(module.Refusal):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: Refusal not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.156s
+
+FAILED (failures=3, errors=1)
+CYCLE resources GREEN
+EXIT: 0
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... ok
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 8.664s
+
+OK
+CYCLE scalar rendering RED
+EXIT: 1
+test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) ... 
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='null') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='false') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='true') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='zero') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='24') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='uint64 max') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='minus one') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='int negative64 edge') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='float integral') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='half 1.5') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='single 100000') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='double 1.1') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='empty text') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='NFC text') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='preserved BOM') ... FAIL
+  test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='bytes') ... FAIL
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='null')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='false')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='true')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='zero')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='24')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='uint64 max')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='minus one')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='int negative64 edge')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='float integral')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='half 1.5')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='single 100000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='double 1.1')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='empty text')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='NFC text')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='preserved BOM')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+======================================================================
+FAIL: test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) (label='bytes')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 70, in test_scalar_render_roundtrip
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-001', 'requirement_id': 'GKOS-CANON-001', 'reason': 'usage: --hex HEX or --render FILE'}
+
+----------------------------------------------------------------------
+Ran 1 test in 4.655s
+
+FAILED (failures=16)
+CYCLE scalar rendering GREEN
+EXIT: 0
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... ok
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 19.305s
+
+OK
+CYCLE strict scalar rendering RED
+EXIT: 1
+test_scalar_render_requires_exact_fields_types_and_hash (__main__.VerifierTests.test_scalar_render_requires_exact_fields_types_and_hash) ... FAIL
+
+======================================================================
+FAIL: test_scalar_render_requires_exact_fields_types_and_hash (__main__.VerifierTests.test_scalar_render_requires_exact_fields_types_and_hash)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 95, in test_scalar_render_requires_exact_fields_types_and_hash
+    self.render_refusal({**valid, field: replacement}, 8)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 33, in render_refusal
+    self.assertEqual(status, 1, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1 : {'rendering_format': 'gkos.cbor.typed-json.v1', 'algorithm': 'sha-256', 'canonical_profile': 'GKX-CBOR-1', 'digest': 'b0b2988b6bbe724bacda5e9e524736de0bc7dae41c46b4213c50e1d35d4e5f13', 'node': {'kind': 'null'}, 'canonical_hex': 'f6'}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.132s
+
+FAILED (failures=1)
+CYCLE strict scalar rendering GREEN
+EXIT: 0
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... ok
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_scalar_render_requires_exact_fields_types_and_hash (__main__.VerifierTests.test_scalar_render_requires_exact_fields_types_and_hash) ... ok
+test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 20.887s
+
+OK
+CYCLE container rendering RED
+EXIT: 1
+test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) ... 
+  test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) (label='empty array') ... FAIL
+  test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) (label='array type preservation') ... FAIL
+  test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) (label='empty map') ... FAIL
+  test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) (label='sorted map') ... FAIL
+test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) ... FAIL
+
+======================================================================
+FAIL: test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) (label='empty array')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 232, in test_container_render_roundtrip_and_exact_entry_order
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-008', 'requirement_id': 'GKOS-CANON-008', 'reason': 'unsupported_rendered_kind'}
+
+======================================================================
+FAIL: test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) (label='array type preservation')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 232, in test_container_render_roundtrip_and_exact_entry_order
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-008', 'requirement_id': 'GKOS-CANON-008', 'reason': 'unsupported_rendered_kind'}
+
+======================================================================
+FAIL: test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) (label='empty map')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 232, in test_container_render_roundtrip_and_exact_entry_order
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-008', 'requirement_id': 'GKOS-CANON-008', 'reason': 'unsupported_rendered_kind'}
+
+======================================================================
+FAIL: test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) (label='sorted map')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 232, in test_container_render_roundtrip_and_exact_entry_order
+    self.assertEqual(status, 0, result)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {'verified': False, 'code': 'GKOS-GATE-L6-008', 'requirement_id': 'GKOS-CANON-008', 'reason': 'unsupported_rendered_kind'}
+
+======================================================================
+FAIL: test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 247, in test_container_render_roundtrip_and_exact_entry_order
+    self.render_refusal({**valid, 'node': node}, 2)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 35, in render_refusal
+    self.assertEqual(result['code'], f'GKOS-GATE-L6-{gate:03d}')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'GKOS-GATE-L6-008' != 'GKOS-GATE-L6-002'
+- GKOS-GATE-L6-008
+?                ^
++ GKOS-GATE-L6-002
+?                ^
+
+
+----------------------------------------------------------------------
+Ran 1 test in 3.013s
+
+FAILED (failures=5)
+CYCLE container rendering GREEN
+EXIT: 0
+test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) ... ok
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... ok
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_scalar_render_requires_exact_fields_types_and_hash (__main__.VerifierTests.test_scalar_render_requires_exact_fields_types_and_hash) ... ok
+test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 70.120s
+
+OK
+CYCLE encoding resources RED
+EXIT: 1
+test_encode_and_render_resource_boundaries (__main__.VerifierTests.test_encode_and_render_resource_boundaries) ... FAIL
+
+======================================================================
+FAIL: test_encode_and_render_resource_boundaries (__main__.VerifierTests.test_encode_and_render_resource_boundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 260, in test_encode_and_render_resource_boundaries
+    with self.assertRaises(module.Refusal) as context:
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: Refusal not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+FAILED (failures=1)
+CYCLE encoding resources GREEN
+EXIT: 1
+test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) ... ok
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... ok
+test_encode_and_render_resource_boundaries (__main__.VerifierTests.test_encode_and_render_resource_boundaries) ... FAIL
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_scalar_render_requires_exact_fields_types_and_hash (__main__.VerifierTests.test_scalar_render_requires_exact_fields_types_and_hash) ... ok
+test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+======================================================================
+FAIL: test_encode_and_render_resource_boundaries (__main__.VerifierTests.test_encode_and_render_resource_boundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 287, in test_encode_and_render_resource_boundaries
+    self.render_refusal('[' * 2000 + ']' * 2000, 1)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 35, in render_refusal
+    self.assertEqual(result['code'], f'GKOS-GATE-L6-{gate:03d}')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'GKOS-GATE-L6-008' != 'GKOS-GATE-L6-001'
+- GKOS-GATE-L6-008
+?                ^
++ GKOS-GATE-L6-001
+?                ^
+
+
+----------------------------------------------------------------------
+Ran 10 tests in 26.442s
+
+FAILED (failures=1)
+CYCLE encoding resources GREEN retry
+EXIT: 0
+test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) ... ok
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... ok
+test_encode_and_render_resource_boundaries (__main__.VerifierTests.test_encode_and_render_resource_boundaries) ... ok
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_scalar_render_requires_exact_fields_types_and_hash (__main__.VerifierTests.test_scalar_render_requires_exact_fields_types_and_hash) ... ok
+test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 23.348s
+
+OK
+CYCLE timestamp RED
+EXIT: 1
+test_explicit_timestamp_validation_not_arbitrary_text (__main__.VerifierTests.test_explicit_timestamp_validation_not_arbitrary_text) ... FAIL
+
+======================================================================
+FAIL: test_explicit_timestamp_validation_not_arbitrary_text (__main__.VerifierTests.test_explicit_timestamp_validation_not_arbitrary_text)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 299, in test_explicit_timestamp_validation_not_arbitrary_text
+    self.assertTrue(hasattr(module, 'validate_canonical_timestamp'), 'explicit timestamp validator is missing')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : explicit timestamp validator is missing
+
+----------------------------------------------------------------------
+Ran 1 test in 0.008s
+
+FAILED (failures=1)
+CYCLE timestamp GREEN
+EXIT: 0
+test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) ... ok
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... ok
+test_encode_and_render_resource_boundaries (__main__.VerifierTests.test_encode_and_render_resource_boundaries) ... ok
+test_explicit_timestamp_validation_not_arbitrary_text (__main__.VerifierTests.test_explicit_timestamp_validation_not_arbitrary_text) ... ok
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_scalar_render_requires_exact_fields_types_and_hash (__main__.VerifierTests.test_scalar_render_requires_exact_fields_types_and_hash) ... ok
+test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 24.073s
+
+OK

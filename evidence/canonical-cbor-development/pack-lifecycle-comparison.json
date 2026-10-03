@@ -1,0 +1,24 @@
+[
+  {
+    "checkout": "current",
+    "command": [
+      "C:/_AI/programs/pi-agent/node.exe",
+      "C:/Users/Oden/AppData/Local/hermes/tools/node-26.7.0-win32-x64/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "pack:check"
+    ],
+    "exit_code": 0,
+    "invocation_note": "npm lifecycle supplies npm_execpath required by unchanged check-pack.mjs; direct invocation without it is invalid"
+  },
+  {
+    "checkout": "baseline",
+    "command": [
+      "C:/_AI/programs/pi-agent/node.exe",
+      "C:/Users/Oden/AppData/Local/hermes/tools/node-26.7.0-win32-x64/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "pack:check"
+    ],
+    "exit_code": 0,
+    "invocation_note": "npm lifecycle supplies npm_execpath required by unchanged check-pack.mjs; direct invocation without it is invalid"
+  }
+]

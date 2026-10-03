@@ -1,0 +1,11 @@
+COMMAND: python test/test_canonical_cbor_python.py VerifierTests.test_official_unicode17_normalization_vectors VerifierTests.test_all_binary16_patterns_and_shared_negative_vectors
+EXIT: 0
+UNICODE17_COUNTS {"accepted_nfc": 68937, "cbor_text_decisions": 200340, "normalization_invariants": 400680, "part2_codepoints": 280248, "part2_invariants": 1120992, "refused_non_nfc": 31233, "rows": 20034, "source_sha256": "5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db"}
+BINARY16_COUNTS {"accepted": 63487, "patterns": 65536, "refused": 2049}
+test_official_unicode17_normalization_vectors (__main__.VerifierTests.test_official_unicode17_normalization_vectors) ... ok
+test_all_binary16_patterns_and_shared_negative_vectors (__main__.VerifierTests.test_all_binary16_patterns_and_shared_negative_vectors) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 4.638s
+
+OK

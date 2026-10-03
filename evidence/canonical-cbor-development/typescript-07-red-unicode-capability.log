@@ -1,0 +1,36 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (2.1234ms)
+✔ boolean values preserve their distinct canonical encodings (1.595ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (0.997ms)
+✔ floats retain their type and use shortest exact half single or double bytes (0.8638ms)
+✔ byte strings preserve source bytes separately from text (0.5703ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (0.8399ms)
+✖ text fails closed when the actual runtime Unicode17 capability is unavailable (79.7251ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 6
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 219.2686
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:72:1
+✖ text fails closed when the actual runtime Unicode17 capability is unavailable (79.7251ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 0
+  
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:78:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

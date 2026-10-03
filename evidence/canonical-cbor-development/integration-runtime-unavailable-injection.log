@@ -1,0 +1,26 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/_AI/programs/pi-agent/node.exe", "--import", "file:///C:/Users/Oden/AppData/Local/hermes/cache/scratch/canonical-cbor-integration-unavailable.mjs", "--test", "test/canonical-cbor-runtime.test.mjs"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 0
+actual exit: 0
+stdout:
+# DEVELOPMENT fault injection: unavailable Unicode16 capability; not an actual Node22 qualification
+✔ actual runtime text capability either validates Unicode17 or refuses closed without skips (3.1635ms)
+ℹ {"node":"24.21.0","unicode":"16.0","text_expectation":"unicode_profile_unavailable refusal"}
+✔ actual runtime refuses decomposed text and malformed text without normalization repair (0.5157ms)
+✔ isolated capability loss refuses encode decode digest and map text while numeric values remain usable (336.6535ms)
+✔ numeric integer values keep shortest heads bigint type and unsigned64 bounds on any runtime (2.0374ms)
+✔ numeric float values retain float type shortest exact width and prohibited-value refusal on any runtime (1.0491ms)
+✔ nontext assembly and digest remain canonical without any Unicode requirement (1.0914ms)
+✔ private development APIs leave package public exports and legacy canonical JSON unchanged (13.751ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 478.9713
+
+stderr:

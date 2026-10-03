@@ -1,0 +1,2 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" node_modules/typescript/bin/tsc --noEmit -p tsconfig.json
+exit_code: 0

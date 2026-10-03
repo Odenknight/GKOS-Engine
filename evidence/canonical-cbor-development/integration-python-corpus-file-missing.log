@@ -1,0 +1,29 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "-m", "unittest", "test.test_canonical_cbor_python.VerifierTests.test_official_unicode17_normalization_vectors", "-v"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\missing-normalization-unicode17.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 1
+actual exit: 1
+stdout:
+
+stderr:
+test_official_unicode17_normalization_vectors (test.test_canonical_cbor_python.VerifierTests.test_official_unicode17_normalization_vectors) ... ERROR
+
+======================================================================
+ERROR: test_official_unicode17_normalization_vectors (test.test_canonical_cbor_python.VerifierTests.test_official_unicode17_normalization_vectors)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 327, in test_official_unicode17_normalization_vectors
+    content = path.read_bytes()
+  File "C:\Users\Oden\AppData\Local\hermes\tools\python-3.14.7+20260901-win32-x64\Lib\pathlib\__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Oden\AppData\Local\hermes\tools\python-3.14.7+20260901-win32-x64\Lib\pathlib\__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\missing-normalization-unicode17.txt'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.019s
+
+FAILED (errors=1)

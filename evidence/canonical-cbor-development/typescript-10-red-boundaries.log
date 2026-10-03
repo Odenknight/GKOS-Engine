@@ -1,0 +1,46 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (2.3934ms)
+✔ boolean values preserve their distinct canonical encodings (1.0668ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (2.2002ms)
+✔ floats retain their type and use shortest exact half single or double bytes (1.4762ms)
+✔ byte strings preserve source bytes separately from text (1.7065ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (0.9187ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (336.4546ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.7417ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (1.1992ms)
+✖ binary and typed boundaries reject malformed unsupported values (15.2252ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 495.129
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:107:1
+✖ binary and typed boundaries reject malformed unsupported values (15.2252ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(error instanceof codec.CanonicalCborError)
+  
+      at Object.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:20:10)
+      at expectedException (node:assert:578:17)
+      at expectsError (node:assert:703:21)
+      at strict.throws (node:assert:759:3)
+      at refuses (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:19:52)
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:108:93)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

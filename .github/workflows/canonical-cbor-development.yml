@@ -1,0 +1,129 @@
+name: Canonical CBOR DEVELOPMENT Unicode17
+
+# Development evidence only: not profile qualification or pilot dispositions.
+on:
+  push:
+    paths:
+      - '.github/workflows/canonical-cbor-development.yml'
+      - 'src/canonical-cbor.ts'
+      - 'scripts/*canonical-cbor*'
+      - 'scripts/build.mjs'
+      - 'test/*canonical*cbor*'
+      - 'contracts/canonical-cbor-development-v1.md'
+      - 'package.json'
+      - 'package-lock.json'
+  pull_request:
+    paths:
+      - '.github/workflows/canonical-cbor-development.yml'
+      - 'src/canonical-cbor.ts'
+      - 'scripts/*canonical-cbor*'
+      - 'scripts/build.mjs'
+      - 'test/*canonical*cbor*'
+      - 'contracts/canonical-cbor-development-v1.md'
+      - 'package.json'
+      - 'package-lock.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unicode17-development:
+    name: DEVELOPMENT Unicode17 / ${{ matrix.os }} / Node24 / Python3.11
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    defaults:
+      run:
+        shell: bash
+    env:
+      GKOS_CANONICAL_PYTHON: python
+      GKOS_NORMALIZATION_TEST_PATH: ${{ runner.temp }}/NormalizationTest-17.0.0.txt
+      TMPDIR: ${{ runner.temp }}
+      TMP: ${{ runner.temp }}
+      TEMP: ${{ runner.temp }}
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0, same pin as ci.yml
+
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0, same pin as ci.yml
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5, same pin as ci.yml
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned development dependencies
+        run: |
+          npm ci
+          python -m pip install -r scripts/requirements-canonical-cbor.txt
+
+      - name: Mandatory explicit DEVELOPMENT profile and full corpus gates
+        run: |
+          run_development() {
+            local label="$1"
+            shift
+            local log="$RUNNER_TEMP/canonical-cbor-development-$label.log"
+            printf 'DEVELOPMENT ONLY: no qualification or pilot disposition.\ncommand argv: ' > "$log"
+            printf '%q ' "$@" >> "$log"
+            printf '\n' >> "$log"
+            set +e
+            "$@" 2>&1 | tee -a "$log"
+            local status=${PIPESTATUS[0]}
+            set -e
+            printf 'exit: %s\n' "$status" | tee -a "$log"
+            return "$status"
+          }
+          run_development actual-node-profile node --input-type=module -e "import assert from 'node:assert/strict'; assert.ok(['17.0','17.0.0'].includes(process.versions.unicode),'actual Unicode17 required; no version spoof or skip'); assert.equal('e\\u0301'.normalize('NFC'),'é'); console.log(JSON.stringify({node:process.versions.node,unicode:process.versions.unicode,icu:process.versions.icu,scope:'DEVELOPMENT ONLY'}));"
+          run_development official-normalization-source python - <<'PY'
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import sys
+          import urllib.request
+          import unicodedata2
+
+          assert sys.version_info[:2] == (3, 11), 'Python3.11 development profile required'
+          assert unicodedata2.unidata_version == '17.0.0', 'actual pinned Unicode17 provider required'
+          expected = '5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db'
+          url = 'https://www.unicode.org/Public/17.0.0/ucd/NormalizationTest.txt'
+          with urllib.request.urlopen(url, timeout=60) as response:
+              content = response.read()
+          actual = hashlib.sha256(content).hexdigest()
+          assert actual == expected, 'official normalization SHA256 mismatch; do not use these bytes'
+          path = pathlib.Path(os.environ['GKOS_NORMALIZATION_TEST_PATH'])
+          assert path.parent.resolve() == pathlib.Path(os.environ['RUNNER_TEMP']).resolve()
+          path.write_bytes(content)
+          assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
+          # Bind the cross-language subprocess to the exact setup-python interpreter.
+          with open(os.environ['GITHUB_ENV'], 'a', encoding='utf-8') as stream:
+              stream.write('GKOS_CANONICAL_PYTHON=' + sys.executable + '\n')
+          print(json.dumps({'scope': 'DEVELOPMENT ONLY', 'python': sys.version.split()[0],
+                            'unicode': unicodedata2.unidata_version, 'normalization_sha256': actual,
+                            'normalization_bytes': len(content)}))
+          PY
+          # GITHUB_ENV applies to later steps; resolve the same exact interpreter now.
+          export GKOS_CANONICAL_PYTHON="$(python -c 'import sys; print(sys.executable)')"
+          run_development build node scripts/build.mjs
+          run_development runtime node --test test/canonical-cbor-runtime.test.mjs
+          run_development full-unicode17-ts node --test test/canonical-cbor-unicode17.mjs
+          run_development full-python python -m unittest discover -s test -p test_canonical_cbor_python.py -v
+          run_development cross-language node scripts/verify-canonical-cbor-cross-language.mjs
+
+      - name: Retain DEVELOPMENT commands exits and logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4, same pin as ci.yml
+        with:
+          name: canonical-cbor-DEVELOPMENT-${{ runner.os }}-node24-python311
+          path: ${{ runner.temp }}/canonical-cbor-development-*.log
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+          overwrite: false
+          include-hidden-files: false

@@ -1,0 +1,89 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 1
+✔ null has the fixed canonical bytes and decodes as a typed node (3.9331ms)
+✔ boolean values preserve their distinct canonical encodings (0.7712ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (0.9569ms)
+✔ floats retain their type and use shortest exact half single or double bytes (0.8834ms)
+✔ byte strings preserve source bytes separately from text (0.5868ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (0.9239ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (307.9029ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.6035ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (1.0627ms)
+✔ binary and typed boundaries reject malformed unsupported values (1.6497ms)
+✔ encoded-byte hard limit is enforced before allocating oversized payloads (25.7308ms)
+✔ nesting depth is bounded with root depth zero (1.9077ms)
+✔ total value-node budget includes map keys and preflights declared lengths (54.4ms)
+✔ cyclic inputs are refused explicitly while shared acyclic subtrees are allowed (0.3926ms)
+✔ explicit canonical timestamps enforce Gregorian dates and exact UTC microsecond grammar (0.6623ms)
+✔ digest hashes only verified canonical bytes and labels the bounded profile (1.2576ms)
+✔ shared positive: null (0.2295ms)
+✔ shared positive: false (0.093ms)
+✔ shared positive: true (0.0602ms)
+✔ shared positive: zero (0.065ms)
+✔ shared positive: 24 (0.0612ms)
+✔ shared positive: uint64 max (0.0606ms)
+✔ shared positive: minus one (0.0778ms)
+✔ shared positive: int negative64 edge (0.1047ms)
+✔ shared positive: float integral (0.0932ms)
+✔ shared positive: half 1.5 (0.0639ms)
+✔ shared positive: single 100000 (0.0549ms)
+✔ shared positive: double 1.1 (0.1549ms)
+✔ shared positive: empty text (0.0681ms)
+✔ shared positive: NFC text (0.0931ms)
+✔ shared positive: preserved BOM (0.0603ms)
+✔ shared positive: bytes (0.0828ms)
+✔ shared positive: empty array (0.1079ms)
+✔ shared positive: array type preservation (0.1212ms)
+✔ shared positive: empty map (0.0662ms)
+✔ shared positive: sorted map (0.1636ms)
+✔ shared refusal: nonshort integer (0.2405ms)
+✔ shared refusal: indefinite (0.0841ms)
+✔ shared refusal: duplicate map (0.1198ms)
+✔ shared refusal: unsorted map (0.1122ms)
+✔ shared refusal: negative zero (0.0793ms)
+✔ shared refusal: NaN (0.0717ms)
+✔ shared refusal: infinity (0.072ms)
+✔ shared refusal: float nonshort (0.2575ms)
+✔ shared refusal: bad utf8 (0.1144ms)
+✔ shared refusal: nonNFC (0.1047ms)
+✔ shared refusal: trailing value (0.072ms)
+✔ shared refusal: truncated text (0.1399ms)
+✔ shared refusal: undeclared key type (0.1181ms)
+✔ all binary16 patterns preserve exact finite float bits or refuse prohibited values (248.3767ms)
+ℹ {"binary16_patterns":65536,"accepted":63487,"refused":2049}
+﹣ official pinned Unicode17 normalization vectors execute through both text boundaries (0.0728ms) # GKOS_NORMALIZATION_TEST_PATH absent: official Unicode17 vectors unavailable
+✖ sparse map-entry arrays cannot bypass structured malformed-input refusal (5.3605ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 50
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 800.9308
+
+✖ failing tests:
+
+test at test\canonical-cbor.test.mjs:246:1
+✖ sparse map-entry arrays cannot bypass structured malformed-input refusal (5.3605ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(error instanceof codec.CanonicalCborError)
+  
+      at Object.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:20:10)
+      at expectedException (node:assert:578:17)
+      at expectsError (node:assert:703:21)
+      at strict.throws (node:assert:759:3)
+      at refuses (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:19:52)
+      at TestContext.<anonymous> (file:///C:/Users/Oden/Documents/github/GKOS-Engine/test/canonical-cbor.test.mjs:247:3)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

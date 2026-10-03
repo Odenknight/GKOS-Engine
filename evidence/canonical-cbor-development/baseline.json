@@ -1,0 +1,14 @@
+{
+  "source_head": "45fc25fdfb6a48ccc72a8fe8019f78c1edb01129",
+  "results": [
+    {
+      "name": "baseline-build",
+      "exit_code": 0
+    },
+    {
+      "name": "baseline-contract-regression",
+      "exit_code": 0
+    }
+  ],
+  "scope": "selected unchanged contract/regression lane; not full Engine qualification"
+}

@@ -1,0 +1,31 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "-m", "unittest", "discover", "-s", "test", "-p", "test_canonical_cbor_python.py", "-v"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 0
+actual exit: 0
+stdout:
+BINARY16_COUNTS {"accepted": 63487, "patterns": 65536, "refused": 2049}
+CORPUS_COUNTS {"binary32": 4096, "binary64": 4096, "malformed_inputs": 4096}
+UNICODE17_COUNTS {"accepted_nfc": 68937, "cbor_text_decisions": 200340, "normalization_invariants": 400680, "part2_codepoints": 280248, "part2_invariants": 1120992, "refused_non_nfc": 31233, "rows": 20034, "source_sha256": "5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db"}
+
+stderr:
+test_all_binary16_patterns_and_shared_negative_vectors (test_canonical_cbor_python.VerifierTests.test_all_binary16_patterns_and_shared_negative_vectors) ... ok
+test_container_render_roundtrip_and_exact_entry_order (test_canonical_cbor_python.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) ... ok
+test_containers_preserve_order_and_refuse_duplicate_keys (test_canonical_cbor_python.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_decode_resource_boundaries (test_canonical_cbor_python.VerifierTests.test_decode_resource_boundaries) ... ok
+test_deterministic_binary32_binary64_and_malformed_corpus (test_canonical_cbor_python.VerifierTests.test_deterministic_binary32_binary64_and_malformed_corpus) ... ok
+test_encode_and_render_resource_boundaries (test_canonical_cbor_python.VerifierTests.test_encode_and_render_resource_boundaries) ... ok
+test_explicit_timestamp_validation_not_arbitrary_text (test_canonical_cbor_python.VerifierTests.test_explicit_timestamp_validation_not_arbitrary_text) ... ok
+test_float_width_type_and_prohibited_values (test_canonical_cbor_python.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (test_canonical_cbor_python.VerifierTests.test_null_cli_and_sha256) ... ok
+test_official_unicode17_normalization_vectors (test_canonical_cbor_python.VerifierTests.test_official_unicode17_normalization_vectors) ... ok
+test_scalar_heads_and_malformed_input (test_canonical_cbor_python.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_scalar_render_requires_exact_fields_types_and_hash (test_canonical_cbor_python.VerifierTests.test_scalar_render_requires_exact_fields_types_and_hash) ... ok
+test_scalar_render_roundtrip (test_canonical_cbor_python.VerifierTests.test_scalar_render_roundtrip) ... ok
+test_unicode17_text_and_missing_provider (test_canonical_cbor_python.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 33.082s
+
+OK

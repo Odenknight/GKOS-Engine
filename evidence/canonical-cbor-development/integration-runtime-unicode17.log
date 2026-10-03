@@ -1,0 +1,25 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/_AI/programs/pi-agent/node.exe", "--test", "test/canonical-cbor-runtime.test.mjs"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 0
+actual exit: 0
+stdout:
+✔ actual runtime text capability either validates Unicode17 or refuses closed without skips (4.6931ms)
+ℹ {"node":"24.21.0","unicode":"17.0","text_expectation":"Unicode17 validation"}
+✔ actual runtime refuses decomposed text and malformed text without normalization repair (1.1771ms)
+✔ isolated capability loss refuses encode decode digest and map text while numeric values remain usable (338.8746ms)
+✔ numeric integer values keep shortest heads bigint type and unsigned64 bounds on any runtime (0.9693ms)
+✔ numeric float values retain float type shortest exact width and prohibited-value refusal on any runtime (1.0361ms)
+✔ nontext assembly and digest remain canonical without any Unicode requirement (0.6647ms)
+✔ private development APIs leave package public exports and legacy canonical JSON unchanged (14.3821ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 506.6401
+
+stderr:

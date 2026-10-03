@@ -1,0 +1,26 @@
+✔ State-Change Receipt is a role embedded in the governed record (11.3959ms)
+✔ receipt unavailable means no governed effect or successful claim (1.6703ms)
+✔ invalid receipt-role fields fail closed (0.9976ms)
+✔ durability failure never publishes state or committed receipt outcome (65.0404ms)
+✔ commit transitions outcome only at the transactional publication boundary (6.6842ms)
+✔ duplicate operation replay is exactly-once and conflicting replay is rejected (9.6659ms)
+✔ optimistic head and digest preconditions are enforced (8.6266ms)
+✔ all deterministic Navigation outputs are byte-identical under reordered enumeration (80.4666ms)
+✔ Navigation Effects is separately versioned and default capability discovery is fail-closed (3.3354ms)
+✔ effect capability dependencies are reported independently and deletion remains disabled (0.6099ms)
+✔ Navigation 1.0 capability truth remains unchanged (0.4635ms)
+✔ framework-neutral effects source has no filesystem dependency or Node executor primitive (26.9779ms)
+✔ contract pack is integration-only, effects-separated, and mechanically complete (479.5776ms)
+✔ all required adversarial fixtures are registered and remain effect-free (164.1597ms)
+✔ security and lineage fixtures encode fail-closed outcomes without content disclosure (3.7994ms)
+✔ package export and build products include Navigation Effects without changing release metadata (3.591ms)
+✔ canonical GKX API is available from the engine and package subpaths (2.4815ms)
+✔ downstream adapter is immutable, policy-bound, and product-neutral (32.1797ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5595.1914

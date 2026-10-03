@@ -1,0 +1,9 @@
+COMMAND: python test/test_canonical_cbor_python.py VerifierTests.test_deterministic_binary32_binary64_and_malformed_corpus
+EXIT: 0
+CORPUS_COUNTS {"binary32": 4096, "binary64": 4096, "malformed_inputs": 4096}
+test_deterministic_binary32_binary64_and_malformed_corpus (__main__.VerifierTests.test_deterministic_binary32_binary64_and_malformed_corpus) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.410s
+
+OK

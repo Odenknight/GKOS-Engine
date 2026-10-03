@@ -1,0 +1,11 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\canonical-cbor-integration-fetch-probe.py"]
+explicit environment: {"GITHUB_ENV": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\canonical-cbor-integration-github-env.txt", "GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0-integration-downloaded.txt", "PYTHONDONTWRITEBYTECODE": "1", "RUNNER_TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 0
+actual exit: 0
+stdout:
+LOCAL DEVELOPMENT download/hash probe; Python3.11 CI profile not executed
+{"scope": "DEVELOPMENT ONLY", "python": "3.14.7", "unicode": "17.0.0", "normalization_sha256": "5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db", "normalization_bytes": 2827429}
+
+stderr:

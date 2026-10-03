@@ -1,0 +1,37 @@
+{
+  "command": "C:\\Users\\Oden\\AppData\\Local\\Programs\\cbor-verifier\\Scripts\\python.exe test/test_canonical_cbor_python.py",
+  "cwd": "C:\\Users\\Oden\\Documents\\github\\GKOS-Engine",
+  "exit": 0,
+  "python": "3.14.7 (main, Sep  1 2026, 14:17:30) [MSC v.1944 64 bit (AMD64)]",
+  "stdlib_unicode": "16.0.0",
+  "unicode_provider": "unicodedata2==17.0.1",
+  "provider_unicode": "17.0.0",
+  "shared_positive_vectors": 20,
+  "shared_negative_vectors": 13,
+  "normative_pin": "b308ff7137bdbb109c31f0ace7e6c49b8988e0d5",
+  "provenance": "Separately authored Python implementation; shared contract, normative annex, fixed vectors and Unicode data dependency. Same model family development; NOT external independent assessment. No TypeScript codec or JS evaluator read/imported.",
+  "limits": "Canonical bytes 1048576, root-depth 64, nodes including keys 10000; additional JSON transport ceiling 10485760 and syntax nesting ceiling 199.",
+  "diagnostics": "Registered GKOS-GATE-L6-007 / GKOS-CANON-007 for displayed hash mismatch, L6-008 / CANON-008 for malformed/incomplete typed rendering; numeric/text/map conditions retain L6-003/005/002."
+}
+BINARY16_COUNTS {"accepted": 63487, "patterns": 65536, "refused": 2049}
+CORPUS_COUNTS {"binary32": 4096, "binary64": 4096, "malformed_inputs": 4096}
+UNICODE17_COUNTS {"accepted_nfc": 68937, "cbor_text_decisions": 200340, "normalization_invariants": 400680, "part2_codepoints": 280248, "part2_invariants": 1120992, "refused_non_nfc": 31233, "rows": 20034, "source_sha256": "5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db"}
+test_all_binary16_patterns_and_shared_negative_vectors (__main__.VerifierTests.test_all_binary16_patterns_and_shared_negative_vectors) ... ok
+test_container_render_roundtrip_and_exact_entry_order (__main__.VerifierTests.test_container_render_roundtrip_and_exact_entry_order) ... ok
+test_containers_preserve_order_and_refuse_duplicate_keys (__main__.VerifierTests.test_containers_preserve_order_and_refuse_duplicate_keys) ... ok
+test_decode_resource_boundaries (__main__.VerifierTests.test_decode_resource_boundaries) ... ok
+test_deterministic_binary32_binary64_and_malformed_corpus (__main__.VerifierTests.test_deterministic_binary32_binary64_and_malformed_corpus) ... ok
+test_encode_and_render_resource_boundaries (__main__.VerifierTests.test_encode_and_render_resource_boundaries) ... ok
+test_explicit_timestamp_validation_not_arbitrary_text (__main__.VerifierTests.test_explicit_timestamp_validation_not_arbitrary_text) ... ok
+test_float_width_type_and_prohibited_values (__main__.VerifierTests.test_float_width_type_and_prohibited_values) ... ok
+test_null_cli_and_sha256 (__main__.VerifierTests.test_null_cli_and_sha256) ... ok
+test_official_unicode17_normalization_vectors (__main__.VerifierTests.test_official_unicode17_normalization_vectors) ... ok
+test_scalar_heads_and_malformed_input (__main__.VerifierTests.test_scalar_heads_and_malformed_input) ... ok
+test_scalar_render_requires_exact_fields_types_and_hash (__main__.VerifierTests.test_scalar_render_requires_exact_fields_types_and_hash) ... ok
+test_scalar_render_roundtrip (__main__.VerifierTests.test_scalar_render_roundtrip) ... ok
+test_unicode17_text_and_missing_provider (__main__.VerifierTests.test_unicode17_text_and_missing_provider) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 25.330s
+
+OK

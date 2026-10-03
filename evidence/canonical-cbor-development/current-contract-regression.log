@@ -1,0 +1,118 @@
+TAP version 13
+# Subtest: State-Change Receipt is a role embedded in the governed record
+ok 1 - State-Change Receipt is a role embedded in the governed record
+  ---
+  duration_ms: 2.9581
+  type: 'test'
+  ...
+# Subtest: receipt unavailable means no governed effect or successful claim
+ok 2 - receipt unavailable means no governed effect or successful claim
+  ---
+  duration_ms: 0.9188
+  type: 'test'
+  ...
+# Subtest: invalid receipt-role fields fail closed
+ok 3 - invalid receipt-role fields fail closed
+  ---
+  duration_ms: 0.4147
+  type: 'test'
+  ...
+# Subtest: durability failure never publishes state or committed receipt outcome
+ok 4 - durability failure never publishes state or committed receipt outcome
+  ---
+  duration_ms: 12.0484
+  type: 'test'
+  ...
+# Subtest: commit transitions outcome only at the transactional publication boundary
+ok 5 - commit transitions outcome only at the transactional publication boundary
+  ---
+  duration_ms: 3.2411
+  type: 'test'
+  ...
+# Subtest: duplicate operation replay is exactly-once and conflicting replay is rejected
+ok 6 - duplicate operation replay is exactly-once and conflicting replay is rejected
+  ---
+  duration_ms: 2.7178
+  type: 'test'
+  ...
+# Subtest: optimistic head and digest preconditions are enforced
+ok 7 - optimistic head and digest preconditions are enforced
+  ---
+  duration_ms: 1.8764
+  type: 'test'
+  ...
+# Subtest: all deterministic Navigation outputs are byte-identical under reordered enumeration
+ok 8 - all deterministic Navigation outputs are byte-identical under reordered enumeration
+  ---
+  duration_ms: 29.6429
+  type: 'test'
+  ...
+# Subtest: Navigation Effects is separately versioned and default capability discovery is fail-closed
+ok 9 - Navigation Effects is separately versioned and default capability discovery is fail-closed
+  ---
+  duration_ms: 2.3706
+  type: 'test'
+  ...
+# Subtest: effect capability dependencies are reported independently and deletion remains disabled
+ok 10 - effect capability dependencies are reported independently and deletion remains disabled
+  ---
+  duration_ms: 0.3161
+  type: 'test'
+  ...
+# Subtest: Navigation 1.0 capability truth remains unchanged
+ok 11 - Navigation 1.0 capability truth remains unchanged
+  ---
+  duration_ms: 0.2035
+  type: 'test'
+  ...
+# Subtest: framework-neutral effects source has no filesystem dependency or Node executor primitive
+ok 12 - framework-neutral effects source has no filesystem dependency or Node executor primitive
+  ---
+  duration_ms: 11.847
+  type: 'test'
+  ...
+# Subtest: contract pack is integration-only, effects-separated, and mechanically complete
+ok 13 - contract pack is integration-only, effects-separated, and mechanically complete
+  ---
+  duration_ms: 163.1728
+  type: 'test'
+  ...
+# Subtest: all required adversarial fixtures are registered and remain effect-free
+ok 14 - all required adversarial fixtures are registered and remain effect-free
+  ---
+  duration_ms: 11.619
+  type: 'test'
+  ...
+# Subtest: security and lineage fixtures encode fail-closed outcomes without content disclosure
+ok 15 - security and lineage fixtures encode fail-closed outcomes without content disclosure
+  ---
+  duration_ms: 2.8292
+  type: 'test'
+  ...
+# Subtest: package export and build products include Navigation Effects without changing release metadata
+ok 16 - package export and build products include Navigation Effects without changing release metadata
+  ---
+  duration_ms: 2.2314
+  type: 'test'
+  ...
+# Subtest: canonical GKX API is available from the engine and package subpaths
+ok 17 - canonical GKX API is available from the engine and package subpaths
+  ---
+  duration_ms: 1.3297
+  type: 'test'
+  ...
+# Subtest: downstream adapter is immutable, policy-bound, and product-neutral
+ok 18 - downstream adapter is immutable, policy-bound, and product-neutral
+  ---
+  duration_ms: 18.3474
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 891.3193

@@ -1,0 +1,31 @@
+DEVELOPMENT ONLY: not qualification, independent acceptance, or pilot disposition.
+cwd: C:\Users\Oden\Documents\github\GKOS-Engine
+command argv: ["C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "-m", "unittest", "test.test_canonical_cbor_python.VerifierTests.test_official_unicode17_normalization_vectors", "-v"]
+explicit environment: {"GKOS_CANONICAL_PYTHON": "C:/Users/Oden/AppData/Local/Programs/cbor-verifier/Scripts/python.exe", "GKOS_NORMALIZATION_TEST_PATH": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch\\NormalizationTest-17.0.0-integration-tampered.txt", "PYTHONDONTWRITEBYTECODE": "1", "TEMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMP": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch", "TMPDIR": "C:\\Users\\Oden\\AppData\\Local\\hermes\\cache\\scratch"}
+expected exit: 1
+actual exit: 1
+stdout:
+
+stderr:
+test_official_unicode17_normalization_vectors (test.test_canonical_cbor_python.VerifierTests.test_official_unicode17_normalization_vectors) ... FAIL
+
+======================================================================
+FAIL: test_official_unicode17_normalization_vectors (test.test_canonical_cbor_python.VerifierTests.test_official_unicode17_normalization_vectors)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\Oden\Documents\github\GKOS-Engine\test\test_canonical_cbor_python.py", line 328, in test_official_unicode17_normalization_vectors
+    self.assertEqual(hashlib.sha256(content).hexdigest(),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     '5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db',
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     'Official Unicode17 normalization bytes do not match the pinned SHA256')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '17e47718885d4bf365dcb5e1a11f2355b622d35e485332c8674947a31cfde3e8' != '5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db'
+- 17e47718885d4bf365dcb5e1a11f2355b622d35e485332c8674947a31cfde3e8
++ 5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db
+ : Official Unicode17 normalization bytes do not match the pinned SHA256
+
+----------------------------------------------------------------------
+Ran 1 test in 0.020s
+
+FAILED (failures=1)

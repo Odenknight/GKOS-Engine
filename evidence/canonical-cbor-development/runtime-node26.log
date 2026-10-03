@@ -1,0 +1,53 @@
+TAP version 13
+# Subtest: actual runtime text capability either validates Unicode17 or refuses closed without skips
+ok 1 - actual runtime text capability either validates Unicode17 or refuses closed without skips
+  ---
+  duration_ms: 9.0228
+  type: 'test'
+  ...
+# {"node":"26.7.0","unicode":"17.0","text_expectation":"Unicode17 validation"}
+# Subtest: actual runtime refuses decomposed text and malformed text without normalization repair
+ok 2 - actual runtime refuses decomposed text and malformed text without normalization repair
+  ---
+  duration_ms: 1.3343
+  type: 'test'
+  ...
+# Subtest: isolated capability loss refuses encode decode digest and map text while numeric values remain usable
+ok 3 - isolated capability loss refuses encode decode digest and map text while numeric values remain usable
+  ---
+  duration_ms: 402.5623
+  type: 'test'
+  ...
+# Subtest: numeric integer values keep shortest heads bigint type and unsigned64 bounds on any runtime
+ok 4 - numeric integer values keep shortest heads bigint type and unsigned64 bounds on any runtime
+  ---
+  duration_ms: 1.0929
+  type: 'test'
+  ...
+# Subtest: numeric float values retain float type shortest exact width and prohibited-value refusal on any runtime
+ok 5 - numeric float values retain float type shortest exact width and prohibited-value refusal on any runtime
+  ---
+  duration_ms: 2.2401
+  type: 'test'
+  ...
+# Subtest: nontext assembly and digest remain canonical without any Unicode requirement
+ok 6 - nontext assembly and digest remain canonical without any Unicode requirement
+  ---
+  duration_ms: 1.304
+  type: 'test'
+  ...
+# Subtest: private development APIs leave package public exports and legacy canonical JSON unchanged
+ok 7 - private development APIs leave package public exports and legacy canonical JSON unchanged
+  ---
+  duration_ms: 19.494
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 595.2561

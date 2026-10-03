@@ -1,0 +1,46 @@
+$ "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" scripts/build.mjs && "C:/Users/Oden/AppData/Local/Programs/pi-agent/node.exe" --test test/canonical-cbor.test.mjs
+exit_code: 0
+built dist/gkos-engine.mjs
+built dist/adapter.mjs
+built dist/gkx.mjs
+built dist/graphiti-adapter.mjs
+built dist/navigation.mjs
+built dist/service.mjs
+built dist/navigation-effects.mjs
+built dist/governance.mjs
+built dist/admission-policy.mjs
+built dist/service-node.mjs
+built dist/canonical-cbor.mjs
+built dist/graphiti-broker.mjs
+built dist/service-stdio.mjs
+built dist/retrieval.mjs
+built dist/retrieval-host.mjs
+built dist/retrieval-path-security.mjs
+built dist/retrieval-evaluation-host.mjs
+built dist/ingest-host.mjs
+built dist/ingest-source-scan.mjs
+built dist/watcher-contracts.mjs
+built dist/watcher-host.mjs
+built dist/gkos-desktop-agent.mjs
+built dist/gkos-desktop-agent.cjs
+built dist/navigation-effects-node.mjs
+built dist/*.d.ts
+✔ null has the fixed canonical bytes and decodes as a typed node (2.3408ms)
+✔ boolean values preserve their distinct canonical encodings (1.2318ms)
+✔ bigint integers cover shortest heads and the unsigned64 domain (1.2971ms)
+✔ floats retain their type and use shortest exact half single or double bytes (1.8566ms)
+✔ byte strings preserve source bytes separately from text (0.5263ms)
+✔ text validates strict UTF8 NFC and well-formed UTF16 without stripping BOM (0.7682ms)
+✔ text fails closed when the actual runtime Unicode17 capability is unavailable (306.2734ms)
+✔ arrays preserve order and distinguish empty null and integral float (0.6433ms)
+✔ maps sort encoded text-key bytes without mutating entries and refuse duplicates or disorder (1.0305ms)
+✔ binary and typed boundaries reject malformed unsupported values (0.7537ms)
+✔ encoded-byte hard limit is enforced before allocating oversized payloads (30.3606ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 474.8371

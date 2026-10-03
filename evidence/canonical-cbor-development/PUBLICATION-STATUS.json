@@ -1,0 +1,21 @@
+{
+  "scope": "development publication requested before full regression completion; NOT CI-green, qualification, merge, or production deployment",
+  "review_passed": true,
+  "reviewed_files_match": true,
+  "verified": {
+    "typescript_unicode17_tests": 57,
+    "python311_tests": 14,
+    "matched_contract_regression_tests": 18,
+    "cross_language_positive_vectors": 20,
+    "cross_language_refusals_including_tamper": 14,
+    "rendering_roundtrips": 21
+  },
+  "outstanding": [
+    "full baseline/current regression completion and comparison",
+    "GitHub CI results"
+  ],
+  "excluded_mutable_log_prefixes": [
+    "baseline-full",
+    "current-full"
+  ]
+}
