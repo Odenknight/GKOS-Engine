@@ -390,6 +390,12 @@
       "rationale": "Byte-exact checkouts: files without a specific rule are never EOL-converted, so autocrlf checkouts cannot break the byte-hashing current-runtime gate (root cause found by JEFFREY on #91)."
     },
     {
+      "path": ".github/workflows/canonical-cbor-development.yml",
+      "before": null,
+      "after": "63e205830ccc327a6fd23f4f7619870dea54aa167a5e52a3f6ffbf5d70cf6f4d",
+      "rationale": "Canonical-CBOR DEVELOPMENT-only Linux/Windows Unicode17 lane; runner temporary paths are evaluated at step scope, where runner context is available; all mandatory gates retained."
+    },
+    {
       "path": ".github/workflows/ci.yml",
       "before": "21628eeb780a0103c6c0d8d8e83206991dcd0837",
       "after": "ded98f6627c4487a4e814de22de2dc4cd308ac019526a917f2691e6fd24dfa6f",
@@ -478,6 +484,12 @@
       "before": "50105e0ff658f8eae6b767a1baad9b2d77f326df",
       "after": "6c69ea8d1c92627c8c78af8afc146a0b43372733617762d02a1bd07f6c7734d9",
       "rationale": "September 14 editorial audit remediation: correct source identity, bind current hosted evidence, and record exact PR ancestry without qualification or release promotion."
+    },
+    {
+      "path": "contracts/canonical-cbor-development-v1.md",
+      "before": null,
+      "after": "5c022b02e2a6fbd820fb822251de24a06958a581eaa617f56e1d86af9a2d03cb",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
     },
     {
       "path": "contracts/documentation-verifier/v0.81/LICENSE.txt",
@@ -876,6 +888,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "docs/canonical-cbor-development.md",
+      "before": null,
+      "after": "2cd6e1f4850a4a9a5e7d20361a0b9f76c08a2e5c5843b641216fb01e1e7dd2e7",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
+    },
+    {
       "path": "docs/classifier/GKOS-Classifier-Rust-TypeScript-Build-Plan.md",
       "before": null,
       "after": "a0300e6675cf5775e127d5a1a6a72bcefd9aea8b318bfedfeadcbf33f597908c",
@@ -984,6 +1002,576 @@
       "rationale": "Engine 2.2 MOC implementation: reviewed host/recovery, assistance, tests, version, docs and development dependency repair; frozen evidence unchanged."
     },
     {
+      "path": "evidence/canonical-cbor-development/PUBLICATION-STATUS.json",
+      "before": null,
+      "after": "34c423346b68c6660cebb1d0af2c4ea5644bc3a7bf4a10259015386cf9632ee5",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/baseline-build.log",
+      "before": null,
+      "after": "3b3660ba805f585786f3cef46e8d30aad477c8ff3d4dda655df5389230786125",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/baseline-contract-regression.log",
+      "before": null,
+      "after": "c897d2de61f3d7ab9a3d5e64fecc21afe1179b0facfa55509509c9a7788821e1",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/baseline.json",
+      "before": null,
+      "after": "d6f545e2234ec513ae74a13a54a4eb026ab9e5e6f006db14e4d6d2b5ea2ee847",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/current-contract-regression.log",
+      "before": null,
+      "after": "3f8dcebd37ef8db3dcd3d2a60a3643811836ee39a7395041d28618977f627689",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/final-reviewed-file-hashes.json",
+      "before": null,
+      "after": "070c40f6a3ca26c227bc67831e3ca5c65452b6b8f20e8c1f70039d47be86cb31",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/immediate-release-gates.json",
+      "before": null,
+      "after": "6ad2609f3d54da4deaed6aad478d9dce794b99e6f6d3d11fdcc8f12f1493415d",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-build.log",
+      "before": null,
+      "after": "3db87da0ed3b1225595553e3257610731dcc422afc5414ca6ae082648263cb34",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-ci-bash-syntax.log",
+      "before": null,
+      "after": "a6c06991c990fdd5c6848627219dc89137af78ec257f72149a84c849dcc28e4f",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-ci-local-profile-refusal.log",
+      "before": null,
+      "after": "2165905361ede5d0c75436e6d135a0c93d5132e1e217020370d8285e89843af9",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-cross-language.log",
+      "before": null,
+      "after": "d25756c128b624828dd82eb7e0c9eec283d7348e30907198fb9c6fb5f5a1332f",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-final-summary.log",
+      "before": null,
+      "after": "6bb6fe25a9222285e9a0c7f13e6c6cad47ccf924df20a1046e948862887f52e4",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-green-portable-lanes.log",
+      "before": null,
+      "after": "5182886063110c82699fabdba9347fb98a7110e43241de0bcd1ce4ff4ebbb5cd",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-inventory-selection.log",
+      "before": null,
+      "after": "2fe6765dfddcc603357bb78f9429c27ecf2b211c4f3e083824cb5b49f7714ac9",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-official-source-fetch-hash.log",
+      "before": null,
+      "after": "e8ef934656e8382de7b6907a046af9e945d11b8ae3bc684aeae9b2e96aef1cd1",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-protected-paths-final.log",
+      "before": null,
+      "after": "1da7e85c9fe90414583b9c4cf5802a3113fc1087390324931a98c8cc68e0d3a4",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-python-corpus-env-absent.log",
+      "before": null,
+      "after": "e161397769ecf2a31e0d0646479d49b7507b834eec169a68aad3992f8067b7a5",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-python-corpus-file-missing.log",
+      "before": null,
+      "after": "38cf10f8200d6a3d1aa7808c608f7b530a6bd34b41dba7d620c655b329e310d5",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-python-corpus-sha-refusal.log",
+      "before": null,
+      "after": "99b503e4b9c9064f82a74be14eb577c85d9a5ceb130c793204dbb393634598ca",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-python-full.log",
+      "before": null,
+      "after": "ca816576e313e79bfbf9eb4aafc8fb030d2a75c3138ef37b304c2cf242a52481",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-red-portable-lanes.log",
+      "before": null,
+      "after": "39cb621b4fa425cdefe5bc2385fd742a0946ad4e6e5e10bc05a23832c72b4a2b",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-runtime-unavailable-injection-loader-error.log",
+      "before": null,
+      "after": "1b98c0b6ff256958a14314be7ea952e6b9d684f63ff1c57accd1a2cc3c440823",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-runtime-unavailable-injection.log",
+      "before": null,
+      "after": "f1d6288d2ef54b60178963d0837ca71885a87960f7e633a7f5bcfb053a815729",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-runtime-unicode17.log",
+      "before": null,
+      "after": "0b260c97982f1b542da2e9d61395f0a35e5df83a615938677fab8116aa2b5f64",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integration-unicode17-full-ts.log",
+      "before": null,
+      "after": "819da50167fda03a7a6f109c5f8005be6294cddb443fc2f02918a8b7b97dcfb8",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integrator-after-literal-refactor.log",
+      "before": null,
+      "after": "2b0d28079416e397e35367bb487267acfa06b762c39b67b6464dca1dd2a3a605",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integrator-before-literal-refactor.log",
+      "before": null,
+      "after": "a7bbcad748bcc222da6014ab40c87fd03f793c81dde7f7ac8670de1f9082fab1",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integrator-build.log",
+      "before": null,
+      "after": "1dce1aeb8cf68c962b9c9402923434094813c5e84bf558d31a9813a088e72cba",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integrator-cross-language.log",
+      "before": null,
+      "after": "051a3a90f4d795003a6ea7951d1be7c69d0a9dd15e7faf74659a7ac8b1338e6a",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integrator-initial.json",
+      "before": null,
+      "after": "4655ebb14370d1e2d94a71c1ef2b4368e726b10537faeefc9f6a79a1992b1295",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/integrator-typecheck.log",
+      "before": null,
+      "after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/internal-code-review-final.json",
+      "before": null,
+      "after": "289548962aced6fc8aed218fbf3edcd8bf212353813148667211171979dcb050",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/internal-code-review-initial.json",
+      "before": null,
+      "after": "965df9850f8d1b5c3b9ed39b0ff4b53eb277bf1142ae31632cb375e9426aca0d",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/license-immediate.log",
+      "before": null,
+      "after": "d6f9dfad959edde042534343eb5193a83ad5d2b7e9dbd877a40866ba8cf928b4",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/nomenclature-immediate.log",
+      "before": null,
+      "after": "ec243d8d00265de2f375d6b35d3d08ab6033478de09672673909dca850dc8048",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/pack-baseline-npm-lifecycle.log",
+      "before": null,
+      "after": "2a721b83b46ff9a5cf0225fde23f0d3055f5ec93161cea18b38e3b9de7117e7f",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/pack-current-npm-lifecycle.log",
+      "before": null,
+      "after": "3fddca1e1d6f4f9d6816caa9c84ae408b5f05a28171919d35795c9cd21e55cec",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/pack-immediate.log",
+      "before": null,
+      "after": "2b55ab52706cb12d9d51f5490970d4e6f5f70bfc044b017c63b576f7066d57cd",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/pack-lifecycle-comparison.json",
+      "before": null,
+      "after": "46565ff3804f7aa2278515702a933a8106c5dcf282323603306495ccb3e16988",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/pi-code-review.json",
+      "before": null,
+      "after": "7276501985ca6f751b5140d5fd0eb33d3615113372930f849625f8a680a67c76",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/python-corpus.log",
+      "before": null,
+      "after": "41007e913abc230c75907a624af1c48ab02532ec2d48e90afa0509979c352c51",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/python-cycles.log",
+      "before": null,
+      "after": "f683358012605d8eac69fedc607755c9578d85f75f5c75aec7e74922119417b6",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/python-final.log",
+      "before": null,
+      "after": "6ab69661674c41f498037099c7b4c39fb45277ed859891e80e67c4f6b187d298",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/python-initial-red.log",
+      "before": null,
+      "after": "e609d65c16f115df04a47630b3a57811caf343de17742ae60042c8d101072d02",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/python-unicode17.log",
+      "before": null,
+      "after": "a785b22358f865c9697126236c3e6623143944a2d006c0e05dc734e528083b4b",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/python311-crosslanguage.log",
+      "before": null,
+      "after": "051a3a90f4d795003a6ea7951d1be7c69d0a9dd15e7faf74659a7ac8b1338e6a",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/python311-final.log",
+      "before": null,
+      "after": "6bab4f63ff8846ca5f3cbf7ee19b9d33f20c2153df21196b4a8fc6d80d317f1b",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/python311-profile.log",
+      "before": null,
+      "after": "e60fbb73f8ea248e0abe914b898230c79738fd1a8b61f54e2a881ac14fcc8d67",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/python311-results.json",
+      "before": null,
+      "after": "9dc243249047ffb1d58da4a81b8cb0b5dc133cbd61f05f6b91ab213cc3e2e51a",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/review-packet-fidelity-resolution.json",
+      "before": null,
+      "after": "bd7d067487bfb47598335e2db465f1f0e07e98c11e80a91405b57e7a979ec058",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/runtime-node26.log",
+      "before": null,
+      "after": "b35302eccfa93eddaffe28055336441b624c6317c87f85066574d82bc79c838d",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/static-scan.json",
+      "before": null,
+      "after": "1cba7bff19e25dfb85ab3e185ab6f03fa2a77a61019ca58a48974f15322337c0",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-01-green-null.log",
+      "before": null,
+      "after": "134a422dcdc1d86dea6996a318dd03e2452a03e6d4fbab0e87501c0eafeb3324",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-01-red-null.log",
+      "before": null,
+      "after": "04d89e35a0ed7aa300d15aa7f435363212166d8d248acf2f7ccfa0af9fe054d4",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-02-green-booleans.log",
+      "before": null,
+      "after": "b9d8bbf4d738dedfbcca68f552e4f03c85965b4a463fbb252beab054a788b365",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-02-red-booleans-observed.log",
+      "before": null,
+      "after": "cba6c74582d948addf7c60849a623d09c9f78bd4620935ca7b108012eb500f2a",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-02-red-booleans.log",
+      "before": null,
+      "after": "a3153c7ea9c5c9fde128a27e5343c47ebfaada3bd77b360e8358fca45ad8086f",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-03-green-integers.log",
+      "before": null,
+      "after": "ff1a78c47638aa8b95e8e3cf85f03cd756bc47ea281f1016edd39851478e67f9",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-03-red-integers.log",
+      "before": null,
+      "after": "3da0b9c518919f737f7e7813a40dcb3f0fda38af1f08e78e35c8747c66d55fc6",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-04-green-floats.log",
+      "before": null,
+      "after": "01b521276e0a5784a4ffc2e424fe92c8925513a20a557368373addc575e09e4b",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-04-red-floats.log",
+      "before": null,
+      "after": "bf3d2df4227fb2d1aed04e96002cb6f3bb537d5eb699ab2069d45cc8b9d5ec36",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-05-green-bytes.log",
+      "before": null,
+      "after": "b8929a0f698fa18c043cce332d4cbd0564da5d9a735e56e360d411541c593445",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-05-red-bytes.log",
+      "before": null,
+      "after": "fdd1859ab1032a194d1ed02717d85e969df20ec09635d992d6d3884061fd0cc0",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-06-green-text.log",
+      "before": null,
+      "after": "dc4a2c04f60ac3d0ba31e5eee1b83070dd2826ff07db44afafc1359261e0d05b",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-06-red-text.log",
+      "before": null,
+      "after": "5968672a77eaad9a2be0322ff856a3002786a4bf45ef9c750ab6608c1ff7d777",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-07-green-unicode-capability.log",
+      "before": null,
+      "after": "7e9de0e0a1c82e20be30ee392ff274d9b9eac9f810efcb535bf1a9c26a54c5d1",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-07-red-unicode-capability.log",
+      "before": null,
+      "after": "43dd5c6e4734488273a98790b31d263170b06bee63cc1d61c7633a1eb317cc52",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-08-green-arrays.log",
+      "before": null,
+      "after": "f15c7b57222403c8561207f98d65aae58a4d2f93a899593d59a7945d620371e5",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-08-red-arrays.log",
+      "before": null,
+      "after": "c16d949384d978989dcba81edc8b8d729d46a48aa02a2e0c3849f028f6c17b5b",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-09-green-maps.log",
+      "before": null,
+      "after": "47cc7c8b99cb33c23bb5d518f342a4bbc6500d905f5537276978ac36ea73bb96",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-09-red-maps.log",
+      "before": null,
+      "after": "8833ae9c9013ce6ad39fdab2900b33c140806f29858a538ed75634474e028812",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-10-green-boundaries.log",
+      "before": null,
+      "after": "84b236a96710a50935bf5fd646805493af471cfa05786ca1c67d9c21a1e4f1c1",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-10-red-boundaries.log",
+      "before": null,
+      "after": "e26c29b27a76902f6c5c7712755e2ac1b9027deffc1ea40ac98063ecee03e3a7",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-11-green-byte-limit.log",
+      "before": null,
+      "after": "879ed905d2fbf1cf125cdb7c100ea93e3372ba061d1394b71fce12197d763198",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-11-red-byte-limit.log",
+      "before": null,
+      "after": "4d89f8f3ce8c9e2bf52228e41f138459f2c54ff7a80ee3d6f6f0dc06bbaace62",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-12-green-depth.log",
+      "before": null,
+      "after": "1fbfc2c7d10c13b3fbdf4e56954300020bfe761cabedfa65362ee60a64c60572",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-12-red-depth.log",
+      "before": null,
+      "after": "9302ff037ab6aa2e24fd67273c49ed7d5750a68b1021d0e6ab3b80e720c7e698",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-13-green-node-limit.log",
+      "before": null,
+      "after": "da79994dcd838262503da8b251e65aef2d78885302f74471169d84bab8d61dae",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-13-red-node-limit.log",
+      "before": null,
+      "after": "0c9fd011a09405efa99494b6bc095620c5463319f2831e3c47da69b6e9e2c4db",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-14-green-cycles.log",
+      "before": null,
+      "after": "5e289d262b320a74726942926c0e5f91bb79f7688cf9756f730e28d8fd6d7893",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-14-red-cycles.log",
+      "before": null,
+      "after": "683face0b007e1cd92d06fd21fab3159516e2478cff184ec74abc34265a18dae",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-15-green-timestamps.log",
+      "before": null,
+      "after": "b1f48be69d6e13708b9dbc1a6e6a60e51a7fed7dc06a794a71ba856223d9254a",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-15-red-timestamps.log",
+      "before": null,
+      "after": "0d46167b88f25492550a2c65a65822e9c4d4c1b09224aa610db36b0b62d965fe",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-16-green-digest.log",
+      "before": null,
+      "after": "977274b36d12912e87d1b282c71c92bc7e1043d4ace9314d6b468f9c528f5b91",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-16-red-digest.log",
+      "before": null,
+      "after": "2d737db4fcf5dfac97453b86518127f60f4f643886514230695ed37d54bf6e2c",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-17-conformance-vectors.log",
+      "before": null,
+      "after": "4ea7fb1b3baeaaddaaa6a62be1770f867de25057c0728c64e5281a345cfac8e7",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-18-green-sparse-map.log",
+      "before": null,
+      "after": "62281ae3979bf60b2df363376c7f8d9f2bad242f02568e1256b73d74df58c178",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-18-red-sparse-map.log",
+      "before": null,
+      "after": "26ddcd429c57632b6b4364de08353196605e23bb3f1736284fa2c4de3fa57122",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-19-green-digest-snapshot.log",
+      "before": null,
+      "after": "2121bdb9b6a36cad201d66fa3eb26e6e41745a762f81ac7e40e9a8df3f17ab26",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-19-red-digest-snapshot.log",
+      "before": null,
+      "after": "2a2127759e7d55fc4d1781a02c9202ca90361e12d308635d3e47f26b04271984",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-20-extended-vectors.log",
+      "before": null,
+      "after": "681833865bc5a128f05e76af7808d182b1a0746e01ff35197dd4678477833ede",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-21-refactor-and-private-boundary.log",
+      "before": null,
+      "after": "6be15749de61c7a89382591a45eebff83ca3a02256f52d89d09421fecfd16899",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-22-final-unicode17.log",
+      "before": null,
+      "after": "f81974391a10c4ec035ebf97cc9eb844c887255f067abebb7279cfa5bef700d5",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-23-typecheck.log",
+      "before": null,
+      "after": "337649fbe2be189341251933b5076f69dfd2e8c8beb8826e57b1df17afe83b77",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
+      "path": "evidence/canonical-cbor-development/typescript-24-legacy-regression.log",
+      "before": null,
+      "after": "8e64d0d68aac79d706c15a6a1d9e944ff822bd0c19e35e7808dbc5436741794e",
+      "rationale": "Retain immutable published canonical-CBOR DEVELOPMENT execution evidence from 6842051; records observations, not qualification or pilot dispositions."
+    },
+    {
       "path": "evidence/graphiti-030-20260912/SHA256SUMS",
       "before": null,
       "after": "3150ba3c024c68083a0c8174a327ea4588b5d87db92165ca5219c2ca6743acbc",
@@ -1070,8 +1658,8 @@
     {
       "path": "scripts/build.mjs",
       "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
-      "after": "f73428e3243f652764f08325e5ed5ce1c9ae54e15868d19c5acca60e8fbf7ec6",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "3d4e6c0bbdaf0c13ebd2edacc6b28e64d455b31deec677ac11aae573d7984a9e",
+      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search. Add only a private canonical-CBOR development bundle; package and root public exports remain unchanged."
     },
     {
       "path": "scripts/check-pack.mjs",
@@ -1134,6 +1722,12 @@
       "rationale": "Fail closed on any missing mandatory exact-commit gate, incomplete soak, missing evidence binding, wrong tag or inspected tarball digest/inventory."
     },
     {
+      "path": "scripts/requirements-canonical-cbor.txt",
+      "before": null,
+      "after": "a5f0668f95a8caca9da06325a09dbe0103d308dbdf225ce8ec956a563c67c4fc",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
+    },
+    {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
       "after": "5161ce1e3092df97f187e1476f94ef2e8ad8ca2e411a01f8afa26b798b79c848",
@@ -1192,6 +1786,18 @@
       "before": null,
       "after": "9648040266e7fe6fea8814b5e41e33aa467e4408a0b0c4ef59ccd6e9e57039e6",
       "rationale": "Validate caller-claimed receipts against SHA-pinned actual v0.81 schemas with explicit JSON-schema-only scope and no gate registration or CBOR truth claim."
+    },
+    {
+      "path": "scripts/verify-canonical-cbor-cross-language.mjs",
+      "before": null,
+      "after": "11a053d7096ebf4c90ff29ccb474744e842f1daca036ebb4c7de2e55275f5426",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
+    },
+    {
+      "path": "scripts/verify-canonical-cbor.py",
+      "before": null,
+      "after": "2cb05b58ab9ca5e0d57b8b835396f26456d676a99142fd8126daa5127bf6f176",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
     },
     {
       "path": "scripts/verify-documentation-artifact.mjs",
@@ -1306,6 +1912,12 @@
       "before": "153ceac4a878772d3c51e6dcf12bf02d3af0fbd8",
       "after": "f4500c4a6ac08c93cc489fede53b63d63073873d14e70e193bbf488df9b8839a",
       "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
+    },
+    {
+      "path": "src/canonical-cbor.ts",
+      "before": null,
+      "after": "40493721902ae05e6620c58ad8a9a9dc6dd1d1196dad10869daa566302b06048",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
     },
     {
       "path": "src/graphiti-adapter.ts",
@@ -1618,6 +2230,24 @@
       "before": "4f99d8100ca34835bab6f1058fecb818a46c3be7",
       "after": "4bb27d8591f774d2fd5bb80e7dc399d4221b2ec6a98fa4d11d60f78ee91a0662",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/canonical-cbor-runtime.test.mjs",
+      "before": null,
+      "after": "7341b22f02905a61c1df74f1ed6e15a372d96ecf485c572cec33513a81e5814e",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
+    },
+    {
+      "path": "test/canonical-cbor-unicode17.mjs",
+      "before": null,
+      "after": "08a975c3c2566dba9fd1861065c7ac53b6eef0864d16ae3807ab3e95efa390dd",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
+    },
+    {
+      "path": "test/canonical-cbor-vectors.json",
+      "before": null,
+      "after": "44f6990594d52854ea64faed5f54400f0587c3d02ff6d0633f5d2da036bd594d",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
     },
     {
       "path": "test/compatibility-baseline.test.mjs",
@@ -1942,6 +2572,12 @@
       "before": "d03197327839542ebba3b852e0d2a214f6354997",
       "after": "895329e990d64558cbcea4c232972be812ee7e0f9fb6ab77d69602e564abc643",
       "rationale": "Provide a guarded synthetic lexical callback and valid input while keeping legacy compatibility snapshot request sequencing stable."
+    },
+    {
+      "path": "test/test_canonical_cbor_python.py",
+      "before": null,
+      "after": "6ba7e60ab0d754eb47e9c3ed5bce8a3716a2659b266c275c2d317e15b1646145",
+      "rationale": "Bind the published private canonical-CBOR DEVELOPMENT codec, independent verifier, full Unicode17 tests or scope documentation from 6842051; no public export, legacy canonicalization, standard pin or qualification claim."
     },
     {
       "path": "test/watcher-coordinator.test.mjs",
