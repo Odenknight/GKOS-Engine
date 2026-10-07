@@ -99,8 +99,15 @@ State-change receipt/store and deferred review freeze checks are reused as
 existing independent primitives. This reviewer contract supplies the bounded
 missing decision gate without changing those APIs or claiming broader standing.
 
-The private CBOR codec, vector tests and separate Python verifier are reused
-verbatim from Carson commit `6842051ff697dd65a8fc0072c078dc81bc8a9bd9`.
+The private CBOR codec (`src/canonical-cbor.ts`), vectors
+(`test/canonical-cbor-vectors.json`), Python verifier and cross-language script
+(`scripts/verify-canonical-cbor.py` and
+`scripts/verify-canonical-cbor-cross-language.mjs`) are byte-identical to Carson
+commit `6842051ff697dd65a8fc0072c078dc81bc8a9bd9`. The imported runtime test
+was subsequently adapted in its title and expected package exports for the
+`./governance/artifacts` subpath. Carson is a partial author of the reused CBOR
+slice and cannot be its sole non-author reviewer; different-family technical
+counter-review does not establish organizational independence.
 No upstream historical execution logs are copied or counted as this build's tests.
 Actual runtime Unicode 17 capability and the official normalization corpus are
 required for the full development lane. The pinned corpus SHA-256 is
