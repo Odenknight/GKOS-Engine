@@ -29,7 +29,8 @@ export function canonicalizeValue(value: unknown, seen = new Set<object>()): unk
   if (typeof value === "object") {
     if (seen.has(value as object)) throw new TypeError("Canonicalization rejects cyclic objects.");
     seen.add(value as object);
-    const result: Record<string, unknown> = {};
+    // Keys such as __proto__ are evidence too; a plain object setter discards them.
+    const result: Record<string, unknown> = Object.create(null);
     for (const key of Object.keys(value as object).sort(codeUnitCompare)) {
       const entry = (value as Record<string, unknown>)[key];
       if (entry !== undefined) result[key] = canonicalizeValue(entry, seen);

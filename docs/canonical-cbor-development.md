@@ -45,6 +45,13 @@ The readable format is `gkos.cbor.typed-json.v1`. Integer values render as decim
 
 ## Evidence and outstanding gates
 
+Reuse note (2026-10-07): this source and the codec/tests/verifier were imported
+from `6842051ff697dd65a8fc0072c078dc81bc8a9bd9`. The historical evidence and
+review descriptions below refer to that upstream commit, not execution at this
+checkout. This checkout's reviewer test evidence is recorded separately; no
+upstream qualification is inherited. The upstream development workflow and
+historical evidence directory were not copied.
+
 Development evidence is under `evidence/canonical-cbor-development/`, including retained RED/GREEN cycles, integrator execution, normalization source identity, packet-fidelity resolution, and internal developer review. The first same-family review failed closed when tooling masked a nonsecret decimal test constant into invalid-looking syntax. The actual source parsed and the full corpus passed before and after an equivalent hexadecimal test-only refactor; that resolution is preserved, not a fabricated success or removal of the initial finding.
 
 A Kimi K2.6/OpenRouter counter-review is different-model-family **internal developer review**. Neither it nor separately written Python creates organizational independence or external-assessor standing. Full baseline/current regression results and GitHub CI must be recorded from their real completion output before publication can be called regression-clean or CI-green.

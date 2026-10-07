@@ -32,6 +32,7 @@ export class InMemoryGovernanceStore implements GovernanceStore {
   private operations = new Map<string, StoredOperation>();
   private idempotency = new Map<string, string>();
   private version = 0;
+  private appendQueue: Promise<unknown> = Promise.resolve();
   private head: string | undefined;
   private digest = "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
@@ -48,6 +49,14 @@ export class InMemoryGovernanceStore implements GovernanceStore {
   }
 
   async append<T>(record: GovernedRecord<T>, options: GovernanceAppendOptions): Promise<GovernanceAppendResult<T>> {
+    // Snapshot before queueing: callers cannot mutate an awaiting proposal.
+    const proposal = clone(record), preconditions = clone(options);
+    const operation = this.appendQueue.then(() => this.appendSerialized(proposal, preconditions));
+    this.appendQueue = operation.catch(() => undefined);
+    return operation;
+  }
+
+  private async appendSerialized<T>(record: GovernedRecord<T>, options: GovernanceAppendOptions): Promise<GovernanceAppendResult<T>> {
     const failure = (reason: Extract<GovernanceAppendResult, { committed: false }>["reason"]): GovernanceAppendResult<T> => deepFreeze({
       committed: false,
       reason,
@@ -70,6 +79,7 @@ export class InMemoryGovernanceStore implements GovernanceStore {
     }
     const keyOwner = this.idempotency.get(options.idempotencyKey);
     if (keyOwner && keyOwner !== record.operationId) return failure("idempotency-conflict");
+    if (!record.recordId || !record.recordType || this.records.some(existing => existing.recordId === record.recordId)) return failure("operation-conflict");
     if (options.expectedHead !== undefined && options.expectedHead !== this.head) return failure("precondition-failed");
     if (options.expectedDigest !== undefined && options.expectedDigest !== this.digest) return failure("precondition-failed");
     if (this.options.durabilityAvailable?.(record) === false) return failure("durability-failed");
