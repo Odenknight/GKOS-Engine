@@ -190,7 +190,7 @@ export async function evaluateReviewerAdmission(request: ReviewerAdmissionReques
   reject(!text(r?.operation) || !a?.operations?.includes(r.operation) || !text(r?.targetId) || !a?.targetIds?.includes(r.targetId), "EFFECT_SCOPE_DENIED");
   reject(!p || !text(p.id) || !text(p.proposerId) || !DIGEST.test(p.digest) || !DIGEST.test(p.contextDigest) || !DIGEST.test(p.intendedResultDigest), "PROPOSAL_INVALID");
   reject(!v || !text(v.id) || !text(v.reviewerId) || v.disposition !== "approved", "REVIEW_NOT_APPROVED");
-  reject(!v || !["human", "agent"].includes(v.reviewerClass) || !text(v.reviewAuthorityId)
+  reject(!v || !["human", "agent"].includes(v.reviewerClass) || !text(v.reviewAuthorityId) || v.reviewAuthorityId === a?.id
     || !DIGEST.test(v.sealedEvidenceDigest) || !DIGEST.test(r.expectedReviewEvidenceDigest) || v.sealedEvidenceDigest !== r.expectedReviewEvidenceDigest, "REVIEW_AUTHORITY_INVALID");
   reject(!Number.isFinite(instant(v?.validUntil)) || !Number.isFinite(now) || now >= instant(v?.validUntil), "REVIEW_EXPIRED");
   reject(v?.reviewerClass === "agent" && (!text(v.reviewerModelFamily) || !text(v.proposerModelFamily) || v.reviewerModelFamily === v.proposerModelFamily), "REVIEW_MODEL_FAMILY_INVALID");

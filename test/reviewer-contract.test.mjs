@@ -75,6 +75,7 @@ test('admission binds authoritative roles, state, exact context, time, review an
     ['CHALLENGE_HOLD', r => r.challengeDisposition = 'upheld'],
     ['REVIEW_EXPIRED', r => r.review.validUntil = at],
     ['REVIEW_AUTHORITY_INVALID', r => r.review.sealedEvidenceDigest = intendedResultDigest],
+    ['REVIEW_AUTHORITY_INVALID', r => r.review.reviewAuthorityId = r.authority.id],
     ['REVIEW_MODEL_FAMILY_INVALID', r => { r.review.reviewerClass = 'agent'; r.review.proposerModelFamily = 'sol'; r.review.reviewerModelFamily = 'sol'; }],
     ['HUMAN_ESCALATION_REQUIRED', r => r.review.mandatoryEscalation = true],
     ['TYPED_EFFECT_SCOPE_DENIED', r => r.requestedEffect.audience = 'world'],
