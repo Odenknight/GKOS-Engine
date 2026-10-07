@@ -480,6 +480,12 @@
       "rationale": "September 14 editorial audit remediation: correct source identity, bind current hosted evidence, and record exact PR ancestry without qualification or release promotion."
     },
     {
+      "path": "contracts/canonical-cbor-development-v1.md",
+      "before": null,
+      "after": "5c022b02e2a6fbd820fb822251de24a06958a581eaa617f56e1d86af9a2d03cb",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
       "path": "contracts/documentation-verifier/v0.81/LICENSE.txt",
       "before": null,
       "after": "c40538b67a5de4054b116e900b6bfcfeaec2fa4de594e28ca444ba952c5938d2",
@@ -670,6 +676,18 @@
       "before": null,
       "after": "ec3bf083a73a0d74ba3fc08af10420288dbc65db7798b076232b7b0ae2ec077a",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/reviewer-development-v1.md",
+      "before": null,
+      "after": "f223b925c96b056619bbf9036d72ddc0e089e7f9264368c456959bd717d707c0",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "contracts/reviewer-diagnostic-map-v1.json",
+      "before": null,
+      "after": "580919f5290aacd69debf0bdd63e29d5502105ac77b4f5cb1f0a64caf9a46953",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
     },
     {
       "path": "docs/AUTHORIZED-LEXICAL-DISCOVERY-V1.md",
@@ -876,6 +894,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "docs/canonical-cbor-development.md",
+      "before": null,
+      "after": "0d1c519dccba7c6b753f04dd5de98788d2c83102e3e33f06946f55ac88553cdc",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
       "path": "docs/classifier/GKOS-Classifier-Rust-TypeScript-Build-Plan.md",
       "before": null,
       "after": "a0300e6675cf5775e127d5a1a6a72bcefd9aea8b318bfedfeadcbf33f597908c",
@@ -1070,8 +1094,8 @@
     {
       "path": "scripts/build.mjs",
       "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
-      "after": "f73428e3243f652764f08325e5ed5ce1c9ae54e15868d19c5acca60e8fbf7ec6",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "683cbab0a5a220851c9bb724f9c757e0299f65164940f55eb509f93c70940e8a",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
     },
     {
       "path": "scripts/check-pack.mjs",
@@ -1134,6 +1158,12 @@
       "rationale": "Fail closed on any missing mandatory exact-commit gate, incomplete soak, missing evidence binding, wrong tag or inspected tarball digest/inventory."
     },
     {
+      "path": "scripts/requirements-canonical-cbor.txt",
+      "before": null,
+      "after": "a5f0668f95a8caca9da06325a09dbe0103d308dbdf225ce8ec956a563c67c4fc",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
       "path": "scripts/run-current-tests.mjs",
       "before": null,
       "after": "5161ce1e3092df97f187e1476f94ef2e8ad8ca2e411a01f8afa26b798b79c848",
@@ -1192,6 +1222,18 @@
       "before": null,
       "after": "9648040266e7fe6fea8814b5e41e33aa467e4408a0b0c4ef59ccd6e9e57039e6",
       "rationale": "Validate caller-claimed receipts against SHA-pinned actual v0.81 schemas with explicit JSON-schema-only scope and no gate registration or CBOR truth claim."
+    },
+    {
+      "path": "scripts/verify-canonical-cbor-cross-language.mjs",
+      "before": null,
+      "after": "11a053d7096ebf4c90ff29ccb474744e842f1daca036ebb4c7de2e55275f5426",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
+      "path": "scripts/verify-canonical-cbor.py",
+      "before": null,
+      "after": "2cb05b58ab9ca5e0d57b8b835396f26456d676a99142fd8126daa5127bf6f176",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
     },
     {
       "path": "scripts/verify-documentation-artifact.mjs",
@@ -1306,6 +1348,36 @@
       "before": "153ceac4a878772d3c51e6dcf12bf02d3af0fbd8",
       "after": "f4500c4a6ac08c93cc489fede53b63d63073873d14e70e193bbf488df9b8839a",
       "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
+    },
+    {
+      "path": "src/canonical-cbor.ts",
+      "before": null,
+      "after": "40493721902ae05e6620c58ad8a9a9dc6dd1d1196dad10869daa566302b06048",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
+      "path": "src/canonical.ts",
+      "before": "0ab5c4bbae23194df040100e7220decd45bc5c8a",
+      "after": "4f4e635a9146caeaef1c74c000549dd3828fcb2494d203bb7eb2610b4df6da99",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "src/governance/index.ts",
+      "before": "2a8499bc0dbe93fe9393144fe76cae094e0a8ad6",
+      "after": "ca53afd62dd4941a1fbfec7f98701ff9f5d0828d9b9ffd51b2a67b6bdb7d9a85",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "src/governance/reviewer.ts",
+      "before": null,
+      "after": "5f68e72442a9977281260337da1ec117f2fcbbc4141001323ec81da4c25c12f5",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "src/governance/store.ts",
+      "before": "8d6e05bed5ca4b93f7d52643912c56844727c5a5",
+      "after": "1305acddf300ee5f97850a60c19db6f76259571ddf639f1cfa371d93d582089a",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
     },
     {
       "path": "src/graphiti-adapter.ts",
@@ -1620,10 +1692,28 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "test/canonical-cbor-runtime.test.mjs",
+      "before": null,
+      "after": "7341b22f02905a61c1df74f1ed6e15a372d96ecf485c572cec33513a81e5814e",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
+      "path": "test/canonical-cbor-unicode17.mjs",
+      "before": null,
+      "after": "08a975c3c2566dba9fd1861065c7ac53b6eef0864d16ae3807ab3e95efa390dd",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
+      "path": "test/canonical-cbor-vectors.json",
+      "before": null,
+      "after": "44f6990594d52854ea64faed5f54400f0587c3d02ff6d0633f5d2da036bd594d",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "936dcf747790b051f70b5b24c4a1fef1c29839f100b7e84a10156821109d7927",
-      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
+      "after": "7bc9a4e854ce80ee40f0f4d8ab37d48f87491ddf250c86015dd06b3214633017",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
     },
     {
       "path": "test/determinism.test.mjs",
@@ -1872,6 +1962,12 @@
       "rationale": "Q-GUARD coverage closure: register native Windows security assertions only on Windows so the hosted OS matrix carries the platform claim without synthetic skips."
     },
     {
+      "path": "test/reviewer-contract.test.mjs",
+      "before": null,
+      "after": "47c48270210bd8c1cbb6ddc0cc68345a5bfb37ca7d42c043e43b2e05eb9ba3ca",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
       "after": "6e1142781e4acfa5aab30d6db04bd8dc7cd0415b9ba424a22836a7d23dd99eb1",
@@ -1942,6 +2038,12 @@
       "before": "d03197327839542ebba3b852e0d2a214f6354997",
       "after": "895329e990d64558cbcea4c232972be812ee7e0f9fb6ab77d69602e564abc643",
       "rationale": "Provide a guarded synthetic lexical callback and valid input while keeping legacy compatibility snapshot request sequencing stable."
+    },
+    {
+      "path": "test/test_canonical_cbor_python.py",
+      "before": null,
+      "after": "6ba7e60ab0d754eb47e9c3ed5bce8a3716a2659b266c275c2d317e15b1646145",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
     },
     {
       "path": "test/watcher-coordinator.test.mjs",

@@ -15,6 +15,9 @@
     { "productCodes": ["RECEIPT_UNAVAILABLE"], "requirementIds": ["GKOS-RECEIPT-003", "GKOS-AUTHUSE-005"], "registeredGate": "GKOS-GATE-L7-005" },
     { "productCodes": ["TARGET_PRECONDITION_FAILED"], "requirementIds": ["GKOS-CANON-007", "GKOS-AUTHUSE-002"], "registeredGate": "GKOS-GATE-L6-007" },
     { "productCodes": ["EXECUTION_HOLD", "CHALLENGE_HOLD"], "requirementIds": ["GKOS-AUTHUSE-006", "GKOS-REVIEW-004"], "registeredGate": null, "note": "Product hold policy; no new registered diagnostic allocated." },
+    { "productCodes": ["DETERMINISTIC_CONTROLS_INVALID", "DELEGATION_PREDICATE_DENIED"], "requirementIds": ["GKOS-DELEGATION-002", "GKOS-POLICY-001"], "registeredGate": "GKOS-GATE-L4-003", "note": "Supporting predicate evidence; no normative receipt standing asserted." },
+    { "productCodes": ["NONDETERMINISTIC_RELAXATION_DENIED"], "requirementIds": ["GKOS-DELEGATION-003"], "registeredGate": "GKOS-GATE-L4-004" },
+    { "productCodes": ["RECOVERY_ROUTE_UNAVAILABLE"], "requirementIds": ["GKOS-AUTHUSE-006"], "registeredGate": "GKOS-GATE-L7-006" },
     { "productCodes": ["CORRECTION_ACTOR_DENIED", "CORRECTION_EVIDENCE_INCOMPLETE", "CORRECTION_UNCHANGED"], "requirementIds": ["GKOS-REENTRY-001", "GKOS-REENTRY-002", "GKOS-REENTRY-003", "GKOS-REENTRY-004"], "registeredGate": null, "note": "Evidence-support mapping only; no normative re-entry record claim." }
   ]
 }

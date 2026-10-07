@@ -53,6 +53,18 @@ Effect purpose, audience, environment, sensitivity, operation and target must
 match both actor and authority scope; a positive safe-integer affected count
 cannot exceed either bound. Unknown/incomparable dimensions close the gate.
 
+`request.controls` is captured authoritative policy evidence: `predicate`
+identifies version/digest/evidence refs and `pass`, `major` or `indeterminate`
+outcome; `checker` identifies version/digest and deterministic/nondeterministic
+kind with preserve/relax/escalate recommendation; `recovery` explicitly declares
+correction, compensation, rollback and escalation availability. This pilot
+requires all four recovery routes. A predicate result other than pass always
+refuses use. A nondeterministic recommendation to relax it additionally records
+refusal and cannot remove the deterministic gate. Checker escalation requires
+resolved human escalation. The host selects and records these controls from
+frozen policy/fixture rules; guest input cannot replace them. Engine evaluation
+does not manufacture referenced control records or prove route availability.
+
 `evaluateReviewerCorrection(request)` checks the authenticated correcting
 reviewer against the host's authoritative reviewer list, predecessor and new
 context integrity, same run, challenge/decision references, rationale and the

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { canonicalJson, canonicalizeValue } from '../dist/gkos-engine.mjs';
 import { buildReviewerContext, verifyReviewerContext, evaluateReviewerAdmission, evaluateReviewerCorrection,
   reviewerCanonicalDigest, reviewerCanonicalBytes, InMemoryGovernanceStore, buildStateChangeReceipt, buildGovernedRecord } from '../dist/governance.mjs';
 
@@ -22,7 +23,10 @@ const request = { context, expectedContextDigest: context.contextDigest, runId: 
     reviewerClass: 'human', reviewAuthorityId: 'review-authority', sealedEvidenceDigest: context.contextDigest, validUntil: expiresAt, mandatoryEscalation: false, humanEscalationResolved: false },
   operation: 'result:publish', targetId: 'result-1', at, receiptAvailable: true, targetDigest, expectedTargetDigest: targetDigest, intendedResultDigest,
   authoritativeSources: contextInput.sources, authoritativeClosure: { requiredSourceIds: [], requiredWarningCodes: [] }, expectedReviewEvidenceDigest: context.contextDigest,
-  executionState: 'ready', challengeDisposition: 'none', requestedEffect: { ...effectScope }, actorEffect: { ...effectScope } };
+  executionState: 'ready', challengeDisposition: 'none', requestedEffect: { ...effectScope }, actorEffect: { ...effectScope },
+  controls: { predicate: { id: 'synthetic-result-policy', version: '1', digest: policy.digest, outcome: 'pass', evidenceRefs: ['synthetic-fixture:1'] },
+    checker: { id: 'fixture-checker', version: '1', digest: policy.digest, kind: 'deterministic', recommendation: 'preserve' },
+    recovery: { correction: true, compensation: true, rollback: true, escalation: true } } };
 const clone = value => structuredClone(value);
 
 test('context captures exact source bytes, deterministic corpus order and ordered selection closure', async () => {
@@ -83,6 +87,13 @@ test('admission binds authoritative roles, state, exact context, time, review an
     ['TYPED_EFFECT_SCOPE_DENIED', r => r.actorEffect.sensitivity = 'secret'],
     ['TYPED_EFFECT_SCOPE_DENIED', r => r.requestedEffect.layerReach = 7],
     ['TYPED_EFFECT_SCOPE_DENIED', r => r.authority.effectScope.reversibility = 'unknown'],
+    ['DETERMINISTIC_CONTROLS_INVALID', r => delete r.controls],
+    ['DETERMINISTIC_CONTROLS_INVALID', r => r.controls.predicate.evidenceRefs = []],
+    ['DELEGATION_PREDICATE_DENIED', r => r.controls.predicate.outcome = 'major'],
+    ['DELEGATION_PREDICATE_DENIED', r => r.controls.predicate.outcome = 'indeterminate'],
+    ['NONDETERMINISTIC_RELAXATION_DENIED', r => { r.controls.predicate.outcome = 'major'; r.controls.checker.kind = 'nondeterministic'; r.controls.checker.recommendation = 'relax'; }],
+    ['RECOVERY_ROUTE_UNAVAILABLE', r => r.controls.recovery.rollback = false],
+    ['HUMAN_ESCALATION_REQUIRED', r => r.controls.checker.recommendation = 'escalate'],
   ];
   for (const [reason, mutate] of cases) {
     const input = clone(request); mutate(input); const result = await evaluateReviewerAdmission(input);
@@ -109,6 +120,10 @@ test('authorized correction creates fresh evidence and requires fresh review and
 });
 
 test('canonical evidence retains hostile JSON keys', () => {
+  const hostile = JSON.parse('{"__proto__":{"x":1},"a":2}');
+  assert.equal(canonicalJson(hostile), '{"__proto__":{"x":1},"a":2}');
+  assert.equal(Object.getPrototypeOf(canonicalizeValue(hostile)), Object.prototype);
+  assert.equal(canonicalJson({ content: 'a\r\nb' }), '{"content":"a\\nb"}');
   assert.equal(reviewerCanonicalBytes(JSON.parse('{"__proto__":{"x":1},"a":2}')), '{"__proto__":{"x":1},"a":2}');
   assert.equal(reviewerCanonicalBytes({ content: 'a\r\nb\rc\n' }), '{"content":"a\\r\\nb\\rc\\n"}');
   for (const value of ['\ud800', 1.5, NaN, -0, Number.MAX_SAFE_INTEGER + 1, [undefined], new Array(1)]) assert.throws(() => reviewerCanonicalBytes(value));

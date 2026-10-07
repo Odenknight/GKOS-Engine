@@ -135,6 +135,11 @@ export interface ReviewerEffectScope {
   purpose: string; audience: string; environment: string; sensitivity: string;
   operation: string; targetId: string; maxAffected: number;
 }
+export interface ReviewerDeterministicControls {
+  predicate: { id: string; version: string; digest: string; outcome: "pass" | "major" | "indeterminate"; evidenceRefs: string[] };
+  checker: { id: string; version: string; digest: string; kind: "deterministic" | "nondeterministic"; recommendation: "preserve" | "relax" | "escalate" };
+  recovery: { correction: boolean; compensation: boolean; rollback: boolean; escalation: boolean };
+}
 export interface ReviewerAuthority {
   id: string; actorId: string; authorizerId: string; runId: string; revision: number;
   status: "active" | "revoked"; validFrom: string; validUntil: string; contextDigest: string;
@@ -152,6 +157,7 @@ export interface ReviewerAdmissionRequest {
   executionState: "ready" | "hold" | "uncertain" | "recovering";
   challengeDisposition: "none" | "open" | "needs-evidence" | "upheld" | "dismissed";
   requestedEffect: ReviewerEffectScope; actorEffect: ReviewerEffectScope;
+  controls: ReviewerDeterministicControls;
 }
 export interface ReviewerAdmissionDecision { admitted: boolean; reasonCodes: string[]; bindingDigest: string }
 /** Run inside the host's serialization boundary using authenticated actor and authoritative state. */
@@ -167,6 +173,14 @@ export async function evaluateReviewerAdmission(request: ReviewerAdmissionReques
   reject(!text(r?.corpusRevision) || c?.corpusRevision !== r.corpusRevision, "CORPUS_BINDING_MISMATCH");
   reject(!policyValid(r?.policy) || reviewerCanonicalBytes(c?.policy ?? null) !== reviewerCanonicalBytes(r?.policy ?? null), "POLICY_BINDING_MISMATCH");
   const now = instant(r?.at);
+  const controls = r.controls, predicate = controls?.predicate, checker = controls?.checker;
+  reject(!policyValid(predicate) || !["pass", "major", "indeterminate"].includes(predicate?.outcome)
+    || !unique(predicate?.evidenceRefs) || !predicate?.evidenceRefs?.length || !policyValid(checker)
+    || !["deterministic", "nondeterministic"].includes(checker?.kind) || !["preserve", "relax", "escalate"].includes(checker?.recommendation), "DETERMINISTIC_CONTROLS_INVALID");
+  reject(predicate?.outcome !== "pass", "DELEGATION_PREDICATE_DENIED");
+  reject(predicate?.outcome !== "pass" && checker?.kind === "nondeterministic" && checker?.recommendation === "relax", "NONDETERMINISTIC_RELAXATION_DENIED");
+  reject(checker?.recommendation === "escalate" && v?.humanEscalationResolved !== true, "HUMAN_ESCALATION_REQUIRED");
+  reject(!controls?.recovery || ["correction", "compensation", "rollback", "escalation"].some(key => controls.recovery[key] !== true), "RECOVERY_ROUTE_UNAVAILABLE");
   reject(r.executionState !== "ready", "EXECUTION_HOLD");
   reject(!["none", "dismissed"].includes(r.challengeDisposition), "CHALLENGE_HOLD");
   const closure = r.authoritativeClosure;
