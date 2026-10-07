@@ -119,13 +119,13 @@ test('nontext assembly and digest remain canonical without any Unicode requireme
   for (const canonical of ['f6f6', '9fff', 'c0f6']) refuses(() => decode(bytes(canonical)), 1);
 });
 
-test('private development APIs leave package public exports and legacy canonical JSON unchanged', async () => {
+test('private codec stays private alongside the explicit host artifact subpath and legacy JSON', async () => {
   const root = await import('../dist/gkos-engine.mjs');
   const privateNames = ['CanonicalCborError', 'encodeCanonicalCbor', 'decodeCanonicalCbor', 'digestCanonicalCbor', 'validateCanonicalTimestamp'];
   assert.deepEqual(Object.keys(codec).sort(), privateNames.sort());
   for (const name of privateNames) assert.equal(name in root, false);
   const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
   assert.deepEqual(Object.keys(pkg.exports), ['.', './adapter', './gkx', './graphiti', './navigation',
-    './navigation-effects', './navigation-effects/node', './governance', './retrieval', './admission-policy']);
+    './navigation-effects', './navigation-effects/node', './governance', './governance/artifacts', './retrieval', './admission-policy']);
   assert.equal(root.canonicalJson({ text: 'a\r\nb', zero: -0 }), JSON.stringify({ text: 'a\nb', zero: 0 }));
 });

@@ -1,0 +1,10 @@
+import {createHash} from 'node:crypto';
+import {gkosCapturedInputDigest,buildReviewerArtifactsV2} from '../../dist/governance-artifacts.mjs';
+import {request,at,expiresAt} from './reviewer-v2.mjs';
+const clone=structuredClone;
+const evidence=[{id:'hold-declaration',revision:'1',content:'Synthetic policy has no active hold.',digest:'sha256:'+createHash('sha256').update('Synthetic policy has no active hold.').digest('hex')}];
+const retention={policy:{id:'retention',version:'1',digest:request.policy.digest,requiredEvidenceIds:['hold-declaration']},evaluation:{id:'eval1',policyDigest:request.policy.digest,state:'clear',evidence,evaluatedAt:at,validUntil:expiresAt,dispositionId:null},disposition:null,manualHold:false,operation:'effect',at};
+const basis={request:clone(request),issuedAt:at,issuer:{actor_id:'host',actor_class:'service'},proofMechanism:'authenticated-transaction',compilerRef:{component_id:'reviewer-v2',component_version:'2',digest:gkosCapturedInputDigest(null)},requiredRecoveryKinds:['correction'],recoveryRoutes:[{kind:'correction',procedureRef:'correction-v2',evidenceRef:'qualification:correction',available:true}],retention};
+basis.request.controls.recovery={correction:true,compensation:false,rollback:false,escalation:false};
+const native=()=>{const b=clone(basis);return {...b,artifacts:buildReviewerArtifactsV2(b)};};
+export {basis,retention,native};
