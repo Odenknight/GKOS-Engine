@@ -11,14 +11,18 @@ const contextInput = { runId: 'run-1', corpusRevision: 'corpus-1', policy,
   selectedSourceIds: ['b', 'a'], assembledAt: at, expiresAt };
 const context = await buildReviewerContext(contextInput);
 const intendedResultDigest = await hash('effect'), proposalDigest = await hash('proposal'), targetDigest = await hash('before');
+const effectScope = { purpose: 'synthetic-review', audience: 'run:run-1', environment: 'isolated-reviewer-cell', sensitivity: 'public', operation: 'result:publish', targetId: 'result-1', maxAffected: 1 };
 const request = { context, expectedContextDigest: context.contextDigest, runId: 'run-1', corpusRevision: 'corpus-1', policy,
   actor: { id: 'executor', class: 'service' },
   authority: { id: 'grant-1', actorId: 'executor', authorizerId: 'authorizer', runId: 'run-1', revision: 1, status: 'active',
     validFrom: at, validUntil: expiresAt, contextDigest: context.contextDigest, proposalDigest, intendedResultDigest,
-    operations: ['result:publish'], targetIds: ['result-1'] }, expectedAuthorityRevision: 1,
+    operations: ['result:publish'], targetIds: ['result-1'], effectScope: { ...effectScope } }, expectedAuthorityRevision: 1,
   proposal: { id: 'proposal-1', digest: proposalDigest, proposerId: 'proposer', contextDigest: context.contextDigest, intendedResultDigest },
-  review: { id: 'review-1', reviewerId: 'reviewer', proposalDigest, contextDigest: context.contextDigest, disposition: 'approved' },
-  operation: 'result:publish', targetId: 'result-1', at, receiptAvailable: true, targetDigest, expectedTargetDigest: targetDigest, intendedResultDigest };
+  review: { id: 'review-1', reviewerId: 'reviewer', proposalDigest, contextDigest: context.contextDigest, disposition: 'approved',
+    reviewerClass: 'human', reviewAuthorityId: 'review-authority', sealedEvidenceDigest: context.contextDigest, validUntil: expiresAt, mandatoryEscalation: false, humanEscalationResolved: false },
+  operation: 'result:publish', targetId: 'result-1', at, receiptAvailable: true, targetDigest, expectedTargetDigest: targetDigest, intendedResultDigest,
+  authoritativeSources: contextInput.sources, authoritativeClosure: { requiredSourceIds: [], requiredWarningCodes: [] }, expectedReviewEvidenceDigest: context.contextDigest,
+  executionState: 'ready', challengeDisposition: 'none', requestedEffect: { ...effectScope }, actorEffect: { ...effectScope } };
 const clone = value => structuredClone(value);
 
 test('context captures exact source bytes, deterministic corpus order and ordered selection closure', async () => {
@@ -31,6 +35,10 @@ test('context captures exact source bytes, deterministic corpus order and ordere
   for (const selectedSourceIds of [[], ['a', 'a'], ['missing']]) await assert.rejects(buildReviewerContext({ ...contextInput, selectedSourceIds }));
   await assert.rejects(buildReviewerContext({ ...contextInput, expiresAt: '2026-02-31T12:00:00Z' }));
   await assert.rejects(buildReviewerContext({ ...contextInput, sources: [{ id: 'a', revision: '1', content: '\ud800' }] }));
+  await assert.rejects(buildReviewerContext({ ...contextInput, selectedSourceIds: ['a'], requiredSourceIds: ['b'] }));
+  await assert.rejects(buildReviewerContext({ ...contextInput, requiredWarningCodes: ['contradiction'] }));
+  const closure = { ...contextInput, requiredSourceIds: ['b'], requiredWarningCodes: ['contradiction'], warnings: [{ code: 'contradiction', sourceId: 'b', message: 'Sources disagree' }] };
+  assert.equal(await verifyReviewerContext(await buildReviewerContext(closure)), true);
   const tampered = clone(context); tampered.sources[0].digest = intendedResultDigest;
   assert.equal(await verifyReviewerContext(tampered), false);
 });
@@ -57,6 +65,21 @@ test('admission binds authoritative roles, state, exact context, time, review an
     ['TARGET_PRECONDITION_FAILED', r => r.expectedTargetDigest = intendedResultDigest],
     ['RECEIPT_UNAVAILABLE', r => r.receiptAvailable = false],
     ['AUTHORITY_INVALID', r => r.authority.operations = '*'],
+    ['CONTEXT_CLOSURE_INCOMPLETE', r => r.authoritativeClosure.requiredSourceIds = ['missing']],
+    ['CONTEXT_CLOSURE_INCOMPLETE', r => r.authoritativeClosure.requiredWarningCodes = ['contradiction']],
+    ['SOURCE_BINDING_MISMATCH', r => r.authoritativeSources[0].content = 'changed'],
+    ['SOURCE_BINDING_MISMATCH', r => r.authoritativeSources[0].revision = '2'],
+    ['EXECUTION_HOLD', r => r.executionState = 'uncertain'],
+    ['EXECUTION_HOLD', r => r.executionState = 'recovering'],
+    ['CHALLENGE_HOLD', r => r.challengeDisposition = 'open'],
+    ['CHALLENGE_HOLD', r => r.challengeDisposition = 'upheld'],
+    ['REVIEW_EXPIRED', r => r.review.validUntil = at],
+    ['REVIEW_AUTHORITY_INVALID', r => r.review.sealedEvidenceDigest = intendedResultDigest],
+    ['REVIEW_MODEL_FAMILY_INVALID', r => { r.review.reviewerClass = 'agent'; r.review.proposerModelFamily = 'sol'; r.review.reviewerModelFamily = 'sol'; }],
+    ['HUMAN_ESCALATION_REQUIRED', r => r.review.mandatoryEscalation = true],
+    ['TYPED_EFFECT_SCOPE_DENIED', r => r.requestedEffect.audience = 'world'],
+    ['TYPED_EFFECT_SCOPE_DENIED', r => r.requestedEffect.maxAffected = 2],
+    ['TYPED_EFFECT_SCOPE_DENIED', r => r.actorEffect.sensitivity = 'secret'],
   ];
   for (const [reason, mutate] of cases) {
     const input = clone(request); mutate(input); const result = await evaluateReviewerAdmission(input);
@@ -65,6 +88,10 @@ test('admission binds authoritative roles, state, exact context, time, review an
   }
   const input = clone(request); const pending = evaluateReviewerAdmission(input); input.authority.status = 'revoked';
   assert.equal((await pending).admitted, true, 'evaluation captures the supplied serialized state before asynchronous hashing');
+  const agent = clone(request); agent.review.reviewerClass = 'agent'; agent.review.proposerModelFamily = 'sol'; agent.review.reviewerModelFamily = 'kimi';
+  assert.equal((await evaluateReviewerAdmission(agent)).admitted, true);
+  agent.review.mandatoryEscalation = true; agent.review.humanEscalationResolved = true;
+  assert.equal((await evaluateReviewerAdmission(agent)).admitted, true);
 });
 
 test('authorized correction creates fresh evidence and requires fresh review and authority', async () => {
@@ -80,6 +107,8 @@ test('authorized correction creates fresh evidence and requires fresh review and
 
 test('canonical evidence retains hostile JSON keys', () => {
   assert.equal(reviewerCanonicalBytes(JSON.parse('{"__proto__":{"x":1},"a":2}')), '{"__proto__":{"x":1},"a":2}');
+  assert.equal(reviewerCanonicalBytes({ content: 'a\r\nb\rc\n' }), '{"content":"a\\r\\nb\\rc\\n"}');
+  for (const value of ['\ud800', 1.5, NaN, -0, Number.MAX_SAFE_INTEGER + 1, [undefined], new Array(1)]) assert.throws(() => reviewerCanonicalBytes(value));
 });
 
 test('governance adapter serializes concurrent append and rejects duplicate record identities', async () => {

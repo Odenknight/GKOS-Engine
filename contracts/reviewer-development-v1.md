@@ -3,7 +3,7 @@
 This bounded implementation contract is exported from `gkos-engine/governance`
 and the Engine root. It does not qualify a GKOS profile. Its context is labeled
 `engine.reviewer-context`, not a normative GKOS Context Manifest. Canonical JSON
-is labeled `engine-canonical-json-v1`; private canonical CBOR remains a separate
+is labeled `engine-reviewer-exact-json-v1`; private canonical CBOR remains a separate
 byte primitive and is not silently substituted for this contract.
 
 ## Public API
@@ -16,11 +16,14 @@ invalid intervals and malformed source Unicode are rejected. Source content
 line endings remain significant. `verifyReviewerContext(context)` checks the
 contract shape and its self digest, not the authenticity of the corpus owner.
 
-`reviewerCanonicalBytes(value)` returns the existing Engine canonical JSON
-string; `reviewerCanonicalDigest(value)` returns its SHA-256 with `sha256:`
-prefix. JSON canonicalization normalizes CR/LF in string fields; source content
-is separately hashed before that normalization. Identity fields reject newlines.
-These helpers retain hostile JSON keys including `__proto__`.
+`reviewerCanonicalBytes(value)` returns exact-string canonical JSON;
+`reviewerCanonicalDigest(value)` returns its SHA-256 with `sha256:` prefix.
+CR/LF remain significant in every string. Object keys sort by UTF-16 code units;
+arrays preserve order. Only safe integers (not negative zero), booleans, null,
+well-formed strings, arrays and plain objects are supported. Undefined values,
+sparse/cyclic arrays, nonfinite/floating numbers and lone surrogates are rejected.
+Identity fields reject newlines. Hostile keys including `__proto__` are retained.
+Legacy Engine `canonicalJson` keeps its established newline normalization.
 
 `evaluateReviewerAdmission(request)` binds the exact context to run, corpus,
 policy, authenticated executor, proposal, completed approving review, current
@@ -30,6 +33,25 @@ and executor identities must differ in this bounded pilot policy. Authority
 operation and target lists use exact equality: wildcards have no special meaning.
 Expiry is exclusive. It returns `{admitted,reasonCodes,bindingDigest}`. Reason
 codes are implementation diagnostics, not allocated GKOS normative codes.
+`reviewer-diagnostic-map-v1.json` maps their related requirements and registered
+gates as implementation evidence; a map does not make a product receipt normative.
+
+Admission also verifies supplied authoritative source revisions and exact raw
+bytes against the captured inventory; authoritative required source IDs and
+warning codes must be present in selection/closure. Captured warnings remain
+visible without claiming user acknowledgement. Context construction performs
+no retrieval or semantic contradiction inference: the host's pinned fixture
+rules supply required closure. Missing required inputs close the gate.
+
+Human reviews require a bound reviewer authority reference, sealed evidence digest
+and unexpired review. Agent reviews additionally require distinct identified
+proposer/reviewer model families. Mandatory escalation requires an explicit
+resolved human escalation. The host must prove the supplied authority and
+escalation resolution from append-only records; IDs/booleans alone are not proof.
+Execution must be `ready`; open, needs-evidence or upheld challenges hold use.
+Effect purpose, audience, environment, sensitivity, operation and target must
+match both actor and authority scope; a positive safe-integer affected count
+cannot exceed either bound. Unknown/incomparable dimensions close the gate.
 
 `evaluateReviewerCorrection(request)` checks the authenticated correcting
 reviewer against the host's authoritative reviewer list, predecessor and new
@@ -76,8 +98,8 @@ The pinned standard registry and normative authority/canonical annexes were read
 from git object `b308ff7137bdbb109c31f0ace7e6c49b8988e0d5` (origin/main), rather
 than the older working checkout. This contract does not complete all their
 requirements: canonical JSON/context timestamps are bounded implementation
-evidence, and typed operation/target lists are not the full normative effect
-vocabulary. The gateway's requirement map
+evidence, and the typed effect scope omits broader layer/reversibility/delegation
+dimensions outside this single-cell operation. The gateway's requirement map
 must pin the intended standard edition and keep unexecuted broader obligations
 explicit. Host compromise, organizational independence, human outcomes,
 production qualification and full normative Context Manifest/authority schemas

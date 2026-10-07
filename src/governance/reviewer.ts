@@ -1,21 +1,53 @@
-import { canonicalJson, canonicalSha256, deepFreeze, sha256Bytes } from "../canonical";
+import { deepFreeze, sha256Bytes } from "../canonical";
 import type { ActorRef } from "./types";
 
 /** Bounded synthetic reviewer contract. This is not a normative GKOS context manifest. */
 export const REVIEWER_CONTRACT_VERSION = "1.0.0";
-export const reviewerCanonicalBytes = canonicalJson;
-export const reviewerCanonicalDigest = canonicalSha256;
+/** Exact strings, UTF-16 key ordering, safe integers only; JSON never repairs evidence. */
+export function reviewerCanonicalBytes(value: unknown): string {
+  const seen = new Set<object>();
+  const encode = (item: unknown): string => {
+    if (item === null || typeof item === "boolean") return JSON.stringify(item);
+    if (typeof item === "string") {
+      if (!wellFormed(item)) throw new TypeError("Reviewer canonical strings require well-formed Unicode.");
+      return JSON.stringify(item);
+    }
+    if (typeof item === "number" && Number.isSafeInteger(item) && !Object.is(item, -0)) return String(item);
+    if (typeof item !== "object" || !item || seen.has(item)) throw new TypeError("Reviewer canonical values require acyclic JSON with safe integers.");
+    const proto = Object.getPrototypeOf(item);
+    if (!Array.isArray(item) && proto !== Object.prototype && proto !== null) throw new TypeError("Reviewer canonical objects must be plain JSON.");
+    seen.add(item);
+    let result: string;
+    if (Array.isArray(item)) {
+      const entries = [];
+      for (let i = 0; i < item.length; i++) {
+        if (!Object.prototype.hasOwnProperty.call(item, i)) throw new TypeError("Reviewer canonical arrays cannot be sparse.");
+        entries.push(encode(item[i]));
+      }
+      result = `[${entries.join(",")}]`;
+    } else {
+      result = `{${Object.keys(item).sort().map(key => `${encode(key)}:${encode(item[key])}`).join(",")}}`;
+    }
+    seen.delete(item);
+    return result;
+  };
+  return encode(value);
+}
+export async function reviewerCanonicalDigest(value: unknown): Promise<string> { return sha256Bytes(reviewerCanonicalBytes(value)); }
 export interface ReviewerPolicy { id: string; version: string; digest: string }
 export interface ReviewerSource { id: string; revision: string; content: string }
 export interface ReviewerContext {
   artifactKind: "engine.reviewer-context";
   contractVersion: "1.0.0";
-  canonicalization: "engine-canonical-json-v1";
+  canonicalization: "engine-reviewer-exact-json-v1";
   runId: string;
   corpusRevision: string;
   policy: ReviewerPolicy;
   sources: { id: string; revision: string; digest: string }[];
   selectedSourceIds: string[];
+  requiredSourceIds: string[];
+  requiredWarningCodes: string[];
+  warnings: { code: string; sourceId?: string; message: string }[];
   assembledAt: string;
   expiresAt: string;
   contextDigest: string;
@@ -47,11 +79,15 @@ function contextProblems(context: ReviewerContext): string[] {
   if (!context || typeof context !== "object") return ["CONTEXT_INVALID"];
   const sources = context.sources;
   if (context.artifactKind !== "engine.reviewer-context" || context.contractVersion !== REVIEWER_CONTRACT_VERSION
-    || context.canonicalization !== "engine-canonical-json-v1" || !text(context.runId) || !text(context.corpusRevision)
+    || context.canonicalization !== "engine-reviewer-exact-json-v1" || !text(context.runId) || !text(context.corpusRevision)
     || !policyValid(context.policy) || !Array.isArray(sources) || sources.length === 0
     || sources.some(s => !s || !text(s.id) || !text(s.revision) || !DIGEST.test(s.digest))
     || !unique(sources.map(s => s.id)) || !unique(context.selectedSourceIds) || context.selectedSourceIds.length === 0
     || context.selectedSourceIds.some(id => !sources.some(s => s.id === id))
+    || !unique(context.requiredSourceIds) || context.requiredSourceIds.some(id => !context.selectedSourceIds.includes(id))
+    || !unique(context.requiredWarningCodes) || !Array.isArray(context.warnings)
+    || context.warnings.some(w => !w || !text(w.code) || !text(w.message) || (w.sourceId !== undefined && (!text(w.sourceId) || !context.selectedSourceIds.includes(w.sourceId))))
+    || context.requiredWarningCodes.some(code => !context.warnings.some(w => w.code === code))
     || !Number.isFinite(instant(context.assembledAt)) || !Number.isFinite(instant(context.expiresAt))
     || instant(context.expiresAt) <= instant(context.assembledAt) || !DIGEST.test(context.contextDigest)) return ["CONTEXT_INVALID"];
   return [];
@@ -59,14 +95,19 @@ function contextProblems(context: ReviewerContext): string[] {
 export async function buildReviewerContext(input: {
   runId: string; corpusRevision: string; policy: ReviewerPolicy; sources: readonly ReviewerSource[];
   selectedSourceIds: readonly string[]; assembledAt: string; expiresAt: string;
+  requiredSourceIds?: readonly string[]; requiredWarningCodes?: readonly string[];
+  warnings?: readonly { code: string; sourceId?: string; message: string }[];
 }): Promise<ReviewerContext> {
   input = snapshot(input);
   if (!input || !Array.isArray(input.sources) || input.sources.some(s => !s || typeof s.content !== "string" || !wellFormed(s.content))) throw new TypeError("Reviewer sources require exact well-formed text content.");
   const sources = await Promise.all(input.sources.map(async s => ({ id: s.id, revision: s.revision, digest: await sha256Bytes(s.content) })));
   sources.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
   const body = { artifactKind: "engine.reviewer-context" as const, contractVersion: REVIEWER_CONTRACT_VERSION as "1.0.0",
-    canonicalization: "engine-canonical-json-v1" as const, runId: input.runId, corpusRevision: input.corpusRevision,
-    policy: { ...input.policy }, sources, selectedSourceIds: [...input.selectedSourceIds], assembledAt: input.assembledAt, expiresAt: input.expiresAt };
+    canonicalization: "engine-reviewer-exact-json-v1" as const, runId: input.runId, corpusRevision: input.corpusRevision,
+    policy: { ...input.policy }, sources, selectedSourceIds: [...input.selectedSourceIds],
+    requiredSourceIds: [...(input.requiredSourceIds ?? [])].sort(), requiredWarningCodes: [...(input.requiredWarningCodes ?? [])].sort(),
+    warnings: [...(input.warnings ?? [])].sort((a, b) => `${a.code}\0${a.sourceId ?? ""}\0${a.message}` < `${b.code}\0${b.sourceId ?? ""}\0${b.message}` ? -1 : `${a.code}\0${a.sourceId ?? ""}\0${a.message}` > `${b.code}\0${b.sourceId ?? ""}\0${b.message}` ? 1 : 0),
+    assembledAt: input.assembledAt, expiresAt: input.expiresAt };
   const result = { ...body, contextDigest: await reviewerCanonicalDigest(body) };
   if (contextProblems(result).length) throw new TypeError("Invalid reviewer context or incomplete selection closure.");
   return deepFreeze(result);
@@ -85,17 +126,32 @@ export interface ReviewerProposal {
 export interface ReviewerReview {
   id: string; reviewerId: string; proposalDigest: string; contextDigest: string;
   disposition: "approved" | "incomplete" | "refused";
+  reviewerClass: "human" | "agent";
+  reviewerModelFamily?: string; proposerModelFamily?: string;
+  reviewAuthorityId: string; sealedEvidenceDigest: string; validUntil: string;
+  mandatoryEscalation: boolean; humanEscalationResolved: boolean;
+}
+export interface ReviewerEffectScope {
+  purpose: string; audience: string; environment: string; sensitivity: string;
+  operation: string; targetId: string; maxAffected: number;
 }
 export interface ReviewerAuthority {
   id: string; actorId: string; authorizerId: string; runId: string; revision: number;
   status: "active" | "revoked"; validFrom: string; validUntil: string; contextDigest: string;
   proposalDigest: string; intendedResultDigest: string; operations: string[]; targetIds: string[];
+  effectScope: ReviewerEffectScope;
 }
 export interface ReviewerAdmissionRequest {
   context: ReviewerContext; expectedContextDigest: string; runId: string; corpusRevision: string; policy: ReviewerPolicy;
   actor: ActorRef; authority: ReviewerAuthority; expectedAuthorityRevision: number;
   proposal: ReviewerProposal; review: ReviewerReview; operation: string; targetId: string; at: string;
   receiptAvailable: boolean; targetDigest: string; expectedTargetDigest: string; intendedResultDigest: string;
+  authoritativeSources: readonly ReviewerSource[];
+  authoritativeClosure: { requiredSourceIds: string[]; requiredWarningCodes: string[] };
+  expectedReviewEvidenceDigest: string;
+  executionState: "ready" | "hold" | "uncertain" | "recovering";
+  challengeDisposition: "none" | "open" | "needs-evidence" | "upheld" | "dismissed";
+  requestedEffect: ReviewerEffectScope; actorEffect: ReviewerEffectScope;
 }
 export interface ReviewerAdmissionDecision { admitted: boolean; reasonCodes: string[]; bindingDigest: string }
 /** Run inside the host's serialization boundary using authenticated actor and authoritative state. */
@@ -111,6 +167,18 @@ export async function evaluateReviewerAdmission(request: ReviewerAdmissionReques
   reject(!text(r?.corpusRevision) || c?.corpusRevision !== r.corpusRevision, "CORPUS_BINDING_MISMATCH");
   reject(!policyValid(r?.policy) || reviewerCanonicalBytes(c?.policy ?? null) !== reviewerCanonicalBytes(r?.policy ?? null), "POLICY_BINDING_MISMATCH");
   const now = instant(r?.at);
+  reject(r.executionState !== "ready", "EXECUTION_HOLD");
+  reject(!["none", "dismissed"].includes(r.challengeDisposition), "CHALLENGE_HOLD");
+  const closure = r.authoritativeClosure;
+  reject(!closure || !unique(closure.requiredSourceIds) || !unique(closure.requiredWarningCodes)
+    || closure.requiredSourceIds.some(id => !c?.selectedSourceIds?.includes(id))
+    || closure.requiredWarningCodes.some(code => !c?.warnings?.some(w => w.code === code)), "CONTEXT_CLOSURE_INCOMPLETE");
+  let authoritative = false;
+  try {
+    const captured = await buildReviewerContext({ ...c, sources: r.authoritativeSources });
+    authoritative = reviewerCanonicalBytes(captured.sources) === reviewerCanonicalBytes(c?.sources);
+  } catch { /* Missing or malformed authoritative source bytes close the gate. */ }
+  reject(!authoritative, "SOURCE_BINDING_MISMATCH");
   reject(!Number.isFinite(now) || now < instant(c?.assembledAt) || now >= instant(c?.expiresAt), "CONTEXT_TIME_INVALID");
   reject(!a || !text(a.id) || !text(a.actorId) || !text(a.authorizerId) || !Number.isSafeInteger(a.revision) || a.revision < 1
     || !unique(a.operations) || !unique(a.targetIds) || !DIGEST.test(a.contextDigest) || !DIGEST.test(a.proposalDigest) || !DIGEST.test(a.intendedResultDigest), "AUTHORITY_INVALID");
@@ -122,6 +190,19 @@ export async function evaluateReviewerAdmission(request: ReviewerAdmissionReques
   reject(!text(r?.operation) || !a?.operations?.includes(r.operation) || !text(r?.targetId) || !a?.targetIds?.includes(r.targetId), "EFFECT_SCOPE_DENIED");
   reject(!p || !text(p.id) || !text(p.proposerId) || !DIGEST.test(p.digest) || !DIGEST.test(p.contextDigest) || !DIGEST.test(p.intendedResultDigest), "PROPOSAL_INVALID");
   reject(!v || !text(v.id) || !text(v.reviewerId) || v.disposition !== "approved", "REVIEW_NOT_APPROVED");
+  reject(!v || !["human", "agent"].includes(v.reviewerClass) || !text(v.reviewAuthorityId)
+    || !DIGEST.test(v.sealedEvidenceDigest) || !DIGEST.test(r.expectedReviewEvidenceDigest) || v.sealedEvidenceDigest !== r.expectedReviewEvidenceDigest, "REVIEW_AUTHORITY_INVALID");
+  reject(!Number.isFinite(instant(v?.validUntil)) || !Number.isFinite(now) || now >= instant(v?.validUntil), "REVIEW_EXPIRED");
+  reject(v?.reviewerClass === "agent" && (!text(v.reviewerModelFamily) || !text(v.proposerModelFamily) || v.reviewerModelFamily === v.proposerModelFamily), "REVIEW_MODEL_FAMILY_INVALID");
+  reject(typeof v?.mandatoryEscalation !== "boolean" || typeof v?.humanEscalationResolved !== "boolean"
+    || (v?.mandatoryEscalation === true && v?.humanEscalationResolved !== true), "HUMAN_ESCALATION_REQUIRED");
+  const scopeValid = (s: ReviewerEffectScope) => !!s && [s.purpose, s.audience, s.environment, s.sensitivity, s.operation, s.targetId].every(text)
+    && Number.isSafeInteger(s.maxAffected) && s.maxAffected > 0;
+  const contained = (requested: ReviewerEffectScope, allowed: ReviewerEffectScope) => scopeValid(requested) && scopeValid(allowed)
+    && ["purpose", "audience", "environment", "sensitivity", "operation", "targetId"].every(key => requested[key] === allowed[key])
+    && requested.maxAffected <= allowed.maxAffected;
+  reject(!contained(r.requestedEffect, r.actorEffect) || !contained(r.requestedEffect, a?.effectScope)
+    || r.requestedEffect?.operation !== r.operation || r.requestedEffect?.targetId !== r.targetId, "TYPED_EFFECT_SCOPE_DENIED");
   reject(!DIGEST.test(r?.intendedResultDigest) || p?.intendedResultDigest !== r.intendedResultDigest || a?.intendedResultDigest !== r.intendedResultDigest, "RESULT_BINDING_MISMATCH");
   reject(a?.contextDigest !== c?.contextDigest || p?.contextDigest !== c?.contextDigest || v?.contextDigest !== c?.contextDigest
     || a?.proposalDigest !== p?.digest || v?.proposalDigest !== p?.digest, "DECISION_BINDING_MISMATCH");
@@ -150,5 +231,6 @@ export async function evaluateReviewerCorrection(r: ReviewerCorrectionRequest): 
   if (r?.predecessor?.contextDigest === r?.replacement?.contextDigest) reasons.push("CORRECTION_UNCHANGED");
   const now = instant(r?.at);
   if (!Number.isFinite(now) || now < instant(r?.replacement?.assembledAt) || now >= instant(r?.replacement?.expiresAt)) reasons.push("CONTEXT_TIME_INVALID");
-  return deepFreeze({ admitted: reasons.length === 0, reasonCodes: [...new Set(reasons)].sort(), bindingDigest: await reviewerCanonicalDigest({ contractVersion: REVIEWER_CONTRACT_VERSION, request: r, reasonCodes: reasons }) });
+  const reasonCodes = [...new Set(reasons)].sort();
+  return deepFreeze({ admitted: reasonCodes.length === 0, reasonCodes, bindingDigest: await reviewerCanonicalDigest({ contractVersion: REVIEWER_CONTRACT_VERSION, request: r, reasonCodes }) });
 }
