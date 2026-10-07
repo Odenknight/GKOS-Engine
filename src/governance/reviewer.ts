@@ -196,7 +196,9 @@ export async function evaluateReviewerAdmission(request: ReviewerAdmissionReques
   reject(v?.reviewerClass === "agent" && (!text(v.reviewerModelFamily) || !text(v.proposerModelFamily) || v.reviewerModelFamily === v.proposerModelFamily), "REVIEW_MODEL_FAMILY_INVALID");
   reject(typeof v?.mandatoryEscalation !== "boolean" || typeof v?.humanEscalationResolved !== "boolean"
     || (v?.mandatoryEscalation === true && v?.humanEscalationResolved !== true), "HUMAN_ESCALATION_REQUIRED");
-  const scopeValid = (s: ReviewerEffectScope) => !!s && [s.purpose, s.audience, s.environment, s.sensitivity, s.operation, s.targetId].every(text)
+  const scopeKeys = ["purpose", "audience", "environment", "sensitivity", "operation", "targetId", "maxAffected"];
+  const scopeValid = (s: ReviewerEffectScope) => !!s && Object.keys(s).every(key => scopeKeys.includes(key))
+    && [s.purpose, s.audience, s.environment, s.sensitivity, s.operation, s.targetId].every(text)
     && Number.isSafeInteger(s.maxAffected) && s.maxAffected > 0;
   const contained = (requested: ReviewerEffectScope, allowed: ReviewerEffectScope) => scopeValid(requested) && scopeValid(allowed)
     && ["purpose", "audience", "environment", "sensitivity", "operation", "targetId"].every(key => requested[key] === allowed[key])

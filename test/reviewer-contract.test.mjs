@@ -81,6 +81,8 @@ test('admission binds authoritative roles, state, exact context, time, review an
     ['TYPED_EFFECT_SCOPE_DENIED', r => r.requestedEffect.audience = 'world'],
     ['TYPED_EFFECT_SCOPE_DENIED', r => r.requestedEffect.maxAffected = 2],
     ['TYPED_EFFECT_SCOPE_DENIED', r => r.actorEffect.sensitivity = 'secret'],
+    ['TYPED_EFFECT_SCOPE_DENIED', r => r.requestedEffect.layerReach = 7],
+    ['TYPED_EFFECT_SCOPE_DENIED', r => r.authority.effectScope.reversibility = 'unknown'],
   ];
   for (const [reason, mutate] of cases) {
     const input = clone(request); mutate(input); const result = await evaluateReviewerAdmission(input);
