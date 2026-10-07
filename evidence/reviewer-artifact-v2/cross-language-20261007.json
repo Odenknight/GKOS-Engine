@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "scope": "five canonical-byte/rendering roles; not independent authority or full schema replay",
+  "results": [
+    {
+      "role": "selection-envelope",
+      "digest": "66e025420028c0708863e8aa8152033385b3f8baf5ffb818fe7a2ccce13aeca4",
+      "canonical_bytes": 1286,
+      "rendering_roundtrip": "PASS",
+      "displayed_hash_tamper": "REFUSED"
+    },
+    {
+      "role": "context-manifest",
+      "digest": "09d7dab0c42c828164fb29e3c4e76dbef6e4e8b0c8c7478abebe91f57d3a513d",
+      "canonical_bytes": 1380,
+      "rendering_roundtrip": "PASS",
+      "displayed_hash_tamper": "REFUSED"
+    },
+    {
+      "role": "authority-receipt",
+      "digest": "b3fc5066a7c34f08b5d500ff04095233dbe546fe61ad5291ca3a61c963807dfd",
+      "canonical_bytes": 1219,
+      "rendering_roundtrip": "PASS",
+      "displayed_hash_tamper": "REFUSED"
+    },
+    {
+      "role": "authorized-use-record",
+      "digest": "7fd9e55e3134385648d4ec9e21258dc39cb583dd7276aec64b5c2cd7bb76ce18",
+      "canonical_bytes": 1939,
+      "rendering_roundtrip": "PASS",
+      "displayed_hash_tamper": "REFUSED"
+    },
+    {
+      "role": "refusal-receipt",
+      "digest": "50a1576639cd4c1c95a854f0c7367c4e879197239d3843c99cdee56e95bbd01d",
+      "canonical_bytes": 1115,
+      "rendering_roundtrip": "PASS",
+      "displayed_hash_tamper": "REFUSED"
+    }
+  ]
+}

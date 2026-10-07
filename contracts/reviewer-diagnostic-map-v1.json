@@ -1,0 +1,23 @@
+{
+  "artifactKind": "engine.reviewer-diagnostic-map",
+  "standing": "informative product-to-requirement evidence map; not normative conformance",
+  "standardCommit": "b308ff7137bdbb109c31f0ace7e6c49b8988e0d5",
+  "mappings": [
+    { "productCodes": ["CONTEXT_INVALID", "SOURCE_BINDING_MISMATCH"], "requirementIds": ["GKOS-CONTEXT-001", "GKOS-CONTEXT-002"], "registeredGate": "GKOS-GATE-L6-007" },
+    { "productCodes": ["CONTEXT_CLOSURE_INCOMPLETE"], "requirementIds": ["GKOS-CONTEXT-004"], "registeredGate": "GKOS-GATE-L6-009" },
+    { "productCodes": ["CONTEXT_BINDING_MISMATCH", "CONTEXT_TIME_INVALID", "RUN_BINDING_MISMATCH", "CORPUS_BINDING_MISMATCH", "POLICY_BINDING_MISMATCH"], "requirementIds": ["GKOS-AUTHUSE-001", "GKOS-AUTHUSE-002"], "registeredGate": "GKOS-GATE-L7-004" },
+    { "productCodes": ["AUTHORITY_INVALID", "AUTHORITY_REVOKED", "AUTHORITY_REVISION_MISMATCH", "AUTHORITY_TIME_INVALID", "ACTOR_BINDING_MISMATCH"], "requirementIds": ["GKOS-AUTHUSE-003", "GKOS-AUTHUSE-007"], "registeredGate": "GKOS-GATE-L7-001" },
+    { "productCodes": ["EFFECT_SCOPE_DENIED", "TYPED_EFFECT_SCOPE_DENIED"], "requirementIds": ["GKOS-EFFECT-001", "GKOS-EFFECT-002", "GKOS-EFFECT-003"], "registeredGate": "GKOS-GATE-L7-002" },
+    { "productCodes": ["REVIEW_NOT_APPROVED"], "requirementIds": ["GKOS-REVIEW-001"], "registeredGate": "GKOS-GATE-L5-003" },
+    { "productCodes": ["PROPOSAL_INVALID", "REVIEW_AUTHORITY_INVALID", "DECISION_BINDING_MISMATCH", "RESULT_BINDING_MISMATCH"], "requirementIds": ["GKOS-REVIEW-002", "GKOS-CONTEXT-005"], "registeredGate": "GKOS-GATE-L5-004" },
+    { "productCodes": ["ROLE_SEPARATION_FAILED", "REVIEW_MODEL_FAMILY_INVALID", "HUMAN_ESCALATION_REQUIRED"], "requirementIds": ["GKOS-REVIEW-003", "GKOS-AUTHUSE-004"], "registeredGate": "GKOS-GATE-L5-005" },
+    { "productCodes": ["REVIEW_EXPIRED"], "requirementIds": ["GKOS-DELEGATION-006", "GKOS-REVIEW-004"], "registeredGate": "GKOS-GATE-L5-001" },
+    { "productCodes": ["RECEIPT_UNAVAILABLE"], "requirementIds": ["GKOS-RECEIPT-003", "GKOS-AUTHUSE-005"], "registeredGate": "GKOS-GATE-L7-005" },
+    { "productCodes": ["TARGET_PRECONDITION_FAILED"], "requirementIds": ["GKOS-CANON-007", "GKOS-AUTHUSE-002"], "registeredGate": "GKOS-GATE-L6-007" },
+    { "productCodes": ["EXECUTION_HOLD", "CHALLENGE_HOLD"], "requirementIds": ["GKOS-AUTHUSE-006", "GKOS-REVIEW-004"], "registeredGate": null, "note": "Product hold policy; no new registered diagnostic allocated." },
+    { "productCodes": ["DETERMINISTIC_CONTROLS_INVALID", "DELEGATION_PREDICATE_DENIED"], "requirementIds": ["GKOS-DELEGATION-002", "GKOS-POLICY-001"], "registeredGate": "GKOS-GATE-L4-003", "note": "Supporting predicate evidence; no normative receipt standing asserted." },
+    { "productCodes": ["NONDETERMINISTIC_RELAXATION_DENIED"], "requirementIds": ["GKOS-DELEGATION-003"], "registeredGate": "GKOS-GATE-L4-004" },
+    { "productCodes": ["RECOVERY_ROUTE_UNAVAILABLE"], "requirementIds": ["GKOS-AUTHUSE-006"], "registeredGate": "GKOS-GATE-L7-006" },
+    { "productCodes": ["CORRECTION_ACTOR_DENIED", "CORRECTION_EVIDENCE_INCOMPLETE", "CORRECTION_UNCHANGED"], "requirementIds": ["GKOS-REENTRY-001", "GKOS-REENTRY-002", "GKOS-REENTRY-003", "GKOS-REENTRY-004"], "registeredGate": null, "note": "Evidence-support mapping only; no normative re-entry record claim." }
+  ]
+}

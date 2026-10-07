@@ -185,7 +185,8 @@ test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI beh
   const navigationEffectsNodeExports = ["DurableEffectJournal", "NodeNavigationEffectsExecutor", "SimulatedEffectCrash", "NodeManagedMocHost", "NodeManagedMocRuntime"].sort();
   const rootExports = Object.keys(root).sort();
   const graphitiAdditions = ["GRAPHITI_INGEST_SCRIPT", "attachGraphitiSourceEvidence", "GRAPHITI_QUERY_CONTRACT_VERSION", "prepareGraphitiQueryRequest", "acceptGraphitiQueryResult"].sort();
-  const additiveRootExports = [...navigationEffectsExports, ...graphitiAdditions, "inspectScopedLineage"].sort();
+  const reviewerAdditions = ["REVIEWER_CONTRACT_VERSION", "buildReviewerContext", "evaluateReviewerAdmission", "evaluateReviewerCorrection", "reviewerCanonicalBytes", "reviewerCanonicalDigest", "verifyReviewerContext"].sort();
+  const additiveRootExports = [...navigationEffectsExports, ...graphitiAdditions, ...reviewerAdditions, "inspectScopedLineage"].sort();
   const phase0Root = rootExports.filter((name) => !additiveRootExports.includes(name));
   const actualExports = {
     root: phase0Root,
@@ -193,11 +194,12 @@ test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI beh
     gkx: Object.keys(gkx).sort(),
     graphiti: Object.keys(graphiti).filter((name) => !graphitiAdditions.includes(name)).sort(),
     navigation: Object.keys(navigation).sort(),
-    governance: Object.keys(governance).sort(),
+    governance: Object.keys(governance).filter(name => !reviewerAdditions.includes(name)).sort(),
   };
   assert.deepEqual(actualExports, expectedExports);
   assert.deepEqual(rootExports.filter((name) => !expectedExports.root.includes(name)), additiveRootExports);
   assert.deepEqual(Object.keys(graphiti).filter((name) => !expectedExports.graphiti.includes(name)).sort(), graphitiAdditions);
+  assert.deepEqual(Object.keys(governance).filter(name => !expectedExports.governance.includes(name)).sort(), reviewerAdditions);
   assert.deepEqual(Object.keys(navigationEffects).sort(), navigationEffectsExports);
   assert.deepEqual(Object.keys(navigationEffectsNode).sort(), navigationEffectsNodeExports);
   assert.deepEqual(

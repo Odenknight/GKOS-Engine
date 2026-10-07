@@ -71,6 +71,11 @@ try {
   // package export gate is explicitly revised.
   writeFileSync(resolve(root, "dist/service-node.mjs"), await bundle("src/service/node.ts", { platform: "node" }));
   console.log("built dist/service-node.mjs");
+  // Reused private development codec from Carson 6842051; no package API grant.
+  writeFileSync(resolve(root, "dist/canonical-cbor.mjs"), await bundle("src/canonical-cbor.ts", { platform: "node" }));
+  console.log("built dist/canonical-cbor.mjs");
+  writeFileSync(resolve(root, "dist/governance-artifacts.mjs"), await bundle("src/governance/artifact-index.ts", { platform: "node" }));
+  console.log("built dist/governance-artifacts.mjs");
   writeFileSync(resolve(root, "dist/graphiti-broker.mjs"), await bundle("src/graphiti-broker.ts", { platform: "node" }));
   console.log("built dist/graphiti-broker.mjs");
   // Private compatibility transport for the gkos-mcp-stdio executable. It

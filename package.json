@@ -46,6 +46,11 @@
       "import": "./dist/governance.mjs",
       "default": "./dist/governance.mjs"
     },
+    "./governance/artifacts": {
+      "types": "./dist/governance/artifact-index.d.ts",
+      "import": "./dist/governance-artifacts.mjs",
+      "default": "./dist/governance-artifacts.mjs"
+    },
     "./retrieval": {
       "types": "./dist/retrieval/index.d.ts",
       "import": "./dist/retrieval.mjs",

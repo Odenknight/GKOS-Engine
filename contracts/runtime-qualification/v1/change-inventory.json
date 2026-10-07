@@ -474,10 +474,22 @@
       "rationale": "Update the declared optional Graphiti target to the actually smoke-tested 0.30.2 version."
     },
     {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "before": "d2d15122e7400e4228722b67039e2a087a39ab3f",
+      "after": "92253430ccff9bad6cc97661e231c63f78c7f543ddd0e8a978bd89b653abb062",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
       "path": "TRACEABILITY.md",
       "before": "50105e0ff658f8eae6b767a1baad9b2d77f326df",
       "after": "6c69ea8d1c92627c8c78af8afc146a0b43372733617762d02a1bd07f6c7734d9",
       "rationale": "September 14 editorial audit remediation: correct source identity, bind current hosted evidence, and record exact PR ancestry without qualification or release promotion."
+    },
+    {
+      "path": "contracts/canonical-cbor-development-v1.md",
+      "before": null,
+      "after": "5c022b02e2a6fbd820fb822251de24a06958a581eaa617f56e1d86af9a2d03cb",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
     },
     {
       "path": "contracts/documentation-verifier/v0.81/LICENSE.txt",
@@ -670,6 +682,24 @@
       "before": null,
       "after": "ec3bf083a73a0d74ba3fc08af10420288dbc65db7798b076232b7b0ae2ec077a",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "contracts/reviewer-artifacts-v2.md",
+      "before": null,
+      "after": "ebda4afb5733f2ed9f40681ff944e404bfed2460f6aadbe3cd2968edd84bb99f",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "contracts/reviewer-development-v1.md",
+      "before": null,
+      "after": "f223b925c96b056619bbf9036d72ddc0e089e7f9264368c456959bd717d707c0",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "contracts/reviewer-diagnostic-map-v1.json",
+      "before": null,
+      "after": "580919f5290aacd69debf0bdd63e29d5502105ac77b4f5cb1f0a64caf9a46953",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
     },
     {
       "path": "docs/AUTHORIZED-LEXICAL-DISCOVERY-V1.md",
@@ -876,6 +906,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "docs/canonical-cbor-development.md",
+      "before": null,
+      "after": "0d1c519dccba7c6b753f04dd5de98788d2c83102e3e33f06946f55ac88553cdc",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
       "path": "docs/classifier/GKOS-Classifier-Rust-TypeScript-Build-Plan.md",
       "before": null,
       "after": "a0300e6675cf5775e127d5a1a6a72bcefd9aea8b318bfedfeadcbf33f597908c",
@@ -1032,6 +1068,30 @@
       "rationale": "Graphiti recovery observation: parameterized FalkorDB read-only reconciliation, immutable original receipts, durable replacement, failure tests and byte-bound synthetic live evidence."
     },
     {
+      "path": "evidence/reviewer-artifact-v2/README.md",
+      "before": null,
+      "after": "1b3b4a32b054c55b8c1fa661e723cb127a6470f9d14e5cdfffe5d5ddb7571954",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "evidence/reviewer-artifact-v2/build-inventory.json",
+      "before": null,
+      "after": "1d78e892bdcd7f52719851e424ab53d3aa2494e14fc495e74d33b90ae6569c06",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "evidence/reviewer-artifact-v2/cross-language-20261007.json",
+      "before": null,
+      "after": "fed8f9659af4b72903c44ec512ef5f90e9c9d511638fecdfa09e0abaee4541d5",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "evidence/reviewer-artifact-v2/current-runtime-failure-353518a.md",
+      "before": null,
+      "after": "5063d47d03fb77793fbb88128ba19862c90a69d754783a2de4ee853b22062937",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
       "path": "examples/check-product-engine.mjs",
       "before": null,
       "after": "c31740aa1c56b73f8ec6b7e30eff1238e4632e3dba583365e96684098b1be0a4",
@@ -1052,8 +1112,8 @@
     {
       "path": "package.json",
       "before": "cd207b9395c638c681a624769ede3b7a6b63d1dd",
-      "after": "dcede8332600e29403ae35cb24cae89044177a30f511cf1276c276ac151f10f4",
-      "rationale": "Package governance notices: ship the root NOTICE and the governance documents it references in the npm package, and require them in check-pack (landed from #84)."
+      "after": "c42ac1c90ec07b853c209535db5fac434451289b5a2c41ade6ef6e8468497a75",
+      "rationale": "Package governance notices: ship the root NOTICE and the governance documents it references in the npm package, and require them in check-pack (landed from #84). Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
     },
     {
       "path": "scripts/benchmark-graphiti-native.mjs",
@@ -1070,14 +1130,14 @@
     {
       "path": "scripts/build.mjs",
       "before": "4fae5e56ddadb78e3287ad5a4bc870b64c6930c8",
-      "after": "f73428e3243f652764f08325e5ed5ce1c9ae54e15868d19c5acca60e8fbf7ec6",
-      "rationale": "Managed Graphiti host integration: bounded ledger/worker/broker, safety qualification, or owner-selected common product Engine documentation; private integration does not activate product semantic search."
+      "after": "3bcbfb5bbff2c9d9e7f669c33663ddb443af45bb3993cedfa80b6300d2fe67eb",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved. Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
     },
     {
       "path": "scripts/check-pack.mjs",
       "before": "e2d0d1d76389cae3a759f9802308cbc75da6404d",
-      "after": "711343c28c44dc163620491a575405bfc221fc5bfddf0dd59b115587e2d8584e",
-      "rationale": "Package governance notices: ship the root NOTICE and the governance documents it references in the npm package, and require them in check-pack (landed from #84)."
+      "after": "d4373fcb6ceeb4221f6b323000dfb7ddc0434c794adfda1acb7bbe81c5ee7dc1",
+      "rationale": "Package governance notices: ship the root NOTICE and the governance documents it references in the npm package, and require them in check-pack (landed from #84). Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
     },
     {
       "path": "scripts/current-test-plan.mjs",
@@ -1132,6 +1192,12 @@
       "before": null,
       "after": "581f6adb15db65971d66eec236dbc537e22595c2ab357559252209a0585f4747",
       "rationale": "Fail closed on any missing mandatory exact-commit gate, incomplete soak, missing evidence binding, wrong tag or inspected tarball digest/inventory."
+    },
+    {
+      "path": "scripts/requirements-canonical-cbor.txt",
+      "before": null,
+      "after": "a5f0668f95a8caca9da06325a09dbe0103d308dbdf225ce8ec956a563c67c4fc",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
     },
     {
       "path": "scripts/run-current-tests.mjs",
@@ -1194,10 +1260,28 @@
       "rationale": "Validate caller-claimed receipts against SHA-pinned actual v0.81 schemas with explicit JSON-schema-only scope and no gate registration or CBOR truth claim."
     },
     {
+      "path": "scripts/verify-canonical-cbor-cross-language.mjs",
+      "before": null,
+      "after": "11a053d7096ebf4c90ff29ccb474744e842f1daca036ebb4c7de2e55275f5426",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
+      "path": "scripts/verify-canonical-cbor.py",
+      "before": null,
+      "after": "2cb05b58ab9ca5e0d57b8b835396f26456d676a99142fd8126daa5127bf6f176",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
       "path": "scripts/verify-documentation-artifact.mjs",
       "before": null,
       "after": "c435f54358692b11401e0036078ddc44c99c7d66f85a047953acdd27b814d3ea",
       "rationale": "Implement owner-approved OD-02 bounded exact-byte SHA-256 and independently declared ordered manifest verification; emit Engine-specific result, not standard RefusalReceipt."
+    },
+    {
+      "path": "scripts/verify-reviewer-artifact-cross-language.mjs",
+      "before": null,
+      "after": "df21ba161559801af9b85be6bd14ef80a869669fe2ff33e5a1100e44531e0c1b",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
     },
     {
       "path": "services/gkos-graphiti/README.md",
@@ -1306,6 +1390,66 @@
       "before": "153ceac4a878772d3c51e6dcf12bf02d3af0fbd8",
       "after": "f4500c4a6ac08c93cc489fede53b63d63073873d14e70e193bbf488df9b8839a",
       "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
+    },
+    {
+      "path": "src/canonical-cbor.ts",
+      "before": null,
+      "after": "40493721902ae05e6620c58ad8a9a9dc6dd1d1196dad10869daa566302b06048",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
+      "path": "src/canonical.ts",
+      "before": "0ab5c4bbae23194df040100e7220decd45bc5c8a",
+      "after": "4f4e635a9146caeaef1c74c000549dd3828fcb2494d203bb7eb2610b4df6da99",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "src/governance/artifact-diagnostics.ts",
+      "before": null,
+      "after": "6d1d151952d013842abd32885ee07273de88aac48a566240067bdea128dac62f",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "src/governance/artifact-index.ts",
+      "before": null,
+      "after": "102b9259ddf9a7e5006b68559099904931038f698fac60ef8f5a3363ad2fb46b",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "src/governance/artifact-schemas.ts",
+      "before": null,
+      "after": "e88bf695a3c82062afedbccef1c740320f76d4a09a3ab9cfdcce38565e935f56",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "src/governance/artifacts.ts",
+      "before": null,
+      "after": "81930bd2a3fb8b7e2bbad3f95c99832e25fd26d8f95fe2f2079d639c53920dc5",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "src/governance/index.ts",
+      "before": "2a8499bc0dbe93fe9393144fe76cae094e0a8ad6",
+      "after": "ca53afd62dd4941a1fbfec7f98701ff9f5d0828d9b9ffd51b2a67b6bdb7d9a85",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "src/governance/reviewer-v2.ts",
+      "before": null,
+      "after": "69975a0dd03c3a884eaa8defbcc4d58e6e925a966c3986322c1fa495b788bb77",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "src/governance/reviewer.ts",
+      "before": null,
+      "after": "5f68e72442a9977281260337da1ec117f2fcbbc4141001323ec81da4c25c12f5",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "src/governance/store.ts",
+      "before": "8d6e05bed5ca4b93f7d52643912c56844727c5a5",
+      "after": "1305acddf300ee5f97850a60c19db6f76259571ddf639f1cfa371d93d582089a",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
     },
     {
       "path": "src/graphiti-adapter.ts",
@@ -1620,10 +1764,34 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "test/canonical-cbor-runtime.test.mjs",
+      "before": null,
+      "after": "e01100a7325667826848c4b35eb62d081e1236313c43fdb7fc465982b4f76f33",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification. Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "test/canonical-cbor-unicode17.mjs",
+      "before": null,
+      "after": "08a975c3c2566dba9fd1861065c7ac53b6eef0864d16ae3807ab3e95efa390dd",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
+      "path": "test/canonical-cbor-vectors.json",
+      "before": null,
+      "after": "44f6990594d52854ea64faed5f54400f0587c3d02ff6d0633f5d2da036bd594d",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+    },
+    {
       "path": "test/compatibility-baseline.test.mjs",
       "before": "ddc6f4fa8038b3c87a66d65b522011c069a72b65",
-      "after": "936dcf747790b051f70b5b24c4a1fef1c29839f100b7e84a10156821109d7927",
-      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
+      "after": "7bc9a4e854ce80ee40f0f4d8ab37d48f87491ddf250c86015dd06b3214633017",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "test/current-test-selection.test.mjs",
+      "before": null,
+      "after": "e2f15cfeae0aa3bf53cd1aed686e92e69d9defe9dc040f4b7555168a5b19a309",
+      "rationale": "Reviewer V2: adopted artifact validation, CBOR identities, bounded admission, capability/coverage tests and qualification evidence."
     },
     {
       "path": "test/determinism.test.mjs",
@@ -1690,6 +1858,18 @@
       "before": null,
       "after": "702340b218966a17f922ce3af0512f6b09fe2b2b8353ee1bc42ce0e60cdcf3b7",
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+    },
+    {
+      "path": "test/fixtures/reviewer-artifact-basis.mjs",
+      "before": null,
+      "after": "af43e886706bf4248193089f12bca8353c1d8817699ab02d1c22c40b2482e206",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "test/fixtures/reviewer-v2.mjs",
+      "before": null,
+      "after": "750d77bb1368aabf81251ad4776d196426fbe692ac48e9e80b7758bbd76fb803",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
     },
     {
       "path": "test/graphiti-broker.test.mjs",
@@ -1872,10 +2052,22 @@
       "rationale": "Q-GUARD coverage closure: register native Windows security assertions only on Windows so the hosted OS matrix carries the platform claim without synthetic skips."
     },
     {
+      "path": "test/reviewer-artifacts.test.mjs",
+      "before": null,
+      "after": "b417776857eec1bea2f555b0b971a58ea644c224013ca362120c8bb82ca456c9",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "test/reviewer-contract.test.mjs",
+      "before": null,
+      "after": "47c48270210bd8c1cbb6ddc0cc68345a5bfb37ca7d42c043e43b2e05eb9ba3ca",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
       "path": "test/runtime-qualification.test.mjs",
       "before": null,
       "after": "6e1142781e4acfa5aab30d6db04bd8dc7cd0415b9ba424a22836a7d23dd99eb1",
-      "rationale": "Regression coverage proves both watcher retries reject mixed, signaled, published-artifact, and repeated failures."
+      "rationale": "Regression coverage proves both watcher retries reject mixed, signaled, published-artifact, and repeated failures. Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
     },
     {
       "path": "test/science-core.test.mjs",
@@ -1942,6 +2134,12 @@
       "before": "d03197327839542ebba3b852e0d2a214f6354997",
       "after": "895329e990d64558cbcea4c232972be812ee7e0f9fb6ab77d69602e564abc643",
       "rationale": "Provide a guarded synthetic lexical callback and valid input while keeping legacy compatibility snapshot request sequencing stable."
+    },
+    {
+      "path": "test/test_canonical_cbor_python.py",
+      "before": null,
+      "after": "6ba7e60ab0d754eb47e9c3ed5bce8a3716a2659b266c275c2d317e15b1646145",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
     },
     {
       "path": "test/watcher-coordinator.test.mjs",
