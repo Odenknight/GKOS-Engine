@@ -1,0 +1,3 @@
+# Unicode data only; no CBOR implementation dependency.
+# Distribution 17.0.1 provides Unicode 17.0.0 normalization data.
+unicodedata2==17.0.1

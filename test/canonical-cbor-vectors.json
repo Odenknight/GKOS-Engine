@@ -1,0 +1,258 @@
+{
+  "contract": "canonical-cbor-development-v1",
+  "positive": [
+    {
+      "label": "null",
+      "hex": "f6",
+      "node": {
+        "kind": "null"
+      }
+    },
+    {
+      "label": "false",
+      "hex": "f4",
+      "node": {
+        "kind": "boolean",
+        "value": false
+      }
+    },
+    {
+      "label": "true",
+      "hex": "f5",
+      "node": {
+        "kind": "boolean",
+        "value": true
+      }
+    },
+    {
+      "label": "zero",
+      "hex": "00",
+      "node": {
+        "kind": "integer",
+        "value": "0"
+      }
+    },
+    {
+      "label": "24",
+      "hex": "1818",
+      "node": {
+        "kind": "integer",
+        "value": "24"
+      }
+    },
+    {
+      "label": "uint64 max",
+      "hex": "1bffffffffffffffff",
+      "node": {
+        "kind": "integer",
+        "value": "18446744073709551615"
+      }
+    },
+    {
+      "label": "minus one",
+      "hex": "20",
+      "node": {
+        "kind": "integer",
+        "value": "-1"
+      }
+    },
+    {
+      "label": "int negative64 edge",
+      "hex": "3bffffffffffffffff",
+      "node": {
+        "kind": "integer",
+        "value": "-18446744073709551616"
+      }
+    },
+    {
+      "label": "float integral",
+      "hex": "f93c00",
+      "node": {
+        "kind": "float",
+        "value": 1.0
+      }
+    },
+    {
+      "label": "half 1.5",
+      "hex": "f93e00",
+      "node": {
+        "kind": "float",
+        "value": 1.5
+      }
+    },
+    {
+      "label": "single 100000",
+      "hex": "fa47c35000",
+      "node": {
+        "kind": "float",
+        "value": 100000.0
+      }
+    },
+    {
+      "label": "double 1.1",
+      "hex": "fb3ff199999999999a",
+      "node": {
+        "kind": "float",
+        "value": 1.1
+      }
+    },
+    {
+      "label": "empty text",
+      "hex": "60",
+      "node": {
+        "kind": "text",
+        "value": ""
+      }
+    },
+    {
+      "label": "NFC text",
+      "hex": "62c3a9",
+      "node": {
+        "kind": "text",
+        "value": "é"
+      }
+    },
+    {
+      "label": "preserved BOM",
+      "hex": "63efbbbf",
+      "node": {
+        "kind": "text",
+        "value": "﻿"
+      }
+    },
+    {
+      "label": "bytes",
+      "hex": "44deadbeef",
+      "node": {
+        "kind": "bytes",
+        "value": "deadbeef"
+      }
+    },
+    {
+      "label": "empty array",
+      "hex": "80",
+      "node": {
+        "kind": "array",
+        "items": []
+      }
+    },
+    {
+      "label": "array type preservation",
+      "hex": "8301f93c00f6",
+      "node": {
+        "kind": "array",
+        "items": [
+          {
+            "kind": "integer",
+            "value": "1"
+          },
+          {
+            "kind": "float",
+            "value": 1.0
+          },
+          {
+            "kind": "null"
+          }
+        ]
+      }
+    },
+    {
+      "label": "empty map",
+      "hex": "a0",
+      "node": {
+        "kind": "map",
+        "entries": []
+      }
+    },
+    {
+      "label": "sorted map",
+      "hex": "a2616102616201",
+      "node": {
+        "kind": "map",
+        "entries": [
+          [
+            "a",
+            {
+              "kind": "integer",
+              "value": "2"
+            }
+          ],
+          [
+            "b",
+            {
+              "kind": "integer",
+              "value": "1"
+            }
+          ]
+        ]
+      }
+    }
+  ],
+  "negative": [
+    {
+      "label": "nonshort integer",
+      "hex": "1800",
+      "code": "GKOS-GATE-L6-001"
+    },
+    {
+      "label": "indefinite",
+      "hex": "9fff",
+      "code": "GKOS-GATE-L6-001"
+    },
+    {
+      "label": "duplicate map",
+      "hex": "a2616101616102",
+      "code": "GKOS-GATE-L6-002"
+    },
+    {
+      "label": "unsorted map",
+      "hex": "a2616201616102",
+      "code": "GKOS-GATE-L6-002"
+    },
+    {
+      "label": "negative zero",
+      "hex": "f98000",
+      "code": "GKOS-GATE-L6-003"
+    },
+    {
+      "label": "NaN",
+      "hex": "f97e00",
+      "code": "GKOS-GATE-L6-003"
+    },
+    {
+      "label": "infinity",
+      "hex": "f97c00",
+      "code": "GKOS-GATE-L6-003"
+    },
+    {
+      "label": "float nonshort",
+      "hex": "fb3ff0000000000000",
+      "code": "GKOS-GATE-L6-003"
+    },
+    {
+      "label": "bad utf8",
+      "hex": "61ff",
+      "code": "GKOS-GATE-L6-005"
+    },
+    {
+      "label": "nonNFC",
+      "hex": "6365cc81",
+      "code": "GKOS-GATE-L6-005"
+    },
+    {
+      "label": "trailing value",
+      "hex": "0001",
+      "code": "GKOS-GATE-L6-001"
+    },
+    {
+      "label": "truncated text",
+      "hex": "6361",
+      "code": "GKOS-GATE-L6-001"
+    },
+    {
+      "label": "undeclared key type",
+      "hex": "a10000",
+      "code": "GKOS-GATE-L6-001"
+    }
+  ]
+}
