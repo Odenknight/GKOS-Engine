@@ -1,0 +1,65 @@
+{
+  "record_type": "gkos-phase6-d0-owner-ratification",
+  "record_version": "1.0.0",
+  "ratified_at_utc": "2026-08-26T01:22:28.530Z",
+  "owner_statement": "Ratify all 15 as proposed and authorize F1.",
+  "ratification_scope": {
+    "decision_items": [
+      "D0-1",
+      "D0-2",
+      "D0-3",
+      "D0-4",
+      "D0-5",
+      "D0-6",
+      "D0-7",
+      "D0-8",
+      "D0-9",
+      "D0-10",
+      "D0-11",
+      "D0-12",
+      "D0-13",
+      "D0-14",
+      "D0-15"
+    ],
+    "authorized_work_package": "F1 Full contract pack only",
+    "not_authorized": [
+      "F2 runtime authority implementation",
+      "F3 MCP facade implementation",
+      "F4 adversarial execution",
+      "F5 platform or evidence closeout",
+      "Lite L1-L4 implementation",
+      "merge",
+      "release",
+      "deployment",
+      "activation",
+      "publication"
+    ]
+  },
+  "frozen_inputs": {
+    "core_spec_sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+    "core_operation_inventory_sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+    "core_decision_record_sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+    "core_error_registry_sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+    "core_validation_sha256": "4f31f73833344b0d771775beb869f32da3404c6ef49b1c53f365e2407cd3b6b8",
+    "allowed_paths_sha256": "7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce",
+    "protected_paths_sha256": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948",
+    "interface_proposal_sha256": "476e839fb81f2f936785a38278846d33c7a680a84069607b1188c5ca2609e427",
+    "mcp_registry_schema_sha256": "5c043dc5570c4c52ad13425925711e672ec198d5910ab5c9e8c1438cb5ed8004",
+    "mcp_catalog_sha256": "c0ed2b963dcaef8a8bd08a427687d493bb7e85f1e26076a88a04f68b2117de7e",
+    "mcp_vectors_sha256": "23f48e01f890b746012d3713b8ece8331b113927ca15ab72e9955cf03830387c",
+    "interface_validation_sha256": "7f2171bc98112a529f05b9324be20475484ec55e4ac392829109e6f94121daef",
+    "source_provenance_sha256": "7284527598409b43218f99f87e8365b3382b3fae1606f9975ae9acba90108321",
+    "governance_matrix_sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f"
+  },
+  "independent_acceptance": {
+    "artifact": "future-build-phase6/reviews/final/PHASE6_D0_CROSS_REGISTER_ACCEPTANCE_V7_2026-08-25.md",
+    "sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb",
+    "bytes": 13939,
+    "verdict": "ZERO_FINDING_ACCEPT"
+  },
+  "gate_transition": {
+    "before": "F1_NO_GO / PHASE6_NOT_STARTED",
+    "after": "F1_AUTHORIZED_ONLY",
+    "orchestrator_rule": "Dispatch Peirce for F1, stop all other Phase 6 implementation lanes, and dispatch Beauvoir only after immutable F1 handoff and implementer slot release."
+  }
+}

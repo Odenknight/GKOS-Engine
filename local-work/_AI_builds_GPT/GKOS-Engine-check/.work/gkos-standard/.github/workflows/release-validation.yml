@@ -1,0 +1,18 @@
+name: Release validation
+on: [push, pull_request]
+permissions: {contents: read}
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Required files
+        run: |
+          test -f README.md
+          test -f LICENSE.md
+          test -f standard/00_GKOS_Master_Standard.md
+          test -f decisions/GKOS_Decision_Register.md
+          test -f SECURITY.md
+      - name: Reject pre-v0.75 and draft artifacts
+        run: |
+          if find . -type f | grep -E '/(draft|pre-0\.75|v0\.[0-6])' ; then exit 1; fi

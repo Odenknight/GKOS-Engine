@@ -1,0 +1,84 @@
+{
+  "kind": "managed-moc-qualification/1",
+  "node": "v24.18.0",
+  "platform": "win32",
+  "generated_at": "2026-09-20T19:55:13.140Z",
+  "release_qualified": false,
+  "source": {
+    "commit": "03724fd997fd11b0ebc382e23aa8c21cd0cfb1ec",
+    "dirty": true,
+    "worktree_status_sha256": "sha256:954bbbada61da9b1c18068db9f012d5f08d8f6a847d9a8d6dd739ab7411fcb8a",
+    "worktree_content_sha256": "sha256:06af66ed94cf593d6fa49503e6292749acc41bb851d1901daf8871ef59437378",
+    "runner_sha256": "sha256:5f2183982f8b3e7b940700afa82d94e1e571e44f5c94affd8ad80f323e245fe8",
+    "navigation_dist_sha256": "sha256:3d21278a4b042d8db7912ab1cb99ad5b4c9418990e60aa2e8dc272f89b4a8edb",
+    "effects_dist_sha256": "sha256:215a06cef5582d3da488212fe2727e9642ec20d5e4b317a9dcd5f1af7ae75dde",
+    "effects_node_dist_sha256": "sha256:cef9f26800b420e03491ca9d823e611881a91905151e3b1a1a56373c8ecd7ea5"
+  },
+  "limits": {
+    "synthetic_fixture_only": true,
+    "event_samples_are_sequential": true,
+    "latency_samples_retained_maximum": 10000,
+    "coordinator_queue_depth_is_status_sampled_not_internal_introspection": true,
+    "source_reads_are_not_parser_or_incremental_qualification": true,
+    "no_release_acceptance_budgets": true
+  },
+  "rows": [
+    {
+      "notes": 2000,
+      "status": "OBSERVED_SHORT_SOAK",
+      "requested_samples": 3,
+      "completed_samples": 11,
+      "requested_soak_seconds": 30,
+      "observation_seconds": 32.2430738,
+      "restarts": 3,
+      "event_to_convergence_ms": {
+        "total_count": 11,
+        "retained_first_count": 11,
+        "retained_first_samples": [
+          1316.5806000000002,
+          1331.6615000000002,
+          1320.4376000000002,
+          1247.161399999999,
+          1250.7716999999993,
+          1263.1810999999998,
+          1253.6735999999983,
+          1372.1332000000002,
+          1308.5946999999978,
+          1381.4396000000015,
+          1325.1283999999978
+        ],
+        "retained_first_p50": 1316.5806000000002,
+        "retained_first_p95": 1381.4396000000015,
+        "retained_first_max": 1381.4396000000015
+      },
+      "source_scanning": {
+        "snapshot_calls": 37,
+        "source_reads": 74000,
+        "source_bytes": 2549593,
+        "parser_qualified": false,
+        "incremental_scanning_qualified": false
+      },
+      "coordinator_queue": {
+        "samples": 2509,
+        "pendingSamples": 2157,
+        "activeSamples": 1075,
+        "maxOutstanding": 2,
+        "activeResourcesPeak": 68
+      },
+      "memory": {
+        "samples": 2509,
+        "rss_initial_bytes": 61218816,
+        "rss_peak_bytes": 228397056
+      },
+      "final_runtime_status": {
+        "ready": true,
+        "pending": false,
+        "active": false,
+        "running": true,
+        "watcherActive": true,
+        "errorCode": null
+      }
+    }
+  ],
+  "receipt_sha256": "sha256:39f73748923b2f70845d01b27181635b9c49e4f08a642244cdce72725a627535"
+}

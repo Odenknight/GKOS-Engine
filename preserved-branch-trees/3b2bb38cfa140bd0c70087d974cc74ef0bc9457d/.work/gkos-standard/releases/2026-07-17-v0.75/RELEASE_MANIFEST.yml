@@ -1,0 +1,12 @@
+standard: GKOS
+identifier: GKOS-2026-07-17-v0.75
+version: "0.75"
+date: "2026-07-17"
+status: public-pre-standard
+canonical-repository: https://github.com/Odenknight/gkos-standard
+copyright-holder: "Shaun Oden Marshall"
+documentation-license: CC-BY-4.0
+software-license: Apache-2.0
+signature-status: unsigned-pending-governed-key
+contains-pre-0.75-artifacts: false
+contains-draft-artifacts: false

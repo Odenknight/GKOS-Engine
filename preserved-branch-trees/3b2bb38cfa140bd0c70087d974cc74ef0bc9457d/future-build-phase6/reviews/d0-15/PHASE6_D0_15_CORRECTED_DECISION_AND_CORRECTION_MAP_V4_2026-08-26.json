@@ -1,0 +1,252 @@
+{
+  "record_type": "gkos-phase6-d0-15-corrected-decision-and-correction-map",
+  "record_version": "4.0.0",
+  "recorded_at_utc": "2026-08-26T14:08:22.8475342Z",
+  "status": "AWAITING_STANDING_AUTHORITY_RECEIPT",
+  "purpose": "Consolidate Q1 through Q20, corrected R01 through R15, D015-DC01 through D015-DC13, V8 standing source-preserving evidence dispositions, and fully expanded Registry V4 into one immutable evidence-only map. This record is not an exact-coordinate receipt, concurrence acceptance, product-correction authorization, or implementation authority.",
+  "authority_boundary": {
+    "detached_evidence_validation_authorized": true,
+    "standing_authority_receipt_application_preparation_authorized": true,
+    "exact_coordinate_receipt_complete": false,
+    "fresh_c1_rerun_authorized_before_receipt": false,
+    "c2_authorized": false,
+    "c3_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "product_contract_or_fixture_regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_push_workflow_pr_merge_release_deploy_activate_publish_authorized": false,
+    "rule": "Validate and preserve Registry V4 and this Map V4, then apply an exact-coordinate receipt under V8 standing authority to their final existing bytes. Fresh C1 does not rerun before that receipt."
+  },
+  "exact_parent_ledger": [
+    {
+      "role": "V8 Q17-Q20 and standing evidence-disposition authority",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V8_2026-08-26.json",
+      "sha256": "6b8a5b9fca8c72561ef1aee56c15911e34d0559edcae058f19631b71e16d9116",
+      "bytes": 18358,
+      "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2"
+    },
+    {
+      "role": "Q17-Q20 expanded corrected non-MCP fixture registry",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V4_2026-08-26.json",
+      "sha256": "279397cd052352c071e9714219c7b4a99882adcbabc83b058a60ca9e1dea9b1c",
+      "bytes": 179929,
+      "record_digest": "9d7a70bf2f160c424332a612389504a0d39d792d96e8d8c82b2d9c77eb42007f",
+      "status": "Q17_Q20_EXPANDED_CLOSED_EVIDENCE_DESCENDANT_AWAITING_LATER_ACYCLIC_MAP_AND_EXACT_COORDINATE_RECEIPT"
+    },
+    {
+      "role": "historical V7 exact-coordinate owner ratification",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_BYTE_OWNER_RATIFICATION_V7_2026-08-26.json",
+      "sha256": "bade7af1ef173bb7039afaea265d9f38fe4f7871209cd4dbe2975ed4f8570bc7",
+      "bytes": 10768,
+      "record_digest": "5e6965b59e02295f733b3a7215e30ec9a6a6cff435269cc0f547a73d5d34be77"
+    },
+    {
+      "role": "historical noncarrying C1 V3 migration acceptance",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V3_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "8ae7046263f73df945dc354589de6b0403c8ae4c8c8e13ceebc14b1b20b35dd6",
+      "bytes": 19940,
+      "record_digest": "ad9e2513535e69a3617542c8699684fa1830bd9c89e6d23376da780d0a8be4f8",
+      "verdict": "ACCEPT_CONCURRENCE"
+    },
+    {
+      "role": "historical C1 V3 security rejection controlling Q17-Q20",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V3_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "b8060ba76b759ad8ee871cb4f66696cc08e7f237483c007e111a181888a86981",
+      "bytes": 32134,
+      "record_digest": "92298b88abf726ef16bdebe2b89cd33aa9611248c57970a812df16b3b0296a01",
+      "verdict": "REJECT_CONCURRENCE"
+    }
+  ],
+  "historical_coordinate_disposition": {
+    "registry_v3": {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V3_2026-08-26.json",
+      "sha256": "a53aff0c61ab116fa12c47e37963871bf438ae7e977c59b134399cb1dbb710f6",
+      "bytes": 163799,
+      "record_digest": "4007918ead1cbf241c2b89518f25eabd7ff485f9fd72aa619a45930f8c7aa075"
+    },
+    "map_v3": {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V3_2026-08-26.json",
+      "sha256": "ab6c6f65d2103d6308df4cc70a891e85c3af63a106e70566cf5db71663274458",
+      "bytes": 21898,
+      "record_digest": "a7793998ddbae2a224ad0b15fe1d584bbc688f97ba2ff601df3d088b58b8ddfd"
+    },
+    "v7_and_c1_v3": "V7 and both C1 V3 verdicts remain immutable historical evidence for the superseded 372-case coordinate. Neither old C1 verdict carries to Registry V4 or Map V4.",
+    "security_rejection_effect": "C1 V3 security rejected the 372-case coordinate and opened Q17 through Q20; Registry V4 and this Map V4 are distinct-path source-preserving descendants under V8.",
+    "immutability": "No historical artifact is edited, replaced, or converted into acceptance."
+  },
+  "q1_q20_correction_basis": [
+    {"id": "Q1", "rule": "Five fresh zero-contribution roles run in serial waves: C1 migration plus security, C2 authority/concurrency, and C3 Full-contract plus Lite-conformance. A wave advances only after every current-wave role accepts the same exact coordinate."},
+    {"id": "Q2", "rule": "A reference-bound cursor after restart returns CURSOR_STALE as GKOS_P6_REQUEST_STALE_AUTHORITY before dead-reference lookup and requires fresh live opaque-reference rediscovery; no durable resolver, raw path, new table, operation, tool, or continuation exception."},
+    {"id": "Q3", "rule": "Eighteen is the exact 8+10 named non-MCP subtotal, never the overall count. Preserve 67 official MCP IDs and valid wire semantics; one executable leaf has one unique ID, named input, deterministic schedule, outcome, mutation set, and family."},
+    {"id": "Q4", "rule": "Defer mapping evidence, collision-guard construction, adapter binding, and subject-digest collision qualification to a separately ratified authenticated adapter. Preserve 53 errors, zero-mutation collision behavior, and pre-adapter GKOS_P6_PLATFORM_UNAVAILABLE."},
+    {"id": "Q5", "rule": "Adopt D015-DC01 through D015-DC13 subject to later owner amendments and exact evidence descendants."},
+    {"id": "Q6", "rule": "Evidence and ratification/concurrence record preparation only; no product, proposal, F1, F2, regeneration, implementation, commit, push, workflow, PR, merge, release, deployment, activation, or publication authority."},
+    {"id": "Q7", "rule": "Backup integrity, foreign-key, and pragma failures use GKOS_P6_AUTHORITY_CORRUPT; byte-length and manifest-digest mismatches use GKOS_P6_EVIDENCE_MISMATCH; all have zero accepted result, publication, mutation, event, and success activity."},
+    {"id": "Q8", "rule": "Global-event coordinate, duplicate-sequence, and kind-table insertion failures use GKOS_P6_STATE_CONFLICT with rollback; startup corruption uses GKOS_P6_AUTHORITY_CORRUPT and blocked gate; duplicate generated event ID uses GKOS_P6_IDENTITY_COLLISION."},
+    {"id": "Q9", "rule": "Post-resolution physical drift uses authenticated-redacted GKOS_P6_RESOURCE_NOT_FOUND with zero access/mutation; a restarted reference-bound cursor remains GKOS_P6_REQUEST_STALE_AUTHORITY under Q2."},
+    {"id": "Q10", "rule": "An initially clean preexisting final locator uses GKOS_P6_STATE_CONFLICT; a post-qualification identity/existence race uses GKOS_P6_MIGRATION_RECOVERY_REQUIRED; no overwrite/delete/hybrid publication and exact recovery evidence is preserved."},
+    {"id": "Q11", "rule": "Precommit restart cuts at admission, final gate without committed effect, effect-prepared without terminal effect, or uncommitted anchor intent persist stale and use GKOS_P6_REQUEST_STALE_AUTHORITY with no result/effect/success; later committed cuts use deterministic recovery/replay."},
+    {"id": "Q12", "rule": "RESTORE-OWNER-001 through 009 retain original D0 meanings; valid staged evidence auto-resumes; abort is separately authenticated; bootstrap same-locator rollback/retry is preserved; counts are mechanically derived."},
+    {"id": "Q13", "rule": "Use an acyclic sequence of immutable owner basis, completed registry, completed map, exact-coordinate receipt, then fresh C1. No ancestor pre-binds later bytes."},
+    {"id": "Q14", "rule": "Ordinary committed credential handoff transport failure returns the committed nonsecret result with secret_revealed=false, no error envelope, content-free evidence, no retry/overwrite/re-reveal; actual proven exposure is a separate GKOS_P6_SECRET_EXPOSURE leaf."},
+    {"id": "Q15", "rule": "Materialize BCI-MECH-001 through 006 as source-preserving deterministic evidence splits and derive counts/hashes after materialization rather than target-fit."},
+    {"id": "Q16", "rule": "Old migration acceptance is noncarrying; after new descendants and exact-coordinate receipt, both fresh C1 roles rerun against the same coordinate."},
+    {"id": "Q17", "rule": "BOOTSTRAP-HANDOFF-FAILURE-001 is protected-locator publication failure before final creation: preserve PLAN_STAGED and exact bound temp, return nonretryable GKOS_P6_STORAGE_PERMISSION_INVALID in the six-field envelope with secret_revealed absent, persist content-free evidence, no regenerate/overwrite/reveal/state advance, recovery reuses exact temp; lost acknowledgment remains BOOTSTRAP-HANDOFF-LOST-001."},
+    {"id": "Q18", "rule": "Two processes submit agent.disable for one enabled agent with distinct keys A and B. A serializes first and commits one result/event/generation/auth_epoch/anchor; B revalidates disabled and returns nonretryable GKOS_P6_STATE_CONFLICT with zero mutation; retry B returns the same conflict; no gap, fork, duplicate, or hybrid."},
+    {"id": "Q19", "rule": "Materialize C1-V3-MECH-001 through 006: field-specific integer negatives, intent-only anchor fields, four event tables, five restore binding/auth cases, serializer/log sensitive classes, and derived counts/hashes. Do not predetermine totals."},
+    {"id": "Q20", "rule": "C1 V3 migration acceptance is historical/noncarrying. After source-preserving descendants and exact-coordinate receipt under V8, both fresh zero-contribution C1 roles rerun; later waves remain separately authorized."}
+  ],
+  "standing_authority_application": {
+    "owner_statement": "Ratify all future dispositions.",
+    "application": "Registry V4 and this Map V4 apply V8 only to deterministic source-preserving evidence correction, derived counts/hashes/digests, and later exact-coordinate receipt plus fresh-C1 evidence. They make no new public or security choice.",
+    "source_preserving_dispositions": [
+      "ACTIVITY-INTEGER-001 and ACTIVITY-INTEGER-002 positive integer boundary bundles are split into the four exact named fields input_bytes, output_bytes, item_count, and result_count under the already-frozen typed metadata semantics.",
+      "The configured in-scope log-level set for this evidence coordinate is exactly error, based on accepted F1 evidence of console.error and no configured debug, info, warn, or fatal level in scope.",
+      "A later in-scope configuration adding another log level requires distinct sensitive-class leaves, a new registry descendant, exact-coordinate receipt, and requalification before acceptance.",
+      "Every C1-V3-MECH split preserves an existing exact result or invariant and contributes no new error, response shape, retry rule, state transition, operation, or public semantic."
+    ],
+    "not_extended_to": ["C2", "C3", "product work", "successor-F1 correction", "F2", "regeneration", "implementation", "repository mutation"]
+  },
+  "r01_r15_corrected_selections": [
+    {"id": "D015-R01", "selection": "A", "binding": "closed three-variant anchor"},
+    {"id": "D015-R02", "selection": "A", "binding": "six disjoint restore aggregates and global head"},
+    {"id": "D015-R03", "selection": "A_WITH_Q10", "binding": "closed restore plan/abort/locator/generation/recovery and exact conflicts"},
+    {"id": "D015-R04", "selection": "A", "binding": "authenticated authority.status recovery object"},
+    {"id": "D015-R05", "selection": "A_WITH_Q17", "binding": "closed bootstrap vocabulary, exact prepublication locator failure, PLAN_STAGED preservation, exact-temp reuse, and distinct lost-ack case"},
+    {"id": "D015-R06", "selection": "A_CLARIFIED_BY_Q3_Q12_Q15_Q19", "binding": "18 named subtotal plus 395 derived additional equals 413 overall; 12 aliases, 16 families, and 67 MCP"},
+    {"id": "D015-R07", "selection": "OWNER_AMENDED_BY_Q2_Q9", "binding": "restart cursor stale-authority precedence"},
+    {"id": "D015-R08", "selection": "A_WITH_Q8", "binding": "kind-table constants and exact event projections"},
+    {"id": "D015-R09", "selection": "A_WITH_Q11_Q18_Q19", "binding": "selective gate, deterministic restart cuts, and exact two-process disable schedule"},
+    {"id": "D015-R10", "selection": "A", "binding": "credential issuance epoch semantics"},
+    {"id": "D015-R11", "selection": "A_WITH_Q14", "binding": "sole-owner safety and committed ordinary handoff failure result"},
+    {"id": "D015-R12", "selection": "A", "binding": "pre-adapter mapping unavailable"},
+    {"id": "D015-R13", "selection": "A_WITH_Q15_Q19", "binding": "prospective retention and mechanically split crash/anchor leaves"},
+    {"id": "D015-R14", "selection": "A_WITH_STANDING_FIELD_SPLIT", "binding": "closed typed activity metadata with exact named integer fields"},
+    {"id": "D015-R15", "selection": "OWNER_AMENDED_BY_Q4", "binding": "53-code collision behavior and adapter deferral"}
+  ],
+  "normatively_adopted_corrected_derived_corrections": [
+    {"id": "D015-DC01", "correction": "One six-field closed envelope with exactly 53 errors; Registry V4 preserves 53 per-code leaves and structural negatives without arbitrary content."},
+    {"id": "D015-DC02", "correction": "Durable stale requests and field-specific binding-loss leaves with no result/effect/success."},
+    {"id": "D015-DC03", "correction": "Closed policy/dependency arrays, bounded reasons, and exact fail-closed outcomes."},
+    {"id": "D015-DC04", "correction": "Closed rate buckets, persisted refill, time/restart rules, and distinct clock-divergence leaves."},
+    {"id": "D015-DC05", "correction": "Closed bootstrap/restore plan and abort definitions in existing leaves; Q17 freezes prepublication failure and exact recovery."},
+    {"id": "D015-DC06", "correction": "Registry V4 is the exact executable coordinate: 413 unique canonical cases across 16 families, 18 named plus 395 additional, 12 aliases, and 67 unchanged MCP vectors. Every ID is one deterministic leaf."},
+    {"id": "D015-DC07", "correction": "Gregorian UTC millisecond timestamps 1970-9999 with exact rejects."},
+    {"id": "D015-DC08", "correction": "Closed backup publication/check/replay and Q7 projections with zero failure mutation."},
+    {"id": "D015-DC09", "correction": "Closed credential/handoff encoding and evidence, Q14 ordinary committed failure, Q17 bootstrap prepublication failure, and separate exposure/lost-ack leaves."},
+    {"id": "D015-DC10", "correction": "One global event union, exact sequencing and Q8 projections; Q18 commits one disable event with no duplicate/gap/fork/hybrid."},
+    {"id": "D015-DC11", "correction": "Fully bound references/sessions/cursors/snapshots/requests/idempotency with restart precedence and expanded exact binding cases."},
+    {"id": "D015-DC12", "correction": "Closed retention authorization/deletion/evidence with separate crash/anchor cuts."},
+    {"id": "D015-DC13", "correction": "Only after later product authority, deterministically regenerate successor-F1 leaves and acyclic hosted evidence; accepted F1 remains historical only."}
+  ],
+  "exact_preservation_and_accounting": {
+    "normalized_authority_tables": 16,
+    "operations": 32,
+    "public_authenticated_operations": 7,
+    "local_bootstrap_operations": 1,
+    "owner_only_operations": 24,
+    "error_codes": 53,
+    "per_registered_code_error_envelope_leaves": 53,
+    "required_public_mcp_tools": 7,
+    "official_mcp_vectors": 67,
+    "official_mcp_ids_or_valid_wire_semantics_changed": false,
+    "named_core_operation_subtotal": 8,
+    "named_restore_bootstrap_recovery_subtotal": 10,
+    "named_non_mcp_subtotal": 18,
+    "named_non_mcp_subtotal_is_overall_total": false,
+    "additional_canonical_non_mcp_fixtures": 395,
+    "overall_canonical_non_mcp_fixtures": 413,
+    "aliases": 12,
+    "coverage_families": 16,
+    "formula": "18 + 395 = 413 canonical non-MCP fixtures; aliases do not count",
+    "new_table_operation_error_or_public_tool": false,
+    "public_mcp_tool_name_catalog_input_or_success_semantic_change": false
+  },
+  "exact_family_totals": {
+    "ACTIVITY-METADATA": 37,
+    "ANCHOR-INTENT": 34,
+    "BACKUP": 9,
+    "BOOTSTRAP-HANDOFF": 39,
+    "COLLISION-CANONICAL": 32,
+    "CREDENTIAL-AUTH-NONENUM": 7,
+    "CREDENTIAL-ISSUE-ROTATE": 22,
+    "GLOBAL-EVENT": 12,
+    "POLICY-DEPENDENCY-TRANSPORT": 18,
+    "RACE-FINAL-GATE-EFFECT": 21,
+    "RATE": 7,
+    "REDACTION-NO-JSON": 84,
+    "RESTORE-OWNER-ABORT": 41,
+    "RETENTION": 15,
+    "SESSION-REFERENCE-CURSOR-REPLAY": 28,
+    "TIMESTAMP": 7
+  },
+  "c1_v3_findings_closure": {
+    "C1-V3-SEC-001": "CLOSED by Q17 and BOOTSTRAP-HANDOFF-FAILURE-001 exact PLAN_STAGED, bound-temp, STORAGE_PERMISSION_INVALID, secret_revealed-absent, content-free failure, exact recovery, and LOST-001 separation.",
+    "C1-V3-SEC-002": "CLOSED by Q18 exact RACE-MULTIPROCESS-001 schedule and C1-V3-MECH-001 through 005 fully materialized leaves, with C1-V3-MECH-006 derived accounting.",
+    "mechanical_inventory": {
+      "C1-V3-MECH-001": "PASS_FOUR_INTEGER_FIELDS_TIMES_THREE_NEGATIVE_VALUES",
+      "C1-V3-MECH-002": "PASS_FIVE_COMMITTED_ANCHOR_INTENT_ONLY_FIELDS",
+      "C1-V3-MECH-003": "PASS_FOUR_EXACT_GLOBAL_EVENT_MEMBER_TABLES",
+      "C1-V3-MECH-004": "PASS_FIVE_SEPARATE_RESTORE_ABORT_BINDING_AND_AUTH_CASES",
+      "C1-V3-MECH-005": "PASS_RESULT_ERROR_TIMES_SIX_SENSITIVE_CLASSES_AND_ERROR_LOG_LEVEL_TIMES_FIVE_SENSITIVE_CLASSES",
+      "C1-V3-MECH-006": "PASS_DERIVED_COUNTS_HASHES_AND_DIGEST_PREPARATION"
+    }
+  },
+  "registry_v4_binding": {
+    "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V4_2026-08-26.json",
+    "sha256": "279397cd052352c071e9714219c7b4a99882adcbabc83b058a60ca9e1dea9b1c",
+    "bytes": 179929,
+    "record_digest": "9d7a70bf2f160c424332a612389504a0d39d792d96e8d8c82b2d9c77eb42007f",
+    "validation": {
+      "json_parse": "PASS",
+      "internal_record_digest_recomputation": "PASS",
+      "canonical_fixture_rows": 413,
+      "unique_canonical_ids": 413,
+      "canonical_ids_lexicographically_sorted": true,
+      "alias_rows": 12,
+      "unique_aliases": 12,
+      "alias_targets_exist": true,
+      "per_family_count_rows": 16,
+      "coverage_family_rows": 16,
+      "family_sum": 413,
+      "per_code_error_leaves": 53,
+      "fixed_count_arithmetic": "18 + 395 = 413",
+      "missing_or_extra_executable_fields": 0,
+      "unresolved_modal_alternative_generic_any_slash_range_or_bundle_occurrences": 0
+    }
+  },
+  "source_and_cross_binding_verification": {
+    "performed_at_utc": "2026-08-26T14:08:22.8475342Z",
+    "algorithm": "SHA-256 over raw bytes plus each declared canonical internal record digest",
+    "results": [
+      "V8, Registry V4, V7, and both C1 V3 receipts match raw SHA-256, byte length, and internal digest",
+      "Registry V4 source trace binds exact existing historical and authoritative parents",
+      "Registry V4 has 413 unique sorted canonical IDs, 12 unique aliases with existing targets, and 16 family totals summing to 413",
+      "Registry V4 and Map V4 agree on 18 named, 395 additional, 413 overall, 12 aliases, 16 families, 53 errors/leaves, and 67 MCP",
+      "Registry V3 and Map V3 remain unchanged historical coordinates"
+    ],
+    "overall": "PASS"
+  },
+  "required_next_sequence": [
+    {
+      "order": 1,
+      "gate": "STANDING_AUTHORITY_EXACT_COORDINATE_RECEIPT",
+      "requirement": "Apply V8's exact literal standing owner statement to the final existing V8, Registry V4, and Map V4 bytes in a new acyclic receipt. This map does not pre-bind that receipt."
+    },
+    {
+      "order": 2,
+      "gate": "FRESH_C1",
+      "requirement": "After the receipt exists, fresh zero-contribution migration and security reviewers assess the same exact coordinate. Neither old C1 V3 verdict carries."
+    },
+    {
+      "order": 3,
+      "gate": "LATER_WAVES",
+      "requirement": "C2 and C3 remain unauthorized. After both fresh C1 roles accept, preserve receipts and return for explicit next-wave authorization."
+    }
+  ],
+  "terminal_statement": "MAP V4 IS COMPLETE AS SOURCE-PRESERVING EVIDENCE UNDER V8 AND AWAITS AN EXACT-COORDINATE STANDING-AUTHORITY RECEIPT. Q1 THROUGH Q20, 413 DERIVED CASES, 12 ALIASES, 16 FAMILIES, 53 ERRORS/LEAVES, AND 67 MCP VECTORS ARE CLOSED AT THE BOUND REGISTRY V4. NO FRESH C1 BEFORE THE RECEIPT, C2, C3, PRODUCT OR PROPOSAL EDIT, SUCCESSOR-F1 CORRECTION, F2 RESTART, PRODUCT REGENERATION, IMPLEMENTATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, OR PUBLICATION IS AUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "c20588e1cd55226ca3f65a73e272dde8ac3b98dd573d7b2c823b2e8d962568ef"
+}

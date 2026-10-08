@@ -1,0 +1,156 @@
+{
+  "engine": {
+    "name": "gkos-engine",
+    "version": "1.0.5"
+  },
+  "notes": {
+    "gcp1-b01-missing-sensitivity.md": {
+      "mode": "strict-v2.3",
+      "effective_sensitivity": "internal",
+      "effective_epistemic_state": "reported",
+      "diagnostics": [
+        {
+          "code": "OKF-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs"
+        },
+        {
+          "code": "OKF-SENSITIVITY-001",
+          "severity": "warning",
+          "field": "sensitivity.level"
+        }
+      ]
+    },
+    "gcp1-n01-missing-required.md": {
+      "mode": "strict-v2.3",
+      "effective_sensitivity": "internal",
+      "effective_epistemic_state": "hypothesis",
+      "diagnostics": [
+        {
+          "code": "OKF-IDENTITY-001",
+          "severity": "warning",
+          "field": "uid"
+        },
+        {
+          "code": "OKF-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs"
+        },
+        {
+          "code": "OKF-SCHEMA-004",
+          "severity": "error",
+          "field": "created_at"
+        },
+        {
+          "code": "OKF-SCHEMA-004",
+          "severity": "error",
+          "field": "type"
+        },
+        {
+          "code": "OKF-SCHEMA-004",
+          "severity": "error",
+          "field": "uid"
+        },
+        {
+          "code": "OKF-SENSITIVITY-001",
+          "severity": "warning",
+          "field": "sensitivity.level"
+        }
+      ]
+    },
+    "gcp1-n02-invalid-epistemic.md": {
+      "mode": "strict-v2.3",
+      "effective_sensitivity": "internal",
+      "effective_epistemic_state": "gospel",
+      "diagnostics": [
+        {
+          "code": "OKF-EPISTEMIC-002",
+          "severity": "error",
+          "field": "epistemic.state"
+        },
+        {
+          "code": "OKF-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs"
+        }
+      ]
+    },
+    "gcp1-n03-naive-timestamp.md": {
+      "mode": "strict-v2.3",
+      "effective_sensitivity": "internal",
+      "effective_epistemic_state": "observation",
+      "diagnostics": [
+        {
+          "code": "OKF-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs"
+        }
+      ]
+    },
+    "gcp1-p01-agent-ready-minimal.md": {
+      "mode": "strict-v2.3",
+      "effective_sensitivity": "internal",
+      "effective_epistemic_state": "hypothesis",
+      "diagnostics": [
+        {
+          "code": "OKF-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs"
+        }
+      ]
+    },
+    "gcp3-c01-claim.md": {
+      "mode": "strict-v2.3",
+      "effective_sensitivity": "internal",
+      "effective_epistemic_state": "supported",
+      "diagnostics": [
+        {
+          "code": "OKF-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs"
+        }
+      ]
+    },
+    "gcp3-c02-counter.md": {
+      "mode": "strict-v2.3",
+      "effective_sensitivity": "internal",
+      "effective_epistemic_state": "contested",
+      "diagnostics": [
+        {
+          "code": "OKF-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs"
+        }
+      ]
+    },
+    "gcp3-l01-superseded.md": {
+      "mode": "strict-v2.3",
+      "effective_sensitivity": "internal",
+      "effective_epistemic_state": "superseded",
+      "diagnostics": [
+        {
+          "code": "OKF-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs"
+        }
+      ]
+    },
+    "gcp3-l02-successor.md": {
+      "mode": "strict-v2.3",
+      "effective_sensitivity": "internal",
+      "effective_epistemic_state": "accepted",
+      "diagnostics": [
+        {
+          "code": "OKF-EPISTEMIC-004",
+          "severity": "warning",
+          "field": "epistemic.state"
+        },
+        {
+          "code": "OKF-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs"
+        }
+      ]
+    }
+  }
+}

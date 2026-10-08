@@ -1,0 +1,20 @@
+node_modules/
+dist/
+*.map
+*.tgz
+*.log
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+.DS_Store
+.gkx/
+
+# Codex/AI tooling state and alternate package-manager artifacts (repo is npm-based)
+.codex/
+.pnpm-store/
+.npm-cache/
+pnpm-lock.yaml
+pnpm-workspace.yaml
+.claude/

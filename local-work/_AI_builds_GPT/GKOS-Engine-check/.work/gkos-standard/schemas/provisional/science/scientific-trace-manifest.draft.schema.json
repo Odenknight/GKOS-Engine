@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/science/scientific-trace-manifest.draft.schema.json",
+  "title": "Scientific Research Trace Profile Manifest — PROVISIONAL DRAFT, informative only",
+  "description": "Graph container for SRTP experiments. Validation demonstrates only evaluation against the named draft fixture suite; it is not GKOS scientific validation or a reproducibility certification.",
+  "type": "object",
+  "required": ["profile", "profile_status", "trace_id", "created_at", "version_coordinates", "evaluation_status", "datasets", "environments", "execution_requests", "execution_manifests", "execution_events", "artifacts", "results", "reviewer_findings", "rerun_comparisons", "context_manifests", "authorized_uses", "reentry_receipts", "relations"],
+  "properties": {
+    "profile": { "const": "SRTP-DRAFT-0.1" },
+    "profile_status": { "const": "provisional-draft-non-normative" },
+    "trace_id": { "$ref": "../../gkx-common.defs.json#/$defs/authoredNoteUid" },
+    "created_at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" },
+    "version_coordinates": {
+      "type": "object",
+      "required": ["gkos_publication", "gkx_namespace", "projection_profile", "engine_package"],
+      "properties": {
+        "gkos_publication": { "type": "string" },
+        "gkx_namespace": { "type": "string" },
+        "projection_profile": { "type": "string" },
+        "engine_package": { "type": "string" },
+        "engine_commit": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "evaluation_status": { "type": "string", "enum": ["PASS", "FAIL", "PARTIAL", "UNEVALUATED"] },
+    "research_objects": { "type": "array", "items": { "$ref": "research-object.draft.schema.json" } },
+    "datasets": { "type": "array", "minItems": 1, "items": { "$ref": "dataset-snapshot.draft.schema.json" } },
+    "environments": { "type": "array", "minItems": 1, "items": { "$ref": "environment-snapshot.draft.schema.json" } },
+    "execution_requests": { "type": "array", "minItems": 1, "items": { "$ref": "execution-request.draft.schema.json" } },
+    "execution_manifests": { "type": "array", "minItems": 1, "items": { "$ref": "execution-manifest.draft.schema.json" } },
+    "execution_events": { "type": "array", "minItems": 1, "items": { "$ref": "execution-event.draft.schema.json" } },
+    "artifacts": { "type": "array", "minItems": 1, "items": { "$ref": "artifact-record.draft.schema.json" } },
+    "results": { "type": "array", "minItems": 1, "items": { "$ref": "result.draft.schema.json" } },
+    "reviewer_findings": { "type": "array", "minItems": 1, "items": { "$ref": "reviewer-finding.draft.schema.json" } },
+    "rerun_comparisons": { "type": "array", "items": { "$ref": "rerun-comparison.draft.schema.json" } },
+    "context_manifests": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["id", "digest", "purpose", "recipient", "compiled_at", "expires_at", "sensitivity"], "properties": { "id": { "$ref": "../../gkx-common.defs.json#/$defs/authoredNoteUid" }, "digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" }, "purpose": { "type": "string" }, "recipient": { "$ref": "../../gkx-common.defs.json#/$defs/actorIdentity" }, "compiled_at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" }, "expires_at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" }, "sensitivity": { "$ref": "../../gkx-common.defs.json#/$defs/sensitivity" }, "warnings": { "type": "array", "items": { "type": "string" } }, "omissions": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": true } },
+    "authorized_uses": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["id", "actor", "action", "context_manifest_id", "context_manifest_digest", "authorized_at", "input_digests", "sensitivity"], "properties": { "id": { "$ref": "../../gkx-common.defs.json#/$defs/authoredNoteUid" }, "actor": { "$ref": "../../gkx-common.defs.json#/$defs/actorIdentity" }, "action": { "type": "string" }, "context_manifest_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" }, "context_manifest_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" }, "authorized_at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" }, "input_digests": { "type": "array", "minItems": 1, "items": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" } }, "sensitivity": { "$ref": "../../gkx-common.defs.json#/$defs/sensitivity" } }, "additionalProperties": true } },
+    "reentry_receipts": { "type": "array", "minItems": 1, "items": { "$ref": "reentry-receipt.draft.schema.json" } },
+    "relations": { "type": "array", "items": { "type": "object", "required": ["type", "from", "to", "scope", "recorded_at"], "properties": { "type": { "type": "string", "enum": ["srtp:used", "srtp:generated", "srtp:generated_by", "srtp:executed", "srtp:executed_by", "srtp:parameterized_by", "srtp:review_finding_for", "srtp:rerun_of", "srtp:compares_run", "srtp:invalidates_reproducibility_claim", "srtp:reentry_of_authorized_use", "supports", "contradicts", "derived_from", "supersedes"] }, "from": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" }, "to": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" }, "scope": { "type": "string", "minLength": 1 }, "recorded_at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" }, "prov_mapping": { "type": "string" }, "loss_markers": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": true } },
+    "extensions": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

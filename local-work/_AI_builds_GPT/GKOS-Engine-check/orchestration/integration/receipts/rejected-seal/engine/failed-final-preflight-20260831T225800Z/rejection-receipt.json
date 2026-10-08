@@ -1,0 +1,12 @@
+{
+  "status": "REJECTED_FAIL",
+  "reason": "Final preflight found stale candidate SHA-256 binding before suite execution",
+  "command": "node scripts/runtime-qualification.mjs --check",
+  "exit_code": 1,
+  "error": "Unreviewed candidate bytes: test/service-reference-freshness.test.mjs",
+  "expected_manifest_sha256": "32fb64252166c099ba6027c4ca7295b4a80496da6cfdc1b5186a769a603ef761",
+  "actual_committed_sha256": "f4c45d6c1085acd0bc6743a1161c8b0615c0e74507acf0a01c048fcf3c66484c",
+  "log_sha256": "f35971ce87d820f0d04337f85744f61be29a2d70bb0311efd5d1c2c6d0fe09a7",
+  "suite_started": false,
+  "rejected_at_utc": "2026-08-31T22:58:54.1056543Z"
+}

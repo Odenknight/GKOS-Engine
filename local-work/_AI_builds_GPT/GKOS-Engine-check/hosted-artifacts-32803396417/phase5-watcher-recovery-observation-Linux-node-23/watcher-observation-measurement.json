@@ -1,0 +1,38 @@
+{
+  "contract_version": "gkos-watcher-observation-measurement/1.0.0-draft.1",
+  "convergence": null,
+  "edit_latency_micros": null,
+  "embedding_work": null,
+  "environment": {
+    "arch": "x64",
+    "contract_version": "gkos-watcher-observation-environment/1.0.0-draft.1",
+    "environment_digest": "sha256:37ddbf793b6dcc41b63a2f7a4c68effeff328c2ad7b97c54df1cd6adb972a52c",
+    "os": "linux",
+    "physical_fts5_available": false,
+    "runner_class": "github_hosted",
+    "runtime": "node",
+    "runtime_version": "23.11.1",
+    "sqlite_version": "unavailable"
+  },
+  "failure_codes": [
+    "MEASURE_FTS_UNAVAILABLE"
+  ],
+  "fts_qualification": {
+    "arch": "x64",
+    "contract_version": "gkos-watcher-fts-qualification-outcome/1.0.0-draft.1",
+    "index_generation_count": 0,
+    "lane_kind": "matrix",
+    "os": "linux",
+    "outcome_digest": "sha256:0ad9d4fe706419c332d1543a9fc95bda4e14b8d69b5c4982886baebc4a1ba761",
+    "physical_fts5_available": false,
+    "provider_call_count": 0,
+    "query_count": 0,
+    "runtime_version": "23.11.1",
+    "status": "unavailable"
+  },
+  "measurement_digest": "sha256:f249e9f0316139a7c011247febfc9e0033a02562182d271c55a73021461d689e",
+  "percentiles_micros": null,
+  "sample_plan_digest": "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b",
+  "source_work": null,
+  "status": "unavailable"
+}

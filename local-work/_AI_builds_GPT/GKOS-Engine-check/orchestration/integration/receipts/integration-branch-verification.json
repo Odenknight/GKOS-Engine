@@ -1,0 +1,78 @@
+{
+  "version": "gkos-local-integration-verification/1",
+  "result": "PASS",
+  "repositories": {
+    "engine": {
+      "branch": "codex/integrate-engine-stability-20260831",
+      "base": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+      "head": "1c59a992bafd6815ae9837bb3910084d4aea9972",
+      "tree": "54f68ff48294c87ac2d528b3464eede3c96facf6",
+      "parent": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+      "patch_sha256": "1f06667fea932638b0136e56ecb3a9b546579dece660ef07ffda65a632a64cef",
+      "status_clean": true,
+      "remote_branch_present": false,
+      "diff_check": "PASS",
+      "manifested_blobs": "PASS"
+    },
+    "standard-r18": {
+      "branch": "codex/integrate-standard-r18-20260831",
+      "base": "aa9a05315a9a767bd672aa2bb5179c963d9d66ca",
+      "head": "9f47ecf8fefb87810cd44bd03fa8e82eb321fd4a",
+      "tree": "8326360374a7dadbad97e2f92627f5edf578a66f",
+      "parent": "aa9a05315a9a767bd672aa2bb5179c963d9d66ca",
+      "patch_sha256": "b4ce3f17ef88bb51647577c2d693730e98c96ed8d8a97c602d77b64e7354dcdd",
+      "status_clean": true,
+      "remote_branch_present": false,
+      "diff_check": "PASS",
+      "manifested_blobs": "PASS"
+    },
+    "kosmos": {
+      "branch": "codex/integrate-kosmos-identity-20260831",
+      "base": "6486035dfc2e42173b1158b8007c9bab35aa7dc9",
+      "head": "52b843c50a9e810bf8ad7ac7de8e4505a44b6baa",
+      "tree": "2a3d9a777c7e3ef582c9e5d544acb04f92c2f5fc",
+      "parent": "6486035dfc2e42173b1158b8007c9bab35aa7dc9",
+      "patch_sha256": "b52b9df81756d3876e90f3d46d24e8dc75df2c58aca63dc5ea145d7a195bbfee",
+      "status_clean": true,
+      "remote_branch_present": false,
+      "diff_check": "PASS",
+      "manifested_blobs": "PASS"
+    },
+    "lite": {
+      "branch": "codex/integrate-lite-quick-connect-20260831",
+      "base": "4027bfc4499ad0a2f3e753401f1320468e283823",
+      "head": "f5b06b4a4ea5020d62824ceffc51622269a52f19",
+      "tree": "8b655d225a400127ac0bd90090663f09b32c7fa8",
+      "parent": "4027bfc4499ad0a2f3e753401f1320468e283823",
+      "patch_sha256": "8bea6d258452552086ea410ec831c9afcdcbc8465728ecec5c76e523f8606d97",
+      "status_clean": true,
+      "remote_branch_present": false,
+      "diff_check": "PASS",
+      "manifested_blobs": "PASS"
+    },
+    "observatory": {
+      "branch": "codex/integrate-observatory-identity-20260831",
+      "base": "2a7b66fc6a33076fdcf29574cf2e31082c1b6e2a",
+      "head": "2c01d9ea1263db2e4d7f438c2955cbc481c69f6e",
+      "tree": "4e9530c9f71348f29763c4e22faafe3572ba8803",
+      "parent": "07ffb58859c8e0622a746d88df9016d7b520c6d3",
+      "patch_sha256": "bd454ba7801dd95c16be0f9d53373aee805955a4f591fa74243244467890d508",
+      "status_clean": true,
+      "remote_branch_present": false,
+      "diff_check": "PASS",
+      "manifested_blobs": "PASS",
+      "source_coordinate": "8da1d2239a9ce0af5570fe1bfa264934d8aabbe4",
+      "source_object_available_locally": false,
+      "reconstruction_commit": "07ffb58859c8e0622a746d88df9016d7b520c6d3",
+      "reconstruction_parent": "2a7b66fc6a33076fdcf29574cf2e31082c1b6e2a",
+      "reconstruction_blobs": {
+        "deploy/live/build-engine.sh": "04246380190aa5defea7aa5988db8bd7f46833af",
+        "deploy/live/patches/SHA256SUMS": "ca383bdb5417ffc7177fe498a2083feef5384ef2",
+        "deploy/live/patches/engine-content.patch": "9d4a394264d15ca219b4a8a2a59381d1fb3073b8",
+        "deploy/live/patches/engine-param-errors-pr37.patch": "8e858fd943e7f570871efd5f3c7732e6a562aff4",
+        "docs/INVALID-PARAMS-BUILD.md": "3889e0b350e8e390b0cd70d7b513889567c21511"
+      }
+    }
+  },
+  "errors": []
+}

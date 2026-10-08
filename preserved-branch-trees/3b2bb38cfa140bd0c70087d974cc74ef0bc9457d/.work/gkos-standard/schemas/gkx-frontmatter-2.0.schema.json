@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/gkx-frontmatter-2.0.schema.json",
+  "title": "GKX 2.0 record frontmatter",
+  "type": "object",
+  "required": ["gkx_version", "uid", "title", "type", "created_at", "epistemic_state"],
+  "properties": {
+    "gkx_version": { "const": "2.0" },
+    "uid": { "$ref": "gkx-common.defs.json#/$defs/authoredNoteUid" },
+    "title": { "type": "string", "minLength": 1 },
+    "type": { "type": "string", "minLength": 1 },
+    "created_at": { "$ref": "gkx-common.defs.json#/$defs/timestamp" },
+    "updated_at": { "$ref": "gkx-common.defs.json#/$defs/timestamp" },
+    "epistemic_state": { "$ref": "gkx-common.defs.json#/$defs/epistemicState" },
+    "sensitivity": { "$ref": "gkx-common.defs.json#/$defs/sensitivity" },
+    "authorship_origin": { "$ref": "gkx-common.defs.json#/$defs/origin" }
+  },
+  "additionalProperties": true
+}

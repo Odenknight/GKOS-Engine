@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/diagnostics-sidecar.schema.json",
+  "title": "Diagnostics sidecar (L4)",
+  "description": "Per-note deterministic diagnostics export. Sidecar location: .gkx/diagnostics/<uid>.diagnostics.yaml.",
+  "type": "object",
+  "required": ["target_uid", "source_path", "content_hash", "engine_version", "generated_at", "diagnostics"],
+  "properties": {
+    "target_uid": { "oneOf": [{ "$ref": "gkx-common.defs.json#/$defs/authoredNoteUid" }, { "type": "null" }] },
+    "source_path": { "type": "string" },
+    "content_hash": { "$ref": "gkx-common.defs.json#/$defs/contentHash" },
+    "engine_version": { "type": "string" },
+    "policy_hash": { "type": "string" },
+    "generated_at": { "$ref": "gkx-common.defs.json#/$defs/timestamp" },
+    "diagnostics": { "type": "array", "items": { "$ref": "gkx-common.defs.json#/$defs/diagnostic" } }
+  },
+  "additionalProperties": false
+}

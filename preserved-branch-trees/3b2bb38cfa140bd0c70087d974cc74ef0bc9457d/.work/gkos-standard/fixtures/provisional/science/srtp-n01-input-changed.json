@@ -1,0 +1,1 @@
+{ "extends": "srtp-p01-complete.json", "mutations": [{ "op": "set", "path": "/execution_manifests/0/dataset_digests/0", "value": "sha256:dataset-v2" }] }

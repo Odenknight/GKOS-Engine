@@ -1,0 +1,12 @@
+PASS              GCP1-P01
+PASS              GCP1-N01
+PASS              GCP1-N02
+PASS              GCP1-N03
+PASS              GCP1-B01
+UNEVALUATED       GCP3-C01  — unevaluated expectations: pair, projection.graph_expect
+UNEVALUATED       GCP3-L01  — unevaluated expectations: pair, projection.graph_expect
+PASS              GCP3-L02
+unknown format "date" ignored in schema at path "#/properties/attestation/properties/assessment_date"
+unknown format "date" ignored in schema at path "#/properties/attestation/properties/assessment_date"
+
+claim written: ../../../reports/evidence/standard-starter-claim.json  (passed=6 failed=0 known-divergences=0 unevaluated=2)

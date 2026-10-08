@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/authorized-use-record.draft.schema.json",
+  "title": "Authorized Use Record (L7) — PROVISIONAL DRAFT, informative only",
+  "description": "Links action, context manifest, authority basis, actor, purpose, and outcome for a consequential use per GKOS v0.76 §7.10 (external disclosure, sensitivity change, promotion to accepted, deletion/tombstone).",
+  "type": "object",
+  "required": ["record_id", "action_class", "actor", "purpose", "context_manifest_id", "authority_basis", "recorded_at", "outcome"],
+  "properties": {
+    "record_id": { "type": "string", "minLength": 1 },
+    "action_class": { "type": "string", "enum": ["external-disclosure", "sensitivity-change", "epistemic-promotion-to-accepted", "deletion-or-tombstone", "deployment-extension"] },
+    "action_detail": { "type": "string" },
+    "actor": { "$ref": "../okf-common.defs.json#/$defs/actorIdentity" },
+    "purpose": { "type": "string" },
+    "context_manifest_id": { "type": "string" },
+    "authority_basis": {
+      "description": "Pending the v0.8 receipt mechanism: a receipt locator (future) or the explicit disclosure 'none (single-actor profile)'.",
+      "type": "string"
+    },
+    "target_uids": { "type": "array", "items": { "$ref": "../okf-common.defs.json#/$defs/uid" } },
+    "blast_radius": {
+      "type": "object",
+      "properties": {
+        "reachable_count": { "type": "integer", "minimum": 0 },
+        "corpus_fraction": { "type": "number", "minimum": 0, "maximum": 1 },
+        "hop_bound": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "recorded_at": { "$ref": "../okf-common.defs.json#/$defs/timestamp" },
+    "outcome": { "type": "string", "enum": ["completed", "refused", "failed", "partial"] }
+  },
+  "additionalProperties": false
+}

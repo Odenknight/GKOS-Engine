@@ -1,0 +1,183 @@
+diff --git a/docs/RENDERER-PROTOCOL.md b/docs/RENDERER-PROTOCOL.md
+index 678844e..400f79f 100644
+--- a/docs/RENDERER-PROTOCOL.md
++++ b/docs/RENDERER-PROTOCOL.md
+@@ -107,6 +107,16 @@ of falling through to link resolution.
+ 
+ ### Compatibility
+ 
++The renderer method `notifyAgentTraversal(paths, tool, agentLabel?, replay?, agentId?)`
++accepts an optional opaque stable ID. Live service and recorded replay adapters
++must pass `agent_id` as the fifth argument and keep `agent_label` for display.
++Equal labels with different IDs retain separate heads and colors; renaming an ID
++does not create another head. IDs are not authentication or effect authority.
++Callers without stable IDs retain explicit label-only grouping, in a namespace
++separate from IDs. Missing/blank IDs use this legacy behavior. Retained traversal
++steps remain capped at 25, displayed markers at six, and the deterministic color
++cache at 64 entries. A shared location can visually overlap distinct markers.
++
+ Host and renderer ship together inside `main.js`, so a single current version
+ suffices. For resilience, the renderer also still accepts the legacy flat
+ shapes (`kosmos:files` / `kosmos:update` / `kosmos:open`) from older host
+diff --git a/src/renderer/renderer.ts b/src/renderer/renderer.ts
+index badf4f0..a695405 100644
+--- a/src/renderer/renderer.ts
++++ b/src/renderer/renderer.ts
+@@ -66,7 +66,7 @@ export interface KosmosApp {
+   notifyLiveEvent(ev: { path: string; type?: string }): void;
+   /** Highlight the notes touched by one Agent API query with a fading trail.
+    *  `agent` (optional) colours the trail per-agent and labels its rocket head. */
+-  notifyAgentTraversal(paths: string[], tool: string, agent?: string, replay?: boolean): void;
++  notifyAgentTraversal(paths: string[], tool: string, agent?: string, replay?: boolean, agentId?: string): void;
+   clearTraversalObservability(): void;
+   setTrafficHeatmapEnabled(enabled: boolean): void;
+   clearTrafficHeatmap(): void;
+@@ -218,7 +218,7 @@ export function createKosmosApp(opts: KosmosAppOptions = {}): KosmosApp {
+      drawn as fading emerald line segments (v0.5.1 behavior, ported). */
+   let agentTrail: any = null;
+   let agentDust: any = null;
+-  let agentSteps: Array<{ id: string; t: number; agent: string }> = [];
++  let agentSteps: Array<{ id: string; t: number; agent: string; label: string }> = [];
+   let __agentLive = new Set<string>();
+   let __agentHintT = 0;
+   const AGENT_MAX = 24;
+@@ -256,6 +256,7 @@ export function createKosmosApp(opts: KosmosAppOptions = {}): KosmosApp {
+     else if (hue < 240) { g = x; b = c; } else if (hue < 300) { r = x; b = c; } else { r = c; b = x; }
+     const rgb: [number, number, number] = [r + m, g + m, b + m];
+     const val = { rgb, css: `hsl(${hue} 82% 62%)` };
++    if (__agentColors.size >= 64) __agentColors.delete(__agentColors.keys().next().value!);
+     __agentColors.set(key, val);
+     return val;
+   }
+@@ -1568,7 +1569,7 @@ export function createKosmosApp(opts: KosmosAppOptions = {}): KosmosApp {
+     const now = performance.now();
+     // newest hop per agent over the trail lifetime (rocket rides the head of
+     // each agent's trail and fades with it); newest agents first, capped
+-    const headByAgent = new Map<string, { id: string; t: number; agent: string }>();
++    const headByAgent = new Map<string, { id: string; t: number; agent: string; label: string }>();
+     for (const s of agentSteps) { if (now - s.t > AGENT_TRAIL_MS || !idToRender.has(s.id)) continue; headByAgent.set(s.agent, s); }
+     const heads = Array.from(headByAgent.values()).sort((a, b) => b.t - a.t).slice(0, MAX_AGENTS_SHOWN);
+     let mi = 0;
+@@ -1579,7 +1580,7 @@ export function createKosmosApp(opts: KosmosAppOptions = {}): KosmosApp {
+       const m = agentMarkers[mi++]; const col = agentColor(s.agent);
+       m.agent = s.agent;
+       m.rocket.style.color = col.css; m.rocket.style.textShadow = `0 0 6px ${col.css}`;
+-      if (m.name.textContent !== s.agent) m.name.textContent = s.agent;
++      if (m.name.textContent !== s.label) m.name.textContent = s.label;
+       m.name.style.color = col.css; m.name.style.borderColor = col.css + "66";
+       m.name.style.display = labelsEnabled ? "" : "none";
+       m.el.style.transform = `translate(-50%,-140%) translate(${sp.x.toFixed(1)}px,${sp.y.toFixed(1)}px)`;
+@@ -1600,9 +1601,12 @@ export function createKosmosApp(opts: KosmosAppOptions = {}): KosmosApp {
+     applyLive(); updateHalos();
+   }
+   /** Entry point: the host posts agent-traversal whenever the Agent API serves a query. */
+-  function notifyAgentTraversal(paths: string[], tool: string, agent?: string, replay = false): void {
++  function notifyAgentTraversal(paths: string[], tool: string, agent?: string, replay = false, agentId?: string): void {
+     if (!Array.isArray(paths) || !G) return;
+-    const who = String(agent || "").trim() || DEFAULT_AGENT;
++    const displayLabel = String(agent || "").trim() || DEFAULT_AGENT;
++    // Explicit identity is opaque and separate from legacy label-only identity.
++    const who = typeof agentId === "string" && agentId.trim()
++      ? JSON.stringify(["id", agentId]) : JSON.stringify(["label", displayLabel]);
+     const now = performance.now(); let touched = false;
+     for (const p of paths) {
+       const id = "file:" + String(p || "").replace(/\\/g, "/");
+@@ -1611,15 +1615,15 @@ export function createKosmosApp(opts: KosmosAppOptions = {}): KosmosApp {
+       // Find this agent's own head so interleaved agents retain independent
+       // comet segments and never connect to somebody else's traversal.
+       let last:any=null; for(let i=agentSteps.length-1;i>=0;i--)if(agentSteps[i].agent===who){last=agentSteps[i];break;}
+-      if (last && last.id === id && last.agent === who) { last.t = now; touched = true; continue; }
++      if (last && last.id === id && last.agent === who) { last.t = now; last.label = displayLabel; touched = true; continue; }
+       burstAgentDust(last?.id??null,id,who,now);
+-      agentSteps.push({ id, t: now, agent: who }); touched = true;
++      agentSteps.push({ id, t: now, agent: who, label: displayLabel }); touched = true;
+       if (agentSteps.length > AGENT_MAX + 1) agentSteps.splice(0, agentSteps.length - (AGENT_MAX + 1));
+     }
+     if (!touched) return;
+     refreshAgentLive(now); updateAgentTrail();
+     updateTrafficHeat(true);
+-    const label = replay ? `Replay · ${who}` : (who === DEFAULT_AGENT ? "Agent traversal" : who + " traversal");
++    const label = replay ? `Replay · ${displayLabel}` : (displayLabel === DEFAULT_AGENT ? "Agent traversal" : displayLabel + " traversal");
+     if (now - __agentHintT > 4000) { __agentHintT = now; showHint(label + ": " + (tool || "query")); }
+   }
+   function clearTraversalObservability(): void {
+@@ -2095,7 +2099,7 @@ export function createKosmosApp(opts: KosmosAppOptions = {}): KosmosApp {
+     setTrafficHeatmapEnabled,
+     clearTrafficHeatmap,
+     setHostVisible,
+-    getDiagnostics() { return G ? { ...(G.diagnostics || {}), residualCollisions: G.__residualCollisions ?? (G.diagnostics && G.diagnostics.residualCollisions) ?? 0, agentTraversalHops: agentSteps.length, agentDustParticles: agentDust?.active ?? 0, trafficHeatEnabled, trafficHeatNodes: trafficHeat.size } : null; },
++    getDiagnostics() { return G ? { ...(G.diagnostics || {}), residualCollisions: G.__residualCollisions ?? (G.diagnostics && G.diagnostics.residualCollisions) ?? 0, agentTraversalHops: agentSteps.length, agentTraversalAgents: new Set(agentSteps.map(s => s.agent)).size, agentColorCacheEntries: __agentColors.size, agentDustParticles: agentDust?.active ?? 0, trafficHeatEnabled, trafficHeatNodes: trafficHeat.size } : null; },
+     getRenderStats() { return { frames: renderStats.frames, running: renderStats.running, drawCalls: renderer.info.render.calls }; },
+     showError: showFatal,
+     showHint,
+diff --git a/src/standalone/standalone.ts b/src/standalone/standalone.ts
+index f8a6143..5af1666 100644
+--- a/src/standalone/standalone.ts
++++ b/src/standalone/standalone.ts
+@@ -79,7 +79,7 @@ function leaveReplayForLive(): void {
+   stopReplayTimer();
+   replayMode = false;
+   app.clearTraversalObservability();
+-  for (const event of liveDuringReplay.splice(0)) app.notifyAgentTraversal(event.paths, event.tool, event.agent_label, false);
++  for (const event of liveDuringReplay.splice(0)) app.notifyAgentTraversal(event.paths, event.tool, event.agent_label, false, event.agent_id);
+   liveDuringReplayBytes = 0;
+ }
+ function updateReplayUi(): void {
+@@ -94,7 +94,7 @@ function ensureReplayTimer(): void {
+   if (replayTimer) return;
+   replayTimer = (setInterval(() => {
+     if (!replayMode) return;
+-    for (const event of sessionReplay.tick()) app.notifyAgentTraversal(event.paths, event.tool, event.agent_label, true);
++    for (const event of sessionReplay.tick()) app.notifyAgentTraversal(event.paths, event.tool, event.agent_label, true, event.agent_id);
+     updateReplayUi();
+     if (!sessionReplay.state.playing) stopReplayTimer();
+   }, 30) as unknown) as number;
+@@ -124,7 +124,7 @@ function receiveTraversalEvent(event: TraversalEventEnvelope): void {
+     }
+     return;
+   }
+-  app.notifyAgentTraversal(event.paths, event.tool, event.agent_label, false);
++  app.notifyAgentTraversal(event.paths, event.tool, event.agent_label, false, event.agent_id);
+ }
+ function startEventStream(): void {
+   stopEventStream();
+@@ -463,7 +463,7 @@ const ui: StandaloneUI = createStandaloneUI({
+   },
+   onReplaySeek: (offsetMs) => {
+     replayMode = true; app.clearTraversalObservability(); sessionReplay.seek(offsetMs);
+-    for (const event of sessionReplay.tick()) app.notifyAgentTraversal(event.paths, event.tool, event.agent_label, true);
++    for (const event of sessionReplay.tick()) app.notifyAgentTraversal(event.paths, event.tool, event.agent_label, true, event.agent_id);
+     updateReplayUi();
+   },
+   onReplaySpeed: (speed) => { sessionReplay.setSpeed(speed); updateReplayUi(); },
+diff --git a/test/browser/consumer-identity.spec.ts b/test/browser/consumer-identity.spec.ts
+new file mode 100644
+index 0000000..eb5be41
+--- /dev/null
++++ b/test/browser/consumer-identity.spec.ts
+@@ -0,0 +1,25 @@
++import {test,expect} from '@playwright/test';
++test('stable identity survives live, replay, and buffered-live adapters without label conflation',async({page})=>{
++ await page.goto('/kosmos-oden-stand-alone.html?capture=1&seed=1907&time=0&animation=off');
++ await page.waitForFunction(()=>(window as any).__kosmos?.ok===true);
++ const base={schema_version:1,agent_id:'agent:a',agent_label:'Shared label',session_id:'session:a',operation_id:'op:a',sequence:1,offset_ms:0,cost_units:null,tool:'note_read',status:'completed',paths:['10_Research/Literature Radar.md']};
++ const live=await page.evaluate(({base})=>{
++  const w=window as any,s=w.__kosmosStandalone,k=w.__kosmos;k.clearTraversalObservability();
++  s.receiveTraversalForTest(base);s.receiveTraversalForTest({...base,agent_id:'agent:b',sequence:2});
++  return k.getDiagnostics();
++ },{base});
++ expect(live.agentTraversalHops).toBe(2);expect(live.agentTraversalAgents).toBe(2);
++ await page.evaluate(({base})=>{
++  const s=(window as any).__kosmosStandalone;
++  s.loadReplayForTest({schema_version:1,metadata:{started_at:'2026-08-31T00:00:00.000Z',service_protocol:'draft.1',viewer_version:'0.8.0',corpus_hash:null,redaction:'Traversal envelopes only; no note bodies, tokens, prompts, credentials, or raw errors.'},truncated:false,events:[base,{...base,sequence:2,agent_id:'agent:b',offset_ms:1}]});
++  s.replayActionForTest('play');
++ },{base});
++ await page.waitForFunction(()=>(window as any).__kosmosStandalone.getObservabilityInfo().replay.ended);
++ expect(await page.evaluate(()=>(window as any).__kosmos.getDiagnostics().agentTraversalAgents)).toBe(2);
++ const buffered=await page.evaluate(({base})=>{
++  const s=(window as any).__kosmosStandalone;
++  s.receiveTraversalForTest({...base,sequence:3});s.receiveTraversalForTest({...base,sequence:4,agent_id:'agent:b'});
++  s.replayActionForTest('live');return (window as any).__kosmos.getDiagnostics();
++ },{base});
++ expect(buffered.agentTraversalHops).toBe(2);expect(buffered.agentTraversalAgents).toBe(2);
++});

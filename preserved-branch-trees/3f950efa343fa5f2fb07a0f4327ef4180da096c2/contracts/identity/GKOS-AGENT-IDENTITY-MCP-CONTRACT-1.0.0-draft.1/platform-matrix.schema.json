@@ -1,0 +1,89 @@
+{
+  "$id": "platform-matrix.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "const": "1.0.0-draft.1"
+    },
+    "entries": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "arch": {
+            "enum": [
+              "x64",
+              "arm64",
+              "aarch64",
+              "other"
+            ]
+          },
+          "claim": {
+            "enum": [
+              "contract_portability_only",
+              "conformance_only",
+              "none"
+            ]
+          },
+          "id": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "os": {
+            "enum": [
+              "linux",
+              "windows",
+              "macos",
+              "multi"
+            ]
+          },
+          "repository": {
+            "enum": [
+              "full",
+              "lite"
+            ]
+          },
+          "runner": {
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
+          "runtime": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "required",
+              "optional",
+              "unavailable"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "repository",
+          "os",
+          "runner",
+          "arch",
+          "runtime",
+          "status",
+          "claim"
+        ],
+        "title": "Platform",
+        "type": "object"
+      },
+      "maxItems": 20,
+      "minItems": 20,
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract_version",
+    "entries"
+  ],
+  "title": "Platform matrix",
+  "type": "object"
+}

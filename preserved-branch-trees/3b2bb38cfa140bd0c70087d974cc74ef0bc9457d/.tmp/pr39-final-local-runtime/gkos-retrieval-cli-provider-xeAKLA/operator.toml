@@ -1,0 +1,9 @@
+config_version = 1
+[vectors]
+enabled = true
+provider = "local_onnx"
+provider_id = "operator-local"
+model_id = "operator-model"
+dimensions = 2
+model_path = "C:/operator/models/model.onnx"
+timeout_ms = 50

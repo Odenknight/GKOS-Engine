@@ -1,0 +1,14 @@
+{
+  "fixtureId": "effects-precondition-stale",
+  "category": "stale",
+  "input": {
+    "targetPath": "topics/MOC.md",
+    "expectedDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observedDigest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  "expected": {
+    "outcome": "stale",
+    "sourceWrite": false,
+    "reasonCodes": ["TARGET_DIGEST_MISMATCH"]
+  }
+}

@@ -1,0 +1,1261 @@
+{
+  "record_type": "gkos-phase6-d0-15-consolidated-owner-decision-proposal",
+  "record_version": "1.0.0",
+  "prepared_at_utc": "2026-08-26T08:55:30.923Z",
+  "prepared_by_role": "/root/phase6_d0_15_resolution_synthesizer",
+  "status": "PROPOSAL_ONLY_OWNER_SELECTION_PENDING",
+  "verdict": "F2_REMAINS_STOPPED",
+  "authority_boundary": {
+    "implementation_authorized": false,
+    "f2_restart_authorized": false,
+    "owner_decision_made": false,
+    "concurrence_granted": false,
+    "proposal_or_product_edits_authorized": false,
+    "statement": "NO_IMPLEMENTATION. This detached review artifact consolidates choices and recommends selections; it does not edit or supersede ratified D0, accepted F1, product, proposal, workflow, fixture, expectation, or evidence bytes and grants no authorization."
+  },
+  "source_ledger": {
+    "primary_d0_15_inputs": [
+      {
+        "path": "future-build-phase6/reviews/implementer/PHASE6_F2_FULL_D0_15_STOP_2026-08-26.json",
+        "sha256": "5d192bd3cb1ddb4f0a8a0d8148d16c605ed80fe2078b5591c2a79c258dcd52ea",
+        "bytes": 6663
+      },
+      {
+        "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_FULL_CONTRACT_STEWARD_REVIEW_2026-08-26.json",
+        "sha256": "12a37ee80c129ae016bfb330cd91621d50ad9f8f9406ab850798714adedce63c",
+        "bytes": 51789
+      },
+      {
+        "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_MIGRATION_REVIEW_2026-08-26.json",
+        "sha256": "9534727333c2c964b4285f136ee046b823f61f100f7acff1fe520d85efd4aa57",
+        "bytes": 43945
+      },
+      {
+        "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_SECURITY_REVIEW_2026-08-26.json",
+        "sha256": "f7d862851832ded51ec3c264beaf65b7bd5f9ad958580215f3d955546ac6d401",
+        "bytes": 50913
+      }
+    ],
+    "ratified_d0_sources": [
+      {
+        "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+        "sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+        "bytes": 117722
+      },
+      {
+        "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_DECISION_RECORD_PROPOSAL_2026-08-25.json",
+        "sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+        "bytes": 28582
+      },
+      {
+        "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_OPERATION_INVENTORY_PROPOSAL_2026-08-25.json",
+        "sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+        "bytes": 45471
+      },
+      {
+        "path": "future-build-phase6/proposals/core/PHASE6_D0_CLOSED_ERROR_REGISTRY_1.0.0-draft.1.json",
+        "sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+        "bytes": 17606
+      },
+      {
+        "path": "future-build-phase6/proposals/core/PROPOSAL_VALIDATION_2026-08-25.md",
+        "sha256": "4f31f73833344b0d771775beb869f32da3404c6ef49b1c53f365e2407cd3b6b8",
+        "bytes": 21204
+      },
+      {
+        "path": "future-build-phase6/proposals/core/P6_F1_ALLOWED_PATHS_PROPOSAL.txt",
+        "sha256": "7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce",
+        "bytes": 3312
+      },
+      {
+        "path": "future-build-phase6/proposals/core/P6_F1_PROTECTED_PATHS_PROPOSAL.txt",
+        "sha256": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948",
+        "bytes": 515
+      },
+      {
+        "path": "future-build-phase6/proposals/kosmos-oden/PHASE6_D0_INTERFACE_PROPOSAL.md",
+        "sha256": "476e839fb81f2f936785a38278846d33c7a680a84069607b1188c5ca2609e427",
+        "bytes": 43542
+      },
+      {
+        "path": "future-build-phase6/proposals/kosmos-oden/MCP_TOOL_REGISTRY.schema.json",
+        "sha256": "5c043dc5570c4c52ad13425925711e672ec198d5910ab5c9e8c1438cb5ed8004",
+        "bytes": 49408
+      },
+      {
+        "path": "future-build-phase6/proposals/kosmos-oden/MCP_INITIAL_TOOL_CATALOG.proposal.json",
+        "sha256": "c0ed2b963dcaef8a8bd08a427687d493bb7e85f1e26076a88a04f68b2117de7e",
+        "bytes": 12920
+      },
+      {
+        "path": "future-build-phase6/proposals/kosmos-oden/MCP_2025_11_25_CONFORMANCE_VECTORS.proposal.json",
+        "sha256": "23f48e01f890b746012d3713b8ece8331b113927ca15ab72e9955cf03830387c",
+        "bytes": 51108
+      },
+      {
+        "path": "future-build-phase6/proposals/kosmos-oden/PROPOSAL_VALIDATION_2026-08-25.md",
+        "sha256": "7f2171bc98112a529f05b9324be20475484ec55e4ac392829109e6f94121daef",
+        "bytes": 11655
+      },
+      {
+        "path": "future-build-phase6/proposals/kosmos-oden/SOURCE_PROVENANCE_MATRIX.md",
+        "sha256": "7284527598409b43218f99f87e8365b3382b3fae1606f9975ae9acba90108321",
+        "bytes": 17892
+      },
+      {
+        "path": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+        "sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+        "bytes": 31178
+      },
+      {
+        "path": "future-build-phase6/reviews/final/PHASE6_D0_OWNER_RATIFICATION_2026-08-25.json",
+        "sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929",
+        "bytes": 2842
+      },
+      {
+        "path": "future-build-phase6/reviews/final/PHASE6_D0_CROSS_REGISTER_ACCEPTANCE_V7_2026-08-25.md",
+        "sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb",
+        "bytes": 13939
+      }
+    ],
+    "accepted_f1": {
+      "repository": "Odenknight/GKOS-Engine",
+      "accepted_result_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+      "accepted_tree_sha": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+      "pack_root": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1",
+      "pack_manifest_sha256": "e6e045abe5ec77d96f747c5358dca62deca212940f3b32a170099dcddf321463",
+      "manifest_aggregate_digest": "sha256:e3dab5b4ee3da62a845cc92bc9dc9b831ed492f34371104b503587c566300380",
+      "generation_input_digest": "sha256:ec3ece84c71114b0d97cfa23376d37d35fde2f4e6105815d5c5e967ff886cc18",
+      "generator_digest": "sha256:95fcdb91814ecf683461a791f4a4dc99ede9d279abba87ee59a9d08cce23ba68",
+      "pack_leaves": 34,
+      "manifest_hashed_leaves": 33,
+      "gate": {
+        "path": "future-build-phase6/reviews/f1/PHASE6_F1_ACCEPTANCE_GATE_2026-08-26.json",
+        "sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff",
+        "bytes": 2347
+      },
+      "independent_review": {
+        "path": "future-build-phase6/reviews/f1/PHASE6_F1_FULL_INDEPENDENT_REVIEW_V3_2026-08-26.json",
+        "sha256": "ee027811dd29826883f736c0f018de552979d2418762e69fa7988aff635aaa70",
+        "bytes": 33708
+      },
+      "implementer_handoff": {
+        "path": "future-build-phase6/reviews/implementer/PHASE6_F1_FULL_IMPLEMENTER_HANDOFF_V3_2026-08-26.json",
+        "sha256": "a1ffcef317c3f1d7f2cac1b0748450e9e9261e65d9f181ff3df6e4cbbf0160b2",
+        "bytes": 13883
+      }
+    },
+    "f2_authorization_superseded_by_stop": {
+      "path": "future-build-phase6/reviews/f2/PHASE6_F2_OWNER_AUTHORIZATION_2026-08-26.json",
+      "sha256": "e16b351f16d8fcf98d4683429764a6009e9073408bdb73c6b36e20f82d0e2118",
+      "bytes": 2336,
+      "effect": "No restart authority remains while D0-15 is unresolved."
+    },
+    "integrity_result": "ALL_LOCALLY_AVAILABLE_SOURCE_HASHES_MATCH"
+  },
+  "preservation_targets": {
+    "normalized_authority_tables": 16,
+    "operation_count": 32,
+    "public_authenticated_operations": 7,
+    "local_bootstrap_operations": 1,
+    "owner_only_operations": 24,
+    "public_error_codes": 53,
+    "public_mcp_required_tools": 7,
+    "official_mcp_vectors": 67,
+    "public_mcp_tool_name_or_catalog_change": false,
+    "public_mcp_input_or_success_result_semantic_change": false,
+    "successor_pack_leaf_target": 34,
+    "successor_manifest_hashed_leaf_target": 33,
+    "allowed_path_count_target": 40,
+    "fail_closed_default": true
+  },
+  "synthesis_counts": {
+    "source_contract_questions": 10,
+    "source_migration_questions": 3,
+    "source_security_questions": 8,
+    "source_questions_total": 21,
+    "consolidated_items_total": 15,
+    "semantic_owner_choice_items": 9,
+    "mixed_derived_and_owner_choice_items": 1,
+    "derived_correction_items": 5,
+    "mapping_rows": 21,
+    "mapping_omissions": 0,
+    "mapping_duplicates": 0
+  },
+  "mapping_matrix": [
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-ANCHOR-VARIANTS",
+      "consolidated_item_id": "D015-R01",
+      "coverage": "anchor oneOf field names, nullability, genesis predecessor, and RESTORE_INTENT coordinate orientation"
+    },
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-RESTORE-AGGREGATES",
+      "consolidated_item_id": "D015-R02",
+      "coverage": "restore aggregate partition and new global head representation"
+    },
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-RESTORE-PLAN-PATH",
+      "consolidated_item_id": "D015-R03",
+      "coverage": "external restore-plan locator representation and recovery binding"
+    },
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-RESTORE-DISCOVERY",
+      "consolidated_item_id": "D015-R04",
+      "coverage": "lost-response plan discovery while preserving the operation surface"
+    },
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-BOOTSTRAP-STATE",
+      "consolidated_item_id": "D015-R05",
+      "coverage": "exact ratified bootstrap vocabulary and transition closure"
+    },
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-VECTOR-COUNT",
+      "consolidated_item_id": "D015-R06",
+      "coverage": "8 core-operation vectors versus 10 separately frozen recovery vectors"
+    },
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-SNAPSHOT-BYTES",
+      "consolidated_item_id": "D015-R07",
+      "coverage": "actual durable canonical snapshot payload and authorization-binding preimage"
+    },
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-EVENT-KINDS",
+      "consolidated_item_id": "D015-R08",
+      "coverage": "four exact kind-to-table discriminators"
+    },
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-FINAL-GATE",
+      "consolidated_item_id": "D015-R09",
+      "coverage": "selective final-gate revalidation after unrelated generation change"
+    },
+    {
+      "source_role": "FULL_CONTRACT_STEWARD",
+      "source_question_id": "OWNER-Q-CREDENTIAL-ISSUE-EPOCH",
+      "consolidated_item_id": "D015-R10",
+      "coverage": "credential issue epoch advancement without implicit revocation of other active credentials"
+    },
+    {
+      "source_role": "MIGRATION",
+      "source_question_id": "OWNER-Q-BOOTSTRAP-PREAUTH-CRASH",
+      "consolidated_item_id": "D015-R05",
+      "coverage": "reachable recovery before an authenticated authority exists"
+    },
+    {
+      "source_role": "MIGRATION",
+      "source_question_id": "OWNER-Q-RETENTION-PROSPECTIVE",
+      "consolidated_item_id": "D015-R13",
+      "coverage": "literal prospective eligibility and permanent policy history"
+    },
+    {
+      "source_role": "MIGRATION",
+      "source_question_id": "OWNER-Q-RESTORE-ABORT-GENERATION",
+      "consolidated_item_id": "D015-R03",
+      "coverage": "abort generation, event, session, cursor, and snapshot transition"
+    },
+    {
+      "source_role": "SECURITY",
+      "source_question_id": "OWNER-SEC-001",
+      "consolidated_item_id": "D015-R11",
+      "coverage": "sole-owner rotation after a lost postcommit handoff"
+    },
+    {
+      "source_role": "SECURITY",
+      "source_question_id": "OWNER-SEC-002",
+      "consolidated_item_id": "D015-R04",
+      "coverage": "authenticated discovery of a server-generated restore_plan_id"
+    },
+    {
+      "source_role": "SECURITY",
+      "source_question_id": "OWNER-SEC-003",
+      "consolidated_item_id": "D015-R07",
+      "coverage": "cursor continuation across restart versus explicit invalidation"
+    },
+    {
+      "source_role": "SECURITY",
+      "source_question_id": "OWNER-SEC-004",
+      "consolidated_item_id": "D015-R12",
+      "coverage": "mapping availability before an authenticated external adapter exists"
+    },
+    {
+      "source_role": "SECURITY",
+      "source_question_id": "OWNER-SEC-005",
+      "consolidated_item_id": "D015-R13",
+      "coverage": "retention policy history and source sequence representation within 16 tables"
+    },
+    {
+      "source_role": "SECURITY",
+      "source_question_id": "OWNER-SEC-006",
+      "consolidated_item_id": "D015-R14",
+      "coverage": "closed non-content activity metadata value domains"
+    },
+    {
+      "source_role": "SECURITY",
+      "source_question_id": "OWNER-SEC-007",
+      "consolidated_item_id": "D015-R15",
+      "coverage": "mapping cryptographic collision error and no-mutation disposition"
+    },
+    {
+      "source_role": "SECURITY",
+      "source_question_id": "OWNER-SEC-008",
+      "consolidated_item_id": "D015-R03",
+      "coverage": "abort-callable states and exact staged locator/temp disposition"
+    }
+  ],
+  "consolidated_resolution_slate": [
+    {
+      "id": "D015-R01",
+      "title": "Closed authority-anchor variants",
+      "classification": "SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "question": "Which exact three-variant anchor representation governs generation naming, genesis predecessor nullability, and RESTORE_INTENT coordinates?",
+      "options": [
+        {
+          "id": "A",
+          "label": "D0-first proposed-coordinate variants",
+          "rule": "Use a closed oneOf for MUTATION_INTENT, RESTORE_INTENT, and COMMITTED; name the generation field last_generation; use null for the bootstrap-genesis predecessor_anchor_digest; make intent top-level instance, restore_epoch, last_generation, global_event_seq, global_event_head_digest, and database_header_digest the proposed committed coordinates while retaining explicit old_event_head_digest and proposed_next_event_head_digest plus the candidate and expected committed digests. COMMITTED requires intent-only fields to be null and predecessor_anchor_digest to be non-null except at bootstrap genesis.",
+          "consequences": {
+            "security": "The intent is a complete candidate-anchor projection, the old/proposed head pair remains explicit, and anchor genesis cannot be confused with the event-chain empty predecessor.",
+            "compatibility": "Renames accepted authority_generation to last_generation in the owner-only external anchor schema; no public MCP tool or result changes.",
+            "counts": "16 tables, 32 operations, 24 owner operations, 53 errors, 34 pack leaves, and 67 MCP vectors remain unchanged.",
+            "schema": "audit-receipt.schema.json authority_anchor becomes a three-branch additionalProperties:false oneOf with equality and nullability constraints.",
+            "vectors": "Add every old/new/intent crash pairing, genesis-null, predecessor mismatch, fork, alias, and multi-drift negative."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Accepted-name old-coordinate intents",
+          "rule": "Keep authority_generation, use the event empty-string digest for bootstrap predecessor_anchor_digest, and make RESTORE_INTENT top-level coordinates the old authority while carrying proposed values only in candidate fields.",
+          "consequences": {
+            "security": "Can be made closed, but conflates two independent genesis domains and makes the intent less directly comparable to the candidate committed anchor.",
+            "compatibility": "Preserves one accepted field name but changes its meaning by variant and retains more accepted-shape familiarity.",
+            "counts": "No count change.",
+            "schema": "Still requires a three-branch oneOf and explicit candidate fields.",
+            "vectors": "Requires separate old-coordinate versus candidate-coordinate equality vectors."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Flat nullable superset",
+          "rule": "Keep one closed object with nullable fields and no state-specific oneOf.",
+          "consequences": {
+            "security": "Allows semantically incomplete or hybrid intent/committed combinations unless correctness is deferred to runtime; this is not an adequate closed contract.",
+            "compatibility": "Smallest structural edit to accepted F1 but preserves the class of underbinding that caused the stop.",
+            "counts": "No count change.",
+            "schema": "Adds properties without discriminated branch exclusion.",
+            "vectors": "Cannot express schema-level rejection of cross-variant fields."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "It follows the ratified anchor.last_generation spelling and three-durable-point recovery intent, while keeping event genesis and anchor genesis distinct.",
+        "exact_required_common_fields": [
+          "contract_version",
+          "vault_id",
+          "authority_instance_id",
+          "restore_epoch",
+          "last_generation",
+          "global_event_seq",
+          "global_event_head_digest",
+          "database_header_digest",
+          "anchor_state",
+          "candidate_event_digest",
+          "candidate_database_digest",
+          "expected_committed_anchor_digest",
+          "old_event_head_digest",
+          "proposed_next_event_head_digest",
+          "predecessor_anchor_digest",
+          "updated_at",
+          "anchor_digest"
+        ],
+        "exact_variant_rule": "All listed fields are required, including nullable fields. Intent branches require non-null candidate_event_digest, candidate_database_digest, expected_committed_anchor_digest, old_event_head_digest, proposed_next_event_head_digest, and predecessor_anchor_digest. COMMITTED requires those five intent-only fields to be null, requires predecessor_anchor_digest except at bootstrap genesis, and uses null only for that bootstrap-genesis predecessor. RESTORE_INTENT top-level authority and event coordinates are the proposed committed coordinates."
+      }
+    },
+    {
+      "id": "D015-R02",
+      "title": "Restore publication aggregates and global head",
+      "classification": "SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "question": "Which exact invalidation aggregates and head fields prove that restore published a complete replacement rather than a hybrid authority?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Six disjoint aggregates; event digest is head",
+          "rule": "Require exactly revoked_credential_count plus revoked_credentials_digest, closed_session_count plus closed_sessions_digest, invalidated_request_count plus invalidated_requests_digest, invalidated_cursor_count plus invalidated_cursors_digest, invalidated_snapshot_count plus invalidated_snapshots_digest, and invalidated_idempotency_record_count plus invalidated_idempotency_records_digest as six disjoint count plus ordered-set-digest pairs; also require restored_database_digest. Treat event-common global_event_seq and event_digest as the new global sequence and head, with no duplicate new_global_event_head_digest field.",
+          "consequences": {
+            "security": "Each durable invalidation class is independently auditable; a hybrid restore cannot hide behind one opaque aggregate; duplicate head fields cannot disagree.",
+            "compatibility": "Adds owner-only restore-event fields and replaces accepted generic booleans/digests; public MCP is unchanged.",
+            "counts": "The restore_events table remains table 16; no operation, owner-operation, error, leaf, or MCP count changes.",
+            "schema": "authority_restore becomes a closed branch requiring the six count/digest pairs, old/new authority coordinates, replacement-owner binding, restored_database_digest, and publication constants.",
+            "vectors": "RESTORE-OWNER vectors must assert each count, ordered digest, database digest, global_event_seq, and event_digest."
+          }
+        },
+        {
+          "id": "B",
+          "label": "One combined invalidation aggregate",
+          "rule": "Use one invalidated_state_count and invalidated_state_digest across requests, cursors, snapshots, and idempotency while keeping credentials and sessions separate.",
+          "consequences": {
+            "security": "Proves a combined set but cannot independently verify that every required state class was covered.",
+            "compatibility": "Smaller schema expansion than A.",
+            "counts": "No count change.",
+            "schema": "Fewer fields but weaker class closure.",
+            "vectors": "Would need opaque aggregate reconstruction tooling and cannot isolate an omitted class."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Six aggregates plus duplicate new head",
+          "rule": "Use option A and add new_global_event_head_digest constrained equal to event_digest.",
+          "consequences": {
+            "security": "Equivalent only if equality is enforced; otherwise creates a forkable duplicate claim.",
+            "compatibility": "Adds one redundant field to every restore receipt.",
+            "counts": "No count change.",
+            "schema": "Requires a non-native cross-field equality assertion in generation/runtime checks.",
+            "vectors": "Adds mismatch-negative cases without adding semantic evidence."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "It is the smallest partition that proves every D0 invalidation class, and event_digest already is the globally chained new head."
+      }
+    },
+    {
+      "id": "D015-R03",
+      "title": "Restore plan, abort states, locator disposition, and generation",
+      "classification": "SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "question": "What exact external plan representation and prepublication abort protocol governs staged locator recovery?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Canonical relative locator; two-state abort",
+          "rule": "Store a canonical relative temporary_locator_name beneath the fixed verified credential parent plus temporary_path_binding_digest, physical_identity_digest, content_digest, protection_digest, owner_digest, regular_file=true, and no_link=true; never store a raw absolute path. The external plan states are RESTORE_PLAN_STAGED, RESTORE_OWNER_LOCATOR_STAGED, RESTORE_INTENT, COMMITTED, RESTORE_ABORT_INTENT, and ABORTED. Abort is callable only from RESTORE_PLAN_STAGED or RESTORE_OWNER_LOCATOR_STAGED while database_publication_started=false and anchor_publication_started=false. Bind staged_locator_kind=temporary|final and staged_locator_disposition=deleted_exact|absent|preserved_unsafe. Abort keeps authority_instance_id and restore_epoch, advances authority_generation and the global event chain exactly once, stales all pre-plan sessions and admitted requests, invalidates all pre-plan cursors/snapshots, leaves old active credentials usable for fresh authentication, and tombstones the abandoned replacement credential and plan.",
+          "consequences": {
+            "security": "No raw path leaks; cleanup is identity-bound; both prepublication staged states have a reachable fail-closed escape; unsafe objects are preserved; reconnect requires fresh current authorization.",
+            "compatibility": "Clarifies and modestly broadens abort from the prose's named RESTORE_PLAN_STAGED point to both prepublication states; no public MCP change.",
+            "counts": "restore_plan and restore_abort_intent remain external $defs in an existing leaf; 16 tables, 32 operations, 24 owner operations, 53 errors, and 34 pack leaves remain exact.",
+            "schema": "Add closed restore_plan and restore_abort_intent definitions; make restore abort result/receipt state-discriminated and replace temporary-only disposition with staged locator kind plus disposition.",
+            "vectors": "Cover both abort source states, exact temp/final deletion, absence, unsafe preservation, generation plus one, session/request/cursor/snapshot invalidation, tombstone split crash, and rejection from RESTORE_INTENT or later."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Digest-derived name; plan-stage-only abort",
+          "rule": "Derive the relative locator name from restore_plan_id and store only its path-binding digest; allow abort only in RESTORE_PLAN_STAGED; leave authority_generation and old sessions unchanged.",
+          "consequences": {
+            "security": "Avoids a stored name but leaves locator-staged failures with continuation as the only path and permits pre-plan sessions to survive a closed-gate security transition.",
+            "compatibility": "Closer to the narrowest reading of the existing abort prose.",
+            "counts": "No count change.",
+            "schema": "Fewer locator fields and narrower state transition.",
+            "vectors": "Requires permanent fail-closed cases for locator-staged plans that cannot continue."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Protected raw path; broad abort",
+          "rule": "Persist a protected absolute path and allow abort from any non-COMMITTED plan state, including RESTORE_INTENT.",
+          "consequences": {
+            "security": "Leaks host-specific path material and permits rollback after publication has begun, conflicting with anchor recovery and fail-closed publication semantics.",
+            "compatibility": "Creates host-specific backup/restore records.",
+            "counts": "No count change.",
+            "schema": "Requires raw path fields and ambiguous postpublication disposition.",
+            "vectors": "Would need rollback cases that conflict with ratified no-guessed-repair rules."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "It gives every prepublication staged credential object an exact recover-or-tombstone path while retaining the old authority and forbidding rollback after RESTORE_INTENT."
+      }
+    },
+    {
+      "id": "D015-R04",
+      "title": "Restore-plan discovery after an ambiguous response",
+      "classification": "SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "question": "How does the exact pre-restore owner recover a server-generated restore_plan_id without a new side channel?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Extend authority.status",
+          "rule": "Keep authority.status OWNER_ONLY and add required nullable restore_recovery={restore_plan_id,state,state_digest,abort_eligible}. During write_gate=recovery_required|blocked, only owner_cli may call this read path after reauthentication of the exact pre-restore credential and equality with the active plan's old authority coordinates. The object forbids raw paths, credential material/digests, physical identity details, and protection descriptors.",
+          "consequences": {
+            "security": "Provides one authenticated nonsecret discovery path under a closed gate without weakening abort authentication.",
+            "compatibility": "Changes only an owner-only result schema; public MCP tools, inputs, results, and catalog stay byte-semantically unchanged.",
+            "counts": "Exactly 32 operations and 24 owner operations remain; authority.status remains nonmutating.",
+            "schema": "operation-inventory authority_status_result gains one closed nullable object and recovery-gate transport rules.",
+            "vectors": "RESTORE-STATUS-DISCOVERY-001 proves lost response, one active plan, exact ID/digest, redaction, and successful abort."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Add restore-plan inspect",
+          "rule": "Add owner-only authority.restore.inspect with a dedicated result.",
+          "consequences": {
+            "security": "Can be made safe but introduces a second recovery read surface.",
+            "compatibility": "Requires inventory, schema, docs, fixture, and evidence count changes; still no public MCP tool if kept owner-only.",
+            "counts": "Operations become 33 and owner-only operations become 25.",
+            "schema": "Adds request/result definitions and an inventory entry.",
+            "vectors": "Every exact-count and unknown-operation vector must change."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Client-chosen plan identifier",
+          "rule": "Make restore_plan_id caller-supplied before staging and remove server-side discovery.",
+          "consequences": {
+            "security": "Avoids discovery but moves identifier collision and binding responsibility to an authenticated client and changes idempotency semantics.",
+            "compatibility": "Changes authority.restore request semantics.",
+            "counts": "Operation counts stay 32/24.",
+            "schema": "Adds restore_plan_id to the request and collision rules.",
+            "vectors": "Requires caller-ID collision, replay, and cross-owner binding cases."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "It is the only choice that preserves the ratified exact operation counts and adds no new authority or public MCP surface."
+      }
+    },
+    {
+      "id": "D015-R05",
+      "title": "Bootstrap vocabulary and pre-authority crash recovery",
+      "classification": "MIXED_DERIVED_AND_SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "derived_part": "The state vocabulary is already ratified and is not a free owner choice: UNINITIALIZED, OWNER_PROVED, PLAN_STAGED, OWNER_LOCATOR_STAGED, DB_COMMITTED, ANCHOR_COMMITTED, OWNER_ACTIVE, LEGACY_ACTIVE, LEGACY_REVOKED, COMPLETE, and BLOCKED with the two exact terminal branches.",
+      "question": "How is the secret-loss window between owner proof and a durable bootstrap plan made recoverable without an authenticated authority?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Temp-before-plan",
+          "rule": "Persist the closed OWNER_PROVED external record, create/fsync an implementation-owned protected credential temporary, then atomically persist PLAN_STAGED binding that exact temp before renaming it to the default locator and advancing to OWNER_LOCATOR_STAGED. A crash before the plan rename may remove only the exact verified unreferenced temp and retry from OWNER_PROVED with fresh IDs/secret; after PLAN_STAGED, recovery must reuse the bound temp and never regenerate or re-reveal. Use only the ratified vocabulary and remove DB_PUBLISHED, LEGACY_REMOVED, and RECOVERY_REQUIRED as states.",
+          "consequences": {
+            "security": "Eliminates the unauthenticated blocked-plan deadlock without creating repeat OS-owner administration authority; referenced secrets are never discarded or regenerated.",
+            "compatibility": "Amends bootstrap staging order but preserves all durable state names, one-time locator handoff, and local-bootstrap-only authority.",
+            "counts": "16 tables and the existing one LOCAL_BOOTSTRAP operation remain; no new operation or error code.",
+            "schema": "bootstrap-migration.schema.json gains closed external owner-proof/plan variants and exact state transitions; authority_meta.bootstrap_state is closed.",
+            "vectors": "Add BOOTSTRAP-PLAN-CRASH-001 for pre-plan cleanup/retry and retain BOOTSTRAP-LOCATOR-ROLLBACK-001 for post-plan exact reuse."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Fresh OS-owner recovery variant",
+          "rule": "Keep plan-before-temp ordering and add a fresh interactive OS-owner-proof bootstrap.initialize recovery/abort variant that tombstones a blocked abandoned plan before generating new IDs or secret.",
+          "consequences": {
+            "security": "Can recover, but creates a second pre-authority mutation authority and requires exact anti-replay/challenge/tombstone rules.",
+            "compatibility": "Expands bootstrap.initialize semantics while preserving operation count.",
+            "counts": "Counts stay unchanged if represented as a request variant; schema definition/vector counts grow.",
+            "schema": "Adds a recovery discriminator and blocked-plan tombstone evidence.",
+            "vectors": "Requires proof freshness, abandoned-plan collision, double recovery, and crash-at-tombstone cases."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Authenticated migration.recover",
+          "rule": "Leave ordering unchanged and require OWNER_ONLY migration.recover after a pre-authority crash.",
+          "consequences": {
+            "security": "Unreachable because no active credential or authority exists; the vault remains permanently blocked.",
+            "compatibility": "No schema expansion but an unusable recovery promise.",
+            "counts": "No count change.",
+            "schema": "Retains the contradiction.",
+            "vectors": "Cannot produce a successful pre-authority recovery vector."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "It closes the crash window with the smallest semantic amendment and no new authority, operation, state name, or error."
+      }
+    },
+    {
+      "id": "D015-R06",
+      "title": "Core and recovery vector accounting",
+      "classification": "DERIVED_CORRECTION",
+      "owner_selection_required": false,
+      "question": "How are the ratified eight core-operation vectors and ten separately frozen restore/bootstrap recovery vectors counted?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Separate 8 plus 10 classes",
+          "rule": "Keep f1_core_operation_vector_count=8 for BOOTSTRAP-SOURCE-001..004 and CREDENTIAL-RESULT-001..004; add f1_restore_bootstrap_recovery_vector_count=10 for RESTORE-OWNER-001..009 and BOOTSTRAP-LOCATOR-ROLLBACK-001; state combined_required_non_mcp_core_vectors=18. Keep official_mcp_vectors=67 and attach aliases rather than renumbering the 67 IDs.",
+          "consequences": {
+            "security": "All mandatory crash/recovery cases become executable without erasing the meaning of the existing eight-vector class.",
+            "compatibility": "Preserves ratified IDs and public MCP vector coordinates.",
+            "counts": "8 core-operation plus 10 recovery equals 18 combined; MCP remains 67.",
+            "schema": "Decision record and conformance metadata gain explicit class counts.",
+            "vectors": "Adds the missing ten as closed scenario vectors and core_vector_id aliases for existing semantic MCP cases."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Single total of 18",
+          "rule": "Rename the existing field to f1_core_operation_vector_count=18 and place all cases in one class.",
+          "consequences": {
+            "security": "Covers all cases but loses the ratified distinction between operation and recovery vectors.",
+            "compatibility": "Changes an accepted decision/count meaning.",
+            "counts": "One 18 count; MCP 67 unchanged.",
+            "schema": "Simpler count field but requires amendments to every eight-count assertion.",
+            "vectors": "IDs may remain unchanged."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Keep only eight",
+          "rule": "Treat the ten named recovery vectors as prose and preserve the existing fixture count.",
+          "consequences": {
+            "security": "Leaves the stopped restore/bootstrap crash protocol unqualified.",
+            "compatibility": "Preserves accepted F1 but contradicts ratified D0.",
+            "counts": "Eight only.",
+            "schema": "No correction.",
+            "vectors": "Ten required vectors remain absent."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "This is directly implied by the decision record's named eight-vector class and D0-6's separately named ten-vector recovery family; no discrete owner choice is needed unless D0 semantics are intentionally amended."
+      }
+    },
+    {
+      "id": "D015-R07",
+      "title": "Durable page-snapshot bytes and cursor restart",
+      "classification": "DERIVED_CORRECTION",
+      "owner_selection_required": false,
+      "question": "Does a page snapshot persist its authorized payload and remain usable after process restart during its 15-minute life?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Persist canonical payload; survive restart",
+          "rule": "Replace integer canonical_bytes with canonical_byte_length 0..524288 and canonical_payload_base64url containing the exact canonical UTF-8 authorized redacted summary bytes, with strict decode-length equality and byte-identical re-encode. Add policy_decision_id, nullable scope_ref_digest, nullable physical_identity_digest, nullable temporal_at, nullable temporal_state=valid|superseded|not_yet_created|all|null, and authorization_binding_digest. Compute authorization_binding_digest as SHA-256 over domain GKOS-PAGE-SNAPSHOT-AUTHORIZATION-V1, NUL, and canonical JSON of vault/authority/restore/generation, agent/auth epoch/session/transport/operation, policy decision, scope/physical/filter/temporal/order, snapshot digest, and expiry. Page cursors repeat policy_decision_id and authorization_binding_digest and require equality with the referenced row. An unexpired valid cursor resumes from SQLite after restart.",
+          "consequences": {
+            "security": "Restart cannot substitute process-memory pages or weaken the graph authorization tuple; only already-authorized redacted bytes persist.",
+            "compatibility": "Corrects an accepted field type and strengthens owner/private storage; public page semantics remain the ratified stable-snapshot behavior.",
+            "counts": "The existing page_snapshots and page_cursors tables remain tables 13 and 14; 32/24 operations and public MCP tool counts do not change.",
+            "schema": "audit-receipt page_snapshot/page_cursor definitions gain payload and binding fields with strict base64url validation.",
+            "vectors": "SNAPSHOT-RESTART-001 proves continuation from SQLite only; add binding mismatch, canonical alias, length mismatch, expiry, and restore-invalidation negatives."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Invalidate cursors on restart",
+          "rule": "Keep only snapshot digest/count metadata and define every process restart as cursor invalidation.",
+          "consequences": {
+            "security": "Fail-closed but weakens the ratified durable row and 15-minute stable-snapshot semantics.",
+            "compatibility": "Introduces a visible restart-dependent cursor failure.",
+            "counts": "No count change.",
+            "schema": "No payload field; requires explicit process epoch binding.",
+            "vectors": "Restart must always yield the closed invalid-cursor projection."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Process-memory snapshot cache",
+          "rule": "Persist only counts/digests and reconstruct pages from a process-local cache when present.",
+          "consequences": {
+            "security": "Produces nondurable behavior and cannot prove the stored snapshot digest corresponds to returned bytes after restart.",
+            "compatibility": "Matches the stopped draft's behavior only.",
+            "counts": "No count change.",
+            "schema": "Remains underbound.",
+            "vectors": "Cannot pass restart qualification."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "D0 says snapshots materialize bounded bytes, persist as rows until receipted expiry, and bind cursors; restart invalidation would be a semantic amendment rather than a correction."
+      }
+    },
+    {
+      "id": "D015-R08",
+      "title": "Global event kind-to-table constants",
+      "classification": "SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "question": "Which exact event_kind spellings close the four event tables?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Singular record-kind constants",
+          "rule": "Freeze identity_audit_receipt for identity_audit_receipts, retention_batch for retention_batches, effect_outbox_event for effect_outbox_events, and restore_event for restore_events.",
+          "consequences": {
+            "security": "Startup can reject kind/table aliases, cross-table substitution, and duplicate union entries with exact constants.",
+            "compatibility": "Adds exact enum values where accepted F1 allowed arbitrary strings; no public MCP change.",
+            "counts": "Four event kinds across the existing four event tables; no table, operation, error, leaf, or MCP count change.",
+            "schema": "Each event definition uses a table-specific const and the global union dispatches on those values.",
+            "vectors": "Add every wrong-table kind, case/Unicode alias, cross-table duplicate ID/sequence, gap, fork, genesis, and restore-floor negative."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Plural SQL-table constants",
+          "rule": "Use identity_audit_receipts, retention_batches, effect_outbox_events, and restore_events.",
+          "consequences": {
+            "security": "Equivalent closure if exact.",
+            "compatibility": "Couples the canonical event wire to plural physical table names.",
+            "counts": "No count change.",
+            "schema": "Four alternate consts.",
+            "vectors": "Same coverage with plural expected bytes."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "The singular values match the ratified record names and the contract-steward correction without exposing physical SQL naming as wire semantics."
+      }
+    },
+    {
+      "id": "D015-R09",
+      "title": "Race final gate after global generation drift",
+      "classification": "DERIVED_CORRECTION",
+      "owner_selection_required": false,
+      "question": "Does an unrelated agent mutation automatically stale otherwise valid work?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Selective bound-principal revalidation",
+          "rule": "At the read-result gate or immediately before the first irreversible effect commit under A-to-E, reread current instance/restore/generation/write gate, affected agent status and auth_epoch, credential status/ownership, session state/expiry, policy/configuration and required capability/dependency bindings, and scope/physical bindings. If only authority_generation changed and every affected binding remains equal, permit publication and record the current authority_generation_final. If any affected binding changed, persist request state stale, publish no result/effect/success activity, and return GKOS_P6_REQUEST_STALE_AUTHORITY.",
+          "consequences": {
+            "security": "No stale allow survives; unrelated agents cannot cause denial-of-service by generation churn.",
+            "compatibility": "Exactly matches ratified D0 lines 1019-1025 and requires the missing request stale state.",
+            "counts": "No count change and no public MCP schema change beyond already-ratified error behavior.",
+            "schema": "request state adds stale; final coordinates remain explicit.",
+            "vectors": "Cover same-agent and different-agent generation changes before/after final gate, reconnect, cancellation, effect commit, restart, and multiprocess order."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Unconditional generation equality",
+          "rule": "Any authority_generation change stales the request without rereading affected bindings.",
+          "consequences": {
+            "security": "Safe but creates cross-agent denial-of-service and contradicts the ratified selective rule.",
+            "compatibility": "Changes deterministic race outcomes.",
+            "counts": "No count change.",
+            "schema": "Simpler runtime predicate only.",
+            "vectors": "Different-agent mutation must stale, contrary to D0."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Ignore generation drift",
+          "rule": "Check only the admission snapshot and do no final revalidation.",
+          "consequences": {
+            "security": "Allows revoked, disabled, stale-policy, or recovery-blocked work to publish.",
+            "compatibility": "Violates the final-gate contract.",
+            "counts": "No count change.",
+            "schema": "Leaves stale state unused.",
+            "vectors": "Fails lifecycle-race negatives."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "The ratified text resolves this deterministically; owner action is needed only to reject and amend that rule."
+      }
+    },
+    {
+      "id": "D015-R10",
+      "title": "Credential issuance epoch and continuing authentication",
+      "classification": "DERIVED_CORRECTION",
+      "owner_selection_required": false,
+      "question": "Does issuing one credential silently invalidate other status=active credentials?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Historical issuance coordinate",
+          "rule": "credential.issue increments global authority_generation and the affected agent auth_epoch exactly once, stales all earlier sessions and admitted work for that agent, and writes the new credential's auth_epoch_issued as the new epoch. Continuing authentication requires the credential status active and the current agent active; it does not require auth_epoch_issued=current auth_epoch. Every other active credential remains usable for a fresh session at the current epoch. revoke and rotate affect only the selected credential, with rotate inserting one new active credential and revoking the selected old one.",
+          "consequences": {
+            "security": "All old work is stale while multiple independently attributable active credentials remain intentional and auditable.",
+            "compatibility": "Matches the ratified four-active-credentials limit and issuance-coordinate schema; removes the stopped draft's accidental implicit revocation.",
+            "counts": "No count, public MCP, table, or error change.",
+            "schema": "Clarify auth_epoch_issued as immutable history and close active/revoked credential nullability; no new field is required.",
+            "vectors": "Prove prior active credential reconnect after issue, all old sessions stale, selected-only revoke/rotate, and no equality gate."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Epoch equality authentication",
+          "rule": "Require every credential auth_epoch_issued to equal the current agent epoch.",
+          "consequences": {
+            "security": "Silently disables every prior active credential whenever any lifecycle mutation increments the epoch.",
+            "compatibility": "Contradicts multiple active credentials and status history.",
+            "counts": "No count change.",
+            "schema": "Makes active status misleading.",
+            "vectors": "Prior-active reconnect must fail."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Issue does not advance epoch",
+          "rule": "Keep prior sessions and work live when credential.issue commits.",
+          "consequences": {
+            "security": "Weakens the ratified stale-work boundary for a security-relevant credential mutation.",
+            "compatibility": "Contradicts D0's exact increment rule.",
+            "counts": "No count change.",
+            "schema": "No schema expansion.",
+            "vectors": "Issue-before-final-gate work would remain valid contrary to D0."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "This is the only interpretation consistent with both epoch-based stale work and up to four active credentials per agent."
+      }
+    },
+    {
+      "id": "D015-R11",
+      "title": "Sole-owner rotation after lost postcommit handoff",
+      "classification": "SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "question": "What prevents permanent owner lockout when rotation revokes the sole usable credential before a new one-time handoff is lost?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Require a second handed-off owner credential",
+          "rule": "Before credential.rotate may target an owner_admin credential, require at least one other distinct status=active owner_admin credential for the same owner agent with durable successful handoff evidence. If absent, return GKOS_P6_STATE_CONFLICT with zero mutation, zero new credential, and zero handoff. The owner first uses credential.issue; a lost issue handoff leaves the old credential active, and a lost rotate handoff leaves the second credential usable.",
+          "consequences": {
+            "security": "Preserves zero grace, no re-reveal, no OS-owner repeat administration, and no new recovery authority while preventing sole-credential lockout.",
+            "compatibility": "Adds a precondition to owner credential rotation; issue remains the safe enrollment path.",
+            "counts": "No operation, owner-operation, error, table, leaf, or public MCP count change; active credential cap remains four.",
+            "schema": "Credential handoff evidence must distinguish committed, delivered, and failed delivery without storing secret/path content.",
+            "vectors": "Cover sole-credential rejection, issue failure with old credential retained, two-credential rotation success, lost rotate handoff, replay false, and recovery through the second credential."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Independent recovery authority",
+          "rule": "Allow sole-owner rotation and define a separate authenticated recovery principal capable of rotating after lockout.",
+          "consequences": {
+            "security": "Adds a high-value authority and credential lifecycle that must be protected, revoked, audited, and recovered.",
+            "compatibility": "Expands the authority model and likely operation/request schemas.",
+            "counts": "Could preserve counts only by overloading an existing operation; a clean design likely changes operation or authority counts.",
+            "schema": "Requires recovery-principal, proof, policy, and event records.",
+            "vectors": "Requires full recovery credential non-enumeration, rotation, revocation, compromise, and race coverage."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Version sequencing or grace",
+          "rule": "Change rotation so old revocation follows successful handoff or introduce a grace window.",
+          "consequences": {
+            "security": "Avoids lockout but abandons zero grace and changes the deterministic race boundary.",
+            "compatibility": "Requires a new protocol version and revised rotation results.",
+            "counts": "Counts may remain but contract version and many vectors change.",
+            "schema": "Adds pending/grace states and timing fields.",
+            "vectors": "Requires dual-active, crash, replay, timeout, and revoke-during-grace cases."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "It resolves the contradiction using already-ratified multiple active credentials and does not add authority or weaken zero grace."
+      }
+    },
+    {
+      "id": "D015-R12",
+      "title": "External mapping availability before adapter authentication",
+      "classification": "DERIVED_CORRECTION",
+      "owner_selection_required": false,
+      "question": "May mapping.add or mapping.revoke bind an owner-supplied external subject before a qualified authenticated adapter exists?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Inventory-present but unavailable",
+          "rule": "Keep mapping.add and mapping.revoke in the exact owner-only inventory but return GKOS_P6_PLATFORM_UNAVAILABLE with zero mutation until a separately ratified adapter authenticates a stable namespace and canonical subject. The eventual request carries a nonsecret authenticated adapter evidence/reference, not a raw owner-supplied external_subject; authenticated_by is a closed adapter identifier/evidence digest, not a free string.",
+          "consequences": {
+            "security": "Prevents owners or callers from forging external identity bindings and stores no raw subject.",
+            "compatibility": "The operations remain discoverable in owner inventory but fail closed until dependency qualification; no public MCP tool exists for them.",
+            "counts": "Exactly 32 operations and 24 owner operations remain; error count stays 53.",
+            "schema": "Close adapter namespace/evidence and unavailable behavior; remove raw external_subject from callable owner input.",
+            "vectors": "Add adapter-absent, namespace mismatch, unauthenticated subject, replay, and zero-mutation unavailable cases."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Owner-supplied subject allowed",
+          "rule": "Permit owner_cli/private_authority to submit a raw external subject and label authenticated_by locally.",
+          "consequences": {
+            "security": "Creates unauthenticated mappings and violates the ratified future-adapter boundary.",
+            "compatibility": "Matches the accepted request shape but not D0.",
+            "counts": "No count change.",
+            "schema": "Retains free-form subject/authenticator semantics.",
+            "vectors": "Cannot prove external authentication."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Remove mapping operations",
+          "rule": "Delete mapping.add and mapping.revoke until an adapter is added.",
+          "consequences": {
+            "security": "Fail-closed, but changes the frozen operation catalog.",
+            "compatibility": "Unknown-operation behavior replaces defined unavailability.",
+            "counts": "Operations become 30 and owner-only operations become 22.",
+            "schema": "Removes two entries and related request/result definitions.",
+            "vectors": "All exact inventory/count fixtures must change."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "D0 invariant 4 already makes mapping unavailable until a separately authenticated namespace/subject contract exists; preserving the entries preserves the frozen 32/24 inventory."
+      }
+    },
+    {
+      "id": "D015-R13",
+      "title": "Prospective retention policy, history, and source sequences",
+      "classification": "SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "question": "What does prospective mean, and how is the applied policy reconstructible without a seventeenth table?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Creation-time policy binding in 16 tables",
+          "rule": "Store current retention_days 7..365, retention_effective_from, and retention_policy_digest in authority_meta, initialized to 90 and authority creation time. A set_retention receipt permanently stores exact before/after days, effective times, and policy digests. The new value applies only to purgeable rows created at or after retention_effective_from; each closed session, request, policy decision, and activity binds retention_policy_digest_at_creation. Add monotonic retention_sequence to session, request, and policy-decision rows; activity_seq serves activity. Each retention_batch names one record_type, the exact policy digest applied, true inclusive first/last source sequences, row count, ordered row digest, and deletion time. Sweeps delete only complete UTC days, respect the 24-hour idempotency minimum and active-row protection, and use the normal mutation-intent/event transaction.",
+          "consequences": {
+            "security": "No retroactive shortening, fabricated sequence evidence, or policy-history loss; every deletion is reconstructible.",
+            "compatibility": "Adds fields to existing records and a closed set_retention receipt variant; retention.get/set operation semantics stay owner-only.",
+            "counts": "Exactly 16 tables, 32 operations, 24 owner operations, and 53 errors remain; no new pack leaf or public MCP change.",
+            "schema": "authority_meta, the four purgeable record classes, identity audit set_retention, and retention_batch gain exact policy/sequence fields.",
+            "vectors": "Cover set/restart/get, multiple policy versions, old/new row eligibility, complete UTC-day boundaries, true sequences/digests, authorization, restore preservation, 24-hour replay, crash, and active-row denial."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Current policy governs every future sweep",
+          "rule": "A new retention value applies to all rows whenever a later sweep runs, including rows created before retention_effective_from; store only current policy plus setting receipts.",
+          "consequences": {
+            "security": "A shorter new value can retroactively accelerate deletion and a longer value can retain older rows unexpectedly.",
+            "compatibility": "Simpler row schema but changes the literal prospective meaning.",
+            "counts": "No count change.",
+            "schema": "Source sequences are still required for truthful batch evidence, but per-row policy binding is absent.",
+            "vectors": "Must prove retroactive sweep behavior explicitly."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Dedicated retention-policy table",
+          "rule": "Create a seventeenth table for current and historical retention versions and foreign-key purgeable rows to it.",
+          "consequences": {
+            "security": "Can be reconstructible, but introduces a new normalized state surface.",
+            "compatibility": "Contradicts the exact 16-table D0 model and changes backup/restore/startup schemas.",
+            "counts": "Table count becomes 17.",
+            "schema": "Adds a table, migrations, FKs, manifest expectations, and restoration rules.",
+            "vectors": "All schema/table-count and backup/restore fixtures must change."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "It gives prospective its literal non-retroactive meaning, makes policy selection and purge evidence permanent, and preserves the exact 16-table design."
+      }
+    },
+    {
+      "id": "D015-R14",
+      "title": "Closed activity metadata value domains",
+      "classification": "SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "question": "Which non-content value domains are allowed under the six base activity metadata keys?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Typed integers and closed enums",
+          "rule": "input_bytes, output_bytes, item_count, and result_count are nonnegative safe integers. cache_outcome is exactly not_applicable|hit|miss|bypassed. side_effect_class is exactly read|compute_only|proposal_only|authority_mutation|qualified_external_effect. Keys remain optional, at most 16 total and 8192 canonical bytes, and operation-specific schemas may remove values but not add free strings.",
+          "consequences": {
+            "security": "Paths, subjects, SQL, stack, credentials, and user content cannot be smuggled through metadata strings.",
+            "compatibility": "The three public-tool side-effect values remain aligned with the ratified MCP catalog; owner/effect activity gains two closed values.",
+            "counts": "No count change and no MCP tool/catalog semantic change.",
+            "schema": "activity.schema.json applies per-key types/enums and additionalProperties:false to metadata.",
+            "vectors": "Accept every enum/integer boundary; reject arbitrary strings, negative/fractional/unsafe integers, content-bearing attempts, and unknown keys."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Remove categorical keys",
+          "rule": "Allow only the four nonnegative integer keys and remove cache_outcome and side_effect_class from base metadata.",
+          "consequences": {
+            "security": "Strongly content-free but loses useful coarse operational classification.",
+            "compatibility": "Drops two ratified base keys.",
+            "counts": "No count change.",
+            "schema": "Smaller closed metadata object.",
+            "vectors": "Categorical keys become schema-invalid."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Digest categorical values",
+          "rule": "Store only domain-separated digests for cache and side-effect classification.",
+          "consequences": {
+            "security": "Content-free if preimages are closed, but opaque digests add no value over enums and complicate audits.",
+            "compatibility": "Changes human- and machine-readable activity semantics.",
+            "counts": "No count change.",
+            "schema": "Two sha256 fields replace enums.",
+            "vectors": "Requires a separate closed preimage registry."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "It preserves the ratified base keys and existing MCP classifications while closing every content-bearing value channel."
+      }
+    },
+    {
+      "id": "D015-R15",
+      "title": "Mapping cryptographic collision classification",
+      "classification": "SEMANTIC_OWNER_CHOICE",
+      "owner_selection_required": true,
+      "question": "Which exact existing or new error distinguishes a cryptographic mapping collision from an ordinary ownership conflict?",
+      "options": [
+        {
+          "id": "A",
+          "label": "Narrow existing identity collision",
+          "rule": "Use GKOS_P6_IDENTITY_COLLISION for a generated mapping_id collision or when the same namespace plus subject_digest is presented with a distinct authenticated canonical-subject collision guard/evidence digest. Use GKOS_P6_MAPPING_CONFLICT only for an ordinary existing binding/ownership conflict with no cryptographic mismatch. On collision consume entropy exactly once, perform zero authority mutation, do not overwrite or retry, emit only content-free owner evidence, and treat it as a D0-15 stop-class event.",
+          "consequences": {
+            "security": "Cryptographic/entropy failure remains distinguishable from expected uniqueness conflict without leaking the external subject.",
+            "compatibility": "Narrows the meaning of an existing owner-only code; no public MCP envelope or code-set expansion.",
+            "counts": "Error count remains exactly 53; operations remain 32/24 and tables remain 16.",
+            "schema": "external_mapping gains or binds a nonsecret authenticated collision-guard/evidence digest in the existing table; the registry description and exact mapping vectors are corrected.",
+            "vectors": "Inject mapping_id and subject-digest collisions; assert one entropy call, IDENTITY_COLLISION, no retry/overwrite/mutation, and distinguish ordinary MAPPING_CONFLICT."
+          }
+        },
+        {
+          "id": "B",
+          "label": "Add mapping collision code",
+          "rule": "Ratify GKOS_P6_MAPPING_COLLISION as a new owner-only public-registry member with the same no-mutation disposition.",
+          "consequences": {
+            "security": "Most explicit name, with equivalent fail-closed behavior.",
+            "compatibility": "Changes the closed error registry and every duplicated enum/error fixture.",
+            "counts": "Error count becomes 54 and MCP/error vector hashes change.",
+            "schema": "All exact 53-code schemas and evidence counts must be amended.",
+            "vectors": "Adds a new expected error code across Full/Lite parity."
+          }
+        },
+        {
+          "id": "C",
+          "label": "Use mapping conflict for both",
+          "rule": "Return GKOS_P6_MAPPING_CONFLICT for ordinary ownership conflicts and cryptographic collisions.",
+          "consequences": {
+            "security": "Hides a stop-class entropy/digest anomaly among normal conflicts and cannot prove collision handling.",
+            "compatibility": "Preserves the accepted code mapping.",
+            "counts": "Error count remains 53.",
+            "schema": "No new code or narrowed description.",
+            "vectors": "Collision and ordinary conflict expected bytes become indistinguishable."
+          }
+        }
+      ],
+      "recommendation": {
+        "option_id": "A",
+        "rationale": "It preserves the closed 53-code registry and gives mapping collision the same stop-class semantics already ratified for identity and credential collisions."
+      }
+    }
+  ],
+  "recommended_exact_selections": {
+    "D015-R01": "A",
+    "D015-R02": "A",
+    "D015-R03": "A",
+    "D015-R04": "A",
+    "D015-R05": "A",
+    "D015-R06": "A",
+    "D015-R07": "A",
+    "D015-R08": "A",
+    "D015-R09": "A",
+    "D015-R10": "A",
+    "D015-R11": "A",
+    "D015-R12": "A",
+    "D015-R13": "A",
+    "D015-R14": "A",
+    "D015-R15": "A",
+    "selection_effect": "If the Product Owner ratifies these selections and all required fresh concurrence roles later accept the exact rule bytes, the correction can preserve 16 tables, 32 operations, 24 owner operations, 53 errors, seven public MCP tools, 67 official MCP vectors, and a 34-leaf/33-hashed-leaf pack."
+  },
+  "bounded_derived_corrections_not_requiring_separate_owner_questions": [
+    {
+      "id": "D015-DC01",
+      "correction": "Replace every standalone or duplicated error schema with the same six-field additionalProperties:false envelope: contract_version, error_code from exactly 53 codes, request_id, retryable, retry_after_ms, and error_digest. Remove code, message, details, and every arbitrary content field. This aligns private/CLI/HTTP with the already-ratified MCP envelope; it does not change public MCP semantics."
+    },
+    {
+      "id": "D015-DC02",
+      "correction": "Add request state stale and restrict operation/capability/namespace fields to the ratified ASCII grammar and 64-byte ceiling. Persist stale with no result, effect, or success activity when lifecycle wins before the final gate."
+    },
+    {
+      "id": "D015-DC03",
+      "correction": "Represent exact ordered policy-operation arrays and private dependency arrays per operation, separate transport from authority, cap policy reason_codes at 16 unique sorted ASCII values of at most 64 bytes, and require deny/indeterminate/timeout/unmapped dependency failure to close."
+    },
+    {
+      "id": "D015-DC04",
+      "correction": "Close rate_bucket.bucket_class to agent_request, global_request, credential_selector_auth_failure, or global_auth_failure; freeze conditional agent/auth-epoch nullability, domain-separated bucket-id preimages, persisted integer-microtoken refill, effective_now, monotonic/wall divergence, restart, and unknown-selector cap semantics."
+    },
+    {
+      "id": "D015-DC05",
+      "correction": "Add reachable closed external bootstrap plan/owner-proof, restore_plan, and restore_abort_intent definitions inside existing schema leaves; do not add a table, operation, pack leaf, or raw path field."
+    },
+    {
+      "id": "D015-DC06",
+      "correction": "Replace generic conformance assertion shells with per-kind closed executable scenarios containing exact initial durable/physical state, request bytes, injected entropy/failure/crash schedule, expected canonical response/error bytes, allowed and forbidden mutations, restart step, and durable post-state digests. Repair cursor IDs or declare closed aliases, and add core_vector_id aliases to semantically corresponding MCP cases without renumbering the official 67."
+    },
+    {
+      "id": "D015-DC07",
+      "correction": "Accept real Gregorian UTC millisecond timestamps for exactly years 1970 through 9999 rather than stopping at 2999; retain rejection of missing milliseconds, offsets, impossible dates, date-only values, and year 10000."
+    },
+    {
+      "id": "D015-DC08",
+      "correction": "Keep authority_backup_manifest as an existing external protected record and freeze vault/instance/restore/generation as source coordinates plus checked SQLite-backup-API snapshot byte length/digest, no-follow/no-replace publication, checkpoint, integrity/foreign-key verification, fsync order, and exact replay."
+    },
+    {
+      "id": "D015-DC09",
+      "correction": "Close credential prefix/format/digest coupling, active versus revoked nullability, one-time handoff evidence, locator/pipe physical identity/protection/content binding, delivered/failed/replay outcomes, canonical decode/re-encode, one-shot entropy, no retry/overwrite, and byte-identical unauthenticated non-enumeration. Ordinary delivery failure is not GKOS_P6_SECRET_EXPOSURE."
+    },
+    {
+      "id": "D015-DC10",
+      "correction": "Enforce the one global event union across the four existing event tables: globally unique event_id/global_event_seq, no gaps/forks, exact predecessor, full before/after authority and nullable agent/epoch coordinates, only one bootstrap genesis, exact restore history floor, kind-to-table constants from D015-R08, checked integrity/foreign keys/pragmas, and receipt digests computed only from committed canonical records."
+    },
+    {
+      "id": "D015-DC11",
+      "correction": "Bind references, sessions, cursors, snapshots, requests, and idempotency to the ratified identity/authority/policy/physical/recovery coordinates; enforce 24-hour idempotency expiry, restore invalidation, process/write-gate invalidation, and startup resealing of every durable record changed to stale/closed."
+    },
+    {
+      "id": "D015-DC12",
+      "correction": "Keep retention authorization owner-or-trusted-scheduler only, require the open/recovery gate rule, delete only complete UTC-day eligible rows in foreign-key-safe order, preserve active rows and replay minima, bind each batch to mutation intent/global event/true sequence/digest evidence, and never report placeholder sequence values."
+    },
+    {
+      "id": "D015-DC13",
+      "correction": "Regenerate changed F1 leaves deterministically, regenerate pack-manifest.json last, keep it non-self-listing, recompute every size/hash and generation/aggregate digest, and create a new acyclic input-commit to hosted-run to evidence-closeout chain. The accepted e29e04b pack remains immutable historical evidence and cannot qualify corrected bytes."
+    }
+  ],
+  "aggregate_consequences_of_recommended_slate": {
+    "security": [
+      "All anchor, restore, bootstrap, credential, retention, mapping, cursor, event, error, policy, activity, collision, and race boundaries fail closed with content-free errors and exact durable evidence.",
+      "No raw credential, raw external subject, unrestricted path, SQL, stack, exception text, or arbitrary activity/error string is admitted to contract records or serialized errors.",
+      "No collision is retried or overwritten; no lost secret is re-revealed; no restore or bootstrap recovery guesses or synthesizes state."
+    ],
+    "compatibility": [
+      "The accepted F1 pack at e29e04bdad1cd192a25eba2d682a4c46774def28 remains historical but cannot be used for F2 restart.",
+      "A successor F1 pack is a versioned corrected coordinate with new hashes; internal/owner schemas change substantially.",
+      "The recommended slate makes no public MCP tool-name, required-tool-count, input, or successful-result semantic change. The already-ratified six-field MCP error envelope remains the governing public shape; Full duplicate schemas and fixture coordinates are brought into parity."
+    ],
+    "counts": {
+      "authority_tables": 16,
+      "operations": 32,
+      "public_authenticated": 7,
+      "local_bootstrap": 1,
+      "owner_only": 24,
+      "errors": 53,
+      "public_mcp_required_tools": 7,
+      "official_mcp_vectors": 67,
+      "core_operation_vectors": 8,
+      "restore_bootstrap_recovery_vectors": 10,
+      "combined_required_non_mcp_core_vectors": 18,
+      "pack_leaves_target": 34,
+      "manifest_hashed_leaves_target": 33,
+      "allowed_paths_target": 40
+    },
+    "schema": [
+      "Use existing leaves and exact 16 tables; add external plan/intent $defs rather than a new leaf/table.",
+      "Use closed oneOf variants and per-field domains instead of flat nullable supersets or arbitrary strings.",
+      "All corrected bytes, manifests, docs, fixtures, schemas, generators, and evidence must be regenerated and requalified as one exact successor F1 coordinate."
+    ],
+    "vectors": [
+      "Preserve the 67 official MCP vector IDs and use closed aliases where ratified ERROR-* or cursor coordinates differ.",
+      "Materialize all named restore/bootstrap vectors plus the contract-steward and security negative families as executable per-scenario cases.",
+      "Every vector binds exact input bytes, expected public bytes/code, mutation count/set, event count/sequence/digests, physical disposition, reveal count, crash/restart state, and forbidden outcomes."
+    ]
+  },
+  "lite_mcp_concurrence_determination": {
+    "required_before_successor_f1_correction": true,
+    "answer": "YES",
+    "required_pair": [
+      "/root/phase6_full_contract_steward",
+      "/root/phase6_lite_conformance_reviewer"
+    ],
+    "must_be_fresh_and_zero_contribution": true,
+    "reason": "The correction touches the closed error envelope, Full duplicate protocol/error schemas, MCP conformance fixture coordinates/aliases, policy/dependency/transport declarations, and all pack/consumer hashes. Governance-correction.3 assigns protocol/catalog/error resolution to a fresh Full contract steward plus fresh Lite-conformance reviewer before a product correction wave, even though the recommended slate changes no public MCP tool or success semantics.",
+    "independent_mcp_reviewer_required_at_this_pre_correction_step": false,
+    "independent_mcp_reviewer_rule": "The separate independent MCP reviewer remains required for governed F3/L2 review. It becomes additionally required here only if the owner selects an option that changes public MCP tool names, catalog membership, inputs, successful results, or protocol behavior; no recommended option does so.",
+    "lite_implementation_authorized": false,
+    "lite_rule": "No L1-L4 work starts. After future accepted Full F5, Lite must copy the corrected hosted-green Full pack byte-for-byte and repin the exact accepted Full coordinate."
+  },
+  "required_reviewers_and_sequence": [
+    {
+      "order": 1,
+      "role": "Product Owner",
+      "action": "Select and ratify exact options for every SEMANTIC_OWNER_CHOICE and MIXED item, and ratify the derived corrections as one bounded correction record if accepted.",
+      "authority_limit": "Owner selection alone does not authorize product correction or F2 restart."
+    },
+    {
+      "order": 2,
+      "roles": [
+        "/root/phase6_full_contract_steward",
+        "/root/phase6_lite_conformance_reviewer"
+      ],
+      "action": "Separately concur on the exact post-owner Full protocol/error/vector rule and Lite byte/error parity before successor F1 correction starts.",
+      "independence": "Use fresh reviewers with no contribution to the affected rule, package, or expected outcomes; the authors of the supplied D0-15 review proposals cannot accept their own proposed resolution bytes."
+    },
+    {
+      "order": 2,
+      "role": "/root/phase6_migration_reviewer",
+      "action": "Fresh concurrence on bootstrap vocabulary/staging, restore plan/discovery/abort lifecycle, retention policy/history, crash/restart, rollback, and exact physical disposition.",
+      "independence": "No contribution to the amended state machine, package, or expected outcomes."
+    },
+    {
+      "order": 2,
+      "role": "/root/phase6_security_reviewer",
+      "action": "Fresh and separate concurrence on credential epochs/handoff, sole-owner rotation, locator protection, restore abort, mapping availability/collision, redaction, metadata, non-enumeration, and negative vectors.",
+      "independence": "No contribution to the selected security rule, package, or expected outcomes."
+    },
+    {
+      "order": 2,
+      "role": "fresh independent authority/concurrency reviewer",
+      "action": "Concur on selective final-gate race winners, abort generation/session invalidation, A-to-E ordering, multiprocess behavior, and restart semantics.",
+      "independence": "Must not have authored the affected runtime, rule, or expected outcomes."
+    },
+    {
+      "order": 3,
+      "role": "governed successor F1 implementer",
+      "action": "Only after all required owner decisions and concurrence receipts, generate a versioned successor F1 pack from ratified sources; do not repair or grandfather the stopped F2 worktree.",
+      "authority_limit": "F1 contract correction only under a new explicit work authorization."
+    },
+    {
+      "order": 4,
+      "roles": [
+        "fresh zero-contribution F1 independent reviewer",
+        "independent evidence reviewer",
+        "Product Owner"
+      ],
+      "action": "Independently regenerate/validate the exact successor pack, verify new hosted terminal-green evidence and manifests, then accept one exact corrected F1 SHA.",
+      "authority_limit": "No role may reuse the old e29e04b acceptance as qualification for changed bytes."
+    },
+    {
+      "order": 5,
+      "roles": [
+        "Orchestrator",
+        "Product Owner"
+      ],
+      "action": "Issue a new explicit F2 authorization naming the exact accepted successor F1 SHA and review digest before any F2 implementation restarts.",
+      "authority_limit": "The current dirty/stopped F2 snapshot is evidence only and is not accepted, grandfathered, or authorized."
+    }
+  ],
+  "resume_gate": {
+    "current_state": "F2_STOPPED_D0_15",
+    "all_required_before_f2_restart": [
+      "Owner-ratified exact D0-15 resolution record with all selections and replacement fixture IDs.",
+      "Fresh Full-contract, Lite-conformance, migration, security, and authority/concurrency concurrence receipts as applicable to the selected rules.",
+      "Versioned successor F1 source commit and deterministic pack with exact new hashes.",
+      "Strict schema/meta-schema validation, executable negative/security/recovery vectors, all mandatory hosted jobs terminal-green, and ordinary CI green with only ratified skips.",
+      "Fresh zero-contribution F1 independent acceptance and Product Owner acceptance of one exact successor SHA.",
+      "New explicit F2 authorization against that exact successor SHA and review digest."
+    ],
+    "prohibited": [
+      "Editing or silently normalizing the ratified proposals based on this proposal",
+      "Editing accepted F1 bytes in place or reusing their manifest/evidence digests",
+      "Committing, signing, pushing, accepting, or repairing the current stopped F2 snapshot",
+      "Starting F3, F4, F5, Lite L1-L4, merge, release, deployment, activation, or publication"
+    ]
+  },
+  "final_statement": "This artifact is a detached proposal with complete one-to-one coverage of the 21 supplied owner questions. Recommended selections preserve ratified D0 intent, exact 16/32/24/53 counts, the seven-tool public MCP surface, 67 official MCP vectors, and fail-closed recovery. NO_IMPLEMENTATION; F2_STOPPED."
+}

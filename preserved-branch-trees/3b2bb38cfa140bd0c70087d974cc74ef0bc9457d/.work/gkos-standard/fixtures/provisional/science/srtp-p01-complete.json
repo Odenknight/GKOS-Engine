@@ -1,0 +1,225 @@
+{
+  "profile": "SRTP-DRAFT-0.1",
+  "profile_status": "provisional-draft-non-normative",
+  "trace_id": "10000000-0000-4000-8000-000000000001",
+  "created_at": "2026-08-08T14:00:00-04:00",
+  "version_coordinates": {
+    "gkos_publication": "GKOS-2026-08-05 v0.78",
+    "gkx_namespace": "2.0",
+    "projection_profile": "gkx-2.0-validating-projection",
+    "engine_package": "2.0.1",
+    "engine_commit": "7c742436d50b34f6dda66976212a672fb51f7c21"
+  },
+  "evaluation_status": "UNEVALUATED",
+  "research_objects": [],
+  "datasets": [
+    {
+      "id": "20000000-0000-4000-8000-000000000002",
+      "srtp_type": "srtp:DatasetSnapshot",
+      "origin": "authored",
+      "sensitivity": "restricted",
+      "derived_sensitivity": "restricted",
+      "created_at": "2026-08-08T13:00:00-04:00",
+      "created_by": "human",
+      "lineage": { "branch_id": "main", "predecessors": [] },
+      "snapshot_digest": "sha256:dataset-v1",
+      "source_revision": "dataset-revision-1",
+      "custody": [{ "actor": "human", "at": "2026-08-08T13:00:00-04:00", "action": "captured" }],
+      "retrieved_at": "2026-08-08T13:00:00-04:00",
+      "x_vendor_note": "unknown dataset extension must round-trip"
+    }
+  ],
+  "environments": [
+    {
+      "id": "30000000-0000-4000-8000-000000000003",
+      "srtp_type": "srtp:EnvironmentSnapshot",
+      "origin": "derived",
+      "sensitivity": "restricted",
+      "created_at": "2026-08-08T13:05:00-04:00",
+      "created_by": "tool:environment-capture",
+      "lineage": { "branch_id": "main", "predecessors": [] },
+      "snapshot_digest": "sha256:environment-v1",
+      "runtime": "node 22.18.0",
+      "dependencies": [{ "name": "analysis-library", "version": "1.0.0", "digest": "sha256:dependency-v1" }],
+      "platform": { "os": "linux", "architecture": "x86_64", "container_digest": "sha256:container-v1" }
+    }
+  ],
+  "execution_requests": [
+    {
+      "id": "40000000-0000-4000-8000-000000000004",
+      "srtp_type": "srtp:ExecutionRequest",
+      "origin": "approved",
+      "sensitivity": "restricted",
+      "created_at": "2026-08-08T13:20:00-04:00",
+      "created_by": "human",
+      "lineage": { "branch_id": "main", "predecessors": [] },
+      "code_digest": "sha256:code-v1",
+      "dataset_ids": ["20000000-0000-4000-8000-000000000002"],
+      "environment_id": "30000000-0000-4000-8000-000000000003",
+      "parameters_digest": "sha256:parameters-v1",
+      "seed": 42,
+      "context_manifest_id": "c0000000-0000-4000-8000-00000000000c",
+      "authorized_use_id": "d0000000-0000-4000-8000-00000000000d",
+      "requested_state": "requested"
+    }
+  ],
+  "execution_manifests": [
+    {
+      "id": "50000000-0000-4000-8000-000000000005",
+      "srtp_type": "srtp:ExecutionManifest",
+      "origin": "derived",
+      "sensitivity": "restricted",
+      "created_at": "2026-08-08T13:30:00-04:00",
+      "created_by": "agent:science-runner",
+      "content_digest": "sha256:manifest-v1",
+      "lineage": { "branch_id": "main", "predecessors": [] },
+      "request_id": "40000000-0000-4000-8000-000000000004",
+      "code_digest": "sha256:code-v1",
+      "dataset_digests": ["sha256:dataset-v1"],
+      "environment_digest": "sha256:environment-v1",
+      "parameters_digest": "sha256:parameters-v1",
+      "seed": 42,
+      "started_at": "2026-08-08T13:30:00-04:00",
+      "ended_at": "2026-08-08T13:31:00-04:00",
+      "state": "succeeded",
+      "event_ids": ["60000000-0000-4000-8000-000000000006", "70000000-0000-4000-8000-000000000007"]
+    }
+  ],
+  "execution_events": [
+    {
+      "id": "60000000-0000-4000-8000-000000000006",
+      "srtp_type": "srtp:ExecutionEvent",
+      "origin": "derived",
+      "sensitivity": "restricted",
+      "created_at": "2026-08-08T13:30:01-04:00",
+      "created_by": "agent:science-runner",
+      "lineage": { "branch_id": "main", "predecessors": [] },
+      "manifest_id": "50000000-0000-4000-8000-000000000005",
+      "sequence": 0,
+      "event_kind": "code",
+      "event_digest": "sha256:event-0",
+      "previous_event_digest": null,
+      "occurred_at": "2026-08-08T13:30:01-04:00",
+      "input_digests": ["sha256:code-v1", "sha256:dataset-v1", "sha256:environment-v1"],
+      "output_digests": ["sha256:calculation-v1"]
+    },
+    {
+      "id": "70000000-0000-4000-8000-000000000007",
+      "srtp_type": "srtp:ExecutionEvent",
+      "origin": "derived",
+      "sensitivity": "restricted",
+      "created_at": "2026-08-08T13:31:00-04:00",
+      "created_by": "agent:science-runner",
+      "lineage": { "branch_id": "main", "predecessors": ["60000000-0000-4000-8000-000000000006"] },
+      "manifest_id": "50000000-0000-4000-8000-000000000005",
+      "sequence": 1,
+      "event_kind": "output",
+      "event_digest": "sha256:event-1",
+      "previous_event_digest": "sha256:event-0",
+      "occurred_at": "2026-08-08T13:31:00-04:00",
+      "input_digests": ["sha256:calculation-v1"],
+      "output_digests": ["sha256:figure-v1"]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "80000000-0000-4000-8000-000000000008",
+      "srtp_type": "srtp:Artifact",
+      "origin": "derived",
+      "sensitivity": "restricted",
+      "created_at": "2026-08-08T13:31:00-04:00",
+      "created_by": "agent:science-runner",
+      "lineage": { "branch_id": "main", "predecessors": [] },
+      "artifact_kind": "figure",
+      "artifact_digest": "sha256:figure-v1",
+      "registered_source_digest": "sha256:figure-v1",
+      "generating_event_id": "70000000-0000-4000-8000-000000000007",
+      "code_digest": "sha256:code-v1",
+      "dataset_digests": ["sha256:dataset-v1"],
+      "environment_digest": "sha256:environment-v1"
+    }
+  ],
+  "results": [
+    {
+      "id": "90000000-0000-4000-8000-000000000009",
+      "srtp_type": "srtp:Result",
+      "origin": "proposed",
+      "sensitivity": "restricted",
+      "created_at": "2026-08-08T13:32:00-04:00",
+      "created_by": "agent:science-runner",
+      "lineage": { "branch_id": "interpretation-a", "predecessors": [] },
+      "run_id": "50000000-0000-4000-8000-000000000005",
+      "outcome": "success",
+      "scope": "fixture population only",
+      "uncertainty": "sampling uncertainty remains",
+      "claim": "The observed mean is 2.0 in the fixture population.",
+      "evidence_ids": ["80000000-0000-4000-8000-000000000008"],
+      "numeric_claims": [{ "text": "mean = 2.0", "calculation_event_id": "60000000-0000-4000-8000-000000000006", "evidence_ids": ["80000000-0000-4000-8000-000000000008"] }]
+    }
+  ],
+  "reviewer_findings": [
+    {
+      "id": "a0000000-0000-4000-8000-00000000000a",
+      "srtp_type": "srtp:ReviewerFinding",
+      "origin": "derived",
+      "sensitivity": "restricted",
+      "created_at": "2026-08-08T13:40:00-04:00",
+      "created_by": "tool:deterministic-review",
+      "lineage": { "branch_id": "review", "predecessors": [] },
+      "target_id": "90000000-0000-4000-8000-000000000009",
+      "reviewer": "tool:deterministic-review",
+      "independence": "independent",
+      "deterministic": true,
+      "severity": "info",
+      "evaluation": "PASS",
+      "finding": "Numeric claim resolves to calculation event and evidence."
+    }
+  ],
+  "rerun_comparisons": [],
+  "context_manifests": [
+    {
+      "id": "c0000000-0000-4000-8000-00000000000c",
+      "digest": "sha256:context-v1",
+      "purpose": "execute generic analysis fixture",
+      "recipient": "agent:science-runner",
+      "compiled_at": "2026-08-08T13:15:00-04:00",
+      "expires_at": "2026-08-09T13:15:00-04:00",
+      "sensitivity": "restricted",
+      "warnings": [],
+      "omissions": []
+    }
+  ],
+  "authorized_uses": [
+    {
+      "id": "d0000000-0000-4000-8000-00000000000d",
+      "actor": "agent:science-runner",
+      "action": "execute-analysis",
+      "context_manifest_id": "c0000000-0000-4000-8000-00000000000c",
+      "context_manifest_digest": "sha256:context-v1",
+      "authorized_at": "2026-08-08T13:20:00-04:00",
+      "input_digests": ["sha256:code-v1", "sha256:dataset-v1", "sha256:environment-v1", "sha256:parameters-v1"],
+      "sensitivity": "restricted"
+    }
+  ],
+  "reentry_receipts": [
+    {
+      "receipt_id": "e0000000-0000-4000-8000-00000000000e",
+      "authorized_use_id": "d0000000-0000-4000-8000-00000000000d",
+      "context_manifest_digest": "sha256:context-v1",
+      "execution_manifest_digest": "sha256:manifest-v1",
+      "new_source_digests": ["sha256:manifest-v1", "sha256:event-0", "sha256:event-1"],
+      "new_artifact_digests": ["sha256:figure-v1"],
+      "emitted_at": "2026-08-08T13:41:00-04:00",
+      "receipt_status": "complete",
+      "origin": "derived",
+      "sensitivity": "restricted"
+    }
+  ],
+  "relations": [
+    { "type": "srtp:used", "from": "50000000-0000-4000-8000-000000000005", "to": "20000000-0000-4000-8000-000000000002", "scope": "run input", "recorded_at": "2026-08-08T13:30:00-04:00", "prov_mapping": "prov:used" },
+    { "type": "srtp:generated", "from": "50000000-0000-4000-8000-000000000005", "to": "80000000-0000-4000-8000-000000000008", "scope": "run output", "recorded_at": "2026-08-08T13:31:00-04:00", "prov_mapping": "prov:generated" },
+    { "type": "srtp:reentry_of_authorized_use", "from": "e0000000-0000-4000-8000-00000000000e", "to": "d0000000-0000-4000-8000-00000000000d", "scope": "closing receipt", "recorded_at": "2026-08-08T13:41:00-04:00", "loss_markers": ["GKOS authority semantics are not representable in bare PROV"] }
+  ],
+  "extensions": { "x_lab_extension": { "preserve": true } },
+  "x_top_level_extension": "unknown top-level extension must round-trip"
+}

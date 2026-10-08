@@ -1,0 +1,22 @@
+{
+  "fixture_id": "GCP6-P-REPLAY-001",
+  "evidence_status": "mechanism_demonstrated",
+  "requirement_ids": [
+    "GKOS-CANON-007",
+    "GKOS-CANON-008",
+    "GKOS-CONTEXT-001",
+    "GKOS-CONTEXT-002",
+    "GKOS-CONTEXT-003"
+  ],
+  "qualifying_profiles": [],
+  "tier_claims": [],
+  "core_tier_claimed": false,
+  "assessment_type": "self-attested",
+  "selection_sha256": "a1ee26b8b6077655154a3fdf73bbd93122033a22b09bc6a47b25bbb3564200eb",
+  "canonical_sha256": "03d9507b12bb07d3d0224359881c0f6b6f7c2eb79346e31ca25925365dc2667b",
+  "canonical_byte_length": 1338,
+  "limitations": [
+    "Closed deterministic fixture corpus",
+    "Mechanism evidence only; cumulative GCP-6 conformance is not established"
+  ]
+}

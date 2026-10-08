@@ -1,0 +1,220 @@
+{
+  "record_type": "gkos-phase6-d0-15-standing-authority-exact-coordinate-receipt",
+  "record_version": "11.0.0",
+  "recorded_at_utc": "2026-08-26T15:02:00.0000000Z",
+  "status": "STANDING_AUTHORITY_EXACT_COORDINATE_V11_APPLIED_FRESH_C1_ONLY",
+  "owner_statement_exact": "Ratify all future dispositions.",
+  "purpose": "Apply V8's bounded standing source-preserving evidence authority, as mechanically resolved by V10, to the final immutable V8, V10, Registry V5, and Map V5 bytes. This later acyclic receipt authorizes only a brand-new fresh independent C1 migration and security rerun on the same exact coordinate. Map V4, V9, and both C1 V4 receipts are bound only as immutable historical noncarrying evidence.",
+  "standing_authority_application": {
+    "authority_source": "V8 standing_future_disposition_authority",
+    "mechanical_disposition_source": "V10",
+    "conditions_satisfied": [
+      "V10 was complete and immutable before Registry V5 was created",
+      "Registry V5 was complete and immutable before Map V5 was created",
+      "Map V5 was complete and immutable before this receipt was created",
+      "the primary coordinate raw hashes, byte lengths, and canonical internal digests were independently recomputed before this receipt",
+      "the 468-case count and all family totals were derived from materialized Registry V5 rows rather than target-fit",
+      "C1-V4-SEC-001 and C1-V4-SEC-002 were corrected only through V10's finite source-preserving matrices",
+      "no product choice, product byte, proposal byte, F1 byte, F2 byte, official MCP vector, valid wire semantic, logger configuration, output channel, error, retry, state transition, operation, or public behavior was changed"
+    ],
+    "application_result": "EXACT_COORDINATE_BOUND_FRESH_C1_ONLY",
+    "owner_q_and_a_required": false
+  },
+  "exact_primary_coordinate": [
+    {
+      "coordinate": "V8",
+      "role": "Q17-Q20 owner resolution and bounded standing source-preserving evidence authority",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V8_2026-08-26.json",
+      "sha256": "6b8a5b9fca8c72561ef1aee56c15911e34d0559edcae058f19631b71e16d9116",
+      "bytes": 18358,
+      "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2"
+    },
+    {
+      "coordinate": "V10",
+      "role": "ratified source-preserving mechanical disposition for C1-V4-SEC-001 and C1-V4-SEC-002",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_STANDING_SOURCE_PRESERVING_DISPOSITION_V10_2026-08-26.json",
+      "sha256": "2fc2da6a15308460c091624c5ccaa9ede2b3a17ac529b3fe401f9d9138f9814b",
+      "bytes": 28622,
+      "record_digest": "a560e9dbd92cd8e31fb6b05512c5c197bf92e2c3b8a204a7877bc7d5b2e89de7"
+    },
+    {
+      "coordinate": "Registry V5",
+      "role": "closed 468-row canonical non-MCP fixture registry",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V5_2026-08-26.json",
+      "sha256": "de2a2f28ee0248b01644bf50328c8e1321790e5e0fd6f3b3c12d40adb92610c8",
+      "bytes": 254938,
+      "record_digest": "db1806b1edda3a8eaab27e9d1c2861d95fbd5cce61630412b52087a0232efde4"
+    },
+    {
+      "coordinate": "Map V5",
+      "role": "corrected decision and correction map closing both C1 V4 security findings without contribution",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V5_2026-08-26.json",
+      "sha256": "7c9f4cb1fcd97dded263be39cc21bff1291968bd9d41747dcef68748d009fb56",
+      "bytes": 24737,
+      "record_digest": "380736841645b57bd6d31e2dab68c632f328efdc163e1d40fc48438494f1fda7"
+    }
+  ],
+  "historical_noncarrying_parent_ledger": [
+    {
+      "coordinate": "Map V4",
+      "role": "immutable rejected-coordinate map; superseded only by Map V5 and retained as historical evidence",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V4_2026-08-26.json",
+      "sha256": "ef2eb284bc992ccf32170b7aaf0d21b140a61395b86a4cb97bef96aeb9ab5967",
+      "bytes": 21386,
+      "record_digest": "c20588e1cd55226ca3f65a73e272dde8ac3b98dd573d7b2c823b2e8d962568ef",
+      "carrying": false
+    },
+    {
+      "coordinate": "V9",
+      "role": "immutable receipt for the rejected V8, Registry V4, and Map V4 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_COORDINATE_RECEIPT_V9_2026-08-26.json",
+      "sha256": "ba604f8d74534b76840580a128cbb8e737ee7a4a72d6031fbd53adfc60f228ee",
+      "bytes": 13388,
+      "record_digest": "610657caf21d2a4a47b9ad9c5fac2a6ac9d7deecaa0b070609014c5e817d9f07",
+      "carrying": false
+    },
+    {
+      "coordinate": "C1 V4 migration",
+      "role": "immutable acceptance of V9 only; does not carry to this coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V4_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "13c8f31327de7c0ef4faad66288b437299a49bb2a73777a444818f9a8701cb08",
+      "bytes": 19333,
+      "record_digest": "5dec4e47418c3d211a87f309ce5379c293fb030238980b0fc4a5e6b86d0e3dad",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "carrying": false
+    },
+    {
+      "coordinate": "C1 V4 security",
+      "role": "immutable rejection that opened C1-V4-SEC-001 and C1-V4-SEC-002; defect evidence only after correction",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V4_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "7bc783da8dedceecd05e27a3ceab4394a2775b623cfff5f8e2a42a0d3c866c91",
+      "bytes": 27190,
+      "record_digest": "3d04c1692e7f815b4f3600a1ebbac063b8f81418b1a77255821f166e0908b2b8",
+      "verdict": "REJECT_CONCURRENCE",
+      "carrying": false
+    }
+  ],
+  "bound_semantic_and_count_summary": {
+    "q1_q20_retained_without_contribution": true,
+    "d015_r01_r15_retained_and_v10_corrected": true,
+    "d015_dc01_dc13_retained_and_v10_corrected": true,
+    "c1_v4_sec_001": "MECHANICALLY_CLOSED_AWAITING_FRESH_INDEPENDENT_C1",
+    "c1_v4_sec_002": "MECHANICALLY_CLOSED_AWAITING_FRESH_INDEPENDENT_C1",
+    "named_core_operation_subtotal": 8,
+    "named_restore_bootstrap_recovery_subtotal": 10,
+    "named_non_mcp_subtotal": 18,
+    "additional_canonical_non_mcp_fixtures": 450,
+    "overall_canonical_non_mcp_fixtures": 468,
+    "formula": "8 + 10 = 18; 18 + 450 = 468",
+    "aliases": 12,
+    "coverage_families": 16,
+    "family_sum": 468,
+    "GLOBAL-EVENT": 52,
+    "REDACTION-NO-JSON": 99,
+    "other_fourteen_family_totals_unchanged_from_registry_v4": true,
+    "error_registry_codes": 53,
+    "per_registered_code_error_envelope_leaves": 53,
+    "official_mcp_vectors": 67,
+    "official_mcp_ids_changed": false,
+    "official_mcp_valid_wire_semantics_changed": false,
+    "retired_generic_global_event_ids_present_as_canonical_or_alias": 0,
+    "exact_global_event_matrix_rows": 44,
+    "observed_output_methods": ["console.error","console.log","process.stdout.write","process.stderr.write"],
+    "existing_sensitive_classes": ["credential","path","sql","stack","external_subject_preimage"],
+    "method_sensitive_cross_product_rows": 20,
+    "new_logger_or_configuration_defined": false
+  },
+  "exact_coordinate_verification": {
+    "performed_at_utc": "2026-08-26T15:02:00.0000000Z",
+    "raw_sha256_and_byte_lengths_recomputed": true,
+    "canonical_internal_record_digests_recomputed": true,
+    "all_bound_json_parsed": true,
+    "primary_coordinate_matches_declared_bytes": true,
+    "historical_parent_coordinate_matches_declared_bytes": true,
+    "chronology": {
+      "v10_before_registry_v5": true,
+      "registry_v5_before_map_v5": true,
+      "map_v5_before_v11": true,
+      "acyclic": true
+    },
+    "registry_v5": {
+      "canonical_ids": 468,
+      "unique_canonical_ids": 468,
+      "lexicographically_sorted": true,
+      "aliases": 12,
+      "unique_aliases": 12,
+      "aliases_colliding_with_canonical_ids": 0,
+      "aliases_with_missing_targets": 0,
+      "family_keys": 16,
+      "family_sum": 468,
+      "rows_with_missing_or_extra_executable_fields": 0,
+      "rows_with_empty_executable_fields": 0,
+      "unresolved_generic_or_bundle_shorthand": 0,
+      "source_trace_paths_exist_and_match": true
+    },
+    "cross_binding": {
+      "v10_registry_v5_event_matrices_match": true,
+      "v10_registry_v5_observed_sink_inventory_match": true,
+      "v10_registry_v5_map_v5_counts_match": true,
+      "registry_v5_map_v5_family_totals_match": true,
+      "registry_v5_map_v5_error_and_mcp_counts_match": true,
+      "map_v5_contains_no_c1_verdict": true
+    },
+    "json_parse": "PASS",
+    "canonical_internal_record_digest": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "fresh_c1_authorization": {
+    "authorized": true,
+    "wave": "C1_ONLY",
+    "roles": ["migration","security"],
+    "reviewers": "two brand-new independent zero-contribution reviewers",
+    "review_coordinate_rule": "Both reviewers must bind this exact V11 primary coordinate and V11's final raw receipt coordinate; neither may edit, correct, regenerate, or contribute to reviewed bytes.",
+    "old_verdicts_carry": false,
+    "acceptance_rule": "C1 completes only if both brand-new reviewers independently return unconditional ACCEPT_CONCURRENCE on the same exact coordinate. Any rejection controls and C1 remains incomplete.",
+    "product_effect": false
+  },
+  "authorization_boundary": {
+    "detached_fresh_c1_migration_evidence_authorized": true,
+    "detached_fresh_c1_security_evidence_authorized": true,
+    "c2_authorized": false,
+    "c3_authorized": false,
+    "product_authorized": false,
+    "proposal_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f1_authorized": false,
+    "f2_authorized": false,
+    "f2_restart_authorized": false,
+    "product_contract_or_fixture_regeneration_authorized": false,
+    "regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_authorized": false,
+    "push_authorized": false,
+    "workflow_authorized": false,
+    "pr_authorized": false,
+    "merge_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "activation_authorized": false,
+    "publication_authorized": false,
+    "rule": "V11 grants exactly fresh C1 migration and security evidence review. It grants no later wave, product, proposal, repository, or publication authority."
+  },
+  "post_c1_boundary": {
+    "if_either_fresh_c1_rejects": "C1 remains incomplete. Preserve every coordinate and apply only separately valid bounded standing source-preserving evidence dispositions; return to the Product Owner if a new semantic choice is required.",
+    "if_both_fresh_c1_accept": "Stop and preserve both receipts. Do not start C2. Return for separate explicit Product Owner authorization of C2 authority/concurrency concurrence.",
+    "automatic_c2_advance": false,
+    "automatic_c3_advance": false
+  },
+  "preservation": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_disposition": "immutable historical evidence only",
+    "stopped_f2_disposition": "dirty, uncommitted, unqualified, and preserved exactly; no reset, discard, repair, qualification, commit, push, or restart",
+    "existing_evidence_bytes_edited": false,
+    "new_artifact_only": true
+  },
+  "self_raw_coordinate_rule": "This artifact cannot embed its own final raw SHA-256 or byte length without changing those bytes. Its final raw SHA-256 and byte length are reported externally after write and verification; the internal record_digest below is self-verifying under the declared omission rule.",
+  "terminal_statement": "THE EXACT V11 PRIMARY COORDINATE V8, V10, REGISTRY V5, AND MAP V5 IS BOUND UNDER THE PRODUCT OWNER'S V8-BOUNDED STANDING SOURCE-PRESERVING AUTHORITY. MAP V4, V9, AND BOTH C1 V4 RECEIPTS ARE HISTORICAL AND NONCARRYING. ONLY A BRAND-NEW FRESH INDEPENDENT ZERO-CONTRIBUTION C1 MIGRATION AND SECURITY RERUN IS AUTHORIZED. IF BOTH ACCEPT, STOP FOR SEPARATE EXPLICIT C2 AUTHORITY. C2, C3, PRODUCT, PROPOSAL, REGENERATION, F1, F2, IMPLEMENTATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, AND PUBLICATION REMAIN UNAUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "6d7725bd8b095daf9280882702aa075d55576ecffaf88d2fc8f1d624350e12a7"
+}

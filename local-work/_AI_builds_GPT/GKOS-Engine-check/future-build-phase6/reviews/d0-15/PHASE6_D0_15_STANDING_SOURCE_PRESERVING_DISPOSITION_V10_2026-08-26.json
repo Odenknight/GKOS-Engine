@@ -1,0 +1,489 @@
+{
+  "record_type": "gkos-phase6-d0-15-standing-source-preserving-disposition",
+  "record_version": "10.0.0",
+  "recorded_at_utc": "2026-08-26T14:38:01.1654996Z",
+  "status": "STANDING_SOURCE_PRESERVING_DISPOSITION_APPLIED_REGISTRY_V5_DESCENDANTS_AND_FRESH_C1_ONLY",
+  "owner_statement_exact": "Ratify all future dispositions.",
+  "purpose": "Apply the Product Owner's exact standing statement only within V8's bounded source-preserving evidence-only authority to the two mechanical defects C1-V4-SEC-001 and C1-V4-SEC-002. This record derives the complete four-table event pair matrices and the accepted-F1 source-bound output-sink inventory, fixes no product behavior, and authorizes only Registry V5, Map V5, their later exact-coordinate receipt, and fresh C1 evidence.",
+  "disposition_result": {
+    "C1-V4-SEC-001": "MECHANICALLY_DERIVABLE_NO_OWNER_CHOICE",
+    "C1-V4-SEC-002": "MECHANICALLY_DERIVABLE_NO_OWNER_CHOICE",
+    "new_product_semantic_selected": false,
+    "privileged_event_table_representative_selected": false,
+    "new_logger_or_logging_configuration_selected": false,
+    "new_security_boundary_selected": false,
+    "product_owner_q_and_a_required": false
+  },
+  "standing_authority_basis": {
+    "source": "V8 standing_future_disposition_authority",
+    "application": "Both corrections are deterministic one-leaf materializations of already-ratified Q3, Q8, Q19 C1-V3-MECH-003, Q19 C1-V3-MECH-005, D015-DC06, D015-DC10, and the exact accepted-F1 output calls identified by C1 V4 security. No response, error, retry, state, operation, public behavior, collision outcome, redaction outcome, or product boundary changes.",
+    "conditions_satisfied": [
+      "every expansion is the Cartesian, unordered-pair, or unordered-pair-with-replacement closure of a finite immutable source set",
+      "counts are derived from materialized coordinates and are not target-fit",
+      "generic one-to-many fixture IDs are retired rather than aliased to one arbitrarily preferred member",
+      "all insertion and startup error projections and mutations remain exactly those already ratified by Q8 and Q19",
+      "all output leaves preserve the existing zero-sensitive-byte result and existing five sensitive classes",
+      "the output inventory binds observed accepted-F1 methods and call sites and does not infer a configured logger enum"
+    ],
+    "outside_scope_rule": "Any need to add an event table, event field, error code, retry, repair, logging method, logging configuration, sensitive class, output boundary, public behavior, or product implementation returns to the Product Owner."
+  },
+  "exact_parent_ledger": [
+    {
+      "coordinate": "V8",
+      "role": "Q17-Q20 owner resolution and bounded standing source-preserving evidence authority",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V8_2026-08-26.json",
+      "sha256": "6b8a5b9fca8c72561ef1aee56c15911e34d0559edcae058f19631b71e16d9116",
+      "bytes": 18358,
+      "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2"
+    },
+    {
+      "coordinate": "Registry V4",
+      "role": "immutable rejected-coordinate registry whose generic rows and unsupported log-level assertion are corrected only in a later descendant",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V4_2026-08-26.json",
+      "sha256": "279397cd052352c071e9714219c7b4a99882adcbabc83b058a60ca9e1dea9b1c",
+      "bytes": 179929,
+      "record_digest": "9d7a70bf2f160c424332a612389504a0d39d792d96e8d8c82b2d9c77eb42007f"
+    },
+    {
+      "coordinate": "Map V4",
+      "role": "immutable rejected-coordinate map whose closure claims are superseded only by a later descendant",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V4_2026-08-26.json",
+      "sha256": "ef2eb284bc992ccf32170b7aaf0d21b140a61395b86a4cb97bef96aeb9ab5967",
+      "bytes": 21386,
+      "record_digest": "c20588e1cd55226ca3f65a73e272dde8ac3b98dd573d7b2c823b2e8d962568ef"
+    },
+    {
+      "coordinate": "V9",
+      "role": "immutable exact-coordinate receipt applying standing authority to V8, Registry V4, and Map V4 for fresh C1 only",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_COORDINATE_RECEIPT_V9_2026-08-26.json",
+      "sha256": "ba604f8d74534b76840580a128cbb8e737ee7a4a72d6031fbd53adfc60f228ee",
+      "bytes": 13388,
+      "record_digest": "610657caf21d2a4a47b9ad9c5fac2a6ac9d7deecaa0b070609014c5e817d9f07"
+    },
+    {
+      "coordinate": "C1 V4 migration",
+      "role": "immutable unconditional acceptance of the rejected V9 coordinate, historical and noncarrying after descendant bytes change",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V4_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "13c8f31327de7c0ef4faad66288b437299a49bb2a73777a444818f9a8701cb08",
+      "bytes": 19333,
+      "record_digest": "5dec4e47418c3d211a87f309ce5379c293fb030238980b0fc4a5e6b86d0e3dad",
+      "verdict": "ACCEPT_CONCURRENCE"
+    },
+    {
+      "coordinate": "C1 V4 security",
+      "role": "immutable rejection opening C1-V4-SEC-001 and C1-V4-SEC-002",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V4_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "7bc783da8dedceecd05e27a3ceab4394a2775b623cfff5f8e2a42a0d3c866c91",
+      "bytes": 27190,
+      "record_digest": "3d04c1692e7f815b4f3600a1ebbac063b8f81418b1a77255821f166e0908b2b8",
+      "verdict": "REJECT_CONCURRENCE"
+    },
+    {
+      "coordinate": "C1 V3 security",
+      "role": "immutable source of C1-V3-MECH-003 and C1-V3-MECH-005 exact-existing-result constraints",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V3_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "b8060ba76b759ad8ee871cb4f66696cc08e7f237483c007e111a181888a86981",
+      "bytes": 32134,
+      "record_digest": "92298b88abf726ef16bdebe2b89cd33aa9611248c57970a812df16b3b0296a01"
+    },
+    {
+      "coordinate": "D0 core specification",
+      "role": "immutable source of the four exact event tables, globally unique event_id and global_event_seq, insertion under the authority lease, and startup union verification",
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+      "bytes": 117722
+    },
+    {
+      "coordinate": "D0 core decision record",
+      "role": "immutable source of normalized table inventory and one global authority event chain",
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_DECISION_RECORD_PROPOSAL_2026-08-25.json",
+      "sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+      "bytes": 28582
+    },
+    {
+      "coordinate": "D0-15 owner decision basis V3",
+      "role": "immutable D015-DC06 one-leaf closure and D015-DC10 global-union source",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_DECISION_BASIS_V3_2026-08-26.json",
+      "sha256": "e282fa0c2c378b9716302d49738f50f93f158da344df3c693e39e992d09e3d0d",
+      "bytes": 21782,
+      "record_digest": "f3b00953902a5e38bd6c118991b862b4539d493bd517f1254346f12955728e73"
+    }
+  ],
+  "accepted_f1_source_coordinate": {
+    "commit": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "tree": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+    "disposition": "immutable historical evidence only",
+    "source_blobs": [
+      {
+        "path": "src/desktop-agent.ts",
+        "git_blob": "835f0d3e1231696d936b9ae1cb53bb67bda8fb30",
+        "bytes": 21774,
+        "sha256": "29a15df5efb1a0bdd469e9f36b43b5d50fffb00de542d2f7a19ae06bd09661d1"
+      },
+      {
+        "path": "scripts/generate-agent-identity-mcp-contract.mjs",
+        "git_blob": "899d825f6fd15dcde4c344f5f59abacd8d3ed992",
+        "bytes": 111170,
+        "sha256": "95fcdb91814ecf683461a791f4a4dc99ede9d279abba87ee59a9d08cce23ba68"
+      }
+    ],
+    "scope_rule": "These are exactly the two accepted-F1 blobs cited by C1-V4-SEC-002. Inventory every explicit console or process stdout/stderr emission in those blobs. Do not add unrelated product files, infer a logger enum, or treat absence of another method as a product guarantee.",
+    "inventory_complete_for_bound_blobs": true
+  },
+  "sec_001_global_event_pair_disposition": {
+    "finding": "C1-V4-SEC-001",
+    "result": "SOURCE_PRESERVING_MECHANICAL_EXPANSION",
+    "source_rules": [
+      "Q3 and D015-DC06 require one unique canonical ID, one named input, one deterministic schedule, one outcome, one exhaustive mutation set, and one family per executable case.",
+      "D015-DC10 and the D0 core require one global union across identity_audit_receipts, effect_outbox_events, restore_events, and retention_batches with globally unique event_id and global_event_seq.",
+      "Q8 preserves insertion event_id collision as GKOS_P6_IDENTITY_COLLISION, insertion sequence conflict as GKOS_P6_STATE_CONFLICT, and startup duplicate corruption as GKOS_P6_AUTHORITY_CORRUPT with blocked gate.",
+      "Q19 C1-V3-MECH-003 preserves entropy_calls=1, full rollback, and zero retry, overwrite, event, or authority mutation for generated event_id insertion collision."
+    ],
+    "exact_tables": [
+      "effect_outbox_events",
+      "identity_audit_receipts",
+      "restore_events",
+      "retention_batches"
+    ],
+    "table_order_rule": "Lexicographic order of the four exact table names is used only to serialize tuple arrays and canonical IDs; it grants no semantic priority.",
+    "canonical_table_tokens": {
+      "effect_outbox_events": "EFFECT-OUTBOX",
+      "identity_audit_receipts": "IDENTITY-AUDIT",
+      "restore_events": "RESTORE",
+      "retention_batches": "RETENTION"
+    },
+    "preserved_same_table_event_id_insertion_leaves": [
+      {"existing_table": "identity_audit_receipts", "candidate_table": "identity_audit_receipts", "canonical_id": "COLLISION-ID-EVENT-001"},
+      {"existing_table": "effect_outbox_events", "candidate_table": "effect_outbox_events", "canonical_id": "COLLISION-ID-EVENT-EFFECT-OUTBOX-001"},
+      {"existing_table": "restore_events", "candidate_table": "restore_events", "canonical_id": "COLLISION-ID-EVENT-RESTORE-001"},
+      {"existing_table": "retention_batches", "candidate_table": "retention_batches", "canonical_id": "COLLISION-ID-EVENT-RETENTION-001"}
+    ],
+    "retired_generic_canonical_ids": [
+      "GLOBAL-EVENT-DUPLICATE-ID-INSERT-001",
+      "GLOBAL-EVENT-DUPLICATE-ID-STARTUP-001",
+      "GLOBAL-EVENT-DUPLICATE-SEQUENCE-INSERT-001",
+      "GLOBAL-EVENT-DUPLICATE-SEQUENCE-STARTUP-001"
+    ],
+    "retired_id_rule": "The four generic IDs remain immutable historical Registry V4 evidence. Registry V5 does not carry them as canonical fixtures or aliases because each denotes more than one exact case and no single descendant may be selected as its representative.",
+    "added_row_family": "Every new exact row in the four matrices below belongs to GLOBAL-EVENT; the four preserved same-table event_id insertion rows remain in COLLISION-CANONICAL.",
+    "event_id_insertion_cross_table_matrix": {
+      "semantics": "Ordered existing-table/candidate-table pairs with unequal members. The four equal-member ordered pairs are the preserved COLLISION-ID-EVENT leaves above.",
+      "canonical_id_template": "GLOBAL-EVENT-DUPLICATE-ID-INSERT-EXISTING-{EXISTING_TOKEN}-CANDIDATE-{CANDIDATE_TOKEN}-001",
+      "pairs": [
+        ["effect_outbox_events", "identity_audit_receipts"],
+        ["effect_outbox_events", "restore_events"],
+        ["effect_outbox_events", "retention_batches"],
+        ["identity_audit_receipts", "effect_outbox_events"],
+        ["identity_audit_receipts", "restore_events"],
+        ["identity_audit_receipts", "retention_batches"],
+        ["restore_events", "effect_outbox_events"],
+        ["restore_events", "identity_audit_receipts"],
+        ["restore_events", "retention_batches"],
+        ["retention_batches", "effect_outbox_events"],
+        ["retention_batches", "identity_audit_receipts"],
+        ["retention_batches", "restore_events"]
+      ],
+      "new_rows": 12,
+      "complete_ordered_pair_coverage_with_preserved_rows": 16,
+      "expected": "GKOS_P6_IDENTITY_COLLISION",
+      "mutation": "entropy_calls=1; roll back the entire insertion transaction; zero retry, overwrite, event, and authority mutation"
+    },
+    "event_id_startup_matrix": {
+      "semantics": "Unordered pairs of distinct stored tables because immutable Registry V4 and C1-V4-SEC-001 define this startup case as two rows in distinct event tables. The four same-table event_id insertion coordinates remain separately exercised by the preserved collision leaves.",
+      "canonical_id_template": "GLOBAL-EVENT-DUPLICATE-ID-STARTUP-TABLES-{LOW_TOKEN}-{HIGH_TOKEN}-001",
+      "pairs": [
+        ["effect_outbox_events", "identity_audit_receipts"],
+        ["effect_outbox_events", "restore_events"],
+        ["effect_outbox_events", "retention_batches"],
+        ["identity_audit_receipts", "restore_events"],
+        ["identity_audit_receipts", "retention_batches"],
+        ["restore_events", "retention_batches"]
+      ],
+      "new_rows": 6,
+      "expected": "GKOS_P6_AUTHORITY_CORRUPT and blocked write gate",
+      "mutation": "zero repair, overwrite, skip, alias, and publication"
+    },
+    "global_event_seq_insertion_matrix": {
+      "semantics": "All ordered existing-table/candidate-table pairs, including equal members, because the candidate insertion coordinate and the committed conflicting coordinate are directionally distinct.",
+      "canonical_id_template": "GLOBAL-EVENT-DUPLICATE-SEQUENCE-INSERT-EXISTING-{EXISTING_TOKEN}-CANDIDATE-{CANDIDATE_TOKEN}-001",
+      "pairs": [
+        ["effect_outbox_events", "effect_outbox_events"],
+        ["effect_outbox_events", "identity_audit_receipts"],
+        ["effect_outbox_events", "restore_events"],
+        ["effect_outbox_events", "retention_batches"],
+        ["identity_audit_receipts", "effect_outbox_events"],
+        ["identity_audit_receipts", "identity_audit_receipts"],
+        ["identity_audit_receipts", "restore_events"],
+        ["identity_audit_receipts", "retention_batches"],
+        ["restore_events", "effect_outbox_events"],
+        ["restore_events", "identity_audit_receipts"],
+        ["restore_events", "restore_events"],
+        ["restore_events", "retention_batches"],
+        ["retention_batches", "effect_outbox_events"],
+        ["retention_batches", "identity_audit_receipts"],
+        ["retention_batches", "restore_events"],
+        ["retention_batches", "retention_batches"]
+      ],
+      "new_rows": 16,
+      "expected": "GKOS_P6_STATE_CONFLICT",
+      "mutation": "roll back the entire insertion transaction; zero committed mutation, event, retry, and overwrite"
+    },
+    "global_event_seq_startup_matrix": {
+      "semantics": "All unordered stored-table pairs with replacement. Equal members cover two corrupt rows in one table; unequal members cover cross-table corruption.",
+      "canonical_id_template": "GLOBAL-EVENT-DUPLICATE-SEQUENCE-STARTUP-TABLES-{LOW_TOKEN}-{HIGH_TOKEN}-001",
+      "pairs": [
+        ["effect_outbox_events", "effect_outbox_events"],
+        ["effect_outbox_events", "identity_audit_receipts"],
+        ["effect_outbox_events", "restore_events"],
+        ["effect_outbox_events", "retention_batches"],
+        ["identity_audit_receipts", "identity_audit_receipts"],
+        ["identity_audit_receipts", "restore_events"],
+        ["identity_audit_receipts", "retention_batches"],
+        ["restore_events", "restore_events"],
+        ["restore_events", "retention_batches"],
+        ["retention_batches", "retention_batches"]
+      ],
+      "new_rows": 10,
+      "expected": "GKOS_P6_AUTHORITY_CORRUPT and blocked write gate",
+      "mutation": "zero repair, renumber, skip, alias, and publication"
+    },
+    "derived_count_delta": {
+      "generic_rows_removed": 4,
+      "exact_rows_added": 44,
+      "net_canonical_delta": 40,
+      "GLOBAL-EVENT_before": 12,
+      "GLOBAL-EVENT_after": 52,
+      "COLLISION-CANONICAL_before": 32,
+      "COLLISION-CANONICAL_after": 32
+    }
+  },
+  "sec_002_output_sink_disposition": {
+    "finding": "C1-V4-SEC-002",
+    "result": "SOURCE_BOUND_MECHANICAL_EXPANSION",
+    "scope": "Every explicit console or process stdout/stderr emission in the two accepted-F1 source blobs already cited by C1 V4 security.",
+    "observed_call_site_inventory": [
+      {
+        "source_path": "src/desktop-agent.ts",
+        "git_blob": "835f0d3e1231696d936b9ae1cb53bb67bda8fb30",
+        "method": "console.log",
+        "channel": "stdout",
+        "lines": [491, 591, 595],
+        "payloads": ["DESKTOP_AGENT_USAGE", "service version, document count, loopback host and port", "tokenPath and args.statusFile"],
+        "security_observation": "line 595 emits two raw filesystem paths"
+      },
+      {
+        "source_path": "src/desktop-agent.ts",
+        "git_blob": "835f0d3e1231696d936b9ae1cb53bb67bda8fb30",
+        "method": "console.error",
+        "channel": "stderr",
+        "lines": [533, 585, 600],
+        "payloads": ["status-file failure prefix plus Error.message", "initial-scan failure prefix plus Error.message", "shutdown failure prefix plus Error.message"]
+      },
+      {
+        "source_path": "scripts/generate-agent-identity-mcp-contract.mjs",
+        "git_blob": "899d825f6fd15dcde4c344f5f59abacd8d3ed992",
+        "method": "process.stdout.write",
+        "channel": "stdout",
+        "lines": [295],
+        "payloads": ["raw child-process stdout Buffer"]
+      },
+      {
+        "source_path": "scripts/generate-agent-identity-mcp-contract.mjs",
+        "git_blob": "899d825f6fd15dcde4c344f5f59abacd8d3ed992",
+        "method": "process.stderr.write",
+        "channel": "stderr",
+        "lines": [295],
+        "payloads": ["raw child-process stderr Buffer"]
+      },
+      {
+        "source_path": "scripts/generate-agent-identity-mcp-contract.mjs",
+        "git_blob": "899d825f6fd15dcde4c344f5f59abacd8d3ed992",
+        "method": "console.log",
+        "channel": "stdout",
+        "lines": [346],
+        "payloads": ["JSON containing output_root and nullable resolved archive and receipt paths plus nonsecret contract/count/mode fields"],
+        "security_observation": "the JSON output is path-bearing whenever output_root, archive, or receipt contains an absolute path"
+      }
+    ],
+    "observed_method_counts": {
+      "console.error": 3,
+      "console.log": 4,
+      "console.warn": 0,
+      "console.info": 0,
+      "console.debug": 0,
+      "process.stdout.write": 1,
+      "process.stderr.write": 1,
+      "total_call_sites": 9,
+      "distinct_methods": 4
+    },
+    "not_a_logger_configuration": "The four method names are immutable observed source sinks, not a configured log-level enum. Registry V5 must remove the Registry V4 assertion that the configured in-scope level set is exactly error and must not define or require a new logger.",
+    "existing_sensitive_classes": [
+      {"class": "credential", "input": "one raw credential value", "id_suffix": ""},
+      {"class": "path", "input": "one absolute filesystem path", "id_suffix": "-PATH"},
+      {"class": "sql", "input": "one SQL statement", "id_suffix": "-SQL"},
+      {"class": "stack", "input": "one stack trace", "id_suffix": "-STACK"},
+      {"class": "external_subject_preimage", "input": "one raw external-subject preimage", "id_suffix": "-SUBJECT"}
+    ],
+    "method_fixture_series": [
+      {
+        "series": "REDACTION-LOG-001{SENSITIVE_SUFFIX}",
+        "method": "console.error",
+        "disposition": "retain the five Registry V4 canonical IDs and mechanically replace unsupported error-level wording with the exact observed console.error method and stderr channel"
+      },
+      {
+        "series": "REDACTION-LOG-002{SENSITIVE_SUFFIX}",
+        "method": "console.log",
+        "disposition": "add five exact leaves; REDACTION-LOG-002-PATH explicitly covers the path-bearing desktop line 595 and generator line 346 source coordinates"
+      },
+      {
+        "series": "REDACTION-LOG-003{SENSITIVE_SUFFIX}",
+        "method": "process.stdout.write",
+        "disposition": "add five exact leaves for the raw stdout Buffer forwarding path at generator line 295"
+      },
+      {
+        "series": "REDACTION-LOG-004{SENSITIVE_SUFFIX}",
+        "method": "process.stderr.write",
+        "disposition": "add five exact leaves for the raw stderr Buffer forwarding path at generator line 295"
+      }
+    ],
+    "fixture_family": "REDACTION-NO-JSON",
+    "exact_leaf_semantics": {
+      "input": "one observed method receives exactly one named existing sensitive class",
+      "schedule": "emit through that exact observed method into its existing stdout or stderr channel and run the static sensitive-byte scanner",
+      "expected": "emitted bytes contain only already-closed IDs, codes, and domain-separated digests; scanner matches zero bytes of the named sensitive input",
+      "mutation": "zero named sensitive bytes in the observed output channel",
+      "preserved": "no new output field, error code, response, logger, configuration, channel, retry, state transition, operation, or public semantic"
+    },
+    "derived_count_delta": {
+      "existing_console_error_rows_rebound_to_exact_source_method": 5,
+      "new_console_log_rows": 5,
+      "new_process_stdout_write_rows": 5,
+      "new_process_stderr_write_rows": 5,
+      "new_rows_total": 15,
+      "removed_rows": 0,
+      "net_canonical_delta": 15,
+      "REDACTION-NO-JSON_before": 84,
+      "REDACTION-NO-JSON_after": 99
+    }
+  },
+  "registry_v5_expected_derived_coordinate": {
+    "derivation": "Registry V4 413 canonical rows plus SEC-001 net 40 plus SEC-002 net 15",
+    "named_core_operation_subtotal": 8,
+    "named_restore_bootstrap_recovery_subtotal": 10,
+    "named_non_mcp_subtotal": 18,
+    "additional_canonical_non_mcp_fixtures": 450,
+    "overall_canonical_non_mcp_fixtures": 468,
+    "aliases": 12,
+    "coverage_families": 16,
+    "official_mcp_vectors": 67,
+    "official_mcp_ids_or_valid_wire_semantics_changed": false,
+    "error_registry_codes": 53,
+    "per_registered_code_error_envelope_leaves": 53,
+    "formula": "18 + 450 = 468 canonical non-MCP fixtures; 12 aliases do not add executable cases",
+    "family_totals": {
+      "ACTIVITY-METADATA": 37,
+      "ANCHOR-INTENT": 34,
+      "BACKUP": 9,
+      "BOOTSTRAP-HANDOFF": 39,
+      "COLLISION-CANONICAL": 32,
+      "CREDENTIAL-AUTH-NONENUM": 7,
+      "CREDENTIAL-ISSUE-ROTATE": 22,
+      "GLOBAL-EVENT": 52,
+      "POLICY-DEPENDENCY-TRANSPORT": 18,
+      "RACE-FINAL-GATE-EFFECT": 21,
+      "RATE": 7,
+      "REDACTION-NO-JSON": 99,
+      "RESTORE-OWNER-ABORT": 41,
+      "RETENTION": 15,
+      "SESSION-REFERENCE-CURSOR-REPLAY": 28,
+      "TIMESTAMP": 7
+    },
+    "family_total_sum": 468,
+    "count_is_expected_from_this_exact_disposition": true,
+    "later_raw_sha256_bytes_and_record_digests": "DERIVE_ONLY_AFTER_EACH_DESCENDANT_EXISTS"
+  },
+  "required_descendant_sequence": [
+    {
+      "order": 1,
+      "artifact": "Registry V5",
+      "requirement": "Create a distinct-path immutable registry descendant applying exactly the matrices and sink-method series above; sort all 468 canonical IDs lexicographically; recompute aliases, family totals, raw SHA-256, byte length, internal digest, and source trace."
+    },
+    {
+      "order": 2,
+      "artifact": "Map V5",
+      "requirement": "Create after Registry V5 exists; bind exact V10 and Registry V5 coordinates; remove the unsupported error-only claim; record C1-V4-SEC-001 and 002 as mechanically closed; carry no C1 verdict."
+    },
+    {
+      "order": 3,
+      "artifact": "later exact-coordinate receipt",
+      "requirement": "Create only after final V10, Registry V5, and Map V5 bytes exist and independently validate; bind their exact raw SHA-256, byte length, and internal digest; authorize fresh C1 only."
+    },
+    {
+      "order": 4,
+      "artifact": "fresh C1 migration and security receipts",
+      "requirement": "Use two fresh independent zero-contribution reviewers on the same exact later coordinate. Neither C1 V4 verdict carries. Any rejection remains controlling."
+    }
+  ],
+  "historical_and_noncarry_disposition": {
+    "registry_v4_map_v4_v9": "immutable historical rejected coordinate",
+    "c1_v4_migration_acceptance": "immutable historical acceptance of V9 only and noncarrying after Registry V5 or Map V5 exists",
+    "c1_v4_security_rejection": "immutable controlling defect evidence until a later fresh C1 security reviewer accepts the exact corrected coordinate",
+    "accepted_f1": "immutable historical evidence only",
+    "stopped_f2": "uncommitted, unqualified, preserved exactly, and not reset, discarded, repaired, qualified, committed, pushed, or restarted"
+  },
+  "authorization_boundary": {
+    "this_record_is_already_ratified_within_v8_bounded_standing_authority": true,
+    "registry_v5_evidence_descendant_authorized": true,
+    "map_v5_evidence_descendant_authorized": true,
+    "later_exact_coordinate_receipt_authorized_after_descendants_exist_and_validate": true,
+    "fresh_c1_migration_and_security_evidence_authorized_after_exact_coordinate_receipt": true,
+    "c2_authorized": false,
+    "c3_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "product_contract_or_fixture_regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_authorized": false,
+    "push_authorized": false,
+    "workflow_authorized": false,
+    "pr_authorized": false,
+    "merge_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "activation_authorized": false,
+    "publication_authorized": false,
+    "rule": "V10 authorizes only detached source-preserving D0-15 evidence descendants, their later exact-coordinate receipt, and fresh C1 concurrence evidence. It grants no later wave or repository mutation authority."
+  },
+  "validation": {
+    "all_bound_json_parsed": true,
+    "all_parent_raw_sha256_and_byte_lengths_recomputed": true,
+    "all_declared_parent_internal_digests_recomputed": true,
+    "accepted_f1_commit_and_tree_verified": true,
+    "accepted_f1_blob_ids_sizes_and_raw_sha256_verified": true,
+    "registry_v4_all_413_rows_parsed_and_core_fields_checked": true,
+    "event_table_set_cardinality": 4,
+    "event_id_insertion_complete_ordered_pairs": 16,
+    "event_id_startup_distinct_unordered_pairs": 6,
+    "sequence_insertion_complete_ordered_pairs": 16,
+    "sequence_startup_unordered_pairs_with_replacement": 10,
+    "new_exact_event_rows": 44,
+    "retired_generic_event_rows": 4,
+    "net_event_delta": 40,
+    "observed_output_methods": 4,
+    "existing_sensitive_classes": 5,
+    "complete_method_sensitive_cross_product": 20,
+    "existing_exact_method_sensitive_rows_retained": 5,
+    "new_method_sensitive_rows": 15,
+    "combined_net_delta": 55,
+    "expected_registry_v5_total": 468,
+    "expected_family_sum": 468,
+    "json_parse": "PASS",
+    "canonical_internal_record_digest": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "self_raw_coordinate_rule": "This artifact cannot embed its own final raw SHA-256 or byte length without changing those bytes. Its final raw SHA-256 and byte length are reported externally after write and verification; the internal record_digest below is self-verifying under the declared omission rule.",
+  "terminal_statement": "C1-V4-SEC-001 AND C1-V4-SEC-002 ARE MECHANICALLY RESOLVED UNDER THE PRODUCT OWNER'S EXACT `Ratify all future dispositions.` STATEMENT AS BOUNDED BY V8. THE SOURCE-PRESERVING DESCENDANT MUST MATERIALIZE ALL FOUR-TABLE ID AND SEQUENCE PAIRS AND ALL FOUR OBSERVED ACCEPTED-F1 OUTPUT METHODS CROSSED WITH THE FIVE EXISTING SENSITIVE CLASSES, YIELDING 468 CANONICAL NON-MCP CASES. REGISTRY V5, MAP V5, THEIR LATER EXACT-COORDINATE RECEIPT, AND FRESH C1 EVIDENCE ONLY ARE AUTHORIZED. C2, C3, PRODUCT OR PROPOSAL EDITS, SUCCESSOR-F1 CORRECTION, F2 RESTART, REGENERATION, IMPLEMENTATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, AND PUBLICATION REMAIN UNAUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "a560e9dbd92cd8e31fb6b05512c5c197bf92e2c3b8a204a7877bc7d5b2e89de7"
+}

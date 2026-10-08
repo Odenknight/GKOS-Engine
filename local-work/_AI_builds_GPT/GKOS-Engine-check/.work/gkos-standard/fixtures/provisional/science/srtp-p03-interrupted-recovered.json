@@ -1,0 +1,8 @@
+{
+  "extends": "srtp-p01-complete.json",
+  "mutations": [
+    { "op": "set", "path": "/execution_manifests/0/state", "value": "recovered" },
+    { "op": "set", "path": "/execution_manifests/0/recovery_of", "value": "srtp-run:interrupted-001" },
+    { "op": "set", "path": "/execution_events/1/event_kind", "value": "recovery" }
+  ]
+}

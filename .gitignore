@@ -1,0 +1,11 @@
+**/npm-cache/
+**/.npm-cache*/
+**/.uv-cache*/
+**/uv-cache/
+**/_cacache/
+**/pip-cache/
+**/.cache/
+**/target/
+**/target-*/
+**/cargo-target*/
+**/node_modules/

@@ -1,0 +1,4 @@
+# SHA256 checksums generated 2026-08-05 from LF UTF-8 release files. Publication is bound to the signed release commit and annotated tag `v0.77`.
+ba5db295ad74c6cef0ab7053dfb1da5bcbf036138aa60bd629d64ca8f549a80b  README.md
+90a677a1219553c6eec8d22b2a10500702e144ebc9a1141a24e0d29d3f0c2255  RELEASE_MANIFEST.yml
+3f1a25be56474b9a7bc0a1e6b363dcf6004882364a7ca921a29b94f94a786f2f  RELEASE_NOTES.md

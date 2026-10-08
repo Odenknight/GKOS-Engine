@@ -1,0 +1,223 @@
+{
+  "captured_at": "2026-08-31T17:46:40.1982794Z",
+  "repositories": [
+    {
+      "name": "Odenknight/GKOS-Engine",
+      "default_branch": "main",
+      "head": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+      "open_prs": [
+        {
+          "number": 30,
+          "title": "Phase 5 Slice A: freeze watcher recovery contracts",
+          "url": "https://github.com/Odenknight/GKOS-Engine/pull/30",
+          "draft": true,
+          "updated_at": "2026-08-25T02:58:21Z",
+          "head_ref": "codex/phase-5-watcher-recovery",
+          "head": "7b5262baee9fcda23d50b0cee0c4977d6e4305e7",
+          "base_ref": "codex/phase-4-retrieval-evaluation",
+          "base": "98f4faf227320852006f5e1e9e01eb41f5fdff7b"
+        },
+        {
+          "number": 29,
+          "title": "feat(retrieval): add and execute sealed Phase 4 evaluation",
+          "url": "https://github.com/Odenknight/GKOS-Engine/pull/29",
+          "draft": true,
+          "updated_at": "2026-08-23T02:42:39Z",
+          "head_ref": "codex/phase-4-retrieval-evaluation",
+          "head": "98f4faf227320852006f5e1e9e01eb41f5fdff7b",
+          "base_ref": "codex/phase-2-lineage-citations",
+          "base": "5396d46d497ff4ba952039d8aadef3049d767809"
+        },
+        {
+          "number": 27,
+          "title": "feat(retrieval): add lineage citations and temporal search",
+          "url": "https://github.com/Odenknight/GKOS-Engine/pull/27",
+          "draft": true,
+          "updated_at": "2026-08-22T06:19:34Z",
+          "head_ref": "codex/phase-2-lineage-citations",
+          "head": "5396d46d497ff4ba952039d8aadef3049d767809",
+          "base_ref": "codex/phase-1-retrieval-core",
+          "base": "0164f3d5b2c698cbf048c8e0e53323def80eb251"
+        },
+        {
+          "number": 26,
+          "title": "feat: add deterministic hybrid retrieval core",
+          "url": "https://github.com/Odenknight/GKOS-Engine/pull/26",
+          "draft": true,
+          "updated_at": "2026-08-21T08:52:32Z",
+          "head_ref": "codex/phase-1-retrieval-core",
+          "head": "0164f3d5b2c698cbf048c8e0e53323def80eb251",
+          "base_ref": "codex/phase-0-recon-adrs",
+          "base": "ba918e6617ece6bb1392f6768b69d4913818035d"
+        }
+      ]
+    },
+    {
+      "name": "Odenknight/GKOS-Engine-Lite",
+      "default_branch": "main",
+      "head": "4027bfc4499ad0a2f3e753401f1320468e283823",
+      "open_prs": [
+        {
+          "number": 21,
+          "title": "Post-Phase 5: admission and desktop boundary fixes",
+          "url": "https://github.com/Odenknight/GKOS-Engine-Lite/pull/21",
+          "draft": true,
+          "updated_at": "2026-08-25T19:12:25Z",
+          "head_ref": "codex/post-phase5-admission-fixes",
+          "head": "ce8095515d2a1a7b23a10c01bd8f22e2dc5917e2",
+          "base_ref": "codex/phase-5-watcher-recovery",
+          "base": "a39f14d1394e3dd8f8dada8bec77bd995b1a0bc4"
+        },
+        {
+          "number": 20,
+          "title": "Phase 5 Slice A: watcher recovery contracts",
+          "url": "https://github.com/Odenknight/GKOS-Engine-Lite/pull/20",
+          "draft": true,
+          "updated_at": "2026-08-25T04:11:24Z",
+          "head_ref": "codex/phase-5-watcher-recovery",
+          "head": "a39f14d1394e3dd8f8dada8bec77bd995b1a0bc4",
+          "base_ref": "codex/phase-4-retrieval-evaluation",
+          "base": "d1c0d5d60e5380d4c1cb9fb1562585852307e657"
+        },
+        {
+          "number": 19,
+          "title": "Phase 4: retrieval evaluation parity",
+          "url": "https://github.com/Odenknight/GKOS-Engine-Lite/pull/19",
+          "draft": true,
+          "updated_at": "2026-08-22T22:24:44Z",
+          "head_ref": "codex/phase-4-retrieval-evaluation",
+          "head": "d1c0d5d60e5380d4c1cb9fb1562585852307e657",
+          "base_ref": "codex/phase-3-ingest-validation",
+          "base": "41912fd6db279f1b46e67cb4b88c1f1b4ba86e63"
+        },
+        {
+          "number": 18,
+          "title": "Phase 3: add fail-closed ingest validation",
+          "url": "https://github.com/Odenknight/GKOS-Engine-Lite/pull/18",
+          "draft": true,
+          "updated_at": "2026-08-22T07:27:51Z",
+          "head_ref": "codex/phase-3-ingest-validation",
+          "head": "41912fd6db279f1b46e67cb4b88c1f1b4ba86e63",
+          "base_ref": "codex/phase-2-lineage-citations",
+          "base": "45bfc3c4b66ae2978ddae814022d8c861076eec3"
+        },
+        {
+          "number": 17,
+          "title": "feat: add Phase 2 lineage citations",
+          "url": "https://github.com/Odenknight/GKOS-Engine-Lite/pull/17",
+          "draft": true,
+          "updated_at": "2026-08-21T19:58:28Z",
+          "head_ref": "codex/phase-2-lineage-citations",
+          "head": "45bfc3c4b66ae2978ddae814022d8c861076eec3",
+          "base_ref": "codex/phase-1-retrieval-core",
+          "base": "eda2e2105b41de683dfce88b5666443145682a5e"
+        },
+        {
+          "number": 16,
+          "title": "feat: add pin-bound Lite retrieval core",
+          "url": "https://github.com/Odenknight/GKOS-Engine-Lite/pull/16",
+          "draft": true,
+          "updated_at": "2026-08-21T08:52:49Z",
+          "head_ref": "codex/phase-1-retrieval-core",
+          "head": "eda2e2105b41de683dfce88b5666443145682a5e",
+          "base_ref": "codex/phase-0-recon-adrs",
+          "base": "83b0baac033f469abe508802faad7f6b3873ade9"
+        },
+        {
+          "number": 14,
+          "title": "Clarify GKX and product naming",
+          "url": "https://github.com/Odenknight/GKOS-Engine-Lite/pull/14",
+          "draft": true,
+          "updated_at": "2026-08-05T03:17:04Z",
+          "head_ref": "agent/current-naming-and-product-clarity-20260804",
+          "head": "6fe38fc73b66e7c791f16b3dbab3253806a1106f",
+          "base_ref": "main",
+          "base": "2ebbf77583af3e83032054f1256188dc56376907"
+        },
+        {
+          "number": 13,
+          "title": "Define Engine-Lite compatibility contract",
+          "url": "https://github.com/Odenknight/GKOS-Engine-Lite/pull/13",
+          "draft": true,
+          "updated_at": "2026-08-03T05:42:05Z",
+          "head_ref": "agent/gkx-compatibility-r12-20260803",
+          "head": "46c82b3528bfc19c408b9c922209bd82228ba665",
+          "base_ref": "main",
+          "base": "2ebbf77583af3e83032054f1256188dc56376907"
+        },
+        {
+          "number": 9,
+          "title": "Harden engine pin resolution workflow",
+          "url": "https://github.com/Odenknight/GKOS-Engine-Lite/pull/9",
+          "draft": true,
+          "updated_at": "2026-07-28T07:43:22Z",
+          "head_ref": "agent/harden-v1-1-3-pin",
+          "head": "d17b25de902998536afc1f49768572f6a28e4921",
+          "base_ref": "main",
+          "base": "9e2e018ffc295866c18cb05488551f8c6ee49a6b"
+        }
+      ]
+    }
+  ],
+  "benchmark": {
+    "repository": "mariusTalpos/gkos-engine-benchmark",
+    "status": "not_verified",
+    "checks": [
+      "REST404",
+      "GitHub connector404",
+      "repository search0 results",
+      "web cache miss"
+    ],
+    "head": null
+  },
+  "tests": [
+    {
+      "repo": "Engine",
+      "head": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+      "command": "npm run typecheck",
+      "result": "pass"
+    },
+    {
+      "repo": "Engine",
+      "command": "npm run build",
+      "result": "pass_after_sandbox_escalation"
+    },
+    {
+      "repo": "Engine",
+      "command": "node --test test/settings-inventory.test.mjs test/service-contracts.test.mjs test/service-content.test.mjs test/service-authorized-view.test.mjs test/service-param-errors.test.mjs test/service-retrieval.test.mjs",
+      "result": "pass",
+      "tests": 46,
+      "skipped": 0,
+      "duration_ms": 3638.0063
+    },
+    {
+      "repo": "Engine",
+      "command": "node ../review-probes.mjs",
+      "result": "both_current_defects_reproduced"
+    },
+    {
+      "repo": "Engine",
+      "source": "https://github.com/Odenknight/GKOS-Engine/actions/runs/33418044551/job/99573337429",
+      "result": "fail",
+      "tests": 940,
+      "passed": 935,
+      "failed": 1,
+      "skipped": 4
+    },
+    {
+      "repo": "Lite",
+      "head": "4027bfc4499ad0a2f3e753401f1320468e283823",
+      "command": "cargo test --manifest-path rust/Cargo.toml --workspace --all-targets --locked --offline",
+      "result": "pass",
+      "unit_tests": 155,
+      "conformance_tests": 11
+    },
+    {
+      "repo": "Lite",
+      "command": "cargo test --manifest-path rust/Cargo.toml --workspace --doc --locked --offline",
+      "result": "pass",
+      "tests": 3
+    }
+  ]
+}
+

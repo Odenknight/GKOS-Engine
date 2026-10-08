@@ -1,0 +1,27 @@
+standard: GKOS
+identifier: GKOS-2026-08-05-v0.77
+version: "0.77"
+date: "2026-08-05"
+status: authorized-developmental-publication
+publication-status: published
+current-release: true
+canonical-repository: https://github.com/Odenknight/gkos-standard
+governance-mode: developmental-v0.x
+consensus-ratified: false
+independently-certified: false
+intended-tag: v0.77
+tag-created: true
+signature-status: signed-commit-and-annotated-tag
+decision-record: decisions/R13_Conformance_Honesty_and_Alignment_Development_Decision_Record.md
+release-authorization: authorized-2026-08-05
+preserves-published-baseline: releases/2026-07-20-v0.76
+contains:
+  - accepted-r13-development-decision
+  - conformance-honesty-remediation
+  - authoritative-requirements-registry
+  - non-normative-engine-diagnostic-adapter-map
+  - corrected-reconciliation-v0.2
+  - catalog-0.1.1-non-qualifying-boundary
+  - uuidv7-forward-policy
+  - legacy-lowercase-uuidv4-preservation
+  - branch-preserving-lineage-policy

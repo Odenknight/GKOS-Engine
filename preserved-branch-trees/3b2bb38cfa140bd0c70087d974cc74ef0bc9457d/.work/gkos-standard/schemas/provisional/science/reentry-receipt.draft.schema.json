@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/science/reentry-receipt.draft.schema.json",
+  "title": "SRTP L7-to-L1 Re-entry Receipt — PROVISIONAL DRAFT, informative only",
+  "description": "Draft digest binding only. It is not the deferred GKOS authority-receipt or upward-attestation-chain contract.",
+  "type": "object",
+  "required": ["receipt_id", "authorized_use_id", "context_manifest_digest", "execution_manifest_digest", "new_source_digests", "new_artifact_digests", "emitted_at", "receipt_status", "origin", "sensitivity"],
+  "properties": {
+    "receipt_id": { "$ref": "../../gkx-common.defs.json#/$defs/authoredNoteUid" },
+    "authorized_use_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" },
+    "context_manifest_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+    "execution_manifest_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+    "new_source_digests": { "type": "array", "minItems": 1, "items": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" } },
+    "new_artifact_digests": { "type": "array", "minItems": 1, "items": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" } },
+    "emitted_at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" },
+    "receipt_status": { "type": "string", "enum": ["complete", "partial", "unavailable", "UNEVALUATED"] },
+    "origin": { "$ref": "../../gkx-common.defs.json#/$defs/origin" },
+    "sensitivity": { "$ref": "../../gkx-common.defs.json#/$defs/sensitivity" },
+    "extensions": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

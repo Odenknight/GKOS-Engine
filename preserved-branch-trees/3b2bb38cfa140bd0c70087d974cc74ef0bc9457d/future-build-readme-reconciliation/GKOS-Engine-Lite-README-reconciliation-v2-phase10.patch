@@ -1,0 +1,250 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Codex <codex@openai.com>
+Date: Tue, 25 Aug 2026 13:00:00 -0400
+Subject: [PATCH v2] docs: reconcile Lite source, verifier, and future status
+X-GKOS-Base-Commit: a39f14d1394e3dd8f8dada8bec77bd995b1a0bc4
+X-GKOS-Base-README-Blob: 446cd5d1f9f79dff76aa1e268b1f51551c7dd6cb
+
+Phase-10 review artifact only. It is not authorization to apply, commit,
+push, merge, tag, release, publish, deploy, or activate a service.
+
+---
+diff --git a/README.md b/README.md
+index 446cd5d..47d354f 100644
+--- a/README.md
++++ b/README.md
+@@ -1,57 +1,87 @@
+ # GKOS-Engine-Lite
+ 
+-**Command-line GKX Notes (2.2) + Agent-Ready (flat 2.3) tooling for any
+-folder of Markdown notes.**
+-
+-GKX (Governed Knowledge Exchange) is the current name for the model formerly
+-published as OKF+. Existing OKF+ notes and the stable `okf-lite` command remain
+-fully supported compatibility surfaces; the naming change alone requires no
+-document migration.
+-
+-GKOS-Engine-Lite is the standalone, non-Obsidian counterpart to
+-[Kosmos Research Studio Lite (KRS-Lite)](https://github.com/Odenknight/Kosmos-Oden-Lite): it gives
+-individuals and small vaults the same GKOS-Engine-Lite schema — GKX Notes
+-(2.2) with the optional Agent-Ready flat 2.3 profile — as a command-line tool
+-you can point at any folder of Markdown notes. The CLI package has no Obsidian
+-dependency, plugin, or GUI: just `okf-lite validate`, `index`, `assess`,
+-`search`, `retrieval eval`, `retrieval tune`, `graph`, and `export` over a
+-directory.
+-
+-The published JavaScript CLI remains a thin delegate. Under the hood it depends
+-directly on [gkos-engine](https://github.com/Odenknight/GKOS-Engine) — the
+-canonical, deterministic engine that also powers KRS and KRS-Lite — and
+-delegates its allowed GKX commands unchanged. Same parser, same validation and
+-assessment behavior, through the same upstream execution path. The new
+-`rust/` retrieval core is the separately governed future static-Lite path: a
+-pin-bound implementation of Full-owned retrieval contracts with exact
+-cross-language conformance, never a second GKX parser, lineage model, or
+-authority. No static distribution or platform qualification is claimed yet.
+-CI verifies both the restricted command boundary and compatibility fixtures.
+-
+-Phase 4 Slice A adds a crate-private verifier for Full-produced normalized
+-evaluation envelopes, integer metrics, comparisons, temporal and citation
+-evidence, policy-leak accounting, scenario outcomes, and tuning priority. It
+-does not parse golden TOML, read GKX source corpora, invoke providers or search,
+-select or publish configuration, or expose a new public Rust API. Those host
+-responsibilities remain exclusively with the pinned Full engine. Slice B adds
+-only byte-for-byte delegation of Full's `retrieval eval` and `retrieval tune`
+-CLI: Lite does not discover fixtures, execute providers/search, stage evaluation
+-state, select a candidate, or publish output itself.
+-
+-Version 1.1 also offers an optional `assist` command backed by a separately
+-configured local intelligence sidecar. It never modifies a note and prints
+-only engine-validated candidate proposals. Python, DSPy, a model, and provider
+-credentials are optional; `validate`, `assess`, `search`, `graph`, and `export` work
+-unchanged without them.
++**A dependency-light source profile and Rust conformance surface for
++Full-owned GKX contracts.**
++
++GKOS-Engine-Lite is not a second knowledge engine. GKOS-Engine Full remains the
++TypeScript contract and reference-semantics authority. Lite's current Node
++wrapper delegates an allowed command surface to an exact Full dependency; its
++Rust workspace privately verifies selected Full-produced contracts. Lite does
++not independently parse GKX, define identity or lineage, activate a watcher,
++host MCP, or obtain filesystem-effects authority.
++
++## Capability and release status
++
++The three status classes below must not be collapsed.
++
++| Surface | Status | Exact boundary |
++| --- | --- | --- |
++| Current source checkout | Legacy Node wrapper; not a registry-install claim | Restricted command delegation, optional proposal-only assistance client, and desktop presentation source. No claim is made that `gkos-engine-lite` is published on npm. |
++| Functional uplift Phases 0-5 | Draft-qualified, verifier-only/stacked | Lite implementation `6d94e40dc11e1bb43693b225e32ec6110d4e03b1`, run `32807434279`; evidence head `a39f14d1394e3dd8f8dada8bec77bd995b1a0bc4`, run `32808011926`; draft PR #20. Full authority is `7b5262baee9fcda23d50b0cee0c4977d6e4305e7`. |
++| Functional uplift Phases 6-11 | Future planned work | Public watcher runtime, authenticated multi-agent MCP, graph tools, UI integration, packaging, final documentation, and cross-repository handoff are not implemented or released. |
++
++The Phase 5 Rust watcher component is crate-private and inert. It verifies the
++copied Full pack and fixture semantics; it is not a public watcher service,
++filesystem writer, executable, or service activation. The current sidecar is
++an authenticated, GET-only loopback REST surface with `/health`, `/notes`,
++`/graph`, and `/graphiti/episodes`. It has no `/mcp` route. The desktop's MCP
++snippets therefore do not describe a working endpoint at this coordinate.
++
++## Authority allocation
++
++- `gkos-standard` owns normative GKOS/GKX meaning.
++- Full owns the TypeScript parser, deterministic semantics, contract packs,
++  reference behavior, and operational host decisions.
++- Lite consumes exact Full pins. Rust may prove cross-language conformance but
++  may not create a second parser, lineage model, authority system, or denial
++  semantics.
++- The wrapper, desktop shell, optional models, and future transports are
++  presentation or adapter layers only.
++
++## Sensitivity and access-control boundary
++
++`sensitivity` is projection metadata, not access control. The current `/notes`
++and `/graph` routes return all indexed records and attach sensitivity metadata;
++`default_sensitivity` does not enforce a visibility ceiling. Authentication of
++the loopback transport does not provide per-agent identity or authorization.
++Any host that discloses results must separately authenticate the caller and
++enforce its discoverability policy before returning records.
++
++## Current and draft functionality
++
++From a source checkout, the current wrapper can delegate its allowed commands
++to the pinned Full engine. The optional `assist` client sends proposal-only
++requests to a separately configured loopback intelligence service and does not
++apply source changes.
++
++On the draft uplift stack, Rust remains a private conformance/verifier layer:
++
++- Phase 1 verifies deterministic retrieval-contract behavior.
++- Phase 2 verifies citation and temporal coordinates.
++- Phase 3 verifies ingest and sealed-generation contracts while Full remains
++  parser, storage-owner, and activation authority.
++- Phase 4 verifies evaluation/tuning envelopes and delegates the CLI to Full.
++- Phase 5 verifies the exact watcher/recovery pack without exposing runtime
++  watcher or effects authority.
++
++No npm publication, final `gkx-lite` executable, signed installer, operational
++MCP endpoint, governed external-effects plane, or activated Phase 5 watcher is
++claimed.
++
++## Future planned sequence
++
++After Full defects are repaired and independently qualified, future phases may
++add identity-bound MCP, bounded graph projections/tools, truthful operator
++interfaces, clean-machine packaging, final documentation, and integration.
++Each Lite step follows a hosted-green Full contract pin and reciprocal review.
++Planning does not authorize merge, tag, release, publication, deployment,
++service activation, or external effects.
+ 
+ ## Why "Lite"
+ 
+-The full [gkos-engine](https://github.com/Odenknight/GKOS-Engine) can read
+-and report on both OKF+ 2.3 dialects (the human/agent-editable **Agent-Ready
+-flat** profile, and the nested **Machine Dialect** used by heavier
+-governance workflows), and diagnostic commands are always honest about what
+-they find in a vault regardless of dialect — GKOS-Engine-Lite never hides or
+-misreports a note just because it's outside its intended audience.
++The full [gkos-engine](https://github.com/Odenknight/GKOS-Engine) owns the
++canonical parser and reports the supported legacy and GKX forms. Lite narrows
++the command and presentation surface without changing those semantics.
+ 
+ What "Lite" narrows is documentation and positioning, not behavior: this
+ README and this package describe and support the everyday, individual-vault
+@@ -65,12 +95,18 @@ decisions, mv, or serve), GKOS-Engine-Lite's CLI surface will stay limited to
+ the eight delegated command paths below plus the separate, proposal-only
+ `assist` surface.
+ 
+-## Install
++## Source checkout
+ 
+-Requires Node >=22 <25.
++Lite is not currently claimed as an npm-published package. Do not use or
++document `npm install gkos-engine-lite` unless a later release coordinate and
++registry check explicitly establish publication.
++
++The current source checkout requires Node >=22 <25 and npm >=10:
+ 
+ ```sh
+-npm install gkos-engine-lite
++npm ci
++npm run check:metadata
++npm test
+ ```
+ 
+ `gkos-engine` has no npm registry publish; this integration branch installs
+@@ -84,7 +120,13 @@ rewrite. Derived graph and projection envelopes produced by this pin use the
+ current canonical GKX namespace; the preserved Phase 0 and classified Phase 1
+ goldens document that migration explicitly.
+ 
+-## CLI: `okf-lite`
++## Source-checkout CLI: `okf-lite`
++
++The exact commands available depend on the checked-out coordinate. The basic
++validation, assessment, graph, export, and proposal-only assistance surfaces
++belong to the legacy wrapper. The `validate --kb-path`, `index`, `search`, and
++`retrieval eval|tune` forms below describe the draft uplift stack and are not a
++registry-package availability claim.
+ 
+ ```sh
+ node bin/okf-lite.mjs validate ./my-notes
+@@ -178,6 +220,9 @@ status, stdout, stderr, exit, and candidate bytes on Node 22, 23, and 24.
+ Builds the canonical Kosmos graph (nodes, links, stats, diagnostics) with
+ stable serialization. `--watch` rebuilds on change.
+ 
++This delegated legacy graph rebuild is not the Phase 5 governed watcher and
++does not activate crash recovery, filesystem effects, or an MCP service.
++
+ ### `okf-lite export graphiti <dir> --episodes <out.json> [--group-id <ns>]`
+ 
+ Exports Graphiti episodes for the corpus.
+@@ -188,30 +233,35 @@ reproducible and auditable.
+ 
+ ## Desktop app — GKOS Engine Desktop
+ 
+-`desktop/` contains the separate **GKOS Engine Desktop** presentation package, a Tauri 2 tray app for macOS and
+-Windows that wraps the engine's headless sidecar (`kosmos-agent`). The CLI
++`desktop/` contains **GKOS Engine Desktop** presentation source, a Tauri 2 tray
++app for macOS and Windows that wraps the engine's headless sidecar
++(`kosmos-agent`). The CLI
+ integration is bound to [Engine package 2.1.2 at exact commit
+ `a57b98c`](https://github.com/Odenknight/GKOS-Engine/commit/a57b98c00c1913f5b7ed96839b3f8effe5be9c4a);
+ desktop sidecar artifacts remain separately qualified and are not implied by
+ that source pin.
+-Point it at a notes folder; it watches and projects (OKF+ 2.3 + Graphiti) and
+-serves a **loopback-only, read-only, token-gated** agent API for local AI
+-assistants (Claude Desktop, Cursor, …). No cloud, no remote access, no tunnel.
+-
+-A mandatory first-run wizard makes you choose a default sensitivity **before**
+-the API can ever be enabled (fail-closed to `secret`). Installer workflows are implemented and build **unsigned** artifacts. The
++The sidecar monitors a notes folder for projection refresh and serves a
++loopback-only, read-only, token-gated REST API. This is not Phase 5 watcher
++activation and is not MCP. The four verified data/status routes are `/health`,
++`/notes`, `/graph`, and `/graphiti/episodes`; `/mcp` is absent.
++
++A mandatory first-run wizard records a default sensitivity projection value.
++That value does not filter API results or replace authorization. Installer
++workflows can build **unsigned** artifacts, but no published or clean-machine-
++qualified installer is claimed. The
+ current Engine package 2.1.2 integration requires a fresh installer-matrix and
+ clean-machine verification before availability is claimed (`.github/workflows/desktop-build.yml`) — your OS will warn
+ on first open; the guides below cover the safe open-anyway steps.
+ 
+-- **[Quickstart](desktop/docs/QUICKSTART.md)** — download, install (unsigned),
+-  first-run setup, and connecting Claude Desktop.
++- **[Quickstart](desktop/docs/QUICKSTART.md)** — source-build and first-run
++  guidance; any MCP connection text is future documentation until an endpoint
++  is implemented and qualified.
+ - **[User Guide](desktop/docs/USER-GUIDE.md)** — full walkthrough: concepts,
+   the wizard, settings, quick-connect snippets, privacy/safety FAQ, and
+   troubleshooting.
+ 
+-The desktop frontend logic (snippet generation, settings validation) is
+-type-checked and unit-tested (`node --test`) in CI; Rust/Tauri compilation and
+-the `.dmg`/`.exe` bundles are produced exclusively on the CI matrix.
++The desktop frontend logic (snippet generation and settings validation) has CI
++coverage. Rust/Tauri compilation and installer artifacts require a separately
++verified matrix before availability can be claimed.
+ 
+ ## Relationship to the rest of the GKOS family
+-- 
+2.51.1

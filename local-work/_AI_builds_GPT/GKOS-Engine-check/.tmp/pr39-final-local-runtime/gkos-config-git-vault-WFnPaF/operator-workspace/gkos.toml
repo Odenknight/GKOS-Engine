@@ -1,0 +1,11 @@
+config_version = 1
+
+[vectors]
+enabled = true
+provider = "mcp"
+provider_id = "operator-chosen-provider"
+model_id = "operator/chosen-model"
+dimensions = 2
+timeout_ms = 100
+server = "operator-mcp"
+tool = "embed-anything"

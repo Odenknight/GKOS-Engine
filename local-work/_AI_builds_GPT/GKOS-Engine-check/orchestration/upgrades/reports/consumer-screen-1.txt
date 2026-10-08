@@ -1,0 +1,726 @@
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/VAULT-REPAIR-PLAN.md
+1: # Vault repair plan — review only
+8: ## Diagnostic workstreams
+10: ### Separate real candidates from intentional diagnostic canaries
+12: The owner reports eleven intentional duplicate-identity fixtures in the FAC
+13: documents/guides area, expected to exercise `GKX-IDENTITY-003`/`004`. The exact
+17: Maintain two report tracks: identity/relationship repair candidates outside the
+21: not proof of duplicate UIDs; verify admitted identity evidence and reviewed
+25: An intentional duplicate is not an admission exemption. The Engine must still
+27: marker is descriptive only, never permission to bypass validation. No marker,
+30: provides the paths; additions/removals require review.
+32: ## Supported interfaces
+39: | `gkx validate <dir>` | Reports schema, identity, and lineage diagnostics; exits nonzero for errors. |
+52: ## Proposed workflow
+69:    native planner; never automatically assign replacement IDs. Determine whether
+70:    records are copies, versions, or distinct entities before approving identity
+72:    cycles, and chronology conflicts require evidence about the intended target
+76:    defaults silently. Do not invent creation dates, authorship, provenance,
+77:    epistemic status, or source history from file timestamps or inference. A
+81: 6. **Approve and apply a bounded change set.** Present exact protected diffs and
+84:    application wrapper must provide backups, atomic replacement, permission
+87:    native retrieval against the staged result, including identity/lineage and
+93: ## Acceptance boundary
+96: and approved. Conflicting identities and historical relationships require a
+97: decision, not a guessed correction. Explicitly scoped search can remain useful
+
+2026-08-31/observatory-audit/GKOS-Observatory/docs/VIEWER.md
+1: # Kosmos-Oden Observatory viewer
+3: **Scope update:** the following renderer/replay evidence describes the static
+5: authenticated native Engine projections; it does not turn canonical replay
+7: [deployment status](../DEPLOYMENT.md) for the administrator-only viewer token,
+9: that no live API is enabled are scoped to the initial replay release.
+11: This is the actual Kosmos-Oden WebGL2 render core, not an invented replacement. Upstream repository: https://github.com/Odenknight/Kosmos-Oden at commit `50ebc3c168cf4e34137faf47e0b297b00db1a753`. Source was imported from the local checkout; only README/untracked upstream files were dirty, and none were used. `web/vendor/kosmos-oden/PROVENANCE.json` hashes the untouched renderer inputs and compiled ESM bundle. The inherited Three.js and GKOS Engine code runs only as bundled browser rendering dependencies; this does not constitute live Engine execution.
+15: Replay and scrub both call the same `clearTraversalObservability` / `notifyAgentTraversal` adapter. Event type, role, decision and reason remain the exact supplied fixture values in the accessible text timeline. The renderer does not adjudicate policy, confer authority, or synthesize event decisions. Effects are simulated. The initial deployment is static replay with unsigned integrity-only receipts; no SSE, private sessions, user prompts, tools, live Engine API or arbitrary URLs are enabled.
+17: The renderer is hosted in `/frame.html` so its unmodified resize handler receives the actual remaining viewport size. That handler changes renderer dimensions and camera aspect/projection only. The shell never rebuilds the graph on sheet detent changes and never moves the orbit target then. A one-time initial framing uses native wheel input; later inspection/resize does not reframe. Pointer selection goes through the upstream context-menu pick path (which has no camera flight), then reads the public inspector path into the shell. Orbit gestures remain native. The catalog buttons provide an accessible equivalent without any camera control.
+21: ## Build and verify
+23: `node scripts/build-web.mjs` requires Node only, verifies the pinned renderer bundle and copies local assets into `web/dist`. No CDN or network build dependency is used. `viewer-build.json` records hashes of shell/adapter assets and the renderer commit. All vendor source inputs and notices must remain checked in, including the nested `source/node_modules` files (these are provenance artifacts, not installed dependencies).
+25: `node --test tests/viewer.test.mjs` checks protected projection exclusion, all six replay mappings, immutability, and every vendored input hash. The optional browser gate is `node tests/viewer-browser.mjs <absolute-path-to-playwright-package>`; it starts and stops its own loopback server. Chromium passes actual WebGL2 frame/draw checks, all six scenario choices, missing-authority reason, receipt verification, sheet detents and mobile width with no console/page errors. Captures are `web/viewer-desktop.png` and `web/viewer-mobile.png`. Firefox, Safari/WebKit, actual touch-device picking and an unfamiliar tester comprehension gate still need independent release testing.
+27: `web/vendor/build-upstream.mjs <checkout>` is a maintainer-only vendor import utility using the upstream checkout's esbuild installation. Normal builds do not invoke it. Review and update its commit pin before deliberately importing another baseline. Project software is Apache-2.0; inherited software retains MIT/other upstream notices. See vendor LICENSE, THIRD-PARTY-NOTICES.md, dependency license copies and PROVENANCE.json. These licenses do not grant trademark, certification or endorsement rights.
+29: ## Security headers
+33: ## Separate authenticated live viewer
+35: `/live.html` is a separate, opt-in live surface added after explicit authorization for actual Engine access. It does not reuse fixture data. It passes the actual Engine `/graph` GkxGraph directly to the unmodified renderer in `/live-frame.html`. The latter requires the same narrowly scoped frame-ancestors exception as `/frame.html`.
+37: The operator must provide same-origin HTTPS reverse proxy routes `/engine/graph`, `/engine/notes`, and optionally `/engine/events` to the actual credential-gated Engine. The browser accepts no configurable remote address, URL credential, or storage credential. It sends a manually entered bearer token only in an Authorization header, disables redirects, omits cookies, and clears the input immediately. Disconnect aborts pending reads and SSE, clears displayed data, and reloads the renderer. Reload/back-forward restoration requires reconnecting. Non-loopback HTTP is rejected before credential transmission.
+39: The inspected Engine service has no `/note` route or raw note-content MCP tool. Its `/notes` route returns authorized `{id,path,label,uid,type,sensitivity}` summaries only. Selecting or refetching a note makes a fresh `/notes` request and displays only that summary, accurately labeled. The viewer must not claim to read source bodies. Graph refresh is explicit; event watching is optional authenticated streaming fetch, bounded to 200 visible events and 64 KiB per pending event block. Responses are bounded to 8 MiB; graph and note counts are bounded. Engine events are shown with their actual `completed`, `failed`, or `denied` statuses, never translated into authorization facts. Disconnected/static service availability does not imply live Engine readiness.
+
+2026-08-31/observatory-audit/GKOS-Observatory/GKOS Observatory Lab v0.2 — Build and Deployment Plan.md
+9: Standing: Build and deployment plan; not a conformance result, certification, deployment authorization, production activation, or authority grant
+11: GKOS Observatory Lab is a disposable, non-authoritative deployment mode of Kosmos-Oden backed by a read-only GKOS Engine execution cell. It demonstrates selected record, policy, refusal, replay, and receipt behaviors over a synthetic corpus. It is not a new product identity and must never become a canonical evidence store.
+23: 2. Public observation comes before public execution. The first launch can replay signed canonical scenarios. A bounded live rerun is optional and cannot delay the observer launch.
+27: 4. Protected existence is treated explicitly. A record may be publicly cataloged while its content is protected. An undisclosed record must receive a uniform not_available response that neither confirms nor denies existence. The plan does not claim elimination of all timing side channels.
+31: 6. Publication is moderated. “Publish this session” becomes “submit replay for publication.” Nothing enters the public feed without redaction checks and approval.
+33: 7. The service topology is reduced. Session control, bounded scenario execution, SSE fan-out, and ephemeral receipt storage begin as one Observatory service, not four independently operated services.
+42: |Canonical replay exhibit           |Pinned corpus, validated replay archive, receipt verification, no secret material|“Replays recorded demonstration events and verifies their receipt integrity.”|  
+49: 1. Refusal is a server decision. The viewer never infers permission or creates authority facts.
+59: 6. Every service must be replaceable from source and configuration. Ephemeral state must be safe to destroy.
+61: 7. A static observer mode must remain available when interactive execution is disabled.
+83: The public verifier must label these distinctions plainly.
+89: > This public sandbox uses synthetic records and demonstrates selected retrieval, policy, refusal, replay, and receipt behaviors. It is not a certified deployment. Effects are simulated. Do not submit sensitive, personal, confidential, regulated, or proprietary information.
+116: |Optional static replay host|Canonical signed scenario archives                                             |Yes                               |Versioned replay artifacts     |
+118: Do not add Redis, NATS, PostgreSQL, a service mesh, Kubernetes, or a separate identity service unless measured load or a later approved requirement makes the in-process implementation inadequate. A bounded in-memory broadcaster plus an expiring SQLite or filesystem store is sufficient initially.
+122: The phrase “Engine bound to loopback” must remain true in deployment, not merely in documentation.
+146: 3. Browser → Observatory: bounded HTTP POST for scenario or menu actions.
+154: 3.4 Edge decision
+161: |DDoS/WAF/rate assistance    |Available           |Operator must provide|  
+174: Reuse ratified GKOS/GKX and Engine contracts where they exist. The Observatory must not silently create normative GKOS semantics.
+180: Every emitted event must include or resolve to:
+196: ● decision where applicable
+212: The viewer can map event types to colors, positions, and animations, but the source event remains the authoritative display input. A color must never be interpreted as an authority grant.
+220: ● Replay after reconnection is bounded; a client outside the replay window downloads the final receipt bundle instead.
+222: ● Events for one session can never be requested using another session’s token.
+224: ● Public replay archives contain only events already marked public.
+278: ● A decision memo reviewed and authorized by named fictional roles.
+280: ● A conflicting interpretation that is retained but never authorized.
+282: ● A publicly cataloged incident record whose contents require a higher sensitivity capability.
+288: ● A simulated external effect that cannot occur without a valid authorization record.
+326: 5. Attempted effect without an authorization record.
+360: Store only a one-way token identifier or revocation handle where possible. Never log bearer tokens.
+366: |Observer replay |None or anonymous session cookie|View canonical replay, verify receipt|Phase 1                  |  
+372: GitHub OAuth is optional and deferred. Add it only if manual invitations become an operational burden or attributable participation produces clear value. OAuth must not be required to watch the exhibit.
+382: ● Authorization checked on every event-stream reconnect and receipt download.
+436: Exit gate: all seven core scenarios produce the expected server-side decisions locally; protected canaries never appear in public output, receipts for unauthorized sessions, or logs.
+458: Exit gate: two independent code paths reproduce every golden digest; tampering changes verification status; an unknown or revoked key fails origin verification; the UI explains digest versus signature correctly.
+494: ● Serve canonical, signed replay archives first.
+498: ● Add accessibility fallback: a text/table timeline must convey the same decisions without 3D rendering.
+502: ● Optionally add a bounded live-rerun button behind strict quotas; it is not a launch dependency.
+504: Exit gate: an unfamiliar tester can run or replay a scenario, identify why the effect was refused, distinguish review from authorization, and verify receipt integrity without maintainer assistance.
+524: ● Add “submit replay for publication”; queue submissions for redaction and approval.
+526: ● Add cross-session, replay-attack, malformed-input, reconnect, expiry, and concurrency tests.
+536: Required evidence before a separate decision:
+540: ● Abuse, resource-exhaustion, malformed-request, replay, and enumeration controls tested.
+552: ● Explicit owner authorization for the new exposure class.
+566: ● POST /v1/scenarios/{scenario_id}/runs — optional bounded live run.
+586: ● POST /v1/sessions/{session_id}/publication-submissions — request moderation; never immediate publication.
+600: ● Assets: protected corpus fields, session events, tokens, demo signing key, build provenance, availability.
+606: ● Threats: enumeration, authorization bypass, cross-session reads, content and metadata leakage, token replay, resource exhaustion, parser ambiguity, dependency compromise, log leakage, forged receipts, and moderator error.
+615: |Authorization   |Every allowlisted operation tested with valid, expired, wrong-scope, wrong-session, and revoked tokens|  
+616: |Non-disclosure  |Protected canary absent from response, event, log, receipt, and public replay                         |  
+617: |Object ambiguity|Absent and undisclosed requests have the same public status and envelope shape                        |  
+622: |Browser         |Current Chromium, Firefox, and Safari render equivalent decision timelines                            |  
+628: ● Canonical public replay artifacts: retained as versioned release artifacts.
+632: ● Approved public replays: retained only after redaction review and explicit approval.
+705: ● Use bounded tmpfs for temporary files.
+713: ● Keep the signing key in a runtime secret mount, never an environment dump or image layer.
+765: ● live-demo: bounded scripted server execution.
+771: Production starts in static. Promote one profile at a time after its gate passes. An incident must be able to fall back to static without changing DNS.
+789: ● Session TTL and replay window.
+795: Do not advertise an SLA. Publish a status note if invited testers depend on a scheduled evaluation window.
+803: ● HTTP status and refusal class counts.
+827: 3. Disable live runs while retaining canonical replay.
+837: For suspected disclosure or authorization bypass:
+847: 5. Determine whether any session or public replay crossed visibility boundaries.
+859: ● Roll back by digest, never by rebuilding an old branch.
+861: ● Corpus and public replay artifacts are restored from version control/releases.
+875: All must pass:
+879: ● Canonical replay fixtures validated.
+891: Gate B — Bounded live scenarios
+933: Unscheduled and unauthorized. Requires a separate decision after the WP-6 evidence package.
+945: 2. Distinguish retrieval, review, authorization, and effect.
+973: Return to the static exhibit immediately for any authorization bypass, cross-session disclosure, protected-canary detection, uncontrolled cost, or unmanageable abuse.
+983: ● If there are no meaningful completed-demo signals after reasonable distribution, tear down the live infrastructure and bundle the corpus and replay into Kosmos-Oden.
+989: ● User accounts, profiles, teams, SSO, billing, or a general identity platform.
+1019: 19. The static Observatory can launch using canonical replay artifacts before live Engine execution is exposed.
+1023: 21. Responsibility-layer comparison content should link to the running static exhibit, but vendor capability claims require separate verification and evidence labels.
+1025: 22. Informal external adoption may occur at any point; a public case study requires a separately documented evidence and permission boundary.
+1039: 28. Build the static canonical-replay path before provisioning a public interactive endpoint.
+1057: ● Each event shown is traceable to a public replay fixture.
+1065: ● The corpus, policy, viewer, replay, and verifier versions are visible.
+1075: Before approving a submitted replay for the public feed, confirm:
+1083: ● The replay uses a supported public schema and corpus version.
+1089: ● The approver and approval time are recorded outside the public replay.
+1097: ● Made static canonical replay the safest first launch mode.
+
+2026-08-31/observatory-audit/GKOS-Observatory/GKOS-OBSERVATORY-BUILD.md
+1: # GKOS-Observatory Alpha — Build Instructions
+8: ## 1. Component map
+22: │   ├── viewer/              # Kosmos-Oden fork: replay + bottom-sheet
+33: ## 2. Corpus pipeline (build first)
+58:    alongside source; runtime never renders raw markdown.
+70: authorized decision with full receipt chain, one flagged-never-authorized
+77: ## 3. Engine (Segment 2)
+85:   refusal events carry an opaque request ref, never the protected id), reason
+89:   return identical status/shape/latency-class; graph topology sent to the viewer
+91:   counts and search results never include refused items.
+93: ## 4. Gateway
+107: ## 5. Event bus
+118: ## 6. Scenario runner
+121: invalidation; flagged conflict; effect-without-authorization refused), each a
+128: ## 7. Web display (Segment 1)
+130: ### Viewer fork
+133: - **Replay controls**: play/pause/scrub over a session's event list (replay =
+137: ### Bottom-sheet note viewer + starfield compression
+142:   canvas to the remaining viewport (`renderer.setSize(w, h_remaining)`) and
+148:   canvas narrows) — same principle: resize viewport, never touch camera state.
+156: ### Pages (HTMX)
+162: ### CSP (set at Caddy)
+170: ## 8. Build & test targets
+
+2026-08-31/observatory-audit/GKOS-Observatory/GKOS-OBSERVATORY-DEPLOY.md
+1: # GKOS-Observatory Alpha — Deploy Instructions (Debian 13 LXC)
+3: **Principle:** the LXC is a disposable VPS stand-in. Everything below must also
+9: ## 1. Container creation (Proxmox host)
+25: ## 2. Base hardening (inside the LXC)
+32: # Node 22 LTS (NodeSource) and Caddy (official repo) — pin both
+41: # Service user — nothing runs as root
+44: # Firewall: only Caddy is reachable
+55: ## 3. Application layout
+70: ## 4. systemd units
+98: Ordering: engine → gateway/eventbus → runner (`After=`/`Requires=`).
+99: `systemctl enable --now` each; engine must fail to start (and stay failed) if
+102: ## 5. Caddy
+139: There must be **no** `file_server` path that reaches `corpus/attachments` or
+143: ## 6. Smoke test (every deploy)
+147: # manual checks:
+150: # refused vs nonexistent must be indistinguishable (status, body, headers)
+156: ## 7. Operations
+167: ## 8. Rebuild & teardown
+176: ## 9. VPS migration (when alpha graduates)
+180: (or direct TLS per the recorded threat-model decision), and the Phase-2 rate
+
+2026-08-31/observatory-audit/GKOS-Observatory/gkos-observatory-plan.md
+1: # GKOS-Observatory — Construction & Deployment Plan
+4: Not a product identity — a deployment mode of Kosmos-Oden fed by GKOS Engine in read-only mode.
+5: Disposable, non-authoritative, synthetic-corpus only. Never the canonical evidence store.
+9: ## Governing constraints (from the accepted assessments)
+12: 2. Refusal is server behavior. The engine/policy layer withholds content and emits reason-coded refusal events. The renderer only displays them. No protected metadata leaks via labels, counts, topology, timing, or error shape.
+15: 5. One maintainer. Every component must be boring, replaceable, and destroyable.
+19: ## Architecture
+48: ## The corpus (do this first — it is the creative core)
+53: - A decision memo **authorized** by a named fictional reviewer, with receipt.
+54: - A conflicting interpretation from a second team, **flagged, never authorized**.
+62: ## Build phases
+64: ### Phase 0 — Foundations (est. 1–2 weekends)
+65: - Write the threat model doc (one page): assets, trust boundaries, the Cloudflare-vs-direct-TLS decision recorded with reasons.
+70: **Gate:** locally, a scripted scenario produces a complete receipt (evidence → interpretation → review → authorization → effect) and a refusal receipt, and both digests reproduce from recorded inputs.
+72: ### Phase 1 — Observer exhibit (est. 2–4 weekends) ← the public launch
+78: 5. Attempted effect without authorization → refused.
+89: ### Phase 2 — Constrained interactive sessions (est. 2–3 weekends)
+97: ### Phase 3 — Invited external agents (only if Phase 2 earns it)
+105: ## Deployment & ops
+108: - **Deploy:** single docker-compose or Proxmox-style LXC with a Makefile; rebuild-from-scratch must take <30 min. No state worth backing up except the corpus repo (which lives in git anyway).
+112: ## Explicit non-goals
+115: ## Sequence with everything else
+
+2026-08-31/observatory-audit/GKOS-Observatory/README.md
+1: # GKOS Observatory
+3: Settings audit and Engine-owner tracking: [settings audit](docs/ENGINE-SETTINGS-AUDIT.md), [handoff and verification](docs/ENGINE-AGENT-HANDOFF.md). The new settings fixes passed focused staging tests, but upstream CI requires a protected-path contract decision before integration. PRs are draft; the production release below is unchanged.
+5: A LAN demonstration using the actual **Kosmos-Oden star-field renderer**, canonical Meridian replays, and a separately running **GKOS Engine** over a configured notes folder.
+7: **Latest accepted release:** viewer `20260831-discovery1` and Engine `0584a5d-discovery1` run over the configured vault. Agents have native hybrid SQLite FTS5/local ONNX search, paged Markdown reads, compact name/path discovery and known-locator resolution. The release passed 127 focused Engine tests and 39 Linux repository/viewer tests. Whole-vault retrieval still requires reviewed identity/relationship repair; no source notes were changed by these releases. See the [deployment record](DEPLOYMENT.md), [historical admission inventory](docs/LIVE-VAULT-ADMISSION.md), and [next Engine build roadmap](docs/ENGINE-BUILD-ROADMAP.md).
+9: **Multi-session clients:** chat and Code lanes can share a credential with separate MCP sessions and persistent SSE streams. Setup capacity is separate from a fair, bounded note-work queue: two executing tool calls server-wide, one per session. Streams allow reconnect overlap. See [the scheduling policy](docs/MCP-SCHEDULING.md) for limits and retry behavior.
+11: **Also implemented:** six canonical replay scenarios, 3D and text views, replay controls, a responsive record inspector, receipt download and verification, and the static replay service.
+13: **All-classification testing enabled:** the owner explicitly authorized the shared MCP identity to use a `secret` ceiling, covering all seven classifications. The live identity change and authenticated scoped search/read are verified; the existing token still works. The viewer is wider and taller, with a hide-summary control. Access covers admitted, authorized records, not the 1,467 metadata rejects, and does not resolve whole-vault retrieval conflicts.
+24: verified citations, provenance and actual stage status. The deployed profile uses local lexical and ONNX vector retrieval; reranking
+25: remains unconfigured. Inspect actual stage status on each response. Check the
+29: **Not implemented or claimed:** general named-agent provisioning, anonymous menu sessions, OAuth, media ingestion, receipt-origin signatures, GKOS conformance, or production qualification. Native MCP supports the original default identity plus an explicitly enabled, independent Codex identity; it is not the planned multi-user invitation platform.
+31: ## Deployment
+35: Running at [http://192.168.5.99](http://192.168.5.99) and [https://192.168.5.99](https://192.168.5.99), with LXC autostart enabled. Gateway is 192.168.5.1; DNS is 9.9.9.9 and 1.1.1.1. HTTPS uses a local CA; clients must trust it separately. No WAN exposure. The owner authorized release of this address from stopped CT810; its original configuration was preserved and its disk left unchanged.
+41: Trust the local CA first. Tokens are never embedded in the page or proxy. The
+43: only**, unchanged by access1. The separately credentialed, shared MCP identity is
+47: `internal`; explicit Codex enablement creates a separate secret-ceiling identity. The original token is reserved for Claude; Codex does not share its rate allowance or revocation.
+50: ## Build and verify
+57: The Observatory build requires Node22 and Python3, with no application npm
+58: dependencies or external CDN. Building the separate Engine requires its pinned
+66: # Open http://127.0.0.1:7002
+72: Every static viewer/replay asset is pinned at startup. The Observatory service
+76: denied and operator status/shutdown routes are never exposed.
+78: ## Integrity and scope
+82: Replay notes are projected as plain text; attachments remain unsupported. The
+87: does not become a canonical replay automatically.
+90: [Corpus](docs/CORPUS.md) · [Upstream inventory](docs/BASELINES.md) · [Viewer provenance](docs/VIEWER.md)
+94: ## Licensing and disclosure
+98: > The static public exhibit uses synthetic records and simulated effects. The separate authenticated live Engine reads the owner-selected vault; its source data is not public replay content. Neither surface is a certified deployment. Do not submit sensitive information to the public exhibit.
+
+2026-08-31/observatory-audit/GKOS-Observatory/tests/fixtures/live/CLASSIFICATION.md
+1: # Classification gate used by the native service
+5: An authenticated identity has a sensitivity ceiling. A source is visible only when its effective classification is at or below that ceiling and the operation's capability is allowed. Thus internal permits public and internal; secret permits all seven classifications. Missing or invalid source classification remains fail-closed under the Engine's effective classification rules.
+7: This is an inclusive ceiling, not an exact-classification selector. It does not mean “show only secret.” Exact-only access would require an additional explicit operator policy; the current MCP search schema does not expose an exact-classification option. Optional path_include only narrows retrieval paths and never raises the credential ceiling.
+9: Persisted identities default to internal unless the operator explicitly chooses another supported ceiling. Raising a particular identity to secret is an explicit authorization change. It does not change all identities, bypass required mcp.read capability, authorize writes, repair conflicting authored records, or publish results into the static Observatory corpus.
+11: The local embedding indexing ceiling is separate: a trusted local model may index through secret when the owner authorizes it, while each querying identity remains constrained by its own ceiling before ranking, snippets, citations and note reads. A secret-indexed vector is not automatically public.
+13: The synthetic regression in service-retrieval.test.mjs checks that an explicit secret identity can retrieve the synthetic secret note; the default internal identity cannot find or read it. The test also checks that the secret identity still sees lower-tier records, documenting the inclusive semantics. It reads no live notes and prints no production credentials.
+
+2026-08-31/observatory-audit/GKOS-Observatory/tests/fixtures/live/README.md
+1: # Actual Engine smoke fixture
+3: Original fictional CC0 test material. This is separate from the static replay corpus. Stage ONLY the contents of the vault subdirectory into a dedicated synthetic Engine vault:
+11: Configure the actual Engine with this vault, Navigation configuration enabled, an MCP agent identity with mcp.read, and sensitivity ceiling public (or internal), never secret. Keep credentials outside the source vault and repository. The default MCP-agent binding intentionally cannot call REST /notes or /graph.
+21: For loopback execution inside the guest, set the MCP URL to http://127.0.0.1:4814/mcp (or the real configured port). Token files must be absolute, owner-only files on POSIX; Windows relies on the operator's file ACL. No token value is accepted in an argument or environment variable.
+23: Optional native REST summary checks inside the guest require a separate read credential with notes.read and graph.read at public/internal sensitivity:
+33: The script makes only read operations and deletes its own transient MCP session. It does not create agents, modify corpus files, upload/deploy anything, or invoke shutdown. On HTTPS it also probes a small explicit set of operator paths using GET and requires denial; this is not a complete proxy route audit.
+37: Success on this script is a bounded smoke result, not complete MCP conformance, timing-side-channel resistance, certification, or authorization to open operator routes.
+39: ## Optional local content extension
+45: The live content smoke requires physical SQLite FTS5 capability (not a particular Node major version), reassembles the full note, hashes its exact UTF-8 bytes and verifies citation source digests and every matched span against those bytes.
+
+2026-08-31/observatory-audit/GKOS-Observatory/tests/fixtures/live/vault/index.md
+10: # Meridian live fixture index
+
+2026-08-31/observatory-audit/GKOS-Observatory/tests/fixtures/live/vault/Measurement.md
+10: # Meridian live fixture measurement
+
+2026-08-31/observatory-audit/GKOS-Observatory/tests/fixtures/live/vault/Restricted/Hidden-Live-72A9.md
+12: Original synthetic canary, not real confidential information. Must not appear in public/internal agent projections.
+
+2026-08-31/observatory-audit/GKOS-Observatory/web/dist/vendor/THIRD-PARTY-NOTICES.md
+1: # Third-Party Notices
+5: ## Three.js
+7: The 3D renderer bundles **Three.js** (r185, npm `three@0.185.1`), © 2010–2025
+10: `renderer-provenance.json`); esbuild bundles the ESM module into `main.js`,
+13: build is retained under `vendor/legacy/` (see its `.PROVENANCE.json`) for an
+28: The above copyright notice and this permission notice shall be included in all
+33: FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+42: ## Upstream project — vault-kosmos
+50: ## GKX provenance
+57: ## Build & dev dependencies
+64: ## GKOS-Engine
+74: ## Project-authored material
+
+2026-08-31/observatory-audit/GKOS-Observatory/web/vendor/kosmos-oden/THIRD-PARTY-NOTICES.md DUPLICATE 2026-08-31/observatory-audit/GKOS-Observatory/web/dist/vendor/THIRD-PARTY-NOTICES.md
+
+
+2026-08-31/product-audit/Kosmos-Oden/.github/pull_request_template.md
+3: ## What & why
+5: ## Checklist
+14: ## Review-required flags (check any that apply — these need explicit maintainer review)
+17: - [ ] iframe sandbox permission or host↔renderer protocol changed
+
+2026-08-31/product-audit/Kosmos-Oden/ACKNOWLEDGMENTS.md
+1: # Acknowledgments
+3: ## Andrej Karpathy — LLM Wiki
+
+2026-08-31/product-audit/Kosmos-Oden/AGENT-API.md
+1: # Vault Kosmos — universal Agent API guide (v0.6.5-alpha.8)
+16: ## Start the connector
+20: 3. Keep **Require auth token** enabled.
+27: ## Quick connect
+31: ### Anthropic Claude Code
+34: claude mcp add --transport http --header "Authorization: Bearer <TOKEN>" vault-kosmos "http://127.0.0.1:4816/mcp"
+45:       "headers": { "Authorization": "Bearer <TOKEN>" }
+51: ### OpenAI Codex, ChatGPT desktop, and Codex IDE
+58: http_headers = { Authorization = "Bearer <TOKEN>" }
+65: ### Claude Desktop and stdio-only harnesses
+88: ### Any Streamable HTTP harness
+91: - Header: `Authorization: Bearer <TOKEN>`
+99: ## Read tools
+117: | `assess_vault` | Bounded in-memory assessment summary; no writes |
+120: support under the declared policy. They are not truth scores, approval, or
+121: authorization. Proposed values never enter the effective projection until a
+122: separate authorized decision exists.
+125: Earlier episodes never receive later `superseded_by`, `head`, or `invalid_at`
+129: ## REST and troubleshooting
+
+2026-08-31/product-audit/Kosmos-Oden/benchmarks/provider-size-study/README.md
+1: # Provider bundle-size study
+6: sync adapters. Production adapters require pagination, resumable transfers,
+7: change cursors, retry/backoff, remote identity mapping, validation, and tests.
+
+2026-08-31/product-audit/Kosmos-Oden/benchmarks/RESULTS.md
+1: # Kosmos-Oden v0.5.5 — benchmark results
+26: ## Reading the numbers
+44: Renderer-side scene build / frame times depend on the GPU and are not measured
+
+2026-08-31/product-audit/Kosmos-Oden/BUILD-DIRECTIVE-v0.5.5.md
+1: # BUILD DIRECTIVE — Vault Kosmos v0.5.5 Correctness, Standalone Runtime, Temporal Lineage, Incremental Indexing, Security, Testing, and Documentation Rebuild
+10: # 1. Mission
+16: The rebuild must:
+38: # 2. Non-Negotiable Architectural Principles
+40: ## 2.1 Local-first
+42: The primary visualization must make no external network request.
+44: The following must be bundled into the distributed artifacts:
+52: * renderer
+60: The standalone artifact must function when opened directly from disk as:
+70: ## 2.2 One graph semantics implementation
+113:   renderer/
+116:     renderer.ts
+132: The exact naming may change, but semantic duplication must be reduced.
+136: # 3. Fix Canonical Lineage Semantics
+138: ## 3.1 Current defect
+145: # Engine v2
+163: ## 3.2 Canonical internal model
+193: The indexer must normalize all valid declarations into the same canonical lineage graph.
+197: ## 3.3 Required lineage normalization algorithm
+229: ## 3.4 Temporal invalidation
+263: ## 3.5 Lineage validation
+286: # 4. Clarify the Temporal Model
+288: Vault Kosmos v0.5.5 must not describe its current note model as fully bitemporal unless true transaction-time history is actually implemented.
+313: ## 4.1 Point-in-time graph semantics
+336: The following must use the same projector:
+347: ## 4.2 Preserve current content limitations honestly
+355: It must not claim to reconstruct an edit that was overwritten in place and no longer exists.
+359: # 5. Build a True Standalone HTML Runtime
+367: The user must be able to:
+393: # 6. Standalone Directory Selection
+397: ## 6.1 Preferred path: persistent directory handle
+426: ## 6.2 Fallback path
+439: The fallback must still:
+462: # 7. Standalone Folder Persistence
+483: 5. Never silently access a directory without browser authorization.
+497: # 8. Standalone Recursive Scanner
+523: The scanner must:
+545: # 9. Detect New Folders and Files
+547: The standalone runtime must update when the underlying directory changes where the browser directory API permits repeated access.
+555: ## 9.1 Snapshot signatures
+583: ## 9.2 Rescan triggers
+610: ## 9.3 New folder behavior
+621: If a new top-level folder appears, it must automatically become a new galaxy according to the existing Kosmos specification.
+625: # 10. Standalone Incremental Update Pipeline
+650: Renderer Update
+655: ## 10.1 Note content cache
+682: ## 10.2 Structural changes
+697: # 11. Renderer Update Strategy
+699: The renderer must distinguish:
+710: ### Metadata-only
+715: status
+722: ### Topology
+736: ### Major structural rebuild
+742: # 12. Collision and Layout Claims
+755: 2. Attempt a bounded corrective separation pass.
+768: # 13. Graphiti Export Corrections
+791: ## 13.1 Canonical lineage export
+833: ## 13.2 Do not overclaim deterministic Graphiti reconstruction
+851: # 14. Restore or Replace `kosmos-build.mjs`
+863: ## Preferred option
+894: The script must not contain a separate incompatible graph implementation.
+898: # 15. MCP Protocol Negotiation
+920: 5. Never claim support for an unknown future protocol version.
+935: # 16. Authentication Hardening
+937: Token generation must require a cryptographically secure random source.
+972: Never silently downgrade authentication security.
+976: # 17. Security Language and Implementation
+1014: # 18. Clarify Read-Only Behavior
+1018: ## Read-only operations
+1020: These must never modify existing notes:
+1032: ## Explicit file-producing commands
+1043: The README must state this accurately.
+1045: Never claim:
+1048: Vault Kosmos never writes anything to the vault
+1056: Visualization and Agent API queries never modify existing notes. Optional export and setup commands create explicitly named output files.
+1061: # 19. True Standalone User Interface
+1063: The standalone HTML page must have a clear startup experience.
+1078: ## 19.1 Status panel
+1093: Monitoring status
+1107: ## 19.2 Rescan controls
+1120: ## 19.3 Errors
+1139: # 20. HTMX Usage
+1157: status panel refresh behavior
+1162: However, core operations must remain native application logic:
+1186: # 21. Build the Standalone Artifact as a Real Single File
+1214: The generated artifact must be one file.
+1224: # 22. Preserve the Obsidian Plugin
+1226: The Obsidian plugin must continue to work using:
+1238: The plugin must remain local and self-contained.
+1242: # 23. Testing Rebuild
+1244: A clean checkout must support:
+1268: # 24. Required Unit Tests
+1272: ## Parser
+1285: ## Link resolver
+1296: ## Canonical lineage
+1315: with no reverse field on v1 must still produce:
+1325: ## Temporal projection
+1339: ## Incremental indexing
+1360: ## Graphiti export
+1375: ## Agent API
+1398: # 25. Standalone Automated Tests
+1422: # 26. Performance Benchmarks
+1459: # 27. Hidden-View Performance Test
+1486: # 28. CI Pipeline
+1488: GitHub Actions must run on:
+1519: # 29. Version Synchronization
+1539: # 30. README Rewrite Requirements
+1547: ## Allowed claim
+1563: ## Allowed claim
+1577: ## Allowed claim
+1587: ## Allowed claim
+1597: ## Allowed claim
+1607: ## Allowed claim
+1627: # 31. Standalone README Instructions
+1650: # 32. Diagnostics API
+1682: # 33. Agent API Read Consistency
+1684: The Agent API and visible cosmos must use the same normalized graph snapshot.
+1694: must return the same lineage the viewer displays.
+1702: must use the same temporal projector as Chrono.
+1706: # 34. Standalone Graphiti Export
+1717: Do not require filesystem write permission merely to export a file.
+1725: may be added later as an explicit write action, but it must never occur silently.
+1729: # 35. User Data Safety
+1731: The standalone directory scanner must be read-only.
+1747: Any future write capability must be separately permissioned and clearly visible.
+1751: # 36. Preserve Existing Major Features
+1753: The rebuild must preserve, unless a documented defect requires correction:
+1786: # 37. Required Deliverables
+1825: Generated artifacts may differ in exact location, but the release process must be reproducible.
+1829: # 38. Definition of Done
+1833: ### Correctness
+1837: * HEAD status is derived correctly.
+1841: ### Standalone
+1854: ### Incremental behavior
+1856: * Editing one note does not require rereading every note from disk.
+1857: * Adding one folder does not require rereading all unchanged note contents.
+1860: ### Security
+1867: ### Testing
+1879: ### CI
+1891: ### Documentation
+1897: * No false claim that the entire plugin never creates files remains.
+1902: # 39. Final Engineering Standard
+1927:       3D renderer        3D renderer        Graph queries
+1930: The semantic result must not depend upon which surface is being used.
+1938: HEAD status
+1957: # 40. Final Instruction to the Implementing Agent
+
+2026-08-31/product-audit/Kosmos-Oden/CHANGELOG.md
+1: # Changelog
+8: ## [Unreleased]
+10: ## [0.8.0] — 2026-08-16
+12: ### Added
+25: ### Changed
+35: ### Compatibility
+46: ### Verification
+50:   and host/renderer feature-state validation.
+55: ## [0.7.0] — 2026-07-27
+58: developed and merged on `main` but never cut as GitHub releases; 0.7.0 is the
+64: ### Changed
+71:   and no approval capability. v1.1.2 additionally documents that
+82: ### Fixed (documentation)
+90: ### Compatibility
+102:   sensitivity, never lower one that declares a higher level.
+107: ### Rolled up from the unreleased 0.6.6–0.6.9 line
+119:   memory and never persisted), plus the `standalone-html-release.yml` workflow
+122: ## [0.6.9] — 2026-07-23
+124: ### Added
+132:   `GET /graph`), the bearer **token is held in memory only and never persisted**,
+142:   to a GitHub **prerelease** with a one-line provenance note (built from this repo
+145: ### Notes
+153: ## [0.6.8] — 2026-07-23
+155: ### Changed
+168: ### Compatibility
+178:   declares a higher sensitivity is never lowered).
+180: ## [0.6.7] — 2026-07-22
+182: ### Changed
+189: ### Added
+195:   a note's effective sensitivity, never lower it. Enabling the Agent API or
+198: ### Compatibility
+213: ## [0.6.5] — 2026-07-19
+218: ### Re-branding — what changed in name, and why
+233:     uid-first identity, `created_at`/`updated_at`, `epistemic_state`,
+237:     readable for machine-managed corpora, never written into human-edited
+242: ### Why flat won (the evolution, tested)
+258:   in-memory projection and (per the beta.13 design) `.gkx/` sidecars, never
+262: ### Added
+272: ### Compatibility
+274:   never flattened automatically. Notes converted during the beta series
+277: ### Testing
+280:   `check:renderer-provenance`. The flat-profile work was additionally
+286: ## [0.6.5-beta.12] — 2026-07-19 (pre-release)
+288: ### Fixed
+296: ## [0.6.5-beta.11] — 2026-07-19 (pre-release)
+298: ### Fixed
+302: - Added a bounded repair for metadata written by beta.10's deterministic nested
+312: ### Safety
+313: - Genuinely authored native GKX 2.3 notes are never flattened automatically.
+321: ## [0.6.5-beta.10] — 2026-07-19 (pre-release)
+323: ### Changed
+333: ### Safety
+334: - Retained dry-run approval, byte-exact Markdown body preservation, local binary
+338: ## [0.6.5-beta.9] — 2026-07-19 (pre-release)
+340: ### Added
+342:   portable timestamp, Nextcloud WebDAV, Graphiti ingestion-status, and renderer
+347: ### Changed
+354: ### Compatibility
+358: ## [0.6.5-alpha.8] — 2026-07-19 (pre-release)
+360: ### Added
+362:   nested metadata parsing, UID-first identity, typed relationships, stable
+366:   completeness, provenance, evidence, relationship integrity, temporal
+367:   freshness, contradiction status, and review readiness. Scores explicitly
+368:   measure documentation/support quality—not truth or authorization.
+371:   bounded vault assessment.
+372: - Added UUIDv7-compatible Graphiti identity and governance summaries that
+375: ### Security
+385: ### Compatibility
+389: ## [0.6.5-beta.8] — 2026-07-18 (pre-release)
+392: - Added visible status rows for the measured S3-compatible, Dropbox, OneDrive, and Google Drive connector roadmap, plus the n+1 safety gate. Nextcloud remains the only operational storage connector in this beta.
+397: ## [0.6.5-beta.7] — 2026-07-18 (pre-release)
+399: ### Fixed
+405: - Added compact-desktop renderer breakpoints so the bottom command deck wraps
+409: ### Changed
+419: ## [0.6.5-beta.3] — 2026-07-18 (pre-release)
+421: ### Added
+426: ## [0.6.5-beta.2] — 2026-07-18 (pre-release)
+428: ### Added
+434: ### Security
+439: ## [0.6.5-beta.1] — 2026-07-18 (pre-release)
+441: ### Added
+450: - Added conditional `If-Match`/`If-None-Match` writes, bounded WebDAV traversal,
+454: ### Security
+455: - Nextcloud credentials are never placed in plugin `data.json`; app passwords
+462: ### Compatibility
+466: ## [0.6.5-alpha.7] — 2026-07-16 (pre-release)
+468: ### Fixed
+469: - Replaced the proposal row's viewport-sized input width with a bounded,
+473: ## [0.6.5-alpha.6] — 2026-07-16 (pre-release)
+475: ### Added
+482: ### Changed
+484:   proposal has an explicit decision. An untouched control is no longer
+489: ## [0.6.5-alpha.5] — 2026-07-16 (pre-release)
+491: ### Added
+501: ### Security
+502: - LAN endpoints require literal RFC1918, IPv4 link-local, IPv6 ULA, or IPv6
+506:   requires an explicit ceiling change plus per-run confirmation. The consent
+512: ## [0.6.5-alpha.4] — 2026-07-16 (pre-release)
+514: ### Added
+522: ### Security
+525: - Only bounded, provably closed frontmatter is sent; likely credential fields
+527:   omitted. Output must cite supplied deterministic finding codes and is saved
+532: ## [0.6.5-alpha.3] — 2026-07-16 (pre-release)
+534: ### Added
+538: - Accepted relationship targets must resolve and cannot point back to the
+541: ### Security
+548: ## [0.6.5-alpha.2] — 2026-07-15 (pre-release)
+550: ### Added
+551: - Added deterministic, bounded note-evidence selection for GKX descriptions,
+557: ### Security
+558: - Local endpoints are loopback-only; cloud endpoints require HTTPS and fresh
+564:   and proposal confidence never grants approval.
+566: ## [0.6.5-alpha.1] — 2026-07-15 (pre-release)
+568: ### Added
+577: ### Security
+580:   never grants approval or changes epistemic authority.
+582: ## [0.6.0-beta.2] — 2026-07-15 (pre-release)
+587: ### Changed
+588: - Stable renderer remains exact-pinned to ESM `three@0.185.1`, bundled into
+593: ### Added
+594: - Deterministic capture controls, renderer provenance checks, Playwright browser
+595:   scaffolding, split renderer CI, and mass-weighted elliptical orbits.
+597: ### Known issues
+601: ## [0.5.6] — 2026-07-15
+603: ### Added
+607:   note contents; apply is bound to the SHA-256 plan, requires explicit backup
+612: ### Fixed
+621:   namespaces, paginate connector exports, and never backfill later
+624: ### Security
+629: ### Changed
+636: ## [0.5.5] — 2026-07-11
+641: ### Added
+644: - **Per-agent live traversal trail** — each connected agent gets its own colour (stable hash of its name) and a colour-coded **mini rocket** riding the head of its trail; the agent's **name label shows when labels are toggled on** and hides when off. Agent identity comes from the MCP `clientInfo.name` (via an `Mcp-Session-Id` minted at `initialize`), else the `User-Agent`. Interleaved agents keep independent trails (no spurious cross-agent segments).
+652: - **Genuine standalone single-file viewer** (`kosmos-oden-stand-alone.html`) — `showDirectoryPicker` + `webkitdirectory` snapshot fallback, IndexedDB handle persistence, rescan-and-diff monitoring, status panel, in-page errors, browser-download exports.
+656: - Reproducibility double-build CI job; `SHA256SUMS` + `BUILD-INFO.json` release provenance; `kosmos-invariants.yml` policy with `check:invariants`; Dependabot; pinned toolchain + committed `package-lock.json`.
+657: - Versioned host↔renderer message protocol with structural validation; the plugin iframe is now sandboxed (`allow-scripts allow-pointer-lock allow-downloads`, no `allow-same-origin`).
+658: - Governance docs: `SECURITY.md`, `CONTRIBUTING.md`, `THREAT-MODEL.md`, `ARCHITECTURE.md`, `RELEASE-PROCESS.md`, `RENDERER-PROTOCOL.md`, `THIRD-PARTY-NOTICES.md`.
+659: - **Folder-safe context menu restored** — right-clicking a folder-only galaxy (no manifest note) now offers **Expand Folder** (reveals it in Obsidian's file explorer and flies the camera to the galaxy) instead of attempting to open or create a note; carried over via a versioned `open-folder` renderer→host message.
+668: ### Changed
+669: - **Packaging for Obsidian Community Plugin submission** — the standalone viewer (`kosmos-oden-stand-alone.html`) and other generated outputs (`dist/`) are no longer committed; they're rebuilt by CI and attached to each GitHub Release, with the standalone as its own downloadable asset kept separate from the plugin components (`manifest.json`/`main.js`/`styles.css`/`versions.json`). `release.yml` now fires on unprefixed version tags (Obsidian requires the tag to equal the manifest version exactly, no `v`) and marks pre-releases automatically. See `docs/COMMUNITY-PLUGIN.md`. Internal docs consolidated under `docs/` with de-versioned filenames.
+670: - Renderer extracted from the v0.5.0 base64 monolith into reviewable modules (`src/renderer/`); the single-file artifacts are now deterministically generated at build time.
+674: ### Fixed
+679: ### Security
+680: - **Agent API concurrency fairness (Mitigation 4)** — a per-agent in-flight cap (`MAX_CONCURRENT_PER_AGENT = 12`, all clients incl. loopback), so one agent's bulk/background work can't monopolize throughput and starve another agent's interactive query. Complements the existing global cap + per-client rate limit + request timeout. Concurrency review of all four mitigations recorded in `docs/AGENT-API-CONCURRENCY-STATUS.md` (index-once: confirmed; `*Sync` audit: clean; worker-thread: scoped out with rationale).
+687: ### Compatibility
+688: - Settings schema migrated to v2 on load; existing tokens preserved. Query-token auth defaults OFF — clients using `?token=` must switch to `Authorization: Bearer` / `x-api-key`, or re-enable the deprecated option in settings (removal targeted for the next breaking release).
+692: ## [0.5.0]
+694: Prior baseline (fork of `H4R7W16/vault-kosmos`): 3D cosmology renderer, GKX
+697: ## [0.6.5-beta.5] — 2026-07-18 (pre-release)
+704: ## [0.6.5-beta.6] — 2026-07-18 (pre-release)
+706: - Extends the functioning per-agent MCP traversal breadcrumb with a bounded additive comet-tail particle pool and lingering snow-dust around visited notes.
+708: - Adds renderer diagnostics and a real-browser test proving traversal hops produce visible bounded dust particles.
+
+2026-08-31/product-audit/Kosmos-Oden/CONTRIBUTING.md
+1: # Contributing to Kosmos-Oden
+7: ## Setup
+15: ## The golden rule
+18: > standalone viewer, Agent API, Graphiti exporter and CLI all consume it. Never
+21: ## Before opening a PR
+31: - Docs updated when behavior or claims change; the README must not claim more
+36: ## Browser and visual tests
+38: The renderer is real WebGL2, so parts of the suite need a real GPU. What runs
+46: | `npm run test:browser:full` — the same renderer specs on Firefox + WebKit | `Browser (full matrix)`, weekly + on demand | advisory |
+50: a conformant *software* WebGL2 implementation that this renderer initializes on
+64: npm run test:browser:full          # Firefox + WebKit renderer specs
+70: reference machine. An agent may *propose* a baseline update but must never
+73: ## Changes that require explicit review (Doc2 §9)
+75: - New network route, or any write capability (must not exist without an
+76:   architectural decision + threat-model update).
+79: - Any change to iframe sandbox permissions or the host↔renderer protocol.
+82: ## Commit / PR conventions
+
+2026-08-31/product-audit/Kosmos-Oden/docs/AGENT-API-CONCURRENCY-STATUS.md
+1: # Agent API Concurrency Mitigations — status log (v0.5.5)
+5: Done requires (1 confirmed, 2 audited, 3 & 4 scoped in/out — decisions logged,
+8: | # | Mitigation | Status | Evidence |
+17: ## Mitigation 1 — in-memory index, built once — CONFIRMED PRESENT
+38: ## Mitigation 2 — no synchronous fs calls — AUDITED, CLEAN
+52: ## Mitigation 3 — worker thread for heavy compute — SCOPED OUT (justified)
+58: the requested instant, not an O(history) replay. On the cached index this is a
+59: fast synchronous scan bounded by vault size, not by history depth.
+69: ## Mitigation 4 — per-agent fairness cap — SCOPED IN, IMPLEMENTED
+80: keyed on the agent identity now derived per request (MCP `clientInfo.name` via
+84: by design — interactive use never reaches it; only bulk/background floods do.
+88: The same agent-identity signal also drives the per-agent colour + rocket label
+93: ## Definition of Done — met
+
+2026-08-31/product-audit/Kosmos-Oden/docs/AGENT-API-CONNECTOR-BUILD.md
+1: # Building the Agent API (HTTP + MCP) connector
+17: ## 0. What you get
+24: - Per-agent identity (for fairness limits and optional live "who's querying" UI).
+32: ## 1. Architecture
+55:    pass a `provider` in. The class never imports Obsidian/Express/etc. You can
+58:    structure; the server never parses source files per request (see §7, M1).
+62: ## 2. The provider interface (your integration point)
+96: ## 3. Settings & lifecycle
+112:   it refuses to listen and reports an error — never expose data to the network
+120: ## 4. HTTP dispatch pipeline
+139: and vault content must never be cached by intermediaries.
+143: ## 5. Security (each is a testable property)
+149: | Header auth is the default | `Authorization: Bearer <t>` or `x-api-key: <t>` | 401 without, 200 with |
+150: | Query-token deprecated | `?token=` accepted only if `agentAllowQueryToken` AND **never** in LAN mode | 401 in LAN even when flag on |
+163: ## 6. MCP over Streamable HTTP
+192: // echo the client's version if supported; else return our latest (never echo an unknown version)
+197: and DELETE must send that id plus the negotiated `MCP-Protocol-Version`.
+200: lifecycle instead of treating a stateful identity session as stateless.
+204: ## 7. Concurrency & fairness (the four mitigations)
+220:    O(n) projection over the cached index (not an O(history) replay), you don't
+223:    per-client rate limit, cap the in-flight requests **per agent identity**
+226:    Over the cap → 429 + `Retry-After`. Generous enough that interactive use never
+235: ## 8. Agent identity (fairness key + optional live UI)
+237: Agents typically **share one token**, so identity comes from the request, not auth:
+240:   store `sessionId → {name, lastSeen}` (bounded map + TTL, e.g. 64 sessions / 30 min),
+247: agent's activity. Identity is best-effort — never make correctness depend on it.
+251: ## 9. Tools & REST surface
+263: | `search_notes` — `GET /notes?q=&tag=&area=&limit=` | lexical hits with status |
+276: ## 10. Client configuration
+285:       "headers": { "Authorization": "Bearer <TOKEN>" }
+290: or `claude mcp add --transport http --header "Authorization: Bearer <TOKEN>" my-connector "http://127.0.0.1:4816/mcp"`.
+296: http_headers = { Authorization = "Bearer <TOKEN>" }
+308: **Any HTTP client:** `curl -H "Authorization: Bearer <TOKEN>" http://127.0.0.1:4816/health`.
+311: holds the token). Never commit `data.json`/settings that persist the token.
+315: ## 11. Verification
+322: agent identity flows to `onTraversal`, and the per-agent cap returns 429.
+341: ## 12. Porting checklist
+354: `docs/AGENT-API-CONCURRENCY-STATUS.md` (the mitigation rationale).
+
+2026-08-31/product-audit/Kosmos-Oden/docs/ARCHITECTURE.md
+1: # Architecture
+28:                     Renderer  src/renderer/
+29:                     (cosmology · layout · shaders · renderer)
+32: ## Modules
+34: ### `gkos-engine` — the shared engine (DOM-free, runs in Node and the browser)
+54: findings to the local renderer, and advertises that Kosmos-Oden has no
+57: ### `src/renderer/` — the visualization (consumes a Core graph; never re-derives semantics)
+61: materials; `renderer.ts` is the Three.js scene, camera, interactions, Chrono,
+64: ### `src/plugin/` — Obsidian host + Agent API
+75: bounded-LLM proposals; `gkx-enrichment-apply.ts` keeps the later human review,
+76: hash-bound decision plan, backup, source recheck, and write authority in a
+79: migration blockers; it shares the bounded JSON request transport in
+85: enumerates Nextcloud with bounded depth-1 `PROPFIND` requests, applies
+90: ### `src/standalone/` — the offline single-file viewer
+93: + status + errors + exports), `standalone.ts` (entry, owns a `GkxIndex`).
+95: ## Build
+104: ## Read/write boundary
+109: migrator has a separate approval boundary: save-audit writes only a content-free
+110: plan; apply requires backup/sensitivity confirmations, writes binary backups,
+113: in-memory and read-only. They never insert assessment results into notes and
+114: never treat proposed values as effective. The enrichment path adds another boundary: proposals have no write authority,
+115: nothing is preselected, accepted relationship targets must resolve, and only a
+
+2026-08-31/product-audit/Kosmos-Oden/docs/ASSESSMENT-SCORING.md
+1: # GKX 2.3 Assessment Scoring
+8: | Provenance quality | 0.20 |
+12: | Contradiction status | 0.10 |
+18: item in each independence group before bounded product aggregation. Missing
+19: evidence never becomes invented evidence.
+24: truth, consensus, approval, authority, safety, or permitted use.

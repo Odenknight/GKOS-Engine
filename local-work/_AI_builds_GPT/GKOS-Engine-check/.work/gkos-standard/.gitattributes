@@ -1,0 +1,4 @@
+# Normalize line endings to LF in both the stored blob and the working tree.
+# Guarantees that checksum manifests generated on any platform (including
+# Windows with core.autocrlf) match the LF blob content that CI checks out.
+* text=auto eol=lf

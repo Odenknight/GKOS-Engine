@@ -1,0 +1,157 @@
+{
+  "version": "gkos-final-local-integration-review/1",
+  "generated_at_utc": "2026-09-01T05:18:01.4810695Z",
+  "status": "REVIEW_BRANCHES_PUBLISHED_WITH_ENGINE_HOSTED_FAILURES; Q_INTENT_R19_EXACT_SHA_HOSTED_CI_PASS",
+  "release_qualified": false,
+  "verifiers": {
+    "deliverables": { "status": "PASS", "repositories": 5, "files": 42, "errors": 0 },
+    "integration_branches": { "status": "PASS", "repositories": 5, "errors": 0 },
+    "original_markdown": { "status": "PASS", "checked": 659, "changed": 0 },
+    "current_markdown_audit": {
+      "status": "PASS",
+      "sol_tracked_review_count": 712,
+      "recursive_filesystem_count": 1649,
+      "bytes": 10623274,
+      "unique_content_sha256": 583,
+      "utf8_errors": 0,
+      "note": "The recursive count includes duplicated documentation inside integration and preserved superseded worktrees plus the prospective R19 decision, review, and hosted-CI records."
+    }
+  },
+  "deliverables": {
+    "manifest_sha256": "10a70209862bea2549edef8006d66a4d140e9a1ac250d29c53eaccfea819f706",
+    "manifested_files": 42
+  },
+  "repositories": {
+    "engine": {
+      "branch": "codex/integrate-engine-stability-20260831",
+      "base": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+      "commit": "1c59a992bafd6815ae9837bb3910084d4aea9972",
+      "tree": "54f68ff48294c87ac2d528b3464eede3c96facf6",
+      "patch_sha256": "1f06667fea932638b0136e56ecb3a9b546579dece660ef07ffda65a632a64cef",
+      "tests": { "executed": 951, "passed": 944, "failed": 0, "skipped": 7 },
+      "historical_replay": { "executed": 35, "passed": 35, "failed": 0, "skipped": 0 },
+      "status": "INCOMPLETE_PLATFORM_COVERAGE"
+    },
+    "standard_r18": {
+      "branch": "codex/integrate-standard-r18-20260831",
+      "base": "aa9a05315a9a767bd672aa2bb5179c963d9d66ca",
+      "commit": "9f47ecf8fefb87810cd44bd03fa8e82eb321fd4a",
+      "patch_sha256": "b4ce3f17ef88bb51647577c2d693730e98c96ed8d8a97c602d77b64e7354dcdd",
+      "tests": { "executed": 80, "passed": 80, "failed": 0, "skipped": 0 },
+      "starter": { "passed": 6, "unevaluated": 2, "qualifying": false }
+    },
+    "standard_r19_followup": {
+      "status": "OWNER_DECISION_ENCODED_UNPUBLISHED_HOSTED_CI_PASS",
+      "branch": "codex/adopt-q-intent-r19-20260901",
+      "parent": "9f47ecf8fefb87810cd44bd03fa8e82eb321fd4a",
+      "commit": "04a164792c0957f5ce8acc9ba6853597ec0660dd",
+      "tree": "534d518cf091578b8f0a6e06629e1f0e5cb017c6",
+      "decision": "R19-132",
+      "remote_branch_present": true,
+      "tests": { "executed": 82, "passed": 82, "failed": 0, "skipped": 0 },
+      "strict_mutation_lint": { "status": "PASS", "requirements": 62, "gate_codes": 28, "uncovered": 0 },
+      "starter": { "executed": 8, "passed": 6, "unevaluated": 2, "qualifying": false },
+      "markdownlint": "PASS_HOSTED",
+      "known_limitation": "Six pre-existing DOCSTD source cells cite obsolete compact-master section numbers; R19 leaves them visible for separately reviewed correction.",
+      "adoption_receipt": "orchestration/integration/receipts/q-intent-r19-adoption-receipt.json",
+      "advisory_review": "orchestration/integration/receipts/Q-INTENT-EIGHTH-INVARIANT-INDEPENDENT-REVIEW.md",
+      "hosted_ci": {
+        "status": "PASS",
+        "workflows": 5,
+        "success": 5,
+        "failure": 0,
+        "receipt": "orchestration/integration/receipts/q-intent-r19-hosted-ci.json"
+      }
+    },
+    "kosmos": {
+      "branch": "codex/integrate-kosmos-identity-20260831",
+      "base": "6486035dfc2e42173b1158b8007c9bab35aa7dc9",
+      "commit": "52b843c50a9e810bf8ad7ac7de8e4505a44b6baa",
+      "patch_sha256": "b52b9df81756d3876e90f3d46d24e8dc75df2c58aca63dc5ea145d7a195bbfee",
+      "tests": { "executed": 283, "passed": 283, "failed": 0, "skipped": 0 },
+      "browser": { "executed": 2, "passed": 2 }
+    },
+    "observatory": {
+      "branch": "codex/integrate-observatory-identity-20260831",
+      "source_coordinate": "8da1d2239a9ce0af5570fe1bfa264934d8aabbe4",
+      "source_object_available_locally": false,
+      "local_base": "2a7b66fc6a33076fdcf29574cf2e31082c1b6e2a",
+      "reconstruction_commit": "07ffb58859c8e0622a746d88df9016d7b520c6d3",
+      "commit": "2c01d9ea1263db2e4d7f438c2955cbc481c69f6e",
+      "patch_sha256": "bd454ba7801dd95c16be0f9d53373aee805955a4f591fa74243244467890d508",
+      "tests": { "executed": 39, "passed": 38, "failed": 0, "skipped": 1 },
+      "browser": { "status": "PASS", "transport": "synthetic mocked SSE", "renderer": "actual Chromium WebGL" }
+    },
+    "lite": {
+      "branch": "codex/integrate-lite-quick-connect-20260831",
+      "base": "4027bfc4499ad0a2f3e753401f1320468e283823",
+      "commit": "f5b06b4a4ea5020d62824ceffc51622269a52f19",
+      "patch_sha256": "8bea6d258452552086ea410ec831c9afcdcbc8465728ecec5c76e523f8606d97",
+      "tests": { "node_executed": 17, "node_passed": 17, "cargo_executed": 2, "cargo_passed": 2 },
+      "coverage": { "windows": "EXECUTED", "linux": "NOT_EXECUTED", "macos": "NOT_EXECUTED" }
+    }
+  },
+  "decisions": {
+    "Q_ORACLE": "OPEN",
+    "Q_EFFECTS": "PARTIALLY_RESOLVED_CT210_SELECTED_FOR_NL_E0_WRITES_DISABLED_ONLY",
+    "Q_PROVIDERS": "OPEN",
+    "Q_BENCH": "OPEN",
+    "Q_INTENT": "OWNER_DECISION_RECORDED_EXACT_SHA_HOSTED_CI_PASS; PR_INTEGRATION_GATE_EXECUTION_AND_PUBLICATION_PENDING",
+    "Q_LIVE": "OPEN"
+  },
+  "invariant_catalog": {
+    "status": "PASS",
+    "catalog": "orchestration/integration/receipts/KNOWN-INVARIANTS-CATALOG.md",
+    "catalog_sha256": "8bf0e0aca39f31860247f894009bf5d43d07d32fde5f5ffd5e4af2a9eb525c7e",
+    "source_index_sha256": "5d7a5baa02d73a7dcca393585d26ee86a8402e53be0cf9fed22f734f600839ec",
+    "validation_receipt_sha256": "60b59ea510a27a8020454030f5c71b5deea9fa9ed3ec9e7a99b09eb921a12709",
+    "indexed_markdown_paths": 205,
+    "unique_indexed_contents": 85,
+    "validated_citation_points": 127,
+    "r4_declared_cardinality": 8,
+    "historical_pre_r19_proposed_docstd_rows": 7,
+    "adopted_unpublished_docstd_rows": 8,
+    "eighth_item_found_in_historical_r4": false,
+    "eighth_item_prospectively_supplied_by_owner": true,
+    "gate_executed": false
+  },
+  "hosted_ci": {
+    "status": "COMPLETE_WITH_ENGINE_FAILURES_AND_UNTRIGGERED_REPOSITORIES",
+    "engine": {
+      "status": "FAIL",
+      "ci_jobs": { "success": 10, "failure": 2, "skipped": 2 },
+      "runtime_jobs": { "historical_success": 9, "current_failure": 3 }
+    },
+    "standard_r18": { "status": "PASS", "commit": "9f47ecf8fefb87810cd44bd03fa8e82eb321fd4a", "workflows": 5 },
+    "standard_r19_followup": { "status": "PASS", "commit": "04a164792c0957f5ce8acc9ba6853597ec0660dd", "workflows": 5, "receipt": "orchestration/integration/receipts/q-intent-r19-hosted-ci.json" },
+    "kosmos": { "status": "PASS", "workflows": 2 },
+    "observatory": { "status": "NOT_RUN_NO_WORKFLOW" },
+    "lite": { "status": "NOT_RUN_BRANCH_FILTER" },
+    "receipt": "orchestration/integration/receipts/hosted-ci-qualification.json"
+  },
+  "linux_lane": {
+    "environment": "KnightsAI CT210, privileged LXC, Debian 13.6",
+    "node": "22.23.2",
+    "status": "ACCEPTED_FOR_NL_E0_WRITES_DISABLED_ASSESSMENT_ONLY",
+    "effects_execution": "DENIED_UNQUALIFIED",
+    "durability_qualified": false,
+    "hosted_ci_runner": false,
+    "receipt": "orchestration/integration/receipts/ct210-node-linux-effects-host-assessment.json"
+  },
+  "authority": {
+    "remote_branches_created": true,
+    "pushed": true,
+    "remote_branches_created_count": 6,
+    "r19_followup_pushed": true,
+    "merged": false,
+    "released": false,
+    "deployed": false,
+    "tags_moved": false,
+    "production_credentials_used": false,
+    "effects_writes_enabled": false,
+    "vault_mutated": false,
+    "oracle_selected": false,
+    "rust_cutover_authorized": false
+  },
+  "primary_review": "orchestration/integration/INTEGRATION-REVIEW.md"
+}

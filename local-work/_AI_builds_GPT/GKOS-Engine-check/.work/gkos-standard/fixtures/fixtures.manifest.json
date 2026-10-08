@@ -1,0 +1,72 @@
+{
+  "catalog_version": "0.1.1",
+  "gkos_release": "GKOS-2026-08-05 v0.78",
+  "requirement_registry": "requirements/REGISTRY.md",
+  "description": "Starter, non-qualifying fixture catalog. Each fixture cites permanent GKOS requirement IDs; schema and projection observations are evaluated through implementation-specific adapter maps, never by treating GKX diagnostics as requirements. Volatile fields (calculatedAt, generated_at, engine paths) are masked by the runner; determinism binds to bytes + engine version + policy hash.",
+  "qualifying_profiles": [],
+  "mask_rules": ["assessment.calculatedAt", "assessment.assessmentId", "*.generated_at", "*.sourcePath"],
+  "fixtures": [
+    {
+      "fixture_id": "GCP1-P01", "class": "positive", "profile": "GCP-1",
+      "requirement_ids": ["GKOS-CONFORMANCE-003", "GKOS-IDENTITY-002"],
+      "file": "corpus/gcp1-p01-agent-ready-minimal.md",
+      "schema": { "against": "gkx-frontmatter-2.0.schema.json", "expect": "valid" },
+      "projection": { "forbid_severities": ["error", "critical"], "allow_codes": ["GKX-PROVENANCE-001"] }
+    },
+    {
+      "fixture_id": "GCP1-N01", "class": "negative", "profile": "GCP-1",
+      "requirement_ids": ["GKOS-CONFORMANCE-003"],
+      "file": "corpus/gcp1-n01-missing-required.md",
+      "schema": { "against": "gkx-frontmatter-2.0.schema.json", "expect": "invalid", "expect_paths": ["uid", "type", "created_at"] },
+      "projection": { "require_codes": [{ "code": "GKX-SCHEMA-004", "min_count": 3, "severity": "error" }] }
+    },
+    {
+      "fixture_id": "GCP1-N02", "class": "negative", "profile": "GCP-1",
+      "requirement_ids": ["GKOS-CONFORMANCE-003"],
+      "file": "corpus/gcp1-n02-invalid-epistemic.md",
+      "schema": { "against": "gkx-frontmatter-2.0.schema.json", "expect": "invalid", "expect_paths": ["epistemic_state"] },
+      "projection": { "require_codes": [{ "code": "GKX-EPISTEMIC-002", "severity": "error" }] },
+      "open_question_ref": "DIV-003"
+    },
+    {
+      "fixture_id": "GCP1-N03", "class": "negative", "profile": "GCP-1",
+      "requirement_ids": ["GKOS-CONFORMANCE-003"],
+      "file": "corpus/gcp1-n03-naive-timestamp.md",
+      "schema": { "against": "gkx-frontmatter-2.0.schema.json", "expect": "invalid", "expect_paths": ["created_at"] },
+      "projection": { "require_codes": [{ "code": "GKX-TEMPORAL-*", "severity": "warning-or-error" }] },
+      "known_divergence": "DIV-001"
+    },
+    {
+      "fixture_id": "GCP1-B01", "class": "boundary", "profile": "GCP-1",
+      "requirement_ids": ["GKOS-CONFORMANCE-003"],
+      "file": "corpus/gcp1-b01-missing-sensitivity.md",
+      "schema": { "against": "gkx-frontmatter-2.0.schema.json", "expect": "valid" },
+      "projection": { "require_codes": [{ "code": "GKX-SENSITIVITY-001", "severity": "warning" }], "effective_sensitivity": "restricted-or-stricter" },
+      "known_divergence": "DIV-002"
+    },
+    {
+      "fixture_id": "GCP3-C01", "class": "contradiction", "profile": "GCP-3",
+      "requirement_ids": ["GKOS-CONFORMANCE-001", "GKOS-CONFORMANCE-002", "GKOS-CONFORMANCE-003"],
+      "file": "corpus/gcp3-c01-claim.md", "pair": "corpus/gcp3-c02-counter.md",
+      "schema": { "against": "gkx-frontmatter-2.0.schema.json", "expect": "valid" },
+      "projection": { "forbid_codes": ["GKX-RELATIONSHIP-001"], "graph_expect": { "typed_edge": "contradicts", "resolves": true } }
+    },
+    {
+      "fixture_id": "GCP3-L01", "class": "lineage", "profile": "GCP-3",
+      "requirement_ids": ["GKOS-CONFORMANCE-001", "GKOS-CONFORMANCE-002", "GKOS-CONFORMANCE-003", "GKOS-IDENTITY-002", "GKOS-LINEAGE-001", "GKOS-LINEAGE-003"],
+      "file": "corpus/gcp3-l01-superseded.md", "pair": "corpus/gcp3-l02-successor.md",
+      "schema": { "against": "gkx-frontmatter-2.0.schema.json", "expect": "valid" },
+      "projection": { "forbid_codes": ["GKX-LINEAGE-003"], "graph_expect": { "supersession_chain": ["6f7a8b9c-0d1e-4f2a-8b3c-4d5e6f7a8b9c", "8b9c0d1e-2f3a-4b4c-8d5e-6f7a8b9c0d1e"], "uid_first_resolution": true } }
+    },
+    {
+      "fixture_id": "GCP3-L02", "class": "promotion-gate", "profile": "GCP-3",
+      "requirement_ids": ["GKOS-CONFORMANCE-003"],
+      "file": "corpus/gcp3-l02-successor.md",
+      "schema": { "against": "gkx-frontmatter-2.0.schema.json", "expect": "valid" },
+      "projection": { "require_codes": [{ "code": "GKX-EPISTEMIC-004", "severity": "warning" }] },
+      "note": "GKOS v0.76 §6.1: promotion to accepted requires a corroborating Decision Record; the fixture has none, so the gate diagnostic MUST fire."
+    }
+  ],
+  "planned_classes_not_yet_covered": ["sensitivity", "delegation", "replay", "erasure", "context-reproduction", "authorized-use"],
+  "profiles_not_yet_covered": ["GCP-4", "GCP-5", "GCP-6", "GCP-7", "Viewer-Projection-Profile"]
+}

@@ -1,0 +1,30 @@
+standard: GKOS
+identifier: GKOS-2026-08-05-v0.78
+version: "0.78"
+date: "2026-08-05"
+status: authorized-developmental-publication
+governance-mode: developmental-v0.x
+consensus-ratified: false
+independently-certified: false
+tag: v0.78
+current-release: true
+canonical-repository: https://github.com/Odenknight/gkos-standard
+decision-record: decisions/R14_GKX_2_0_Breaking_Machine_Namespace_Development_Decision_Record.md
+supersedes-current-policy:
+  - decisions/R11_GKX_Naming_Transition_Development_Decision_Record.md
+  - decisions/R12_Ecosystem_Compatibility_Development_Decision_Record.md
+machine-namespace:
+  version-field: gkx_version
+  state-directory: .gkx
+  diagnostic-prefix: GKX-
+  command: gkx
+preserves-immutable-releases:
+  - releases/2026-08-05-v0.77
+  - releases/2026-07-20-v0.76
+  - releases/2026-07-17-v0.75
+signature-status: signed-commit-and-annotated-tag
+publication-status: authorized-for-publication
+reference-implementation:
+  package: gkos-engine
+  version: "2.0.1"
+  commit: 7c742436d50b34f6dda66976212a672fb51f7c21

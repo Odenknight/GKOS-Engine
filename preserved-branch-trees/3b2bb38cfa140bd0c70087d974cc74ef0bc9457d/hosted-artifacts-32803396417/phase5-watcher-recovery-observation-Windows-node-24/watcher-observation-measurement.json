@@ -1,0 +1,84 @@
+{
+  "contract_version": "gkos-watcher-observation-measurement/1.0.0-draft.1",
+  "convergence": {
+    "all_equal": true,
+    "clean_canonical_gkx_digest": "sha256:d5f6e4a56fe38e724a2114062bd5aefbf5fe8ac0b8849dc75afe5c06c687904a",
+    "clean_canonical_graph_digest": "sha256:d5f6e4a56fe38e724a2114062bd5aefbf5fe8ac0b8849dc75afe5c06c687904a",
+    "clean_graphiti_digest": "sha256:201fe6664901cb96ad8b6db37eefb5b908974768d82d58cf36f954dcbbfc8bc9",
+    "clean_retrieval_manifest_digest": "sha256:dd8a8ee6b9c3552a05acefee84d1849c4d3c54ec052709dbe88fc680df2ab5ec",
+    "contract_version": "gkos-watcher-observation-convergence/1.0.0-draft.1",
+    "convergence_digest": "sha256:a95e24d575d86113cd717ba8464c0b8cbb15f8d9c2557666b537295b60638b3e",
+    "incremental_canonical_gkx_digest": "sha256:d5f6e4a56fe38e724a2114062bd5aefbf5fe8ac0b8849dc75afe5c06c687904a",
+    "incremental_canonical_graph_digest": "sha256:d5f6e4a56fe38e724a2114062bd5aefbf5fe8ac0b8849dc75afe5c06c687904a",
+    "incremental_graphiti_digest": "sha256:201fe6664901cb96ad8b6db37eefb5b908974768d82d58cf36f954dcbbfc8bc9",
+    "incremental_retrieval_manifest_digest": "sha256:dd8a8ee6b9c3552a05acefee84d1849c4d3c54ec052709dbe88fc680df2ab5ec"
+  },
+  "edit_latency_micros": [
+    1407918,
+    1423459,
+    1474314,
+    1429343,
+    1455388,
+    1475373,
+    1490351,
+    1482912,
+    1535512,
+    1531831,
+    1558239,
+    1574156,
+    1588250,
+    1618139,
+    1618388,
+    1609031,
+    1633390,
+    1653135,
+    1652621,
+    1688554
+  ],
+  "embedding_work": {
+    "provider_call_count": 0,
+    "provider_item_count": 0,
+    "unchanged_chunk_reembedded_count": 0
+  },
+  "environment": {
+    "arch": "x64",
+    "contract_version": "gkos-watcher-observation-environment/1.0.0-draft.1",
+    "environment_digest": "sha256:013bc39f5a9b55bb7a662b4fe6a73f0f3f7e8029b550afc48b365b7c4cc43d1d",
+    "os": "windows",
+    "physical_fts5_available": true,
+    "runner_class": "github_hosted",
+    "runtime": "node",
+    "runtime_version": "24.19.0",
+    "sqlite_version": "3.53.3"
+  },
+  "failure_codes": [],
+  "fts_qualification": {
+    "arch": "x64",
+    "contract_version": "gkos-watcher-fts-qualification-outcome/1.0.0-draft.1",
+    "index_generation_count": 23,
+    "lane_kind": "reference",
+    "os": "windows",
+    "outcome_digest": "sha256:d1eaf955964baba07ec0f1880a31f118542ed98c995ed9043f2d524c7dd11a59",
+    "physical_fts5_available": true,
+    "provider_call_count": 0,
+    "query_count": 22,
+    "runtime_version": "24.19.0",
+    "status": "qualified"
+  },
+  "measurement_digest": "sha256:3cd74d0ff4a2e8e436fd709538454bd789ef07b7b02ec4d68bb60e6cc12491e4",
+  "percentiles_micros": {
+    "max": 1688554,
+    "p50": 1535512,
+    "p95": 1653135,
+    "p99": 1688554
+  },
+  "sample_plan_digest": "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b",
+  "source_work": {
+    "initial_generation_count": 1,
+    "mutation_generation_count": 22,
+    "query_count": 22,
+    "reparsed_source_count": 22,
+    "total_generation_count": 23
+  },
+  "status": "qualified"
+}

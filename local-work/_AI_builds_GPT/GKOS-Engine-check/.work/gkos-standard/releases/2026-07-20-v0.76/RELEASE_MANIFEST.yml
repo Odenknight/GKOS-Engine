@@ -1,0 +1,18 @@
+standard: GKOS
+identifier: GKOS-2026-07-20-v0.76
+version: "0.76"
+date: "2026-07-20"
+status: public-pre-standard-concept-refinement
+canonical-repository: https://github.com/Odenknight/gkos-standard
+copyright-holder: "Shaun Oden Marshall"
+documentation-license: CC-BY-4.0
+software-license: Apache-2.0
+governance-mode: developmental-v0.x
+consensus-ratified: false
+independently-certified: false
+decision-record: decisions/R9_V0.76_Development_Decision_Record.md
+signature-status: unsigned-pending-governed-key
+contains-informative-draft-implementation-documents: true
+normative-scope-excludes:
+  - docs/implementation/GKOS-Engine-v1.0-Build-Instructions.md
+  - docs/implementation/OKF-Plus-2.3-Specialist-Reviewer-Role.md

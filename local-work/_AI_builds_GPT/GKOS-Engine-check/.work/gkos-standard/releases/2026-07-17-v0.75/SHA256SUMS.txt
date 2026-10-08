@@ -1,0 +1,4 @@
+# SHA256 checksums generated 2026-07-19. GPG/SSH signing of this manifest remains pending per the release notes.
+afedfabedfffe7a5c684880afd67762fec693bc31b5053564bafbd6b16b0bd8e *README.md
+cc5cd623eddcd17c29f457c75a78973dfc9aa8d7eb632b21be7395f7e424287e *RELEASE_MANIFEST.yml
+39da06bc3fd0b9bf3fce8f1ac34666d2a376463a00ebb868b1da39313d4f7270 *RELEASE_NOTES.md

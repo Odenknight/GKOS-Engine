@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/contract-fixture.schema.json",
+  "title": "Navigation Effects Contract Fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["fixtureId", "category", "input", "expected"],
+  "properties": {
+    "fixtureId": { "type": "string", "pattern": "^effects-[a-z0-9-]+$" },
+    "category": { "enum": ["success", "no-op", "stale", "denied", "conflict", "recovery", "malformed-markers", "path-escape", "ambiguous-lineage"] },
+    "input": { "type": "object" },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outcome", "sourceWrite", "reasonCodes"],
+      "properties": {
+        "outcome": { "enum": ["planned", "no-op", "stale", "denied", "conflict", "effect-present-verified", "review-required"] },
+        "sourceWrite": { "type": "boolean" },
+        "reasonCodes": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "preserveBranches": { "type": "boolean" },
+        "currentContentIncluded": { "const": false }
+      }
+    }
+  }
+}

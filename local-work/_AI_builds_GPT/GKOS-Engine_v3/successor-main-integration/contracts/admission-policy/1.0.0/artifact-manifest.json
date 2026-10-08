@@ -1,0 +1,67 @@
+{
+  "schema": "gkos.admission-policy.artifact-manifest.v1",
+  "contractVersion": "1.0.0",
+  "digestDomain": "exact Git blob bytes; UTF-8 with LF line endings",
+  "artifacts": [
+    {
+      "path": "decision-receipt.schema.json",
+      "bytes": 7012,
+      "sha256": "db32e1fc39233b09ba746be9123912bb0c47a1246e2609e992e02e090d66befb"
+    },
+    {
+      "path": "policy.schema.json",
+      "bytes": 2874,
+      "sha256": "e08dd3d96c770a3568bae4ecf9bea37addde944c2c806d2467eac565588b8d48"
+    },
+    {
+      "path": "reason-codes.json",
+      "bytes": 2418,
+      "sha256": "5ce8da908102ddeebacb46d1aba0f62bb1776d7416fad89e4c8c5aae4f51a8e3"
+    },
+    {
+      "path": "request.schema.json",
+      "bytes": 4091,
+      "sha256": "2288ae493a6fb3e60e0a6c5b89880c5c8f38c735c13949b7b8c67d309dada2f1"
+    },
+    {
+      "path": "semantic-validation-rules.json",
+      "bytes": 1421,
+      "sha256": "e191a663d29dd2e7f41a1e6b2881ddf4a01190498c980346799209e861246aae"
+    },
+    {
+      "path": "vectors/adversarial.json",
+      "bytes": 2738,
+      "sha256": "ff367dd61d0364529b150e9030acdc571143dd8eff4db297c9ac2837583f33b8"
+    },
+    {
+      "path": "vectors/manifest.json",
+      "bytes": 1988,
+      "sha256": "26806a6d2e8ca5fc8db023844e406d94184fab859dcdf491bba4cc308e175972"
+    },
+    {
+      "path": "vectors/policy.json",
+      "bytes": 1594,
+      "sha256": "b7ba377b4fdb7bec7d2637f969a4fc9e84714545555f4341bc4daed2872d9a0d"
+    },
+    {
+      "path": "vectors/request-auto-admit.json",
+      "bytes": 1559,
+      "sha256": "51abc8e286249ea41ee9f1db29d04a868e7eb1c22814240c0a591a072c094986"
+    },
+    {
+      "path": "vectors/request-human-review.json",
+      "bytes": 1732,
+      "sha256": "8a8406bac56c3e78490548b55001db607c4d1641677ec8da5f243161220e00b6"
+    },
+    {
+      "path": "vectors/request-invalid.json",
+      "bytes": 1565,
+      "sha256": "98b85065df475563fc306e4e6baab884ff75dc40e603632df1d0692e5b51f106"
+    },
+    {
+      "path": "vectors/request-priority-review.json",
+      "bytes": 1892,
+      "sha256": "516a67469a5ec94900fa67db018e4e5a23b797999ff0688f40916c45d66871c6"
+    }
+  ]
+}

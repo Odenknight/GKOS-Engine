@@ -1,0 +1,73 @@
+{
+  "record_type": "gkos-phase6-d0-15-owner-resolution",
+  "record_version": "1.0.0",
+  "resolved_at_utc": "2026-08-26T09:49:37.170Z",
+  "status": "OWNER_RATIFIED_SUCCESSOR_F1_CORRECTION_ONLY",
+  "owner_conditional_statement": "Assess these three files before continuing. If nothing downstream is affected, then Ratify all 15 D0-15 recommendations and authorize successor F1 correction only.",
+  "condition_evaluation": {
+    "assessment_artifact": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_ATTACHMENT_IMPACT_ASSESSMENT_2026-08-26.json",
+    "assessment_sha256": "69a6f241294a530cf7f3aa89ce7c897bcd5010d125462dfda59c2e73b9a2c014",
+    "result": "NO_CHANGE_TO_D0_15_RECOMMENDATIONS",
+    "condition_satisfied": true
+  },
+  "proposal": {
+    "artifact": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json",
+    "sha256": "149b1933503eb418ab8f1d37d2aa6dad19e8d18fa08ee5ce359ecea0fff9e78f",
+    "mapped_source_questions": 21,
+    "consolidated_items": 15,
+    "derived_corrections": 13
+  },
+  "owner_selections": [
+    { "id": "D015-R01", "option": "A" },
+    { "id": "D015-R02", "option": "A" },
+    { "id": "D015-R03", "option": "A" },
+    { "id": "D015-R04", "option": "A" },
+    { "id": "D015-R05", "option": "A" },
+    { "id": "D015-R06", "option": "A" },
+    { "id": "D015-R07", "option": "A" },
+    { "id": "D015-R08", "option": "A" },
+    { "id": "D015-R09", "option": "A" },
+    { "id": "D015-R10", "option": "A" },
+    { "id": "D015-R11", "option": "A" },
+    { "id": "D015-R12", "option": "A" },
+    { "id": "D015-R13", "option": "A" },
+    { "id": "D015-R14", "option": "A" },
+    { "id": "D015-R15", "option": "A" }
+  ],
+  "ratified_preservation_targets": {
+    "normalized_tables": 16,
+    "operations": 32,
+    "owner_only_operations": 24,
+    "errors": 53,
+    "public_mcp_tool_semantics_changed": false,
+    "new_restore_operation": false,
+    "restore_discovery": "owner-only authority.status recovery object",
+    "official_mcp_vectors": 67,
+    "non_mcp_core_vectors": 18,
+    "legacy_accepted_f1": "e29e04bdad1cd192a25eba2d682a4c46774def28 remains immutable historical evidence"
+  },
+  "authorization": {
+    "authorized": "successor F1 contract correction, deterministic regeneration, qualification, evidence, signed+DCO branch commits, branch push, and draft PR update only after required pre-correction concurrences",
+    "not_authorized": [
+      "F2 restart or commit",
+      "F3-F5 implementation",
+      "Lite implementation or repin before successor Full qualification",
+      "merge",
+      "release",
+      "deployment",
+      "activation",
+      "publication"
+    ]
+  },
+  "required_pre_correction_gate": {
+    "fresh_full_contract_concurrence": true,
+    "fresh_lite_conformance_concurrence": true,
+    "separate_mcp_reviewer_required_before_correction": false,
+    "rule": "Both fresh reviewers must accept the exact owner-resolution bytes and proposed successor-F1 correction map before product correction begins."
+  },
+  "f2_state": {
+    "status": "STOPPED_UNCOMMITTED_UNQUALIFIED",
+    "prior_authorization_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "restart_rule": "After successor F1 independent acceptance, the Product Owner must separately authorize F2 against the new exact F1 SHA."
+  }
+}

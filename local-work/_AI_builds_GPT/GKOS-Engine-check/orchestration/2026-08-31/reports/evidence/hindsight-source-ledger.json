@@ -1,0 +1,2329 @@
+{
+  "repo": "Odenknight/gkos-hindsight-governance",
+  "commit": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+  "requested_treeish": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+  "actual_tree_sha": "4ab4e928dd20855925b1e10ef49e1e2f9c58b3bb",
+  "tree_verification": {
+    "commit_endpoint": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/commits/59af4d1080efb0eae147d2aec0c0b1b75461b761",
+    "tree_endpoint": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/trees/4ab4e928dd20855925b1e10ef49e1e2f9c58b3bb?recursive=1",
+    "verified_date": "2026-08-31",
+    "truncated": false,
+    "entry_count": 323,
+    "blob_count": 257
+  },
+  "files": [
+    {
+      "path": ".github/CODEOWNERS",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b027c9144dc66fa6d36042104c31c3645bd3ef53",
+      "size": 307,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b027c9144dc66fa6d36042104c31c3645bd3ef53",
+      "downloaded_sha": "b027c9144dc66fa6d36042104c31c3645bd3ef53"
+    },
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9884352aad2540ff8f87a0797ccac4e0932fc6c8",
+      "size": 534,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/9884352aad2540ff8f87a0797ccac4e0932fc6c8",
+      "downloaded_sha": "9884352aad2540ff8f87a0797ccac4e0932fc6c8"
+    },
+    {
+      "path": ".github/workflows/contract.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2bb36055d4bbd6708e734a9f6da1861cf394d695",
+      "size": 3029,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/2bb36055d4bbd6708e734a9f6da1861cf394d695",
+      "downloaded_sha": "2bb36055d4bbd6708e734a9f6da1861cf394d695"
+    },
+    {
+      "path": ".github/workflows/differential.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4c0897c018711e215f6354eccf54ea4760008533",
+      "size": 875,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/4c0897c018711e215f6354eccf54ea4760008533",
+      "downloaded_sha": "4c0897c018711e215f6354eccf54ea4760008533"
+    },
+    {
+      "path": ".github/workflows/postgres-runtime-qualification.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "acb0b014f9ea6feeaaa79b25f2fc89ee40250498",
+      "size": 14289,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/acb0b014f9ea6feeaaa79b25f2fc89ee40250498",
+      "downloaded_sha": "acb0b014f9ea6feeaaa79b25f2fc89ee40250498"
+    },
+    {
+      "path": ".github/workflows/python.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de3513f5eea234324eced7f8ea65365536d82552",
+      "size": 980,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/de3513f5eea234324eced7f8ea65365536d82552",
+      "downloaded_sha": "de3513f5eea234324eced7f8ea65365536d82552"
+    },
+    {
+      "path": ".github/workflows/rust.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dcbf2f04eed1916b1cb819190ae1b5303b337d8e",
+      "size": 526,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/dcbf2f04eed1916b1cb819190ae1b5303b337d8e",
+      "downloaded_sha": "dcbf2f04eed1916b1cb819190ae1b5303b337d8e"
+    },
+    {
+      "path": ".github/workflows/security.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9614149f1a3152a678f348f1ec58503df5162089",
+      "size": 834,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/9614149f1a3152a678f348f1ec58503df5162089",
+      "downloaded_sha": "9614149f1a3152a678f348f1ec58503df5162089"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b85673dff56f28c0657439dc422b7d2db4fcd1b6",
+      "size": 71,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b85673dff56f28c0657439dc422b7d2db4fcd1b6",
+      "downloaded_sha": "b85673dff56f28c0657439dc422b7d2db4fcd1b6"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "size": 11357,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "downloaded_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+    },
+    {
+      "path": "NOTICE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f1906e73dc9cd3ee8c2fdb933d7f3a66d502e58",
+      "size": 234,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/0f1906e73dc9cd3ee8c2fdb933d7f3a66d502e58",
+      "downloaded_sha": "0f1906e73dc9cd3ee8c2fdb933d7f3a66d502e58"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "04f30bcd18a347649abb05172b5915468ac76173",
+      "size": 8152,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/04f30bcd18a347649abb05172b5915468ac76173",
+      "downloaded_sha": "04f30bcd18a347649abb05172b5915468ac76173"
+    },
+    {
+      "path": "contracts/adjudication/v1/ADJUDICATION-CONTRACT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7962c86477d7cd359fcc79d79b435da583acb9f1",
+      "size": 5715,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/7962c86477d7cd359fcc79d79b435da583acb9f1",
+      "downloaded_sha": "7962c86477d7cd359fcc79d79b435da583acb9f1"
+    },
+    {
+      "path": "contracts/R2-CONTRACTS.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c6b5ba2f39ff13aa4864c5adb3a58d45e017ba27",
+      "size": 5756,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/c6b5ba2f39ff13aa4864c5adb3a58d45e017ba27",
+      "downloaded_sha": "c6b5ba2f39ff13aa4864c5adb3a58d45e017ba27"
+    },
+    {
+      "path": "contracts/BOOTSTRAP-CONTRACTS.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "26bbe092180b0e944b32e81a9aa0189b5cd63f1f",
+      "size": 2571,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/26bbe092180b0e944b32e81a9aa0189b5cd63f1f",
+      "downloaded_sha": "26bbe092180b0e944b32e81a9aa0189b5cd63f1f"
+    },
+    {
+      "path": "contracts/adjudication/v1/disposition-receipt.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6810eacfe2e6a3f0ed74e33922f31fcb2dd00781",
+      "size": 6678,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6810eacfe2e6a3f0ed74e33922f31fcb2dd00781",
+      "downloaded_sha": "6810eacfe2e6a3f0ed74e33922f31fcb2dd00781"
+    },
+    {
+      "path": "contracts/adjudication/v1/HASH-PREIMAGES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2044def8fe2ed94defa655fa265d10b282c850a6",
+      "size": 2275,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/2044def8fe2ed94defa655fa265d10b282c850a6",
+      "downloaded_sha": "2044def8fe2ed94defa655fa265d10b282c850a6"
+    },
+    {
+      "path": "contracts/adjudication/v1/eligibility-receipt.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb89cc6c8e7ae3537b03fe02c5c0bbb2c74b1fcb",
+      "size": 5071,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/cb89cc6c8e7ae3537b03fe02c5c0bbb2c74b1fcb",
+      "downloaded_sha": "cb89cc6c8e7ae3537b03fe02c5c0bbb2c74b1fcb"
+    },
+    {
+      "path": "contracts/adjudication/v1/policies/auto-admission-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64292a1510d2b4582607d483e427cc5662092ad0",
+      "size": 982,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/64292a1510d2b4582607d483e427cc5662092ad0",
+      "downloaded_sha": "64292a1510d2b4582607d483e427cc5662092ad0"
+    },
+    {
+      "path": "contracts/adjudication/v1/policies/data-routing-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02fab73d444f57ef50436575399d2d4f27c945f6",
+      "size": 886,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/02fab73d444f57ef50436575399d2d4f27c945f6",
+      "downloaded_sha": "02fab73d444f57ef50436575399d2d4f27c945f6"
+    },
+    {
+      "path": "contracts/adjudication/v1/policies/review-priority-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9fe04395203baf70893135d5e1e5d4294df4130e",
+      "size": 1256,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/9fe04395203baf70893135d5e1e5d4294df4130e",
+      "downloaded_sha": "9fe04395203baf70893135d5e1e5d4294df4130e"
+    },
+    {
+      "path": "contracts/adjudication/v1/policy-bundle-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d02930e244485b370a89cec6bd297cef73a29c64",
+      "size": 1768,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d02930e244485b370a89cec6bd297cef73a29c64",
+      "downloaded_sha": "d02930e244485b370a89cec6bd297cef73a29c64"
+    },
+    {
+      "path": "contracts/adjudication/v1/policy-bundle.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ac32eb903ae6e7c5a2a4615ec317c661f1ad498",
+      "size": 3939,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/9ac32eb903ae6e7c5a2a4615ec317c661f1ad498",
+      "downloaded_sha": "9ac32eb903ae6e7c5a2a4615ec317c661f1ad498"
+    },
+    {
+      "path": "contracts/adjudication/v1/policy-contract.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a1de9639ba73480ec0f804ef1bc21ec2982e4eaa",
+      "size": 4533,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a1de9639ba73480ec0f804ef1bc21ec2982e4eaa",
+      "downloaded_sha": "a1de9639ba73480ec0f804ef1bc21ec2982e4eaa"
+    },
+    {
+      "path": "contracts/adjudication/v1/validity-receipt.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "25fbccdf160c3db603ea8f7c7c10d915c378a2c7",
+      "size": 5085,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/25fbccdf160c3db603ea8f7c7c10d915c378a2c7",
+      "downloaded_sha": "25fbccdf160c3db603ea8f7c7c10d915c378a2c7"
+    },
+    {
+      "path": "contracts/adjudication/v1/risk-receipt.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b20fff343eb889dee4db60de9f57f4b1b687212",
+      "size": 1644,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/2b20fff343eb889dee4db60de9f57f4b1b687212",
+      "downloaded_sha": "2b20fff343eb889dee4db60de9f57f4b1b687212"
+    },
+    {
+      "path": "contracts/bootstrap_security.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "14fffd62daf765c042421756bf575065729943cd",
+      "size": 14181,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/14fffd62daf765c042421756bf575065729943cd",
+      "downloaded_sha": "14fffd62daf765c042421756bf575065729943cd"
+    },
+    {
+      "path": "contracts/adjudication/v1/reason-codes.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d28a1e8adef9e400140d870ecae053670b657172",
+      "size": 6064,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d28a1e8adef9e400140d870ecae053670b657172",
+      "downloaded_sha": "d28a1e8adef9e400140d870ecae053670b657172"
+    },
+    {
+      "path": "contracts/check_lane_boundaries.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f37c8202f914d4bea087857d5f971cab3d406d4",
+      "size": 24517,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/7f37c8202f914d4bea087857d5f971cab3d406d4",
+      "downloaded_sha": "7f37c8202f914d4bea087857d5f971cab3d406d4"
+    },
+    {
+      "path": "contracts/authority/v1/owner-decision-intake.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "00d835888d97c0acb38e2b5abee0830bfc6db4ef",
+      "size": 15497,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/00d835888d97c0acb38e2b5abee0830bfc6db4ef",
+      "downloaded_sha": "00d835888d97c0acb38e2b5abee0830bfc6db4ef"
+    },
+    {
+      "path": "contracts/ci/v1/CONTRACT-CI-GATE.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bad3a800ccaec39390f918583840437bc467c8f4",
+      "size": 2068,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bad3a800ccaec39390f918583840437bc467c8f4",
+      "downloaded_sha": "bad3a800ccaec39390f918583840437bc467c8f4"
+    },
+    {
+      "path": "contracts/ci/v1/requirements-test.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6c9b9a8ae9fbecfe01550a6c0c8b9d4b977630b9",
+      "size": 756,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6c9b9a8ae9fbecfe01550a6c0c8b9d4b977630b9",
+      "downloaded_sha": "6c9b9a8ae9fbecfe01550a6c0c8b9d4b977630b9"
+    },
+    {
+      "path": "contracts/common/v1/definitions.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "028e3f99f4fd84c26534e398310aa4266c907700",
+      "size": 5682,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/028e3f99f4fd84c26534e398310aa4266c907700",
+      "downloaded_sha": "028e3f99f4fd84c26534e398310aa4266c907700"
+    },
+    {
+      "path": "contracts/conformance/v1/CLI-PROTOCOL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1d46c4cb9deb4f8d88646fb5d424def797016b80",
+      "size": 10520,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1d46c4cb9deb4f8d88646fb5d424def797016b80",
+      "downloaded_sha": "1d46c4cb9deb4f8d88646fb5d424def797016b80"
+    },
+    {
+      "path": "contracts/conformance/v1/PRE-RATIFICATION-CLI-CLEAN-ROOM.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aa47e1ce152162f3c8bb9d72d7d603fde1c58606",
+      "size": 2039,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/aa47e1ce152162f3c8bb9d72d7d603fde1c58606",
+      "downloaded_sha": "aa47e1ce152162f3c8bb9d72d7d603fde1c58606"
+    },
+    {
+      "path": "contracts/conformance/v1/check_cli_protocol.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8717571641c5884f832cceb9da1a5ae0a159676d",
+      "size": 40177,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8717571641c5884f832cceb9da1a5ae0a159676d",
+      "downloaded_sha": "8717571641c5884f832cceb9da1a5ae0a159676d"
+    },
+    {
+      "path": "contracts/conformance/v1/cli-protocol-vectors.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f1e856bd6c3c4540b3335e0c79e3f4735b3ca5fa",
+      "size": 2139,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f1e856bd6c3c4540b3335e0c79e3f4735b3ca5fa",
+      "downloaded_sha": "f1e856bd6c3c4540b3335e0c79e3f4735b3ca5fa"
+    },
+    {
+      "path": "contracts/conformance/v1/output-bindings.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a01257f65907b394cf7679125b768d6869b36bc3",
+      "size": 2120,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a01257f65907b394cf7679125b768d6869b36bc3",
+      "downloaded_sha": "a01257f65907b394cf7679125b768d6869b36bc3"
+    },
+    {
+      "path": "contracts/conformance/v1/operation-profile-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79538dc9fb6b368381162e79c1bc86483ca1ebe8",
+      "size": 14004,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/79538dc9fb6b368381162e79c1bc86483ca1ebe8",
+      "downloaded_sha": "79538dc9fb6b368381162e79c1bc86483ca1ebe8"
+    },
+    {
+      "path": "contracts/conformance/v1/operation-profile.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "476f588473d00d98c1662f182a00d3da3115d316",
+      "size": 5504,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/476f588473d00d98c1662f182a00d3da3115d316",
+      "downloaded_sha": "476f588473d00d98c1662f182a00d3da3115d316"
+    },
+    {
+      "path": "contracts/conformance/v1/schema-validation-result.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "443e8ffdba87265b7eb1c5f3d568f174b1bacbb2",
+      "size": 966,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/443e8ffdba87265b7eb1c5f3d568f174b1bacbb2",
+      "downloaded_sha": "443e8ffdba87265b7eb1c5f3d568f174b1bacbb2"
+    },
+    {
+      "path": "contracts/database/v1/SECTION-3.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "edb87e0b309f75f541369c944d6ceead31779949",
+      "size": 6275,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/edb87e0b309f75f541369c944d6ceead31779949",
+      "downloaded_sha": "edb87e0b309f75f541369c944d6ceead31779949"
+    },
+    {
+      "path": "contracts/conformance/v1/request.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8343a37c60bd6a8b4b18f9a18ee7ef1335105063",
+      "size": 2519,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8343a37c60bd6a8b4b18f9a18ee7ef1335105063",
+      "downloaded_sha": "8343a37c60bd6a8b4b18f9a18ee7ef1335105063"
+    },
+    {
+      "path": "contracts/database/v1/POSTGRESQL-LEDGER-PROFILE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f365937f3854c16357b83c964e1d871fdf4b7f7",
+      "size": 17202,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/4f365937f3854c16357b83c964e1d871fdf4b7f7",
+      "downloaded_sha": "4f365937f3854c16357b83c964e1d871fdf4b7f7"
+    },
+    {
+      "path": "contracts/conformance/v1/result.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d5d12da8880c2fd32072b5c6e3918a539b810f6",
+      "size": 2900,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/9d5d12da8880c2fd32072b5c6e3918a539b810f6",
+      "downloaded_sha": "9d5d12da8880c2fd32072b5c6e3918a539b810f6"
+    },
+    {
+      "path": "contracts/database/v1/adjudication-verification.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cbd31f33840f3f5b11b016c68f99fad7d8b22d03",
+      "size": 4653,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/cbd31f33840f3f5b11b016c68f99fad7d8b22d03",
+      "downloaded_sha": "cbd31f33840f3f5b11b016c68f99fad7d8b22d03"
+    },
+    {
+      "path": "contracts/database/v1/checkpoint-anchor-request.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "20ca230564f0ed06c2500c3f7f977be0875d9592",
+      "size": 992,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/20ca230564f0ed06c2500c3f7f977be0875d9592",
+      "downloaded_sha": "20ca230564f0ed06c2500c3f7f977be0875d9592"
+    },
+    {
+      "path": "contracts/database/v1/adjudication-verifier-profile.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a34ed836f567691f19f7e7d27c4c06a33a963237",
+      "size": 2084,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a34ed836f567691f19f7e7d27c4c06a33a963237",
+      "downloaded_sha": "a34ed836f567691f19f7e7d27c4c06a33a963237"
+    },
+    {
+      "path": "contracts/database/v1/effect-receipt-verification.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d1326fe49afe20ddd0b3b9a5e706efbfe001347",
+      "size": 2653,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/4d1326fe49afe20ddd0b3b9a5e706efbfe001347",
+      "downloaded_sha": "4d1326fe49afe20ddd0b3b9a5e706efbfe001347"
+    },
+    {
+      "path": "contracts/database/v1/deployment-scope-profile.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ccad9416e97d1816be7320cc50872a809f99ac20",
+      "size": 1652,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/ccad9416e97d1816be7320cc50872a809f99ac20",
+      "downloaded_sha": "ccad9416e97d1816be7320cc50872a809f99ac20"
+    },
+    {
+      "path": "contracts/database/v1/checkpoint-verification.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd5f20461d9d9bb6da25077593b690febd022a5b",
+      "size": 3726,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bd5f20461d9d9bb6da25077593b690febd022a5b",
+      "downloaded_sha": "bd5f20461d9d9bb6da25077593b690febd022a5b"
+    },
+    {
+      "path": "contracts/database/v1/effect-receipt.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0a8453b362c2caa7be1a7bd2294abb37a3db1b7",
+      "size": 2109,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d0a8453b362c2caa7be1a7bd2294abb37a3db1b7",
+      "downloaded_sha": "d0a8453b362c2caa7be1a7bd2294abb37a3db1b7"
+    },
+    {
+      "path": "contracts/database/v1/ledger-event-verifier-profile.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "20774af683f5570e1fb0750ec6de49b953e55a38",
+      "size": 1709,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/20774af683f5570e1fb0750ec6de49b953e55a38",
+      "downloaded_sha": "20774af683f5570e1fb0750ec6de49b953e55a38"
+    },
+    {
+      "path": "contracts/database/v1/ledger-event-verification.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11c2a01720bf39d3b14005fcf5718960ceafeb07",
+      "size": 2851,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/11c2a01720bf39d3b14005fcf5718960ceafeb07",
+      "downloaded_sha": "11c2a01720bf39d3b14005fcf5718960ceafeb07"
+    },
+    {
+      "path": "contracts/database/v1/ledger-event.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb719db1eb5499ee68dfb608dfa373beac3475fd",
+      "size": 7240,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/eb719db1eb5499ee68dfb608dfa373beac3475fd",
+      "downloaded_sha": "eb719db1eb5499ee68dfb608dfa373beac3475fd"
+    },
+    {
+      "path": "contracts/database/v1/outbox-command.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e25e58382759832244c52321034c2050408cb8b1",
+      "size": 1852,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/e25e58382759832244c52321034c2050408cb8b1",
+      "downloaded_sha": "e25e58382759832244c52321034c2050408cb8b1"
+    },
+    {
+      "path": "contracts/database/v1/quorum-evaluation-verification.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c076b88375d1e032dc144fe16b39767a5c41d3e6",
+      "size": 3030,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/c076b88375d1e032dc144fe16b39767a5c41d3e6",
+      "downloaded_sha": "c076b88375d1e032dc144fe16b39767a5c41d3e6"
+    },
+    {
+      "path": "contracts/database/v1/provider-receipt-profile.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bdeb10c435d529470b65448cf1eee5f1cd36faa9",
+      "size": 1952,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bdeb10c435d529470b65448cf1eee5f1cd36faa9",
+      "downloaded_sha": "bdeb10c435d529470b65448cf1eee5f1cd36faa9"
+    },
+    {
+      "path": "contracts/database/v1/quorum-evaluation-profile.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6206b26f449614699ae8f489ec2b81d00b1e6b5b",
+      "size": 1529,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6206b26f449614699ae8f489ec2b81d00b1e6b5b",
+      "downloaded_sha": "6206b26f449614699ae8f489ec2b81d00b1e6b5b"
+    },
+    {
+      "path": "contracts/database/v1/reason-codes.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1985844c2bdadadb38c95617b910096dac45fcb3",
+      "size": 2319,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1985844c2bdadadb38c95617b910096dac45fcb3",
+      "downloaded_sha": "1985844c2bdadadb38c95617b910096dac45fcb3"
+    },
+    {
+      "path": "contracts/fixtures/v1/config-lock.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bc2b2417347b9ca29033a9227ed3daedbda04f41",
+      "size": 6749,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bc2b2417347b9ca29033a9227ed3daedbda04f41",
+      "downloaded_sha": "bc2b2417347b9ca29033a9227ed3daedbda04f41"
+    },
+    {
+      "path": "contracts/fixtures/v1/PHASE-A-FIXTURE-CONTRACT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9cd820b7952e187198b3c6369160569510a5d811",
+      "size": 1810,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/9cd820b7952e187198b3c6369160569510a5d811",
+      "downloaded_sha": "9cd820b7952e187198b3c6369160569510a5d811"
+    },
+    {
+      "path": "contracts/fixtures/v1/model-lock.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "538baa1a86f7e84b3af1935f36e6a7fbfa8ad047",
+      "size": 5479,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/538baa1a86f7e84b3af1935f36e6a7fbfa8ad047",
+      "downloaded_sha": "538baa1a86f7e84b3af1935f36e6a7fbfa8ad047"
+    },
+    {
+      "path": "contracts/evd-002/portable-compatibility-manifest.v1.proposed.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f82478facadaceaac5adb009606bbcb980166356",
+      "size": 4093,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f82478facadaceaac5adb009606bbcb980166356",
+      "downloaded_sha": "f82478facadaceaac5adb009606bbcb980166356"
+    },
+    {
+      "path": "contracts/fixtures/v1/public-demonstration-suite.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f94672665c7e3f5f7a14e575a70d65984617afc7",
+      "size": 7081,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f94672665c7e3f5f7a14e575a70d65984617afc7",
+      "downloaded_sha": "f94672665c7e3f5f7a14e575a70d65984617afc7"
+    },
+    {
+      "path": "contracts/evd-002/portable-compatibility-manifest.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7752d23e35beac380fe3704c56732a0026ebfd2",
+      "size": 4573,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d7752d23e35beac380fe3704c56732a0026ebfd2",
+      "downloaded_sha": "d7752d23e35beac380fe3704c56732a0026ebfd2"
+    },
+    {
+      "path": "contracts/fixtures/v1/shadow-qualification-vectors.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "62507b6073349e6c36ade2a75a393cb2addc7c3d",
+      "size": 23357,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/62507b6073349e6c36ade2a75a393cb2addc7c3d",
+      "downloaded_sha": "62507b6073349e6c36ade2a75a393cb2addc7c3d"
+    },
+    {
+      "path": "contracts/evd-002/EVD-002-PYTHON-EVIDENCE-CHAIN-BUILD-INSTRUCTIONS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f43ebf55f4b0e23faf7f60de7623a3530eb82bc7",
+      "size": 20526,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f43ebf55f4b0e23faf7f60de7623a3530eb82bc7",
+      "downloaded_sha": "f43ebf55f4b0e23faf7f60de7623a3530eb82bc7"
+    },
+    {
+      "path": "contracts/evd-002/evidence-chain-entry-v1.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7211cc0803fdfd5a8002ebf114d4d1e5a9008987",
+      "size": 1245,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/7211cc0803fdfd5a8002ebf114d4d1e5a9008987",
+      "downloaded_sha": "7211cc0803fdfd5a8002ebf114d4d1e5a9008987"
+    },
+    {
+      "path": "contracts/fixtures/v1/SECTION-6.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e348ba65d99ec79a484ef9016eb27b389cc7f8fa",
+      "size": 2567,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/e348ba65d99ec79a484ef9016eb27b389cc7f8fa",
+      "downloaded_sha": "e348ba65d99ec79a484ef9016eb27b389cc7f8fa"
+    },
+    {
+      "path": "contracts/fixtures/v1/confidential-local-manifest.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e82acf64c8ea95b27518426c24c9ed9459d8364",
+      "size": 1561,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6e82acf64c8ea95b27518426c24c9ed9459d8364",
+      "downloaded_sha": "6e82acf64c8ea95b27518426c24c9ed9459d8364"
+    },
+    {
+      "path": "contracts/fixtures/v1/component-lock.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d724eb2e186bb19420a865d26f896bb5914c3ef7",
+      "size": 4616,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d724eb2e186bb19420a865d26f896bb5914c3ef7",
+      "downloaded_sha": "d724eb2e186bb19420a865d26f896bb5914c3ef7"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/GKX-CHECKPOINT-CONTRACT-v1.0.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6784e4d555814e0a47bd4f0517a86efbfb957306",
+      "size": 10030,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6784e4d555814e0a47bd4f0517a86efbfb957306",
+      "downloaded_sha": "6784e4d555814e0a47bd4f0517a86efbfb957306"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/CODEX-RUNBOOK-GKX-CHECKPOINT-CONTRACT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "12d6b8394ebf117ef5eee869c164da41535bd6c1",
+      "size": 3964,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/12d6b8394ebf117ef5eee869c164da41535bd6c1",
+      "downloaded_sha": "12d6b8394ebf117ef5eee869c164da41535bd6c1"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/SOURCE-MANIFEST.sha256",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3d2a38273fb10e07bacfb4eae62aebc5194d534d",
+      "size": 974,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/3d2a38273fb10e07bacfb4eae62aebc5194d534d",
+      "downloaded_sha": "3d2a38273fb10e07bacfb4eae62aebc5194d534d"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "80dae1434b09560b9119c28a3620b265edeb3ed2",
+      "size": 1508,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/80dae1434b09560b9119c28a3620b265edeb3ed2",
+      "downloaded_sha": "80dae1434b09560b9119c28a3620b265edeb3ed2"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/marshal-canonical-json-v1.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90a7ed3256bf5bafa6c1f9d57e3a489bd726a695",
+      "size": 1844,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/90a7ed3256bf5bafa6c1f9d57e3a489bd726a695",
+      "downloaded_sha": "90a7ed3256bf5bafa6c1f9d57e3a489bd726a695"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/gkx-checkpoint-reason-codes.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e527a9d8c9b031527f5e365987c46187fd196125",
+      "size": 2892,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/e527a9d8c9b031527f5e365987c46187fd196125",
+      "downloaded_sha": "e527a9d8c9b031527f5e365987c46187fd196125"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/gkx-checkpoint.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "14cb231caa62551751bcc7e84a647650680bb2c0",
+      "size": 5558,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/14cb231caa62551751bcc7e84a647650680bb2c0",
+      "downloaded_sha": "14cb231caa62551751bcc7e84a647650680bb2c0"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/source/GKX-CHECKPOINT-RATIFICATION-RECORD.proposed.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aa4d6456bf68e7818ed886b9b8f51030ffac7eb5",
+      "size": 1823,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/aa4d6456bf68e7818ed886b9b8f51030ffac7eb5",
+      "downloaded_sha": "aa4d6456bf68e7818ed886b9b8f51030ffac7eb5"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/vectors/invalid-checkpoint-bad-range.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8a03d80006c721f99bdef8057cb550fdf4c8bc4f",
+      "size": 1516,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8a03d80006c721f99bdef8057cb550fdf4c8bc4f",
+      "downloaded_sha": "8a03d80006c721f99bdef8057cb550fdf4c8bc4f"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/vectors/expected-results.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d6eb65c35ce7818b3b0dd1b06fb8c0efa9def043",
+      "size": 737,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d6eb65c35ce7818b3b0dd1b06fb8c0efa9def043",
+      "downloaded_sha": "d6eb65c35ce7818b3b0dd1b06fb8c0efa9def043"
+    },
+    {
+      "path": "contracts/gkx-checkpoint/vectors/valid-checkpoint.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4816d9552fe77fe8d5d4dc7ba9bcce6571cdadd8",
+      "size": 1553,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/4816d9552fe77fe8d5d4dc7ba9bcce6571cdadd8",
+      "downloaded_sha": "4816d9552fe77fe8d5d4dc7ba9bcce6571cdadd8"
+    },
+    {
+      "path": "contracts/governance/GKOS-Hindsight-Dream-Governance-Demonstrator.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ec778295e0fa35c1817fdc0a22c225e68fcf98f",
+      "size": 34966,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/4ec778295e0fa35c1817fdc0a22c225e68fcf98f",
+      "downloaded_sha": "4ec778295e0fa35c1817fdc0a22c225e68fcf98f"
+    },
+    {
+      "path": "contracts/governance/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5742809294539f7281d4be97864b5f996040f720",
+      "size": 209,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/5742809294539f7281d4be97864b5f996040f720",
+      "downloaded_sha": "5742809294539f7281d4be97864b5f996040f720"
+    },
+    {
+      "path": "contracts/governance/v1/semantic-assessment.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "71cf5da857e2802eab2e90e6d06664c6c52570ac",
+      "size": 3880,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/71cf5da857e2802eab2e90e6d06664c6c52570ac",
+      "downloaded_sha": "71cf5da857e2802eab2e90e6d06664c6c52570ac"
+    },
+    {
+      "path": "contracts/governance/v1/dream-artifact.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a5aee9c3089c0cdb6d5b2f41193b0aebee05d87c",
+      "size": 3157,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a5aee9c3089c0cdb6d5b2f41193b0aebee05d87c",
+      "downloaded_sha": "a5aee9c3089c0cdb6d5b2f41193b0aebee05d87c"
+    },
+    {
+      "path": "contracts/governance/v1/governance-envelope.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d06add47ac0f0bbe167d751e459a9bfd1deb6572",
+      "size": 7193,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d06add47ac0f0bbe167d751e459a9bfd1deb6572",
+      "downloaded_sha": "d06add47ac0f0bbe167d751e459a9bfd1deb6572"
+    },
+    {
+      "path": "contracts/governance/v1/review-packet.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e08cbcd62345a1bb0dbfc57ff57a9ea1af76a888",
+      "size": 3220,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/e08cbcd62345a1bb0dbfc57ff57a9ea1af76a888",
+      "downloaded_sha": "e08cbcd62345a1bb0dbfc57ff57a9ea1af76a888"
+    },
+    {
+      "path": "contracts/hindsight/v1/HINDSIGHT-COMPATIBILITY.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bbd813dd450c7be7c7fc82a7230e6a3e3161400b",
+      "size": 3677,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bbd813dd450c7be7c7fc82a7230e6a3e3161400b",
+      "downloaded_sha": "bbd813dd450c7be7c7fc82a7230e6a3e3161400b"
+    },
+    {
+      "path": "contracts/hindsight/v1/operation-compatibility-profile.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ad20de41703143f36c22f4f76ac62343da6190b2",
+      "size": 6997,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/ad20de41703143f36c22f4f76ac62343da6190b2",
+      "downloaded_sha": "ad20de41703143f36c22f4f76ac62343da6190b2"
+    },
+    {
+      "path": "contracts/hindsight/v1/HINDSIGHT-OPERATION-COMPATIBILITY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "230356d22bda6e0d95ae8c46567a01da84ec0697",
+      "size": 8950,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/230356d22bda6e0d95ae8c46567a01da84ec0697",
+      "downloaded_sha": "230356d22bda6e0d95ae8c46567a01da84ec0697"
+    },
+    {
+      "path": "contracts/hindsight/v1/reason-codes.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1816213fbaee6d042af132abdf79f439b20bb2bc",
+      "size": 8517,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1816213fbaee6d042af132abdf79f439b20bb2bc",
+      "downloaded_sha": "1816213fbaee6d042af132abdf79f439b20bb2bc"
+    },
+    {
+      "path": "contracts/hindsight/v1/compatibility-cases.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "acda4657f3960a9fbd5b2519b66762676eddb66b",
+      "size": 3248,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/acda4657f3960a9fbd5b2519b66762676eddb66b",
+      "downloaded_sha": "acda4657f3960a9fbd5b2519b66762676eddb66b"
+    },
+    {
+      "path": "contracts/hindsight/v1/synthetic-capability-evidence.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e813c93c9f8b31934d61b62708072abb04196993",
+      "size": 3815,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/e813c93c9f8b31934d61b62708072abb04196993",
+      "downloaded_sha": "e813c93c9f8b31934d61b62708072abb04196993"
+    },
+    {
+      "path": "contracts/hindsight/v1/webhook-replay.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e5c7221038ab0cfecf051d78574cbc383cc91668",
+      "size": 2085,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/e5c7221038ab0cfecf051d78574cbc383cc91668",
+      "downloaded_sha": "e5c7221038ab0cfecf051d78574cbc383cc91668"
+    },
+    {
+      "path": "contracts/runtime-limits/v1/runtime-limit-profile.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3ecb21202d029eab2c98f82be6f6e459f11c7225",
+      "size": 5612,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/3ecb21202d029eab2c98f82be6f6e459f11c7225",
+      "downloaded_sha": "3ecb21202d029eab2c98f82be6f6e459f11c7225"
+    },
+    {
+      "path": "contracts/runtime-limits/v1/RUNTIME-LIMITS.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "779d67c46ed48ad91b3879b77edcd3fc78e6fed5",
+      "size": 1802,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/779d67c46ed48ad91b3879b77edcd3fc78e6fed5",
+      "downloaded_sha": "779d67c46ed48ad91b3879b77edcd3fc78e6fed5"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/SEMANTIC-COHERENCE-CONTRACT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "121b8da6156a2994e72e9742d907f31f423361be",
+      "size": 10214,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/121b8da6156a2994e72e9742d907f31f423361be",
+      "downloaded_sha": "121b8da6156a2994e72e9742d907f31f423361be"
+    },
+    {
+      "path": "contracts/runtime-limits/v1/runtime-limit-measurement.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e796a2d30f2a8403846f25e93ce9bdc4c68a2097",
+      "size": 2315,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/e796a2d30f2a8403846f25e93ce9bdc4c68a2097",
+      "downloaded_sha": "e796a2d30f2a8403846f25e93ce9bdc4c68a2097"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/hindsight-gkx-object-mapping.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ad430771d42c4c7637bc32105227dd73db7ae1e0",
+      "size": 5025,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/ad430771d42c4c7637bc32105227dd73db7ae1e0",
+      "downloaded_sha": "ad430771d42c4c7637bc32105227dd73db7ae1e0"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/object-mapping.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a94d8f3ea3d5b5668b8bb976587b90e5e093101",
+      "size": 3534,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/7a94d8f3ea3d5b5668b8bb976587b90e5e093101",
+      "downloaded_sha": "7a94d8f3ea3d5b5668b8bb976587b90e5e093101"
+    },
+    {
+      "path": "contracts/runtime-limits/v1/r2-test-resource-limits.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50c03c92099852aae32099fc9d0bd86dca452d9e",
+      "size": 2677,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/50c03c92099852aae32099fc9d0bd86dca452d9e",
+      "downloaded_sha": "50c03c92099852aae32099fc9d0bd86dca452d9e"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/semantic-coherence-invalid-result.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0a9d3362312209d4ae3bdf87f7ecaf5519204e0",
+      "size": 1026,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f0a9d3362312209d4ae3bdf87f7ecaf5519204e0",
+      "downloaded_sha": "f0a9d3362312209d4ae3bdf87f7ecaf5519204e0"
+    },
+    {
+      "path": "contracts/runtime-limits/v1/runtime-limit-vector-suite.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0c4a86f35663ae9f442774b3e4cba6d4df601b1",
+      "size": 7160,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d0c4a86f35663ae9f442774b3e4cba6d4df601b1",
+      "downloaded_sha": "d0c4a86f35663ae9f442774b3e4cba6d4df601b1"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/semantic-coherence-receipt.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "804d9c261bc9b546e5d11f8759b37e9e34ccee5c",
+      "size": 5622,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/804d9c261bc9b546e5d11f8759b37e9e34ccee5c",
+      "downloaded_sha": "804d9c261bc9b546e5d11f8759b37e9e34ccee5c"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/SECTION-5.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "225d36ece458a5d3d18605093fdbe014d3bf6641",
+      "size": 2855,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/225d36ece458a5d3d18605093fdbe014d3bf6641",
+      "downloaded_sha": "225d36ece458a5d3d18605093fdbe014d3bf6641"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/semantic-coherence-request.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "45b6e0afacdcb1b0acc19ff30294fd5c70385d9c",
+      "size": 7451,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/45b6e0afacdcb1b0acc19ff30294fd5c70385d9c",
+      "downloaded_sha": "45b6e0afacdcb1b0acc19ff30294fd5c70385d9c"
+    },
+    {
+      "path": "contracts/tests/test_hindsight_compatibility_contract.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dafd93bf15ad950c844cc4f43ee0589ec51ccc66",
+      "size": 30139,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/dafd93bf15ad950c844cc4f43ee0589ec51ccc66",
+      "downloaded_sha": "dafd93bf15ad950c844cc4f43ee0589ec51ccc66"
+    },
+    {
+      "path": "contracts/tests/test_operator_documentation.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "63981865366ad6049fd01e97795e8e64b8ef5d0c",
+      "size": 4054,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/63981865366ad6049fd01e97795e8e64b8ef5d0c",
+      "downloaded_sha": "63981865366ad6049fd01e97795e8e64b8ef5d0c"
+    },
+    {
+      "path": "contracts/tests/postgres_runtime_qualification.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f31e2f96902023d0e0916c8542514e0da2a925e",
+      "size": 47975,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/2f31e2f96902023d0e0916c8542514e0da2a925e",
+      "downloaded_sha": "2f31e2f96902023d0e0916c8542514e0da2a925e"
+    },
+    {
+      "path": "contracts/tests/test_r2_cli_and_lane_boundaries.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b4a70a918e049040e2294279d1cb4a9a41f22349",
+      "size": 38130,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b4a70a918e049040e2294279d1cb4a9a41f22349",
+      "downloaded_sha": "b4a70a918e049040e2294279d1cb4a9a41f22349"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/semantic-rule-registry.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4aab8b0bd362aabbeccbe694d138a688fa383e6e",
+      "size": 5340,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/4aab8b0bd362aabbeccbe694d138a688fa383e6e",
+      "downloaded_sha": "4aab8b0bd362aabbeccbe694d138a688fa383e6e"
+    },
+    {
+      "path": "contracts/tests/test_r2_merge_authority_closure.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "423746f750e08efaf51d44393ba1653b09ade3d0",
+      "size": 21257,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/423746f750e08efaf51d44393ba1653b09ade3d0",
+      "downloaded_sha": "423746f750e08efaf51d44393ba1653b09ade3d0"
+    },
+    {
+      "path": "contracts/tests/test_r2_contracts.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "001a581ff6c675f85853e75599dbe2877a64c7d5",
+      "size": 29056,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/001a581ff6c675f85853e75599dbe2877a64c7d5",
+      "downloaded_sha": "001a581ff6c675f85853e75599dbe2877a64c7d5"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/semantic-coherence-vectors.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "826233b7dc301727d98adf89469442be5efcd0fd",
+      "size": 4097,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/826233b7dc301727d98adf89469442be5efcd0fd",
+      "downloaded_sha": "826233b7dc301727d98adf89469442be5efcd0fd"
+    },
+    {
+      "path": "contracts/tests/test_r2_owner_decision_intake.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "57ed6bb9807bdf4a9f9ed3010262654253c4952c",
+      "size": 11493,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/57ed6bb9807bdf4a9f9ed3010262654253c4952c",
+      "downloaded_sha": "57ed6bb9807bdf4a9f9ed3010262654253c4952c"
+    },
+    {
+      "path": "contracts/semantic-coherence/v1/semantic-rules.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b55910bc3c03cf5f4a19a873cf584bb5ade7c68b",
+      "size": 17778,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b55910bc3c03cf5f4a19a873cf584bb5ade7c68b",
+      "downloaded_sha": "b55910bc3c03cf5f4a19a873cf584bb5ade7c68b"
+    },
+    {
+      "path": "contracts/tests/test_bootstrap_security.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dac7b65fba9701c580787c86bcb0147c8248a6a6",
+      "size": 11928,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/dac7b65fba9701c580787c86bcb0147c8248a6a6",
+      "downloaded_sha": "dac7b65fba9701c580787c86bcb0147c8248a6a6"
+    },
+    {
+      "path": "contracts/tests/test_contract_ci_gate.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e19f38bae29d2db294094749d263fa8a559fdcaa",
+      "size": 5614,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/e19f38bae29d2db294094749d263fa8a559fdcaa",
+      "downloaded_sha": "e19f38bae29d2db294094749d263fa8a559fdcaa"
+    },
+    {
+      "path": "contracts/tests/test_r2_postgres_contracts.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ee00e04f3f3821b642ac8b927bff4bd2a2797361",
+      "size": 38825,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/ee00e04f3f3821b642ac8b927bff4bd2a2797361",
+      "downloaded_sha": "ee00e04f3f3821b642ac8b927bff4bd2a2797361"
+    },
+    {
+      "path": "contracts/tests/test_r2_phase_a_fixtures.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9627c6f46145a5809b1c2245c91298e95f53dc8a",
+      "size": 53701,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/9627c6f46145a5809b1c2245c91298e95f53dc8a",
+      "downloaded_sha": "9627c6f46145a5809b1c2245c91298e95f53dc8a"
+    },
+    {
+      "path": "contracts/tests/test_r2_semantic_coherence.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "baf50a86c200f6fac77ebe82158b47616ff092a9",
+      "size": 56464,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/baf50a86c200f6fac77ebe82158b47616ff092a9",
+      "downloaded_sha": "baf50a86c200f6fac77ebe82158b47616ff092a9"
+    },
+    {
+      "path": "contracts/tests/test_r2_runtime_limits.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a0f13cf840b9b7ec4dae0b0136444bbb9bc07ffc",
+      "size": 16394,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a0f13cf840b9b7ec4dae0b0136444bbb9bc07ffc",
+      "downloaded_sha": "a0f13cf840b9b7ec4dae0b0136444bbb9bc07ffc"
+    },
+    {
+      "path": "contracts/tests/test_r2_threat_failure_matrix.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d47a27be2a3b53ef01b579b2546e7554434cb04",
+      "size": 12641,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8d47a27be2a3b53ef01b579b2546e7554434cb04",
+      "downloaded_sha": "8d47a27be2a3b53ef01b579b2546e7554434cb04"
+    },
+    {
+      "path": "contracts/tests/test_verify_bootstrap.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cf85d748a0136d11a19814623441a73673bec61e",
+      "size": 8023,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/cf85d748a0136d11a19814623441a73673bec61e",
+      "downloaded_sha": "cf85d748a0136d11a19814623441a73673bec61e"
+    },
+    {
+      "path": "contracts/tests/test_wp1_traceability.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "94cdbb1139f8d9d872a9c0ec3dba07ca06507129",
+      "size": 8903,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/94cdbb1139f8d9d872a9c0ec3dba07ca06507129",
+      "downloaded_sha": "94cdbb1139f8d9d872a9c0ec3dba07ca06507129"
+    },
+    {
+      "path": "contracts/tests/test_wp1_completion_audit.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5f8aca5b92a25439d71b8bb580fc4189c136d214",
+      "size": 8938,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/5f8aca5b92a25439d71b8bb580fc4189c136d214",
+      "downloaded_sha": "5f8aca5b92a25439d71b8bb580fc4189c136d214"
+    },
+    {
+      "path": "contracts/threat-model/v1/SECTION-4.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03236f108e70fcd5161f61faf9df3048d5ba98a2",
+      "size": 810,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/03236f108e70fcd5161f61faf9df3048d5ba98a2",
+      "downloaded_sha": "03236f108e70fcd5161f61faf9df3048d5ba98a2"
+    },
+    {
+      "path": "contracts/verify_bootstrap.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d56e9a82f96d492e65ab551ff530efe7c5fb9dbb",
+      "size": 7056,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d56e9a82f96d492e65ab551ff530efe7c5fb9dbb",
+      "downloaded_sha": "d56e9a82f96d492e65ab551ff530efe7c5fb9dbb"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cbba4403383f5fb4248c006fad9988c86860b4e9",
+      "size": 11209,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/cbba4403383f5fb4248c006fad9988c86860b4e9",
+      "downloaded_sha": "cbba4403383f5fb4248c006fad9988c86860b4e9"
+    },
+    {
+      "path": "docs/DATABASE-CONTRACT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a43ecf17abd6b7d91a46faed70f0722ac160d4a2",
+      "size": 3259,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a43ecf17abd6b7d91a46faed70f0722ac160d4a2",
+      "downloaded_sha": "a43ecf17abd6b7d91a46faed70f0722ac160d4a2"
+    },
+    {
+      "path": "docs/R2-FAILURE-MATRIX.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8de3fe0d6406f54deb0eda68babf14bafd936e6a",
+      "size": 3046,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8de3fe0d6406f54deb0eda68babf14bafd936e6a",
+      "downloaded_sha": "8de3fe0d6406f54deb0eda68babf14bafd936e6a"
+    },
+    {
+      "path": "docs/OPERATIONS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1bf74a0e5cdde056f6755f2fcc3d0d77d3654e40",
+      "size": 6311,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1bf74a0e5cdde056f6755f2fcc3d0d77d3654e40",
+      "downloaded_sha": "1bf74a0e5cdde056f6755f2fcc3d0d77d3654e40"
+    },
+    {
+      "path": "docs/R2-OWNER-DECISION-INTAKE-2026-08-27.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "654fa895ce46bb5c722ac1f41963979bdb87268d",
+      "size": 3743,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/654fa895ce46bb5c722ac1f41963979bdb87268d",
+      "downloaded_sha": "654fa895ce46bb5c722ac1f41963979bdb87268d"
+    },
+    {
+      "path": "docs/R2-SECTION-4-THREAT-FAILURE-REPORT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0cff829b2c692a36539215f826647517405ac183",
+      "size": 4454,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/0cff829b2c692a36539215f826647517405ac183",
+      "downloaded_sha": "0cff829b2c692a36539215f826647517405ac183"
+    },
+    {
+      "path": "docs/R2-HINDSIGHT-COMPATIBILITY-REPORT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66965fd344e135883202ff7c330036b776a89dc5",
+      "size": 7327,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/66965fd344e135883202ff7c330036b776a89dc5",
+      "downloaded_sha": "66965fd344e135883202ff7c330036b776a89dc5"
+    },
+    {
+      "path": "docs/R2-CONTRACT-CI-GATE-REPORT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36922261ed734a6ffa2b0c330bb3e539e7e3106e",
+      "size": 4263,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/36922261ed734a6ffa2b0c330bb3e539e7e3106e",
+      "downloaded_sha": "36922261ed734a6ffa2b0c330bb3e539e7e3106e"
+    },
+    {
+      "path": "docs/R2-OPERATOR-DOCUMENTATION-REPORT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ccd413d5fcfb6b00b5835226f0817098407126e",
+      "size": 4653,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1ccd413d5fcfb6b00b5835226f0817098407126e",
+      "downloaded_sha": "1ccd413d5fcfb6b00b5835226f0817098407126e"
+    },
+    {
+      "path": "docs/R2-SECTION-5-SEMANTIC-COHERENCE-REPORT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1403a2a5e33f8e888b73bf42e98f1b34f262d19a",
+      "size": 6945,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1403a2a5e33f8e888b73bf42e98f1b34f262d19a",
+      "downloaded_sha": "1403a2a5e33f8e888b73bf42e98f1b34f262d19a"
+    },
+    {
+      "path": "docs/R2-OWNER-DECISION-INTAKE-2026-08-27.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c465d059ee81ff1dc84bba0d5742e6f9e8c0db03",
+      "size": 2059,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/c465d059ee81ff1dc84bba0d5742e6f9e8c0db03",
+      "downloaded_sha": "c465d059ee81ff1dc84bba0d5742e6f9e8c0db03"
+    },
+    {
+      "path": "docs/R2-OPERATOR-DOCUMENTATION.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d083bfc5df7a082304354789c9fdc7be4b6bc73",
+      "size": 1277,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8d083bfc5df7a082304354789c9fdc7be4b6bc73",
+      "downloaded_sha": "8d083bfc5df7a082304354789c9fdc7be4b6bc73"
+    },
+    {
+      "path": "docs/R2-PRE-RATIFICATION-CLI-CLEAN-ROOM-REPORT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b6e9555cf97c0688fda76a7273b6934f59007ca",
+      "size": 6765,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8b6e9555cf97c0688fda76a7273b6934f59007ca",
+      "downloaded_sha": "8b6e9555cf97c0688fda76a7273b6934f59007ca"
+    },
+    {
+      "path": "docs/R2-SECTION-3-REPORT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3aebb906aa55dd2ca822f429e4f907b30c583cc9",
+      "size": 12251,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/3aebb906aa55dd2ca822f429e4f907b30c583cc9",
+      "downloaded_sha": "3aebb906aa55dd2ca822f429e4f907b30c583cc9"
+    },
+    {
+      "path": "docs/R2-SECTION-6-PHASE-A-FIXTURES-REPORT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "928b00aaf612c47b5d64a69dfe72dbc908cb3f4e",
+      "size": 7749,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/928b00aaf612c47b5d64a69dfe72dbc908cb3f4e",
+      "downloaded_sha": "928b00aaf612c47b5d64a69dfe72dbc908cb3f4e"
+    },
+    {
+      "path": "docs/WP1-COMPLETION-AUDIT-2026-08-27.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a8900597e5c5f61ccb8dac6a0aea40f2acfa457e",
+      "size": 9257,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a8900597e5c5f61ccb8dac6a0aea40f2acfa457e",
+      "downloaded_sha": "a8900597e5c5f61ccb8dac6a0aea40f2acfa457e"
+    },
+    {
+      "path": "docs/THREAT-MODEL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c7ecf601cc3db4e3adf852f03f9b3b290c69c7f4",
+      "size": 23437,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/c7ecf601cc3db4e3adf852f03f9b3b290c69c7f4",
+      "downloaded_sha": "c7ecf601cc3db4e3adf852f03f9b3b290c69c7f4"
+    },
+    {
+      "path": "docs/WP1-COMPLETION-AUDIT-2026-08-27.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d167ab2a5c63b894df36ba9d7ecb7bf38b86dfd4",
+      "size": 2315,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d167ab2a5c63b894df36ba9d7ecb7bf38b86dfd4",
+      "downloaded_sha": "d167ab2a5c63b894df36ba9d7ecb7bf38b86dfd4"
+    },
+    {
+      "path": "docs/WP1-REQUIREMENTS-TRACEABILITY.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8aa3784f42f3deef051edd3d0eae56c5e07a54a8",
+      "size": 53676,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8aa3784f42f3deef051edd3d0eae56c5e07a54a8",
+      "downloaded_sha": "8aa3784f42f3deef051edd3d0eae56c5e07a54a8"
+    },
+    {
+      "path": "docs/WP1-REQUIREMENTS-TRACEABILITY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b387e844ced084ec957397baf1b5bdb3b7035403",
+      "size": 5854,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b387e844ced084ec957397baf1b5bdb3b7035403",
+      "downloaded_sha": "b387e844ced084ec957397baf1b5bdb3b7035403"
+    },
+    {
+      "path": "docs/WP1-REQUIREMENTS-TRACEABILITY.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24aff68d8747f85bb0f2432e7d898a3460bbd862",
+      "size": 1037,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/24aff68d8747f85bb0f2432e7d898a3460bbd862",
+      "downloaded_sha": "24aff68d8747f85bb0f2432e7d898a3460bbd862"
+    },
+    {
+      "path": "docs/sol-reports/R2-ENGINE-PR31-INDEPENDENT-AUDIT-2026-08-27.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "badf39686fa18eca6d996c410be83ee304710189",
+      "size": 11266,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/badf39686fa18eca6d996c410be83ee304710189",
+      "downloaded_sha": "badf39686fa18eca6d996c410be83ee304710189"
+    },
+    {
+      "path": "docs/sol-reports/R2-EVD-002-INDEPENDENT-AUDIT-2026-08-27.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "018d671eeb11c0112bb6a4a48152b094bf71b8c5",
+      "size": 12347,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/018d671eeb11c0112bb6a4a48152b094bf71b8c5",
+      "downloaded_sha": "018d671eeb11c0112bb6a4a48152b094bf71b8c5"
+    },
+    {
+      "path": "docs/sol-reports/R2-RUNTIME-LIMITS-IMPLEMENTATION-2026-08-27.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a5276f4a275835a7ef4dbac5ef7bba734381a67",
+      "size": 4989,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6a5276f4a275835a7ef4dbac5ef7bba734381a67",
+      "downloaded_sha": "6a5276f4a275835a7ef4dbac5ef7bba734381a67"
+    },
+    {
+      "path": "fixtures/adversarial/hindsight-v1/compatibility-negative-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41692b6fd13bf6d69fa02408a2b3ed9d6e91b9a9",
+      "size": 319563,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/41692b6fd13bf6d69fa02408a2b3ed9d6e91b9a9",
+      "downloaded_sha": "41692b6fd13bf6d69fa02408a2b3ed9d6e91b9a9"
+    },
+    {
+      "path": "fixtures/adversarial/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b444bb0d578229e60398a23abac47f621caa564",
+      "size": 120,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/4b444bb0d578229e60398a23abac47f621caa564",
+      "downloaded_sha": "4b444bb0d578229e60398a23abac47f621caa564"
+    },
+    {
+      "path": "fixtures/adversarial/r2-contracts/failure-matrix-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67dd943a1a86a6c159e04168aef5840072f6b6be",
+      "size": 71101,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/67dd943a1a86a6c159e04168aef5840072f6b6be",
+      "downloaded_sha": "67dd943a1a86a6c159e04168aef5840072f6b6be"
+    },
+    {
+      "path": "fixtures/adversarial/r2-contracts/adjudication-boundaries-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7164cb78df28bfdd01de673bd7ea4fd316c753e1",
+      "size": 1254,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/7164cb78df28bfdd01de673bd7ea4fd316c753e1",
+      "downloaded_sha": "7164cb78df28bfdd01de673bd7ea4fd316c753e1"
+    },
+    {
+      "path": "fixtures/adversarial/r2-contracts/provider-authority-inflation-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a66c344d9ac8ec67166a4c77bd656faf6eaf75d",
+      "size": 1131,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/7a66c344d9ac8ec67166a4c77bd656faf6eaf75d",
+      "downloaded_sha": "7a66c344d9ac8ec67166a4c77bd656faf6eaf75d"
+    },
+    {
+      "path": "fixtures/confidential-local-manifest/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a93d352fc8a1bcd70a6dd504b84110d4c8902528",
+      "size": 561,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a93d352fc8a1bcd70a6dd504b84110d4c8902528",
+      "downloaded_sha": "a93d352fc8a1bcd70a6dd504b84110d4c8902528"
+    },
+    {
+      "path": "fixtures/confidential-local-manifest/manifest.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "636d1ca1f11f24cf0cbeca08dec7267a3738947b",
+      "size": 1776,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/636d1ca1f11f24cf0cbeca08dec7267a3738947b",
+      "downloaded_sha": "636d1ca1f11f24cf0cbeca08dec7267a3738947b"
+    },
+    {
+      "path": "fixtures/conformance/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7ea2ddc03909a0f6ce25f40e84bd6db3a1918d2",
+      "size": 105,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f7ea2ddc03909a0f6ce25f40e84bd6db3a1918d2",
+      "downloaded_sha": "f7ea2ddc03909a0f6ce25f40e84bd6db3a1918d2"
+    },
+    {
+      "path": "fixtures/conformance/bootstrap.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f99077f1f457f9947a9140c973217b49beb19572",
+      "size": 125,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f99077f1f457f9947a9140c973217b49beb19572",
+      "downloaded_sha": "f99077f1f457f9947a9140c973217b49beb19572"
+    },
+    {
+      "path": "fixtures/conformance/hindsight-v1/manifest.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "516165aa9d38a3c916c738f0140148f15664ce49",
+      "size": 700,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/516165aa9d38a3c916c738f0140148f15664ce49",
+      "downloaded_sha": "516165aa9d38a3c916c738f0140148f15664ce49"
+    },
+    {
+      "path": "fixtures/conformance/hindsight-v1/operation-profile-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6b2f80eefb5ea9e89956807cf07edcc816c9f5f3",
+      "size": 49399,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6b2f80eefb5ea9e89956807cf07edcc816c9f5f3",
+      "downloaded_sha": "6b2f80eefb5ea9e89956807cf07edcc816c9f5f3"
+    },
+    {
+      "path": "fixtures/conformance/hindsight-v1/synthetic-capability-evidence-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b73bb78e36ae707345e6cc9b0f0720a73f03388d",
+      "size": 11648,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b73bb78e36ae707345e6cc9b0f0720a73f03388d",
+      "downloaded_sha": "b73bb78e36ae707345e6cc9b0f0720a73f03388d"
+    },
+    {
+      "path": "fixtures/conformance/hindsight-v1/synthetic-openapi-compatible-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fab46ba338b150c4aa3cbf8e7d8f02e89799bc37",
+      "size": 32483,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/fab46ba338b150c4aa3cbf8e7d8f02e89799bc37",
+      "downloaded_sha": "fab46ba338b150c4aa3cbf8e7d8f02e89799bc37"
+    },
+    {
+      "path": "fixtures/conformance/hindsight-v1/webhook-replay-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a1a36e1c8022a34b76ad6ded1a5a525eb14d5e7",
+      "size": 9416,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/2a1a36e1c8022a34b76ad6ded1a5a525eb14d5e7",
+      "downloaded_sha": "2a1a36e1c8022a34b76ad6ded1a5a525eb14d5e7"
+    },
+    {
+      "path": "fixtures/conformance/r2-cli/protocol-vectors-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be0b495c31e209de92a0db734d6a9d4284409aac",
+      "size": 76862,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/be0b495c31e209de92a0db734d6a9d4284409aac",
+      "downloaded_sha": "be0b495c31e209de92a0db734d6a9d4284409aac"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/canonical-json-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a54732101f3369dc7563db238dff6a7cb4f4f77",
+      "size": 2678,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/0a54732101f3369dc7563db238dff6a7cb4f4f77",
+      "downloaded_sha": "0a54732101f3369dc7563db238dff6a7cb4f4f77"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/adjudication-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "525936f38389f85b90b0bb6f933455f4fd3310c0",
+      "size": 3855,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/525936f38389f85b90b0bb6f933455f4fd3310c0",
+      "downloaded_sha": "525936f38389f85b90b0bb6f933455f4fd3310c0"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/cli-request-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "28cfa45bfdc4a12a46865d7a1b64d22b642245d3",
+      "size": 942,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/28cfa45bfdc4a12a46865d7a1b64d22b642245d3",
+      "downloaded_sha": "28cfa45bfdc4a12a46865d7a1b64d22b642245d3"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/conformance-result-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06a2323bc1e28e6a797d6e1b066ad78f6493923e",
+      "size": 1905,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/06a2323bc1e28e6a797d6e1b066ad78f6493923e",
+      "downloaded_sha": "06a2323bc1e28e6a797d6e1b066ad78f6493923e"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/dream-artifact-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9217fb791f45c1b9573fd8f4bca4ebab43157fa9",
+      "size": 3914,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/9217fb791f45c1b9573fd8f4bca4ebab43157fa9",
+      "downloaded_sha": "9217fb791f45c1b9573fd8f4bca4ebab43157fa9"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/disposition-receipt-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29ab0a3fcc351a298c3747ee0cb9e192b5b6ca5f",
+      "size": 4572,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/29ab0a3fcc351a298c3747ee0cb9e192b5b6ca5f",
+      "downloaded_sha": "29ab0a3fcc351a298c3747ee0cb9e192b5b6ca5f"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/eligibility-receipt-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b0feac252228095dd1cf91be1cf10dba269720f4",
+      "size": 2855,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b0feac252228095dd1cf91be1cf10dba269720f4",
+      "downloaded_sha": "b0feac252228095dd1cf91be1cf10dba269720f4"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/governance-envelope-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b88a893db8f1e8e0071a82fc801919d1d4d756b4",
+      "size": 6213,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b88a893db8f1e8e0071a82fc801919d1d4d756b4",
+      "downloaded_sha": "b88a893db8f1e8e0071a82fc801919d1d4d756b4"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/expected-results.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e70ee535bb5188603c032ceb8d009821b438b90",
+      "size": 1152,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/3e70ee535bb5188603c032ceb8d009821b438b90",
+      "downloaded_sha": "3e70ee535bb5188603c032ceb8d009821b438b90"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/review-packet-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ec58025f5c73b57935ca3ee58b573469547d461",
+      "size": 5574,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/0ec58025f5c73b57935ca3ee58b573469547d461",
+      "downloaded_sha": "0ec58025f5c73b57935ca3ee58b573469547d461"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/manifest.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c01cb7654ef45bd42bb43a3eb8ba55e3a7d9bdc",
+      "size": 1902,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1c01cb7654ef45bd42bb43a3eb8ba55e3a7d9bdc",
+      "downloaded_sha": "1c01cb7654ef45bd42bb43a3eb8ba55e3a7d9bdc"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/semantic-assessment-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "95cfcb354dfdb29233a7bb0710d3beda966be225",
+      "size": 3598,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/95cfcb354dfdb29233a7bb0710d3beda966be225",
+      "downloaded_sha": "95cfcb354dfdb29233a7bb0710d3beda966be225"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/risk-receipt-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bea4c1043086c6ae8032b9ebc535d768cc6d7416",
+      "size": 1685,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bea4c1043086c6ae8032b9ebc535d768cc6d7416",
+      "downloaded_sha": "bea4c1043086c6ae8032b9ebc535d768cc6d7416"
+    },
+    {
+      "path": "fixtures/conformance/r2-contracts/validity-receipt-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba414c80931a57addd567e3adc87ca24926d3897",
+      "size": 3920,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/ba414c80931a57addd567e3adc87ca24926d3897",
+      "downloaded_sha": "ba414c80931a57addd567e3adc87ca24926d3897"
+    },
+    {
+      "path": "fixtures/conformance/r2-semantic-coherence/decision-envelope-profiles-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3b115b8668a4f072513f48377e3ac8939361f5e6",
+      "size": 3701,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/3b115b8668a4f072513f48377e3ac8939361f5e6",
+      "downloaded_sha": "3b115b8668a4f072513f48377e3ac8939361f5e6"
+    },
+    {
+      "path": "fixtures/conformance/r2-semantic-coherence/semantic-coherence-cases-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4b13fc0fa92bce292edbd02d7dda973946b713c",
+      "size": 36631,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a4b13fc0fa92bce292edbd02d7dda973946b713c",
+      "downloaded_sha": "a4b13fc0fa92bce292edbd02d7dda973946b713c"
+    },
+    {
+      "path": "fixtures/conformance/runtime-limits/boundary-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f9eb8c993f73132a4b9c960b026b6cd30d188fb5",
+      "size": 3480,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f9eb8c993f73132a4b9c960b026b6cd30d188fb5",
+      "downloaded_sha": "f9eb8c993f73132a4b9c960b026b6cd30d188fb5"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/adjudication-verification-valid.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "87ba234adb75869d867d2d22561a566c426794cd",
+      "size": 1811,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/87ba234adb75869d867d2d22561a566c426794cd",
+      "downloaded_sha": "87ba234adb75869d867d2d22561a566c426794cd"
+    },
+    {
+      "path": "fixtures/conformance/runtime-limits/negative-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d36d1bdc7eacca6b55794d0da27243f975a36296",
+      "size": 5596,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/d36d1bdc7eacca6b55794d0da27243f975a36296",
+      "downloaded_sha": "d36d1bdc7eacca6b55794d0da27243f975a36296"
+    },
+    {
+      "path": "fixtures/conformance/runtime-limits/positive-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "47fcbc5c6a52528897513147fc27bc60f057e50f",
+      "size": 3513,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/47fcbc5c6a52528897513147fc27bc60f057e50f",
+      "downloaded_sha": "47fcbc5c6a52528897513147fc27bc60f057e50f"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/adjudication-verifier-profile-unevaluated.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ec3d904a0b1612dba35b657f369e259cbc62678",
+      "size": 549,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8ec3d904a0b1612dba35b657f369e259cbc62678",
+      "downloaded_sha": "8ec3d904a0b1612dba35b657f369e259cbc62678"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/checkpoint-anchor-request-valid.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e8a84fa4a118678e5a3322b0a2c011029b072b6",
+      "size": 394,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/3e8a84fa4a118678e5a3322b0a2c011029b072b6",
+      "downloaded_sha": "3e8a84fa4a118678e5a3322b0a2c011029b072b6"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/checkpoint-verification-valid.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f66097dbbb821a381fa72d937342eefdfedae76",
+      "size": 1204,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/2f66097dbbb821a381fa72d937342eefdfedae76",
+      "downloaded_sha": "2f66097dbbb821a381fa72d937342eefdfedae76"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/effect-receipt-valid.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7bd9b79dbe65389bcb141709c44a5985bc268c0f",
+      "size": 619,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/7bd9b79dbe65389bcb141709c44a5985bc268c0f",
+      "downloaded_sha": "7bd9b79dbe65389bcb141709c44a5985bc268c0f"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/ledger-event-valid.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "55325fd43dece4fea9d93771806e17c72f1e8b8d",
+      "size": 1630,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/55325fd43dece4fea9d93771806e17c72f1e8b8d",
+      "downloaded_sha": "55325fd43dece4fea9d93771806e17c72f1e8b8d"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/ledger-event-verifier-profile-unevaluated.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fc8646343d04da5231a1aa6ae0b1ad9c057a38a3",
+      "size": 391,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/fc8646343d04da5231a1aa6ae0b1ad9c057a38a3",
+      "downloaded_sha": "fc8646343d04da5231a1aa6ae0b1ad9c057a38a3"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/ledger-event-verification-unevaluated.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2ff1968a4d978e2553079f77e796c3370d352cc",
+      "size": 1067,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f2ff1968a4d978e2553079f77e796c3370d352cc",
+      "downloaded_sha": "f2ff1968a4d978e2553079f77e796c3370d352cc"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/deployment-scope-profile-unevaluated.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf3d1cc9f844eaa8a07d598335b7bcd5b59d2b07",
+      "size": 395,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bf3d1cc9f844eaa8a07d598335b7bcd5b59d2b07",
+      "downloaded_sha": "bf3d1cc9f844eaa8a07d598335b7bcd5b59d2b07"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/database-invariants.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5c08bcb9e67dd55c18a80dde065606a685adab8",
+      "size": 12122,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b5c08bcb9e67dd55c18a80dde065606a685adab8",
+      "downloaded_sha": "b5c08bcb9e67dd55c18a80dde065606a685adab8"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/effect-receipt-verification-valid.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd43656c59d74d236b770668f7e4130ff13dbb0e",
+      "size": 1000,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bd43656c59d74d236b770668f7e4130ff13dbb0e",
+      "downloaded_sha": "bd43656c59d74d236b770668f7e4130ff13dbb0e"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/legacy-post-0004-assertions.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "81b9f18839d044df7aaa9d7d593d51135b2f666b",
+      "size": 6334,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/81b9f18839d044df7aaa9d7d593d51135b2f666b",
+      "downloaded_sha": "81b9f18839d044df7aaa9d7d593d51135b2f666b"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/ledger-structural-counterexamples.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "12546b04f4211cc42cc2c38c38e251d501aa7ae4",
+      "size": 5415,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/12546b04f4211cc42cc2c38c38e251d501aa7ae4",
+      "downloaded_sha": "12546b04f4211cc42cc2c38c38e251d501aa7ae4"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/legacy-pre-0004-seed.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "354a8f7b37c126d63c7cc12eab913d39a808c033",
+      "size": 4165,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/354a8f7b37c126d63c7cc12eab913d39a808c033",
+      "downloaded_sha": "354a8f7b37c126d63c7cc12eab913d39a808c033"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/manifest.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "14f6ac5dd2c722436afef4f23f6ee95c7367ecf0",
+      "size": 1430,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/14f6ac5dd2c722436afef4f23f6ee95c7367ecf0",
+      "downloaded_sha": "14f6ac5dd2c722436afef4f23f6ee95c7367ecf0"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/outbox-command-valid.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a816717fb02b87a4ebfd726176337f16b2b567a6",
+      "size": 624,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a816717fb02b87a4ebfd726176337f16b2b567a6",
+      "downloaded_sha": "a816717fb02b87a4ebfd726176337f16b2b567a6"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/provider-receipt-profile-unevaluated.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "77bfa525741540948b7fd48ce1484f23a66a551a",
+      "size": 399,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/77bfa525741540948b7fd48ce1484f23a66a551a",
+      "downloaded_sha": "77bfa525741540948b7fd48ce1484f23a66a551a"
+    },
+    {
+      "path": "fixtures/public-synthetic/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5bfd381c08eef7575474284e002d659a5dc3b8c5",
+      "size": 1503,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/5bfd381c08eef7575474284e002d659a5dc3b8c5",
+      "downloaded_sha": "5bfd381c08eef7575474284e002d659a5dc3b8c5"
+    },
+    {
+      "path": "fixtures/shadow/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "05cdf9dbf93ca7d6540d79ad49d7cee5e7fbbb57",
+      "size": 2977,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/05cdf9dbf93ca7d6540d79ad49d7cee5e7fbbb57",
+      "downloaded_sha": "05cdf9dbf93ca7d6540d79ad49d7cee5e7fbbb57"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/quorum-evaluation-verification-unevaluated.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1d1e98983794896863b987d5b64ecce31072249e",
+      "size": 1098,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1d1e98983794896863b987d5b64ecce31072249e",
+      "downloaded_sha": "1d1e98983794896863b987d5b64ecce31072249e"
+    },
+    {
+      "path": "fixtures/database/r2-postgres/quorum-evaluation-profile-unevaluated.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "08b986ecc44215f71ca7ba8eb4f25ef56022fccd",
+      "size": 311,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/08b986ecc44215f71ca7ba8eb4f25ef56022fccd",
+      "downloaded_sha": "08b986ecc44215f71ca7ba8eb4f25ef56022fccd"
+    },
+    {
+      "path": "fixtures/public-synthetic/section-12-suite-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8491e342e6e56c27dd5e6d6f6dad6c2b79416022",
+      "size": 22623,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8491e342e6e56c27dd5e6d6f6dad6c2b79416022",
+      "downloaded_sha": "8491e342e6e56c27dd5e6d6f6dad6c2b79416022"
+    },
+    {
+      "path": "governance/AUTHORITY_MANIFEST.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c9ffe5ceb1652fc72671e4763b1917d067269225",
+      "size": 576,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/c9ffe5ceb1652fc72671e4763b1917d067269225",
+      "downloaded_sha": "c9ffe5ceb1652fc72671e4763b1917d067269225"
+    },
+    {
+      "path": "governance/ACTIVATION_RECEIPT.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b2fdda3abba133049422adac362d08ead9aa0a69",
+      "size": 10575,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/b2fdda3abba133049422adac362d08ead9aa0a69",
+      "downloaded_sha": "b2fdda3abba133049422adac362d08ead9aa0a69"
+    },
+    {
+      "path": "governance/WP1_DISPATCH_INTENT.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4918d13443af3bbea265c40922cb1e48ae8499c5",
+      "size": 644,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/4918d13443af3bbea265c40922cb1e48ae8499c5",
+      "downloaded_sha": "4918d13443af3bbea265c40922cb1e48ae8499c5"
+    },
+    {
+      "path": "governance/RELEASE_RATIFICATION.yaml.example",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb46ce99e887d3b7ef60e5dcf3025e554529394d",
+      "size": 200,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/cb46ce99e887d3b7ef60e5dcf3025e554529394d",
+      "downloaded_sha": "cb46ce99e887d3b7ef60e5dcf3025e554529394d"
+    },
+    {
+      "path": "fixtures/shadow/qualification-boundaries-v1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bbdb4e119ddf6548bd48683ab40eacfd1fe44f6b",
+      "size": 17103,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bbdb4e119ddf6548bd48683ab40eacfd1fe44f6b",
+      "downloaded_sha": "bbdb4e119ddf6548bd48683ab40eacfd1fe44f6b"
+    },
+    {
+      "path": "governance/authority/GKX-CHECKPOINT-CONTRACT-v1-RATIFICATION.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "87bf1fa3ac5b3fbb5883b67ede27bae6a5b6a41d",
+      "size": 3270,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/87bf1fa3ac5b3fbb5883b67ede27bae6a5b6a41d",
+      "downloaded_sha": "87bf1fa3ac5b3fbb5883b67ede27bae6a5b6a41d"
+    },
+    {
+      "path": "governance/authority/R2-MERGE-CLOSURE.sha256.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c34326317fdabc375b27002674f7a1a51a53895",
+      "size": 1493,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/5c34326317fdabc375b27002674f7a1a51a53895",
+      "downloaded_sha": "5c34326317fdabc375b27002674f7a1a51a53895"
+    },
+    {
+      "path": "governance/external-evidence/github-actions-billing-preexecution-ff2dc1f-2026-08-27.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "554531ab572fbc45fc6e314c99099322f007660b",
+      "size": 6139,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/554531ab572fbc45fc6e314c99099322f007660b",
+      "downloaded_sha": "554531ab572fbc45fc6e314c99099322f007660b"
+    },
+    {
+      "path": "governance/external-evidence/github-actions-billing-preexecution-8ea9bb7-2026-08-27.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "49bc29e4de9c8ce7a5a4786abf1a93891523117b",
+      "size": 4719,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/49bc29e4de9c8ce7a5a4786abf1a93891523117b",
+      "downloaded_sha": "49bc29e4de9c8ce7a5a4786abf1a93891523117b"
+    },
+    {
+      "path": "governance/authority/R2-CONTRACT-FREEZE-AUTHORITY-AMENDMENT.proposed.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f28f91e7e1dd87abc2aa0e1d277da5281c53434a",
+      "size": 14270,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f28f91e7e1dd87abc2aa0e1d277da5281c53434a",
+      "downloaded_sha": "f28f91e7e1dd87abc2aa0e1d277da5281c53434a"
+    },
+    {
+      "path": "governance/authority/R2-OWNER-DECISION-INTAKE-2026-08-27.proposed.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f6d3f9e39176a73811097468f6276ec0cb386314",
+      "size": 11883,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f6d3f9e39176a73811097468f6276ec0cb386314",
+      "downloaded_sha": "f6d3f9e39176a73811097468f6276ec0cb386314"
+    },
+    {
+      "path": "governance/authority/R2-CONTRACT-FOUNDATION-RATIFICATION-2026-08-27.proposed.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b2ea9d5e98e6b533ed3e085069cdc5b05564510",
+      "size": 6407,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/2b2ea9d5e98e6b533ed3e085069cdc5b05564510",
+      "downloaded_sha": "2b2ea9d5e98e6b533ed3e085069cdc5b05564510"
+    },
+    {
+      "path": "governance/external-evidence/r2-dependency-observation-2026-08-27.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a880000b4fbe35f67c7485037bf0cfdf2db0f4a8",
+      "size": 9110,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a880000b4fbe35f67c7485037bf0cfdf2db0f4a8",
+      "downloaded_sha": "a880000b4fbe35f67c7485037bf0cfdf2db0f4a8"
+    },
+    {
+      "path": "governance/external-evidence/terminal-activation-observation-2026-08-27.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2e8b8f6bac5593010bf90a5219e5e00da1ed329",
+      "size": 2396,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/c2e8b8f6bac5593010bf90a5219e5e00da1ed329",
+      "downloaded_sha": "c2e8b8f6bac5593010bf90a5219e5e00da1ed329"
+    },
+    {
+      "path": "governance/provenance/R2-AUTHORITY-INTAKE.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76b1c3e56e72648e8f5b6bf5354eb18e60cd5e50",
+      "size": 3869,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/76b1c3e56e72648e8f5b6bf5354eb18e60cd5e50",
+      "downloaded_sha": "76b1c3e56e72648e8f5b6bf5354eb18e60cd5e50"
+    },
+    {
+      "path": "governance/external-evidence/unchanged-input-closure-f63c87f-to-8ea9bb7.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb593a99d48d8af3084316167c37f3679f4dfbb9",
+      "size": 2545,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/bb593a99d48d8af3084316167c37f3679f4dfbb9",
+      "downloaded_sha": "bb593a99d48d8af3084316167c37f3679f4dfbb9"
+    },
+    {
+      "path": "governance/provenance/R2-CONTRACT-CI-GATE.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f6df2f3eeadcdfcaf05786b9b79b0872957771b",
+      "size": 4712,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/0f6df2f3eeadcdfcaf05786b9b79b0872957771b",
+      "downloaded_sha": "0f6df2f3eeadcdfcaf05786b9b79b0872957771b"
+    },
+    {
+      "path": "governance/provenance/R2-HINDSIGHT-COMPATIBILITY-CONTRACTS.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "70545bcaa5364f65ac3d19790a979ee019093774",
+      "size": 4035,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/70545bcaa5364f65ac3d19790a979ee019093774",
+      "downloaded_sha": "70545bcaa5364f65ac3d19790a979ee019093774"
+    },
+    {
+      "path": "governance/provenance/R2-PRE-RATIFICATION-CLI-CLEAN-ROOM.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6c490a55ea3fabd9e047e0bcc6e409515d97c10e",
+      "size": 5195,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6c490a55ea3fabd9e047e0bcc6e409515d97c10e",
+      "downloaded_sha": "6c490a55ea3fabd9e047e0bcc6e409515d97c10e"
+    },
+    {
+      "path": "governance/provenance/R2-OPERATOR-DOCUMENTATION.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6d21358164fb7e3fb0a8a4e3d4f3b18a4b4366d3",
+      "size": 5295,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6d21358164fb7e3fb0a8a4e3d4f3b18a4b4366d3",
+      "downloaded_sha": "6d21358164fb7e3fb0a8a4e3d4f3b18a4b4366d3"
+    },
+    {
+      "path": "governance/provenance/R2-REQUIREMENTS-TRACEABILITY.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68e86858a18cf44e0a15cd998dfd1b8b7adffe12",
+      "size": 4164,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/68e86858a18cf44e0a15cd998dfd1b8b7adffe12",
+      "downloaded_sha": "68e86858a18cf44e0a15cd998dfd1b8b7adffe12"
+    },
+    {
+      "path": "governance/provenance/R2-RUNTIME-LIMITS.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15dcc554b399eccf492333e40be7f0941f7909f5",
+      "size": 5285,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/15dcc554b399eccf492333e40be7f0941f7909f5",
+      "downloaded_sha": "15dcc554b399eccf492333e40be7f0941f7909f5"
+    },
+    {
+      "path": "governance/provenance/R2-SECTION-3-POSTGRESQL-CONTRACTS.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4d9b55319207ae858c23b71cd52bd3185284382",
+      "size": 8323,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/a4d9b55319207ae858c23b71cd52bd3185284382",
+      "downloaded_sha": "a4d9b55319207ae858c23b71cd52bd3185284382"
+    },
+    {
+      "path": "governance/provenance/R2-SECTION-2-SHARED-CONTRACTS.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de9029ac9cd2c85706fb1934baad5438a7f4b11b",
+      "size": 4949,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/de9029ac9cd2c85706fb1934baad5438a7f4b11b",
+      "downloaded_sha": "de9029ac9cd2c85706fb1934baad5438a7f4b11b"
+    },
+    {
+      "path": "governance/provenance/R2-SECTION-5-SEMANTIC-COHERENCE.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc3f8ab648b640d689044ef93badc500d310cb89",
+      "size": 4460,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/dc3f8ab648b640d689044ef93badc500d310cb89",
+      "downloaded_sha": "dc3f8ab648b640d689044ef93badc500d310cb89"
+    },
+    {
+      "path": "governance/provenance/R2-SECTION-4-THREAT-FAILURE-MATRIX.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "140b1d2ca644ee3cd92a820b5f3912c3e55d7c56",
+      "size": 4207,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/140b1d2ca644ee3cd92a820b5f3912c3e55d7c56",
+      "downloaded_sha": "140b1d2ca644ee3cd92a820b5f3912c3e55d7c56"
+    },
+    {
+      "path": "governance/provenance/WP1-COMPLETION-AUDIT-2026-08-27.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "39c6e5ca98726352fcdb2581d3eee5588865439a",
+      "size": 3797,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/39c6e5ca98726352fcdb2581d3eee5588865439a",
+      "downloaded_sha": "39c6e5ca98726352fcdb2581d3eee5588865439a"
+    },
+    {
+      "path": "governance/provenance/R2-SECTION-6-PHASE-A-FIXTURES.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c09d4d31536794dbfc31a59f7c40f34f2a5f419d",
+      "size": 3819,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/c09d4d31536794dbfc31a59f7c40f34f2a5f419d",
+      "downloaded_sha": "c09d4d31536794dbfc31a59f7c40f34f2a5f419d"
+    },
+    {
+      "path": "governance/work-packets/WP1-PR1-MERGE-CLOSURE.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac26fe38840802a7d57b64f79faf87cd8646ca89",
+      "size": 12276,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/ac26fe38840802a7d57b64f79faf87cd8646ca89",
+      "downloaded_sha": "ac26fe38840802a7d57b64f79faf87cd8646ca89"
+    },
+    {
+      "path": "governance/specifications/GKOS-Hindsight-Dream-Governance-Demonstrator.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ec778295e0fa35c1817fdc0a22c225e68fcf98f",
+      "size": 34966,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/4ec778295e0fa35c1817fdc0a22c225e68fcf98f",
+      "downloaded_sha": "4ec778295e0fa35c1817fdc0a22c225e68fcf98f"
+    },
+    {
+      "path": "implementations/python/src/gkos_hindsight/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79a9dc03835c96f6e11056cdb98f9d0118446e23",
+      "size": 101,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/79a9dc03835c96f6e11056cdb98f9d0118446e23",
+      "downloaded_sha": "79a9dc03835c96f6e11056cdb98f9d0118446e23"
+    },
+    {
+      "path": "governance/work-packets/WP1-TRACK2-CONTRACT-FOUNDATION.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfe94340ab997233d39523f22c5dc53f7163f594",
+      "size": 14329,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/cfe94340ab997233d39523f22c5dc53f7163f594",
+      "downloaded_sha": "cfe94340ab997233d39523f22c5dc53f7163f594"
+    },
+    {
+      "path": "implementations/python/pyproject.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f06de908226fed9201307e59b2972d9fb31b831e",
+      "size": 269,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/f06de908226fed9201307e59b2972d9fb31b831e",
+      "downloaded_sha": "f06de908226fed9201307e59b2972d9fb31b831e"
+    },
+    {
+      "path": "implementations/python/requirements-test-build.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8500025470aeebc2674ec5499c5d8bcf20e08a9d",
+      "size": 666,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/8500025470aeebc2674ec5499c5d8bcf20e08a9d",
+      "downloaded_sha": "8500025470aeebc2674ec5499c5d8bcf20e08a9d"
+    },
+    {
+      "path": "implementations/python/tests/test_scaffold.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1942a4d92dc2f6f27ec2d74be0b6d2a180f2cb2e",
+      "size": 123,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1942a4d92dc2f6f27ec2d74be0b6d2a180f2cb2e",
+      "downloaded_sha": "1942a4d92dc2f6f27ec2d74be0b6d2a180f2cb2e"
+    },
+    {
+      "path": "implementations/rust/Cargo.lock",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ee51f96932e2c64994939da7129473b673fe194",
+      "size": 168,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/5ee51f96932e2c64994939da7129473b673fe194",
+      "downloaded_sha": "5ee51f96932e2c64994939da7129473b673fe194"
+    },
+    {
+      "path": "implementations/rust/src/lib.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "050c61d6613d8058388b51e4e9d6de8dc5c326ee",
+      "size": 261,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/050c61d6613d8058388b51e4e9d6de8dc5c326ee",
+      "downloaded_sha": "050c61d6613d8058388b51e4e9d6de8dc5c326ee"
+    },
+    {
+      "path": "implementations/rust/Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "27158d463bff53373546b0205a4db4e9efd5373c",
+      "size": 145,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/27158d463bff53373546b0205a4db4e9efd5373c",
+      "downloaded_sha": "27158d463bff53373546b0205a4db4e9efd5373c"
+    },
+    {
+      "path": "manifests/component-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ead3c41f2a592ead801e40ae40464e98e83c8e28",
+      "size": 4676,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/ead3c41f2a592ead801e40ae40464e98e83c8e28",
+      "downloaded_sha": "ead3c41f2a592ead801e40ae40464e98e83c8e28"
+    },
+    {
+      "path": "manifests/config-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b6b0463cacb0cf7cd1f90f44d1bc73e9ac25944",
+      "size": 3807,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/1b6b0463cacb0cf7cd1f90f44d1bc73e9ac25944",
+      "downloaded_sha": "1b6b0463cacb0cf7cd1f90f44d1bc73e9ac25944"
+    },
+    {
+      "path": "migrations/0001_canonical_ledger.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9343a9a014aac0201acd9ee08cf0f585c271bf91",
+      "size": 10685,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/9343a9a014aac0201acd9ee08cf0f585c271bf91",
+      "downloaded_sha": "9343a9a014aac0201acd9ee08cf0f585c271bf91"
+    },
+    {
+      "path": "manifests/model-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a556c1ffdaf72ccca02443326eb5b87b9c08b91",
+      "size": 1805,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/6a556c1ffdaf72ccca02443326eb5b87b9c08b91",
+      "downloaded_sha": "6a556c1ffdaf72ccca02443326eb5b87b9c08b91"
+    },
+    {
+      "path": "migrations/0002_workflows_outbox_checkpoint.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "78188fd53a3f6eacfd850b6b700aca96e2988042",
+      "size": 71224,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/78188fd53a3f6eacfd850b6b700aca96e2988042",
+      "downloaded_sha": "78188fd53a3f6eacfd850b6b700aca96e2988042"
+    },
+    {
+      "path": "migrations/0004_ledger_structural_binding.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ae7e3470dc9acd0f7e4185adc8ee25fb9a01ca67",
+      "size": 23025,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/ae7e3470dc9acd0f7e4185adc8ee25fb9a01ca67",
+      "downloaded_sha": "ae7e3470dc9acd0f7e4185adc8ee25fb9a01ca67"
+    },
+    {
+      "path": "migrations/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0576d0c64d018c6411957b2aae3a0e4e441451bb",
+      "size": 1873,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/0576d0c64d018c6411957b2aae3a0e4e441451bb",
+      "downloaded_sha": "0576d0c64d018c6411957b2aae3a0e4e441451bb"
+    },
+    {
+      "path": "migrations/0003_roles_and_grants.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0456605781af8c1a9637ec6462efbefbc9285646",
+      "size": 4231,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/0456605781af8c1a9637ec6462efbefbc9285646",
+      "downloaded_sha": "0456605781af8c1a9637ec6462efbefbc9285646"
+    },
+    {
+      "path": "migrations/rollback/0003_disable_writers.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eecce1b09222fd1e728350d0a9d173aac0c39397",
+      "size": 1728,
+      "url": "https://api.github.com/repos/Odenknight/gkos-hindsight-governance/git/blobs/eecce1b09222fd1e728350d0a9d173aac0c39397",
+      "downloaded_sha": "eecce1b09222fd1e728350d0a9d173aac0c39397"
+    }
+  ]
+}

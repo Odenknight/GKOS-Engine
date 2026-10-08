@@ -1,0 +1,16 @@
+{
+  "schema": "gkos-known-invariant-catalog-validation/1",
+  "status": "PASS",
+  "catalog_sha256": "8bf0e0aca39f31860247f894009bf5d43d07d32fde5f5ffd5e4af2a9eb525c7e",
+  "source_index_sha256": "5d7a5baa02d73a7dcca393585d26ee86a8402e53be0cf9fed22f734f600839ec",
+  "validated_citation_points": 127,
+  "failure_matrix_invariant_count": 17,
+  "database_invariant_case_count": 41,
+  "source_index_markdown_path_count": 205,
+  "source_index_unique_content_count": 85,
+  "source_derived_markdown_path_count": 205,
+  "source_derived_unique_content_count": 85,
+  "catalog_declared_markdown_path_count": 205,
+  "catalog_declared_unique_content_count": 85,
+  "errors": []
+}

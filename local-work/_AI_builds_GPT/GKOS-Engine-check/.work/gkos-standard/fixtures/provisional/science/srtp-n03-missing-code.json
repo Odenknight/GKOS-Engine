@@ -1,0 +1,1 @@
+{ "extends": "srtp-p01-complete.json", "mutations": [{ "op": "set", "path": "/execution_manifests/0/code_digest", "value": "sha256:code-missing" }] }

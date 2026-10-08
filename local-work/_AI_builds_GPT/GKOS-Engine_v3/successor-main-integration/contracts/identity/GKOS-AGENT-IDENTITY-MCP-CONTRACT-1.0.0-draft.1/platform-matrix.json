@@ -1,0 +1,205 @@
+{
+  "contract_version": "1.0.0-draft.1",
+  "entries": [
+    {
+      "arch": "x64",
+      "claim": "contract_portability_only",
+      "id": "FULL-LINUX-N22",
+      "os": "linux",
+      "repository": "full",
+      "runner": "ubuntu-24.04",
+      "runtime": "Node 22",
+      "status": "required"
+    },
+    {
+      "arch": "x64",
+      "claim": "contract_portability_only",
+      "id": "FULL-LINUX-N23",
+      "os": "linux",
+      "repository": "full",
+      "runner": "ubuntu-24.04",
+      "runtime": "Node 23",
+      "status": "required"
+    },
+    {
+      "arch": "x64",
+      "claim": "contract_portability_only",
+      "id": "FULL-LINUX-N24",
+      "os": "linux",
+      "repository": "full",
+      "runner": "ubuntu-24.04",
+      "runtime": "Node 24",
+      "status": "required"
+    },
+    {
+      "arch": "x64",
+      "claim": "contract_portability_only",
+      "id": "FULL-WINDOWS-N22",
+      "os": "windows",
+      "repository": "full",
+      "runner": "windows-2025",
+      "runtime": "Node 22",
+      "status": "required"
+    },
+    {
+      "arch": "x64",
+      "claim": "contract_portability_only",
+      "id": "FULL-WINDOWS-N23",
+      "os": "windows",
+      "repository": "full",
+      "runner": "windows-2025",
+      "runtime": "Node 23",
+      "status": "required"
+    },
+    {
+      "arch": "x64",
+      "claim": "contract_portability_only",
+      "id": "FULL-WINDOWS-N24",
+      "os": "windows",
+      "repository": "full",
+      "runner": "windows-2025",
+      "runtime": "Node 24",
+      "status": "required"
+    },
+    {
+      "arch": "arm64",
+      "claim": "contract_portability_only",
+      "id": "FULL-MACOS-N22",
+      "os": "macos",
+      "repository": "full",
+      "runner": "macos-15",
+      "runtime": "Node 22",
+      "status": "required"
+    },
+    {
+      "arch": "arm64",
+      "claim": "contract_portability_only",
+      "id": "FULL-MACOS-N23-N24",
+      "os": "macos",
+      "repository": "full",
+      "runner": "macos-15",
+      "runtime": "Node 23/24",
+      "status": "optional"
+    },
+    {
+      "arch": "aarch64",
+      "claim": "contract_portability_only",
+      "id": "FULL-LINUX-AARCH64",
+      "os": "linux",
+      "repository": "full",
+      "runner": "ubuntu-24.04",
+      "runtime": "Node 22",
+      "status": "optional"
+    },
+    {
+      "arch": "x64",
+      "claim": "contract_portability_only",
+      "id": "FULL-MACOS-X64",
+      "os": "macos",
+      "repository": "full",
+      "runner": "maintained named macOS x64",
+      "runtime": "Node 22",
+      "status": "optional"
+    },
+    {
+      "arch": "other",
+      "claim": "none",
+      "id": "FULL-32BIT-BIGENDIAN",
+      "os": "multi",
+      "repository": "full",
+      "runner": "none",
+      "runtime": "unsupported",
+      "status": "unavailable"
+    },
+    {
+      "arch": "other",
+      "claim": "none",
+      "id": "FULL-NODE-OUTSIDE-RANGE",
+      "os": "multi",
+      "repository": "full",
+      "runner": "none",
+      "runtime": "Node <22 or >=25",
+      "status": "unavailable"
+    },
+    {
+      "arch": "x64",
+      "claim": "conformance_only",
+      "id": "LITE-LINUX-MSRV",
+      "os": "linux",
+      "repository": "lite",
+      "runner": "ubuntu-24.04",
+      "runtime": "Rust 1.85.0",
+      "status": "required"
+    },
+    {
+      "arch": "x64",
+      "claim": "conformance_only",
+      "id": "LITE-LINUX-CURRENT",
+      "os": "linux",
+      "repository": "lite",
+      "runner": "ubuntu-24.04",
+      "runtime": "Rust 1.98.0",
+      "status": "required"
+    },
+    {
+      "arch": "x64",
+      "claim": "conformance_only",
+      "id": "LITE-WINDOWS-CURRENT",
+      "os": "windows",
+      "repository": "lite",
+      "runner": "windows-2025",
+      "runtime": "Rust 1.98.0",
+      "status": "required"
+    },
+    {
+      "arch": "arm64",
+      "claim": "conformance_only",
+      "id": "LITE-MACOS-CURRENT",
+      "os": "macos",
+      "repository": "lite",
+      "runner": "macos-15",
+      "runtime": "Rust 1.98.0",
+      "status": "required"
+    },
+    {
+      "arch": "aarch64",
+      "claim": "conformance_only",
+      "id": "LITE-AARCH64-LINUX",
+      "os": "linux",
+      "repository": "lite",
+      "runner": "ubuntu-24.04",
+      "runtime": "Rust 1.98.0",
+      "status": "optional"
+    },
+    {
+      "arch": "x64",
+      "claim": "conformance_only",
+      "id": "LITE-MACOS-X64",
+      "os": "macos",
+      "repository": "lite",
+      "runner": "maintained named macOS x64",
+      "runtime": "Rust 1.98.0",
+      "status": "optional"
+    },
+    {
+      "arch": "other",
+      "claim": "none",
+      "id": "LITE-MUSL-STATIC",
+      "os": "linux",
+      "repository": "lite",
+      "runner": "none",
+      "runtime": "musl targets",
+      "status": "unavailable"
+    },
+    {
+      "arch": "other",
+      "claim": "none",
+      "id": "LITE-MOBILE-WASM",
+      "os": "multi",
+      "repository": "lite",
+      "runner": "none",
+      "runtime": "Android/iOS/WASM",
+      "status": "unavailable"
+    }
+  ]
+}

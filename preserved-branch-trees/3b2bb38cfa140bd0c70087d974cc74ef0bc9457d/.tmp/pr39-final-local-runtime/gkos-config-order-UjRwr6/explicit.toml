@@ -1,0 +1,11 @@
+config_version = 1
+
+[vectors]
+enabled = true
+provider = "openai_compatible"
+provider_id = "operator-chosen-provider"
+model_id = "operator/chosen-model"
+dimensions = 2
+timeout_ms = 100
+endpoint = "https://arbitrary.operator.example/v1/embeddings"
+token_env = "FIXTURE_PROVIDER_TOKEN"

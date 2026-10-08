@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.example/contracts/navigation-effects/1.0.0/agent-grant.schema.json",
+  "title": "Agent Grant",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["agentId", "displayName", "credentialId", "allowedRoot", "capabilities", "sensitivityCeiling", "maxNoteBytes", "maxWritesPerMinute", "enabled", "policyRef"],
+  "properties": {
+    "agentId": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$" },
+    "displayName": { "type": "string", "minLength": 1 },
+    "credentialId": { "type": "string", "minLength": 1 },
+    "allowedRoot": { "type": "string", "minLength": 1, "pattern": "^(?![A-Za-z]:)(?![/\\\\])(?!.*(?:^|[/\\\\])\\.\\.(?:[/\\\\]|$)).+$" },
+    "capabilities": { "type": "array", "items": { "enum": ["note:create", "note:update", "note:append", "note:archive"] }, "uniqueItems": true },
+    "sensitivityCeiling": { "type": "string", "minLength": 1 },
+    "maxNoteBytes": { "type": "integer", "minimum": 1 },
+    "maxWritesPerMinute": { "type": "integer", "minimum": 1 },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "enabled": { "type": "boolean" },
+    "policyRef": { "type": "object", "required": ["id", "version", "digest"], "properties": { "id": { "type": "string" }, "version": { "type": "string" }, "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" } }, "additionalProperties": false }
+  }
+}

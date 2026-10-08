@@ -1,0 +1,189 @@
+{
+  "result": "PASS",
+  "registry_version": "1.1.0-development",
+  "applicability_mapping_version": "1.1.0-development",
+  "applicability_overlay_version": "consolidated-into-base",
+  "requirement_count": 62,
+  "gate_code_count": 28,
+  "covered_gate_codes": {
+    "GKOS-GATE-L1-001": [
+      "TA-L1-001"
+    ],
+    "GKOS-GATE-L3-001": [
+      "TA-L3-001"
+    ],
+    "GKOS-GATE-L4-001": [
+      "TA-L4-001"
+    ],
+    "GKOS-GATE-L4-002": [
+      "TA-L4-002"
+    ],
+    "GKOS-GATE-L4-003": [
+      "TA-L4-003"
+    ],
+    "GKOS-GATE-L4-004": [
+      "TA-L4-004"
+    ],
+    "GKOS-GATE-L5-001": [
+      "TA-L5-001"
+    ],
+    "GKOS-GATE-L5-002": [
+      "TA-L5-002"
+    ],
+    "GKOS-GATE-L5-003": [
+      "TA-L5-003"
+    ],
+    "GKOS-GATE-L5-004": [
+      "TA-L5-004"
+    ],
+    "GKOS-GATE-L5-005": [
+      "TA-L5-005"
+    ],
+    "GKOS-GATE-L5-006": [
+      "TA-L5-006"
+    ],
+    "GKOS-GATE-L6-001": [
+      "TA-L6-001"
+    ],
+    "GKOS-GATE-L6-002": [
+      "TA-L6-002"
+    ],
+    "GKOS-GATE-L6-003": [
+      "TA-L6-003"
+    ],
+    "GKOS-GATE-L6-004": [
+      "TA-L6-004"
+    ],
+    "GKOS-GATE-L6-005": [
+      "TA-L6-005"
+    ],
+    "GKOS-GATE-L6-006": [
+      "TA-L6-006"
+    ],
+    "GKOS-GATE-L6-007": [
+      "GCP6-N-CONTENT-001",
+      "TA-L6-007"
+    ],
+    "GKOS-GATE-L6-008": [
+      "GCP6-N-RENDER-001",
+      "TA-L6-008"
+    ],
+    "GKOS-GATE-L6-009": [
+      "GCP6-N-CLOSURE-001",
+      "TA-L6-009"
+    ],
+    "GKOS-GATE-L7-001": [
+      "GCP7-N-AUTH-TIME-001",
+      "TA-L7-001"
+    ],
+    "GKOS-GATE-L7-002": [
+      "TA-L7-002"
+    ],
+    "GKOS-GATE-L7-003": [
+      "TA-L7-003"
+    ],
+    "GKOS-GATE-L7-004": [
+      "TA-L7-004"
+    ],
+    "GKOS-GATE-L7-005": [
+      "TA-L7-005"
+    ],
+    "GKOS-GATE-L7-006": [
+      "TA-L7-006"
+    ],
+    "GKOS-GATE-L7-007": [
+      "TA-L7-007"
+    ]
+  },
+  "uncovered_gate_codes": [],
+  "executed_predicate_gate_codes": {
+    "GKOS-GATE-L1-001": [
+      "TA-L1-001"
+    ],
+    "GKOS-GATE-L3-001": [
+      "TA-L3-001"
+    ],
+    "GKOS-GATE-L4-001": [
+      "TA-L4-001"
+    ],
+    "GKOS-GATE-L4-002": [
+      "TA-L4-002"
+    ],
+    "GKOS-GATE-L4-003": [
+      "TA-L4-003"
+    ],
+    "GKOS-GATE-L4-004": [
+      "TA-L4-004"
+    ],
+    "GKOS-GATE-L5-001": [
+      "TA-L5-001"
+    ],
+    "GKOS-GATE-L5-002": [
+      "TA-L5-002"
+    ],
+    "GKOS-GATE-L5-003": [
+      "TA-L5-003"
+    ],
+    "GKOS-GATE-L5-004": [
+      "TA-L5-004"
+    ],
+    "GKOS-GATE-L5-005": [
+      "TA-L5-005"
+    ],
+    "GKOS-GATE-L5-006": [
+      "TA-L5-006"
+    ],
+    "GKOS-GATE-L6-001": [
+      "TA-L6-001"
+    ],
+    "GKOS-GATE-L6-002": [
+      "TA-L6-002"
+    ],
+    "GKOS-GATE-L6-003": [
+      "TA-L6-003"
+    ],
+    "GKOS-GATE-L6-004": [
+      "TA-L6-004"
+    ],
+    "GKOS-GATE-L6-005": [
+      "TA-L6-005"
+    ],
+    "GKOS-GATE-L6-006": [
+      "TA-L6-006"
+    ],
+    "GKOS-GATE-L6-007": [
+      "TA-L6-007"
+    ],
+    "GKOS-GATE-L6-008": [
+      "TA-L6-008"
+    ],
+    "GKOS-GATE-L6-009": [
+      "TA-L6-009"
+    ],
+    "GKOS-GATE-L7-001": [
+      "TA-L7-001"
+    ],
+    "GKOS-GATE-L7-002": [
+      "TA-L7-002"
+    ],
+    "GKOS-GATE-L7-003": [
+      "TA-L7-003"
+    ],
+    "GKOS-GATE-L7-004": [
+      "TA-L7-004"
+    ],
+    "GKOS-GATE-L7-005": [
+      "TA-L7-005"
+    ],
+    "GKOS-GATE-L7-006": [
+      "TA-L7-006"
+    ],
+    "GKOS-GATE-L7-007": [
+      "TA-L7-007"
+    ]
+  },
+  "executable_uncovered_gate_codes": [],
+  "coverage_scope": "portable-predicate-twins-only; not cumulative profile qualification",
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/science/research-object.draft.schema.json",
+  "title": "SRTP Research Object — PROVISIONAL DRAFT, informative only",
+  "description": "Common envelope for namespaced Scientific Research Trace Profile objects. This draft does not create a GKOS layer or support a conformance claim. Unknown extension fields are intentionally preserved.",
+  "type": "object",
+  "required": ["id", "srtp_type", "origin", "sensitivity", "created_at", "lineage"],
+  "properties": {
+    "id": { "$ref": "../../gkx-common.defs.json#/$defs/authoredNoteUid" },
+    "srtp_type": {
+      "type": "string",
+      "enum": ["srtp:ResearchQuestion", "srtp:Hypothesis", "srtp:Method", "srtp:Protocol", "srtp:DatasetSnapshot", "srtp:EnvironmentSnapshot", "srtp:ExecutionRequest", "srtp:ExecutionManifest", "srtp:ExecutionEvent", "srtp:Artifact", "srtp:Observation", "srtp:Result", "srtp:NegativeResult", "srtp:ReviewerFinding", "srtp:RerunComparison"]
+    },
+    "origin": { "$ref": "../../gkx-common.defs.json#/$defs/origin" },
+    "sensitivity": { "$ref": "../../gkx-common.defs.json#/$defs/sensitivity" },
+    "derived_sensitivity": { "$ref": "../../gkx-common.defs.json#/$defs/sensitivity" },
+    "created_at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" },
+    "created_by": { "$ref": "../../gkx-common.defs.json#/$defs/actorIdentity" },
+    "content_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+    "lineage": {
+      "type": "object",
+      "required": ["branch_id", "predecessors"],
+      "properties": {
+        "branch_id": { "type": "string", "minLength": 1 },
+        "predecessors": { "type": "array", "uniqueItems": true, "items": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" } },
+        "supersedes": { "type": "array", "uniqueItems": true, "items": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" } }
+      },
+      "additionalProperties": true
+    },
+    "extensions": { "type": "object", "additionalProperties": true }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,576 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import {
+  GKX23_POLICY,
+  buildGraph,
+  buildGkx23Projection,
+  gkx23RelationTargets,
+  parseGkx23Frontmatter,
+} from "../dist/gkos-engine.mjs";
+
+const CANONICAL_POLICY = '{"assessment_thresholds":[[0.9,"assessment:strongly-documented"],[0.75,"assessment:well-documented"],[0.6,"assessment:partially-supported"],[0.4,"assessment:weakly-supported"],[0.01,"assessment:insufficient"],[0,"assessment:invalid-or-untraceable"]],"compatible_gkx_versions":["2.3"],"missing_value_behavior":"exclude-null-and-renormalize","policy_id":"policy:gkx23-default-v1","policy_version":"1.0.0","sensitivity_default":"internal","weights":{"contradiction_status":0.1,"evidence_support":0.2,"provenance_quality":0.2,"relationship_integrity":0.15,"review_readiness":0.1,"structural_completeness":0.15,"temporal_freshness":0.1}}';
+
+test("namespaced identifiers remain relationship targets but cannot be authored note UIDs", () => {
+  const raw = `---
+gkx_version: "2.3"
+uid: "source:authored-note"
+title: "Namespaced target"
+type: "semantic"
+created_at: "2026-08-05T00:00:00Z"
+epistemic_state: "hypothesis"
+relationships:
+  related_to:
+    - target: "source:paper-001"
+---
+Body`;
+  const projection = buildGkx23Projection(raw, "Namespaced.md", "hash:namespaced", null);
+  assert.ok(projection.diagnostics.some((diagnostic) => diagnostic.code === "GKX-IDENTITY-002" && diagnostic.field === "uid"));
+  assert.ok(gkx23RelationTargets(projection).some((relation) => relation.target === "source:paper-001"));
+
+  const graph = buildGraph([{ relativePath: "Namespaced.md", content: raw }], []);
+  assert.equal(graph.gkxUidIndex["source:authored-note"], undefined);
+});
+
+const note = `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec932"
+title: "A governed hypothesis"
+type: "hypothesis"
+created_at: "2026-07-16T20:00:00Z"
+updated_at: "2026-07-17T20:00:00Z"
+authorship:
+  origin: "authored"
+  author_id: "person:operator"
+epistemic:
+  state: "hypothesis"
+  confidence: 0.35
+  confidence_origin: "authored"
+sensitivity:
+  level: "restricted"
+  handling:
+    - "no-public-export"
+provenance:
+  source_kind: "document"
+  source_refs:
+    - "source:paper-001"
+  source_locator:
+    page: 12
+  content_hash: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  extraction:
+    method: "human"
+relationships:
+  depends_on:
+    - target: "concept:metric"
+      origin: "authored"
+  related_to:
+    - "019b2d14-4230-7db7-87d4-7d81cfaec933"
+evidence:
+  supports:
+    - target: "019b2d14-4230-7db7-87d4-7d81cfaec932"
+      strength: 0.8
+      relevance: 0.9
+      source_uid: "source:paper-001"
+      independence_group: "paper:001"
+  contradicts: []
+review:
+  status: "pending"
+  last_reviewed_at: "2026-07-16T20:00:00Z"
+assessment:
+  current_assessment_id: null
+  status: "unassessed"
+authorization:
+  status: "research-only"
+tags:
+  - "navigation-only"
+labels:
+  authored:
+    - "domain:test"
+  derived: []
+  proposed:
+    - label: "epistemic:supported"
+      proposal_id: "proposal:1"
+  approved:
+    - "use:research-only"
+x-lab-extension:
+  sample: true
+---
+# Hypothesis
+Body remains source content.`;
+
+test("GKX 2.3 nested parser preserves extensions and scalar types", () => {
+  const parsed = parseGkx23Frontmatter(note);
+  assert.equal(parsed.present, true);
+  assert.deepEqual(parsed.issues, []);
+  assert.equal(parsed.data.gkx_version, "2.3");
+  assert.equal(parsed.data.epistemic.confidence, 0.35);
+  assert.equal(parsed.data.sensitivity.level, "restricted");
+  assert.equal(parsed.data["x-lab-extension"].sample, true);
+});
+
+test("bundled GKX 2.3 policy hash matches its canonical deterministic input", () => {
+  assert.equal(GKX23_POLICY.hash, `sha256:${createHash("sha256").update(CANONICAL_POLICY).digest("hex")}`);
+});
+
+test("GKX 2.3 projection separates origins and scores documentation, not truth", () => {
+  const projection = buildGkx23Projection(note, "Claims/Test.md", "abc:123", null);
+  assert.ok(projection);
+  assert.equal(projection.profile, "gkx-2.3-validating-projection");
+  assert.equal(projection.authored.epistemicState, "hypothesis");
+  assert.equal(projection.effective.sensitivity, "restricted");
+  assert.deepEqual(projection.authored.tags, ["navigation-only"]);
+  assert.equal(projection.authored.labels.includes("navigation-only"), false);
+  assert.ok(projection.authored.labels.includes("domain:test"));
+  assert.deepEqual(projection.extensions["x-lab-extension"], { sample: true });
+  assert.equal(projection.proposed.labels.length, 1);
+  assert.equal(projection.approved.labels.length, 1);
+  assert.ok(projection.derived.labels.includes("identity:stable"));
+  assert.equal(projection.assessment.interpretation, "documentation-and-support-quality-not-truth");
+  assert.equal(projection.assessment.policy.id, "policy:gkx23-default-v1");
+  assert.ok(projection.assessment.scores.overall > 0);
+  assert.equal(projection.assessment.scores.evidence_support > 0, true);
+});
+
+test("UID-first typed relationships resolve canonically and proposed edges stay non-effective", () => {
+  const target = note
+    .replace("019b2d14-4230-7db7-87d4-7d81cfaec932", "019b2d14-4230-7db7-87d4-7d81cfaec933")
+    .replace('title: "A governed hypothesis"', 'title: "Target"')
+    .replace(/relationships:[\s\S]*?evidence:/, "relationships:\n  related_to: []\nevidence:");
+  const proposed = `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec934"
+title: "Proposal only"
+type: "proposal"
+created_at: "2026-07-16T20:00:00Z"
+authorship:
+  origin: "proposed"
+epistemic:
+  state: "hypothesis"
+sensitivity:
+  level: "internal"
+provenance: { }
+relationships:
+  related_to:
+    - target: "019b2d14-4230-7db7-87d4-7d81cfaec933"
+review: { }
+assessment: { }
+labels:
+  authored: []
+  derived: []
+  proposed: []
+  approved: []
+---`;
+  const graph = buildGraph([
+    { relativePath: "Claims/Source.md", extension: "md", content: note },
+    { relativePath: "Claims/Target.md", extension: "md", content: target },
+    { relativePath: "Claims/Proposal.md", extension: "md", content: proposed },
+  ], ["Claims"], Date.parse("2026-07-18T00:00:00Z"));
+  assert.equal(graph.gkxUidIndex["019b2d14-4230-7db7-87d4-7d81cfaec933"], "file:Claims/Target.md");
+  assert.ok(graph.links.some((link) => link.source === "file:Claims/Source.md" && link.target === "file:Claims/Target.md" && link.kind === "semantic" && link.label === "related_to"));
+  assert.equal(graph.links.some((link) => link.source === "file:Claims/Proposal.md" && link.target === "file:Claims/Target.md" && link.kind === "semantic"), false);
+});
+
+test("native 2.3 wikilink targets yield to flat Obsidian relationship corrections", () => {
+  const original = note
+    .replace("019b2d14-4230-7db7-87d4-7d81cfaec932", "019b2d14-4230-7db7-87d4-7d81cfaec933")
+    .replace('title: "A governed hypothesis"', 'title: "Original"')
+    .replace(/relationships:[\s\S]*?evidence:/, "relationships:\n  related_to: []\nevidence:");
+  const target = note
+    .replace("019b2d14-4230-7db7-87d4-7d81cfaec932", "019b2d14-4230-7db7-87d4-7d81cfaec934")
+    .replace('title: "A governed hypothesis"', 'title: "Target"')
+    .replace(/relationships:[\s\S]*?evidence:/, "relationships:\n  related_to: []\nevidence:");
+  const corrected = note.replace("labels:\n", "related_to:\n  - \"[[Target]]\"\nlabels:\n");
+  const graph = buildGraph([
+    { relativePath: "Claims/Source.md", extension: "md", content: corrected },
+    { relativePath: "Claims/Original.md", extension: "md", content: original },
+    { relativePath: "Claims/Target.md", extension: "md", content: target },
+  ], ["Claims"]);
+  const links = graph.links.filter((link) => link.source === "file:Claims/Source.md" && link.target === "file:Claims/Target.md" && link.kind === "semantic");
+  assert.equal(links.length, 1);
+  assert.equal(links[0].label, "related_to");
+  assert.equal(graph.links.some((link) => link.source === "file:Claims/Source.md" && link.target === "file:Claims/Original.md" && link.kind === "semantic"), false);
+  const projection = graph.nodes.find((node) => node.path === "Claims/Source.md").gkx.projection;
+  assert.ok(!projection.diagnostics.some((diagnostic) => diagnostic.code === "GKX-RELATIONSHIP-001" && diagnostic.field === "relationships.related_to"));
+});
+
+test("duplicate UID reuse fails closed and is excluded from the UID index", () => {
+  const other = note.replace("Body remains source content.", "Conflicting bytes.");
+  const graph = buildGraph([
+    { relativePath: "A.md", extension: "md", content: note },
+    { relativePath: "B.md", extension: "md", content: other },
+  ], [], Date.parse("2026-07-18T00:00:00Z"));
+  assert.equal(graph.gkxUidIndex["019b2d14-4230-7db7-87d4-7d81cfaec932"], undefined);
+  for (const path of ["A.md", "B.md"]) {
+    const projection = graph.nodes.find((node) => node.path === path).gkx.projection;
+    assert.ok(projection.diagnostics.some((d) => d.code === "GKX-IDENTITY-003"));
+    assert.ok(projection.diagnostics.some((d) => d.code === "GKX-IDENTITY-004"));
+  }
+});
+
+test("flat editable 2.3 profile validates and projects governance from flat properties", () => {
+  const flat23 = `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec935"
+title: "Flat editable"
+type: "semantic"
+created_at: "2026-07-01T00:00:00Z"
+updated_at: "2026-07-02T00:00:00Z"
+description: "Obsidian-editable 2.3 note."
+epistemic_state: "fact"
+sensitivity: "restricted"
+authorship_origin: "authored"
+tags:
+  - "research"
+supersedes: []
+superseded_by: []
+forked_from: []
+forked_to: []
+related_to:
+  - "[[Neighbor]]"
+---
+Body.`;
+  const projection = buildGkx23Projection(flat23, "Flat23.md", "f:1", null);
+  assert.ok(projection);
+  assert.equal(projection.mode, "strict-v2.3");
+  assert.ok(!projection.diagnostics.some((d) => d.code === "GKX-SCHEMA-004"), "no missing-block schema errors for the flat profile");
+  assert.equal(projection.authored.epistemicState, "reported");
+  assert.equal(projection.effective.sensitivity, "restricted");
+  assert.equal(projection.authored.assertionOrigin, "authored");
+  assert.deepEqual(projection.authored.tags, ["research"]);
+  assert.equal(projection.extensions.authorship_origin, undefined, "flat governance keys are not extensions");
+});
+
+// DIV-002: missing sensitivity fails closed to the restricted default (secret),
+// configurable and raise-only. (Updated from the old behavior, which resolved
+// missing sensitivity to the mid-open "internal" level.)
+test("missing sensitivity fails closed to secret by default and invalid sensitivity fails closed", () => {
+  const missing = note.replace(/sensitivity:[\s\S]*?provenance:/, "provenance:");
+  const p1 = buildGkx23Projection(missing, "Missing.md", "m:1", null);
+  assert.equal(p1.effective.sensitivity, "secret");
+  assert.ok(p1.diagnostics.some((d) => d.code === "GKX-SENSITIVITY-001"), "GKX-SENSITIVITY-001 still fires so defaulting stays visible");
+  const invalid = note.replace('level: "restricted"', 'level: "unclassified"');
+  const p2 = buildGkx23Projection(invalid, "Invalid.md", "i:1", null);
+  assert.equal(p2.effective.sensitivity, "secret");
+
+  const flat = `---\ngkx_version: "2.2"\nuid: "11111111-1111-4111-8111-111111111111"\ntype: "semantic"\ntitle: "Flat"\ntimestamp: "2026-07-01T00:00:00Z"\nepistemic_state: "fact"\nsensitivity: "typo"\n---\nBody`;
+  const graph = buildGraph([{ relativePath: "Flat.md", extension: "md", content: flat }], []);
+  assert.equal(graph.nodes.find((node) => node.path === "Flat.md").gkx.projection.effective.sensitivity, "secret");
+});
+
+test("DIV-002: defaultSensitivity option is honored, validated, and never lowers an authored classification", () => {
+  const missing = note.replace(/sensitivity:[\s\S]*?provenance:/, "provenance:");
+  // A deployment may relax the default to a less restrictive level.
+  const relaxed = buildGkx23Projection(missing, "Missing.md", "m:2", null, { defaultSensitivity: "internal" });
+  assert.equal(relaxed.effective.sensitivity, "internal");
+  assert.ok(relaxed.diagnostics.some((d) => d.code === "GKX-SENSITIVITY-001"));
+  // An out-of-vocabulary option value is ignored and falls back to secret.
+  const bogus = buildGkx23Projection(missing, "Missing.md", "m:3", null, { defaultSensitivity: "nonsense" });
+  assert.equal(bogus.effective.sensitivity, "secret");
+  // The default never overrides an authored classification, even a more open one.
+  const publicNote = note.replace('level: "restricted"', 'level: "public"');
+  const p = buildGkx23Projection(publicNote, "Public.md", "p:1", null, { defaultSensitivity: "secret" });
+  assert.equal(p.effective.sensitivity, "public");
+});
+
+test("DIV-001: naive wall-clock created_at emits an GKX-TEMPORAL diagnostic", () => {
+  const naive = `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec9b0"
+title: "Naive timestamp"
+type: "semantic"
+created_at: 2026-07-20 12:00:00
+epistemic_state: "fact"
+sensitivity: "restricted"
+authorship_origin: "authored"
+tags: []
+---
+Body.`;
+  const p = buildGkx23Projection(naive, "Naive.md", "n:1", null);
+  const temporal = p.diagnostics.filter((d) => d.code.startsWith("GKX-TEMPORAL"));
+  assert.equal(temporal.length, 1, `expected one GKX-TEMPORAL diagnostic, got: ${JSON.stringify(p.diagnostics)}`);
+  assert.equal(temporal[0].field, "created_at");
+  assert.ok(temporal[0].severity === "warning" || temporal[0].severity === "error", "severity is warning-or-error");
+  // A properly zoned timestamp raises no temporal diagnostic.
+  const zoned = naive.replace("created_at: 2026-07-20 12:00:00", 'created_at: "2026-07-20T12:00:00Z"');
+  const clean = buildGkx23Projection(zoned, "Zoned.md", "n:2", null);
+  assert.equal(clean.diagnostics.some((d) => d.code.startsWith("GKX-TEMPORAL")), false);
+});
+
+test("DIV-003: invalid epistemic state falls back to unknown with defaulted-marking and retained diagnostic", () => {
+  const invalid = note.replace('state: "hypothesis"', 'state: "gospel"');
+  const p = buildGkx23Projection(invalid, "Gospel.md", "g:1", null);
+  // Effective state is the null-weight fallback, machine-detectable via the flag.
+  assert.equal(p.effective.epistemicState, "unknown");
+  assert.equal(p.effective.epistemicStateDefaulted, true);
+  // The original invalid value is retained on the authored projection and in the diagnostic.
+  assert.equal(p.authored.epistemicState, "gospel");
+  const epi = p.diagnostics.find((d) => d.code === "GKX-EPISTEMIC-002");
+  assert.ok(epi, "GKX-EPISTEMIC-002 still fires");
+  assert.equal(epi.severity, "error");
+  assert.ok(epi.message.includes("gospel"), "diagnostic retains the invalid value");
+  // A valid state carries no defaulted-marking.
+  const valid = buildGkx23Projection(note, "Valid.md", "v:1", null);
+  assert.equal(valid.effective.epistemicStateDefaulted, false);
+  assert.equal(valid.effective.epistemicState, "hypothesis");
+});
+
+// --- Same-indent block-sequence regression (Defect B) ---------------------
+// A `- ` list whose items sit at the SAME indent as the mapping key is valid
+// YAML (Obsidian emits this). Before the fix, parseBlock only accepted items
+// indented DEEPER than the key, so the key parsed as null, an "Unparsed YAML
+// content remains" diagnostic fired, and tags/relationships vanished.
+
+test("same-indent flat block sequence under a top-level key parses", () => {
+  const doc = 'top:\ntags:\n- a\n- b\nafter: "x"';
+  const { data, issues } = parseGkx23Frontmatter(`---\n${doc}\n---\nBody.`);
+  assert.deepEqual(data.tags, ["a", "b"], "same-indent list is captured");
+  assert.equal(data.after, "x", "a following same-indent key still terminates the list");
+  assert.equal(data.top, null);
+  assert.equal(issues.length, 0, `no parse issues, got: ${JSON.stringify(issues)}`);
+});
+
+test("same-indent block sequence under a NESTED key parses", () => {
+  const doc = 'labels:\n  authored:\n  - x\n  - y\n  system:\n  - z';
+  const { data, issues } = parseGkx23Frontmatter(`---\n${doc}\n---\nBody.`);
+  assert.deepEqual(data.labels, { authored: ["x", "y"], system: ["z"] });
+  assert.equal(issues.length, 0, `no parse issues, got: ${JSON.stringify(issues)}`);
+});
+
+test("mixed doc: same-indent list followed by another same-level key", () => {
+  const doc = 'title: "T"\ntags:\n- one\n- two\ntype: "semantic"';
+  const { data, issues } = parseGkx23Frontmatter(`---\n${doc}\n---\nBody.`);
+  assert.equal(data.title, "T");
+  assert.deepEqual(data.tags, ["one", "two"]);
+  assert.equal(data.type, "semantic");
+  assert.equal(issues.length, 0, `no parse issues, got: ${JSON.stringify(issues)}`);
+});
+
+test("deeper-indent block sequence still parses unchanged", () => {
+  const doc = 'tags:\n  - a\n  - b';
+  const { data, issues } = parseGkx23Frontmatter(`---\n${doc}\n---\nBody.`);
+  assert.deepEqual(data.tags, ["a", "b"]);
+  assert.equal(issues.length, 0);
+});
+
+test("flat 2.3 note with same-indent tags projects tags with zero schema errors", () => {
+  const flat = `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec9aa"
+title: "Same indent tags"
+type: "semantic"
+created_at: "2026-07-01T00:00:00Z"
+updated_at: "2026-07-02T00:00:00Z"
+epistemic_state: "fact"
+sensitivity: "restricted"
+authorship_origin: "authored"
+tags:
+- alpha
+- beta
+---
+Body.`;
+  const projection = buildGkx23Projection(flat, "SameIndent.md", "si:1", null);
+  assert.deepEqual(projection.authored.tags, ["alpha", "beta"]);
+  assert.ok(
+    !projection.diagnostics.some((d) => d.code === "GKX-SCHEMA-001"),
+    `no GKX-SCHEMA-001, got: ${JSON.stringify(projection.diagnostics)}`
+  );
+});
+
+// 2026-07-27 fix (Bug 1): refines/blocks/documents were valid 2.3 relations
+// (src/gkx.ts RELATIONS + gkos-standard relationType enum) but were missing from
+// gkx23.ts RELATION_TYPES, so splitRelations() and the inverse-edge loop silently
+// DROPPED them. This asserts they now project forward AND generate inverse edges.
+test("refines/blocks/documents now project forward and generate inverse edges (was silently dropped)", () => {
+  const source = `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec9b1"
+title: "Refiner"
+type: "semantic"
+created_at: "2026-07-16T20:00:00Z"
+updated_at: "2026-07-17T20:00:00Z"
+authorship:
+  origin: "authored"
+epistemic:
+  state: "hypothesis"
+sensitivity:
+  level: "internal"
+provenance: { }
+relationships:
+  refines:
+    - target: "019b2d14-4230-7db7-87d4-7d81cfaec9b2"
+      origin: "authored"
+  blocks:
+    - target: "019b2d14-4230-7db7-87d4-7d81cfaec9b2"
+      origin: "authored"
+  documents:
+    - target: "019b2d14-4230-7db7-87d4-7d81cfaec9b2"
+      origin: "authored"
+review: { }
+assessment: { }
+labels:
+  authored: []
+  derived: []
+  proposed: []
+  approved: []
+---
+Body.`;
+  const target = `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec9b2"
+title: "Refined"
+type: "semantic"
+created_at: "2026-07-16T20:00:00Z"
+updated_at: "2026-07-17T20:00:00Z"
+authorship:
+  origin: "authored"
+epistemic:
+  state: "hypothesis"
+sensitivity:
+  level: "internal"
+provenance: { }
+relationships:
+  related_to: []
+review: { }
+assessment: { }
+labels:
+  authored: []
+  derived: []
+  proposed: []
+  approved: []
+---
+Body.`;
+
+  // Projection level: the authored relations survive splitRelations() and the
+  // flat editable-Property merge instead of being dropped.
+  const projection = buildGkx23Projection(source, "Claims/Refiner.md", "r:1", null);
+  assert.ok(projection.authored.relationships.refines, "refines relation preserved");
+  assert.ok(projection.authored.relationships.blocks, "blocks relation preserved");
+  assert.ok(projection.authored.relationships.documents, "documents relation preserved");
+
+  // Graph level: forward semantic edges + inverse derived edges on the target.
+  const graph = buildGraph([
+    { relativePath: "Claims/Refiner.md", extension: "md", content: source },
+    { relativePath: "Claims/Refined.md", extension: "md", content: target },
+  ], ["Claims"], Date.parse("2026-07-18T00:00:00Z"));
+  for (const label of ["refines", "blocks", "documents"]) {
+    assert.ok(
+      graph.links.some((link) => link.source === "file:Claims/Refiner.md" && link.target === "file:Claims/Refined.md" && link.kind === "semantic" && link.label === label),
+      `forward ${label} edge present`
+    );
+  }
+  const targetDerived = graph.nodes.find((node) => node.path === "Claims/Refined.md").gkx.projection.derived.relationships;
+  assert.ok(targetDerived.refined_by, "inverse refined_by edge present on target");
+  assert.ok(targetDerived.blocked_by, "inverse blocked_by edge present on target");
+  assert.ok(targetDerived.documented_by, "inverse documented_by edge present on target");
+});
+
+test("canonical YAML parser bounds inline recursion and rejects prototype keys without pollution", () => {
+  const deeplyNested = `[`.repeat(10_000) + `"value"` + `]`.repeat(10_000);
+  const parsed = parseGkx23Frontmatter(`---\nvalue: ${deeplyNested}\n---\nBody`);
+  assert.ok(parsed.issues.some((issue) => /nesting exceeds 64 levels/u.test(issue.message)));
+
+  delete Object.prototype.phase3Polluted;
+  const unsafe = parseGkx23Frontmatter(`---\n__proto__:\n  phase3Polluted: true\nconstructor: nope\ntitle: Safe\n---\nBody`);
+  assert.equal(Object.prototype.phase3Polluted, undefined);
+  assert.equal(Object.hasOwn(unsafe.data, "__proto__"), false);
+  assert.equal(Object.hasOwn(unsafe.data, "constructor"), false);
+  assert.equal(unsafe.data.title, "Safe");
+  assert.equal(unsafe.issues.filter((issue) => /Unsafe YAML mapping key/u.test(issue.message)).length, 2);
+});
+
+test("canonical YAML parser rejects malformed flow, quotes, and numeric-looking unsupported scalars", () => {
+  for (const [value, message] of [
+    ["[a], [b]", /Malformed inline YAML sequence/u],
+    ["[a,,b]", /Malformed inline YAML sequence/u],
+    ["'a'b'", /Malformed single-quoted YAML scalar/u],
+    ["1e309", /Unsupported or non-finite YAML numeric scalar/u],
+  ]) {
+    const parsed = parseGkx23Frontmatter(`---\nvalue: ${value}\n---\nBody`);
+    assert.ok(parsed.issues.some((issue) => message.test(issue.message)), `${value} must fail safely: ${JSON.stringify(parsed.issues)}`);
+  }
+
+  const valid = parseGkx23Frontmatter(String.raw`---
+tags: ["a\\", "b"]
+---
+Body`);
+  assert.deepEqual(valid.issues, []);
+  assert.deepEqual(valid.data.tags, ["a\\", "b"]);
+});
+
+test("canonical YAML parser preserves spaced empty maps and trailing-comma sequence compatibility", () => {
+  const raw = `---
+gkx_version: "2.3"
+uid: "019b2d14-4230-7db7-87d4-7d81cfaec956"
+title: "Flow compatibility"
+type: "semantic"
+created_at: "2026-07-16T20:00:00Z"
+epistemic_state: "reported"
+sensitivity: "public"
+provenance: { }
+review: {   }
+assessment: {}
+tags: [one, two,]
+---
+Body`;
+  const parsed = parseGkx23Frontmatter(raw);
+  assert.deepEqual(parsed.issues, []);
+  assert.equal(parsed.data.provenance, "{ }");
+  assert.equal(parsed.data.review, "{   }");
+  assert.deepEqual(parsed.data.assessment, {});
+  assert.deepEqual(parsed.data.tags, ["one", "two"]);
+
+  const projection = buildGkx23Projection(raw, "Flow.md", "flow-hash", null);
+  assert.equal(projection.rawFrontmatter.provenance, "{ }");
+  assert.equal(projection.rawFrontmatter.review, "{   }");
+  assert.deepEqual(projection.authored.tags, ["one", "two"]);
+  assert.equal(projection.diagnostics.some((diagnostic) => diagnostic.code === "GKX-SCHEMA-001"), false);
+
+  assert.deepEqual(parseGkx23Frontmatter("---\ntags: [one,]\n---\nBody").data.tags, ["one"]);
+  for (const invalid of ["[,one]", "[one,,two]"]) {
+    assert.ok(parseGkx23Frontmatter(`---\ntags: ${invalid}\n---\nBody`).issues.some((issue) => /Malformed inline YAML sequence/u.test(issue.message)));
+  }
+});
+
+test("frontmatter delimiters, empty headers, physical line caps, BOM, and CRLF are exact", () => {
+  assert.deepEqual(parseGkx23Frontmatter("Body"), { data: {}, issues: [], present: false });
+  assert.deepEqual(parseGkx23Frontmatter("---\n---\nBody"), { data: {}, issues: [], present: true });
+  assert.equal(parseGkx23Frontmatter("---evil\ntitle: Nope\n---\nBody").present, false);
+  const suffixedClose = parseGkx23Frontmatter("---\ntitle: Nope\n---evil\nBody");
+  assert.equal(suffixedClose.present, false);
+  assert.ok(suffixedClose.issues.some((issue) => /unterminated/u.test(issue.message)));
+
+  const comments = `${Array.from({ length: 4_097 }, () => "# comment").join("\n")}`;
+  const tooMany = parseGkx23Frontmatter(`---\n${comments}\n---\nBody`);
+  assert.equal(tooMany.present, false);
+  assert.ok(tooMany.issues.some((issue) => /4096 physical lines/u.test(issue.message)));
+
+  const bomCrlf = parseGkx23Frontmatter("\ufeff---\r\ntitle: Exact\r\ntags:\r\n- one\r\n---\r\nBody");
+  assert.equal(bomCrlf.present, true);
+  assert.deepEqual(bomCrlf.issues, []);
+  assert.equal(bomCrlf.data.title, "Exact");
+  assert.deepEqual(bomCrlf.data.tags, ["one"]);
+});
+
+test("valid public parser and projection envelopes retain their exact compatibility shape", () => {
+  const raw = `---\r\ngkx_version: "2.3"\r\nuid: "019b2d14-4230-7db7-87d4-7d81cfaec955"\r\ntitle: "Byte shape"\r\ntype: "semantic"\r\ncreated_at: "2026-07-16T20:00:00Z"\r\nepistemic_state: "reported"\r\nsensitivity: "public"\r\ntags: [one, two]\r\n---\r\nBody`;
+  assert.deepEqual(parseGkx23Frontmatter(raw), {
+    data: {
+      gkx_version: "2.3",
+      uid: "019b2d14-4230-7db7-87d4-7d81cfaec955",
+      title: "Byte shape",
+      type: "semantic",
+      created_at: "2026-07-16T20:00:00Z",
+      epistemic_state: "reported",
+      sensitivity: "public",
+      tags: ["one", "two"],
+    },
+    issues: [],
+    present: true,
+  });
+  const projection = buildGkx23Projection(raw, "Byte shape.md", "shape-hash", null);
+  assert.deepEqual(Object.keys(projection).sort(), [
+    "approved", "assessment", "authored", "conformanceClaim", "contentHash", "derived", "diagnostics",
+    "effective", "extensions", "mode", "profile", "proposed", "rawFrontmatter", "sourcePath", "sourceVersion",
+  ]);
+  assert.equal(Object.getOwnPropertySymbols(projection).length, 0);
+});

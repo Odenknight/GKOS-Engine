@@ -1,0 +1,466 @@
+{
+  "$comment": "Authoritative validation is JSON Schema plus validateQualificationReceiptSemantics: counts must add exactly, counts_digest binds their canonical object, every duration and interval is real and encompassing, the job command inventory is closed, and top-level PASS or FAIL must agree with every command.",
+  "$defs": {
+    "command_result": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "process"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "counts_digest": {
+                "const": "sha256:acc0cc1565c87221b8f4ed96c526a1c81ac269a77b62518721072d346bd2175c"
+              },
+              "fail_count": {
+                "const": 0
+              },
+              "log_digest": false,
+              "log_name": false,
+              "pass_count": {
+                "const": 0
+              },
+              "skip_count": {
+                "const": 0
+              },
+              "test_count": {
+                "const": 0
+              },
+              "test_duration_ms": false
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "test"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "test_count": {
+                "minimum": 1,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "log_name",
+              "log_digest",
+              "test_duration_ms"
+            ],
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "const": "PASS"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "exit_code": {
+                "const": 0
+              },
+              "fail_count": {
+                "const": 0
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "const": "FAIL"
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "anyOf": [
+              {
+                "properties": {
+                  "exit_code": {
+                    "minimum": 1,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "fail_count": {
+                    "minimum": 1,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "command": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "counts_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "duration_ms": {
+          "exclusiveMinimum": 0,
+          "maximum": 3600000,
+          "type": "number"
+        },
+        "ended_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "exit_code": {
+          "maximum": 255,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "fail_count": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "process",
+            "test"
+          ]
+        },
+        "log_digest": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "log_name": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+          "type": "string"
+        },
+        "pass_count": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "result": {
+          "enum": [
+            "PASS",
+            "FAIL"
+          ]
+        },
+        "skip_count": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "started_at": {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        "test_count": {
+          "maximum": 9007199254740991,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "test_duration_ms": {
+          "exclusiveMinimum": 0,
+          "maximum": 3600000,
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "command",
+        "started_at",
+        "ended_at",
+        "duration_ms",
+        "exit_code",
+        "result",
+        "test_count",
+        "pass_count",
+        "fail_count",
+        "skip_count",
+        "counts_digest"
+      ],
+      "title": "Execution-backed command result",
+      "type": "object"
+    }
+  },
+  "$id": "qualification-receipt.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "result": {
+            "const": "PASS"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "commands": {
+            "items": {
+              "properties": {
+                "result": {
+                  "const": "PASS"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "output_artifact_digests": {
+            "minItems": 1,
+            "type": "array"
+          },
+          "secret_scan": {
+            "const": "PASS",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "result": {
+            "const": "FAIL"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "commands": {
+            "contains": {
+              "properties": {
+                "result": {
+                  "const": "FAIL"
+                }
+              },
+              "required": [
+                "result"
+              ],
+              "type": "object"
+            },
+            "minContains": 1,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      }
+    }
+  ],
+  "properties": {
+    "allowed_paths_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "architecture": {
+      "maxLength": 32,
+      "minLength": 1,
+      "type": "string"
+    },
+    "base_commit": {
+      "const": "56c11c50dde31d4b92d333223507f050ea72d994"
+    },
+    "commands": {
+      "items": {
+        "$ref": "#/$defs/command_result"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "contract_version": {
+      "const": "1.0.0-draft.2"
+    },
+    "cpu": {
+      "maxLength": 256,
+      "minLength": 1,
+      "type": "string"
+    },
+    "ended_at": {
+      "format": "date-time",
+      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "type": "string"
+    },
+    "head_commit": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "input_artifact_digests": {
+      "items": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "job": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "os": {
+      "maxLength": 32,
+      "minLength": 1,
+      "type": "string"
+    },
+    "output_artifact_digests": {
+      "items": {
+        "pattern": "^sha256:[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "pack_aggregate_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "protected_paths_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "run_id": {
+      "maxLength": 64,
+      "minLength": 1,
+      "type": "string"
+    },
+    "runner_image": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "secret_scan": {
+      "enum": [
+        "PASS",
+        "FAIL"
+      ]
+    },
+    "started_at": {
+      "format": "date-time",
+      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "type": "string"
+    },
+    "tool_versions": {
+      "additionalProperties": false,
+      "properties": {
+        "ajv": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "ajv_formats": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "node": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "npm": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "sqlite": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        },
+        "typescript": {
+          "pattern": "^(?:v)?[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node",
+        "npm",
+        "typescript",
+        "ajv",
+        "ajv_formats",
+        "sqlite"
+      ],
+      "title": "Exact qualification tool versions",
+      "type": "object"
+    },
+    "workflow": {
+      "const": "GKOS Phase 6 identity/MCP Draft.2 qualification"
+    }
+  },
+  "required": [
+    "contract_version",
+    "base_commit",
+    "head_commit",
+    "workflow",
+    "run_id",
+    "job",
+    "runner_image",
+    "os",
+    "architecture",
+    "cpu",
+    "tool_versions",
+    "commands",
+    "allowed_paths_digest",
+    "protected_paths_digest",
+    "pack_aggregate_digest",
+    "input_artifact_digests",
+    "output_artifact_digests",
+    "secret_scan",
+    "started_at",
+    "ended_at",
+    "result"
+  ],
+  "title": "Qualification receipt",
+  "type": "object"
+}

@@ -1,0 +1,17 @@
+{
+  "fixtureId": "effects-managed-moc-success",
+  "category": "success",
+  "input": {
+    "targetPath": "topics/MOC.md",
+    "ownership": "region-managed",
+    "currentDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "candidateDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "authority": "valid",
+    "markers": "valid"
+  },
+  "expected": {
+    "outcome": "planned",
+    "sourceWrite": false,
+    "reasonCodes": []
+  }
+}

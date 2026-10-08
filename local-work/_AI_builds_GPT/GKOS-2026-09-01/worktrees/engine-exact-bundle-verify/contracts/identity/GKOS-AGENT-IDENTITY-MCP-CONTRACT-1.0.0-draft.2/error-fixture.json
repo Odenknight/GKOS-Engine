@@ -1,0 +1,472 @@
+{
+  "alias_count": 34,
+  "contract_version": "1.0.0-draft.2",
+  "error_count": 53,
+  "errors": [
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_PARSE_ERROR",
+      "http_status": 400,
+      "mcp_code": -32700,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_INVALID_REQUEST",
+      "http_status": 400,
+      "mcp_code": -32600,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_INVALID_PARAMS",
+      "http_status": 422,
+      "mcp_code": -32602,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_PEER_FORBIDDEN",
+      "http_status": 403,
+      "mcp_code": -32003,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_HOST_FORBIDDEN",
+      "http_status": 403,
+      "mcp_code": -32003,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_ORIGIN_FORBIDDEN",
+      "http_status": 403,
+      "mcp_code": -32003,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_METHOD_NOT_ALLOWED",
+      "http_status": 405,
+      "mcp_code": -32600,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_DELETE_INVALID",
+      "http_status": 400,
+      "mcp_code": -32600,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_UNSUPPORTED_MEDIA_TYPE",
+      "http_status": 415,
+      "mcp_code": -32600,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_PROTOCOL_VERSION_INVALID",
+      "http_status": 400,
+      "mcp_code": -32600,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_NOT_ACCEPTABLE",
+      "http_status": 406,
+      "mcp_code": -32600,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_JSONRPC_METHOD_NOT_FOUND",
+      "http_status": 200,
+      "mcp_code": -32601,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_UNSUPPORTED_CONTRACT_VERSION",
+      "http_status": 400,
+      "mcp_code": -32600,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_UNKNOWN_OPERATION",
+      "http_status": 404,
+      "mcp_code": -32602,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_PAYLOAD_TOO_LARGE",
+      "http_status": 413,
+      "mcp_code": -32602,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_AUTH_FAILED",
+      "http_status": 401,
+      "mcp_code": -32001,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_OWNER_REQUIRED",
+      "http_status": 403,
+      "mcp_code": -32003,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_POLICY_DENIED",
+      "http_status": 403,
+      "mcp_code": -32003,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_POLICY_INDETERMINATE",
+      "http_status": 503,
+      "mcp_code": -32053,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_SESSION_UNKNOWN",
+      "http_status": 404,
+      "mcp_code": -32004,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_SESSION_EXPIRED",
+      "http_status": 404,
+      "mcp_code": -32004,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_SESSION_STALE",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_REQUEST_REPLAY_CONFLICT",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_REQUEST_STALE_AUTHORITY",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_IDEMPOTENCY_EXPIRED",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_AGENT_DISABLED",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_CREDENTIAL_REVOKED",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_IDENTITY_COLLISION",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_CREDENTIAL_COLLISION",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_MAPPING_CONFLICT",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_STATE_CONFLICT",
+      "http_status": 409,
+      "mcp_code": -32009,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 3,
+      "code": "GKOS_P6_RESOURCE_NOT_FOUND",
+      "http_status": 404,
+      "mcp_code": -32004,
+      "retryable": false,
+      "visibility": "authenticated-redacted"
+    },
+    {
+      "cli_exit": 4,
+      "code": "GKOS_P6_RATE_LIMITED",
+      "http_status": 429,
+      "mcp_code": -32029,
+      "retry_after_required": true,
+      "retryable": true,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 4,
+      "code": "GKOS_P6_CONCURRENCY_LIMIT",
+      "http_status": 429,
+      "mcp_code": -32029,
+      "retry_after_required": true,
+      "retryable": true,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 4,
+      "code": "GKOS_P6_REQUEST_TIMEOUT",
+      "http_status": 504,
+      "mcp_code": -32054,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 4,
+      "code": "GKOS_P6_REQUEST_CANCELLED",
+      "http_status": 408,
+      "mcp_code": -32800,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 4,
+      "code": "GKOS_P6_CAPABILITY_UNAVAILABLE",
+      "http_status": 503,
+      "mcp_code": -32053,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 4,
+      "code": "GKOS_P6_PLATFORM_UNAVAILABLE",
+      "http_status": 503,
+      "mcp_code": -32053,
+      "retryable": false,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 4,
+      "code": "GKOS_P6_BOOTSTRAP_REQUIRED",
+      "http_status": 503,
+      "mcp_code": -32053,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_MIGRATION_MALFORMED",
+      "http_status": 422,
+      "mcp_code": -32090,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_MIGRATION_CONFLICT",
+      "http_status": 409,
+      "mcp_code": -32090,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_MIGRATION_RECOVERY_REQUIRED",
+      "http_status": 503,
+      "mcp_code": -32090,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_AUTHORITY_CORRUPT",
+      "http_status": 503,
+      "mcp_code": -32090,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_DATABASE_CAPACITY",
+      "http_status": 507,
+      "mcp_code": -32057,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_ACTIVITY_CAPACITY",
+      "http_status": 507,
+      "mcp_code": -32057,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 2,
+      "code": "GKOS_P6_RETENTION_INVALID",
+      "http_status": 422,
+      "mcp_code": -32602,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_CLOCK_INVALID",
+      "http_status": 503,
+      "mcp_code": -32090,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_STORAGE_PERMISSION_INVALID",
+      "http_status": 503,
+      "mcp_code": -32090,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_AUDIT_WRITE_FAILED",
+      "http_status": 503,
+      "mcp_code": -32090,
+      "retryable": false,
+      "visibility": "public-redacted"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_EVIDENCE_MISMATCH",
+      "http_status": 500,
+      "mcp_code": -32090,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_SECRET_EXPOSURE",
+      "http_status": 500,
+      "mcp_code": -32090,
+      "retryable": false,
+      "visibility": "owner-only"
+    },
+    {
+      "cli_exit": 4,
+      "code": "GKOS_P6_SHUTTING_DOWN",
+      "http_status": 503,
+      "mcp_code": -32053,
+      "retry_after_required": true,
+      "retryable": true,
+      "visibility": "public"
+    },
+    {
+      "cli_exit": 5,
+      "code": "GKOS_P6_INTERNAL_ERROR",
+      "http_status": 500,
+      "mcp_code": -32603,
+      "retryable": false,
+      "visibility": "public-redacted"
+    }
+  ],
+  "interface_aliases": {
+    "AUTH_INVALID": "GKOS_P6_AUTH_FAILED",
+    "AUTH_REQUIRED": "GKOS_P6_AUTH_FAILED",
+    "CREDENTIAL_REVOKED_UNAUTHENTICATED": "GKOS_P6_AUTH_FAILED",
+    "CURSOR_INVALID": "GKOS_P6_INVALID_PARAMS",
+    "CURSOR_STALE": "GKOS_P6_REQUEST_STALE_AUTHORITY",
+    "FORWARDED_IDENTITY_FORBIDDEN": "GKOS_P6_POLICY_DENIED",
+    "IDENTITY_DISABLED_UNAUTHENTICATED": "GKOS_P6_AUTH_FAILED",
+    "MCP_ACCEPT_NOT_NEGOTIABLE": "GKOS_P6_NOT_ACCEPTABLE",
+    "MCP_CALL_MALFORMED": "GKOS_P6_INVALID_PARAMS",
+    "MCP_HTTP_CONTENT_TYPE_INVALID": "GKOS_P6_UNSUPPORTED_MEDIA_TYPE",
+    "MCP_HTTP_CONTENT_TYPE_MISSING": "GKOS_P6_UNSUPPORTED_MEDIA_TYPE",
+    "MCP_HTTP_CONTENT_TYPE_UNSUPPORTED": "GKOS_P6_UNSUPPORTED_MEDIA_TYPE",
+    "MCP_HTTP_DELETE_BODY_FORBIDDEN": "GKOS_P6_DELETE_INVALID",
+    "MCP_HTTP_DELETE_CONTENT_TYPE_FORBIDDEN": "GKOS_P6_DELETE_INVALID",
+    "MCP_HTTP_DELETE_FRAMING_INVALID": "GKOS_P6_DELETE_INVALID",
+    "MCP_HTTP_GET_METHOD_NOT_ALLOWED": "GKOS_P6_METHOD_NOT_ALLOWED",
+    "MCP_HTTP_HOST_FORBIDDEN": "GKOS_P6_HOST_FORBIDDEN",
+    "MCP_HTTP_METHOD_INVALID": "GKOS_P6_METHOD_NOT_ALLOWED",
+    "MCP_HTTP_METHOD_NOT_ALLOWED": "GKOS_P6_METHOD_NOT_ALLOWED",
+    "MCP_HTTP_ORIGIN_FORBIDDEN": "GKOS_P6_ORIGIN_FORBIDDEN",
+    "MCP_HTTP_PEER_FORBIDDEN": "GKOS_P6_PEER_FORBIDDEN",
+    "MCP_HTTP_PROTOCOL_VERSION_INVALID": "GKOS_P6_PROTOCOL_VERSION_INVALID",
+    "MCP_HTTP_PROTOCOL_VERSION_MISSING": "GKOS_P6_PROTOCOL_VERSION_INVALID",
+    "MCP_HTTP_PROTOCOL_VERSION_UNSUPPORTED": "GKOS_P6_PROTOCOL_VERSION_INVALID",
+    "MCP_JSONRPC_METHOD_NOT_FOUND": "GKOS_P6_JSONRPC_METHOD_NOT_FOUND",
+    "MCP_NOT_INITIALIZED": "GKOS_P6_INVALID_REQUEST",
+    "MCP_SESSION_EXPIRED": "GKOS_P6_SESSION_UNKNOWN",
+    "MCP_SESSION_INVALID": "GKOS_P6_SESSION_UNKNOWN",
+    "MCP_SESSION_NOT_FOUND": "GKOS_P6_SESSION_UNKNOWN",
+    "MCP_SESSION_REQUIRED": "GKOS_P6_INVALID_REQUEST",
+    "MCP_SESSION_TERMINATED": "GKOS_P6_SESSION_UNKNOWN",
+    "MCP_TOOL_INPUT_INVALID": "GKOS_P6_INVALID_PARAMS",
+    "MCP_UNKNOWN_TOOL": "GKOS_P6_UNKNOWN_OPERATION",
+    "TOOL_NOT_AVAILABLE": "GKOS_P6_UNKNOWN_OPERATION"
+  },
+  "unauthenticated_non_enumeration": true,
+  "unknown_internal_rule": "GKOS_P6_INTERNAL_ERROR"
+}

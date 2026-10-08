@@ -1,0 +1,1 @@
+{ "extends": "srtp-p01-complete.json", "mutations": [{ "op": "set", "path": "/artifacts/0/registered_source_digest", "value": "sha256:figure-altered" }] }

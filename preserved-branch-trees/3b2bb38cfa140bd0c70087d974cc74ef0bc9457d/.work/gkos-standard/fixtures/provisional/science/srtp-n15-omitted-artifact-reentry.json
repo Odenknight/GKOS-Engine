@@ -1,0 +1,22 @@
+{
+  "extends": "srtp-p01-complete.json",
+  "mutations": [
+    { "op": "add", "path": "/execution_events/1/output_digests/-", "value": "sha256:table-v1" },
+    { "op": "add", "path": "/artifacts/-", "value": {
+    "id": "81000000-0000-4000-8000-000000000018",
+    "srtp_type": "srtp:Artifact",
+    "origin": "derived",
+    "sensitivity": "restricted",
+    "created_at": "2026-08-08T13:31:00-04:00",
+    "created_by": "agent:science-runner",
+    "lineage": { "branch_id": "main", "predecessors": [] },
+    "artifact_kind": "table",
+    "artifact_digest": "sha256:table-v1",
+    "registered_source_digest": "sha256:table-v1",
+    "generating_event_id": "70000000-0000-4000-8000-000000000007",
+    "code_digest": "sha256:code-v1",
+    "dataset_digests": ["sha256:dataset-v1"],
+    "environment_digest": "sha256:environment-v1"
+    } }
+  ]
+}

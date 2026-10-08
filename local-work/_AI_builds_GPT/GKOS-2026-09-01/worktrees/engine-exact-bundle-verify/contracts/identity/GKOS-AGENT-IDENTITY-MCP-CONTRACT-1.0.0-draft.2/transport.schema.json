@@ -1,0 +1,124 @@
+{
+  "$id": "transport.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "const": "1.0.0-draft.2"
+    },
+    "http_predispatch": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "error_code": {
+            "enum": [
+              "GKOS_P6_PEER_FORBIDDEN",
+              "GKOS_P6_HOST_FORBIDDEN",
+              "GKOS_P6_ORIGIN_FORBIDDEN",
+              "GKOS_P6_METHOD_NOT_ALLOWED",
+              "GKOS_P6_UNSUPPORTED_MEDIA_TYPE",
+              "GKOS_P6_PROTOCOL_VERSION_INVALID",
+              "GKOS_P6_NOT_ACCEPTABLE",
+              "GKOS_P6_SESSION_UNKNOWN",
+              "GKOS_P6_AUTH_FAILED"
+            ]
+          },
+          "name": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "request_id": {
+            "type": "null"
+          },
+          "stage": {
+            "maximum": 9,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "stage",
+          "name",
+          "request_id",
+          "error_code"
+        ],
+        "title": "Admission stage",
+        "type": "object"
+      },
+      "maxItems": 9,
+      "minItems": 9,
+      "type": "array"
+    },
+    "protocol_version": {
+      "const": "2025-11-25"
+    },
+    "standing": {
+      "const": "integration_only"
+    },
+    "transports": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "authority": {
+            "enum": [
+              "delegates_to_loopback_service",
+              "credential_bound_local_service"
+            ]
+          },
+          "availability": {
+            "enum": [
+              "package_available",
+              "integration_runtime"
+            ]
+          },
+          "credential_handoff": {
+            "enum": [
+              "private_token_file",
+              "bearer_header"
+            ]
+          },
+          "implementation": {
+            "enum": [
+              "loopback_compatibility_bridge",
+              "authenticated_loopback_service"
+            ]
+          },
+          "name": {
+            "enum": [
+              "native_stdio",
+              "loopback_streamable_http"
+            ]
+          },
+          "request_timeout_ms": {
+            "maximum": 30000,
+            "minimum": 1000,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "availability",
+          "implementation",
+          "authority",
+          "credential_handoff",
+          "request_timeout_ms"
+        ],
+        "title": "Transport",
+        "type": "object"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    }
+  },
+  "required": [
+    "contract_version",
+    "protocol_version",
+    "standing",
+    "transports",
+    "http_predispatch"
+  ],
+  "title": "Versioned integration transports",
+  "type": "object"
+}

@@ -1,0 +1,1 @@
+{ "extends": "srtp-p01-complete.json", "mutations": [{ "op": "set", "path": "/reviewer_findings/0/approved_by", "value": "tool:deterministic-review" }] }

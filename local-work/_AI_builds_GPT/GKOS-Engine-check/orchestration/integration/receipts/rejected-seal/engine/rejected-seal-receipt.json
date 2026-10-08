@@ -1,0 +1,25 @@
+{
+  "standing": "REJECTED: CRLF-corrupt provisional seal; never pushed or merged",
+  "base": "8207958047b3361ae21ac07c5a2abbd26a42a684",
+  "provisional_commit": "acc3dd08c6eba902387f904ea9126de8bda395d8",
+  "provisional_tree": "725d3dfb2c5f77454a0c60a9a7c2395632036594",
+  "branch": "codex/integrate-engine-stability-20260831",
+  "status_lines": [],
+  "logs": [
+    {
+      "name": "engine-inventory-check.json",
+      "bytes": 69210,
+      "sha256": "efde6481a803c67631392ac6649ecca46c9ddd64ff6c19c44a092681410feb03"
+    },
+    {
+      "name": "engine-npm-ci.log",
+      "bytes": 147,
+      "sha256": "af8d6239aa2130ea269dd789caf4ca1a6214f26b9bbc250fdee64e3604b9f715"
+    },
+    {
+      "name": "engine-typecheck.log",
+      "bytes": 51,
+      "sha256": "c488b68ba3182301d8f759d23fad9fc77427c6214ae666ce71a6d24a12009144"
+    }
+  ]
+}

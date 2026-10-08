@@ -1,0 +1,422 @@
+{
+  "artifact_type": "gkos-phase6-d0-15-c1-security-concurrence",
+  "schema_version": "1.0.0",
+  "review_id": "PHASE6-D0-15-C1-SECURITY-2026-08-26",
+  "reviewed_at_utc": "2026-08-26T10:58:59.8579462Z",
+  "reviewer_role": "fresh independent security reviewer",
+  "reviewer_task": "/root/d015_c1_security_concurrence",
+  "wave": "C1",
+  "verdict": "REJECT_CONCURRENCE",
+  "concurrence": false,
+  "severity": "BLOCKER",
+  "terminal_statement": "REJECT_CONCURRENCE. The exact frozen correction map, owner resolution V2, and closed non-MCP fixture registry do not form a self-consistent, ambiguity-free security decision coordinate. No successor-F1 product correction, F2 restart, product edit, regeneration, commit, push, workflow, PR, merge, release, deployment, activation, or publication is authorized. Accepted F1 e29e04bdad1cd192a25eba2d682a4c46774def28 remains immutable historical evidence, and the stopped uncommitted F2 draft remains preserved and unqualified.",
+  "no_contribution_attestation": {
+    "attested": true,
+    "statement": "I authored no D0, proposal, owner-resolution, correction-map, registry, fixture, expected-outcome, product, accepted-F1, stopped-F2, implementation, handoff, or prior-review bytes. I performed a fresh read-only security review and created only this detached concurrence artifact.",
+    "reviewed_rule_or_registry_edits": 0,
+    "product_edits": 0,
+    "fixture_or_expected_outcome_edits": 0,
+    "implementation_decisions_authored": 0
+  },
+  "scope": [
+    "credential encoding, issuance epochs, one-time handoff, sole-owner rotation, zero grace, and recovery",
+    "locator identity, protection, content binding, links, tree confinement, and failed delivery",
+    "reference and cursor process-restart invalidation, stale precedence, rediscovery, and non-enumeration",
+    "pre-adapter mapping GKOS_P6_PLATFORM_UNAVAILABLE and deferred authenticated-adapter collision qualification",
+    "non-mapping identity and credential collision handling, one entropy use, no retry, no overwrite, and zero mutation",
+    "closed errors, redaction, activity metadata, policy, rate, and negative/security fixture families",
+    "preservation of exactly 53 error codes and 67 official MCP vector IDs",
+    "closed non-MCP fixture completeness, canonical IDs, family counts, aliases, and source trace",
+    "decision-only authority boundary and preservation of accepted F1 and stopped F2"
+  ],
+  "exact_inputs": [
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_2026-08-26.json",
+      "sha256": "87da54d22f72e27625144143e15dcc6a38264b856af51bdaf5d26055a92c2a29",
+      "bytes": 21418,
+      "role": "frozen correction map under concurrence"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V2_2026-08-26.json",
+      "sha256": "95b8bc0b7fdb646a8a40f244526df5d8ac6a34384124a40c338366d843f62d84",
+      "bytes": 8395,
+      "role": "hash-bound owner resolution under concurrence"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_2026-08-26.json",
+      "sha256": "e878b6906559e91a7d4acf34d375b8de43b140549c673f50f8e164b5a333bd90",
+      "bytes": 90098,
+      "role": "frozen exhaustive fixture registry under concurrence"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+      "bytes": 117722,
+      "role": "ratified source D0 semantics"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CLOSED_ERROR_REGISTRY_1.0.0-draft.1.json",
+      "sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+      "bytes": 17606,
+      "role": "closed 53-code security and projection source"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_OPERATION_INVENTORY_PROPOSAL_2026-08-25.json",
+      "sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+      "bytes": 45471,
+      "role": "closed operation, reference-lifecycle, and exact reference-error source"
+    },
+    {
+      "path": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+      "sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+      "bytes": 31178,
+      "role": "independence, stop, and authorization governance"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CONSOLIDATED_OWNER_DECISION_PROPOSAL_2026-08-26.json",
+      "sha256": "149b1933503eb418ab8f1d37d2aa6dad19e8d18fa08ee5ce359ecea0fff9e78f",
+      "bytes": 80583,
+      "role": "historical consolidated proposal and selected Option-A semantics"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_FULL_CONTRACT_STEWARD_REVIEW_2026-08-26.json",
+      "sha256": "12a37ee80c129ae016bfb330cd91621d50ad9f8f9406ab850798714adedce63c",
+      "bytes": 51789,
+      "role": "prior contract findings"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_MIGRATION_REVIEW_2026-08-26.json",
+      "sha256": "9534727333c2c964b4285f136ee046b823f61f100f7acff1fe520d85efd4aa57",
+      "bytes": 43945,
+      "role": "prior migration and recovery findings"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_SECURITY_REVIEW_2026-08-26.json",
+      "sha256": "f7d862851832ded51ec3c264beaf65b7bd5f9ad958580215f3d955546ac6d401",
+      "bytes": 50913,
+      "role": "prior security findings and required negative families"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_FULL_CONTRACT_CONCURRENCE_2026-08-26.json",
+      "sha256": "62e26bc062243968fe3bf083443819d2bfab61ec69fc5c7e8d9444eceb1727b1",
+      "bytes": 34666,
+      "role": "prior Full-contract concurrence rejection"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_ATTACHMENT_IMPACT_ASSESSMENT_2026-08-26.json",
+      "sha256": "69a6f241294a530cf7f3aa89ce7c897bcd5010d125462dfda59c2e73b9a2c014",
+      "bytes": 5596,
+      "role": "attachment instruction-boundary and impact evidence"
+    }
+  ],
+  "integrity_audit": {
+    "all_thirteen_review_input_raw_hashes_and_byte_lengths_match": true,
+    "correction_map_internal_record_digest": {
+      "stated": "fe8809604c862a7fbf4d2638802ac6eb6157c920407efbc5998f3b7e6adbc338",
+      "recomputed": "fe8809604c862a7fbf4d2638802ac6eb6157c920407efbc5998f3b7e6adbc338",
+      "match": true
+    },
+    "owner_resolution_v2_internal_record_digest": {
+      "stated": "7271bdbe92e4ae634bd03d33bb2532c52dfc495f972910fc3ffa81b5284ea441",
+      "recomputed": "7271bdbe92e4ae634bd03d33bb2532c52dfc495f972910fc3ffa81b5284ea441",
+      "match": true
+    },
+    "fixture_registry_internal_record_digest": {
+      "stated": "e65c98badb2fcb8399149034edacc40c15d5a6b6d58df86af60229c06f2af732",
+      "recomputed": "e65c98badb2fcb8399149034edacc40c15d5a6b6d58df86af60229c06f2af732",
+      "match": true
+    },
+    "registry_source_trace_matches_current_exact_inputs": false,
+    "registry_source_trace_mismatches": [
+      {
+        "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_2026-08-26.json",
+        "registry_declared_sha256": "d6f2a803452206001fc10d65c64e79996fa91c6604ddb7658cb67aefd65d01ac",
+        "registry_declared_bytes": 22841,
+        "current_frozen_sha256": "87da54d22f72e27625144143e15dcc6a38264b856af51bdaf5d26055a92c2a29",
+        "current_frozen_bytes": 21418
+      },
+      {
+        "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V2_2026-08-26.json",
+        "registry_declared_sha256": "de6a4b034bec87e7819d674abbdf4bd2ebd73529d0caf7bec14e62431712bc14",
+        "registry_declared_bytes": 6548,
+        "current_frozen_sha256": "95b8bc0b7fdb646a8a40f244526df5d8ac6a34384124a40c338366d843f62d84",
+        "current_frozen_bytes": 8395
+      }
+    ]
+  },
+  "security_semantics_audit": [
+    {
+      "area": "credentials, issuance epochs, handoff, and sole-owner rotation",
+      "result": "RULE_ACCEPTABLE_DECISION_ONLY",
+      "basis": "The selected R10/R11 and corrected DC09 boundary preserves historical issuance epoch, requires a second active owner credential before rotation, closes active/revoked state, binds one-time locator delivery, forbids re-reveal, and distinguishes ordinary delivery failure from GKOS_P6_SECRET_EXPOSURE. The registry includes the seven authentication non-enumeration leaves, issue/rotate results, prior-credential reconnect, zero-grace, lost-handoff, and sole-owner conflict leaves. This does not overcome the registry integrity and ambiguity findings."
+    },
+    {
+      "area": "locators and physical protection",
+      "result": "RULE_ACCEPTABLE_DECISION_ONLY",
+      "basis": "The selected rules forbid raw paths and bind canonical relative names, physical identity, content, protection, ownership, regular-file and no-link evidence. Unsafe attacker objects are not deleted. No product qualification is implied."
+    },
+    {
+      "area": "reference and cursor restart behavior",
+      "result": "RULE_ACCEPTABLE_DECISION_ONLY",
+      "basis": "Q2 and corrected R07/DC11 unambiguously invalidate reference-bound cursors after restart, project CURSOR_STALE to GKOS_P6_REQUEST_STALE_AUTHORITY, evaluate restart invalidation before reference lookup, disclose no prior existence, and require rediscovery. Durable resolver state and cross-restart continuation are forbidden."
+    },
+    {
+      "area": "mapping availability and collision deferral",
+      "result": "RULE_ACCEPTABLE_DECISION_ONLY",
+      "basis": "Pre-adapter mapping operations return GKOS_P6_PLATFORM_UNAVAILABLE without mapping-existence disclosure. Authenticated subject evidence, collision guard, digest domain/preimage/equality, adapter binding, and adapter-enabled subject-digest collision qualification are deferred together. GKOS_P6_IDENTITY_COLLISION remains among exactly 53 codes, and ordinary binding conflict remains GKOS_P6_MAPPING_CONFLICT."
+    },
+    {
+      "area": "non-mapping collision handling",
+      "result": "REJECTED_BY_FIXTURE_AMBIGUITY",
+      "basis": "The rule preserves one entropy use, zero mutation, no retry, no overwrite, and content-free evidence, and the registry enumerates non-mapping identifier classes. COLLISION-ID-IDEMPOTENCY-001 nevertheless permits either GKOS_P6_IDENTITY_COLLISION or an unspecified idempotency-conflict projection for one canonical fixture ID."
+    },
+    {
+      "area": "redaction, activity metadata, policy, rate, and non-enumeration",
+      "result": "REJECTED_BY_FIXTURE_AMBIGUITY",
+      "basis": "DC01/DC03/DC04/DC14-equivalent selected rules close the six-field error envelope, activity metadata domains, policy reason bounds and fail-closed evaluation, persisted integer-microtoken rate semantics, and content-free channels. Multiple registry leaves still name generic or alternative projections rather than one exact expected semantic."
+    },
+    {
+      "area": "exact 53-code and 67-MCP preservation",
+      "result": "COUNT_ASSERTIONS_CONSISTENT_NOT_QUALIFYING",
+      "basis": "The D0 closed error registry contains 53 entries including GKOS_P6_IDENTITY_COLLISION and GKOS_P6_PLATFORM_UNAVAILABLE. The D0 source and correction records preserve 67 official MCP vector IDs and prohibit renumbering or semantic changes. This concurrence does not qualify product bytes or independently re-execute the official MCP corpus."
+    },
+    {
+      "area": "decision-only authority",
+      "result": "PASS",
+      "basis": "The correction map, owner resolution V2, and registry explicitly authorize detached decision/concurrence evidence only and forbid successor-F1 product correction, F2 restart, product edits, regeneration, commit, push, hosted workflow, PR, merge, release, deployment, activation, and publication."
+    }
+  ],
+  "fixture_registry_audit": {
+    "canonical_fixture_ids": 237,
+    "duplicate_canonical_fixture_ids": 0,
+    "families": 16,
+    "sum_of_declared_family_counts": 237,
+    "all_declared_family_counts_match_actual_membership": true,
+    "aliases": 12,
+    "duplicate_aliases": 0,
+    "aliases_with_missing_canonical_target": 0,
+    "named_core_operation_subtotal": 8,
+    "named_restore_bootstrap_recovery_subtotal": 10,
+    "named_subtotal": 18,
+    "additional_canonical_fixtures": 219,
+    "overall_canonical_non_mcp_fixtures": 237,
+    "accounting_formula_matches": true,
+    "one_id_one_unambiguous_expected_semantic": false
+  },
+  "required_correction_inventory": {
+    "status": "OWNER_DECISION_REQUIRED_NO_REVIEWER_EDIT_AUTHORITY",
+    "rule": "This inventory records the minimum ambiguity closure needed for a replacement owner-ratified registry. It is not an edit, waiver, fixture contribution, expected-outcome contribution, or product authorization. Where an exact existing source projection controls, it is identified. Where the ratified sources do not freeze one projection, the Product Owner must select one existing 53-code member or a closed non-error state outcome before a new zero-contribution review; the reviewer does not select it.",
+    "count_effect": "The explicit splits below require at least 28 additional canonical leaf IDs, changing the current 237 total to at least 265 before any further owner-selected split. The exact final total must be recomputed after the Product Owner closes every OWNER_SELECTION_REQUIRED entry. Aliases remain non-counting.",
+    "items": [
+      {
+        "source_ids": ["BACKUP-INTEGRITY-001"],
+        "defect": "Five distinct integrity, foreign-key, pragma, byte-length, and manifest-digest failures share an unnamed closed failure.",
+        "required_ids": ["BACKUP-INTEGRITY-CHECK-001", "BACKUP-FOREIGN-KEY-CHECK-001", "BACKUP-PRAGMA-001", "BACKUP-BYTE-LENGTH-001", "BACKUP-MANIFEST-DIGEST-001"],
+        "required_outcome": "OWNER_SELECTION_REQUIRED from the existing 53-code registry for each leaf; all five must have zero accepted backup result and no publication. A shared code is permitted only if explicitly ratified.",
+        "source_control": "DC08 freezes checked backup verification and no publication, but the reviewed sources do not freeze one public error projection for all five causes.",
+        "minimum_net_new_ids": 4
+      },
+      {
+        "source_ids": ["BOOTSTRAP-HANDOFF-ACL-001", "BOOTSTRAP-HANDOFF-INSIDE-TREE-001", "BOOTSTRAP-HANDOFF-LINK-001", "BOOTSTRAP-HANDOFF-MODE-001", "BOOTSTRAP-HANDOFF-OWNER-001", "BOOTSTRAP-HANDOFF-TYPE-001"],
+        "defect": "The leaves name generic protection or invalid/protection failure rather than the closed code.",
+        "required_ids": ["retain all six existing IDs"],
+        "required_outcome": "GKOS_P6_STORAGE_PERMISSION_INVALID; zero state advance and zero secret reveal; no attacker-controlled target mutation.",
+        "source_control": "D0 physical-protection rules freeze nonconforming protected-file ownership, mode/ACL, type, link, and root confinement as GKOS_P6_STORAGE_PERMISSION_INVALID.",
+        "minimum_net_new_ids": 0
+      },
+      {
+        "source_ids": ["COLLISION-ID-IDEMPOTENCY-001"],
+        "defect": "One derived-digest collision leaf permits either identity collision or request replay conflict.",
+        "required_ids": ["COLLISION-ID-IDEMPOTENCY-001", "IDEMPOTENCY-REQUEST-CONFLICT-001"],
+        "required_outcome": "COLLISION-ID-IDEMPOTENCY-001 uses GKOS_P6_IDENTITY_COLLISION with zero mutation/no overwrite for unequal preimages sharing a derived identifier. IDEMPOTENCY-REQUEST-CONFLICT-001 uses GKOS_P6_REQUEST_REPLAY_CONFLICT for the ordinary same raw idempotency key with different canonical input, operation, or agent.",
+        "source_control": "D0 collision handling makes generated/digest identity collision stop-class GKOS_P6_IDENTITY_COLLISION; the race table separately freezes ordinary same-key/different-request behavior as GKOS_P6_REQUEST_REPLAY_CONFLICT.",
+        "minimum_net_new_ids": 1
+      },
+      {
+        "source_ids": ["GLOBAL-EVENT-COORDINATES-001"],
+        "defect": "Transaction validation and startup replay are combined and permit an error or rollback alternative.",
+        "required_ids": ["GLOBAL-EVENT-COORDINATES-INSERT-001", "GLOBAL-EVENT-COORDINATES-STARTUP-001"],
+        "required_outcome": "STARTUP is GKOS_P6_AUTHORITY_CORRUPT with blocked gate. INSERT rolls back with zero committed mutation and an exact existing code selected by the Product Owner.",
+        "source_control": "D0/DC10 freeze transaction validation and startup corruption rejection but do not freeze the external insertion error code for a coordinate mismatch.",
+        "minimum_net_new_ids": 1
+      },
+      {
+        "source_ids": ["GLOBAL-EVENT-DUPLICATE-ID-001"],
+        "defect": "Insertion collision and startup corruption are combined.",
+        "required_ids": ["GLOBAL-EVENT-DUPLICATE-ID-INSERT-001", "GLOBAL-EVENT-DUPLICATE-ID-STARTUP-001"],
+        "required_outcome": "INSERT is GKOS_P6_IDENTITY_COLLISION with one entropy use where generated, zero mutation, no retry, and no overwrite. STARTUP is GKOS_P6_AUTHORITY_CORRUPT with blocked gate.",
+        "source_control": "D0 freezes collision and startup-corruption semantics separately.",
+        "minimum_net_new_ids": 1
+      },
+      {
+        "source_ids": ["GLOBAL-EVENT-DUPLICATE-SEQUENCE-001"],
+        "defect": "The expected value is only an unnamed conflict/corruption outcome and does not distinguish insertion from startup.",
+        "required_ids": ["GLOBAL-EVENT-DUPLICATE-SEQUENCE-INSERT-001", "GLOBAL-EVENT-DUPLICATE-SEQUENCE-STARTUP-001"],
+        "required_outcome": "STARTUP is GKOS_P6_AUTHORITY_CORRUPT with blocked gate. INSERT rolls back with zero committed mutation and an exact existing code selected by the Product Owner.",
+        "source_control": "D0 freezes global sequence uniqueness and startup corruption, but not one external insertion projection.",
+        "minimum_net_new_ids": 1
+      },
+      {
+        "source_ids": ["GLOBAL-EVENT-KIND-TABLE-001"],
+        "defect": "Insertion rejection and startup corruption are combined.",
+        "required_ids": ["GLOBAL-EVENT-KIND-TABLE-INSERT-001", "GLOBAL-EVENT-KIND-TABLE-STARTUP-001"],
+        "required_outcome": "STARTUP is GKOS_P6_AUTHORITY_CORRUPT with blocked gate. INSERT rolls back with zero committed mutation and an exact existing code selected by the Product Owner.",
+        "source_control": "D015-R08/DC10 freeze table-kind constants and startup rejection but not one external insertion projection.",
+        "minimum_net_new_ids": 1
+      },
+      {
+        "source_ids": ["POLICY-DENY-001", "POLICY-INDETERMINATE-001", "POLICY-TIMEOUT-001", "POLICY-MULTI-NAVIGATION-AUDIT-001", "POLICY-MULTI-RECORD-ASSESS-001", "POLICY-MULTI-RECORD-LINEAGE-001", "POLICY-MULTI-RECORD-VALIDATE-001"],
+        "defect": "The leaves use generic denied, unavailable/denied, timeout/policy, or closed-denial phrases.",
+        "required_ids": ["retain all seven existing IDs"],
+        "required_outcome": "DENY and missing required capability leaves use GKOS_P6_POLICY_DENIED; INDETERMINATE uses GKOS_P6_POLICY_INDETERMINATE; evaluator deadline uses GKOS_P6_REQUEST_TIMEOUT. All use the six-field content-free envelope and produce no result, effect, or success activity.",
+        "source_control": "The exact 53-code registry distinguishes POLICY_DENIED, POLICY_INDETERMINATE, and REQUEST_TIMEOUT; DC03 forbids fail-open substitution.",
+        "minimum_net_new_ids": 0
+      },
+      {
+        "source_ids": ["RACE-RESTART-001"],
+        "defect": "One fixture ranges over every durable request, effect, and anchor boundary and permits committed or stale outcomes.",
+        "required_ids": ["RACE-RESTART-ADMITTED-001", "RACE-RESTART-FINAL-GATE-001", "RACE-RESTART-EFFECT-PREPARED-001", "RACE-RESTART-EFFECT-TERMINAL-001", "RACE-RESTART-AUDIT-PUBLISHED-001", "RACE-RESTART-ANCHOR-INTENT-001", "RACE-RESTART-DATABASE-COMMITTED-001", "RACE-RESTART-ANCHOR-COMMITTED-001"],
+        "required_outcome": "Each ID freezes one crash cut and one deterministic post-restart committed, stale, recovered, or blocked outcome from durable evidence, with at most one effect/result and no timing-dependent alternative.",
+        "source_control": "D0 A-to-E, anchor, and request lifecycle rules freeze deterministic recovery by durable cut; exact per-cut expected states must be restated in the replacement registry.",
+        "minimum_net_new_ids": 7
+      },
+      {
+        "source_ids": ["REDACTION-FIXTURE-001"],
+        "defect": "The fixture permits either generator rejection or replacement with synthetic/digest material.",
+        "required_ids": ["REDACTION-FIXTURE-REAL-INPUT-001", "REDACTION-FIXTURE-SYNTHETIC-INPUT-001"],
+        "required_outcome": "REAL-INPUT rejects before fixture publication. SYNTHETIC-INPUT accepts only fixed nonsecret synthetic or digest material and proves no real secret, raw subject, or raw path persists.",
+        "source_control": "D0 forbids credential, subject, and unrestricted path content in fixtures/artifacts; it permits fixed nonsecret synthetic/digest test material.",
+        "minimum_net_new_ids": 1
+      },
+      {
+        "source_ids": ["REDACTION-PATH-001", "REDACTION-SQL-001", "REDACTION-STACK-001"],
+        "defect": "The leaves name only a content-free existing code/envelope.",
+        "required_ids": ["retain all three existing IDs"],
+        "required_outcome": "Unexpected thrown path, SQL, or stack-bearing conditions project GKOS_P6_INTERNAL_ERROR in the exact six-field envelope, with no native message, type, code, path, SQL, or stack content.",
+        "source_control": "The closed registry unknown_internal_rule freezes every unmapped or unexpected implementation condition to GKOS_P6_INTERNAL_ERROR.",
+        "minimum_net_new_ids": 0
+      },
+      {
+        "source_ids": ["REFERENCE-CROSS-SESSION-001", "REFERENCE-PROCESS-RESTART-001"],
+        "defect": "The leaves permit stale or invalid-reference responses rather than the exact resolution projection.",
+        "required_ids": ["retain both existing IDs"],
+        "required_outcome": "Both use authenticated-redacted GKOS_P6_RESOURCE_NOT_FOUND before existence-sensitive resolution. The distinct SNAPSHOT-RESTART-001 cursor case remains CURSOR_STALE/GKOS_P6_REQUEST_STALE_AUTHORITY under Q2.",
+        "source_control": "The core operation inventory freezes unknown, expired, wrong-session, and resolver-absent references as GKOS_P6_RESOURCE_NOT_FOUND; generation/auth-epoch mismatch alone is GKOS_P6_REQUEST_STALE_AUTHORITY.",
+        "minimum_net_new_ids": 0
+      },
+      {
+        "source_ids": ["REFERENCE-PHYSICAL-DRIFT-001"],
+        "defect": "The leaf permits stale or physical failure after a live resolver hit.",
+        "required_ids": ["REFERENCE-PHYSICAL-DRIFT-001"],
+        "required_outcome": "OWNER_SELECTION_REQUIRED from the existing 53-code registry, preserving zero mutation, no replacement-object access, and authenticated redaction.",
+        "source_control": "D0 freezes mandatory physical requalification and fail-closed behavior but does not freeze one external projection for post-resolution physical drift.",
+        "minimum_net_new_ids": 0
+      },
+      {
+        "source_ids": ["SESSION-AUTH-EPOCH-001"],
+        "defect": "Admission and final-gate stages are combined under a generic stale response.",
+        "required_ids": ["SESSION-AUTH-EPOCH-ADMISSION-001", "REQUEST-AUTH-EPOCH-FINAL-GATE-001"],
+        "required_outcome": "ADMISSION uses GKOS_P6_SESSION_STALE. FINAL-GATE persists request state stale and uses GKOS_P6_REQUEST_STALE_AUTHORITY with no result, effect, or success activity.",
+        "source_control": "The closed registry and D0 selective final-gate rule distinguish session stale from request stale authority.",
+        "minimum_net_new_ids": 1
+      },
+      {
+        "source_ids": ["RESTORE-ABORT-TOMBSTONE-CRASH-002"],
+        "defect": "Precommit completion and already-committed replay are alternative durable starting states in one leaf.",
+        "required_ids": ["RESTORE-ABORT-TOMBSTONE-PRECOMMIT-001", "RESTORE-ABORT-TOMBSTONE-POSTCOMMIT-001"],
+        "required_outcome": "PRECOMMIT completes exactly the remaining abort publication once. POSTCOMMIT returns the same committed nonsecret abort result without a second event or mutation.",
+        "source_control": "R03/DC10 freeze one abort event, exact tombstone, and replay without duplicate publication.",
+        "minimum_net_new_ids": 1
+      },
+      {
+        "source_ids": ["RESTORE-ABORT-UNSAFE-001"],
+        "defect": "The expected outcome permits ABORTED or blocked for the same abort-intent schedule.",
+        "required_ids": ["RESTORE-ABORT-UNSAFE-001"],
+        "required_outcome": "After an authenticated eligible abort intent, the outcome is ABORTED with staged_locator_disposition=preserved_unsafe, the attacker object untouched, the abandoned credential and plan tombstoned, and one exact abort event. A separate pre-abort startup qualification leaf returns GKOS_P6_AUTHORITY_CORRUPT and blocked gate.",
+        "source_control": "R03 freezes preserved_unsafe as a valid exact abort disposition; D0 separately freezes unsafe staged-object startup as GKOS_P6_AUTHORITY_CORRUPT.",
+        "minimum_net_new_ids": 0
+      },
+      {
+        "source_ids": ["RESTORE-LOCATOR-CONFLICT-001"],
+        "defect": "The leaf names only a generic conflict/recovery_required outcome.",
+        "required_ids": ["RESTORE-LOCATOR-CONFLICT-EXISTS-001", "RESTORE-LOCATOR-CONFLICT-RACE-001"],
+        "required_outcome": "Both forbid overwrite and hybrid publication, retain exact recovery evidence, and require one Product-Owner-selected existing error projection. The replacement registry separately freezes preexisting-final and identity-change-at-publication outcomes.",
+        "source_control": "D0/R03 freeze no-replace, requalification, and recovery-required state but not one exact external error code for both conflicts.",
+        "minimum_net_new_ids": 1
+      },
+      {
+        "source_ids": ["RESTORE-OLD-AUTHORITY-DENIAL-001"],
+        "defect": "Credential, session, reference, and request are four different boundaries but are bundled as one byte-identical stale/unauthenticated result.",
+        "required_ids": ["RESTORE-OLD-CREDENTIAL-DENIAL-001", "RESTORE-OLD-SESSION-DENIAL-001", "RESTORE-OLD-REFERENCE-DENIAL-001", "RESTORE-OLD-REQUEST-DENIAL-001"],
+        "required_outcome": "CREDENTIAL uses byte-identical GKOS_P6_AUTH_FAILED; SESSION uses GKOS_P6_SESSION_UNKNOWN; REFERENCE uses authenticated-redacted GKOS_P6_RESOURCE_NOT_FOUND unless an explicitly surviving resolver has a generation mismatch, which must be a separate GKOS_P6_REQUEST_STALE_AUTHORITY leaf; REQUEST uses GKOS_P6_REQUEST_STALE_AUTHORITY. None may enumerate old authority state.",
+        "source_control": "The closed error registry and operation inventory distinguish authentication, session, reference, and admitted-request projections.",
+        "minimum_net_new_ids": 3
+      },
+      {
+        "source_ids": ["RESTORE-OWNER-002", "RESTORE-OWNER-003"],
+        "defect": "Each named recovery leaf permits automatic exact recovery or owner abort despite valid staged inputs.",
+        "required_ids": ["retain RESTORE-OWNER-002 and RESTORE-OWNER-003; retain separate RESTORE-ABORT-PLAN-STAGED-001 and RESTORE-ABORT-LOCATOR-STAGED-001"],
+        "required_outcome": "RESTORE-OWNER-002 automatically resumes the same plan, temp, and credential and reveals nothing. RESTORE-OWNER-003 automatically resumes the same bound locator and credential and reveals nothing. authority.status may report abort_eligible, but abort occurs only in the existing separate authenticated abort leaves.",
+        "source_control": "D0 and R03 require exact recovery for valid staged evidence and define abort as a distinct authenticated owner operation.",
+        "minimum_net_new_ids": 0
+      },
+      {
+        "source_ids": ["RESTORE-OWNER-008"],
+        "defect": "Absent, linked, unsafe, physical-identity, content, protection, and owner mismatch branches are bundled in one canonical fixture.",
+        "required_ids": ["RESTORE-OWNER-008-ABSENT", "RESTORE-OWNER-008-LINK", "RESTORE-OWNER-008-PHYSICAL-IDENTITY", "RESTORE-OWNER-008-CONTENT", "RESTORE-OWNER-008-PROTECTION", "RESTORE-OWNER-008-OWNER"],
+        "required_outcome": "Every startup leaf returns GKOS_P6_AUTHORITY_CORRUPT and blocks writes without unsafe use or deletion. Subsequent authenticated abort evidence records absent for the absent leaf and preserved_unsafe for every attacker-object leaf.",
+        "source_control": "D0 RESTORE-OWNER-007/008 semantics freeze GKOS_P6_AUTHORITY_CORRUPT at startup and the exact absent versus preserved_unsafe abort disposition.",
+        "minimum_net_new_ids": 5
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "C1-SEC-001",
+      "severity": "BLOCKER",
+      "title": "The frozen registry source ledger binds superseded correction-map and owner-resolution bytes",
+      "evidence": [
+        "The registry source_trace binds the correction map as d6f2a803452206001fc10d65c64e79996fa91c6604ddb7658cb67aefd65d01ac / 22841 bytes, while the exact concurrence input is 87da54d22f72e27625144143e15dcc6a38264b856af51bdaf5d26055a92c2a29 / 21418 bytes.",
+        "The registry source_trace binds owner resolution V2 as de6a4b034bec87e7819d674abbdf4bd2ebd73529d0caf7bec14e62431712bc14 / 6548 bytes, while the exact concurrence input is 95b8bc0b7fdb646a8a40f244526df5d8ac6a34384124a40c338366d843f62d84 / 8395 bytes.",
+        "Owner resolution V2 requires every concurrence to bind the same exact correction-map, resolution, and registry bytes and says any byte drift or fixture-registry disagreement restarts C1 through C3."
+      ],
+      "impact": "The registry is cryptographically intact as its own artifact but is not evidence derived from, or mutually bound to, the current exact correction coordinate. Accepting it would waive an explicit exact-byte security gate.",
+      "required_disposition": "Remain stopped and return to the Product Owner. A replacement registry/correction-map/resolution coordinate must be produced and ratified without editing these immutable reviewed bytes; all dependent concurrences must restart against the new exact hashes."
+    },
+    {
+      "id": "C1-SEC-002",
+      "severity": "HIGH",
+      "title": "Several frozen canonical fixture IDs allow alternative or unnamed security outcomes",
+      "evidence": [
+        "COLLISION-ID-IDEMPOTENCY-001 permits GKOS_P6_IDENTITY_COLLISION or an existing exact idempotency-conflict projection.",
+        "GLOBAL-EVENT-COORDINATES-001 permits GKOS_P6_AUTHORITY_CORRUPT or transaction rollback; GLOBAL-EVENT-DUPLICATE-ID-001 and GLOBAL-EVENT-KIND-TABLE-001 combine insertion and startup outcomes; GLOBAL-EVENT-DUPLICATE-SEQUENCE-001 names only a closed conflict/corruption outcome.",
+        "POLICY-INDETERMINATE-001 permits a policy-unavailable or denied projection and POLICY-TIMEOUT-001 permits a timeout or policy projection.",
+        "REFERENCE-CROSS-SESSION-001 and REFERENCE-PROCESS-RESTART-001 name stale or invalid-reference responses, while RESTORE-ABORT-UNSAFE-001 permits ABORTED or blocked.",
+        "The registry declares one ID equals one executable leaf and freezes each expected semantic, while the owner resolution forbids adding, splitting, merging, or reinterpreting fixtures without a new owner decision."
+      ],
+      "impact": "A successor-F1 author would have to choose, split, or condition these outcomes, thereby contributing security semantics and potentially changing the ratified count/hash. Byte-identical non-enumeration and exact error projection cannot be proven from a fixture that admits more than one result.",
+      "required_disposition": "The Product Owner must ratify the complete required_correction_inventory in this artifact or an equivalently exact replacement: exact split IDs, exact per-leaf initial state and schedule, exact existing code or state result, and recomputed counts and hashes. Fresh C1 through C3 concurrences are then required."
+    }
+  ],
+  "positive_observations_not_acceptance": [
+    "All thirteen directly reviewed input files matched the raw hashes and byte lengths recorded in this artifact.",
+    "All three primary artifacts passed their declared internal canonical record-digest recomputation.",
+    "The registry has exactly 237 unique canonical fixture IDs in 16 families, its declared family counts sum to and match 237, and its 12 aliases are unique and target existing canonical IDs.",
+    "The arithmetic 18 named subtotal plus 219 additional canonical fixtures equals 237 overall canonical non-MCP fixtures.",
+    "No product, proposal, fixture, expected-outcome, accepted-F1, or stopped-F2 byte was changed by this review."
+  ],
+  "authorization_boundary": {
+    "authorized_by_this_artifact": "detached C1 security concurrence rejection only",
+    "product_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "not_authorized": [
+      "successor-F1 product correction or regeneration",
+      "editing or replacing reviewed evidence under the same hash",
+      "F2 restart, repair, grandfathering, qualification, commit, or push",
+      "F3 through F5 or Lite L1 through L4 implementation",
+      "hosted workflow, pull request, merge, release, deployment, activation, or publication"
+    ]
+  },
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "a89c23269ca373ac4fdc72fab7a7842a0838e4ad93f832b00b48222c82cac1ff"
+}

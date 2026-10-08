@@ -1,0 +1,3674 @@
+{
+  "schema": "gkos-known-invariant-source-index/1",
+  "scope_root": ".",
+  "selection": "Every UTF-8 Markdown file under orchestration containing the whole word invariant or invariants, case-insensitive, excluding the generated integration/receipts/KNOWN-INVARIANTS-CATALOG.md to avoid circular self-indexing.",
+  "excluded_derived_markdown": [
+    "integration/receipts/KNOWN-INVARIANTS-CATALOG.md"
+  ],
+  "markdown_path_count": 205,
+  "unique_content_count": 85,
+  "records": [
+    {
+      "path": "2026-08-31/engine-audit/engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/engine-audit/engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/engine-audit/engine/docs/citations.md",
+      "sha256": "2dc3b76b20d297d3464ebe48b4469d25db80816c09c00d00a430cf11adc1fc01",
+      "byte_count": 4405,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "manifest and projection-digest invariants."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/engine-audit/engine/evidence/2026-08-21-functional-uplift-phase-2.md",
+      "sha256": "c2ec7b565b9aa181f1003fce5756293d6641c5f691f8b57531f72c78656e6982",
+      "byte_count": 16557,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 81,
+          "text": "- strict candidate/provenance invariants and schema-3 reopen verification,"
+        },
+        {
+          "line": 97,
+          "text": "  invariant, so denied source text is never sent to a configured provider and"
+        },
+        {
+          "line": 204,
+          "text": "  candidates, vector conflict invariants, FTS key bijection/tokenizer binding,"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/engine-audit/lite/docs/evidence/phase-1-retrieval-core.md",
+      "sha256": "3db5d81ca4b7b47697bd65b3e48a7fecc86c9b46bc5b8d5335db82ece862b6eb",
+      "byte_count": 19298,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 105,
+          "text": "allowlist and semantic invariants prove stable UIDs, paths, sensitivity,"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/engine-audit/lite/docs/evidence/phase-2-lineage-citations.md",
+      "sha256": "5351a4f4d2c926865784cee667d256973961bc6ed4f4b130c25fbb1c74bcddca",
+      "byte_count": 13779,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 73,
+          "text": "  bindings, and all immutable reopen invariants are verified. Schema 2 remains"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/engine-audit/lite/rust/contracts/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/engine-audit/lite/rust/contracts/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/GKOS-ECOSYSTEM-TS-FIRST-RUST-ROADMAP.md",
+      "sha256": "cd7e57d93b714f481bcd3f446332abca73d93e0605af0a4351804155ef267670",
+      "byte_count": 75607,
+      "match_count": 7,
+      "matches": [
+        {
+          "line": 43,
+          "text": "| Q-INTENT | Reconcile r4's eight-invariant intent-gate reference with the seven-row, still-proposed GKOS-DOCSTD-001 checklist found at current Standard main. Confirm the intended exact checklist/eighth item or amend the reference; do not fabricate an eighth invariant or report eight checks passed. | R4-0 source closure; R4-12 documentation gate |"
+        },
+        {
+          "line": 216,
+          "text": "Exit: the two current probes become red-then-green correctness tests; all affected consumers pass equivalent tests; canonical output/citation/ref invariants and resource limits are rechecked. Synthetic preconditions and live applicability remain clearly stated."
+        },
+        {
+          "line": 301,
+          "text": "Priority: stability-critical, enabled only after authority/host gates. Synthetic reconciliation depends on T00's scoped contract/change inventory, relevant T01 freshness invariants and the specific authority/ownership interfaces in Q-EFFECTS. It does not wait for unrelated provider settings, safe-diagnostic UI or the real FAC canary inventory. Any real-vault application separately requires T04's exact reviewed plan and Q-LIVE approval."
+        },
+        {
+          "line": 332,
+          "text": "Exit: all in-scope provider/data/graph capabilities operate through the claimed runtime, have negative tests and supported-platform evidence, and preserve governance invariants."
+        },
+        {
+          "line": 422,
+          "text": "Gate: injected crash/partial write/corrupt state/alias/concurrent scan cases refuse or recover deterministically. Same-generation mutation invariants from T01 apply to the Rust host too. An observed source deletion removes only the reconciled operational projection; it does not prove semantic supersession or authorized disposition."
+        },
+        {
+          "line": 468,
+          "text": "r4 calls this an eight-invariant gate. Root located [GKOS-DOCSTD-001 at the audited Standard SHA](https://github.com/Odenknight/gkos-standard/blob/71b899473473f47172b181973027f3eb7da25104/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md), which is marked proposed/non-normative and lists seven rows: receipt/grant-based authority; preserved contradictions/history; deterministic disclosed mandatory checks; specialization without authority transfer; fail-closed sensitivity; implementation evidence not automatically amending the Standard; and path-independent identity. Reconcile that seven/eight and adoption discrepancy in Q-INTENT/R4-0. Preserve the accepted underlying invariants, but do not invent the missing eighth item or claim this proposed checklist is already a ratified normative artifact."
+        },
+        {
+          "line": 613,
+          "text": "2. Implement T01's shared reference and cursor invariants with red-then-green tests; independently verify the exact fixes."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/observatory-audit/GKOS-Observatory/docs/ENGINE-AGENT-HANDOFF.md",
+      "sha256": "0cc0076804c9d1fe736fe520156da900eb63319105295223ac4a63bea38d3f63",
+      "byte_count": 10330,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 81,
+          "text": "6. **Snapshots/references:** audit same-generation mutation behavior across assess/validate/lineage and non-discovery cursors. Advertise only proven per-tool digest invariants. Catalog diff/payload digest remains a proposal, not implemented here."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/01-diagnostics-and-preflight.md",
+      "sha256": "710a5480732018887566da148a00e63d8bf2b0a68a5075ec2be873717ec8b8b4",
+      "byte_count": 8023,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 26,
+          "text": "   a successful empty search. Keep native refusal invariants unchanged."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/06-contract-and-release-hardening.md",
+      "sha256": "0024b0286e6484934d92184934ea0d8266a00d3b7c4e65fe7bed21af5d46ac21",
+      "byte_count": 8880,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 141,
+          "text": "  under a documented invariant. Do not label an untested hypothesis a fixed bug."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/.github/pull_request_template.md",
+      "sha256": "bd41f18b89da040a7b471cbaf4a04b4110fcc782c2eb6185de327a9a84406600",
+      "byte_count": 987,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 7,
+          "text": "- [ ] `npm run verify` passes locally (typecheck, build, tests, version/artifact/invariant checks)."
+        },
+        {
+          "line": 12,
+          "text": "- [ ] `kosmos-invariants.yml` still holds (security defaults, read-only API, sandbox, no `\"latest\"` deps)."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/BUILD-DIRECTIVE-v0.5.5.md",
+      "sha256": "bd454a34a5cf023d9e2ef39b98c9fa048dfa0f75b8400522e925dd0f6bffea4a",
+      "byte_count": 35645,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 758,
+          "text": "Do not promise mathematically impossible universal zero-overlap unless an invariant is actually proven."
+        },
+        {
+          "line": 1559,
+          "text": "unless proven as an invariant."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/CHANGELOG.md",
+      "sha256": "080abae1f4032f76f65ee340f27c56331fbf73e37f177d9b7261c0d6f11be35a",
+      "byte_count": 44972,
+      "match_count": 5,
+      "matches": [
+        {
+          "line": 278,
+          "text": "- 187-test suite (unit, round-trip, settings UI, invariants) plus"
+        },
+        {
+          "line": 279,
+          "text": "  `check:versions`, `check:artifacts`, `check:invariants`,"
+        },
+        {
+          "line": 283,
+          "text": "  feasibility, governance invariants, capture ergonomics) whose findings are"
+        },
+        {
+          "line": 642,
+          "text": "- **Mass-weighted elliptical orbits + sibling perturbation** — orbits now *feel* gravity-anchored. Each body traces a Kepler-inspired ellipse whose eccentricity depends on the body's own mass (heavier notes ride more circular orbits; lighter, isolated ones swing more), and its speed scales with the parent's mass (`sqrt(mass/ref)` — heavier hubs pull their satellites faster). The heaviest sibling in a system exerts a small along-orbit tug (theta jitter, capped at ~8°). Apoapsis is pinned to the original |ov| — max radius stays within the layout's collision-safe packing, so no new intersections. Fully deterministic (hash-based jitter only); t=0 position exactly matches the layout position (no visual jump when the loop starts). Six new orbit invariants in `test/cosmology.test.mjs`."
+        },
+        {
+          "line": 656,
+          "text": "- Reproducibility double-build CI job; `SHA256SUMS` + `BUILD-INFO.json` release provenance; `kosmos-invariants.yml` policy with `check:invariants`; Dependabot; pinned toolchain + committed `package-lock.json`."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/CONTRIBUTING.md",
+      "sha256": "0ad957ac9ed10fdb1bde0fc1e424ae5424c2fefc02f7cf903d603f7d8ab131ca",
+      "byte_count": 3926,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 12,
+          "text": "npm run verify     # typecheck + build + test + version/artifact/invariant checks"
+        },
+        {
+          "line": 25,
+          "text": "- Security-relevant changes keep `npm run check:invariants` green (see"
+        },
+        {
+          "line": 26,
+          "text": "  `kosmos-invariants.yml`)."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/assessments/Detailed_Recommended_Changes.md",
+      "sha256": "9ce42085602f5c0af94d40259e70472841c137270fcc30c7dc5af055b1d6877e",
+      "byte_count": 43401,
+      "match_count": 5,
+      "matches": [
+        {
+          "line": 836,
+          "text": "The existing test harness reportedly contains 33 checks against a stub Obsidian environment. A raw test count does not show which invariants are covered or which high-risk paths remain untested."
+        },
+        {
+          "line": 853,
+          "text": "| Vault mutation | Unknown | Unknown | Unknown | before/after filesystem invariant | High |"
+        },
+        {
+          "line": 871,
+          "text": "Prioritize tests that protect stable security invariants:"
+        },
+        {
+          "line": 886,
+          "text": "- Every high-priority security invariant has at least one negative test."
+        },
+        {
+          "line": 1326,
+          "text": "**Exit gate:** Stable security invariants are documented and enforced by negative tests."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/assessments/Engineering_Assurance_Guide.md",
+      "sha256": "1e25771cfcdcfc0ed53a668dfdc048cc72d487137a24e5becadb8c7f99f95511",
+      "byte_count": 26631,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 42,
+          "text": "These disciplines are important for human reviewers and even more important for AI agents. An agent can execute checks consistently, but it requires explicit invariants, deterministic commands, machine-readable evidence, and unambiguous failure conditions."
+        },
+        {
+          "line": 644,
+          "text": "  +--> invariant"
+        },
+        {
+          "line": 655,
+          "text": "Invariant: Server startup rejects LAN + no-token configuration."
+        },
+        {
+          "line": 763,
+          "text": "## 6.4 Example invariant file"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/BUILD-DIRECTIVE.md",
+      "sha256": "bd454a34a5cf023d9e2ef39b98c9fa048dfa0f75b8400522e925dd0f6bffea4a",
+      "byte_count": 35645,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 758,
+          "text": "Do not promise mathematically impossible universal zero-overlap unless an invariant is actually proven."
+        },
+        {
+          "line": 1559,
+          "text": "unless proven as an invariant."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/GKOS-ENGINE-DEFINITIONS.md",
+      "sha256": "c9ed1eaf9a0a06e909474fff8fd3069ebc60822e66b97a46586e67ce09a12ca0",
+      "byte_count": 35085,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 446,
+          "text": "proposals, never in-place edits); `kosmos-invariants.yml`"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/GKX-23-OBSIDIAN-ENGINE-REDESIGN.md",
+      "sha256": "8ce0ccd08e4ce0f33fa95383c8e6513687952dc97114449b502da2dc59b8b73c",
+      "byte_count": 20472,
+      "match_count": 6,
+      "matches": [
+        {
+          "line": 4,
+          "text": "the beta.12 codebase, the Obsidian platform, and the GKX 2.3 / GKOS invariants)"
+        },
+        {
+          "line": 207,
+          "text": "  origin-separation invariant."
+        },
+        {
+          "line": 221,
+          "text": "Landing it requires amending `kosmos-invariants.yml` (`api_write_routes:"
+        },
+        {
+          "line": 222,
+          "text": "proposals-inbox-only`), `scripts/check-invariants.mjs`, and THREAT-MODEL.md in the"
+        },
+        {
+          "line": 223,
+          "text": "same change — the CI invariant is a feature, not an obstacle. Fail-closed sensitivity"
+        },
+        {
+          "line": 294,
+          "text": "8. Opt-in proposal ingress (propose-scoped token; invariants/threat-model amended in"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/IMPLEMENTATION-HANDOFF.md",
+      "sha256": "ec793a1b6e06a201fcd2ff0ad4e8918ba8810397651f31a9d457c55b991ac63b",
+      "byte_count": 24504,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 551,
+          "text": "npm run check:invariants"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/PACKET-B-WORKING-RESULT-20260827.md",
+      "sha256": "3ec19c16a9bab9300f63a0b4e7f8a42a3d648ad2d002ab4f4132ff9f483f996f",
+      "byte_count": 2885,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 34,
+          "text": "- `npm ci`, typecheck, build, version, lockfile, artifact, invariant,"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/PACKET-C0-WORKING-RESULT-20260827.md",
+      "sha256": "5b0d341679a053d67e234aee97e495a2f8d03e004b04bbdd770609a48b248f73",
+      "byte_count": 2974,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 46,
+          "text": "  version, lockfile, artifact, invariant, and renderer-provenance checks."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/QUALIFICATION-PLAN.md",
+      "sha256": "f2bddd4c8c2d3a12ed9ecce13883e85003145ef7a4b1681612071ae026d88890",
+      "byte_count": 23726,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 305,
+          "text": "npm run check:invariants"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/RELEASE-PROCESS.md",
+      "sha256": "538807886c88d3a25bdbd933ff8e6400e9f5406d87f1b7d7133c306b4c9c4130",
+      "byte_count": 2614,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 24,
+          "text": "2. `npm run verify` — typecheck + build + tests + version/lockfile/artifact/invariant checks."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/RENDERER-MIGRATION-r185.md",
+      "sha256": "43cd2e34a7b5b1367fda644749a4f99b91fe6cb335b19a4842c7a839935471b8",
+      "byte_count": 4208,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 64,
+          "text": "119 unit tests, version/artifact/invariant/renderer-provenance checks); the"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/docs/THREAT-MODEL.md",
+      "sha256": "f1ba3baf0fcef54b7ade0e7c6baacaa4a1974305a7c24a0ae5f5645839f5e650",
+      "byte_count": 8574,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 70,
+          "text": "| Silent security regression | `kosmos-invariants.yml` + `check:invariants` gate CI; negative security tests. |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/CI-CD-AND-AGENT-OPERATING-DIRECTIVE.md",
+      "sha256": "ee340de184f2a442d308b15405362a7f36964d10daf8755863fd5ecf3a32496a",
+      "byte_count": 20344,
+      "match_count": 8,
+      "matches": [
+        {
+          "line": 52,
+          "text": "- machine-readable invariant checks;"
+        },
+        {
+          "line": 126,
+          "text": "| Primary/Planning Agent | Read issue, inspect architecture and invariants, define scope, risks, acceptance tests, affected surfaces | Must not silently expand scope |"
+        },
+        {
+          "line": 130,
+          "text": "| Security/Invariant Agent | Review sandbox, network, token, dependency, provenance, offline, and read-only boundaries | Must not treat an absence of a known CVE as proof of safety |"
+        },
+        {
+          "line": 148,
+          "text": "- protected invariants;"
+        },
+        {
+          "line": 176,
+          "text": "- Invariants at risk:"
+        },
+        {
+          "line": 309,
+          "text": "npm run check:invariants"
+        },
+        {
+          "line": 666,
+          "text": "  ci.yml                    # source, typecheck, unit, invariants"
+        },
+        {
+          "line": 692,
+          "text": "- protected invariants pass;"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/KOSMOS-ODEN-RENDERER-ASSESSMENT.md",
+      "sha256": "c989212f5fb27bb3eb1dafc2fc4600c7102889d75d6a7634f456a5b3666b022d",
+      "byte_count": 14408,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 20,
+          "text": "- CI-enforced invariants;"
+        },
+        {
+          "line": 183,
+          "text": "- a machine-readable invariant policy."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/RENDERER-UPGRADE-BUILD-INSTRUCTIONS.md",
+      "sha256": "7551eb6a875f9a523b0a9be86e0cd7b47ef586675e42d89b834fcc6eaae02e22",
+      "byte_count": 14831,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 543,
+          "text": "npm run check:invariants"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/node_modules/@codemirror/view/CHANGELOG.md",
+      "sha256": "88cbdb7efa76687c3c214b4653806a85e2919299f8201b892af8671ffab27544",
+      "byte_count": 71971,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 769,
+          "text": "Forbid widget decoration side values bigger than 10000, to prevent them from breaking range ordering invariants."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/node_modules/gkos-engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/node_modules/gkos-engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/node_modules/gkos-engine/docs/citations.md",
+      "sha256": "d912cab314287a51d2212b00c603f6d535397cee597029d758e641f3ad9ecadd",
+      "byte_count": 4329,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "manifest and projection-digest invariants."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/SECURITY.md",
+      "sha256": "3d812f638dbb10a33e600f19b46eb18bacf6433611d86f5d137f652ee2e0665f",
+      "byte_count": 2637,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 28,
+          "text": "These invariants are declared in [`kosmos-invariants.yml`](kosmos-invariants.yml)"
+        },
+        {
+          "line": 29,
+          "text": "and enforced by `npm run check:invariants` in CI:"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/Kosmos-Oden/TECHNICAL_README.md",
+      "sha256": "d91380d5bd1ec8e46bbd5d26ee136542f5f8fd61332f02099e7a4b84e235d790",
+      "byte_count": 34456,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 495,
+          "text": "- Build invariants check authentication defaults, listener rules, request caps,"
+        },
+        {
+          "line": 518,
+          "text": "| `npm run check:invariants` | Declared security and architecture invariants |"
+        },
+        {
+          "line": 520,
+          "text": "| `npm run verify` | Typecheck, full build, Node tests, and all invariant/artifact checks |"
+        },
+        {
+          "line": 530,
+          "text": "CI type-checks, builds, tests, checks invariants and provenance, performs"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-CRASH-CONCURRENCY.md",
+      "sha256": "7e5d5eff8d99fc9c584868e50e234066c3336f3304de90fcd98dbf713b563030",
+      "byte_count": 5009,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 12,
+          "text": "Crash matrix, concurrency schedules, reproducible seeds, minimized failures, database snapshots/checksums, invariant reports and content-addressed run bundles."
+        },
+        {
+          "line": 57,
+          "text": "PostgreSQL/runtime/build/config digests, seeds and minimized schedules, exact fault timing, pre/post snapshots/checksums, WAL/restart logs, verifier reports, invariant totals, latency/lock metrics, full command transcript and content-addressed bundle manifest."
+        },
+        {
+          "line": 61,
+          "text": "No production target, unresolved environment variable, wildcard destructive command, mock-database qualification, flaky suppression, unseeded randomized result, modified invariant, hidden failed run, or risk exception without owner approval."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-INDEPENDENT-SECURITY-REVIEW.md",
+      "sha256": "fbff86971891ff2c25af27c2a8bc9189428c57e68fddedba7e12c4c25c1afad5",
+      "byte_count": 5046,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 1,
+          "text": "# Coding-agent handoff: independent security and invariant review"
+        },
+        {
+          "line": 15,
+          "text": "Severity-ranked findings with exploit path, exact evidence, violated invariant, remediation and regression test; independent recomputation of manifests; explicit unresolved-risk ledger."
+        },
+        {
+          "line": 48,
+          "text": "Finding fields: ID, severity, confidence, exact file/line or artifact, preconditions, exploit/reproduction, violated invariant, impact, remediation, required regression and status. Produce threat-boundary map, attack checklist, independent digest manifest, test transcript and residual-risk register."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/theMarshal-Core-Rust/coding-agent-handoffs/WP01-POSTGRESQL-WRITER.md",
+      "sha256": "93e02e3e045615cd645be875bfe92e4941f0143f1078814f896946445c582eba",
+      "byte_count": 6674,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 32,
+          "text": "Pinned inputs are the PostgreSQL authority candidate, EVD logical record, state/authority contracts, diagnostics and canonical opaque types. Require PostgreSQL 15+. Per-chain `FOR UPDATE` plus database invariants is the normative minimum; `SERIALIZABLE` is optional defense. The sole writer mints `occurred_at`. Enforce 1 MiB admitted request, 256 KiB payload, 512 KiB record, depth 32, and text 255. Admit only u16 `1 = GENESIS` and `2 = LIFECYCLE_TRANSITION`; prohibit 0 and reject/reserve every other v1 code. Validate the exact closed nine-key genesis payload and six-required/one-optional lifecycle payload before persistence. Store Python free-form reason nowhere in canonical authority bytes; map `owner_authorization_digest` only to envelope `authority_ref`; accept only exact reviewed existing diagnostics. Permanently retain canonical authority records for the authority-domain lifetime; external/raw projections use separate classification retention and secrets/PHI/bulky content never enter the chain."
+        },
+        {
+          "line": 71,
+          "text": "- [ ] Schema invariants and least privileges are enforced by tests."
+        },
+        {
+          "line": 76,
+          "text": "- [ ] Per-chain `FOR UPDATE` and database invariants are evidenced; optional `SERIALIZABLE` results do not replace them."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/theMarshal-Core-Rust/conformance/WP01-ACCEPTANCE-MATRIX.md",
+      "sha256": "5d24a59a4d0af04a9a4079856d13e443e3e9377155f21bca21ab7b663f7db8dd",
+      "byte_count": 5751,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 8,
+          "text": "| Contract completeness | u16 event codes 1/2 frozen with 0 prohibited and all other v1 codes rejected/reserved; exact closed 9-pair genesis and 6-or-7-pair lifecycle payload maps; writer-minted time, digest formula, Unicode pin, locking/invariants, retention boundary, transitions, diagnostics and precedence frozen; no unreviewed adapter mapping |"
+        },
+        {
+          "line": 14,
+          "text": "| PostgreSQL append | per-chain `FOR UPDATE`; database invariants; atomic entry/head/receipt/outbox; idempotent lost-ack recovery; writer-minted `occurred_at` |"
+        },
+        {
+          "line": 23,
+          "text": "| Independent review | security/invariant review separate from implementing lanes |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/theMarshal-Core-Rust/docs/coding-agent-handoffs/WP01-STATE-AUTHORITY-CONTRACTS.md",
+      "sha256": "97216677f24e5f4e3ab7e12130dcb9029789e9c6ff3b6d0f8cbeb1c7b31e6d89",
+      "byte_count": 3184,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 31,
+          "text": "structured reason classes, activation-context invariants, checked revisions, and"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/theMarshal-Core-Rust/specifications/DIAGNOSTIC-REGISTRY-CANDIDATE.md",
+      "sha256": "06560bec4cc1cc68a71296b01eee5902df671e86ade46332462c2e4571d62164",
+      "byte_count": 3875,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 85,
+          "text": "9. internal invariant failure."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/theMarshal-Core-Rust/specifications/EVD-002-LOGICAL-RECORD-CANDIDATE.md",
+      "sha256": "8f1357f047d47b438cd1c4057df36332af4a5cb1b80b622b5d3f7ff237e8208f",
+      "byte_count": 10171,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 117,
+          "text": "## PostgreSQL serialization and invariants"
+        },
+        {
+          "line": 119,
+          "text": "A prospective PostgreSQL writer uses a per-chain `SELECT ... FOR UPDATE` lock as the normative minimum; global locking is prohibited. Database constraints, uniqueness, foreign keys, immutable-entry privileges/triggers, byte-length checks, sequence/head/count consistency, and idempotency receipt invariants are part of the correctness proof. `SERIALIZABLE` may be used defensively but is not required to replace the per-chain lock and invariants."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/theMarshal-Core-Rust/specifications/MARSHAL-STATE-MACHINE-CANDIDATE.md",
+      "sha256": "6b3a6dc412b0374ba82bd8d533e14b932aff977609154607d8635b9ba03272a2",
+      "byte_count": 6461,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 99,
+          "text": "## Concurrency invariants"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/product-audit/theMarshal-Core-Rust/specifications/POSTGRESQL-AUTHORITY-CANDIDATE.md",
+      "sha256": "b5584c977309c96f25418979dab495e111f534fd289e6173233c4f72e036e409",
+      "byte_count": 6314,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 20,
+          "text": "Per-chain row locking with `SELECT ... FOR UPDATE`, plus the stated database invariants, is the normative minimum. `SERIALIZABLE` may be used as a defensive or measured profile, but it does not replace the per-chain lock and invariants. Independent chains MUST NOT be globally serialized. Revocation and kill changes use the same authority-domain serialization boundary so an append cannot commit across an effective boundary."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/reports/AUDIT-KOSMOS-MARSHAL.md",
+      "sha256": "1743bded6dafbe819533438c44dacb5a0016941193e487d41c02190dde05f481",
+      "byte_count": 38772,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 133,
+          "text": "- `marshal-core-contracts`: distinct component and runtime lifecycle types/matrices, revision and refusal invariants; durable-root/state-class/receipt contracts."
+        },
+        {
+          "line": 191,
+          "text": "| Kosmos `npm run verify` | First sandbox run typecheck PASS, esbuild path read Access denied. Approved exact rerun exit 0: typecheck, full build, 283 tests PASS/0 fail/0 skip, version/lock/artifact/invariant/renderer-provenance checks PASS. |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/reports/ORCHESTRATOR-VERIFICATION.md",
+      "sha256": "8523beaf347985f1c4c4494301a184f367deb3b45904fdc5f26326c76127df68",
+      "byte_count": 9994,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 52,
+          "text": "Root then found an additional source discrepancy: r4 refers to eight documentation invariants, while current proposed GKOS-DOCSTD-001 lists seven. Q-INTENT records the unresolved exact checklist/adoption question. No eighth item was invented."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/reports/RUST-MIGRATION-PARITY-MATRIX.md",
+      "sha256": "976b570069492581a111aa470b3834a29380c0766c96a4bdca324195c756c730",
+      "byte_count": 28519,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 109,
+          "text": "| `migration/recovery-cut-map.json` | TS ingest/watch/FX fault locations, old/new state invariant, archive/receipt expectations, OS durability limits, paired Rust test IDs | No actual source write, host service or authority appointment |"
+        },
+        {
+          "line": 115,
+          "text": "## 8. Marshal exclusion and ownership invariants"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/sources/GKOS-RUST-UPLIFT-R4-2026-08-27.md",
+      "sha256": "e0a82edfd4d1c4845366cf059eb9b951cf5cdc8409a5ab6bfcec2ff45f07bc54",
+      "byte_count": 47807,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 450,
+          "text": "4. Run the eight-invariant documentation intent gate and update `DIVERGENCES.md`, `TRACEABILITY.md`, stability promises, migration guides, and third-party notices."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/contracts/database/v1/POSTGRESQL-LEDGER-PROFILE.md",
+      "sha256": "a0fb75d9957d972f3ba6210145373f5afb5c887ca6664b2184ec9730d5251c2c",
+      "byte_count": 17202,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 118,
+          "text": "This neutral chain is compatible with EVD-002's hash-chain receipt invariants;"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/contracts/fixtures/v1/PHASE-A-FIXTURE-CONTRACT.md",
+      "sha256": "161fa2e68e5fcb312f8c034d66d7f4846de235e77be9b3a8522b95c036f14a8f",
+      "byte_count": 1810,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 26,
+          "text": "invariants. Their declared oracle is not executable adjudication logic. A consumer"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/contracts/governance/GKOS-Hindsight-Dream-Governance-Demonstrator.md",
+      "sha256": "e099b9736b5e054b87d351a15675862c98e4d64b8a75d387a04e3971ef828466",
+      "byte_count": 34966,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 60,
+          "text": "### 3.2 Non-negotiable invariants"
+        },
+        {
+          "line": 322,
+          "text": "PRIORITY_HUMAN_REVIEW is the default priority lane. A separately certified bounded class may later be resolved by the ratified security-and-governance agent quorum described in Section 10. That exception does not expand auto-admission, activate prohibited actions, or bypass the non-negotiable invariants in Section 3.2."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/contracts/hindsight/v1/HINDSIGHT-OPERATION-COMPATIBILITY.md",
+      "sha256": "1275ba7040af8fd3ad43d7de173631079a4708f746488cb29258273b6324b72f",
+      "byte_count": 8950,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 8,
+          "text": "The canonical machine-readable profile is `fixtures/conformance/hindsight-v1/operation-profile-v1.json`. It binds exact HTTP methods, paths, request fields, response fields, status codes, semantic invariants, and deployment security conditions. Unknown surfaces fail closed and have no authority effect."
+        },
+        {
+          "line": 70,
+          "text": "## Semantic invariants"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/docs/ARCHITECTURE.md",
+      "sha256": "8f525628bebcbe3df17bdd8d7db05d7f944ccad97dff948e589bc8293c9d68e1",
+      "byte_count": 11209,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 124,
+          "text": "| Threat/failure | 111 cases and 17 invariants; 60 static contract cases, 10 bounded PostgreSQL default-deny cases, 41 unrun behaviors | `NONE` |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/docs/R2-SECTION-3-REPORT.md",
+      "sha256": "45d91b72b807ea14a05a5563ac8ca07eb931a430845fd166c9300f3e13e51cf0",
+      "byte_count": 12251,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 175,
+          "text": "  its append-only hash-chain receipt invariants but deliberately does not rename"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/docs/R2-SECTION-4-THREAT-FAILURE-REPORT.md",
+      "sha256": "1287c648727567594f957da0c47fecc56a81186ec8ff39490ac85578d48788b5",
+      "byte_count": 4454,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 16,
+          "text": "  seventeen named invariants, deterministic fail-closed lane/state requirements,"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/docs/R2-SECTION-5-SEMANTIC-COHERENCE-REPORT.md",
+      "sha256": "6c207a986b96ed4f2294eb298a5429a55a7e7c370624acb5878d3ebb4588e72f",
+      "byte_count": 6945,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 36,
+          "text": "  result/reason pairing, hash binding, and receipt authority invariant."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/docs/R2-SECTION-6-PHASE-A-FIXTURES-REPORT.md",
+      "sha256": "6431fe64918a045d0c925eaf0d71996dc0ee213c3b254c1b8a5a37111fb2ec36",
+      "byte_count": 7749,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 61,
+          "text": "The governed oracle for each case is a set of declared invariants, not executable"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/docs/sol-reports/R2-EVD-002-INDEPENDENT-AUDIT-2026-08-27.md",
+      "sha256": "813bbe9757d457ddc5a57eaf8cd36e75faeda100c9a271ef6812bd1eb71b719e",
+      "byte_count": 12347,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 85,
+          "text": "Those identities and implementation choices must not be imported into the Hindsight PostgreSQL ledger by implication. The target `contracts/database/v1/POSTGRESQL-LEDGER-PROFILE.md:118-121` correctly describes compatibility with EVD-002 invariants while declining to reuse the Python-specific Marshal schema."
+        },
+        {
+          "line": 121,
+          "text": "3. States that Hindsight reuses only append-only sequence, predecessor-hash, canonicalization, verification, and checkpoint invariants."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/fixtures/public-synthetic/README.md",
+      "sha256": "ac64ba4809ce27e0173ba7077a8631a454935ff52ed33ad6c0a45abc5798a072",
+      "byte_count": 1503,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 20,
+          "text": "The governed results are declared invariants, not outputs from a reference"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/governance/specifications/GKOS-Hindsight-Dream-Governance-Demonstrator.md",
+      "sha256": "e099b9736b5e054b87d351a15675862c98e4d64b8a75d387a04e3971ef828466",
+      "byte_count": 34966,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 60,
+          "text": "### 3.2 Non-negotiable invariants"
+        },
+        {
+          "line": 322,
+          "text": "PRIORITY_HUMAN_REVIEW is the default priority lane. A separately certified bounded class may later be resolved by the ratified security-and-governance agent quorum described in Section 10. That exception does not expand auto-admission, activate prohibited actions, or bypass the non-negotiable invariants in Section 3.2."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/archive/illustrated/GKOS-v0.76-Illustrated-Edition.md",
+      "sha256": "ea579da035ab6c1830658e4e0863dcbdc81a0fe6b95cd35c4cd079c49448c4c5",
+      "byte_count": 24387,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 147,
+          "text": "A conformance claim requires a machine-readable manifest, human-readable report, exact GKOS release, test-suite version, evidence, limitations, exceptions, and assessment type. Self-attestation and independent verification MUST be distinguished. Executable GKOS-TS and complete OKP-CH semantic-invariant suites remain incomplete in v0.76; claims remain provisional and MUST disclose coverage."
+        },
+        {
+          "line": 158,
+          "text": "> The first executable GKOS-TS slice now exists: an adapter-neutral runner plus fixture catalog 0.1.0 in the repository's conformance/ and fixtures/ directories, emitting claims that validate against the conformance-manifest schema. Run it, publish the claim with your known divergences listed, and you are ahead of the disclosure bar most software never reaches. For disclosure: flat YAML is one valid answer, not the mandated one — the invariant is “ordinary editing cannot silently corrupt governance structure.”"
+        },
+        {
+          "line": 167,
+          "text": "> “Fails closed to a restricted default” has teeth: pick the default deliberately, write it in your machine-readable invariants, and test it — fixture GCP1-B01 exists precisely because a reference implementation was found defaulting to internal while its own invariants file declared secret. Separate read tokens from write authorization at the API layer, and make above-ceiling targets indistinguishable from nonexistent ones."
+        },
+        {
+          "line": 186,
+          "text": "Each layer contract defines purpose, accepted inputs, required operations, outputs, preserved invariants, authority boundary, prohibited behavior, failure behavior, receipts, and re-entry rules. Blocking invariants: L1 revision and provenance preserved; L2 stable identity (filename is not identity); L3 typed, sourced, temporal, scoped relationships; L4 mandatory failures block promotion; L5 authorized append-only disposition; L6 reproducible purpose-bound presentation; L7 action linked to context and authority. Upper-layer results returning to the corpus MUST enter as new Layer-1 sources."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/archive/standard/00_GKOS_Master_Standard_pre_gkx2.md",
+      "sha256": "c7c99cc268f7767b8274618a84188187eddce078d58cea80dfab5488e265b0a0",
+      "byte_count": 13646,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 147,
+          "text": "A conformance claim requires a machine-readable manifest, human-readable report, exact GKOS release, test-suite version, evidence, limitations, exceptions, and assessment type. Self-attestation and independent verification MUST be distinguished. Executable GKOS-TS and complete OKP-CH semantic-invariant suites remain incomplete in v0.76; claims remain provisional and MUST disclose coverage."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/archive/TECHNICAL_README_pre_gkx2.md",
+      "sha256": "bb6ed8d11394920d24d23586eaf9263e42a1b6b84698da8f6b8be539b1c16779",
+      "byte_count": 20071,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 34,
+          "text": "responsibilities, artifacts, invariants, authority boundaries, failure"
+        },
+        {
+          "line": 55,
+          "text": "A conforming design preserves these invariants:"
+        },
+        {
+          "line": 80,
+          "text": "| Layer | Accepted responsibility | Minimum governed output | Invariant |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/decisions/R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+      "sha256": "994c407fb0d9df7ea78b95095efe502b9503125723069acf67a90a8d22a2c1b5",
+      "byte_count": 8362,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 100,
+          "text": "- `GKOS-REENTRY-002`: cross-cutting standing invariant."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/docs/directives/GKOS-DIRECTIVE-STD-079-r4.md",
+      "sha256": "de4a67deffccca4f6630b378e314a78ef936808bf9ad8a50ef88610d02b9c097",
+      "byte_count": 4542,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "## 0. Controlling invariants"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/docs/GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+      "sha256": "8192b86e99499e14caff20ece35ed31322eb89b6c24f3565fd161738513c7c6b",
+      "byte_count": 8538,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 63,
+          "text": "The export must declare every GKOS field or invariant that cannot be represented."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/docs/implementation/GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+      "sha256": "ea152f8d6dba2f4d5af4d15ff000dcb6f029a92546f25cc57765a6b99beb003a",
+      "byte_count": 2405,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 38,
+          "text": "- Keep NAV-001 presentation informative; promote only registered invariant"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+      "sha256": "e3a95224575d5614beed1fa4e958ab4b89e73a0a627e2e15522432edc656c0e6",
+      "byte_count": 4926,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 56,
+          "text": "preserves all applicable accepted invariants:"
+        },
+        {
+          "line": 58,
+          "text": "| Invariant | Controlling source | Failure condition |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/docs/proposals/SRTP_DRAFT_TRACEABILITY.md",
+      "sha256": "9034a0c29700994010f9069a929d4a68d6d880c8511bd8d243927d68d03859e5",
+      "byte_count": 2876,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 15,
+          "text": "| raise-only sensitivity invariant | `sensitivity`, `derived_sensitivity`, context/use/receipt propagation | `SRTP-P01` | `SRTP-N09` |"
+        },
+        {
+          "line": 16,
+          "text": "| purpose-bound context invariant | context ID/digest, purpose, recipient, versions, warnings, omissions, expiry | `SRTP-P01` | `SRTP-N10` |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/docs/reviews/2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+      "sha256": "b3356ee8623b5c32c7439eb2bdcee5cc2dba7986ef503b1aef3dad16732affda",
+      "byte_count": 8659,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 81,
+          "text": "5. Apply the ratified intent invariants: authority separation (R2), visible and"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/requirements/PROFILE_APPLICABILITY.md",
+      "sha256": "52386a56a6920bc4ec79cdf19f47ba62c4413f0a28fa4ea847d72cda18079eb1",
+      "byte_count": 3676,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 34,
+          "text": "| GKOS-REENTRY-002 | Cross-cutting standing invariant affecting later consumption |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/requirements/REGISTRY.md",
+      "sha256": "81d8898f9a294db69a8920d0fcefb674da692093e4c14d85320f1d344555e862",
+      "byte_count": 20402,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 105,
+          "text": "| `GKOS-REENTRY-002` | Cross-cutting standing invariant |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/standard/annexes/Layer_Interface_Contracts.md",
+      "sha256": "b50030f06275dcdfde04740260377e5adf5dd98cd0fee4189db6e104c85c64e6",
+      "byte_count": 2041,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 4,
+          "text": "outputs, preserved invariants, authority boundary, prohibited behavior, failure"
+        },
+        {
+          "line": 7,
+          "text": "| Layer | Required result | Blocking invariant |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard-r18/TECHNICAL_README.md",
+      "sha256": "6688c8ff1dab5234bca8046097bc8093222a99ee5f2201a530fbc32a03548526",
+      "byte_count": 16372,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 111,
+          "text": "GKOS specifies the governance invariants; it does not mandate one “governance"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/archive/illustrated/GKOS-v0.76-Illustrated-Edition.md",
+      "sha256": "ea579da035ab6c1830658e4e0863dcbdc81a0fe6b95cd35c4cd079c49448c4c5",
+      "byte_count": 24387,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 147,
+          "text": "A conformance claim requires a machine-readable manifest, human-readable report, exact GKOS release, test-suite version, evidence, limitations, exceptions, and assessment type. Self-attestation and independent verification MUST be distinguished. Executable GKOS-TS and complete OKP-CH semantic-invariant suites remain incomplete in v0.76; claims remain provisional and MUST disclose coverage."
+        },
+        {
+          "line": 158,
+          "text": "> The first executable GKOS-TS slice now exists: an adapter-neutral runner plus fixture catalog 0.1.0 in the repository's conformance/ and fixtures/ directories, emitting claims that validate against the conformance-manifest schema. Run it, publish the claim with your known divergences listed, and you are ahead of the disclosure bar most software never reaches. For disclosure: flat YAML is one valid answer, not the mandated one — the invariant is “ordinary editing cannot silently corrupt governance structure.”"
+        },
+        {
+          "line": 167,
+          "text": "> “Fails closed to a restricted default” has teeth: pick the default deliberately, write it in your machine-readable invariants, and test it — fixture GCP1-B01 exists precisely because a reference implementation was found defaulting to internal while its own invariants file declared secret. Separate read tokens from write authorization at the API layer, and make above-ceiling targets indistinguishable from nonexistent ones."
+        },
+        {
+          "line": 186,
+          "text": "Each layer contract defines purpose, accepted inputs, required operations, outputs, preserved invariants, authority boundary, prohibited behavior, failure behavior, receipts, and re-entry rules. Blocking invariants: L1 revision and provenance preserved; L2 stable identity (filename is not identity); L3 typed, sourced, temporal, scoped relationships; L4 mandatory failures block promotion; L5 authorized append-only disposition; L6 reproducible purpose-bound presentation; L7 action linked to context and authority. Upper-layer results returning to the corpus MUST enter as new Layer-1 sources."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/archive/standard/00_GKOS_Master_Standard_pre_gkx2.md",
+      "sha256": "c7c99cc268f7767b8274618a84188187eddce078d58cea80dfab5488e265b0a0",
+      "byte_count": 13646,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 147,
+          "text": "A conformance claim requires a machine-readable manifest, human-readable report, exact GKOS release, test-suite version, evidence, limitations, exceptions, and assessment type. Self-attestation and independent verification MUST be distinguished. Executable GKOS-TS and complete OKP-CH semantic-invariant suites remain incomplete in v0.76; claims remain provisional and MUST disclose coverage."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/archive/TECHNICAL_README_pre_gkx2.md",
+      "sha256": "bb6ed8d11394920d24d23586eaf9263e42a1b6b84698da8f6b8be539b1c16779",
+      "byte_count": 20071,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 34,
+          "text": "responsibilities, artifacts, invariants, authority boundaries, failure"
+        },
+        {
+          "line": 55,
+          "text": "A conforming design preserves these invariants:"
+        },
+        {
+          "line": 80,
+          "text": "| Layer | Accepted responsibility | Minimum governed output | Invariant |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/decisions/R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+      "sha256": "994c407fb0d9df7ea78b95095efe502b9503125723069acf67a90a8d22a2c1b5",
+      "byte_count": 8362,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 100,
+          "text": "- `GKOS-REENTRY-002`: cross-cutting standing invariant."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/docs/directives/GKOS-DIRECTIVE-STD-079-r4.md",
+      "sha256": "de4a67deffccca4f6630b378e314a78ef936808bf9ad8a50ef88610d02b9c097",
+      "byte_count": 4542,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "## 0. Controlling invariants"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/docs/GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+      "sha256": "8192b86e99499e14caff20ece35ed31322eb89b6c24f3565fd161738513c7c6b",
+      "byte_count": 8538,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 63,
+          "text": "The export must declare every GKOS field or invariant that cannot be represented."
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/docs/implementation/GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+      "sha256": "ea152f8d6dba2f4d5af4d15ff000dcb6f029a92546f25cc57765a6b99beb003a",
+      "byte_count": 2405,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 38,
+          "text": "- Keep NAV-001 presentation informative; promote only registered invariant"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+      "sha256": "e3a95224575d5614beed1fa4e958ab4b89e73a0a627e2e15522432edc656c0e6",
+      "byte_count": 4926,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 56,
+          "text": "preserves all applicable accepted invariants:"
+        },
+        {
+          "line": 58,
+          "text": "| Invariant | Controlling source | Failure condition |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/docs/proposals/SRTP_DRAFT_TRACEABILITY.md",
+      "sha256": "9034a0c29700994010f9069a929d4a68d6d880c8511bd8d243927d68d03859e5",
+      "byte_count": 2876,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 15,
+          "text": "| raise-only sensitivity invariant | `sensitivity`, `derived_sensitivity`, context/use/receipt propagation | `SRTP-P01` | `SRTP-N09` |"
+        },
+        {
+          "line": 16,
+          "text": "| purpose-bound context invariant | context ID/digest, purpose, recipient, versions, warnings, omissions, expiry | `SRTP-P01` | `SRTP-N10` |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/docs/reviews/2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+      "sha256": "b3356ee8623b5c32c7439eb2bdcee5cc2dba7986ef503b1aef3dad16732affda",
+      "byte_count": 8659,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 81,
+          "text": "5. Apply the ratified intent invariants: authority separation (R2), visible and"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/requirements/PROFILE_APPLICABILITY.md",
+      "sha256": "b3650fef5d1eca73d9a342c4639aa10440a4adb5eb25c78edf4abd3101c444d2",
+      "byte_count": 3516,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 34,
+          "text": "| GKOS-REENTRY-002 | Cross-cutting standing invariant affecting later consumption |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/requirements/REGISTRY.md",
+      "sha256": "266002e62dadf6d69c4d89b066b4b51faae975976ca2233ead0d1936a240b447",
+      "byte_count": 18013,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 98,
+          "text": "| `GKOS-REENTRY-002` | Cross-cutting standing invariant |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/standard/annexes/Layer_Interface_Contracts.md",
+      "sha256": "b50030f06275dcdfde04740260377e5adf5dd98cd0fee4189db6e104c85c64e6",
+      "byte_count": 2041,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 4,
+          "text": "outputs, preserved invariants, authority boundary, prohibited behavior, failure"
+        },
+        {
+          "line": 7,
+          "text": "| Layer | Required result | Blocking invariant |"
+        }
+      ]
+    },
+    {
+      "path": "2026-08-31/standard-audit/gkos-standard/TECHNICAL_README.md",
+      "sha256": "13193869984aabf3b2534cafb3674327cf137a4e3f5a96623edb48dcbeaa4315",
+      "byte_count": 29768,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 111,
+          "text": "GKOS specifies the governance invariants; it does not mandate one “governance"
+        }
+      ]
+    },
+    {
+      "path": "GKOS-ECOSYSTEM-TS-FIRST-RUST-ROADMAP.md",
+      "sha256": "cd7e57d93b714f481bcd3f446332abca73d93e0605af0a4351804155ef267670",
+      "byte_count": 75607,
+      "match_count": 7,
+      "matches": [
+        {
+          "line": 43,
+          "text": "| Q-INTENT | Reconcile r4's eight-invariant intent-gate reference with the seven-row, still-proposed GKOS-DOCSTD-001 checklist found at current Standard main. Confirm the intended exact checklist/eighth item or amend the reference; do not fabricate an eighth invariant or report eight checks passed. | R4-0 source closure; R4-12 documentation gate |"
+        },
+        {
+          "line": 216,
+          "text": "Exit: the two current probes become red-then-green correctness tests; all affected consumers pass equivalent tests; canonical output/citation/ref invariants and resource limits are rechecked. Synthetic preconditions and live applicability remain clearly stated."
+        },
+        {
+          "line": 301,
+          "text": "Priority: stability-critical, enabled only after authority/host gates. Synthetic reconciliation depends on T00's scoped contract/change inventory, relevant T01 freshness invariants and the specific authority/ownership interfaces in Q-EFFECTS. It does not wait for unrelated provider settings, safe-diagnostic UI or the real FAC canary inventory. Any real-vault application separately requires T04's exact reviewed plan and Q-LIVE approval."
+        },
+        {
+          "line": 332,
+          "text": "Exit: all in-scope provider/data/graph capabilities operate through the claimed runtime, have negative tests and supported-platform evidence, and preserve governance invariants."
+        },
+        {
+          "line": 422,
+          "text": "Gate: injected crash/partial write/corrupt state/alias/concurrent scan cases refuse or recover deterministically. Same-generation mutation invariants from T01 apply to the Rust host too. An observed source deletion removes only the reconciled operational projection; it does not prove semantic supersession or authorized disposition."
+        },
+        {
+          "line": 468,
+          "text": "r4 calls this an eight-invariant gate. Root located [GKOS-DOCSTD-001 at the audited Standard SHA](https://github.com/Odenknight/gkos-standard/blob/71b899473473f47172b181973027f3eb7da25104/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md), which is marked proposed/non-normative and lists seven rows: receipt/grant-based authority; preserved contradictions/history; deterministic disclosed mandatory checks; specialization without authority transfer; fail-closed sensitivity; implementation evidence not automatically amending the Standard; and path-independent identity. Reconcile that seven/eight and adoption discrepancy in Q-INTENT/R4-0. Preserve the accepted underlying invariants, but do not invent the missing eighth item or claim this proposed checklist is already a ratified normative artifact."
+        },
+        {
+          "line": 613,
+          "text": "2. Implement T01's shared reference and cursor invariants with red-then-green tests; independently verify the exact fixes."
+        }
+      ]
+    },
+    {
+      "path": "integration/engine-superseded-20260831/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "integration/engine-superseded-20260831/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "integration/engine-superseded-20260831/docs/citations.md",
+      "sha256": "d912cab314287a51d2212b00c603f6d535397cee597029d758e641f3ad9ecadd",
+      "byte_count": 4329,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "manifest and projection-digest invariants."
+        }
+      ]
+    },
+    {
+      "path": "integration/engine-superseded-20260831/evidence/2026-08-21-functional-uplift-phase-2.md",
+      "sha256": "1195188c7a4237c5ad411ef4e920833163158f6c1359bca27e7ebc0fc8b5ac67",
+      "byte_count": 16300,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 81,
+          "text": "- strict candidate/provenance invariants and schema-3 reopen verification,"
+        },
+        {
+          "line": 97,
+          "text": "  invariant, so denied source text is never sent to a configured provider and"
+        },
+        {
+          "line": 204,
+          "text": "  candidates, vector conflict invariants, FTS key bijection/tokenizer binding,"
+        }
+      ]
+    },
+    {
+      "path": "integration/engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "integration/engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "integration/engine/docs/citations.md",
+      "sha256": "d912cab314287a51d2212b00c603f6d535397cee597029d758e641f3ad9ecadd",
+      "byte_count": 4329,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "manifest and projection-digest invariants."
+        }
+      ]
+    },
+    {
+      "path": "integration/engine/evidence/2026-08-21-functional-uplift-phase-2.md",
+      "sha256": "1195188c7a4237c5ad411ef4e920833163158f6c1359bca27e7ebc0fc8b5ac67",
+      "byte_count": 16300,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 81,
+          "text": "- strict candidate/provenance invariants and schema-3 reopen verification,"
+        },
+        {
+          "line": 97,
+          "text": "  invariant, so denied source text is never sent to a configured provider and"
+        },
+        {
+          "line": 204,
+          "text": "  candidates, vector conflict invariants, FTS key bijection/tokenizer binding,"
+        }
+      ]
+    },
+    {
+      "path": "integration/INTEGRATION-REVIEW.md",
+      "sha256": "6abe535b8f158a6363ecbef323371b8fa8710b8f1f8d709048d8e6a87af5b532",
+      "byte_count": 14050,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 82,
+          "text": "| Q-INTENT | **OWNER DECISION RECORDED; EXACT-SHA HOSTED CI PASS** | R19 prospectively supplies and adopts the previously undefined eighth position: “Every committed governed state change is durably receipted.” The decision traces normative provenance to R15-104/105 and `GKOS-RECEIPT-001`/`003`, with STD-079 r4 invariants 3–4 as directive provenance. It adopts only the eight-row DOCSTD §4 procedure and does not rewrite R4 history. Checklist definition and hosted validation are resolved; pull-request integration, the actual eight-check gate execution, publication, and release qualification remain pending. |"
+        },
+        {
+          "line": 85,
+          "text": "## Known invariant sources"
+        },
+        {
+          "line": 87,
+          "text": "The exhaustive authority-layered catalog is `orchestration/integration/receipts/KNOWN-INVARIANTS-CATALOG.md`. Its deterministic index covers 205 Markdown paths and 85 unique contents; validation passed 127 exact source/line/text citations, all 17 Hindsight machine invariant statements, and all 41 draft database cases."
+        },
+        {
+          "line": 89,
+          "text": "The principal sets are: the R19-adopted, unpublished eight-position DOCSTD §4 documentation-intent procedure; ten owner-approved STD-079 r4 controlling invariants; seven normative layer blocking invariants; 62 atomic Standard registry records with 28 stable negative gate mappings; two provisional SRTP invariants; ten ratified Hindsight build-specification invariants; 17 draft Hindsight failure-matrix invariants; 41 draft database cases; current Engine freshness/reference candidate invariants; Kosmos security, renderer, and cosmology implementation invariants; Lite parity/reopen invariants; and candidate-only Marshal concurrency, database, and ownership constraints. Repeated copies and test descriptions do not create additional authority."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/.github/pull_request_template.md",
+      "sha256": "bd41f18b89da040a7b471cbaf4a04b4110fcc782c2eb6185de327a9a84406600",
+      "byte_count": 987,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 7,
+          "text": "- [ ] `npm run verify` passes locally (typecheck, build, tests, version/artifact/invariant checks)."
+        },
+        {
+          "line": 12,
+          "text": "- [ ] `kosmos-invariants.yml` still holds (security defaults, read-only API, sandbox, no `\"latest\"` deps)."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/BUILD-DIRECTIVE-v0.5.5.md",
+      "sha256": "bd454a34a5cf023d9e2ef39b98c9fa048dfa0f75b8400522e925dd0f6bffea4a",
+      "byte_count": 35645,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 758,
+          "text": "Do not promise mathematically impossible universal zero-overlap unless an invariant is actually proven."
+        },
+        {
+          "line": 1559,
+          "text": "unless proven as an invariant."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/CHANGELOG.md",
+      "sha256": "080abae1f4032f76f65ee340f27c56331fbf73e37f177d9b7261c0d6f11be35a",
+      "byte_count": 44972,
+      "match_count": 5,
+      "matches": [
+        {
+          "line": 278,
+          "text": "- 187-test suite (unit, round-trip, settings UI, invariants) plus"
+        },
+        {
+          "line": 279,
+          "text": "  `check:versions`, `check:artifacts`, `check:invariants`,"
+        },
+        {
+          "line": 283,
+          "text": "  feasibility, governance invariants, capture ergonomics) whose findings are"
+        },
+        {
+          "line": 642,
+          "text": "- **Mass-weighted elliptical orbits + sibling perturbation** — orbits now *feel* gravity-anchored. Each body traces a Kepler-inspired ellipse whose eccentricity depends on the body's own mass (heavier notes ride more circular orbits; lighter, isolated ones swing more), and its speed scales with the parent's mass (`sqrt(mass/ref)` — heavier hubs pull their satellites faster). The heaviest sibling in a system exerts a small along-orbit tug (theta jitter, capped at ~8°). Apoapsis is pinned to the original |ov| — max radius stays within the layout's collision-safe packing, so no new intersections. Fully deterministic (hash-based jitter only); t=0 position exactly matches the layout position (no visual jump when the loop starts). Six new orbit invariants in `test/cosmology.test.mjs`."
+        },
+        {
+          "line": 656,
+          "text": "- Reproducibility double-build CI job; `SHA256SUMS` + `BUILD-INFO.json` release provenance; `kosmos-invariants.yml` policy with `check:invariants`; Dependabot; pinned toolchain + committed `package-lock.json`."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/CONTRIBUTING.md",
+      "sha256": "0ad957ac9ed10fdb1bde0fc1e424ae5424c2fefc02f7cf903d603f7d8ab131ca",
+      "byte_count": 3926,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 12,
+          "text": "npm run verify     # typecheck + build + test + version/artifact/invariant checks"
+        },
+        {
+          "line": 25,
+          "text": "- Security-relevant changes keep `npm run check:invariants` green (see"
+        },
+        {
+          "line": 26,
+          "text": "  `kosmos-invariants.yml`)."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/assessments/Detailed_Recommended_Changes.md",
+      "sha256": "9ce42085602f5c0af94d40259e70472841c137270fcc30c7dc5af055b1d6877e",
+      "byte_count": 43401,
+      "match_count": 5,
+      "matches": [
+        {
+          "line": 836,
+          "text": "The existing test harness reportedly contains 33 checks against a stub Obsidian environment. A raw test count does not show which invariants are covered or which high-risk paths remain untested."
+        },
+        {
+          "line": 853,
+          "text": "| Vault mutation | Unknown | Unknown | Unknown | before/after filesystem invariant | High |"
+        },
+        {
+          "line": 871,
+          "text": "Prioritize tests that protect stable security invariants:"
+        },
+        {
+          "line": 886,
+          "text": "- Every high-priority security invariant has at least one negative test."
+        },
+        {
+          "line": 1326,
+          "text": "**Exit gate:** Stable security invariants are documented and enforced by negative tests."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/assessments/Engineering_Assurance_Guide.md",
+      "sha256": "1e25771cfcdcfc0ed53a668dfdc048cc72d487137a24e5becadb8c7f99f95511",
+      "byte_count": 26631,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 42,
+          "text": "These disciplines are important for human reviewers and even more important for AI agents. An agent can execute checks consistently, but it requires explicit invariants, deterministic commands, machine-readable evidence, and unambiguous failure conditions."
+        },
+        {
+          "line": 644,
+          "text": "  +--> invariant"
+        },
+        {
+          "line": 655,
+          "text": "Invariant: Server startup rejects LAN + no-token configuration."
+        },
+        {
+          "line": 763,
+          "text": "## 6.4 Example invariant file"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/BUILD-DIRECTIVE.md",
+      "sha256": "bd454a34a5cf023d9e2ef39b98c9fa048dfa0f75b8400522e925dd0f6bffea4a",
+      "byte_count": 35645,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 758,
+          "text": "Do not promise mathematically impossible universal zero-overlap unless an invariant is actually proven."
+        },
+        {
+          "line": 1559,
+          "text": "unless proven as an invariant."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/GKOS-ENGINE-DEFINITIONS.md",
+      "sha256": "c9ed1eaf9a0a06e909474fff8fd3069ebc60822e66b97a46586e67ce09a12ca0",
+      "byte_count": 35085,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 446,
+          "text": "proposals, never in-place edits); `kosmos-invariants.yml`"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/GKX-23-OBSIDIAN-ENGINE-REDESIGN.md",
+      "sha256": "8ce0ccd08e4ce0f33fa95383c8e6513687952dc97114449b502da2dc59b8b73c",
+      "byte_count": 20472,
+      "match_count": 6,
+      "matches": [
+        {
+          "line": 4,
+          "text": "the beta.12 codebase, the Obsidian platform, and the GKX 2.3 / GKOS invariants)"
+        },
+        {
+          "line": 207,
+          "text": "  origin-separation invariant."
+        },
+        {
+          "line": 221,
+          "text": "Landing it requires amending `kosmos-invariants.yml` (`api_write_routes:"
+        },
+        {
+          "line": 222,
+          "text": "proposals-inbox-only`), `scripts/check-invariants.mjs`, and THREAT-MODEL.md in the"
+        },
+        {
+          "line": 223,
+          "text": "same change — the CI invariant is a feature, not an obstacle. Fail-closed sensitivity"
+        },
+        {
+          "line": 294,
+          "text": "8. Opt-in proposal ingress (propose-scoped token; invariants/threat-model amended in"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/navigation-effects/IMPLEMENTATION-HANDOFF.md",
+      "sha256": "ec793a1b6e06a201fcd2ff0ad4e8918ba8810397651f31a9d457c55b991ac63b",
+      "byte_count": 24504,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 551,
+          "text": "npm run check:invariants"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/navigation-effects/PACKET-B-WORKING-RESULT-20260827.md",
+      "sha256": "3ec19c16a9bab9300f63a0b4e7f8a42a3d648ad2d002ab4f4132ff9f483f996f",
+      "byte_count": 2885,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 34,
+          "text": "- `npm ci`, typecheck, build, version, lockfile, artifact, invariant,"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/navigation-effects/PACKET-C0-WORKING-RESULT-20260827.md",
+      "sha256": "5b0d341679a053d67e234aee97e495a2f8d03e004b04bbdd770609a48b248f73",
+      "byte_count": 2974,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 46,
+          "text": "  version, lockfile, artifact, invariant, and renderer-provenance checks."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/navigation-effects/QUALIFICATION-PLAN.md",
+      "sha256": "f2bddd4c8c2d3a12ed9ecce13883e85003145ef7a4b1681612071ae026d88890",
+      "byte_count": 23726,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 305,
+          "text": "npm run check:invariants"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/RELEASE-PROCESS.md",
+      "sha256": "538807886c88d3a25bdbd933ff8e6400e9f5406d87f1b7d7133c306b4c9c4130",
+      "byte_count": 2614,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 24,
+          "text": "2. `npm run verify` — typecheck + build + tests + version/lockfile/artifact/invariant checks."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/RENDERER-MIGRATION-r185.md",
+      "sha256": "43cd2e34a7b5b1367fda644749a4f99b91fe6cb335b19a4842c7a839935471b8",
+      "byte_count": 4208,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 64,
+          "text": "119 unit tests, version/artifact/invariant/renderer-provenance checks); the"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/docs/THREAT-MODEL.md",
+      "sha256": "f1ba3baf0fcef54b7ade0e7c6baacaa4a1974305a7c24a0ae5f5645839f5e650",
+      "byte_count": 8574,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 70,
+          "text": "| Silent security regression | `kosmos-invariants.yml` + `check:invariants` gate CI; negative security tests. |"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/Kosmos-Oden-Engineering-Review/CI-CD-AND-AGENT-OPERATING-DIRECTIVE.md",
+      "sha256": "ee340de184f2a442d308b15405362a7f36964d10daf8755863fd5ecf3a32496a",
+      "byte_count": 20344,
+      "match_count": 8,
+      "matches": [
+        {
+          "line": 52,
+          "text": "- machine-readable invariant checks;"
+        },
+        {
+          "line": 126,
+          "text": "| Primary/Planning Agent | Read issue, inspect architecture and invariants, define scope, risks, acceptance tests, affected surfaces | Must not silently expand scope |"
+        },
+        {
+          "line": 130,
+          "text": "| Security/Invariant Agent | Review sandbox, network, token, dependency, provenance, offline, and read-only boundaries | Must not treat an absence of a known CVE as proof of safety |"
+        },
+        {
+          "line": 148,
+          "text": "- protected invariants;"
+        },
+        {
+          "line": 176,
+          "text": "- Invariants at risk:"
+        },
+        {
+          "line": 309,
+          "text": "npm run check:invariants"
+        },
+        {
+          "line": 666,
+          "text": "  ci.yml                    # source, typecheck, unit, invariants"
+        },
+        {
+          "line": 692,
+          "text": "- protected invariants pass;"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/Kosmos-Oden-Engineering-Review/KOSMOS-ODEN-RENDERER-ASSESSMENT.md",
+      "sha256": "c989212f5fb27bb3eb1dafc2fc4600c7102889d75d6a7634f456a5b3666b022d",
+      "byte_count": 14408,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 20,
+          "text": "- CI-enforced invariants;"
+        },
+        {
+          "line": 183,
+          "text": "- a machine-readable invariant policy."
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/Kosmos-Oden-Engineering-Review/RENDERER-UPGRADE-BUILD-INSTRUCTIONS.md",
+      "sha256": "7551eb6a875f9a523b0a9be86e0cd7b47ef586675e42d89b834fcc6eaae02e22",
+      "byte_count": 14831,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 543,
+          "text": "npm run check:invariants"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/SECURITY.md",
+      "sha256": "3d812f638dbb10a33e600f19b46eb18bacf6433611d86f5d137f652ee2e0665f",
+      "byte_count": 2637,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 28,
+          "text": "These invariants are declared in [`kosmos-invariants.yml`](kosmos-invariants.yml)"
+        },
+        {
+          "line": 29,
+          "text": "and enforced by `npm run check:invariants` in CI:"
+        }
+      ]
+    },
+    {
+      "path": "integration/kosmos/TECHNICAL_README.md",
+      "sha256": "d91380d5bd1ec8e46bbd5d26ee136542f5f8fd61332f02099e7a4b84e235d790",
+      "byte_count": 34456,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 495,
+          "text": "- Build invariants check authentication defaults, listener rules, request caps,"
+        },
+        {
+          "line": 518,
+          "text": "| `npm run check:invariants` | Declared security and architecture invariants |"
+        },
+        {
+          "line": 520,
+          "text": "| `npm run verify` | Typecheck, full build, Node tests, and all invariant/artifact checks |"
+        },
+        {
+          "line": 530,
+          "text": "CI type-checks, builds, tests, checks invariants and provenance, performs"
+        }
+      ]
+    },
+    {
+      "path": "integration/lite/docs/evidence/phase-1-retrieval-core.md",
+      "sha256": "3db5d81ca4b7b47697bd65b3e48a7fecc86c9b46bc5b8d5335db82ece862b6eb",
+      "byte_count": 19298,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 105,
+          "text": "allowlist and semantic invariants prove stable UIDs, paths, sensitivity,"
+        }
+      ]
+    },
+    {
+      "path": "integration/lite/docs/evidence/phase-2-lineage-citations.md",
+      "sha256": "5351a4f4d2c926865784cee667d256973961bc6ed4f4b130c25fbb1c74bcddca",
+      "byte_count": 13779,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 73,
+          "text": "  bindings, and all immutable reopen invariants are verified. Schema 2 remains"
+        }
+      ]
+    },
+    {
+      "path": "integration/lite/rust/contracts/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "integration/lite/rust/contracts/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "integration/observatory/docs/ENGINE-AGENT-HANDOFF.md",
+      "sha256": "0cc0076804c9d1fe736fe520156da900eb63319105295223ac4a63bea38d3f63",
+      "byte_count": 10330,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 81,
+          "text": "6. **Snapshots/references:** audit same-generation mutation behavior across assess/validate/lineage and non-discovery cursors. Advertise only proven per-tool digest invariants. Catalog diff/payload digest remains a proposal, not implemented here."
+        }
+      ]
+    },
+    {
+      "path": "integration/observatory/docs/engine-builds/01-diagnostics-and-preflight.md",
+      "sha256": "710a5480732018887566da148a00e63d8bf2b0a68a5075ec2be873717ec8b8b4",
+      "byte_count": 8023,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 26,
+          "text": "   a successful empty search. Keep native refusal invariants unchanged."
+        }
+      ]
+    },
+    {
+      "path": "integration/observatory/docs/engine-builds/06-contract-and-release-hardening.md",
+      "sha256": "0024b0286e6484934d92184934ea0d8266a00d3b7c4e65fe7bed21af5d46ac21",
+      "byte_count": 8880,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 141,
+          "text": "  under a documented invariant. Do not label an untested hypothesis a fixed bug."
+        }
+      ]
+    },
+    {
+      "path": "integration/receipts/CONSUMER-INTEGRATION.md",
+      "sha256": "78baeda2ca3f4c137ff824f4540901fe8fef77cb32ebaf83a71959057ecac5d8",
+      "byte_count": 1959,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 12,
+          "text": "Kosmos `npm run verify` passed typecheck, build, 283 tests and all artifact/version/lock/invariant/provenance gates. The focused actual local browser run passed in Chromium and mobile Chromium, 2/2. Observatory build passed; native tests reported 39 total, 38 pass, zero fail, one explicit Windows Bash installer skip. Its local Chromium/WebGL fixture passed: two equal-label distinct IDs produced two renderer identities and bounded-state checks passed. That browser transport is synthetic SSE, not a deployed Engine."
+        }
+      ]
+    },
+    {
+      "path": "integration/receipts/Q-INTENT-EIGHTH-INVARIANT-INDEPENDENT-REVIEW.md",
+      "sha256": "77a77c721a4d5ac0643fde7d94667b7039b7ce65174a97c0a06a788f0f174f69",
+      "byte_count": 13267,
+      "match_count": 12,
+      "matches": [
+        {
+          "line": 1,
+          "text": "# Q-INTENT eighth-invariant independent technical review"
+        },
+        {
+          "line": 31,
+          "text": "   classifying STD-079 r4 invariants 3–4 as directive provenance."
+        },
+        {
+          "line": 49,
+          "text": "The DOCSTD Section 4 table contains exactly eight invariant rows. The first"
+        },
+        {
+          "line": 51,
+          "text": "the owner-supplied invariant and corrected provenance. The record repeatedly"
+        },
+        {
+          "line": 79,
+          "text": "- The orchestration roadmap, invariant catalog, integration review, and"
+        },
+        {
+          "line": 86,
+          "text": "  rely on the adopted table, without changing the eight invariant positions."
+        },
+        {
+          "line": 108,
+          "text": "STD-079 r4 invariants 3–4 are correct directive provenance. The stronger"
+        },
+        {
+          "line": 117,
+          "text": "| Invariant | Controlling source | Failure condition |"
+        },
+        {
+          "line": 119,
+          "text": "| Every committed governed state change is durably receipted | R15-104–105; STD-079 r4 §0 invariants 3–4; `GKOS-RECEIPT-001` and `GKOS-RECEIPT-003` | A governed state change is represented as committed without durable binding to a governed record satisfying the State-Change Receipt role, or required binding failure neither fails closed nor produces verifiable rollback or compensation before commit success is reported |"
+        },
+        {
+          "line": 181,
+          "text": "`KNOWN-INVARIANTS-CATALOG.md`, its generated source index/validator expectations,"
+        },
+        {
+          "line": 207,
+          "text": "- deterministic regeneration and validation of the known-invariant catalog and"
+        },
+        {
+          "line": 232,
+          "text": "- STD-079 r4 §0 invariants 3–4 and §2; SHA-256"
+        }
+      ]
+    },
+    {
+      "path": "integration/receipts/Q-INTENT-R19-ADOPTION.md",
+      "sha256": "6a78ddc35b01f7ebfc52428a3f233f299160a053bdc2abcb46d8322de27660f2",
+      "byte_count": 5214,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 16,
+          "text": "- Commit subject: `docs: adopt eighth documentation-intent invariant`"
+        },
+        {
+          "line": 35,
+          "text": "`GKOS-RECEIPT-001`, and `GKOS-RECEIPT-003`. STD-079 r4 invariants 3–4"
+        }
+      ]
+    },
+    {
+      "path": "integration/receipts/Q-INTENT-RESOLUTION.md",
+      "sha256": "e314b566586f68aebffd6b4b945e699813ae83d25dd1b0b70cfcfd89ae5e21ea",
+      "byte_count": 5267,
+      "match_count": 5,
+      "matches": [
+        {
+          "line": 11,
+          "text": "   > “Run the eight-invariant documentation intent gate and update `DIVERGENCES.md`, `TRACEABILITY.md`, stability promises, migration guides, and third-party notices.”"
+        },
+        {
+          "line": 13,
+          "text": "   This is the only eight-invariant wording located in the preserved R4 source. It states a cardinality but does not enumerate or name eight invariants."
+        },
+        {
+          "line": 15,
+          "text": "2. `orchestration/upgrades/standard-r18/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md` at audited Standard base `aa9a05315a9a767bd672aa2bb5179c963d9d66ca` (working-file SHA-256 `e3a95224575d5614beed1fa4e958ab4b89e73a0a627e2e15522432edc656c0e6`), heading **“4. Intent review”**, lines 53–68. Its own status is exactly **“Proposed; non-normative until adopted through `GOVERNANCE.md`.”** The heading says an amendment candidate must preserve “all applicable accepted invariants,” then supplies seven table rows:"
+        },
+        {
+          "line": 29,
+          "text": "   - heading **“1. Owner decision gates”**, Q-INTENT row at line 43, explicitly requires reconciliation of R4's eight reference with the proposed seven-row checklist and says: “do not fabricate an eighth invariant or report eight checks passed.”"
+        },
+        {
+          "line": 51,
+          "text": "Local authority cannot select an eighth invariant, split one of the seven rows, silently change “eight” to “seven,” or adopt the proposed checklist. Any of those acts would create intent absent from the preserved R4 text and conflict with the roadmap's explicit non-fabrication instruction."
+        }
+      ]
+    },
+    {
+      "path": "integration/receipts/STANDARD-R18-INTEGRATION.md",
+      "sha256": "49765f61a5f00decacd8a98cbf8e41d8faf63e59d664377c071c349ffcca2d38",
+      "byte_count": 3456,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 36,
+          "text": "The preserved R4 source, under **“Phase 12 — Downstream integration and release cut,”** says “eight-invariant documentation intent gate” but enumerates no invariant list. Proposed/non-normative `GKOS-DOCSTD-001`, under **“4. Intent review,”** contains exactly seven rows. Each maps directly to the seven-item synopsis in the controlling roadmap, but no local source names an eighth item or demonstrates that one row combines two R4 items."
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/archive/illustrated/GKOS-v0.76-Illustrated-Edition.md",
+      "sha256": "ea579da035ab6c1830658e4e0863dcbdc81a0fe6b95cd35c4cd079c49448c4c5",
+      "byte_count": 24387,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 147,
+          "text": "A conformance claim requires a machine-readable manifest, human-readable report, exact GKOS release, test-suite version, evidence, limitations, exceptions, and assessment type. Self-attestation and independent verification MUST be distinguished. Executable GKOS-TS and complete OKP-CH semantic-invariant suites remain incomplete in v0.76; claims remain provisional and MUST disclose coverage."
+        },
+        {
+          "line": 158,
+          "text": "> The first executable GKOS-TS slice now exists: an adapter-neutral runner plus fixture catalog 0.1.0 in the repository's conformance/ and fixtures/ directories, emitting claims that validate against the conformance-manifest schema. Run it, publish the claim with your known divergences listed, and you are ahead of the disclosure bar most software never reaches. For disclosure: flat YAML is one valid answer, not the mandated one — the invariant is “ordinary editing cannot silently corrupt governance structure.”"
+        },
+        {
+          "line": 167,
+          "text": "> “Fails closed to a restricted default” has teeth: pick the default deliberately, write it in your machine-readable invariants, and test it — fixture GCP1-B01 exists precisely because a reference implementation was found defaulting to internal while its own invariants file declared secret. Separate read tokens from write authorization at the API layer, and make above-ceiling targets indistinguishable from nonexistent ones."
+        },
+        {
+          "line": 186,
+          "text": "Each layer contract defines purpose, accepted inputs, required operations, outputs, preserved invariants, authority boundary, prohibited behavior, failure behavior, receipts, and re-entry rules. Blocking invariants: L1 revision and provenance preserved; L2 stable identity (filename is not identity); L3 typed, sourced, temporal, scoped relationships; L4 mandatory failures block promotion; L5 authorized append-only disposition; L6 reproducible purpose-bound presentation; L7 action linked to context and authority. Upper-layer results returning to the corpus MUST enter as new Layer-1 sources."
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/archive/standard/00_GKOS_Master_Standard_pre_gkx2.md",
+      "sha256": "c7c99cc268f7767b8274618a84188187eddce078d58cea80dfab5488e265b0a0",
+      "byte_count": 13646,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 147,
+          "text": "A conformance claim requires a machine-readable manifest, human-readable report, exact GKOS release, test-suite version, evidence, limitations, exceptions, and assessment type. Self-attestation and independent verification MUST be distinguished. Executable GKOS-TS and complete OKP-CH semantic-invariant suites remain incomplete in v0.76; claims remain provisional and MUST disclose coverage."
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/archive/TECHNICAL_README_pre_gkx2.md",
+      "sha256": "bb6ed8d11394920d24d23586eaf9263e42a1b6b84698da8f6b8be539b1c16779",
+      "byte_count": 20071,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 34,
+          "text": "responsibilities, artifacts, invariants, authority boundaries, failure"
+        },
+        {
+          "line": 55,
+          "text": "A conforming design preserves these invariants:"
+        },
+        {
+          "line": 80,
+          "text": "| Layer | Accepted responsibility | Minimum governed output | Invariant |"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/decisions/GKOS_Decision_Register.md",
+      "sha256": "ef663234ba41175689387e8746dcbe6b8d012fc987d08f332cf5fbe515b62958",
+      "byte_count": 9879,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 5,
+          "text": "## R19 — Documentation-intent eighth invariant"
+        },
+        {
+          "line": 9,
+          "text": "- **Decision:** Supply and adopt the previously undefined eighth documentation-intent position as “Every committed governed state change is durably receipted,” with STD-079 r4 invariants 3–4 and the applicable receipt requirements as provenance; preserve the separate standing of the STD-079 and layer-blocking invariant sets; and adopt only the eight-position DOCSTD §4 intent-review table without claiming historical recovery, publication, conformance, or release qualification."
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/decisions/R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+      "sha256": "994c407fb0d9df7ea78b95095efe502b9503125723069acf67a90a8d22a2c1b5",
+      "byte_count": 8362,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 100,
+          "text": "- `GKOS-REENTRY-002`: cross-cutting standing invariant."
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/decisions/R19_Documentation_Intent_Eighth_Invariant_Development_Decision_Record.md",
+      "sha256": "f8dc34f9674d9d41249a22b52f17648183fee540ac580ce187e9594ca83c69b1",
+      "byte_count": 4260,
+      "match_count": 13,
+      "matches": [
+        {
+          "line": 1,
+          "text": "# R19 — Documentation-intent eighth invariant"
+        },
+        {
+          "line": 16,
+          "text": "R4 requires an eight-invariant documentation-intent gate but does not enumerate"
+        },
+        {
+          "line": 17,
+          "text": "the invariants. Before this decision, GKOS-DOCSTD-001 §4 contained seven"
+        },
+        {
+          "line": 18,
+          "text": "proposed positions. The ten STD-079 r4 controlling invariants and the seven"
+        },
+        {
+          "line": 19,
+          "text": "layer-blocking invariants are separate sets and do not resolve that mismatch."
+        },
+        {
+          "line": 24,
+          "text": "| Invariant | Controlling source | Failure condition |"
+        },
+        {
+          "line": 26,
+          "text": "| Every committed governed state change is durably receipted | R15-104..R15-105 and applicable receipt requirements (`GKOS-RECEIPT-001` and `GKOS-RECEIPT-003`); directive provenance: STD-079 r4 invariants 3–4 | A governed mutation commits without a durably bound receipt, or receipt-binding failure neither fails closed nor produces verifiable rollback or compensation |"
+        },
+        {
+          "line": 48,
+          "text": "- the R4 requirement for an eight-invariant documentation-intent gate without"
+        },
+        {
+          "line": 53,
+          "text": "- STD-079 r4 invariants 3–4 as directive provenance; and"
+        },
+        {
+          "line": 55,
+          "text": "  controlling invariants, and the seven layer-blocking invariants."
+        },
+        {
+          "line": 59,
+          "text": "unrelated invariant set to satisfy the count."
+        },
+        {
+          "line": 72,
+          "text": "governed mutation; or change the separate STD-079 and layer-blocking invariant"
+        },
+        {
+          "line": 83,
+          "text": "the invariant, its provenance, the eight-position cardinality, or the adopted"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/docs/directives/GKOS-DIRECTIVE-STD-079-r4.md",
+      "sha256": "de4a67deffccca4f6630b378e314a78ef936808bf9ad8a50ef88610d02b9c097",
+      "byte_count": 4542,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "## 0. Controlling invariants"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/docs/GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+      "sha256": "8192b86e99499e14caff20ece35ed31322eb89b6c24f3565fd161738513c7c6b",
+      "byte_count": 8538,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 63,
+          "text": "The export must declare every GKOS field or invariant that cannot be represented."
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/docs/implementation/GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+      "sha256": "ea152f8d6dba2f4d5af4d15ff000dcb6f029a92546f25cc57765a6b99beb003a",
+      "byte_count": 2405,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 38,
+          "text": "- Keep NAV-001 presentation informative; promote only registered invariant"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+      "sha256": "9e613c0ae00b673910702ccbbdcc11f71283c437e6c9784f9688e0c120d319a1",
+      "byte_count": 5635,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 58,
+          "text": "preserves all applicable accepted invariants:"
+        },
+        {
+          "line": 66,
+          "text": "| Invariant | Controlling source | Failure condition |"
+        },
+        {
+          "line": 75,
+          "text": "| Every committed governed state change is durably receipted | R15-104..R15-105; `GKOS-RECEIPT-001`; `GKOS-RECEIPT-003`; directive provenance: STD-079 r4 invariants 3–4 | A governed mutation commits without a durably bound receipt, or receipt-binding failure neither fails closed nor produces verifiable rollback or compensation |"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/docs/proposals/SRTP_DRAFT_TRACEABILITY.md",
+      "sha256": "9034a0c29700994010f9069a929d4a68d6d880c8511bd8d243927d68d03859e5",
+      "byte_count": 2876,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 15,
+          "text": "| raise-only sensitivity invariant | `sensitivity`, `derived_sensitivity`, context/use/receipt propagation | `SRTP-P01` | `SRTP-N09` |"
+        },
+        {
+          "line": 16,
+          "text": "| purpose-bound context invariant | context ID/digest, purpose, recipient, versions, warnings, omissions, expiry | `SRTP-P01` | `SRTP-N10` |"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/docs/reviews/2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+      "sha256": "b3356ee8623b5c32c7439eb2bdcee5cc2dba7986ef503b1aef3dad16732affda",
+      "byte_count": 8659,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 81,
+          "text": "5. Apply the ratified intent invariants: authority separation (R2), visible and"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/requirements/PROFILE_APPLICABILITY.md",
+      "sha256": "52386a56a6920bc4ec79cdf19f47ba62c4413f0a28fa4ea847d72cda18079eb1",
+      "byte_count": 3676,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 34,
+          "text": "| GKOS-REENTRY-002 | Cross-cutting standing invariant affecting later consumption |"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/requirements/REGISTRY.md",
+      "sha256": "81d8898f9a294db69a8920d0fcefb674da692093e4c14d85320f1d344555e862",
+      "byte_count": 20402,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 105,
+          "text": "| `GKOS-REENTRY-002` | Cross-cutting standing invariant |"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/standard/annexes/Layer_Interface_Contracts.md",
+      "sha256": "b50030f06275dcdfde04740260377e5adf5dd98cd0fee4189db6e104c85c64e6",
+      "byte_count": 2041,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 4,
+          "text": "outputs, preserved invariants, authority boundary, prohibited behavior, failure"
+        },
+        {
+          "line": 7,
+          "text": "| Layer | Required result | Blocking invariant |"
+        }
+      ]
+    },
+    {
+      "path": "integration/standard-r18/TECHNICAL_README.md",
+      "sha256": "6688c8ff1dab5234bca8046097bc8093222a99ee5f2201a530fbc32a03548526",
+      "byte_count": 16372,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 111,
+          "text": "GKOS specifies the governance invariants; it does not mandate one “governance"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/engine-historical/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/engine-historical/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/engine-historical/docs/citations.md",
+      "sha256": "d912cab314287a51d2212b00c603f6d535397cee597029d758e641f3ad9ecadd",
+      "byte_count": 4329,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "manifest and projection-digest invariants."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/engine-historical/evidence/2026-08-21-functional-uplift-phase-2.md",
+      "sha256": "1195188c7a4237c5ad411ef4e920833163158f6c1359bca27e7ebc0fc8b5ac67",
+      "byte_count": 16300,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 81,
+          "text": "- strict candidate/provenance invariants and schema-3 reopen verification,"
+        },
+        {
+          "line": 97,
+          "text": "  invariant, so denied source text is never sent to a configured provider and"
+        },
+        {
+          "line": 204,
+          "text": "  candidates, vector conflict invariants, FTS key bijection/tokenizer binding,"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/engine/docs/citations.md",
+      "sha256": "d912cab314287a51d2212b00c603f6d535397cee597029d758e641f3ad9ecadd",
+      "byte_count": 4329,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "manifest and projection-digest invariants."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/engine/evidence/2026-08-21-functional-uplift-phase-2.md",
+      "sha256": "1195188c7a4237c5ad411ef4e920833163158f6c1359bca27e7ebc0fc8b5ac67",
+      "byte_count": 16300,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 81,
+          "text": "- strict candidate/provenance invariants and schema-3 reopen verification,"
+        },
+        {
+          "line": 97,
+          "text": "  invariant, so denied source text is never sent to a configured provider and"
+        },
+        {
+          "line": 204,
+          "text": "  candidates, vector conflict invariants, FTS key bijection/tokenizer binding,"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/.github/pull_request_template.md",
+      "sha256": "bd41f18b89da040a7b471cbaf4a04b4110fcc782c2eb6185de327a9a84406600",
+      "byte_count": 987,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 7,
+          "text": "- [ ] `npm run verify` passes locally (typecheck, build, tests, version/artifact/invariant checks)."
+        },
+        {
+          "line": 12,
+          "text": "- [ ] `kosmos-invariants.yml` still holds (security defaults, read-only API, sandbox, no `\"latest\"` deps)."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/BUILD-DIRECTIVE-v0.5.5.md",
+      "sha256": "bd454a34a5cf023d9e2ef39b98c9fa048dfa0f75b8400522e925dd0f6bffea4a",
+      "byte_count": 35645,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 758,
+          "text": "Do not promise mathematically impossible universal zero-overlap unless an invariant is actually proven."
+        },
+        {
+          "line": 1559,
+          "text": "unless proven as an invariant."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/CHANGELOG.md",
+      "sha256": "080abae1f4032f76f65ee340f27c56331fbf73e37f177d9b7261c0d6f11be35a",
+      "byte_count": 44972,
+      "match_count": 5,
+      "matches": [
+        {
+          "line": 278,
+          "text": "- 187-test suite (unit, round-trip, settings UI, invariants) plus"
+        },
+        {
+          "line": 279,
+          "text": "  `check:versions`, `check:artifacts`, `check:invariants`,"
+        },
+        {
+          "line": 283,
+          "text": "  feasibility, governance invariants, capture ergonomics) whose findings are"
+        },
+        {
+          "line": 642,
+          "text": "- **Mass-weighted elliptical orbits + sibling perturbation** — orbits now *feel* gravity-anchored. Each body traces a Kepler-inspired ellipse whose eccentricity depends on the body's own mass (heavier notes ride more circular orbits; lighter, isolated ones swing more), and its speed scales with the parent's mass (`sqrt(mass/ref)` — heavier hubs pull their satellites faster). The heaviest sibling in a system exerts a small along-orbit tug (theta jitter, capped at ~8°). Apoapsis is pinned to the original |ov| — max radius stays within the layout's collision-safe packing, so no new intersections. Fully deterministic (hash-based jitter only); t=0 position exactly matches the layout position (no visual jump when the loop starts). Six new orbit invariants in `test/cosmology.test.mjs`."
+        },
+        {
+          "line": 656,
+          "text": "- Reproducibility double-build CI job; `SHA256SUMS` + `BUILD-INFO.json` release provenance; `kosmos-invariants.yml` policy with `check:invariants`; Dependabot; pinned toolchain + committed `package-lock.json`."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/CONTRIBUTING.md",
+      "sha256": "0ad957ac9ed10fdb1bde0fc1e424ae5424c2fefc02f7cf903d603f7d8ab131ca",
+      "byte_count": 3926,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 12,
+          "text": "npm run verify     # typecheck + build + test + version/artifact/invariant checks"
+        },
+        {
+          "line": 25,
+          "text": "- Security-relevant changes keep `npm run check:invariants` green (see"
+        },
+        {
+          "line": 26,
+          "text": "  `kosmos-invariants.yml`)."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/assessments/Detailed_Recommended_Changes.md",
+      "sha256": "9ce42085602f5c0af94d40259e70472841c137270fcc30c7dc5af055b1d6877e",
+      "byte_count": 43401,
+      "match_count": 5,
+      "matches": [
+        {
+          "line": 836,
+          "text": "The existing test harness reportedly contains 33 checks against a stub Obsidian environment. A raw test count does not show which invariants are covered or which high-risk paths remain untested."
+        },
+        {
+          "line": 853,
+          "text": "| Vault mutation | Unknown | Unknown | Unknown | before/after filesystem invariant | High |"
+        },
+        {
+          "line": 871,
+          "text": "Prioritize tests that protect stable security invariants:"
+        },
+        {
+          "line": 886,
+          "text": "- Every high-priority security invariant has at least one negative test."
+        },
+        {
+          "line": 1326,
+          "text": "**Exit gate:** Stable security invariants are documented and enforced by negative tests."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/assessments/Engineering_Assurance_Guide.md",
+      "sha256": "1e25771cfcdcfc0ed53a668dfdc048cc72d487137a24e5becadb8c7f99f95511",
+      "byte_count": 26631,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 42,
+          "text": "These disciplines are important for human reviewers and even more important for AI agents. An agent can execute checks consistently, but it requires explicit invariants, deterministic commands, machine-readable evidence, and unambiguous failure conditions."
+        },
+        {
+          "line": 644,
+          "text": "  +--> invariant"
+        },
+        {
+          "line": 655,
+          "text": "Invariant: Server startup rejects LAN + no-token configuration."
+        },
+        {
+          "line": 763,
+          "text": "## 6.4 Example invariant file"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/BUILD-DIRECTIVE.md",
+      "sha256": "bd454a34a5cf023d9e2ef39b98c9fa048dfa0f75b8400522e925dd0f6bffea4a",
+      "byte_count": 35645,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 758,
+          "text": "Do not promise mathematically impossible universal zero-overlap unless an invariant is actually proven."
+        },
+        {
+          "line": 1559,
+          "text": "unless proven as an invariant."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/GKOS-ENGINE-DEFINITIONS.md",
+      "sha256": "c9ed1eaf9a0a06e909474fff8fd3069ebc60822e66b97a46586e67ce09a12ca0",
+      "byte_count": 35085,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 446,
+          "text": "proposals, never in-place edits); `kosmos-invariants.yml`"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/GKX-23-OBSIDIAN-ENGINE-REDESIGN.md",
+      "sha256": "8ce0ccd08e4ce0f33fa95383c8e6513687952dc97114449b502da2dc59b8b73c",
+      "byte_count": 20472,
+      "match_count": 6,
+      "matches": [
+        {
+          "line": 4,
+          "text": "the beta.12 codebase, the Obsidian platform, and the GKX 2.3 / GKOS invariants)"
+        },
+        {
+          "line": 207,
+          "text": "  origin-separation invariant."
+        },
+        {
+          "line": 221,
+          "text": "Landing it requires amending `kosmos-invariants.yml` (`api_write_routes:"
+        },
+        {
+          "line": 222,
+          "text": "proposals-inbox-only`), `scripts/check-invariants.mjs`, and THREAT-MODEL.md in the"
+        },
+        {
+          "line": 223,
+          "text": "same change — the CI invariant is a feature, not an obstacle. Fail-closed sensitivity"
+        },
+        {
+          "line": 294,
+          "text": "8. Opt-in proposal ingress (propose-scoped token; invariants/threat-model amended in"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/navigation-effects/IMPLEMENTATION-HANDOFF.md",
+      "sha256": "ec793a1b6e06a201fcd2ff0ad4e8918ba8810397651f31a9d457c55b991ac63b",
+      "byte_count": 24504,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 551,
+          "text": "npm run check:invariants"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/navigation-effects/PACKET-B-WORKING-RESULT-20260827.md",
+      "sha256": "3ec19c16a9bab9300f63a0b4e7f8a42a3d648ad2d002ab4f4132ff9f483f996f",
+      "byte_count": 2885,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 34,
+          "text": "- `npm ci`, typecheck, build, version, lockfile, artifact, invariant,"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/navigation-effects/PACKET-C0-WORKING-RESULT-20260827.md",
+      "sha256": "5b0d341679a053d67e234aee97e495a2f8d03e004b04bbdd770609a48b248f73",
+      "byte_count": 2974,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 46,
+          "text": "  version, lockfile, artifact, invariant, and renderer-provenance checks."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/navigation-effects/QUALIFICATION-PLAN.md",
+      "sha256": "f2bddd4c8c2d3a12ed9ecce13883e85003145ef7a4b1681612071ae026d88890",
+      "byte_count": 23726,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 305,
+          "text": "npm run check:invariants"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/RELEASE-PROCESS.md",
+      "sha256": "538807886c88d3a25bdbd933ff8e6400e9f5406d87f1b7d7133c306b4c9c4130",
+      "byte_count": 2614,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 24,
+          "text": "2. `npm run verify` — typecheck + build + tests + version/lockfile/artifact/invariant checks."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/RENDERER-MIGRATION-r185.md",
+      "sha256": "43cd2e34a7b5b1367fda644749a4f99b91fe6cb335b19a4842c7a839935471b8",
+      "byte_count": 4208,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 64,
+          "text": "119 unit tests, version/artifact/invariant/renderer-provenance checks); the"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/docs/THREAT-MODEL.md",
+      "sha256": "f1ba3baf0fcef54b7ade0e7c6baacaa4a1974305a7c24a0ae5f5645839f5e650",
+      "byte_count": 8574,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 70,
+          "text": "| Silent security regression | `kosmos-invariants.yml` + `check:invariants` gate CI; negative security tests. |"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/Kosmos-Oden-Engineering-Review/CI-CD-AND-AGENT-OPERATING-DIRECTIVE.md",
+      "sha256": "ee340de184f2a442d308b15405362a7f36964d10daf8755863fd5ecf3a32496a",
+      "byte_count": 20344,
+      "match_count": 8,
+      "matches": [
+        {
+          "line": 52,
+          "text": "- machine-readable invariant checks;"
+        },
+        {
+          "line": 126,
+          "text": "| Primary/Planning Agent | Read issue, inspect architecture and invariants, define scope, risks, acceptance tests, affected surfaces | Must not silently expand scope |"
+        },
+        {
+          "line": 130,
+          "text": "| Security/Invariant Agent | Review sandbox, network, token, dependency, provenance, offline, and read-only boundaries | Must not treat an absence of a known CVE as proof of safety |"
+        },
+        {
+          "line": 148,
+          "text": "- protected invariants;"
+        },
+        {
+          "line": 176,
+          "text": "- Invariants at risk:"
+        },
+        {
+          "line": 309,
+          "text": "npm run check:invariants"
+        },
+        {
+          "line": 666,
+          "text": "  ci.yml                    # source, typecheck, unit, invariants"
+        },
+        {
+          "line": 692,
+          "text": "- protected invariants pass;"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/Kosmos-Oden-Engineering-Review/KOSMOS-ODEN-RENDERER-ASSESSMENT.md",
+      "sha256": "c989212f5fb27bb3eb1dafc2fc4600c7102889d75d6a7634f456a5b3666b022d",
+      "byte_count": 14408,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 20,
+          "text": "- CI-enforced invariants;"
+        },
+        {
+          "line": 183,
+          "text": "- a machine-readable invariant policy."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/Kosmos-Oden-Engineering-Review/RENDERER-UPGRADE-BUILD-INSTRUCTIONS.md",
+      "sha256": "7551eb6a875f9a523b0a9be86e0cd7b47ef586675e42d89b834fcc6eaae02e22",
+      "byte_count": 14831,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 543,
+          "text": "npm run check:invariants"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/node_modules/@codemirror/view/CHANGELOG.md",
+      "sha256": "88cbdb7efa76687c3c214b4653806a85e2919299f8201b892af8671ffab27544",
+      "byte_count": 71971,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 769,
+          "text": "Forbid widget decoration side values bigger than 10000, to prevent them from breaking range ordering invariants."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/node_modules/gkos-engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/node_modules/gkos-engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/node_modules/gkos-engine/docs/citations.md",
+      "sha256": "d912cab314287a51d2212b00c603f6d535397cee597029d758e641f3ad9ecadd",
+      "byte_count": 4329,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "manifest and projection-digest invariants."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/SECURITY.md",
+      "sha256": "3d812f638dbb10a33e600f19b46eb18bacf6433611d86f5d137f652ee2e0665f",
+      "byte_count": 2637,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 28,
+          "text": "These invariants are declared in [`kosmos-invariants.yml`](kosmos-invariants.yml)"
+        },
+        {
+          "line": 29,
+          "text": "and enforced by `npm run check:invariants` in CI:"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/kosmos/TECHNICAL_README.md",
+      "sha256": "d91380d5bd1ec8e46bbd5d26ee136542f5f8fd61332f02099e7a4b84e235d790",
+      "byte_count": 34456,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 495,
+          "text": "- Build invariants check authentication defaults, listener rules, request caps,"
+        },
+        {
+          "line": 518,
+          "text": "| `npm run check:invariants` | Declared security and architecture invariants |"
+        },
+        {
+          "line": 520,
+          "text": "| `npm run verify` | Typecheck, full build, Node tests, and all invariant/artifact checks |"
+        },
+        {
+          "line": 530,
+          "text": "CI type-checks, builds, tests, checks invariants and provenance, performs"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/lite/docs/evidence/phase-1-retrieval-core.md",
+      "sha256": "3db5d81ca4b7b47697bd65b3e48a7fecc86c9b46bc5b8d5335db82ece862b6eb",
+      "byte_count": 19298,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 105,
+          "text": "allowlist and semantic invariants prove stable UIDs, paths, sensitivity,"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/lite/docs/evidence/phase-2-lineage-citations.md",
+      "sha256": "5351a4f4d2c926865784cee667d256973961bc6ed4f4b130c25fbb1c74bcddca",
+      "byte_count": 13779,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 73,
+          "text": "  bindings, and all immutable reopen invariants are verified. Schema 2 remains"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/lite/rust/contracts/gkos-ingest-validation-1.0.0-draft.1/README.md",
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "byte_count": 17680,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 140,
+          "text": "invariants are mandatory even where Draft 2020-12 cannot express the complete"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/lite/rust/contracts/gkos-retrieval-1.0.0-draft.2/README.md",
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "byte_count": 11601,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 87,
+          "text": "the invariant reason `LINEAGE_VIEW_AUTHORIZED_ONLY` is present regardless of"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/observatory/docs/ENGINE-AGENT-HANDOFF.md",
+      "sha256": "0cc0076804c9d1fe736fe520156da900eb63319105295223ac4a63bea38d3f63",
+      "byte_count": 10330,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 81,
+          "text": "6. **Snapshots/references:** audit same-generation mutation behavior across assess/validate/lineage and non-discovery cursors. Advertise only proven per-tool digest invariants. Catalog diff/payload digest remains a proposal, not implemented here."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/observatory/docs/engine-builds/01-diagnostics-and-preflight.md",
+      "sha256": "710a5480732018887566da148a00e63d8bf2b0a68a5075ec2be873717ec8b8b4",
+      "byte_count": 8023,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 26,
+          "text": "   a successful empty search. Keep native refusal invariants unchanged."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/observatory/docs/engine-builds/06-contract-and-release-hardening.md",
+      "sha256": "0024b0286e6484934d92184934ea0d8266a00d3b7c4e65fe7bed21af5d46ac21",
+      "byte_count": 8880,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 141,
+          "text": "  under a documented invariant. Do not label an untested hypothesis a fixed bug."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/reports/CONSUMER-IDENTITY.md",
+      "sha256": "fe8741ba54c4c2275125fa3809ecf38f353a37af1463ed2e7aefd31dede3a034",
+      "byte_count": 10637,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 40,
+          "text": "| Kosmos `npm run verify` | PASS: typecheck, build, 283/283 unit tests, version, lock, artifact, invariant and renderer provenance. [Retained output](consumer-kosmos-verify.txt). |"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/archive/illustrated/GKOS-v0.76-Illustrated-Edition.md",
+      "sha256": "ea579da035ab6c1830658e4e0863dcbdc81a0fe6b95cd35c4cd079c49448c4c5",
+      "byte_count": 24387,
+      "match_count": 4,
+      "matches": [
+        {
+          "line": 147,
+          "text": "A conformance claim requires a machine-readable manifest, human-readable report, exact GKOS release, test-suite version, evidence, limitations, exceptions, and assessment type. Self-attestation and independent verification MUST be distinguished. Executable GKOS-TS and complete OKP-CH semantic-invariant suites remain incomplete in v0.76; claims remain provisional and MUST disclose coverage."
+        },
+        {
+          "line": 158,
+          "text": "> The first executable GKOS-TS slice now exists: an adapter-neutral runner plus fixture catalog 0.1.0 in the repository's conformance/ and fixtures/ directories, emitting claims that validate against the conformance-manifest schema. Run it, publish the claim with your known divergences listed, and you are ahead of the disclosure bar most software never reaches. For disclosure: flat YAML is one valid answer, not the mandated one — the invariant is “ordinary editing cannot silently corrupt governance structure.”"
+        },
+        {
+          "line": 167,
+          "text": "> “Fails closed to a restricted default” has teeth: pick the default deliberately, write it in your machine-readable invariants, and test it — fixture GCP1-B01 exists precisely because a reference implementation was found defaulting to internal while its own invariants file declared secret. Separate read tokens from write authorization at the API layer, and make above-ceiling targets indistinguishable from nonexistent ones."
+        },
+        {
+          "line": 186,
+          "text": "Each layer contract defines purpose, accepted inputs, required operations, outputs, preserved invariants, authority boundary, prohibited behavior, failure behavior, receipts, and re-entry rules. Blocking invariants: L1 revision and provenance preserved; L2 stable identity (filename is not identity); L3 typed, sourced, temporal, scoped relationships; L4 mandatory failures block promotion; L5 authorized append-only disposition; L6 reproducible purpose-bound presentation; L7 action linked to context and authority. Upper-layer results returning to the corpus MUST enter as new Layer-1 sources."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/archive/standard/00_GKOS_Master_Standard_pre_gkx2.md",
+      "sha256": "c7c99cc268f7767b8274618a84188187eddce078d58cea80dfab5488e265b0a0",
+      "byte_count": 13646,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 147,
+          "text": "A conformance claim requires a machine-readable manifest, human-readable report, exact GKOS release, test-suite version, evidence, limitations, exceptions, and assessment type. Self-attestation and independent verification MUST be distinguished. Executable GKOS-TS and complete OKP-CH semantic-invariant suites remain incomplete in v0.76; claims remain provisional and MUST disclose coverage."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/archive/TECHNICAL_README_pre_gkx2.md",
+      "sha256": "bb6ed8d11394920d24d23586eaf9263e42a1b6b84698da8f6b8be539b1c16779",
+      "byte_count": 20071,
+      "match_count": 3,
+      "matches": [
+        {
+          "line": 34,
+          "text": "responsibilities, artifacts, invariants, authority boundaries, failure"
+        },
+        {
+          "line": 55,
+          "text": "A conforming design preserves these invariants:"
+        },
+        {
+          "line": 80,
+          "text": "| Layer | Accepted responsibility | Minimum governed output | Invariant |"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/decisions/R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+      "sha256": "994c407fb0d9df7ea78b95095efe502b9503125723069acf67a90a8d22a2c1b5",
+      "byte_count": 8362,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 100,
+          "text": "- `GKOS-REENTRY-002`: cross-cutting standing invariant."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/docs/directives/GKOS-DIRECTIVE-STD-079-r4.md",
+      "sha256": "de4a67deffccca4f6630b378e314a78ef936808bf9ad8a50ef88610d02b9c097",
+      "byte_count": 4542,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 8,
+          "text": "## 0. Controlling invariants"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/docs/GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+      "sha256": "8192b86e99499e14caff20ece35ed31322eb89b6c24f3565fd161738513c7c6b",
+      "byte_count": 8538,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 63,
+          "text": "The export must declare every GKOS field or invariant that cannot be represented."
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/docs/implementation/GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+      "sha256": "ea152f8d6dba2f4d5af4d15ff000dcb6f029a92546f25cc57765a6b99beb003a",
+      "byte_count": 2405,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 38,
+          "text": "- Keep NAV-001 presentation informative; promote only registered invariant"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+      "sha256": "e3a95224575d5614beed1fa4e958ab4b89e73a0a627e2e15522432edc656c0e6",
+      "byte_count": 4926,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 56,
+          "text": "preserves all applicable accepted invariants:"
+        },
+        {
+          "line": 58,
+          "text": "| Invariant | Controlling source | Failure condition |"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/docs/proposals/SRTP_DRAFT_TRACEABILITY.md",
+      "sha256": "9034a0c29700994010f9069a929d4a68d6d880c8511bd8d243927d68d03859e5",
+      "byte_count": 2876,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 15,
+          "text": "| raise-only sensitivity invariant | `sensitivity`, `derived_sensitivity`, context/use/receipt propagation | `SRTP-P01` | `SRTP-N09` |"
+        },
+        {
+          "line": 16,
+          "text": "| purpose-bound context invariant | context ID/digest, purpose, recipient, versions, warnings, omissions, expiry | `SRTP-P01` | `SRTP-N10` |"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/docs/reviews/2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+      "sha256": "b3356ee8623b5c32c7439eb2bdcee5cc2dba7986ef503b1aef3dad16732affda",
+      "byte_count": 8659,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 81,
+          "text": "5. Apply the ratified intent invariants: authority separation (R2), visible and"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/requirements/PROFILE_APPLICABILITY.md",
+      "sha256": "52386a56a6920bc4ec79cdf19f47ba62c4413f0a28fa4ea847d72cda18079eb1",
+      "byte_count": 3676,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 34,
+          "text": "| GKOS-REENTRY-002 | Cross-cutting standing invariant affecting later consumption |"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/requirements/REGISTRY.md",
+      "sha256": "81d8898f9a294db69a8920d0fcefb674da692093e4c14d85320f1d344555e862",
+      "byte_count": 20402,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 105,
+          "text": "| `GKOS-REENTRY-002` | Cross-cutting standing invariant |"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/standard/annexes/Layer_Interface_Contracts.md",
+      "sha256": "b50030f06275dcdfde04740260377e5adf5dd98cd0fee4189db6e104c85c64e6",
+      "byte_count": 2041,
+      "match_count": 2,
+      "matches": [
+        {
+          "line": 4,
+          "text": "outputs, preserved invariants, authority boundary, prohibited behavior, failure"
+        },
+        {
+          "line": 7,
+          "text": "| Layer | Required result | Blocking invariant |"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/standard-r18/TECHNICAL_README.md",
+      "sha256": "6688c8ff1dab5234bca8046097bc8093222a99ee5f2201a530fbc32a03548526",
+      "byte_count": 16372,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 111,
+          "text": "GKOS specifies the governance invariants; it does not mandate one “governance"
+        }
+      ]
+    },
+    {
+      "path": "upgrades/UPGRADE-ASSEMBLY.md",
+      "sha256": "f6b22df427452b573e5338ad4746e70ac5fbf82e1dd54f2e20bb85c3a746b7b2",
+      "byte_count": 7248,
+      "match_count": 1,
+      "matches": [
+        {
+          "line": 39,
+          "text": "- Q-INTENT remains open because r4 names eight invariants while the located proposed checklist has seven."
+        }
+      ]
+    }
+  ],
+  "duplicate_content_groups": [
+    {
+      "sha256": "0024b0286e6484934d92184934ea0d8266a00d3b7c4e65fe7bed21af5d46ac21",
+      "paths": [
+        "2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/06-contract-and-release-hardening.md",
+        "integration/observatory/docs/engine-builds/06-contract-and-release-hardening.md",
+        "upgrades/observatory/docs/engine-builds/06-contract-and-release-hardening.md"
+      ]
+    },
+    {
+      "sha256": "080abae1f4032f76f65ee340f27c56331fbf73e37f177d9b7261c0d6f11be35a",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/CHANGELOG.md",
+        "integration/kosmos/CHANGELOG.md",
+        "upgrades/kosmos/CHANGELOG.md"
+      ]
+    },
+    {
+      "sha256": "0ad957ac9ed10fdb1bde0fc1e424ae5424c2fefc02f7cf903d603f7d8ab131ca",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/CONTRIBUTING.md",
+        "integration/kosmos/CONTRIBUTING.md",
+        "upgrades/kosmos/CONTRIBUTING.md"
+      ]
+    },
+    {
+      "sha256": "0cc0076804c9d1fe736fe520156da900eb63319105295223ac4a63bea38d3f63",
+      "paths": [
+        "2026-08-31/observatory-audit/GKOS-Observatory/docs/ENGINE-AGENT-HANDOFF.md",
+        "integration/observatory/docs/ENGINE-AGENT-HANDOFF.md",
+        "upgrades/observatory/docs/ENGINE-AGENT-HANDOFF.md"
+      ]
+    },
+    {
+      "sha256": "1195188c7a4237c5ad411ef4e920833163158f6c1359bca27e7ebc0fc8b5ac67",
+      "paths": [
+        "integration/engine-superseded-20260831/evidence/2026-08-21-functional-uplift-phase-2.md",
+        "integration/engine/evidence/2026-08-21-functional-uplift-phase-2.md",
+        "upgrades/engine-historical/evidence/2026-08-21-functional-uplift-phase-2.md",
+        "upgrades/engine/evidence/2026-08-21-functional-uplift-phase-2.md"
+      ]
+    },
+    {
+      "sha256": "1e25771cfcdcfc0ed53a668dfdc048cc72d487137a24e5becadb8c7f99f95511",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/assessments/Engineering_Assurance_Guide.md",
+        "integration/kosmos/docs/assessments/Engineering_Assurance_Guide.md",
+        "upgrades/kosmos/docs/assessments/Engineering_Assurance_Guide.md"
+      ]
+    },
+    {
+      "sha256": "3d812f638dbb10a33e600f19b46eb18bacf6433611d86f5d137f652ee2e0665f",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/SECURITY.md",
+        "integration/kosmos/SECURITY.md",
+        "upgrades/kosmos/SECURITY.md"
+      ]
+    },
+    {
+      "sha256": "3db5d81ca4b7b47697bd65b3e48a7fecc86c9b46bc5b8d5335db82ece862b6eb",
+      "paths": [
+        "2026-08-31/engine-audit/lite/docs/evidence/phase-1-retrieval-core.md",
+        "integration/lite/docs/evidence/phase-1-retrieval-core.md",
+        "upgrades/lite/docs/evidence/phase-1-retrieval-core.md"
+      ]
+    },
+    {
+      "sha256": "3ec19c16a9bab9300f63a0b4e7f8a42a3d648ad2d002ab4f4132ff9f483f996f",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/PACKET-B-WORKING-RESULT-20260827.md",
+        "integration/kosmos/docs/navigation-effects/PACKET-B-WORKING-RESULT-20260827.md",
+        "upgrades/kosmos/docs/navigation-effects/PACKET-B-WORKING-RESULT-20260827.md"
+      ]
+    },
+    {
+      "sha256": "43cd2e34a7b5b1367fda644749a4f99b91fe6cb335b19a4842c7a839935471b8",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/RENDERER-MIGRATION-r185.md",
+        "integration/kosmos/docs/RENDERER-MIGRATION-r185.md",
+        "upgrades/kosmos/docs/RENDERER-MIGRATION-r185.md"
+      ]
+    },
+    {
+      "sha256": "52386a56a6920bc4ec79cdf19f47ba62c4413f0a28fa4ea847d72cda18079eb1",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/requirements/PROFILE_APPLICABILITY.md",
+        "integration/standard-r18/requirements/PROFILE_APPLICABILITY.md",
+        "upgrades/standard-r18/requirements/PROFILE_APPLICABILITY.md"
+      ]
+    },
+    {
+      "sha256": "5351a4f4d2c926865784cee667d256973961bc6ed4f4b130c25fbb1c74bcddca",
+      "paths": [
+        "2026-08-31/engine-audit/lite/docs/evidence/phase-2-lineage-citations.md",
+        "integration/lite/docs/evidence/phase-2-lineage-citations.md",
+        "upgrades/lite/docs/evidence/phase-2-lineage-citations.md"
+      ]
+    },
+    {
+      "sha256": "538807886c88d3a25bdbd933ff8e6400e9f5406d87f1b7d7133c306b4c9c4130",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/RELEASE-PROCESS.md",
+        "integration/kosmos/docs/RELEASE-PROCESS.md",
+        "upgrades/kosmos/docs/RELEASE-PROCESS.md"
+      ]
+    },
+    {
+      "sha256": "5b0d341679a053d67e234aee97e495a2f8d03e004b04bbdd770609a48b248f73",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/PACKET-C0-WORKING-RESULT-20260827.md",
+        "integration/kosmos/docs/navigation-effects/PACKET-C0-WORKING-RESULT-20260827.md",
+        "upgrades/kosmos/docs/navigation-effects/PACKET-C0-WORKING-RESULT-20260827.md"
+      ]
+    },
+    {
+      "sha256": "6688c8ff1dab5234bca8046097bc8093222a99ee5f2201a530fbc32a03548526",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/TECHNICAL_README.md",
+        "integration/standard-r18/TECHNICAL_README.md",
+        "upgrades/standard-r18/TECHNICAL_README.md"
+      ]
+    },
+    {
+      "sha256": "710a5480732018887566da148a00e63d8bf2b0a68a5075ec2be873717ec8b8b4",
+      "paths": [
+        "2026-08-31/observatory-audit/GKOS-Observatory/docs/engine-builds/01-diagnostics-and-preflight.md",
+        "integration/observatory/docs/engine-builds/01-diagnostics-and-preflight.md",
+        "upgrades/observatory/docs/engine-builds/01-diagnostics-and-preflight.md"
+      ]
+    },
+    {
+      "sha256": "7551eb6a875f9a523b0a9be86e0cd7b47ef586675e42d89b834fcc6eaae02e22",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/RENDERER-UPGRADE-BUILD-INSTRUCTIONS.md",
+        "integration/kosmos/Kosmos-Oden-Engineering-Review/RENDERER-UPGRADE-BUILD-INSTRUCTIONS.md",
+        "upgrades/kosmos/Kosmos-Oden-Engineering-Review/RENDERER-UPGRADE-BUILD-INSTRUCTIONS.md"
+      ]
+    },
+    {
+      "sha256": "8192b86e99499e14caff20ece35ed31322eb89b6c24f3565fd161738513c7c6b",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/docs/GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+        "2026-08-31/standard-audit/gkos-standard/docs/GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+        "integration/standard-r18/docs/GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+        "upgrades/standard-r18/docs/GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md"
+      ]
+    },
+    {
+      "sha256": "81d8898f9a294db69a8920d0fcefb674da692093e4c14d85320f1d344555e862",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/requirements/REGISTRY.md",
+        "integration/standard-r18/requirements/REGISTRY.md",
+        "upgrades/standard-r18/requirements/REGISTRY.md"
+      ]
+    },
+    {
+      "sha256": "88cbdb7efa76687c3c214b4653806a85e2919299f8201b892af8671ffab27544",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/node_modules/@codemirror/view/CHANGELOG.md",
+        "upgrades/kosmos/node_modules/@codemirror/view/CHANGELOG.md"
+      ]
+    },
+    {
+      "sha256": "8ce0ccd08e4ce0f33fa95383c8e6513687952dc97114449b502da2dc59b8b73c",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/GKX-23-OBSIDIAN-ENGINE-REDESIGN.md",
+        "integration/kosmos/docs/GKX-23-OBSIDIAN-ENGINE-REDESIGN.md",
+        "upgrades/kosmos/docs/GKX-23-OBSIDIAN-ENGINE-REDESIGN.md"
+      ]
+    },
+    {
+      "sha256": "9034a0c29700994010f9069a929d4a68d6d880c8511bd8d243927d68d03859e5",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/docs/proposals/SRTP_DRAFT_TRACEABILITY.md",
+        "2026-08-31/standard-audit/gkos-standard/docs/proposals/SRTP_DRAFT_TRACEABILITY.md",
+        "integration/standard-r18/docs/proposals/SRTP_DRAFT_TRACEABILITY.md",
+        "upgrades/standard-r18/docs/proposals/SRTP_DRAFT_TRACEABILITY.md"
+      ]
+    },
+    {
+      "sha256": "994c407fb0d9df7ea78b95095efe502b9503125723069acf67a90a8d22a2c1b5",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/decisions/R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+        "2026-08-31/standard-audit/gkos-standard/decisions/R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+        "integration/standard-r18/decisions/R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+        "upgrades/standard-r18/decisions/R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md"
+      ]
+    },
+    {
+      "sha256": "9ce42085602f5c0af94d40259e70472841c137270fcc30c7dc5af055b1d6877e",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/assessments/Detailed_Recommended_Changes.md",
+        "integration/kosmos/docs/assessments/Detailed_Recommended_Changes.md",
+        "upgrades/kosmos/docs/assessments/Detailed_Recommended_Changes.md"
+      ]
+    },
+    {
+      "sha256": "b3356ee8623b5c32c7439eb2bdcee5cc2dba7986ef503b1aef3dad16732affda",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/docs/reviews/2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+        "2026-08-31/standard-audit/gkos-standard/docs/reviews/2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+        "integration/standard-r18/docs/reviews/2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+        "upgrades/standard-r18/docs/reviews/2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md"
+      ]
+    },
+    {
+      "sha256": "b50030f06275dcdfde04740260377e5adf5dd98cd0fee4189db6e104c85c64e6",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/standard/annexes/Layer_Interface_Contracts.md",
+        "2026-08-31/standard-audit/gkos-standard/standard/annexes/Layer_Interface_Contracts.md",
+        "integration/standard-r18/standard/annexes/Layer_Interface_Contracts.md",
+        "upgrades/standard-r18/standard/annexes/Layer_Interface_Contracts.md"
+      ]
+    },
+    {
+      "sha256": "bb6ed8d11394920d24d23586eaf9263e42a1b6b84698da8f6b8be539b1c16779",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/archive/TECHNICAL_README_pre_gkx2.md",
+        "2026-08-31/standard-audit/gkos-standard/archive/TECHNICAL_README_pre_gkx2.md",
+        "integration/standard-r18/archive/TECHNICAL_README_pre_gkx2.md",
+        "upgrades/standard-r18/archive/TECHNICAL_README_pre_gkx2.md"
+      ]
+    },
+    {
+      "sha256": "bd41f18b89da040a7b471cbaf4a04b4110fcc782c2eb6185de327a9a84406600",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/.github/pull_request_template.md",
+        "integration/kosmos/.github/pull_request_template.md",
+        "upgrades/kosmos/.github/pull_request_template.md"
+      ]
+    },
+    {
+      "sha256": "bd454a34a5cf023d9e2ef39b98c9fa048dfa0f75b8400522e925dd0f6bffea4a",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/BUILD-DIRECTIVE-v0.5.5.md",
+        "2026-08-31/product-audit/Kosmos-Oden/docs/BUILD-DIRECTIVE.md",
+        "integration/kosmos/BUILD-DIRECTIVE-v0.5.5.md",
+        "integration/kosmos/docs/BUILD-DIRECTIVE.md",
+        "upgrades/kosmos/BUILD-DIRECTIVE-v0.5.5.md",
+        "upgrades/kosmos/docs/BUILD-DIRECTIVE.md"
+      ]
+    },
+    {
+      "sha256": "c3acdf6b0870694ca9bd63a25da0fbe1bccd757ee76521284f048888f302ac5b",
+      "paths": [
+        "2026-08-31/engine-audit/engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "2026-08-31/engine-audit/lite/rust/contracts/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "2026-08-31/product-audit/Kosmos-Oden/node_modules/gkos-engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "integration/engine-superseded-20260831/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "integration/engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "integration/lite/rust/contracts/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "upgrades/engine-historical/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "upgrades/engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "upgrades/kosmos/node_modules/gkos-engine/contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "upgrades/lite/rust/contracts/gkos-ingest-validation-1.0.0-draft.1/README.md"
+      ]
+    },
+    {
+      "sha256": "c7c99cc268f7767b8274618a84188187eddce078d58cea80dfab5488e265b0a0",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/archive/standard/00_GKOS_Master_Standard_pre_gkx2.md",
+        "2026-08-31/standard-audit/gkos-standard/archive/standard/00_GKOS_Master_Standard_pre_gkx2.md",
+        "integration/standard-r18/archive/standard/00_GKOS_Master_Standard_pre_gkx2.md",
+        "upgrades/standard-r18/archive/standard/00_GKOS_Master_Standard_pre_gkx2.md"
+      ]
+    },
+    {
+      "sha256": "c989212f5fb27bb3eb1dafc2fc4600c7102889d75d6a7634f456a5b3666b022d",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/KOSMOS-ODEN-RENDERER-ASSESSMENT.md",
+        "integration/kosmos/Kosmos-Oden-Engineering-Review/KOSMOS-ODEN-RENDERER-ASSESSMENT.md",
+        "upgrades/kosmos/Kosmos-Oden-Engineering-Review/KOSMOS-ODEN-RENDERER-ASSESSMENT.md"
+      ]
+    },
+    {
+      "sha256": "c9ed1eaf9a0a06e909474fff8fd3069ebc60822e66b97a46586e67ce09a12ca0",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/GKOS-ENGINE-DEFINITIONS.md",
+        "integration/kosmos/docs/GKOS-ENGINE-DEFINITIONS.md",
+        "upgrades/kosmos/docs/GKOS-ENGINE-DEFINITIONS.md"
+      ]
+    },
+    {
+      "sha256": "cd7e57d93b714f481bcd3f446332abca73d93e0605af0a4351804155ef267670",
+      "paths": [
+        "2026-08-31/GKOS-ECOSYSTEM-TS-FIRST-RUST-ROADMAP.md",
+        "GKOS-ECOSYSTEM-TS-FIRST-RUST-ROADMAP.md"
+      ]
+    },
+    {
+      "sha256": "cf983c2e6269a856aece443f9cf16c0fafbe024ebc00714154838c7e0a7618ec",
+      "paths": [
+        "2026-08-31/engine-audit/engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+        "2026-08-31/engine-audit/lite/rust/contracts/gkos-retrieval-1.0.0-draft.2/README.md",
+        "2026-08-31/product-audit/Kosmos-Oden/node_modules/gkos-engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+        "integration/engine-superseded-20260831/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+        "integration/engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+        "integration/lite/rust/contracts/gkos-retrieval-1.0.0-draft.2/README.md",
+        "upgrades/engine-historical/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+        "upgrades/engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+        "upgrades/kosmos/node_modules/gkos-engine/contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+        "upgrades/lite/rust/contracts/gkos-retrieval-1.0.0-draft.2/README.md"
+      ]
+    },
+    {
+      "sha256": "d912cab314287a51d2212b00c603f6d535397cee597029d758e641f3ad9ecadd",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/node_modules/gkos-engine/docs/citations.md",
+        "integration/engine-superseded-20260831/docs/citations.md",
+        "integration/engine/docs/citations.md",
+        "upgrades/engine-historical/docs/citations.md",
+        "upgrades/engine/docs/citations.md",
+        "upgrades/kosmos/node_modules/gkos-engine/docs/citations.md"
+      ]
+    },
+    {
+      "sha256": "d91380d5bd1ec8e46bbd5d26ee136542f5f8fd61332f02099e7a4b84e235d790",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/TECHNICAL_README.md",
+        "integration/kosmos/TECHNICAL_README.md",
+        "upgrades/kosmos/TECHNICAL_README.md"
+      ]
+    },
+    {
+      "sha256": "de4a67deffccca4f6630b378e314a78ef936808bf9ad8a50ef88610d02b9c097",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/docs/directives/GKOS-DIRECTIVE-STD-079-r4.md",
+        "2026-08-31/standard-audit/gkos-standard/docs/directives/GKOS-DIRECTIVE-STD-079-r4.md",
+        "integration/standard-r18/docs/directives/GKOS-DIRECTIVE-STD-079-r4.md",
+        "upgrades/standard-r18/docs/directives/GKOS-DIRECTIVE-STD-079-r4.md"
+      ]
+    },
+    {
+      "sha256": "e099b9736b5e054b87d351a15675862c98e4d64b8a75d387a04e3971ef828466",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/contracts/governance/GKOS-Hindsight-Dream-Governance-Demonstrator.md",
+        "2026-08-31/standard-audit/gkos-hindsight-governance-snapshot/governance/specifications/GKOS-Hindsight-Dream-Governance-Demonstrator.md"
+      ]
+    },
+    {
+      "sha256": "e3a95224575d5614beed1fa4e958ab4b89e73a0a627e2e15522432edc656c0e6",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+        "2026-08-31/standard-audit/gkos-standard/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+        "upgrades/standard-r18/docs/proposals/GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md"
+      ]
+    },
+    {
+      "sha256": "ea152f8d6dba2f4d5af4d15ff000dcb6f029a92546f25cc57765a6b99beb003a",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/docs/implementation/GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+        "2026-08-31/standard-audit/gkos-standard/docs/implementation/GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+        "integration/standard-r18/docs/implementation/GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+        "upgrades/standard-r18/docs/implementation/GCP67_EXECUTABLE_EVIDENCE_STATUS.md"
+      ]
+    },
+    {
+      "sha256": "ea579da035ab6c1830658e4e0863dcbdc81a0fe6b95cd35c4cd079c49448c4c5",
+      "paths": [
+        "2026-08-31/standard-audit/gkos-standard-r18/archive/illustrated/GKOS-v0.76-Illustrated-Edition.md",
+        "2026-08-31/standard-audit/gkos-standard/archive/illustrated/GKOS-v0.76-Illustrated-Edition.md",
+        "integration/standard-r18/archive/illustrated/GKOS-v0.76-Illustrated-Edition.md",
+        "upgrades/standard-r18/archive/illustrated/GKOS-v0.76-Illustrated-Edition.md"
+      ]
+    },
+    {
+      "sha256": "ec793a1b6e06a201fcd2ff0ad4e8918ba8810397651f31a9d457c55b991ac63b",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/IMPLEMENTATION-HANDOFF.md",
+        "integration/kosmos/docs/navigation-effects/IMPLEMENTATION-HANDOFF.md",
+        "upgrades/kosmos/docs/navigation-effects/IMPLEMENTATION-HANDOFF.md"
+      ]
+    },
+    {
+      "sha256": "ee340de184f2a442d308b15405362a7f36964d10daf8755863fd5ecf3a32496a",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/Kosmos-Oden-Engineering-Review/CI-CD-AND-AGENT-OPERATING-DIRECTIVE.md",
+        "integration/kosmos/Kosmos-Oden-Engineering-Review/CI-CD-AND-AGENT-OPERATING-DIRECTIVE.md",
+        "upgrades/kosmos/Kosmos-Oden-Engineering-Review/CI-CD-AND-AGENT-OPERATING-DIRECTIVE.md"
+      ]
+    },
+    {
+      "sha256": "f1ba3baf0fcef54b7ade0e7c6baacaa4a1974305a7c24a0ae5f5645839f5e650",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/THREAT-MODEL.md",
+        "integration/kosmos/docs/THREAT-MODEL.md",
+        "upgrades/kosmos/docs/THREAT-MODEL.md"
+      ]
+    },
+    {
+      "sha256": "f2bddd4c8c2d3a12ed9ecce13883e85003145ef7a4b1681612071ae026d88890",
+      "paths": [
+        "2026-08-31/product-audit/Kosmos-Oden/docs/navigation-effects/QUALIFICATION-PLAN.md",
+        "integration/kosmos/docs/navigation-effects/QUALIFICATION-PLAN.md",
+        "upgrades/kosmos/docs/navigation-effects/QUALIFICATION-PLAN.md"
+      ]
+    }
+  ]
+}

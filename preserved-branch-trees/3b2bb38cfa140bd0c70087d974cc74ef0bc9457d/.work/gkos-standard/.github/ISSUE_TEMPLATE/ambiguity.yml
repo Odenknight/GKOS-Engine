@@ -1,0 +1,20 @@
+name: Specification ambiguity
+description: Report language with multiple defensible interpretations
+title: "[Ambiguity]: "
+labels: ["type:ambiguity"]
+body:
+  - type: input
+    id: section
+    attributes: {label: Affected section or decision}
+    validations: {required: true}
+  - type: textarea
+    id: interpretations
+    attributes: {label: Competing interpretations}
+    validations: {required: true}
+  - type: textarea
+    id: impact
+    attributes: {label: Operational or conformance impact}
+    validations: {required: true}
+  - type: textarea
+    id: proposal
+    attributes: {label: Proposed clarification}

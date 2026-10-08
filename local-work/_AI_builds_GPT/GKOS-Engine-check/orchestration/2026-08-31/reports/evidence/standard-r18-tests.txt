@@ -1,0 +1,350 @@
+SOURCE: aa9a05315a9a767bd672aa2bb5179c963d9d66ca
+COMMANDS: npm test; node registry-lint.mjs --require-mutation-coverage; six evaluateGate boundary probes
+
+> test
+> node --test "test/*.test.mjs" && npm run lint:registries
+
+✔ authority window uses inclusive start and exclusive end (0.9975ms)
+✔ missing, malformed, and inverted time evidence fails closed (0.145ms)
+✔ exact-expiry refusal preserves protected state and emits a schema-valid receipt (123.8964ms)
+✔ clean-process replay produces identical canonical bytes and hash (298.6044ms)
+✔ held contradiction omission refuses with GKOS-GATE-L6-009 (18.0993ms)
+✔ rendered-field mutation refuses with GKOS-GATE-L6-008 (23.7631ms)
+✔ resolved-content mutation refuses with GKOS-GATE-L6-007 (6.7178ms)
+✔ machine-readable applicability and evidence vocabularies satisfy their schemas (47.938ms)
+✔ unexecuted graph expectations block fixture and profile PASS (787.1105ms)
+PASS  SRTP-P01 — diagnostics: none
+PASS  SRTP-P02 — diagnostics: none
+PASS  SRTP-P03 — diagnostics: none
+PASS  SRTP-P04 — diagnostics: none
+PASS  SRTP-P05 — diagnostics: none
+PASS  SRTP-P06 — diagnostics: none
+PASS  SRTP-N01 — diagnostics: SRTP-ARTIFACT-001, SRTP-INPUT-001
+PASS  SRTP-N02 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-001, SRTP-INPUT-001
+PASS  SRTP-N03 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-002, SRTP-INPUT-001
+PASS  SRTP-N04 — diagnostics: SRTP-ARTIFACT-001
+PASS  SRTP-N05 — diagnostics: SRTP-CLAIM-001
+PASS  SRTP-N06 — diagnostics: SRTP-REVIEW-001
+PASS  SRTP-N07 — diagnostics: SRTP-REVIEW-002
+PASS  SRTP-N08 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N09 — diagnostics: SRTP-SENSITIVITY-001
+PASS  SRTP-N10 — diagnostics: SRTP-CONTEXT-001
+PASS  SRTP-N11 — diagnostics: SRTP-REENTRY-002
+PASS  SRTP-N12 — diagnostics: SRTP-VERSION-001
+PASS  SRTP-N13 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N14 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N15 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N16 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-P01 — diagnostics: none
+PASS  SRTP-P02 — diagnostics: none
+PASS  SRTP-P03 — diagnostics: none
+PASS  SRTP-P04 — diagnostics: none
+PASS  SRTP-P05 — diagnostics: none
+PASS  SRTP-P06 — diagnostics: none
+PASS  SRTP-N01 — diagnostics: SRTP-ARTIFACT-001, SRTP-INPUT-001
+PASS  SRTP-N02 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-001, SRTP-INPUT-001
+PASS  SRTP-N03 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-002, SRTP-INPUT-001
+PASS  SRTP-N04 — diagnostics: SRTP-ARTIFACT-001
+PASS  SRTP-N05 — diagnostics: SRTP-CLAIM-001
+PASS  SRTP-N06 — diagnostics: SRTP-REVIEW-001
+PASS  SRTP-N07 — diagnostics: SRTP-REVIEW-002
+PASS  SRTP-N08 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N09 — diagnostics: SRTP-SENSITIVITY-001
+PASS  SRTP-N10 — diagnostics: SRTP-CONTEXT-001
+PASS  SRTP-N11 — diagnostics: SRTP-REENTRY-002
+PASS  SRTP-N12 — diagnostics: SRTP-VERSION-001
+PASS  SRTP-N13 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N14 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N15 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N16 — diagnostics: SRTP-REENTRY-001
+✔ SRTP draft graph suite catches every declared negative and remains non-qualifying (184.7507ms)
+✔ complete SRTP trace preserves unknown extensions while validating (107.051ms)
+✔ adversarial graph mutations cannot obtain a false PASS (2.2782ms)
+✔ schema rejects empty traces and tolerance reruns without a tolerance (69.5288ms)
+✔ materialization and evaluation preserve unknown extensions without mutation (1.1795ms)
+▶ every Track A baseline remains open and its mutation closes the expected stable gate
+  ✔ TA-L1-001 (0.7418ms)
+  ✔ TA-L3-001 (0.1271ms)
+  ✔ TA-L4-001 (0.1052ms)
+  ✔ TA-L4-002 (0.1035ms)
+  ✔ TA-L4-003 (0.1332ms)
+  ✔ TA-L4-004 (0.1327ms)
+  ✔ TA-L5-001 (0.1278ms)
+  ✔ TA-L5-002 (0.0887ms)
+  ✔ TA-L5-003 (0.1217ms)
+  ✔ TA-L5-004 (0.1375ms)
+  ✔ TA-L5-005 (0.1334ms)
+  ✔ TA-L5-006 (0.0775ms)
+  ✔ TA-L6-001 (0.0664ms)
+  ✔ TA-L6-002 (0.0458ms)
+  ✔ TA-L6-003 (0.0477ms)
+  ✔ TA-L6-004 (0.1919ms)
+  ✔ TA-L6-005 (0.0504ms)
+  ✔ TA-L6-006 (0.0824ms)
+  ✔ TA-L6-007 (0.1662ms)
+  ✔ TA-L6-008 (0.0944ms)
+  ✔ TA-L6-009 (0.1038ms)
+  ✔ TA-L7-001 (0.0721ms)
+  ✔ TA-L7-002 (0.0403ms)
+  ✔ TA-L7-003 (0.0814ms)
+  ✔ TA-L7-004 (0.048ms)
+  ✔ TA-L7-005 (0.0343ms)
+  ✔ TA-L7-006 (0.0329ms)
+  ✔ TA-L7-007 (0.0349ms)
+✔ every Track A baseline remains open and its mutation closes the expected stable gate (7.521ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 930.0242
+
+> lint:registries
+> node registry-lint.mjs
+
+{
+  "result": "PASS",
+  "registry_version": "1.1.0-development",
+  "applicability_mapping_version": "1.1.0-development",
+  "applicability_overlay_version": "consolidated-into-base",
+  "requirement_count": 62,
+  "gate_code_count": 28,
+  "covered_gate_codes": {
+    "GKOS-GATE-L1-001": [
+      "TA-L1-001"
+    ],
+    "GKOS-GATE-L3-001": [
+      "TA-L3-001"
+    ],
+    "GKOS-GATE-L4-001": [
+      "TA-L4-001"
+    ],
+    "GKOS-GATE-L4-002": [
+      "TA-L4-002"
+    ],
+    "GKOS-GATE-L4-003": [
+      "TA-L4-003"
+    ],
+    "GKOS-GATE-L4-004": [
+      "TA-L4-004"
+    ],
+    "GKOS-GATE-L5-001": [
+      "TA-L5-001"
+    ],
+    "GKOS-GATE-L5-002": [
+      "TA-L5-002"
+    ],
+    "GKOS-GATE-L5-003": [
+      "TA-L5-003"
+    ],
+    "GKOS-GATE-L5-004": [
+      "TA-L5-004"
+    ],
+    "GKOS-GATE-L5-005": [
+      "TA-L5-005"
+    ],
+    "GKOS-GATE-L5-006": [
+      "TA-L5-006"
+    ],
+    "GKOS-GATE-L6-001": [
+      "TA-L6-001"
+    ],
+    "GKOS-GATE-L6-002": [
+      "TA-L6-002"
+    ],
+    "GKOS-GATE-L6-003": [
+      "TA-L6-003"
+    ],
+    "GKOS-GATE-L6-004": [
+      "TA-L6-004"
+    ],
+    "GKOS-GATE-L6-005": [
+      "TA-L6-005"
+    ],
+    "GKOS-GATE-L6-006": [
+      "TA-L6-006"
+    ],
+    "GKOS-GATE-L6-007": [
+      "GCP6-N-CONTENT-001",
+      "TA-L6-007"
+    ],
+    "GKOS-GATE-L6-008": [
+      "GCP6-N-RENDER-001",
+      "TA-L6-008"
+    ],
+    "GKOS-GATE-L6-009": [
+      "GCP6-N-CLOSURE-001",
+      "TA-L6-009"
+    ],
+    "GKOS-GATE-L7-001": [
+      "GCP7-N-AUTH-TIME-001",
+      "TA-L7-001"
+    ],
+    "GKOS-GATE-L7-002": [
+      "TA-L7-002"
+    ],
+    "GKOS-GATE-L7-003": [
+      "TA-L7-003"
+    ],
+    "GKOS-GATE-L7-004": [
+      "TA-L7-004"
+    ],
+    "GKOS-GATE-L7-005": [
+      "TA-L7-005"
+    ],
+    "GKOS-GATE-L7-006": [
+      "TA-L7-006"
+    ],
+    "GKOS-GATE-L7-007": [
+      "TA-L7-007"
+    ]
+  },
+  "uncovered_gate_codes": [],
+  "errors": [],
+  "warnings": []
+}
+{
+  "result": "PASS",
+  "registry_version": "1.1.0-development",
+  "applicability_mapping_version": "1.1.0-development",
+  "applicability_overlay_version": "consolidated-into-base",
+  "requirement_count": 62,
+  "gate_code_count": 28,
+  "covered_gate_codes": {
+    "GKOS-GATE-L1-001": [
+      "TA-L1-001"
+    ],
+    "GKOS-GATE-L3-001": [
+      "TA-L3-001"
+    ],
+    "GKOS-GATE-L4-001": [
+      "TA-L4-001"
+    ],
+    "GKOS-GATE-L4-002": [
+      "TA-L4-002"
+    ],
+    "GKOS-GATE-L4-003": [
+      "TA-L4-003"
+    ],
+    "GKOS-GATE-L4-004": [
+      "TA-L4-004"
+    ],
+    "GKOS-GATE-L5-001": [
+      "TA-L5-001"
+    ],
+    "GKOS-GATE-L5-002": [
+      "TA-L5-002"
+    ],
+    "GKOS-GATE-L5-003": [
+      "TA-L5-003"
+    ],
+    "GKOS-GATE-L5-004": [
+      "TA-L5-004"
+    ],
+    "GKOS-GATE-L5-005": [
+      "TA-L5-005"
+    ],
+    "GKOS-GATE-L5-006": [
+      "TA-L5-006"
+    ],
+    "GKOS-GATE-L6-001": [
+      "TA-L6-001"
+    ],
+    "GKOS-GATE-L6-002": [
+      "TA-L6-002"
+    ],
+    "GKOS-GATE-L6-003": [
+      "TA-L6-003"
+    ],
+    "GKOS-GATE-L6-004": [
+      "TA-L6-004"
+    ],
+    "GKOS-GATE-L6-005": [
+      "TA-L6-005"
+    ],
+    "GKOS-GATE-L6-006": [
+      "TA-L6-006"
+    ],
+    "GKOS-GATE-L6-007": [
+      "GCP6-N-CONTENT-001",
+      "TA-L6-007"
+    ],
+    "GKOS-GATE-L6-008": [
+      "GCP6-N-RENDER-001",
+      "TA-L6-008"
+    ],
+    "GKOS-GATE-L6-009": [
+      "GCP6-N-CLOSURE-001",
+      "TA-L6-009"
+    ],
+    "GKOS-GATE-L7-001": [
+      "GCP7-N-AUTH-TIME-001",
+      "TA-L7-001"
+    ],
+    "GKOS-GATE-L7-002": [
+      "TA-L7-002"
+    ],
+    "GKOS-GATE-L7-003": [
+      "TA-L7-003"
+    ],
+    "GKOS-GATE-L7-004": [
+      "TA-L7-004"
+    ],
+    "GKOS-GATE-L7-005": [
+      "TA-L7-005"
+    ],
+    "GKOS-GATE-L7-006": [
+      "TA-L7-006"
+    ],
+    "GKOS-GATE-L7-007": [
+      "TA-L7-007"
+    ]
+  },
+  "uncovered_gate_codes": [],
+  "errors": [],
+  "warnings": []
+}
+[
+  {
+    "input": {
+      "kind": "authority",
+      "valid": true,
+      "evaluation_time": "2026-08-31T00:00:00.000000Z"
+    },
+    "result": null
+  },
+  {
+    "input": {
+      "kind": "context-binding"
+    },
+    "result": null
+  },
+  {
+    "input": {
+      "kind": "digest-binding"
+    },
+    "result": null
+  },
+  {
+    "input": {
+      "kind": "restrictiveness"
+    },
+    "result": null
+  },
+  {
+    "input": {
+      "kind": "canonical-time",
+      "value": "2026-99-99T99:99:99.000000Z"
+    },
+    "result": null
+  },
+  {
+    "input": {
+      "kind": "authorization-manifest"
+    },
+    "result": null
+  }
+]
+

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/gkx-common.defs.json",
+  "title": "GKX 2.0 shared definitions",
+  "$defs": {
+    "authoredNoteUid": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[47][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$" },
+    "targetIdentifier": { "type": "string", "anyOf": [{ "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$" }, { "pattern": "^[a-z][a-z0-9_.-]*:[a-z0-9][a-z0-9_.:/-]{2,}$" }] },
+    "contentHash": { "type": "string", "pattern": "^[a-z0-9]+:[A-Za-z0-9._:-]+$" },
+    "timestamp": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$" },
+    "epistemicState": { "type": "string", "enum": ["unknown", "observation", "reported", "inferred", "hypothesis", "modeled", "supported", "contested", "refuted", "retracted", "accepted", "superseded"] },
+    "sensitivity": { "type": "string", "enum": ["public", "internal", "restricted", "confidential", "regulated", "phi", "secret"] },
+    "origin": { "type": "string", "enum": ["authored", "derived", "proposed", "approved"] },
+    "relationshipTarget": { "type": "string", "anyOf": [{ "$ref": "#/$defs/targetIdentifier" }, { "pattern": "^\\[\\[[^\\[\\]]+\\]\\]$" }] },
+    "diagnostic": { "type": "object", "required": ["code", "severity", "message", "deterministic"], "properties": { "code": { "type": "string", "pattern": "^GKX-[A-Z]+-\\d{3}$" }, "severity": { "type": "string", "enum": ["info", "warning", "error", "critical"] }, "message": { "type": "string" }, "deterministic": { "type": "boolean" } }, "additionalProperties": true },
+    "actorIdentity": { "type": "string", "pattern": "^(human|plugin:[a-z0-9_-]+|agent:[A-Za-z0-9_.:-]+|tool:[a-z0-9_-]+)$" }
+  }
+}

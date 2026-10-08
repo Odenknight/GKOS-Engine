@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/science/artifact-record.draft.schema.json",
+  "title": "SRTP Artifact Record — PROVISIONAL DRAFT, informative only",
+  "allOf": [
+    { "$ref": "research-object.draft.schema.json" },
+    {
+      "type": "object",
+      "required": ["artifact_kind", "artifact_digest", "registered_source_digest", "generating_event_id", "code_digest", "dataset_digests", "environment_digest"],
+      "properties": {
+        "srtp_type": { "const": "srtp:Artifact" },
+        "artifact_kind": { "type": "string", "enum": ["figure", "table", "notebook", "model", "manuscript", "log", "other"] },
+        "artifact_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+        "registered_source_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+        "generating_event_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" },
+        "code_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+        "dataset_digests": { "type": "array", "minItems": 1, "items": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" } },
+        "environment_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+        "external_reference": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  ]
+}

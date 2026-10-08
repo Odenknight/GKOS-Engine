@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/conformance-manifest.schema.json",
+  "title": "GKOS conformance claim manifest",
+  "description": "Machine-readable conformance claim per conformance/README.md: standard and test versions, evidence, limitations, exceptions, and self-attested vs independently-verified distinction. A claim citing a draft technical specification MUST disclose that status and identify the last ratified baseline (GKOS v0.76 §4.1).",
+  "type": "object",
+  "required": ["claim_id", "implementation", "standard", "profiles_claimed", "attestation", "fixtures", "limitations", "generated_at"],
+  "properties": {
+    "claim_id": { "type": "string", "minLength": 1 },
+    "implementation": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "repository": { "type": "string" },
+        "commit": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "standard": {
+      "type": "object",
+      "required": ["gkos_release"],
+      "properties": {
+        "gkos_release": { "type": "string", "examples": ["GKOS-2026-08-05 v0.78"] },
+        "technical_spec": { "type": "string", "examples": ["GKX 2.0"] },
+        "technical_spec_status": { "type": "string", "enum": ["ratified", "developmental"] },
+        "last_ratified_baseline": { "type": "string", "examples": ["GKX 2.0"] }
+      },
+      "if": { "properties": { "technical_spec_status": { "const": "draft" } } },
+      "then": { "required": ["last_ratified_baseline"] },
+      "additionalProperties": false
+    },
+    "profiles_claimed": {
+      "description": "Profiles for which the cited catalog declares complete qualifying coverage and every required expectation passed. An empty array means that the run produced evidence but no profile claim.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["GCP-1", "GCP-2", "GCP-3", "GCP-4", "GCP-5", "GCP-6", "GCP-7", "Viewer-Projection-Profile"] }
+    },
+    "attestation": {
+      "type": "object",
+      "required": ["mode", "attested_by"],
+      "properties": {
+        "mode": { "type": "string", "enum": ["self-attested", "independently-verified"] },
+        "attested_by": { "type": "string" },
+        "verifier": { "type": "string" }
+      },
+      "if": { "properties": { "mode": { "const": "independently-verified" } } },
+      "then": { "required": ["verifier"] },
+      "additionalProperties": false
+    },
+    "fixtures": {
+      "type": "object",
+      "required": ["catalog_version", "executed", "passed", "failed", "skipped", "results"],
+      "properties": {
+        "catalog_version": { "type": "string" },
+        "executed": { "type": "integer", "minimum": 0 },
+        "fully_evaluated": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 },
+        "unevaluated": { "type": "integer", "minimum": 0 },
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["fixture_id", "outcome"],
+            "properties": {
+              "fixture_id": { "type": "string" },
+              "outcome": { "type": "string", "enum": ["pass", "fail", "skip", "known-divergence", "unevaluated"] },
+              "divergence_ref": { "type": "string" },
+              "detail": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "limitations": {
+      "description": "Disclosed limitations and waivers. A single-actor deployment MUST list the separation-of-duties waiver here.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "exceptions": { "type": "array", "items": { "type": "string" } },
+    "environment": { "type": "object" },
+    "generated_at": { "$ref": "gkx-common.defs.json#/$defs/timestamp" }
+  },
+  "additionalProperties": false
+}

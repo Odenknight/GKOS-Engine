@@ -1,0 +1,17 @@
+{
+  "fixtureId": "effects-authority-denied",
+  "category": "denied",
+  "input": {
+    "operation": "agent-note:update",
+    "agentId": "018f22c8-4b63-7a12-9f45-8d91c734beef",
+    "allowedRoot": "_kosmos/agent-notes/atlas",
+    "targetName": "daily.md",
+    "grantEnabled": false
+  },
+  "expected": {
+    "outcome": "denied",
+    "sourceWrite": false,
+    "reasonCodes": ["GRANT_DISABLED"],
+    "currentContentIncluded": false
+  }
+}

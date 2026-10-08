@@ -1,0 +1,256 @@
+{
+  "record_type": "gkos-phase6-d0-15-c2-authority-concurrency-authorization-receipt",
+  "record_version": "12.0.0",
+  "recorded_at_utc": "2026-08-26T16:11:46.8789963Z",
+  "status": "EXACT_C2_AUTHORITY_CONCURRENCY_AUTHORIZED_ONLY",
+  "owner_statement_exact": "Authorize C2 authority/concurrency concurrence against accepted V11 SHA 7f091d1c1dde22c4adf060b166694fc112f7a7eadc24f4a82ae8a8d1cfde9aad and both fresh C1 V5 acceptance receipts only.",
+  "purpose": "Capture the Product Owner's exact, one-wave authorization in a detached immutable receipt. Bind the accepted V11 exact primary coordinate, V11's final raw receipt coordinate, and only the two fresh C1 V5 acceptance receipts as the completed C1 gate. Authorize exactly one brand-new independent zero-contribution C2 authority/concurrency reviewer to review that identical accepted coordinate together with both C1 receipts and this V12 authorization receipt. Require an unconditional C2 acceptance or a controlling stop, and require a separate explicit Product Owner authorization before any C3 activity.",
+  "receipt_properties": {
+    "detached": true,
+    "immutable_after_finalization": true,
+    "exact_byte_bound": true,
+    "authorization_only": true,
+    "review_verdict": false,
+    "product_effect": false
+  },
+  "authority_application": {
+    "authority_source": "Product Owner statement captured verbatim in owner_statement_exact",
+    "authority_is_new_and_explicit": true,
+    "authorized_wave": "C2_ONLY",
+    "authorized_role": "authority/concurrency",
+    "authorized_reviewer_count": 1,
+    "prior_or_historical_c1_receipts_carry": false,
+    "standing_authority_expanded": false,
+    "semantic_choice_added": false,
+    "application_result": "ONE_FRESH_C2_AUTHORITY_CONCURRENCY_REVIEW_AUTHORIZED"
+  },
+  "accepted_v11_primary_coordinate": [
+    {
+      "coordinate": "V8",
+      "role": "Q17-Q20 owner resolution and bounded standing source-preserving evidence authority",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V8_2026-08-26.json",
+      "sha256": "6b8a5b9fca8c72561ef1aee56c15911e34d0559edcae058f19631b71e16d9116",
+      "bytes": 18358,
+      "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2"
+    },
+    {
+      "coordinate": "V10",
+      "role": "ratified source-preserving mechanical disposition for C1-V4-SEC-001 and C1-V4-SEC-002",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_STANDING_SOURCE_PRESERVING_DISPOSITION_V10_2026-08-26.json",
+      "sha256": "2fc2da6a15308460c091624c5ccaa9ede2b3a17ac529b3fe401f9d9138f9814b",
+      "bytes": 28622,
+      "record_digest": "a560e9dbd92cd8e31fb6b05512c5c197bf92e2c3b8a204a7877bc7d5b2e89de7"
+    },
+    {
+      "coordinate": "Registry V5",
+      "role": "closed 468-row canonical non-MCP fixture registry",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V5_2026-08-26.json",
+      "sha256": "de2a2f28ee0248b01644bf50328c8e1321790e5e0fd6f3b3c12d40adb92610c8",
+      "bytes": 254938,
+      "record_digest": "db1806b1edda3a8eaab27e9d1c2861d95fbd5cce61630412b52087a0232efde4"
+    },
+    {
+      "coordinate": "Map V5",
+      "role": "corrected decision and correction map closing both C1 V4 security findings without contribution",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V5_2026-08-26.json",
+      "sha256": "7c9f4cb1fcd97dded263be39cc21bff1291968bd9d41747dcef68748d009fb56",
+      "bytes": 24737,
+      "record_digest": "380736841645b57bd6d31e2dab68c632f328efdc163e1d40fc48438494f1fda7"
+    }
+  ],
+  "accepted_v11_receipt": {
+    "coordinate": "V11",
+    "role": "accepted exact-coordinate receipt whose four-part primary coordinate is reproduced above",
+    "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_COORDINATE_RECEIPT_V11_2026-08-26.json",
+    "sha256": "7f091d1c1dde22c4adf060b166694fc112f7a7eadc24f4a82ae8a8d1cfde9aad",
+    "bytes": 12544,
+    "record_digest": "6d7725bd8b095daf9280882702aa075d55576ecffaf88d2fc8f1d624350e12a7",
+    "carrying": true
+  },
+  "fresh_c1_v5_acceptance_receipts": [
+    {
+      "coordinate": "C1 V5 migration",
+      "role": "brand-new independent zero-contribution migration concurrence on the exact V11 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V5_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "72c2a6522e3d6b9d8d4fe12ed24a551588fac71e7afa142f0d43475082bc82b1",
+      "bytes": 20482,
+      "record_digest": "6fd4af09f4bbf7bcdca8920bc97e913b148a32e0287335d2a49b74722d8067b6",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "concurrence": true,
+      "findings": 0,
+      "unconditional": true,
+      "carrying": true
+    },
+    {
+      "coordinate": "C1 V5 security",
+      "role": "brand-new independent zero-contribution security concurrence on the exact V11 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V5_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "a2a48f99e6634d1d3e0eed803be3e66496b55ca68a521105cbd43347322ee978",
+      "bytes": 25164,
+      "record_digest": "2c2634f50e26ef0a2336ea1a001cf0b9075fc77bd35f98cf59cbbddcdeaefbcc",
+      "verdict": "ACCEPT_CONCURRENCE",
+      "concurrence": true,
+      "findings": 0,
+      "unconditional": true,
+      "carrying": true
+    }
+  ],
+  "c1_gate_evaluation": {
+    "required_receipts": 2,
+    "present_receipts": 2,
+    "accepted_receipts": 2,
+    "receipts_with_findings": 0,
+    "migration_acceptance_present": true,
+    "security_acceptance_present": true,
+    "same_exact_v11_coordinate": true,
+    "raw_sha256_byte_length_and_record_digest_match": true,
+    "unconditional_acceptance_only": true,
+    "gate_result": "PASS_C1_COMPLETE_FOR_EXACT_V11_COORDINATE"
+  },
+  "carrying_input_rule": {
+    "carrying_evidence_receipts": [
+      "accepted V11 exact-coordinate receipt",
+      "fresh C1 V5 migration acceptance receipt",
+      "fresh C1 V5 security acceptance receipt"
+    ],
+    "historical_c1_receipts_carry": false,
+    "rejected_or_superseded_coordinate_receipts_carry": false,
+    "additional_acceptance_receipts_carry": false,
+    "rule": "C2 authority derives only from the Product Owner's exact statement in this V12 receipt. The reviewed evidence coordinate is exactly V11's accepted primary coordinate and final raw receipt coordinate, and completion of C1 is established only by the two fresh C1 V5 acceptance receipts bound above. No other concurrence or historical verdict carries."
+  },
+  "source_graph_and_chronology": {
+    "status": "PASS",
+    "acyclic_order": [
+      "immutable source, proposal, accepted-F1, governance, and historical evidence ancestors",
+      "V8 owner resolution and bounded standing source-preserving evidence authority",
+      "V10 source-preserving mechanical disposition",
+      "Registry V5 materialized and derived-count descendant",
+      "Map V5 descendant binding already-existing V8, V10, and Registry V5 bytes",
+      "V11 exact-coordinate receipt binding already-existing V8, V10, Registry V5, and Map V5 bytes",
+      "fresh independent C1 V5 security and migration receipts, each binding already-existing V11 bytes",
+      "this detached V12 C2 authorization receipt binding already-existing V11 and both fresh C1 V5 receipt bytes",
+      "future detached C2 receipt, which must bind this V12 final raw coordinate without changing any ancestor"
+    ],
+    "chronology": {
+      "v8_before_v10": true,
+      "v10_before_registry_v5": true,
+      "registry_v5_before_map_v5": true,
+      "map_v5_before_v11": true,
+      "v11_before_both_fresh_c1_v5_receipts": true,
+      "both_fresh_c1_v5_receipts_before_v12": true,
+      "v12_before_future_c2_receipt": true
+    },
+    "ancestor_prebinds_v12_raw_sha256_or_byte_length": false,
+    "v12_prebinds_future_c2_raw_sha256_or_byte_length": false,
+    "cycle_or_forward_hash_reference_found": false,
+    "acyclic": true
+  },
+  "c2_authorization": {
+    "authorized": true,
+    "wave": "C2_ONLY",
+    "review_role": "authority/concurrency",
+    "review_kind": "brand-new independent zero-contribution concurrence",
+    "reviewer_count_exactly": 1,
+    "reviewer_must_be_brand_new": true,
+    "reviewer_must_be_independent": true,
+    "reviewer_must_be_zero_contribution": true,
+    "reviewed_coordinate": "the identical accepted V11 primary coordinate and V11 final raw receipt coordinate, plus both fresh C1 V5 acceptance receipts and this V12 authorization receipt's final raw coordinate",
+    "mandatory_inputs": [
+      "all four entries in accepted_v11_primary_coordinate",
+      "accepted_v11_receipt",
+      "fresh_c1_v5_acceptance_receipts[0] migration",
+      "fresh_c1_v5_acceptance_receipts[1] security",
+      "this V12 receipt after its canonical internal digest, raw SHA-256, and byte length are finalized"
+    ],
+    "reviewer_may_edit_reviewed_bytes": false,
+    "reviewer_may_correct_reviewed_bytes": false,
+    "reviewer_may_regenerate_reviewed_bytes": false,
+    "reviewer_may_contribute_product_proposal_contract_fixture_or_evidence_semantics": false,
+    "reviewer_may_reuse_prior_authority_or_concurrency_verdict": false,
+    "only_new_artifact_permitted": "one detached C2 authority/concurrency concurrence receipt",
+    "automatic_c3_advance": false,
+    "product_effect": false
+  },
+  "c2_decision_rule": {
+    "acceptance_rule": "C2 is accepted only if the one authorized brand-new independent zero-contribution authority/concurrency reviewer binds the exact final raw SHA-256, byte length, and canonical internal record digest of V11, both fresh C1 V5 acceptance receipts, and V12; confirms the reproduced V11 primary coordinate is identical; confirms both C1 receipts are unconditional ACCEPT_CONCURRENCE with zero findings on that coordinate; finds no byte drift, cycle, chronology defect, independence defect, ambiguity, waiver, assumption, condition, or authority/concurrency defect; and returns one unconditional ACCEPT_CONCURRENCE with zero findings.",
+    "rejection_rule": "Any rejection, finding, conditional or qualified acceptance, mismatch, byte drift, digest failure, missing input, cycle, chronology defect, ambiguity, waiver, assumption, reviewer contribution, independence defect, or verdict other than unconditional ACCEPT_CONCURRENCE controls. C2 is then incomplete; preserve every coordinate, stop, and return to the Product Owner. No repair, replacement, rerun, later wave, or product action is implied or authorized.",
+    "acceptance_does_not_authorize_c3": true,
+    "rejection_does_not_authorize_correction": true
+  },
+  "mandatory_post_c2_stop": {
+    "if_c2_accepts": "Stop and preserve the detached C2 receipt and every bound coordinate. Do not start C3, Full-contract review, or Lite-conformance review. Return for separate explicit Product Owner authorization of C3 against the exact accepted coordinate and final C2 receipt.",
+    "if_c2_rejects": "Stop and preserve the detached C2 receipt and every bound coordinate. Return to the Product Owner; no correction, rerun, replacement reviewer, C3, or product action is authorized.",
+    "separate_explicit_c3_authority_required": true,
+    "automatic_c3_advance": false
+  },
+  "authorization_boundary": {
+    "detached_c2_authority_concurrency_review_authorized": true,
+    "c2_authorized_reviewer_count": 1,
+    "c2_product_effect_authorized": false,
+    "c3_authorized": false,
+    "full_review_authorized": false,
+    "lite_review_authorized": false,
+    "full_contract_review_authorized": false,
+    "lite_conformance_review_authorized": false,
+    "product_authorized": false,
+    "proposal_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "successor_f1_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f1_authorized": false,
+    "successor_f2_authorized": false,
+    "f2_authorized": false,
+    "f2_restart_authorized": false,
+    "product_contract_or_fixture_regeneration_authorized": false,
+    "regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_authorized": false,
+    "push_authorized": false,
+    "workflow_authorized": false,
+    "pr_authorized": false,
+    "pull_request_authorized": false,
+    "merge_authorized": false,
+    "release_authorized": false,
+    "deploy_authorized": false,
+    "deployment_authorized": false,
+    "activation_authorized": false,
+    "publication_authorized": false,
+    "rule": "This V12 receipt authorizes exactly one detached fresh C2 authority/concurrency evidence review and nothing else. All C3, Full/Lite review, product, proposal, successor-F1/F2, regeneration, implementation, repository, delivery, activation, and publication authority remains false."
+  },
+  "integrity_verification": {
+    "method": "Read exact bytes without newline or JSON normalization; compute raw SHA-256 and byte length; parse each JSON artifact; recompute each canonical internal record digest by the declared omission method; inspect the two fresh C1 V5 verdicts and findings arrays; compare V11's exact primary coordinate entry-for-entry; and audit dependency order for cycles and forward raw-coordinate references.",
+    "v11_raw_sha256_matches": true,
+    "v11_byte_length_matches": true,
+    "v11_canonical_internal_record_digest_matches": true,
+    "migration_c1_v5_raw_sha256_matches": true,
+    "migration_c1_v5_byte_length_matches": true,
+    "migration_c1_v5_canonical_internal_record_digest_matches": true,
+    "migration_c1_v5_verdict_is_accept_concurrence": true,
+    "migration_c1_v5_findings_count": 0,
+    "security_c1_v5_raw_sha256_matches": true,
+    "security_c1_v5_byte_length_matches": true,
+    "security_c1_v5_canonical_internal_record_digest_matches": true,
+    "security_c1_v5_verdict_is_accept_concurrence": true,
+    "security_c1_v5_findings_count": 0,
+    "v11_primary_coordinate_entries_checked": 4,
+    "v11_primary_coordinate_raw_hash_byte_or_digest_mismatches": 0,
+    "all_bound_json_parsed": true,
+    "acyclicity": "PASS",
+    "chronology": "PASS",
+    "this_v12_canonical_internal_record_digest": "PASS",
+    "this_v12_final_raw_sha256_and_byte_length": "REPORTED_EXTERNALLY_AFTER_FINALIZATION",
+    "git_diff_check": "PASS"
+  },
+  "preservation": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_disposition": "immutable historical evidence only; no successor-F1 action authorized",
+    "stopped_f2_disposition": "preserved dirty, uncommitted, unqualified, and stopped; no reset, discard, repair, qualification, commit, push, or restart authorized",
+    "v11_and_both_fresh_c1_v5_receipts_edited": false,
+    "existing_evidence_bytes_edited": false,
+    "new_artifact_only": true
+  },
+  "self_raw_coordinate_rule": "This V12 artifact cannot embed its own final raw SHA-256 or byte length without changing those bytes. Its final raw SHA-256 and byte length are reported externally after write and verification. The future C2 reviewer must bind that external final raw coordinate together with this receipt's self-verifying canonical internal record_digest.",
+  "terminal_statement": "THE PRODUCT OWNER'S EXACT STATEMENT AUTHORIZES EXACTLY ONE BRAND-NEW INDEPENDENT ZERO-CONTRIBUTION C2 AUTHORITY/CONCURRENCY REVIEWER AGAINST THE IDENTICAL ACCEPTED V11 COORDINATE, BOTH FRESH C1 V5 ACCEPTANCE RECEIPTS, AND THIS FINAL V12 RECEIPT ONLY. UNCONDITIONAL C2 ACCEPTANCE WITH ZERO FINDINGS IS REQUIRED; ANY OTHER RESULT CONTROLS AS REJECTION. AFTER C2, STOP FOR SEPARATE EXPLICIT C3 AUTHORITY. C3, FULL/LITE REVIEW, PRODUCT, PROPOSAL, SUCCESSOR-F1, F2, REGENERATION, IMPLEMENTATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, AND PUBLICATION REMAIN UNAUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "6d464a19ff1cafd9ecbdfcef6b31f063d3553a8b7178eacb0628f6204739debc"
+}

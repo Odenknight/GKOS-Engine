@@ -1,0 +1,380 @@
+/**
+ * Desktop-agent sidecar tests (build spec Repo A).
+ *
+ * Covers: arg validation (bad/missing level → secret; --notes required; --host
+ * rejected; port defaulting), the coalescing watcher debounce, loopback-only
+ * bind, and the mandatory bearer token (401 without / 200 with).
+ */
+import test from "node:test";
+import assert from "node:assert/strict";
+import http from "node:http";
+import { once } from "node:events";
+
+import {
+  DESKTOP_AGENT_USAGE,
+  parseArgs,
+  Debouncer,
+  createAgentServer,
+  loadOrCreateToken,
+  SENSITIVITY_LEVELS,
+  DEFAULT_PORT,
+  LOOPBACK_HOST,
+  defaultCredentialStatusPaths,
+  formatDefaultCredentialPaths,
+  loadOrCreateDefaultMcpCredential,
+  openValidatedCredentialDirectory,
+  bindAuthorizedStatusDirectory,
+  captureStatusDirectoryNamespace,
+} from "../dist/gkos-desktop-agent.mjs";
+import { GkxIndex } from "../dist/gkos-engine.mjs";
+import { mkdtempSync, rmSync, readFileSync, statSync, writeFileSync, symlinkSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+// ---- arg validation ----------------------------------------------------
+
+test("deployment helper has non-technical command help", () => {
+  assert.match(DESKTOP_AGENT_USAGE, /protected, read-only note map/i);
+  assert.match(DESKTOP_AGENT_USAGE, /never edits/i);
+  assert.match(DESKTOP_AGENT_USAGE, /--notes <folder>/);
+});
+
+test("parseArgs: valid sensitivity is honored", () => {
+  const a = parseArgs(["--notes", "/x", "--default-sensitivity", "internal"]);
+  assert.equal(a.defaultSensitivity, "internal");
+});
+
+test("parseArgs: invalid sensitivity fails closed to secret", () => {
+  const a = parseArgs(["--notes", "/x", "--default-sensitivity", "banana"]);
+  assert.equal(a.defaultSensitivity, "secret");
+});
+
+test("parseArgs: missing sensitivity fails closed to secret", () => {
+  const a = parseArgs(["--notes", "/x"]);
+  assert.equal(a.defaultSensitivity, "secret");
+});
+
+test("parseArgs: --notes is required", () => {
+  assert.throws(() => parseArgs(["--default-sensitivity", "public"]), /--notes/);
+});
+
+test("parseArgs: --host is rejected (loopback only)", () => {
+  assert.throws(() => parseArgs(["--notes", "/x", "--host", "0.0.0.0"]), /host/);
+});
+
+test("parseArgs: port defaults to 4814; invalid falls back to default", () => {
+  assert.equal(parseArgs(["--notes", "/x"]).port, DEFAULT_PORT);
+  assert.equal(parseArgs(["--notes", "/x", "--port", "0"]).port, DEFAULT_PORT);
+  assert.equal(parseArgs(["--notes", "/x", "--port", "not-a-number"]).port, DEFAULT_PORT);
+  assert.equal(parseArgs(["--notes", "/x", "--port", "5000"]).port, 5000);
+});
+
+test("SENSITIVITY_LEVELS is the seven-level vocabulary ending at secret", () => {
+  assert.equal(SENSITIVITY_LEVELS.length, 7);
+  assert.equal(SENSITIVITY_LEVELS[SENSITIVITY_LEVELS.length - 1], "secret");
+});
+
+// ---- debounce -----------------------------------------------------------
+
+test("Debouncer coalesces a burst into a single flush carrying every path", async () => {
+  let flushes = 0;
+  let lastPaths = [];
+  const d = new Debouncer(30, (paths) => {
+    flushes++;
+    lastPaths = paths;
+  });
+  d.schedule("a.md");
+  d.schedule("b.md");
+  d.schedule("a.md"); // duplicate coalesced
+  d.schedule("c.md");
+  assert.equal(flushes, 0, "no flush before the quiet window elapses");
+  await new Promise((r) => setTimeout(r, 80));
+  assert.equal(flushes, 1, "exactly one flush for the whole burst");
+  assert.deepEqual([...lastPaths].sort(), ["a.md", "b.md", "c.md"]);
+});
+
+test("Debouncer arms a fresh window per burst", async () => {
+  let flushes = 0;
+  const d = new Debouncer(30, () => flushes++);
+  d.schedule("x");
+  await new Promise((r) => setTimeout(r, 80));
+  d.schedule("y");
+  await new Promise((r) => setTimeout(r, 80));
+  assert.equal(flushes, 2);
+});
+
+// ---- token persistence --------------------------------------------------
+
+test("loadOrCreateToken generates a 64-hex token and reuses it on subsequent runs", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-tok-"));
+  try {
+    const p = join(dir, "desktop-agent.token");
+    const t1 = loadOrCreateToken(p);
+    assert.match(t1, /^[0-9a-f]{64}$/);
+    const t2 = loadOrCreateToken(p);
+    assert.equal(t1, t2, "token persists across runs");
+    assert.equal(readFileSync(p, "utf8").trim(), t1);
+    assert.ok(statSync(p).isFile());
+    if (process.platform !== "win32") assert.equal(statSync(p).mode & 0o777, 0o600);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("deleting the token file rotates it on recovery", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-tok-rotate-"));
+  try {
+    const p = join(dir, "desktop-agent.token");
+    const first = loadOrCreateToken(p);
+    rmSync(p);
+    const rotated = loadOrCreateToken(p);
+    assert.notEqual(rotated, first);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("default MCP credential persists a distinct identity and status/startup expose paths only", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-mcp-credential-"));
+  try {
+    const viewerPath = join(dir, "desktop-agent.token");
+    const viewerToken = loadOrCreateToken(viewerPath);
+    const first = loadOrCreateDefaultMcpCredential(dir);
+    const second = loadOrCreateDefaultMcpCredential(dir);
+    assert.equal(first.token, second.token);
+    assert.equal(first.state.agent_id, second.state.agent_id);
+    assert.notEqual(first.token, viewerToken);
+    const status = defaultCredentialStatusPaths(viewerPath, first);
+    const startup = formatDefaultCredentialPaths(viewerPath, first, join(dir, "status.json"));
+    const bytes = JSON.stringify({ status, startup });
+    assert.match(startup, /viewer credential: .*desktop-agent\.token/);
+    assert.match(startup, /MCP credential: .*desktop-agent\.mcp\.token/);
+    assert.match(startup, /MCP identity: .*desktop-agent\.mcp\.identity\.json/);
+    assert.equal(bytes.includes(viewerToken), false);
+    assert.equal(bytes.includes(first.token), false);
+    openValidatedCredentialDirectory(dir, viewerToken, first);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("corrupt existing MCP identity blocks without overwrite", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-mcp-corrupt-"));
+  try {
+    const credential = loadOrCreateDefaultMcpCredential(dir);
+    writeFileSync(credential.identityPath, "corrupt-identity");
+    assert.throws(() => loadOrCreateDefaultMcpCredential(dir));
+    assert.equal(readFileSync(credential.identityPath, "utf8"), "corrupt-identity");
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("protected credential reopen rejects a symlinked MCP identity without changing its target", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-mcp-link-"));
+  const external = mkdtempSync(join(tmpdir(), "gkos-mcp-external-"));
+  try {
+    const viewerPath = join(dir, "desktop-agent.token");
+    const viewerToken = loadOrCreateToken(viewerPath);
+    const credential = loadOrCreateDefaultMcpCredential(dir);
+    const externalIdentity = join(external, "identity.json");
+    const expected = readFileSync(credential.identityPath, "utf8");
+    writeFileSync(externalIdentity, expected);
+    rmSync(credential.identityPath);
+    try { symlinkSync(externalIdentity, credential.identityPath, "file"); }
+    catch { return; }
+    assert.throws(() => loadOrCreateDefaultMcpCredential(dir), /CREDENTIAL_LEAF_INVALID|ELOOP/u);
+    assert.throws(() => openValidatedCredentialDirectory(dir, viewerToken, credential));
+    assert.equal(readFileSync(externalIdentity, "utf8"), expected);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+    rmSync(external, { recursive: true, force: true });
+  }
+});
+
+test("credential loaders reject symlinked viewer and MCP token leaves before reading targets", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-token-links-"));
+  const external = mkdtempSync(join(tmpdir(), "gkos-token-links-external-"));
+  try {
+    const externalToken = join(external, "token");
+    const secret = "z".repeat(64);
+    writeFileSync(externalToken, secret, { mode: 0o600 });
+    const viewerPath = join(dir, "desktop-agent.token");
+    try { symlinkSync(externalToken, viewerPath, "file"); }
+    catch { return; }
+    assert.throws(() => loadOrCreateToken(viewerPath), /CREDENTIAL_LEAF_INVALID|ELOOP/u);
+    assert.equal(readFileSync(externalToken, "utf8"), secret);
+    rmSync(viewerPath);
+
+    loadOrCreateToken(viewerPath);
+    const mcp = loadOrCreateDefaultMcpCredential(dir);
+    rmSync(mcp.tokenPath);
+    symlinkSync(externalToken, mcp.tokenPath, "file");
+    assert.throws(() => loadOrCreateDefaultMcpCredential(dir), /CREDENTIAL_LEAF_INVALID|ELOOP/u);
+    assert.equal(readFileSync(externalToken, "utf8"), secret);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+    rmSync(external, { recursive: true, force: true });
+  }
+});
+
+test("status capability handoff shares only the unchanged authorized directory and rejects an external leaf", () => {
+  const dir = mkdtempSync(join(tmpdir(), "gkos-status-capability-"));
+  try {
+    const viewerPath = join(dir, "desktop-agent.token");
+    const viewerToken = loadOrCreateToken(viewerPath);
+    const credential = loadOrCreateDefaultMcpCredential(dir);
+    const first = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const second = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const namespace = captureStatusDirectoryNamespace(first);
+    assert.equal(bindAuthorizedStatusDirectory(first, second, namespace), second);
+
+    const stale = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const proposed = openValidatedCredentialDirectory(dir, viewerToken, credential);
+    const expected = captureStatusDirectoryNamespace(stale);
+    writeFileSync(join(dir, "external-race"), "untrusted", { mode: 0o600 });
+    assert.throws(() => bindAuthorizedStatusDirectory(stale, proposed, expected), /GKX_WATCHER_(?:FS_DIRECTORY|STATUS_NAMESPACE)_CHANGED/u);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("server returns 401 with an incorrect bearer token", async () => {
+  await withServer(async (_server, _token, addr) => {
+    const res = await req(addr.port, "/health", { authorization: "Bearer incorrect" });
+    assert.equal(res.status, 401);
+  });
+});
+
+// ---- server: loopback bind + token gate ---------------------------------
+
+// A note WITH frontmatter (so a projection is built) but NO sensitivity field
+// — the unlabeled case the configured default governs.
+const UNLABELED =
+  '---\ngkx_version: "2.3"\nuid: "note:a"\ntitle: A\ntype: note\ncreated_at: 2026-01-01T00:00:00Z\nepistemic_state: observation\n---\nBody';
+
+async function withServer(fn) {
+  const index = new GkxIndex({ defaultSensitivity: "internal" });
+  index.setFiles([{ relativePath: "a.md", content: UNLABELED, kind: "note" }], []);
+  const token = "test-token-abc";
+  const getStatus = () => ({
+    pid: process.pid,
+    port: 0,
+    url: "",
+    token_path: "",
+    notes_dir: "/x",
+    default_sensitivity: "internal",
+    notes_indexed: index.noteCount,
+    state: "serving",
+    last_scan_iso: null,
+  });
+  const server = createAgentServer({ index, token, getStatus });
+  server.listen(0, LOOPBACK_HOST);
+  await once(server, "listening");
+  try {
+    await fn(server, token, server.address());
+  } finally {
+    server.close();
+    await once(server, "close");
+  }
+}
+
+test("server binds 127.0.0.1 only (loopback)", async () => {
+  await withServer(async (_server, _token, addr) => {
+    assert.equal(addr.address, LOOPBACK_HOST);
+  });
+});
+
+function req(port, path, headers = {}, method = "GET") {
+  return new Promise((resolve, reject) => {
+    const r = http.request(
+      { host: LOOPBACK_HOST, port, path, method, headers },
+      (res) => {
+        let body = "";
+        res.on("data", (c) => (body += c));
+        res.on("end", () =>
+          resolve({ status: res.statusCode, headers: res.headers, body }),
+        );
+      },
+    );
+    r.on("error", reject);
+    r.end();
+  });
+}
+
+test("server returns 401 without a bearer token", async () => {
+  await withServer(async (_server, _token, addr) => {
+    const res = await req(addr.port, "/health");
+    assert.equal(res.status, 401);
+  });
+});
+
+test("server returns 200 with the bearer token and projects effective sensitivity", async () => {
+  await withServer(async (_server, token, addr) => {
+    const res = await req(addr.port, "/notes", { authorization: `Bearer ${token}` });
+    assert.equal(res.status, 200);
+    const parsed = JSON.parse(res.body);
+    const note = parsed.notes.find((n) => n.path === "a.md");
+    assert.equal(note.sensitivity, "internal", "unlabeled note takes the configured default");
+  });
+});
+
+// ---- scoped CORS for the desktop viewer ---------------------------------
+
+test("OPTIONS preflight from an allowed origin → 204 with reflected CORS headers, no token needed", async () => {
+  await withServer(async (_server, _token, addr) => {
+    for (const origin of [
+      "tauri://localhost",
+      "https://tauri.localhost",
+      "http://tauri.localhost",
+      "null",
+    ]) {
+      const res = await req(addr.port, "/graph", { origin }, "OPTIONS");
+      assert.equal(res.status, 204, `preflight ${origin} → 204`);
+      assert.equal(res.headers["access-control-allow-origin"], origin, "ACAO reflects origin");
+      assert.equal(res.headers["vary"], "Origin");
+      assert.equal(res.headers["access-control-allow-headers"], "Authorization");
+      assert.equal(res.headers["access-control-allow-methods"], "GET, OPTIONS");
+    }
+  });
+});
+
+test("OPTIONS preflight from a disallowed origin → no ACAO (browser will block)", async () => {
+  await withServer(async (_server, _token, addr) => {
+    const res = await req(addr.port, "/graph", { origin: "https://evil.example" }, "OPTIONS");
+    assert.equal(res.status, 204);
+    assert.equal(res.headers["access-control-allow-origin"], undefined, "no CORS for evil origin");
+  });
+});
+
+test("GET from an allowed origin with a valid token → 200 with ACAO reflected", async () => {
+  await withServer(async (_server, token, addr) => {
+    const res = await req(addr.port, "/graph", {
+      origin: "tauri://localhost",
+      authorization: `Bearer ${token}`,
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.headers["access-control-allow-origin"], "tauri://localhost");
+    assert.equal(res.headers["vary"], "Origin");
+  });
+});
+
+test("GET from an allowed origin WITHOUT a token → 401 (auth still enforced)", async () => {
+  await withServer(async (_server, _token, addr) => {
+    const res = await req(addr.port, "/graph", { origin: "tauri://localhost" });
+    assert.equal(res.status, 401, "preflight bypass does not bypass auth on the real request");
+    // CORS still reflected so the browser can surface the 401 to the page.
+    assert.equal(res.headers["access-control-allow-origin"], "tauri://localhost");
+  });
+});
+
+test("GET from a disallowed origin → no ACAO even with a valid token", async () => {
+  await withServer(async (_server, token, addr) => {
+    const res = await req(addr.port, "/graph", {
+      origin: "https://evil.example",
+      authorization: `Bearer ${token}`,
+    });
+    assert.equal(res.status, 200);
+    assert.equal(res.headers["access-control-allow-origin"], undefined);
+  });
+});
+
+test("GET with no Origin (same-origin / non-browser) → 200 and no CORS headers", async () => {
+  await withServer(async (_server, token, addr) => {
+    const res = await req(addr.port, "/graph", { authorization: `Bearer ${token}` });
+    assert.equal(res.status, 200);
+    assert.equal(res.headers["access-control-allow-origin"], undefined, "no behavior change");
+  });
+});

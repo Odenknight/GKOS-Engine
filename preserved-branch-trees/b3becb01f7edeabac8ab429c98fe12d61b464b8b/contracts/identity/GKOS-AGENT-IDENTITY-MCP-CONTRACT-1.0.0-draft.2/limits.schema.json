@@ -1,0 +1,335 @@
+{
+  "$id": "limits.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "active_credentials_per_agent": {
+      "const": 4
+    },
+    "activity_metadata_bytes": {
+      "const": 8192
+    },
+    "activity_metadata_keys": {
+      "const": 16
+    },
+    "activity_record_bytes": {
+      "const": 16384
+    },
+    "activity_rows": {
+      "const": 1000000
+    },
+    "agent_bucket_capacity": {
+      "const": 10
+    },
+    "agent_bucket_refill_ms": {
+      "const": 1000
+    },
+    "agents_per_vault": {
+      "const": 4096
+    },
+    "anchor_bytes": {
+      "const": 16384
+    },
+    "anchors_per_root": {
+      "const": 256
+    },
+    "array_items": {
+      "const": 1024
+    },
+    "audit_receipt_bytes": {
+      "const": 32768
+    },
+    "authentication_deadline_ms": {
+      "const": 2000
+    },
+    "backup_manifest_bytes": {
+      "const": 16384
+    },
+    "cancel_ack_ms": {
+      "const": 1000
+    },
+    "cancel_settle_ms": {
+      "const": 5000
+    },
+    "canonical_input_bytes": {
+      "const": 262144
+    },
+    "canonical_output_bytes": {
+      "const": 1048576
+    },
+    "clock_divergence_ms": {
+      "const": 300000
+    },
+    "completed_request_rows": {
+      "const": 100000
+    },
+    "concurrent_irreversible_effects": {
+      "const": 1
+    },
+    "concurrent_owner_mutations": {
+      "const": 1
+    },
+    "concurrent_requests_per_agent": {
+      "const": 4
+    },
+    "concurrent_requests_per_vault": {
+      "const": 32
+    },
+    "credential_entropy_bytes": {
+      "const": 32
+    },
+    "credential_rotation_grace_ms": {
+      "const": 0
+    },
+    "credentials_per_vault": {
+      "const": 65536
+    },
+    "cursor_ascii_bytes": {
+      "const": 50
+    },
+    "cursor_snapshot_ms": {
+      "const": 900000
+    },
+    "display_name_bytes": {
+      "const": 128
+    },
+    "general_string_bytes": {
+      "const": 512
+    },
+    "global_bucket_capacity": {
+      "const": 100
+    },
+    "global_bucket_refill_ms": {
+      "const": 1000
+    },
+    "global_bucket_refill_tokens": {
+      "const": 10
+    },
+    "global_failure_capacity": {
+      "const": 20
+    },
+    "global_failure_refill_ms": {
+      "const": 1000
+    },
+    "global_failure_refill_tokens": {
+      "const": 2
+    },
+    "idempotency_key_bytes": {
+      "const": 128
+    },
+    "idempotency_window_ms": {
+      "const": 86400000
+    },
+    "json_depth": {
+      "const": 16
+    },
+    "lease_retry_after_ms": {
+      "const": 100
+    },
+    "lease_wait_ms": {
+      "const": 5000
+    },
+    "log_event_bytes": {
+      "const": 4096
+    },
+    "log_metadata_bytes": {
+      "const": 2048
+    },
+    "mappings_per_agent": {
+      "const": 16
+    },
+    "mappings_per_vault": {
+      "const": 65536
+    },
+    "navigation_snapshot_bytes": {
+      "const": 16777216
+    },
+    "navigation_snapshot_ms": {
+      "const": 900000
+    },
+    "navigation_snapshots_per_vault": {
+      "const": 8
+    },
+    "object_properties": {
+      "const": 128
+    },
+    "owner_mutation_deadline_ms": {
+      "const": 10000
+    },
+    "owner_reason_bytes": {
+      "const": 256
+    },
+    "page_records": {
+      "const": 100
+    },
+    "pending_intents_per_anchor": {
+      "const": 1
+    },
+    "policy_reason_count": {
+      "const": 16
+    },
+    "protocol_identifier_bytes": {
+      "const": 64
+    },
+    "public_error_bytes": {
+      "const": 4096
+    },
+    "refs_per_process_vault": {
+      "const": 32768
+    },
+    "refs_per_session": {
+      "const": 2048
+    },
+    "request_deadline_ms": {
+      "const": 30000
+    },
+    "retention_batch_rows": {
+      "const": 1000
+    },
+    "retention_default_days": {
+      "const": 90
+    },
+    "retention_max_days": {
+      "const": 365
+    },
+    "retention_min_days": {
+      "const": 7
+    },
+    "retry_after_max_ms": {
+      "const": 60000
+    },
+    "selector_failure_capacity": {
+      "const": 3
+    },
+    "selector_failure_refill_ms": {
+      "const": 6000
+    },
+    "session_absolute_ms": {
+      "const": 28800000
+    },
+    "session_idle_ms": {
+      "const": 900000
+    },
+    "sessions_per_agent": {
+      "const": 8
+    },
+    "sessions_per_vault": {
+      "const": 256
+    },
+    "shutdown_ms": {
+      "const": 10000
+    },
+    "snapshot_bytes": {
+      "const": 524288
+    },
+    "snapshot_entries": {
+      "const": 2000
+    },
+    "snapshots_per_agent": {
+      "const": 8
+    },
+    "snapshots_per_vault": {
+      "const": 128
+    },
+    "sqlite_max_bytes": {
+      "const": 536870912
+    },
+    "sqlite_max_pages": {
+      "const": 131072
+    },
+    "sqlite_page_bytes": {
+      "const": 4096
+    },
+    "transport_request_bytes": {
+      "const": 393216
+    },
+    "unknown_selector_buckets": {
+      "const": 4096
+    }
+  },
+  "required": [
+    "agents_per_vault",
+    "credentials_per_vault",
+    "active_credentials_per_agent",
+    "mappings_per_agent",
+    "mappings_per_vault",
+    "sessions_per_agent",
+    "sessions_per_vault",
+    "concurrent_requests_per_agent",
+    "concurrent_requests_per_vault",
+    "concurrent_owner_mutations",
+    "concurrent_irreversible_effects",
+    "anchors_per_root",
+    "pending_intents_per_anchor",
+    "agent_bucket_capacity",
+    "agent_bucket_refill_ms",
+    "global_bucket_capacity",
+    "global_bucket_refill_tokens",
+    "global_bucket_refill_ms",
+    "selector_failure_capacity",
+    "selector_failure_refill_ms",
+    "global_failure_capacity",
+    "global_failure_refill_tokens",
+    "global_failure_refill_ms",
+    "clock_divergence_ms",
+    "unknown_selector_buckets",
+    "retry_after_max_ms",
+    "transport_request_bytes",
+    "canonical_input_bytes",
+    "canonical_output_bytes",
+    "public_error_bytes",
+    "protocol_identifier_bytes",
+    "display_name_bytes",
+    "owner_reason_bytes",
+    "general_string_bytes",
+    "idempotency_key_bytes",
+    "policy_reason_count",
+    "activity_metadata_keys",
+    "activity_metadata_bytes",
+    "activity_record_bytes",
+    "audit_receipt_bytes",
+    "anchor_bytes",
+    "backup_manifest_bytes",
+    "log_event_bytes",
+    "log_metadata_bytes",
+    "page_records",
+    "cursor_ascii_bytes",
+    "snapshot_entries",
+    "snapshot_bytes",
+    "snapshots_per_agent",
+    "snapshots_per_vault",
+    "refs_per_session",
+    "refs_per_process_vault",
+    "navigation_snapshot_bytes",
+    "navigation_snapshots_per_vault",
+    "json_depth",
+    "object_properties",
+    "array_items",
+    "authentication_deadline_ms",
+    "owner_mutation_deadline_ms",
+    "request_deadline_ms",
+    "cancel_ack_ms",
+    "cancel_settle_ms",
+    "shutdown_ms",
+    "session_idle_ms",
+    "session_absolute_ms",
+    "idempotency_window_ms",
+    "cursor_snapshot_ms",
+    "navigation_snapshot_ms",
+    "lease_wait_ms",
+    "lease_retry_after_ms",
+    "activity_rows",
+    "completed_request_rows",
+    "sqlite_page_bytes",
+    "sqlite_max_pages",
+    "sqlite_max_bytes",
+    "retention_batch_rows",
+    "retention_default_days",
+    "retention_min_days",
+    "retention_max_days",
+    "credential_entropy_bytes",
+    "credential_rotation_grace_ms"
+  ],
+  "title": "Frozen global ceilings",
+  "type": "object"
+}

@@ -1,0 +1,18 @@
+{
+  "version": "gkos-current-markdown-scan/1",
+  "scope": "Literal recursive *.md scan below orchestration after R19 Q-INTENT owner-adoption records, exact-commit hosted CI, and preservation of the superseded Engine worktree",
+  "status": "PASS",
+  "files": 1649,
+  "bytes": 10623274,
+  "unique_content_sha256": 583,
+  "utf8_errors": 0,
+  "by_top_level": {
+    "2026-08-31": 656,
+    "2026-08-31-Q-GUARD-APPROVAL.md": 1,
+    "2026-08-31-Q-SCOPE-APPROVAL.md": 1,
+    "GKOS-ECOSYSTEM-TS-FIRST-RUST-ROADMAP.md": 1,
+    "integration": 446,
+    "upgrades": 544
+  },
+  "interpretation": "The filesystem count is larger than the original Sol tracked-review count because repository documentation is duplicated inside local integration and preserved superseded worktrees, and because the later R19 decision, review, and hosted-CI records were added prospectively. The original evidence set remains separately verified at 659 byte-identical Markdown files."
+}

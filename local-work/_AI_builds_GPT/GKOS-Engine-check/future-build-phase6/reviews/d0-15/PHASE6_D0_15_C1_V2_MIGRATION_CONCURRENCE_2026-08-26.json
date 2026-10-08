@@ -1,0 +1,253 @@
+{
+  "artifact_type": "GKOS_PHASE6_D0_15_C1_V2_MIGRATION_CONCURRENCE",
+  "schema_version": "2.0.0",
+  "recorded_at_utc": "2026-08-26T12:25:53.5477814Z",
+  "wave": "C1",
+  "review_role": "migration",
+  "review_kind": "fresh independent zero-contribution concurrence",
+  "reviewed_coordinate": "owner-ratified V3 + V4 + Registry V2 + Map V2 coordinate bound by V5",
+  "verdict": "ACCEPT_CONCURRENCE",
+  "concurrence": true,
+  "status": "C1_MIGRATION_ACCEPTED_NO_LATER_WAVE_OR_PRODUCT_AUTHORITY",
+  "review_scope": [
+    "raw and internal digest integrity for V5, V3, V4, Registry V2, Map V2, and historical C1 defect evidence",
+    "acyclic and immutable source trace from ratified D0 sources through the exact-byte owner receipt",
+    "original RESTORE-OWNER-001 through RESTORE-OWNER-009 and BOOTSTRAP-LOCATOR-ROLLBACK-001 meanings",
+    "automatic resume of valid staged restore evidence versus separately authenticated owner abort",
+    "restore discovery, abort eligibility, physical disposition, locator conflict, and crash recovery",
+    "backup verification, publication, replay, source-coordinate, timestamp, and retention behavior",
+    "Q2 process-restart cursor invalidation and Q7 through Q13 migration projections",
+    "265 unique canonical non-MCP fixtures, 12 non-counting aliases, 16 families, and 67 unchanged official MCP vector IDs",
+    "single-leaf deterministic migration outcomes and the decision-only authority boundary"
+  ],
+  "zero_contribution_attestation": {
+    "fresh_review": true,
+    "independent": true,
+    "zero_contribution": true,
+    "statement": "I did not author, edit, correct, regenerate, reinterpret, or select any ratified decision, fixture, expectation, source, product, accepted-F1, or stopped-F2 byte. I performed a fresh read-only migration assessment of the exact owner-ratified coordinate and created only this detached concurrence artifact.",
+    "reviewed_bytes_modified": false,
+    "product_repository_access_or_edit": false,
+    "accepted_f1_access_or_edit": false,
+    "stopped_f2_access_or_edit": false,
+    "commit_push_workflow_pr_merge_release_deploy_activate_publish": false
+  },
+  "exact_input_ledger": [
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_BYTE_OWNER_RATIFICATION_V5_2026-08-26.json",
+      "sha256": "f54db22232586f0b6bff80097b03d55b98808d8db4b9d5c9fbdd5aa37e3a5ea2",
+      "bytes": 10102,
+      "record_digest": "e79523eb606f67869018f33fea0097bf1379f227f7b894ea606614d010b5cdbd",
+      "role": "exact-byte Product Owner ratification and fresh-C1-only authority"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_DECISION_BASIS_V3_2026-08-26.json",
+      "sha256": "e282fa0c2c378b9716302d49738f50f93f158da344df3c693e39e992d09e3d0d",
+      "bytes": 21782,
+      "record_digest": "f3b00953902a5e38bd6c118991b862b4539d493bd517f1254346f12955728e73",
+      "role": "ratified Q1 through Q6 owner decision basis"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_PROJECTION_RESOLUTION_V4_2026-08-26.json",
+      "sha256": "256bbc19b4418c155726e514d1cff9c10dce17914b72040b147176d856b32efb",
+      "bytes": 16576,
+      "record_digest": "83ae66b748ecf85ae42951e777659aefb6d402a9165ea6b01db4daba91a2e82b",
+      "role": "ratified Q7 through Q13 owner projection resolution"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V2_2026-08-26.json",
+      "sha256": "6eeb65ccb6750538bd3ad5ceb85a66095d6bd350895e244ebb49f3eb03a6dee0",
+      "bytes": 111226,
+      "record_digest": "12bcf45edd4faf5c352d0975dcbb1a927638b25595852d843cbeea2f71f3e938",
+      "role": "ratified corrected exhaustive non-MCP registry"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V2_2026-08-26.json",
+      "sha256": "6ac29a9b524c0080162d39d4c482a11e0db4ecb3b534839e8928786253b47f47",
+      "bytes": 21924,
+      "record_digest": "0db57dd45f82fc720ac5fb3a0dbc08465f4d056fcff0ecff77343d52f5b356b4",
+      "role": "ratified corrected Q1 through Q13 decision and correction map"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "167a0ed6f5098daa26ea230805941a245725efb6f6ac636e5945af523b9b0b25",
+      "bytes": 20565,
+      "record_digest": "58c90b6e44f2d35ca634964e56bceb7ffa98ddd02a86977001a7d90901679cb3",
+      "role": "historical noncarrying migration rejection and exact defect evidence"
+    },
+    {
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "2ff2035b102caf69127719313e223e590ad8959df98fe9fec2b482631cbe47f8",
+      "bytes": 33807,
+      "record_digest": "a89c23269ca373ac4fdc72fab7a7842a0838e4ad93f832b00b48222c82cac1ff",
+      "role": "historical noncarrying security rejection and exact defect evidence"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+      "sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+      "bytes": 117722,
+      "role": "ratified D0 migration semantic source"
+    },
+    {
+      "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_DECISION_RECORD_PROPOSAL_2026-08-25.json",
+      "sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+      "bytes": 28582,
+      "role": "ratified D0 decision source"
+    },
+    {
+      "path": "future-build-phase6/proposals/kosmos-oden/MCP_2025_11_25_CONFORMANCE_VECTORS.proposal.json",
+      "sha256": "23f48e01f890b746012d3713b8ece8331b113927ca15ab72e9955cf03830387c",
+      "bytes": 51108,
+      "role": "official-provenance 67-vector source whose IDs remain unchanged"
+    },
+    {
+      "path": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+      "sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+      "bytes": 31178,
+      "role": "independence, stop, serial-wave, and acceptance governance"
+    },
+    {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_ACCEPTANCE_GATE_2026-08-26.json",
+      "sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff",
+      "bytes": 2347,
+      "role": "immutable historical accepted-F1 boundary"
+    }
+  ],
+  "input_integrity": {
+    "all_ledgered_paths_exist": true,
+    "all_ledgered_raw_sha256_values_match": true,
+    "all_ledgered_byte_lengths_match": true,
+    "canonical_internal_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+    "internal_digest_results": [
+      {"input":"V5","claimed":"e79523eb606f67869018f33fea0097bf1379f227f7b894ea606614d010b5cdbd","recomputed":"e79523eb606f67869018f33fea0097bf1379f227f7b894ea606614d010b5cdbd","match":true},
+      {"input":"V3","claimed":"f3b00953902a5e38bd6c118991b862b4539d493bd517f1254346f12955728e73","recomputed":"f3b00953902a5e38bd6c118991b862b4539d493bd517f1254346f12955728e73","match":true},
+      {"input":"V4","claimed":"83ae66b748ecf85ae42951e777659aefb6d402a9165ea6b01db4daba91a2e82b","recomputed":"83ae66b748ecf85ae42951e777659aefb6d402a9165ea6b01db4daba91a2e82b","match":true},
+      {"input":"Registry V2","claimed":"12bcf45edd4faf5c352d0975dcbb1a927638b25595852d843cbeea2f71f3e938","recomputed":"12bcf45edd4faf5c352d0975dcbb1a927638b25595852d843cbeea2f71f3e938","match":true},
+      {"input":"Map V2","claimed":"0db57dd45f82fc720ac5fb3a0dbc08465f4d056fcff0ecff77343d52f5b356b4","recomputed":"0db57dd45f82fc720ac5fb3a0dbc08465f4d056fcff0ecff77343d52f5b356b4","match":true},
+      {"input":"historical C1 migration rejection","claimed":"58c90b6e44f2d35ca634964e56bceb7ffa98ddd02a86977001a7d90901679cb3","recomputed":"58c90b6e44f2d35ca634964e56bceb7ffa98ddd02a86977001a7d90901679cb3","match":true}
+    ],
+    "v5_ratified_coordinate_exactly_matches_reviewed_bytes": true
+  },
+  "source_graph_audit": {
+    "status": "PASS",
+    "registry_v2_source_trace_entries": 12,
+    "registry_v2_source_trace_raw_hash_and_length_matches": 12,
+    "distinct_path_repair": "Registry V2 exists at a new immutable path and names exact existing V3, V4, both historical C1 rejection receipts, the historical rejected registry, and immutable D0/review sources. It does not name mutable replacement bytes under an old path.",
+    "acyclic_order": [
+      "immutable D0, proposal, review, and governance sources",
+      "V3 owner basis",
+      "V4 owner projection resolution",
+      "Registry V2",
+      "Map V2",
+      "V5 exact-byte owner ratification",
+      "this detached fresh C1 migration concurrence"
+    ],
+    "cycle_or_forward_hash_reference_found": false,
+    "stale_normative_coordinate_found": false,
+    "historical_rejected_coordinates_are_noncarrying_evidence_only": true
+  },
+  "historical_migration_rejection_closure": [
+    {
+      "historical_finding": "MIG-C1-001",
+      "status": "CLOSED",
+      "basis": "Every Registry V2 source-trace path exists and all 12 declared raw SHA-256 values and byte lengths match. Registry V2 and Map V2 occupy distinct descendant paths, Map V2 binds only existing immutable parents, and V5 later ratifies the final four-artifact coordinate."
+    },
+    {
+      "historical_finding": "MIG-C1-002",
+      "status": "CLOSED",
+      "basis": "RESTORE-OWNER-001 through 009 again mean normal replacement; old denial/new success; locator-staged crash resume; initial no-replace conflict; candidate/intent crash resume; plan-fsync pre-rename resume; missing-temp startup corruption then absent abort; aliased-temp startup corruption then preserved-unsafe abort; and split abort-event/external-tombstone recovery. No named ID is reassigned."
+    },
+    {
+      "historical_finding": "MIG-C1-003",
+      "status": "CLOSED",
+      "basis": "Named restore recovery leaves select one ordered restart sequence and one exhaustive outcome. Valid staged evidence automatically resumes; abort is a separately authenticated request. RESTORE-OWNER-008 physical causes are split into distinct additional IDs. BOOTSTRAP-LOCATOR-ROLLBACK-001 explicitly preserves OWNER_LOCATOR_STAGED through transaction rollback and retries the exact same locator with no replacement identity, locator, credential, secret, entropy, overwrite, or reveal."
+    }
+  ],
+  "migration_semantic_audits": {
+    "original_named_restore_and_bootstrap_semantics": {
+      "status": "PASS",
+      "evidence": "The exact D0 source at lines 389 through 407 assigns the nine RESTORE-OWNER meanings and same-locator bootstrap rollback behavior reproduced by Registry V2. The 10 named recovery IDs are present once, and all are classed named_recovery_subtotal."
+    },
+    "valid_stage_resume_and_separate_abort": {
+      "status": "PASS",
+      "evidence": "RESTORE-OWNER-003, 005, and 006 resume the same bound plan automatically without authority.status, abort, replacement credential, entropy, or reveal. RESTORE-STATUS-DISCOVERY-001 is read-only and does not abort. Every RESTORE-ABORT leaf requires a separately authenticated eligible abort request, and postpublication abort returns GKOS_P6_STATE_CONFLICT."
+    },
+    "restore_discovery_abort_and_physical_disposition": {
+      "status": "PASS",
+      "evidence": "Discovery returns one nonsecret restore_recovery object. Abort separately freezes temporary and final exact deletion, absent, preserved_unsafe, one generation/event advance, stale-binding aggregates, precommit completion, postcommit replay, and zero attacker-object mutation. Absent, link, physical identity, content, protection, and owner mismatch startup branches are distinct leaves."
+    },
+    "restore_locator_conflict_and_recovery": {
+      "status": "PASS",
+      "evidence": "The initial clean preexisting target, including RESTORE-OWNER-004, deterministically returns GKOS_P6_STATE_CONFLICT. The post-qualification appearance or identity race deterministically returns GKOS_P6_MIGRATION_RECOVERY_REQUIRED. Both forbid overwrite, deletion, hybrid publication, and secret re-reveal and preserve exact staged evidence."
+    },
+    "backup_verification_publication_and_replay": {
+      "status": "PASS",
+      "evidence": "The five Q7 leaves project integrity, foreign-key, and pragma failure to GKOS_P6_AUTHORITY_CORRUPT and length or manifest-digest mismatch to GKOS_P6_EVIDENCE_MISMATCH before publication. The exact verified unpublished temporary is deleted; result, publication, authority mutation, event, and success activity remain zero. The success path fixes checkpoint, SQLite backup API, digest/length, fsync, no-replace publication, source coordinates, and exact restart replay."
+    },
+    "timestamps_and_retention": {
+      "status": "PASS",
+      "evidence": "Timestamp leaves accept canonical real Gregorian UTC millisecond years 1970 through 9999 and reject year 10000, offsets, missing milliseconds, impossible dates, and date-only values. Retention leaves freeze prospective creation-time policy binding, permanent history, complete UTC-day batching, active-row and 24-hour replay protection, true sequences and ordered digest, crash replay, and backup/restore preservation."
+    },
+    "q2_restart_cursor_invalidation": {
+      "status": "PASS",
+      "evidence": "SNAPSHOT-RESTART-001 evaluates restart before reference/snapshot existence lookup and always returns CURSOR_STALE/GKOS_P6_REQUEST_STALE_AUTHORITY with fresh rediscovery required. It forbids continuation, durable resolver state, raw paths, new tables/operations, physical lookup, and existence-sensitive branching. Standalone resolver-absent references retain authenticated-redacted GKOS_P6_RESOURCE_NOT_FOUND."
+    },
+    "q7_through_q13_projection_closure": {
+      "status": "PASS",
+      "evidence": "Registry V2 contains distinct deterministic leaves for Q7 backup failures, Q8 event insertion/startup/collision outcomes, Q9 physical drift and cursor precedence, Q10 initial/raced locator conflict, Q11 precommit stale and later committed recovery cuts, Q12 original recovery meanings and corrected accounting, and Q13 acyclic evidence sequencing."
+    },
+    "deterministic_migration_leaves": {
+      "status": "PASS",
+      "evidence": "No migration-scoped schedule or expected field contains recovered-or-aborted, committed-or-stale, either, and/or, or another selectable alternative. Multi-step named scenarios state sequential observations under one schedule rather than alternative outcomes. Allowed mutations are exhaustive and every unnamed mutation is forbidden by the registry-wide rule."
+    }
+  },
+  "registry_and_vector_audit": {
+    "status": "PASS",
+    "canonical_fixture_count": 265,
+    "canonical_fixture_unique_count": 265,
+    "canonical_ids_lexicographically_sorted": true,
+    "named_core_operation_count": 8,
+    "named_restore_bootstrap_recovery_count": 10,
+    "named_non_mcp_subtotal": 18,
+    "additional_canonical_fixture_count": 247,
+    "accounting_formula": "18 + 247 = 265",
+    "aliases": 12,
+    "unique_aliases": 12,
+    "aliases_colliding_with_canonical_ids": 0,
+    "missing_alias_targets": 0,
+    "coverage_families": 16,
+    "per_family_count_sum": 265,
+    "fixtures_missing_id_class_family_input_schedule_expected_or_mutation": 0,
+    "official_mcp_vector_source_sha256": "23f48e01f890b746012d3713b8ece8331b113927ca15ab72e9955cf03830387c",
+    "official_mcp_vector_count": 67,
+    "official_mcp_unique_id_count": 67,
+    "official_mcp_ids_or_valid_wire_semantics_changed_by_coordinate": false,
+    "mapping_adapter_deferred_fixtures_excluded_from_count_as_ratified": true
+  },
+  "findings": [],
+  "migration_concurrence_summary": {
+    "source_graph_reproducible_and_acyclic": true,
+    "historical_migration_blockers_closed": true,
+    "named_recovery_semantics_preserved": true,
+    "migration_fixture_leaves_deterministic": true,
+    "q2_restart_rule_closed": true,
+    "q7_q13_migration_projections_closed": true,
+    "numeric_and_alias_accounting_recomputed": true,
+    "migration_ambiguity_or_open_outcome_present": false,
+    "acceptance_permitted": true
+  },
+  "authorization_boundary": {
+    "this_artifact_is_c1_migration_evidence_only": true,
+    "this_artifact_authorizes_c1_security_concurrence": false,
+    "this_artifact_authorizes_c2": false,
+    "this_artifact_authorizes_c3": false,
+    "this_artifact_authorizes_successor_f1_product_correction": false,
+    "this_artifact_authorizes_f2_restart": false,
+    "this_artifact_authorizes_product_edit_or_regeneration": false,
+    "this_artifact_authorizes_commit_push_workflow_pr_merge_release_deploy_activate_publish": false,
+    "next_state": "Preserve this acceptance. C1 completes only if the independently assigned fresh C1 security reviewer unconditionally accepts the identical V5-ratified coordinate. Even two C1 acceptances do not automatically authorize C2."
+  },
+  "artifact_raw_receipt_rule": "The artifact raw SHA-256 and byte length are computed and reported externally after final serialization. Embedding either value in these same bytes would be self-referential. The internal record_digest is computed over this semantic record with only the top-level record_digest member omitted.",
+  "terminal_statement": "ACCEPT_CONCURRENCE FOR THE FRESH C1 MIGRATION ROLE ON THE EXACT V5-RATIFIED V3, V4, REGISTRY V2, AND MAP V2 COORDINATE. THIS IS ZERO-CONTRIBUTION C1 MIGRATION EVIDENCE ONLY. IT DOES NOT COMPLETE C1 WITHOUT AN INDEPENDENT SECURITY ACCEPTANCE AND DOES NOT AUTHORIZE C2, C3, SUCCESSOR-F1 CORRECTION, F2 RESTART, PRODUCT OR PROPOSAL EDITS, REGENERATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, OR PUBLICATION.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "f7b0b4de8a6e94df374c5a9036dc193750757600b0b358f8128b6b5a25f67b04"
+}

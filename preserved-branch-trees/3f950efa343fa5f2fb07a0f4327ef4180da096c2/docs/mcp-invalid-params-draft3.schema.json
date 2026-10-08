@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Observatory INVALID_PARAMS envelope proposal, draft.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "error_code", "request_id", "retryable", "retry_after_ms", "parameter_issues", "param_errors", "error_digest"],
+  "properties": {
+    "contract_version": {"const": "1.0.0-draft.3"},
+    "error_code": {"const": "GKOS_P6_INVALID_PARAMS"},
+    "request_id": {"type": ["string", "null"], "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"},
+    "retryable": {"const": false},
+    "retry_after_ms": {"const": null},
+    "error_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "parameter_issues": {
+      "type": "array", "minItems": 1, "maxItems": 16,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["field", "code"],
+        "properties": {
+          "field": {"$ref": "#/$defs/param"},
+          "code": {"enum": ["INVALID_TYPE", "UNEXPECTED_FIELD", "MISSING_REQUIRED_FIELD", "INVALID_ENUM", "OUT_OF_RANGE", "INVALID_PATTERN", "INVALID_LENGTH", "INVALID_ITEMS", "INVALID_TIMESTAMP", "INVALID_PATH", "INVALID_VALUE"]}
+        }
+      }
+    },
+    "param_errors": {
+      "type": "array", "maxItems": 16,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["param", "reason", "expected", "hint"],
+        "properties": {
+          "param": {"$ref": "#/$defs/param"},
+          "reason": {"enum": ["missing", "malformed", "out_of_range", "unknown_param"]},
+          "expected": {"type": "string", "minLength": 1, "maxLength": 256},
+          "hint": {"type": "string", "minLength": 1, "maxLength": 256}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "param": {"enum": ["$", "cursor", "record_ref", "scope_ref", "limit", "limit_bytes", "at", "state", "severity_at_least", "detail", "canonical_path", "path_prefix", "expected_uid", "name_query", "query", "path_include"]}
+  }
+}

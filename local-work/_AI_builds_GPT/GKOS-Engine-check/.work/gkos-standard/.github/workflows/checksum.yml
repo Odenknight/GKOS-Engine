@@ -1,0 +1,15 @@
+name: Release checksums
+on: [push, pull_request]
+permissions: {contents: read}
+jobs:
+  checksums:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify release checksums when present
+        run: |
+          set -e
+          for f in releases/*/SHA256SUMS.txt; do
+            [ -f "$f" ] || continue
+            (cd "$(dirname "$f")" && sha256sum -c SHA256SUMS.txt)
+          done

@@ -1,0 +1,90 @@
+{
+  "claim_id": "claim-2026-08-31-runner-honesty-test-adapter",
+  "implementation": {
+    "name": "runner-honesty-test-adapter",
+    "version": "0.0.0-test"
+  },
+  "standard": {
+    "gkos_release": "GKOS-2026-08-20 v0.80",
+    "technical_spec": "GKX 2.0",
+    "technical_spec_status": "developmental",
+    "last_ratified_baseline": "GKX 2.0"
+  },
+  "evidence_status": "mechanism_demonstrated",
+  "requirements_verified": [],
+  "profiles_claimed": [],
+  "tier_claims": [],
+  "applicability": {
+    "mapping_version": "1.1.0-development",
+    "mapping_sha256": "38d53e4509fe64bffc8041eb2f763560d2699c090a8e7a9323567b5667d1cf06",
+    "evidence_vocabulary_version": "1.0.0",
+    "evidence_vocabulary_sha256": "76b76b482863aa53ac3fcbd2d94ae85e5cea32082f47d8cb7c10b19a6c4cf362"
+  },
+  "attestation": {
+    "mode": "self-attested",
+    "attested_by": "unattested",
+    "assessment_date": "2026-08-31"
+  },
+  "fixtures": {
+    "catalog_version": "0.2.0",
+    "executed": 8,
+    "fully_evaluated": 6,
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "unevaluated": 2,
+    "results": [
+      {
+        "fixture_id": "GCP1-P01",
+        "outcome": "pass"
+      },
+      {
+        "fixture_id": "GCP1-N01",
+        "outcome": "pass"
+      },
+      {
+        "fixture_id": "GCP1-N02",
+        "outcome": "pass"
+      },
+      {
+        "fixture_id": "GCP1-N03",
+        "outcome": "pass"
+      },
+      {
+        "fixture_id": "GCP1-B01",
+        "outcome": "pass"
+      },
+      {
+        "fixture_id": "GCP3-C01",
+        "outcome": "unevaluated",
+        "detail": "unevaluated expectations: pair, projection.graph_expect"
+      },
+      {
+        "fixture_id": "GCP3-L01",
+        "outcome": "unevaluated",
+        "detail": "unevaluated expectations: pair, projection.graph_expect"
+      },
+      {
+        "fixture_id": "GCP3-L02",
+        "outcome": "pass"
+      }
+    ]
+  },
+  "evidence": [
+    {
+      "locator": "fixtures/fixtures.manifest.json",
+      "sha256": "acb10737c2edfa791050def4eaee7d4b22ac3c83ba1ab8f9d643e07e252f5a92"
+    },
+    {
+      "locator": "adapter:fake-adapter.mjs",
+      "sha256": "51242196b28ded1727048e8528b2077d3caf28c737d745396515e1391601948c"
+    }
+  ],
+  "limitations": [
+    "single-actor execution; no separation-of-duties requirement was evaluated",
+    "catalog 0.2.0 is a starter slice and declares no complete qualifying profile",
+    "unevaluated expectations — GCP3-C01: unevaluated expectations: pair, projection.graph_expect; GCP3-L01: unevaluated expectations: pair, projection.graph_expect"
+  ],
+  "exceptions": [],
+  "generated_at": "2026-08-31T21:03:25.309Z"
+}

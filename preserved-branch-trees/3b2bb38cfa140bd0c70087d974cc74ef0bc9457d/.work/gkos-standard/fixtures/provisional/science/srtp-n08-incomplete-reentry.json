@@ -1,0 +1,1 @@
+{ "extends": "srtp-p01-complete.json", "mutations": [{ "op": "set", "path": "/reentry_receipts/0/receipt_status", "value": "partial" }] }

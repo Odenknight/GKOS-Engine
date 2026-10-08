@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/proposal-envelope.schema.json",
+  "title": "Proposal envelope (L5 ingress)",
+  "description": "The structural unit an agent or human submits to request a note change without writing the note. Sidecar location: .gkx/proposals/<proposal-id>.yaml.",
+  "type": "object",
+  "required": ["proposal_id", "target_uid", "input_hash", "patch", "proposer", "submitted_at"],
+  "properties": {
+    "proposal_id": { "type": "string", "minLength": 1 },
+    "target_uid": { "$ref": "gkx-common.defs.json#/$defs/authoredNoteUid" },
+    "input_hash": { "$ref": "gkx-common.defs.json#/$defs/contentHash" },
+    "patch": {
+      "description": "Authoring-plane keys only. A patch touching projection- or governance-plane data is structurally invalid.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^(title|type|description|epistemic_state|sensitivity|tags|sources|scope|scope_id|resource|supersedes|superseded_by|forked_from|forked_to|depends_on|supports|contradicts|derives_from|derived_from|refines|implements|blocks|documents|cites|quotes|interprets|tests|replicates|fails_to_replicate|extends|narrows|generalizes|governed_by|reviewed_by|approved_by|part_of|has_part|related_to|body)$"
+      }
+    },
+    "proposer": { "$ref": "gkx-common.defs.json#/$defs/actorIdentity" },
+    "rationale": { "type": "string" },
+    "submitted_at": { "$ref": "gkx-common.defs.json#/$defs/timestamp" },
+    "expires_at": { "$ref": "gkx-common.defs.json#/$defs/timestamp" },
+    "requires_elevated_authority": {
+      "description": "Set by ingress validation when the patch lowers sensitivity or promotes epistemic state; never self-declared as absent by the proposer.",
+      "type": "boolean"
+    },
+    "evidence_refs": { "type": "array", "items": { "type": "string" } },
+    "evidence_set_hash": {
+      "description": "Hash over the evidence set; one of the two components of the materially-equivalent test (GKOS v0.76 §7.10).",
+      "$ref": "gkx-common.defs.json#/$defs/contentHash"
+    }
+  },
+  "additionalProperties": false
+}

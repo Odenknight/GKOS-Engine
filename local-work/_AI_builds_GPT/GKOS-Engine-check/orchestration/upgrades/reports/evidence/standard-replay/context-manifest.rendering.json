@@ -1,0 +1,73 @@
+{
+  "rendering_format": "GKX-DIAGNOSTIC-JSON-1",
+  "artifact_hash": {
+    "algorithm": "sha-256",
+    "canonical_profile": "GKX-CBOR-1",
+    "value": "03d9507b12bb07d3d0224359881c0f6b6f7c2eb79346e31ca25925365dc2667b"
+  },
+  "canonical_cbor_base64": "rWdtZW1iZXJzgqJka2luZGdjb250ZXh0am9iamVjdF9yZWajZmRpZ2VzdKNldmFsdWV4QGU2MWQ4Y2U4ZTBkZGY4MmY3YWJlZDNmMTI1MDgxMjExYjBmYTc4MjRkYzAyNzE1NWFlZWQ4YjhhZWVkYjgyYTNpYWxnb3JpdGhtZ3NoYS0yNTZxY2Fub25pY2FsX3Byb2ZpbGVqR0tYLUNCT1ItMWthcnRpZmFjdF9pZG9maXh0dXJlOmNsYWltLWFwYXJ0aWZhY3RfdmVyc2lvbmUxLjAuMKJka2luZG1jb250cmFkaWN0aW9uam9iamVjdF9yZWajZmRpZ2VzdKNldmFsdWV4QDExMGY4MmZmYThkMjYyZDM1NjU5MjZkYWU1Nzg0ZWI0YzA0YmZmYmYwOGY0MGZjNDM4YmNiYTFiY2JjNjgzOWVpYWxnb3JpdGhtZ3NoYS0yNTZxY2Fub25pY2FsX3Byb2ZpbGVqR0tYLUNCT1ItMWthcnRpZmFjdF9pZHdmaXh0dXJlOmNvbnRyYWRpY3Rpb24tYnBhcnRpZmFjdF92ZXJzaW9uZTEuMC4wZ3B1cnBvc2V4KkRlbW9uc3RyYXRlIGRldGVybWluaXN0aWMgTGF5ZXItNiBhc3NlbWJseWlyZWNpcGllbnRwZml4dHVyZS1yZXZpZXdlcmpwb2xpY3lfcmVmo2ZkaWdlc3SjZXZhbHVleEBkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkaWFsZ29yaXRobWdzaGEtMjU2cWNhbm9uaWNhbF9wcm9maWxlakdLWC1DQk9SLTFsY29tcG9uZW50X2lkeBtmaXh0dXJlOmdjcDYtY29udGV4dC1wb2xpY3lxY29tcG9uZW50X3ZlcnNpb25lMS4wLjBrY29tcGlsZWRfYXR4GzIwMjYtMDgtMjFUMjA6MDE6MDAuMDAwMDAwWmttYW5pZmVzdF9pZHgcZml4dHVyZTpnY3A2LXJlcGxheS1tYW5pZmVzdGxjb21waWxlcl9yZWajZmRpZ2VzdKNldmFsdWV4QGVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVlZWVpYWxnb3JpdGhtZ3NoYS0yNTZxY2Fub25pY2FsX3Byb2ZpbGVqR0tYLUNCT1ItMWxjb21wb25lbnRfaWR4Gmdrb3MtdHMtcmVmZXJlbmNlLWNvbXBpbGVycWNvbXBvbmVudF92ZXJzaW9uZTAuMS4wbWFydGlmYWN0X3R5cGVwY29udGV4dC1tYW5pZmVzdG5zY2hlbWFfdmVyc2lvbmUxLjAuMG9rbm93bl9vbWlzc2lvbnOAcG1hbmlmZXN0X3ZlcnNpb25lMS4wLjBxY2Fub25pY2FsX3Byb2ZpbGVqR0tYLUNCT1ItMXFzZWxlY3Rpb25fc2V0X3JlZqNmZGlnZXN0o2V2YWx1ZXhAYTFlZTI2YjhiNjA3NzY1NTE1NGEzZmRmNzNiYmQ5MzEyMjAzM2EyMmIwOWJjNmE0N2IyNWJiYjM1NjQyMDBlYmlhbGdvcml0aG1nc2hhLTI1NnFjYW5vbmljYWxfcHJvZmlsZWpHS1gtQ0JPUi0xa2FydGlmYWN0X2lkeB1maXh0dXJlOmdjcDYtcmVwbGF5LXNlbGVjdGlvbnBhcnRpZmFjdF92ZXJzaW9uZTEuMC4w",
+  "decoded": {
+    "members": [
+      {
+        "kind": "context",
+        "object_ref": {
+          "digest": {
+            "value": "e61d8ce8e0ddf82f7abed3f125081211b0fa7824dc027155aeed8b8aeedb82a3",
+            "algorithm": "sha-256",
+            "canonical_profile": "GKX-CBOR-1"
+          },
+          "artifact_id": "fixture:claim-a",
+          "artifact_version": "1.0.0"
+        }
+      },
+      {
+        "kind": "contradiction",
+        "object_ref": {
+          "digest": {
+            "value": "110f82ffa8d262d3565926dae5784eb4c04bffbf08f40fc438bcba1bcbc6839e",
+            "algorithm": "sha-256",
+            "canonical_profile": "GKX-CBOR-1"
+          },
+          "artifact_id": "fixture:contradiction-b",
+          "artifact_version": "1.0.0"
+        }
+      }
+    ],
+    "purpose": "Demonstrate deterministic Layer-6 assembly",
+    "recipient": "fixture-reviewer",
+    "policy_ref": {
+      "digest": {
+        "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "algorithm": "sha-256",
+        "canonical_profile": "GKX-CBOR-1"
+      },
+      "component_id": "fixture:gcp6-context-policy",
+      "component_version": "1.0.0"
+    },
+    "compiled_at": "2026-08-21T20:01:00.000000Z",
+    "manifest_id": "fixture:gcp6-replay-manifest",
+    "compiler_ref": {
+      "digest": {
+        "value": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "algorithm": "sha-256",
+        "canonical_profile": "GKX-CBOR-1"
+      },
+      "component_id": "gkos-ts-reference-compiler",
+      "component_version": "0.1.0"
+    },
+    "artifact_type": "context-manifest",
+    "schema_version": "1.0.0",
+    "known_omissions": [],
+    "manifest_version": "1.0.0",
+    "canonical_profile": "GKX-CBOR-1",
+    "selection_set_ref": {
+      "digest": {
+        "value": "a1ee26b8b6077655154a3fdf73bbd93122033a22b09bc6a47b25bbb3564200eb",
+        "algorithm": "sha-256",
+        "canonical_profile": "GKX-CBOR-1"
+      },
+      "artifact_id": "fixture:gcp6-replay-selection",
+      "artifact_version": "1.0.0"
+    }
+  }
+}

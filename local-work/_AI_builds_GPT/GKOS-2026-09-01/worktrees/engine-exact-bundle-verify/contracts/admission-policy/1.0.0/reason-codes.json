@@ -1,0 +1,22 @@
+{
+  "schema": "gkos.admission-policy.reason-codes.v1",
+  "contractVersion": "1.0.0",
+  "codes": [
+    { "code": "INVALID_REQUEST_SCHEMA", "lane": "REVIEW_INVALID", "meaning": "The evaluation request failed the strict v1 shape or value contract." },
+    { "code": "CONTRACT_BINDING_MISMATCH", "lane": "REVIEW_INVALID", "meaning": "The request contract identity does not match the policy bundle." },
+    { "code": "POLICY_BINDING_MISMATCH", "lane": "REVIEW_INVALID", "meaning": "The request does not bind the exact policy identifier, version, and digest." },
+    { "code": "VALIDITY_GATE_FAILED", "lane": "REVIEW_INVALID", "meaning": "The deterministic pre-adjudication validity gate did not pass." },
+    { "code": "UNKNOWN_TRIGGER_CODE", "lane": "REVIEW_INVALID", "meaning": "A detected trigger is absent from the policy's closed priority and ordinary trigger vocabularies." },
+    { "code": "PRIORITY_TRIGGER", "lane": "PRIORITY_HUMAN_REVIEW", "meaning": "At least one monotonic priority trigger is present." },
+    { "code": "HUMAN_REVIEW_TRIGGER", "lane": "HUMAN_REVIEW", "meaning": "At least one monotonic ordinary-review trigger is present." },
+    { "code": "ARTIFACT_TYPE_NOT_ALLOWED", "lane": "HUMAN_REVIEW", "meaning": "The artifact type is outside the ratified auto-admission allowlist." },
+    { "code": "REVIEWER_INDEPENDENCE_FAILED", "lane": "HUMAN_REVIEW", "meaning": "Independent semantic review was not demonstrated." },
+    { "code": "REVIEWER_CHECK_CONFLICT", "lane": "HUMAN_REVIEW", "meaning": "Reviewer evidence conflicts with deterministic checks." },
+    { "code": "UNSUPPORTED_CLAIMS_PRESENT", "lane": "HUMAN_REVIEW", "meaning": "The reviewer identified one or more unsupported claims." },
+    { "code": "CONTRADICTION_PRESENT", "lane": "HUMAN_REVIEW", "meaning": "The reviewer identified one or more contradictions." },
+    { "code": "SCOPE_MISMATCH", "lane": "HUMAN_REVIEW", "meaning": "The artifact and its evidence do not share an applicable scope." },
+    { "code": "NOT_REVERSIBLE", "lane": "HUMAN_REVIEW", "meaning": "The proposed derived artifact is not reversible." },
+    { "code": "NOT_RECONSTRUCTABLE", "lane": "HUMAN_REVIEW", "meaning": "The proposed derived artifact is not reconstructable from retained inputs." },
+    { "code": "AUTO_ALLOWLIST_MATCH", "lane": "AUTO_ADMIT_DERIVED", "meaning": "All monotonic gates passed and the artifact type is explicitly allowlisted." }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "extends": "srtp-p01-complete.json",
+  "mutations": [
+    { "op": "set", "path": "/results/0/srtp_type", "value": "srtp:NegativeResult" },
+    { "op": "set", "path": "/results/0/outcome", "value": "null" },
+    { "op": "set", "path": "/results/0/claim", "value": "No detectable effect under the recorded conditions." },
+    { "op": "set", "path": "/results/0/negative_details", "value": { "conditions": "fixture parameters and seed 42", "failure_class": "null-effect", "ruled_out": "large effect in this fixture population", "reanalysis_value": "usable for power analysis" } }
+  ]
+}

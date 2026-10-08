@@ -1,0 +1,146 @@
+[
+  {
+    "path": "gcp1-b01-missing-sensitivity.md",
+    "target_uid": "1a2b3c4d-5e6f-4a7b-8c8d-9e0f1a2b3c4d",
+    "overall": 0.375,
+    "label": "assessment:insufficient",
+    "scores": {
+      "structural_completeness": 0.4,
+      "provenance_quality": 0,
+      "evidence_support": null,
+      "relationship_integrity": 1,
+      "temporal_freshness": null,
+      "contradiction_status": null,
+      "review_readiness": 0.15,
+      "overall": 0.375
+    }
+  },
+  {
+    "path": "gcp1-n01-missing-required.md",
+    "target_uid": null,
+    "overall": 0.2875,
+    "label": "assessment:insufficient",
+    "scores": {
+      "structural_completeness": 0.05,
+      "provenance_quality": 0,
+      "evidence_support": null,
+      "relationship_integrity": 1,
+      "temporal_freshness": null,
+      "contradiction_status": null,
+      "review_readiness": 0.15,
+      "overall": 0.2875
+    }
+  },
+  {
+    "path": "gcp1-n02-invalid-epistemic.md",
+    "target_uid": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+    "overall": 0.4083,
+    "label": "assessment:weakly-supported",
+    "scores": {
+      "structural_completeness": 0.5,
+      "provenance_quality": 0,
+      "evidence_support": null,
+      "relationship_integrity": 1,
+      "temporal_freshness": null,
+      "contradiction_status": null,
+      "review_readiness": 0.2,
+      "overall": 0.4083
+    }
+  },
+  {
+    "path": "gcp1-n03-naive-timestamp.md",
+    "target_uid": "9e0f1a2b-3c4d-4e5f-8a6b-7c8d9e0f1a2b",
+    "overall": 0.4083,
+    "label": "assessment:weakly-supported",
+    "scores": {
+      "structural_completeness": 0.5,
+      "provenance_quality": 0,
+      "evidence_support": null,
+      "relationship_integrity": 1,
+      "temporal_freshness": null,
+      "contradiction_status": null,
+      "review_readiness": 0.2,
+      "overall": 0.4083
+    }
+  },
+  {
+    "path": "gcp1-p01-agent-ready-minimal.md",
+    "target_uid": "3f2a1b4c-5d6e-4f70-8a9b-0c1d2e3f4a5b",
+    "overall": 0.4333,
+    "label": "assessment:weakly-supported",
+    "scores": {
+      "structural_completeness": 0.6,
+      "provenance_quality": 0,
+      "evidence_support": null,
+      "relationship_integrity": 1,
+      "temporal_freshness": null,
+      "contradiction_status": null,
+      "review_readiness": 0.2,
+      "overall": 0.4333
+    }
+  },
+  {
+    "path": "gcp3-c01-claim.md",
+    "target_uid": "2b3c4d5e-6f7a-4b8c-8d9e-0f1a2b3c4d5e",
+    "overall": 0.4083,
+    "label": "assessment:weakly-supported",
+    "scores": {
+      "structural_completeness": 0.5,
+      "provenance_quality": 0,
+      "evidence_support": null,
+      "relationship_integrity": 1,
+      "temporal_freshness": null,
+      "contradiction_status": null,
+      "review_readiness": 0.2,
+      "overall": 0.4083
+    }
+  },
+  {
+    "path": "gcp3-c02-counter.md",
+    "target_uid": "4d5e6f7a-8b9c-4d0e-8f1a-2b3c4d5e6f7a",
+    "overall": 0.4083,
+    "label": "assessment:weakly-supported",
+    "scores": {
+      "structural_completeness": 0.5,
+      "provenance_quality": 0,
+      "evidence_support": null,
+      "relationship_integrity": 1,
+      "temporal_freshness": null,
+      "contradiction_status": null,
+      "review_readiness": 0.2,
+      "overall": 0.4083
+    }
+  },
+  {
+    "path": "gcp3-l01-superseded.md",
+    "target_uid": "6f7a8b9c-0d1e-4f2a-8b3c-4d5e6f7a8b9c",
+    "overall": 0.4083,
+    "label": "assessment:weakly-supported",
+    "scores": {
+      "structural_completeness": 0.5,
+      "provenance_quality": 0,
+      "evidence_support": null,
+      "relationship_integrity": 1,
+      "temporal_freshness": null,
+      "contradiction_status": null,
+      "review_readiness": 0.2,
+      "overall": 0.4083
+    }
+  },
+  {
+    "path": "gcp3-l02-successor.md",
+    "target_uid": "8b9c0d1e-2f3a-4b4c-8d5e-6f7a8b9c0d1e",
+    "overall": 0.4083,
+    "label": "assessment:weakly-supported",
+    "scores": {
+      "structural_completeness": 0.5,
+      "provenance_quality": 0,
+      "evidence_support": null,
+      "relationship_integrity": 1,
+      "temporal_freshness": null,
+      "contradiction_status": null,
+      "review_readiness": 0.2,
+      "overall": 0.4083
+    }
+  }
+]

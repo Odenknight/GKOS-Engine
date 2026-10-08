@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/assessment.schema.json",
+  "title": "Deterministic assessment (L4 control receipt)",
+  "description": "Reproducible documentation-quality assessment: same bytes + engine version + policy hash => same output. Interpretation is fixed: documentation-and-support quality, not truth. Sidecar location: .gkx/assessments/<uid>.assessment.yaml (serialized YAML/JSON of this shape).",
+  "type": "object",
+  "required": ["assessmentId", "targetUid", "profile", "policy", "assessor", "inputHash", "calculatedAt", "scores", "interpretation"],
+  "properties": {
+    "assessmentId": { "type": "string", "minLength": 1 },
+    "targetUid": { "oneOf": [ { "$ref": "gkx-common.defs.json#/$defs/authoredNoteUid" }, { "type": "null" } ] },
+    "profile": { "const": "gkx-2.0-validating-projection" },
+    "policy": {
+      "type": "object",
+      "required": ["id", "version", "hash", "weights", "missingValueBehavior"],
+      "properties": {
+        "id": { "type": "string" },
+        "version": { "type": "string" },
+        "hash": { "type": "string" },
+        "weights": { "type": "object", "additionalProperties": { "type": "number" } },
+        "missingValueBehavior": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "assessor": {
+      "type": "object",
+      "required": ["id", "engineVersion"],
+      "properties": {
+        "id": { "$ref": "gkx-common.defs.json#/$defs/actorIdentity" },
+        "engineVersion": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "inputHash": { "$ref": "gkx-common.defs.json#/$defs/contentHash" },
+    "calculatedAt": { "$ref": "gkx-common.defs.json#/$defs/timestamp" },
+    "scores": {
+      "type": "object",
+      "required": ["structural_completeness", "provenance_quality", "evidence_support", "relationship_integrity", "temporal_freshness", "contradiction_status", "review_readiness", "overall"],
+      "properties": {
+        "structural_completeness": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "provenance_quality": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "evidence_support": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "relationship_integrity": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "temporal_freshness": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "contradiction_status": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "review_readiness": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "overall": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] }
+      },
+      "additionalProperties": false
+    },
+    "exclusions": { "type": "array", "items": { "type": "string" } },
+    "labels": {
+      "type": "object",
+      "required": ["derived"],
+      "properties": { "derived": { "type": "array", "items": { "type": "string" } } },
+      "additionalProperties": false
+    },
+    "diagnostics": { "type": "array", "items": { "$ref": "gkx-common.defs.json#/$defs/diagnostic" } },
+    "interpretation": { "const": "documentation-and-support-quality-not-truth" }
+  },
+  "additionalProperties": false
+}

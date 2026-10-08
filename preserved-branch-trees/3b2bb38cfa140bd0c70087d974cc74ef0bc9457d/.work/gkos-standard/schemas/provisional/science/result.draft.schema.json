@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/science/result.draft.schema.json",
+  "title": "SRTP Result and Negative Result — PROVISIONAL DRAFT, informative only",
+  "allOf": [
+    { "$ref": "research-object.draft.schema.json" },
+    {
+      "type": "object",
+      "required": ["run_id", "outcome", "scope", "uncertainty", "claim", "evidence_ids", "numeric_claims"],
+      "properties": {
+        "srtp_type": { "type": "string", "enum": ["srtp:Result", "srtp:NegativeResult"] },
+        "run_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" },
+        "outcome": { "type": "string", "enum": ["success", "failure", "partial", "null", "inconclusive", "terminated"] },
+        "scope": { "type": "string", "minLength": 1 },
+        "uncertainty": { "type": "string", "minLength": 1 },
+        "claim": { "type": "string", "minLength": 1 },
+        "evidence_ids": { "type": "array", "items": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" } },
+        "numeric_claims": { "type": "array", "items": { "type": "object", "required": ["text", "calculation_event_id", "evidence_ids"], "properties": { "text": { "type": "string" }, "calculation_event_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" }, "evidence_ids": { "type": "array", "minItems": 1, "items": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" } } }, "additionalProperties": true } },
+        "negative_details": { "type": "object", "required": ["conditions", "failure_class", "ruled_out", "reanalysis_value"], "properties": { "conditions": { "type": "string" }, "failure_class": { "type": "string" }, "ruled_out": { "type": "string" }, "reanalysis_value": { "type": ["string", "null"] } }, "additionalProperties": true }
+      },
+      "if": { "properties": { "srtp_type": { "const": "srtp:NegativeResult" } } },
+      "then": { "required": ["negative_details"], "properties": { "outcome": { "enum": ["failure", "null", "inconclusive", "terminated"] } } },
+      "additionalProperties": true
+    }
+  ]
+}

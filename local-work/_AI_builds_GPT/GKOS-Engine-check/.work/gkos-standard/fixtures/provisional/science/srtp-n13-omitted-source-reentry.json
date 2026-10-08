@@ -1,0 +1,1 @@
+{ "extends": "srtp-p01-complete.json", "mutations": [{ "op": "remove", "path": "/reentry_receipts/0/new_source_digests/2" }] }

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/decision-record.schema.json",
+  "title": "GKX decision record",
+  "type": "object",
+  "required": ["decision_id", "disposition", "decided_at", "actor"],
+  "properties": {
+    "decision_id": { "type": "string" },
+    "disposition": { "type": "string", "enum": ["accepted", "rejected", "deferred", "withdrawn", "expired", "superseded"] },
+    "actor": { "$ref": "gkx-common.defs.json#/$defs/actorIdentity" },
+    "decided_at": { "$ref": "gkx-common.defs.json#/$defs/timestamp" },
+    "proposal_hash": { "$ref": "gkx-common.defs.json#/$defs/contentHash" },
+    "prev_hash": { "oneOf": [{ "$ref": "gkx-common.defs.json#/$defs/contentHash" }, { "type": "null" }] }
+  },
+  "additionalProperties": true
+}

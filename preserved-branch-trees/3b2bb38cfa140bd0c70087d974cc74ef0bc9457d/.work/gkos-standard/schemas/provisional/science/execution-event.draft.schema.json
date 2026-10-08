@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/science/execution-event.draft.schema.json",
+  "title": "SRTP Execution Event — PROVISIONAL DRAFT, informative only",
+  "allOf": [
+    { "$ref": "research-object.draft.schema.json" },
+    {
+      "type": "object",
+      "required": ["manifest_id", "sequence", "event_kind", "event_digest", "previous_event_digest", "occurred_at"],
+      "properties": {
+        "srtp_type": { "const": "srtp:ExecutionEvent" },
+        "manifest_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" },
+        "sequence": { "type": "integer", "minimum": 0 },
+        "event_kind": { "type": "string", "enum": ["code", "action", "output", "log", "checkpoint", "interruption", "recovery", "completion"] },
+        "event_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+        "previous_event_digest": { "oneOf": [{ "$ref": "../../gkx-common.defs.json#/$defs/contentHash" }, { "type": "null" }] },
+        "occurred_at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" },
+        "input_digests": { "type": "array", "items": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" } },
+        "output_digests": { "type": "array", "items": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" } }
+      },
+      "additionalProperties": true
+    }
+  ]
+}

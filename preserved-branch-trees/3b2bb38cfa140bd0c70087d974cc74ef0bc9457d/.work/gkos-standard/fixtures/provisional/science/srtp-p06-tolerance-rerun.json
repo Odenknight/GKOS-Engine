@@ -1,0 +1,6 @@
+{
+  "extends": "srtp-p01-complete.json",
+  "mutations": [{ "op": "set", "path": "/rerun_comparisons", "value": [
+    { "id": "f1000000-0000-4000-8000-000000000010", "srtp_type": "srtp:RerunComparison", "origin": "derived", "sensitivity": "restricted", "created_at": "2026-08-08T14:00:00-04:00", "created_by": "tool:deterministic-review", "lineage": { "branch_id": "rerun", "predecessors": [] }, "baseline_run_id": "50000000-0000-4000-8000-000000000005", "rerun_id": "srtp-run:tolerance-rerun", "comparison_mode": "numerical-tolerance", "intended_equivalent_inputs": ["code", "dataset", "parameters"], "tolerance": { "absolute": 0.000001, "units": "dimensionless" }, "evaluation": "PASS", "difference_digest": "sha256:tolerance-difference", "profile_evaluated": "SRTP-DRAFT-0.1" }
+  ] }]
+}

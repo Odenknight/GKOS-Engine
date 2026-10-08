@@ -1,0 +1,93 @@
+{
+  "map_version": "0.1.0",
+  "status": "informative-non-normative",
+  "purpose": "Maps permanent GKOS requirements to observed GKOS-Engine diagnostics, runner outcomes, and test evidence. An observation never defines, narrows, or replaces a GKOS requirement.",
+  "standard_target": "GKOS-2026-08-05 v0.77 developmental publication (non-consensus; signed tag v0.77)",
+  "requirement_registry": "../../requirements/REGISTRY.md",
+  "implementation": {
+    "name": "GKOS-Engine",
+    "release_status": "GKOS-Engine 1.3.0",
+    "historical_baseline_commit": "d73e86816df1b800dd9286459722f047266f1cc2",
+    "mounted_evidence_commit": "050740a029b599f01ce2df721880ea147f2b061b"
+  },
+  "source_lineage": [
+    {
+      "scratch_commit": "f9ec96a9fca6e20905532297ab351c579df793ff",
+      "availability": "inaccessible",
+      "disposition": "Preserved as amended source lineage through docs/reconciliations/GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md; not pushed unchanged."
+    }
+  ],
+  "mappings": [
+    {
+      "requirement_id": "GKOS-CONFORMANCE-001",
+      "observation_kind": "runner outcome",
+      "observations": ["UNEVALUATED for declared but unexecuted pair/graph expectations"],
+      "evidence": ["conformance/runner/run.mjs", "conformance/runner/test/run.test.mjs"],
+      "coverage": "implemented by runner; not an Engine diagnostic"
+    },
+    {
+      "requirement_id": "GKOS-CONFORMANCE-002",
+      "observation_kind": "runner claim boundary",
+      "observations": ["empty profiles_claimed and non-zero result for catalog 0.1.1"],
+      "evidence": ["conformance/runner/run.mjs", "fixtures/fixtures.manifest.json"],
+      "coverage": "implemented by runner; catalog remains non-qualifying"
+    },
+    {
+      "requirement_id": "GKOS-CONFORMANCE-003",
+      "observation_kind": "adapter boundary",
+      "observations": ["GKX-SCHEMA-004", "GKX-EPISTEMIC-002", "GKX-TEMPORAL-*", "GKX-SENSITIVITY-001", "GKX-RELATIONSHIP-001", "GKX-LINEAGE-003", "GKX-EPISTEMIC-004"],
+      "evidence": ["fixtures/fixtures.manifest.json"],
+      "coverage": "partial observation inventory; codes are not requirements"
+    },
+    {
+      "requirement_id": "GKOS-IDENTITY-001",
+      "observation_kind": "diagnostic observation",
+      "observations": ["GKX-IDENTITY-001"],
+      "evidence": ["docs/reconciliations/GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md"],
+      "coverage": "informative implementation observation only"
+    },
+    {
+      "requirement_id": "GKOS-IDENTITY-002",
+      "observation_kind": "reader compatibility",
+      "observations": ["legacy lowercase UUIDv4 accepted by authored-note schemas"],
+      "evidence": ["schemas/gkx-common.defs.json", "fixtures/fixtures.manifest.json"],
+      "coverage": "standard schema evidence; no required Engine diagnostic"
+    },
+    {
+      "requirement_id": "GKOS-IDENTITY-003",
+      "observation_kind": "migration behavior",
+      "observations": ["no automatic historical UID rewrite"],
+      "evidence": ["docs/reconciliations/GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md"],
+      "coverage": "policy accepted; Engine evidence remains implementation-scoped"
+    },
+    {
+      "requirement_id": "GKOS-IDENTITY-004",
+      "observation_kind": "authority boundary",
+      "observations": ["no UUID order treated as authority"],
+      "evidence": ["requirements/REGISTRY.md"],
+      "coverage": "policy requirement; no diagnostic mapping"
+    },
+    {
+      "requirement_id": "GKOS-LINEAGE-001",
+      "observation_kind": "graph observation",
+      "observations": ["multiple successors preserved; no branch collapse"],
+      "evidence": ["fixtures/corpus/gcp3-l01-superseded.md", "docs/reconciliations/GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md"],
+      "coverage": "fixture expectation remains UNEVALUATED"
+    },
+    {
+      "requirement_id": "GKOS-LINEAGE-002",
+      "observation_kind": "temporal derivation",
+      "observations": ["earliest temporally valid successor may derive invalid_at"],
+      "evidence": ["docs/reconciliations/GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md"],
+      "coverage": "not covered by the starter lineage fixture"
+    },
+    {
+      "requirement_id": "GKOS-LINEAGE-003",
+      "observation_kind": "diagnostic observation",
+      "observations": ["GKX-LINEAGE-003", "no successor tiebreak treated as authority"],
+      "evidence": ["fixtures/fixtures.manifest.json", "docs/reconciliations/GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md"],
+      "coverage": "fixture expectation remains UNEVALUATED"
+    }
+  ],
+  "open_graph_topics": ["canonical edge direction", "duplicate handling", "cycle treatment", "resolver precedence", "derived HEAD", "temporal fallback order", "inverse relationship vocabulary", "serialization determinism"]
+}

@@ -1,0 +1,1 @@
+{ "extends": "srtp-p01-complete.json", "mutations": [{ "op": "add", "path": "/reentry_receipts/0/new_source_digests/-", "value": "sha256:unexpected-source" }] }

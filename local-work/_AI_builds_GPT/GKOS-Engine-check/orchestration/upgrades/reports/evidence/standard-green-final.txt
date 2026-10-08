@@ -1,0 +1,331 @@
+
+> test
+> node --test "test/*.test.mjs" && npm run lint:registries
+
+✔ authority window uses inclusive start and exclusive end (1.8049ms)
+✔ missing, malformed, and inverted time evidence fails closed (0.3069ms)
+✔ exact-expiry refusal preserves protected state and emits a schema-valid receipt (151.0546ms)
+✔ clean-process replay produces identical canonical bytes and hash (324.9567ms)
+▶ known gate missing and mistyped required evidence always refuses without throwing
+  ✔ TA-L1-001 (1.9921ms)
+  ✔ TA-L3-001 (0.3718ms)
+  ✔ TA-L4-001 (0.4613ms)
+  ✔ TA-L4-002 (0.312ms)
+  ✔ TA-L4-003 (0.235ms)
+  ✔ TA-L4-004 (0.2935ms)
+  ✔ TA-L5-001 (0.2476ms)
+  ✔ TA-L5-002 (0.2325ms)
+  ✔ TA-L5-003 (0.2924ms)
+  ✔ TA-L5-004 (0.5624ms)
+  ✔ TA-L5-005 (1.3461ms)
+  ✔ TA-L5-006 (0.3458ms)
+  ✔ TA-L6-001 (0.1929ms)
+  ✔ TA-L6-002 (0.3457ms)
+  ✔ TA-L6-003 (0.4635ms)
+  ✔ TA-L6-004 (0.4966ms)
+  ✔ TA-L6-005 (0.1998ms)
+  ✔ TA-L6-006 (0.135ms)
+  ✔ TA-L6-007 (0.2195ms)
+  ✔ TA-L6-008 (0.2045ms)
+  ✔ TA-L6-009 (0.2702ms)
+  ✔ TA-L7-001 (0.4962ms)
+  ✔ TA-L7-002 (0.1767ms)
+  ✔ TA-L7-003 (0.1699ms)
+  ✔ TA-L7-004 (0.1941ms)
+  ✔ TA-L7-005 (0.1621ms)
+  ✔ TA-L7-006 (0.1417ms)
+  ✔ TA-L7-007 (0.1774ms)
+✔ known gate missing and mistyped required evidence always refuses without throwing (16.0029ms)
+✔ impossible timestamps refuse in encoder, verifier, gate and authority window (9.9414ms)
+✔ lone UTF-16 surrogates refuse instead of replacement encoding, including keys (0.6165ms)
+✔ valid leap dates, microsecond boundaries and Unicode preserve exact positive bytes (4.9735ms)
+✔ direct authority evaluation refuses absent records and coerced time evidence (0.1446ms)
+✔ sparse canonical arrays refuse without silently encoding undefined (0.7998ms)
+✔ unregistered or absent fixture kinds cannot return the open sentinel (0.3148ms)
+✔ held contradiction omission refuses with GKOS-GATE-L6-009 (26.7907ms)
+✔ rendered-field mutation refuses with GKOS-GATE-L6-008 (29.4051ms)
+✔ resolved-content mutation refuses with GKOS-GATE-L6-007 (8.0186ms)
+✔ machine-readable applicability and evidence vocabularies satisfy their schemas (76.5211ms)
+✔ unexecuted graph expectations block fixture and profile PASS (312.8383ms)
+PASS  SRTP-P01 — diagnostics: none
+PASS  SRTP-P02 — diagnostics: none
+PASS  SRTP-P03 — diagnostics: none
+PASS  SRTP-P04 — diagnostics: none
+PASS  SRTP-P05 — diagnostics: none
+PASS  SRTP-P06 — diagnostics: none
+PASS  SRTP-N01 — diagnostics: SRTP-ARTIFACT-001, SRTP-INPUT-001
+PASS  SRTP-N02 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-001, SRTP-INPUT-001
+PASS  SRTP-N03 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-002, SRTP-INPUT-001
+PASS  SRTP-N04 — diagnostics: SRTP-ARTIFACT-001
+PASS  SRTP-N05 — diagnostics: SRTP-CLAIM-001
+PASS  SRTP-N06 — diagnostics: SRTP-REVIEW-001
+PASS  SRTP-N07 — diagnostics: SRTP-REVIEW-002
+PASS  SRTP-N08 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N09 — diagnostics: SRTP-SENSITIVITY-001
+PASS  SRTP-N10 — diagnostics: SRTP-CONTEXT-001
+PASS  SRTP-N11 — diagnostics: SRTP-REENTRY-002
+PASS  SRTP-N12 — diagnostics: SRTP-VERSION-001
+PASS  SRTP-N13 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N14 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N15 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N16 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-P01 — diagnostics: none
+PASS  SRTP-P02 — diagnostics: none
+PASS  SRTP-P03 — diagnostics: none
+PASS  SRTP-P04 — diagnostics: none
+PASS  SRTP-P05 — diagnostics: none
+PASS  SRTP-P06 — diagnostics: none
+PASS  SRTP-N01 — diagnostics: SRTP-ARTIFACT-001, SRTP-INPUT-001
+PASS  SRTP-N02 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-001, SRTP-INPUT-001
+PASS  SRTP-N03 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-002, SRTP-INPUT-001
+PASS  SRTP-N04 — diagnostics: SRTP-ARTIFACT-001
+PASS  SRTP-N05 — diagnostics: SRTP-CLAIM-001
+PASS  SRTP-N06 — diagnostics: SRTP-REVIEW-001
+PASS  SRTP-N07 — diagnostics: SRTP-REVIEW-002
+PASS  SRTP-N08 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N09 — diagnostics: SRTP-SENSITIVITY-001
+PASS  SRTP-N10 — diagnostics: SRTP-CONTEXT-001
+PASS  SRTP-N11 — diagnostics: SRTP-REENTRY-002
+PASS  SRTP-N12 — diagnostics: SRTP-VERSION-001
+PASS  SRTP-N13 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N14 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N15 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N16 — diagnostics: SRTP-REENTRY-001
+✔ SRTP draft graph suite catches every declared negative and remains non-qualifying (198.3071ms)
+✔ complete SRTP trace preserves unknown extensions while validating (108.3817ms)
+✔ adversarial graph mutations cannot obtain a false PASS (2.4335ms)
+✔ schema rejects empty traces and tolerance reruns without a tolerance (78.5815ms)
+✔ materialization and evaluation preserve unknown extensions without mutation (1.403ms)
+✔ declared expected codes cannot substitute for an executed rejecting mutation (7.3339ms)
+✔ missing, duplicate and falsely bound case declarations fail execution coverage (14.5717ms)
+▶ every Track A baseline remains open and its mutation closes the expected stable gate
+  ✔ TA-L1-001 (1.2146ms)
+  ✔ TA-L3-001 (0.2129ms)
+  ✔ TA-L4-001 (0.2245ms)
+  ✔ TA-L4-002 (0.1657ms)
+  ✔ TA-L4-003 (0.1886ms)
+  ✔ TA-L4-004 (0.1997ms)
+  ✔ TA-L5-001 (0.1285ms)
+  ✔ TA-L5-002 (0.1544ms)
+  ✔ TA-L5-003 (0.1938ms)
+  ✔ TA-L5-004 (0.2453ms)
+  ✔ TA-L5-005 (0.2988ms)
+  ✔ TA-L5-006 (0.3005ms)
+  ✔ TA-L6-001 (0.1305ms)
+  ✔ TA-L6-002 (0.1144ms)
+  ✔ TA-L6-003 (1.0505ms)
+  ✔ TA-L6-004 (0.4666ms)
+  ✔ TA-L6-005 (0.1469ms)
+  ✔ TA-L6-006 (0.1239ms)
+  ✔ TA-L6-007 (0.1754ms)
+  ✔ TA-L6-008 (0.1342ms)
+  ✔ TA-L6-009 (0.1683ms)
+  ✔ TA-L7-001 (0.3121ms)
+  ✔ TA-L7-002 (0.0873ms)
+  ✔ TA-L7-003 (0.1779ms)
+  ✔ TA-L7-004 (0.0984ms)
+  ✔ TA-L7-005 (0.0508ms)
+  ✔ TA-L7-006 (0.0564ms)
+  ✔ TA-L7-007 (0.0689ms)
+✔ every Track A baseline remains open and its mutation closes the expected stable gate (12.527ms)
+ℹ tests 80
+ℹ suites 0
+ℹ pass 80
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 625.2688
+
+> lint:registries
+> node registry-lint.mjs
+
+{
+  "result": "PASS",
+  "registry_version": "1.1.0-development",
+  "applicability_mapping_version": "1.1.0-development",
+  "applicability_overlay_version": "consolidated-into-base",
+  "requirement_count": 62,
+  "gate_code_count": 28,
+  "covered_gate_codes": {
+    "GKOS-GATE-L1-001": [
+      "TA-L1-001"
+    ],
+    "GKOS-GATE-L3-001": [
+      "TA-L3-001"
+    ],
+    "GKOS-GATE-L4-001": [
+      "TA-L4-001"
+    ],
+    "GKOS-GATE-L4-002": [
+      "TA-L4-002"
+    ],
+    "GKOS-GATE-L4-003": [
+      "TA-L4-003"
+    ],
+    "GKOS-GATE-L4-004": [
+      "TA-L4-004"
+    ],
+    "GKOS-GATE-L5-001": [
+      "TA-L5-001"
+    ],
+    "GKOS-GATE-L5-002": [
+      "TA-L5-002"
+    ],
+    "GKOS-GATE-L5-003": [
+      "TA-L5-003"
+    ],
+    "GKOS-GATE-L5-004": [
+      "TA-L5-004"
+    ],
+    "GKOS-GATE-L5-005": [
+      "TA-L5-005"
+    ],
+    "GKOS-GATE-L5-006": [
+      "TA-L5-006"
+    ],
+    "GKOS-GATE-L6-001": [
+      "TA-L6-001"
+    ],
+    "GKOS-GATE-L6-002": [
+      "TA-L6-002"
+    ],
+    "GKOS-GATE-L6-003": [
+      "TA-L6-003"
+    ],
+    "GKOS-GATE-L6-004": [
+      "TA-L6-004"
+    ],
+    "GKOS-GATE-L6-005": [
+      "TA-L6-005"
+    ],
+    "GKOS-GATE-L6-006": [
+      "TA-L6-006"
+    ],
+    "GKOS-GATE-L6-007": [
+      "GCP6-N-CONTENT-001",
+      "TA-L6-007"
+    ],
+    "GKOS-GATE-L6-008": [
+      "GCP6-N-RENDER-001",
+      "TA-L6-008"
+    ],
+    "GKOS-GATE-L6-009": [
+      "GCP6-N-CLOSURE-001",
+      "TA-L6-009"
+    ],
+    "GKOS-GATE-L7-001": [
+      "GCP7-N-AUTH-TIME-001",
+      "TA-L7-001"
+    ],
+    "GKOS-GATE-L7-002": [
+      "TA-L7-002"
+    ],
+    "GKOS-GATE-L7-003": [
+      "TA-L7-003"
+    ],
+    "GKOS-GATE-L7-004": [
+      "TA-L7-004"
+    ],
+    "GKOS-GATE-L7-005": [
+      "TA-L7-005"
+    ],
+    "GKOS-GATE-L7-006": [
+      "TA-L7-006"
+    ],
+    "GKOS-GATE-L7-007": [
+      "TA-L7-007"
+    ]
+  },
+  "uncovered_gate_codes": [],
+  "executed_predicate_gate_codes": {
+    "GKOS-GATE-L1-001": [
+      "TA-L1-001"
+    ],
+    "GKOS-GATE-L3-001": [
+      "TA-L3-001"
+    ],
+    "GKOS-GATE-L4-001": [
+      "TA-L4-001"
+    ],
+    "GKOS-GATE-L4-002": [
+      "TA-L4-002"
+    ],
+    "GKOS-GATE-L4-003": [
+      "TA-L4-003"
+    ],
+    "GKOS-GATE-L4-004": [
+      "TA-L4-004"
+    ],
+    "GKOS-GATE-L5-001": [
+      "TA-L5-001"
+    ],
+    "GKOS-GATE-L5-002": [
+      "TA-L5-002"
+    ],
+    "GKOS-GATE-L5-003": [
+      "TA-L5-003"
+    ],
+    "GKOS-GATE-L5-004": [
+      "TA-L5-004"
+    ],
+    "GKOS-GATE-L5-005": [
+      "TA-L5-005"
+    ],
+    "GKOS-GATE-L5-006": [
+      "TA-L5-006"
+    ],
+    "GKOS-GATE-L6-001": [
+      "TA-L6-001"
+    ],
+    "GKOS-GATE-L6-002": [
+      "TA-L6-002"
+    ],
+    "GKOS-GATE-L6-003": [
+      "TA-L6-003"
+    ],
+    "GKOS-GATE-L6-004": [
+      "TA-L6-004"
+    ],
+    "GKOS-GATE-L6-005": [
+      "TA-L6-005"
+    ],
+    "GKOS-GATE-L6-006": [
+      "TA-L6-006"
+    ],
+    "GKOS-GATE-L6-007": [
+      "TA-L6-007"
+    ],
+    "GKOS-GATE-L6-008": [
+      "TA-L6-008"
+    ],
+    "GKOS-GATE-L6-009": [
+      "TA-L6-009"
+    ],
+    "GKOS-GATE-L7-001": [
+      "TA-L7-001"
+    ],
+    "GKOS-GATE-L7-002": [
+      "TA-L7-002"
+    ],
+    "GKOS-GATE-L7-003": [
+      "TA-L7-003"
+    ],
+    "GKOS-GATE-L7-004": [
+      "TA-L7-004"
+    ],
+    "GKOS-GATE-L7-005": [
+      "TA-L7-005"
+    ],
+    "GKOS-GATE-L7-006": [
+      "TA-L7-006"
+    ],
+    "GKOS-GATE-L7-007": [
+      "TA-L7-007"
+    ]
+  },
+  "executable_uncovered_gate_codes": [],
+  "coverage_scope": "portable-predicate-twins-only; not cumulative profile qualification",
+  "errors": [],
+  "warnings": []
+}

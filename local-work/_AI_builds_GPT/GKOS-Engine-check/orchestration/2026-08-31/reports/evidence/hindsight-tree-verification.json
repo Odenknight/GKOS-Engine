@@ -1,0 +1,13 @@
+{
+  "repo": "Odenknight/gkos-hindsight-governance",
+  "commit_sha": "59af4d1080efb0eae147d2aec0c0b1b75461b761",
+  "commit_tree_sha": "4ab4e928dd20855925b1e10ef49e1e2f9c58b3bb",
+  "returned_tree_sha": "4ab4e928dd20855925b1e10ef49e1e2f9c58b3bb",
+  "truncated": false,
+  "entry_count": 323,
+  "blob_count": 257,
+  "verified_date": "2026-08-31",
+  "ledger_blob_count": 257,
+  "ledger_blob_identity_comparison": "257/257 path+mode+size+blob SHA match",
+  "mismatches": []
+}

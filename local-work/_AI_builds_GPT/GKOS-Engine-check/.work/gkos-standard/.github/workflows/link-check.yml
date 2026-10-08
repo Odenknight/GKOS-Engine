@@ -1,0 +1,21 @@
+name: Link check
+on: [push, pull_request]
+permissions: {contents: read}
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          # Archived documents preserve their release-era relative links and are
+          # intentionally excluded from the live-document integrity gate.
+          args: >-
+            --no-progress
+            --verbose
+            --exclude-path archive
+            --exclude-path docs/archive
+            --exclude-path docs/implementation/archive
+            --exclude-path fixtures/archive
+            --exclude-path schemas/archive
+            "**/*.md"

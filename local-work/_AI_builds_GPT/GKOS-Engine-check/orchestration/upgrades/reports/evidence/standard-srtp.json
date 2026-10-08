@@ -1,0 +1,242 @@
+{
+  "report_type": "SRTP-draft-fixture-evaluation",
+  "status": "provisional-draft-non-normative",
+  "claim_language": "This implementation produced an SRTP draft trace evaluated by the named fixture suite; checks may pass, fail, or remain unevaluated.",
+  "catalog_version": "SRTP-DRAFT-FIXTURES-0.1.1",
+  "profile_evaluated": "SRTP-DRAFT-0.1",
+  "profiles_claimed": [],
+  "evaluation_status": "PASS",
+  "executed": 22,
+  "passed": 22,
+  "failed": 0,
+  "results": [
+    {
+      "fixture_id": "SRTP-P01",
+      "class": "positive-complete-trace",
+      "outcome": "pass",
+      "expected_diagnostics": [],
+      "actual_diagnostics": []
+    },
+    {
+      "fixture_id": "SRTP-P02",
+      "class": "positive-failed-null-result",
+      "outcome": "pass",
+      "expected_diagnostics": [],
+      "actual_diagnostics": []
+    },
+    {
+      "fixture_id": "SRTP-P03",
+      "class": "positive-interrupted-recovered",
+      "outcome": "pass",
+      "expected_diagnostics": [],
+      "actual_diagnostics": []
+    },
+    {
+      "fixture_id": "SRTP-P04",
+      "class": "positive-branched-interpretations",
+      "outcome": "pass",
+      "expected_diagnostics": [],
+      "actual_diagnostics": []
+    },
+    {
+      "fixture_id": "SRTP-P05",
+      "class": "positive-exact-rerun",
+      "outcome": "pass",
+      "expected_diagnostics": [],
+      "actual_diagnostics": []
+    },
+    {
+      "fixture_id": "SRTP-P06",
+      "class": "positive-tolerance-rerun",
+      "outcome": "pass",
+      "expected_diagnostics": [],
+      "actual_diagnostics": []
+    },
+    {
+      "fixture_id": "SRTP-N01",
+      "class": "negative-input-digest-changed",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-ARTIFACT-001",
+        "SRTP-INPUT-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-ARTIFACT-001",
+        "SRTP-INPUT-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N02",
+      "class": "negative-missing-environment",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-ARTIFACT-001",
+        "SRTP-EXEC-001",
+        "SRTP-INPUT-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-ARTIFACT-001",
+        "SRTP-EXEC-001",
+        "SRTP-INPUT-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N03",
+      "class": "negative-missing-code",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-ARTIFACT-001",
+        "SRTP-EXEC-002",
+        "SRTP-INPUT-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-ARTIFACT-001",
+        "SRTP-EXEC-002",
+        "SRTP-INPUT-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N04",
+      "class": "negative-figure-source-mismatch",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-ARTIFACT-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-ARTIFACT-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N05",
+      "class": "negative-untraceable-numeric-claim",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-CLAIM-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-CLAIM-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N06",
+      "class": "negative-reviewer-self-approval",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-REVIEW-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-REVIEW-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N07",
+      "class": "negative-model-conflicts-deterministic",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-REVIEW-002"
+      ],
+      "actual_diagnostics": [
+        "SRTP-REVIEW-002"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N08",
+      "class": "negative-incomplete-reentry",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-REENTRY-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-REENTRY-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N09",
+      "class": "negative-sensitivity-lowering",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-SENSITIVITY-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-SENSITIVITY-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N10",
+      "class": "negative-expired-context",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-CONTEXT-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-CONTEXT-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N11",
+      "class": "negative-output-receipt-unavailable",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-REENTRY-002"
+      ],
+      "actual_diagnostics": [
+        "SRTP-REENTRY-002"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N12",
+      "class": "negative-incompatible-version-coordinate",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-VERSION-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-VERSION-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N13",
+      "class": "negative-reentry-omitted-source",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-REENTRY-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-REENTRY-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N14",
+      "class": "negative-reentry-unexpected-source",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-REENTRY-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-REENTRY-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N15",
+      "class": "negative-reentry-omitted-artifact",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-REENTRY-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-REENTRY-001"
+      ]
+    },
+    {
+      "fixture_id": "SRTP-N16",
+      "class": "negative-reentry-unexpected-artifact",
+      "outcome": "pass",
+      "expected_diagnostics": [
+        "SRTP-REENTRY-001"
+      ],
+      "actual_diagnostics": [
+        "SRTP-REENTRY-001"
+      ]
+    }
+  ]
+}

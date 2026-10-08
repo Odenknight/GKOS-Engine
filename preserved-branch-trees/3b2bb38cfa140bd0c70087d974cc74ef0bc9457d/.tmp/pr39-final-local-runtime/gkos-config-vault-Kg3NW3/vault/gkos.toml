@@ -1,0 +1,4 @@
+config_version = 1
+[retrieval]
+mmr = true
+parent_expansion_max_child_tokens = 64

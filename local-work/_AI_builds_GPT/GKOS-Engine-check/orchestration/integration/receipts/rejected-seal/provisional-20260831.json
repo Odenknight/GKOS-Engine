@@ -1,0 +1,18 @@
+{
+  "status": "rejected-before-tests",
+  "reason": "root integration hold: packer line-ending normalization review",
+  "remote_writes": false,
+  "kosmos": {
+    "base": "6486035dfc2e42173b1158b8007c9bab35aa7dc9",
+    "branch": "codex/integrate-kosmos-identity-20260831",
+    "provisional_commit": "9b28a956f14fe93a937e769d985d1fdbcfdf60ef"
+  },
+  "observatory": {
+    "exact_source_object_available": false,
+    "base_source_coordinate": "8da1d2239a9ce0af5570fe1bfa264934d8aabbe4",
+    "local_git_base": "2a7b66fc6a33076fdcf29574cf2e31082c1b6e2a",
+    "branch": "codex/integrate-observatory-identity-20260831",
+    "provisional_reconstruction_commit": "97ed8ebc6dc90ef61a8e50869330ca9701f8ab54",
+    "provisional_patch_commit": "6e697a245b2de6f520ebc57aca042008f4b34c12"
+  }
+}

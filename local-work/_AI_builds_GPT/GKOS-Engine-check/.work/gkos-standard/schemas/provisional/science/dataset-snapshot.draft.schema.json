@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/science/dataset-snapshot.draft.schema.json",
+  "title": "SRTP Dataset Snapshot — PROVISIONAL DRAFT, informative only",
+  "allOf": [
+    { "$ref": "research-object.draft.schema.json" },
+    {
+      "type": "object",
+      "required": ["snapshot_digest", "source_revision", "custody", "retrieved_at"],
+      "properties": {
+        "srtp_type": { "const": "srtp:DatasetSnapshot" },
+        "snapshot_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+        "source_revision": { "type": "string", "minLength": 1 },
+        "custody": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["actor", "at", "action"], "properties": { "actor": { "$ref": "../../gkx-common.defs.json#/$defs/actorIdentity" }, "at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" }, "action": { "type": "string" } }, "additionalProperties": true } },
+        "retrieved_at": { "$ref": "../../gkx-common.defs.json#/$defs/timestamp" },
+        "external_reference": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/source-record.draft.schema.json",
+  "title": "Source Record (L1) — PROVISIONAL DRAFT, informative only",
+  "type": "object",
+  "required": ["source_id", "source_kind", "content_fingerprint", "acquired_at"],
+  "properties": {
+    "source_id": { "type": "string", "minLength": 1 },
+    "source_kind": { "type": "string", "examples": ["file", "url", "human-statement", "instrument", "derived"] },
+    "source_refs": { "type": "array", "items": { "type": "string" } },
+    "content_fingerprint": { "$ref": "../okf-common.defs.json#/$defs/contentHash" },
+    "acquired_at": { "$ref": "../okf-common.defs.json#/$defs/timestamp" },
+    "acquired_by": { "$ref": "../okf-common.defs.json#/$defs/actorIdentity" },
+    "acquisition_method": { "type": "string" },
+    "revision_of": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "sensitivity": { "$ref": "../okf-common.defs.json#/$defs/sensitivity" }
+  },
+  "additionalProperties": false
+}

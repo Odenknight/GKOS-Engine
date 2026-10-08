@@ -1,0 +1,8 @@
+{
+  "extends": "srtp-p01-complete.json",
+  "mutations": [
+    { "op": "set", "path": "/reviewer_findings/0/evaluation", "value": "FAIL" },
+    { "op": "set", "path": "/reviewer_findings/0/severity", "value": "critical" },
+    { "op": "add", "path": "/reviewer_findings/-", "value": { "id": "b0000000-0000-4000-8000-00000000000b", "srtp_type": "srtp:ReviewerFinding", "origin": "proposed", "sensitivity": "restricted", "created_at": "2026-08-08T13:42:00-04:00", "created_by": "agent:model-reviewer", "lineage": { "branch_id": "model-review", "predecessors": [] }, "target_id": "90000000-0000-4000-8000-000000000009", "reviewer": "agent:model-reviewer", "independence": "independent", "deterministic": false, "severity": "info", "evaluation": "PASS", "finding": "Model proposes ignoring the deterministic failure.", "conflicts_with_deterministic_finding_id": "a0000000-0000-4000-8000-00000000000a" } }
+  ]
+}

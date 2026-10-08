@@ -1,0 +1,12 @@
+name: Security process question
+description: Public, non-sensitive security-policy question only
+title: "[Security process]: "
+labels: ["type:security"]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not disclose vulnerabilities here. Use private vulnerability reporting."
+  - type: textarea
+    id: question
+    attributes: {label: Non-sensitive process question}
+    validations: {required: true}

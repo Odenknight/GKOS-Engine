@@ -1,0 +1,108 @@
+{
+  "$id": "external-mapping.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "agent_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    },
+    "auth_epoch": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "authenticated_by": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "authority_generation": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "authority_instance_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    },
+    "contract_version": {
+      "const": "1.0.0-draft.2"
+    },
+    "created_at": {
+      "format": "date-time",
+      "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+      "type": "string"
+    },
+    "mapping_generation": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "mapping_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    },
+    "namespace": {
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-z][a-z0-9._-]{0,63}$",
+      "type": "string"
+    },
+    "record_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "restore_epoch": {
+      "maximum": 9007199254740991,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "revoked_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "pattern": "^(?:19[7-9][0-9]|2[0-9]{3})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "active",
+        "revoked"
+      ]
+    },
+    "subject_digest": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "vault_id": {
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "contract_version",
+    "vault_id",
+    "authority_instance_id",
+    "restore_epoch",
+    "mapping_id",
+    "namespace",
+    "subject_digest",
+    "agent_id",
+    "authority_generation",
+    "auth_epoch",
+    "mapping_generation",
+    "status",
+    "authenticated_by",
+    "created_at",
+    "revoked_at",
+    "record_digest"
+  ],
+  "title": "external_mapping",
+  "type": "object"
+}

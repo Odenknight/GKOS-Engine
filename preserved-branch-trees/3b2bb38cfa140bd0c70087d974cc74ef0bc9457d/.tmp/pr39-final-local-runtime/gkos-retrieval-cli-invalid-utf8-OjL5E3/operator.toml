@@ -1,0 +1,10 @@
+config_version = 1
+[vectors]
+enabled = true
+provider = "mcp"
+provider_id = "utf8-provider"
+model_id = "utf8-model"
+dimensions = 1
+timeout_ms = 100
+server = "operator-server"
+tool = "embed-anything"

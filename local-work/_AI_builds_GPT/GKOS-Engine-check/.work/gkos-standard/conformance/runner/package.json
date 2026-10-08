@@ -1,0 +1,11 @@
+{
+  "name": "gkos-ts-runner",
+  "private": true,
+  "type": "module",
+  "description": "GKOS-TS starter conformance runner (adapter-neutral).",
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "srtp:draft": "node srtp-graph.mjs --out srtp-draft-report.json"
+  },
+  "dependencies": { "ajv": "^8.17.0", "yaml": "^2.5.0" }
+}

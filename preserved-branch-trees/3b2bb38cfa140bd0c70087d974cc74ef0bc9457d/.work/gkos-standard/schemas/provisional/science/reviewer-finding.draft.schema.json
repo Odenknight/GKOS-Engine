@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/science/reviewer-finding.draft.schema.json",
+  "title": "SRTP Reviewer Finding — PROVISIONAL DRAFT, informative only",
+  "allOf": [
+    { "$ref": "research-object.draft.schema.json" },
+    {
+      "type": "object",
+      "required": ["target_id", "reviewer", "independence", "deterministic", "severity", "evaluation", "finding"],
+      "properties": {
+        "srtp_type": { "const": "srtp:ReviewerFinding" },
+        "target_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" },
+        "reviewer": { "$ref": "../../gkx-common.defs.json#/$defs/actorIdentity" },
+        "independence": { "type": "string", "enum": ["independent", "conflicted", "self-review", "unknown"] },
+        "conflicts": { "type": "array", "items": { "type": "string" } },
+        "deterministic": { "type": "boolean" },
+        "severity": { "type": "string", "enum": ["info", "warning", "error", "critical"] },
+        "evaluation": { "type": "string", "enum": ["PASS", "FAIL", "UNEVALUATED"] },
+        "finding": { "type": "string", "minLength": 1 },
+        "approved_by": { "$ref": "../../gkx-common.defs.json#/$defs/actorIdentity" },
+        "conflicts_with_deterministic_finding_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" }
+      },
+      "additionalProperties": true
+    }
+  ]
+}

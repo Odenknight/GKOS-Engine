@@ -1,0 +1,43 @@
+{
+  "status": "developmental-informative",
+  "matrix_version": "0.1.0",
+  "current": {
+    "gkos_publication": "GKOS-2026-08-05 v0.78",
+    "gkx_namespace": "2.0",
+    "projection_profile": "gkx-2.0-validating-projection",
+    "engine_validating_projection_profile": "gkx-2.3-validating-projection",
+    "engine_validating_projection_api": "buildGkx23Projection",
+    "engine_package": "2.0.1",
+    "engine_commit": "7c742436d50b34f6dda66976212a672fb51f7c21",
+    "srtp_fixture_catalog": "SRTP-DRAFT-FIXTURES-0.1.1",
+    "srtp_fixture_catalog_sha256": "ed9cc63b50ecf332b96c576af9139370a1c708b6145224d881cafefdde8aa651"
+  },
+  "profiles": {
+    "SRTP-DRAFT-0.1": {
+      "status": "provisional-draft-non-normative",
+      "compatible_with": {
+        "gkos_publication": ["GKOS-2026-08-05 v0.78"],
+        "gkx_namespace": ["2.0"],
+        "projection_profile": ["gkx-2.0-validating-projection"],
+        "engine_package": ["2.0.1"],
+        "srtp_fixture_catalog": ["SRTP-DRAFT-FIXTURES-0.1.1"]
+      },
+      "qualifying": false
+    }
+  },
+  "implementation_symbols": {
+    "buildGkx23Projection": {
+      "status": "current-engine-api-independent-of-gkx-namespace",
+      "is_namespace": false,
+      "is_projection_profile": false
+    }
+  },
+  "independent_current_coordinates": {
+    "gkx-2.3-validating-projection": {
+      "current_engine_profile": true,
+      "equivalent_to_srtp_projection_coordinate": false,
+      "handling": "preserve-exactly-and-do-not-infer-from-gkx-namespace"
+    }
+  },
+  "additionalProperties": true
+}

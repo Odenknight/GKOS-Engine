@@ -1,0 +1,28 @@
+{
+  "suite": "ENGINE-NAV-EFFECTS-CONTRACT-1.0.0",
+  "suite_version": "1.0.0",
+  "engine_release_target": "2.2.0",
+  "navigation_contract": "1.0.0",
+  "navigation_effects_contract": "1.0.0",
+  "standing": "integration-only",
+  "gkos_conformance": false,
+  "implementation_phase": "node-executor-experimental",
+  "source_content_effect": "explicit-host-adapter-only",
+  "effect_execution_included": true,
+  "fixture_manifest": "fixtures.manifest.json",
+  "schemas": [
+    "schemas/capabilities.schema.json",
+    "schemas/archive-manifest.schema.json",
+    "schemas/archive-diff.schema.json",
+    "schemas/checkpoint.schema.json",
+    "schemas/effect-plan.schema.json",
+    "schemas/journal-entry.schema.json",
+    "schemas/receipt.schema.json",
+    "schemas/recovery-result.schema.json",
+    "schemas/agent-grant.schema.json",
+    "schemas/agent-write-request.schema.json",
+    "schemas/agent-write-result.schema.json",
+    "schemas/moc-ownership.schema.json",
+    "schemas/contract-fixture.schema.json"
+  ]
+}

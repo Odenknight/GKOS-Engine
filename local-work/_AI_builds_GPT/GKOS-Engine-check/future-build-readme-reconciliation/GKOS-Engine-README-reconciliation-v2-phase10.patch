@@ -1,0 +1,242 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Codex <codex@openai.com>
+Date: Tue, 25 Aug 2026 13:00:00 -0400
+Subject: [PATCH v2] docs: reconcile Full release, draft, and future status
+X-GKOS-Base-Commit: 7b5262baee9fcda23d50b0cee0c4977d6e4305e7
+X-GKOS-Base-README-Blob: a3a388e240edbcf59bc6b578083d4c70a01a1e4f
+
+Phase-10 review artifact only. It is not authorization to apply, commit,
+push, merge, tag, release, publish, deploy, or activate a service.
+
+---
+diff --git a/README.md b/README.md
+index a3a388e..baea4a7 100644
+--- a/README.md
++++ b/README.md
+@@ -1,10 +1,9 @@
+ # GKOS-Engine
+ 
+-**GKOS-Engine 2.1.2** is a deterministic toolkit for working with governed
+-knowledge records. It parses, validates, projects, assesses, graphs, and
+-exports GKX 2.0 records. Its new Navigation tools can find map-of-content
+-(MOC) pages, propose consistent indexes, compare changes, audit a knowledge
+-vault, assemble permission-filtered context, and plan safe re-entry.
++**GKOS-Engine 2.1.2** is the released TypeScript reference engine for
++deterministic GKX parsing, validation, projection, assessment, graph export,
++and read-only Navigation analysis. Full owns the canonical contracts and
++reference semantics consumed by GKOS-Engine-Lite.
+ 
+ Version 2.0 is a breaking release line. It uses the GKX namespace throughout:
+ `gkx_version`, `.gkx/`, `GKX-*` diagnostics, `gkx` commands, and `Gkx*` public
+@@ -14,9 +13,82 @@ This repository is the single source of truth for the engine. It is
+ **Obsidian-free, DOM-free, platform-neutral** TypeScript: a reusable core that
+ downstream products consume rather than re-vendor.
+ 
+-- **Kosmos Research Studio (KRS)** consumes this package.
++- **Kosmos-Oden** may consume this package through qualified integration
++  surfaces.
+ - **GKOS-Engine-Lite** consumes this package.
+ 
++## Capability and release status
++
++The three status classes below are intentionally separate. A draft branch,
++green workflow, or design record is not a release or an activated service.
++
++| Surface | Status | Exact boundary |
++| --- | --- | --- |
++| TypeScript package and `gkx` release line | Current release baseline | Version `2.1.2`; deterministic GKX processing, graph/export, proposal-only intelligence validation, and source-content-read-only Navigation. |
++| Functional uplift Phases 0-5 | Draft-qualified, unmerged | Full head `7b5262baee9fcda23d50b0cee0c4977d6e4305e7`; push run `32803396417`; PR run `32803399153`; draft PR #30. These coordinates qualify source and test evidence, not deployment or service activation. |
++| Functional uplift Phases 6-11 | Future planned work | Identity/MCP, graph projections and bounded tools, operator interfaces, packaging, final documentation, and integration remain unavailable until implemented and qualified in dependency order. |
++
++No Phase 6 work is released or operational. In particular, there is no
++qualified multi-agent identity system, MCP server, governed external-effects
++plane, activated Phase 5 watcher service, or Phase 7 graph-query service.
++Phase 5 contains draft contracts and reference/qualification behavior; it does
++not by itself enable a product service or authorize source mutation.
++
++### Authority allocation
++
++- `gkos-standard` owns normative GKOS/GKX meaning.
++- Full is the platform-neutral TypeScript contract and reference-behavior
++  authority for this uplift.
++- Lite may consume exact Full packs and implement private Rust conformance. It
++  must not become a second parser, identity system, lineage model, or semantic
++  authority.
++- Optional models, providers, graph systems, and transports are adapters. They
++  do not receive governance authority.
++
++### Sensitivity and access-control boundary
++
++`sensitivity` is projection metadata used by caller-supplied policy. Defaulting
++an absent or invalid value to `secret` is a conservative projection rule, not
++an authorization system. The current loopback APIs do not hide records merely
++because of their sensitivity label. A host must authenticate the caller,
++enforce its own authorization and discoverability policy before disclosure,
++and treat the projected sensitivity value as an additional policy input.
++
++### Required defect gate before Phase 6
++
++At base head `7b5262b`, `bin/gkx.mjs` can read `uid` or `sensitivity` text from
++outside a delimited frontmatter block on the CLI `nav context` path. The
++library API remains usable with caller-built snapshots and a correctly
++enforced discoverability policy. A bounded, BOM-aware frontmatter repair and a
++fenced-YAML regression test exist on the uncommitted continuation branch, but
++were still pending the complete independent gate when this reconciliation was
++prepared. Therefore:
++
++- do not advertise or use CLI `nav context` as a security boundary at this
++  base coordinate;
++- complete the repair, independent review, focused regression, broad suite,
++  and hosted qualification before Phase 6; and
++- during Phase 10, replace this status with the exact qualified repair commit
++  and runs before applying this README patch.
++
++## Future planned sequence
++
++1. **Phase 6:** multi-agent identity, credential lifecycle, revocation, and
++   bounded MCP transport facades.
++2. **Phase 7:** disposable durable graph projections and policy-checked,
++   citation-bearing bounded graph tools.
++3. **Phase 8:** operator interfaces that expose only qualified APIs and keep
++   reads, proposals, approvals, and committed effects distinct.
++4. **Phase 9:** clean-machine Full distribution and separately governed Lite
++   packaging with linkage, CPU/OS, checksum, SBOM, and license evidence.
++5. **Phase 10:** documentation reconciliation against terminal behavior and
++   artifacts, including this successor patch.
++6. **Phase 11:** exact Full/Lite pin reconciliation, end-to-end qualification,
++   and owner handoff.
++
++None of those plans authorizes merge, tag, release, publication, deployment,
++service activation, or external effects.
++
+ ## Relationship to GKOS
+ 
+ GKOS-Engine 2.1.2 at this repository revision implements deterministic
+@@ -31,7 +103,11 @@ compatibility is governed by the standard's current compatibility matrix and
+ the immutable release evidence cited by a specific claim; matching version
+ numbers or passing this repository's tests do not establish GKOS conformance.
+ 
+-## Phase 3 functional uplift by technology
++## Draft uplift detail by technology
++
++The sections describing Phases 3-5 apply to the draft uplift coordinates, not
++the released 2.1.2 package. They document qualified implementation evidence and
++private reference behavior; they do not claim an operational service.
+ 
+ - **TypeScript / Node CLI** — adds one-pass ingest validation, strict and
+   non-strict indexing, bounded profile selection, and validate/index/search
+@@ -68,7 +144,9 @@ Navigation 2.1 analyzes a snapshot supplied by your application. It can:
+ - explain text and semantic changes, including stable-identity moves;
+ - audit stale candidates, malformed markers, lineage, configuration, archive,
+   context-budget, and discoverability problems;
+-- build context packs only after access policy has filtered protected objects;
++- build context packs from host-supplied snapshots only after the host has
++  authenticated the caller and filtered protected objects under its own
++  discoverability policy;
+ - plan a human-edited artifact as a new Layer-1 source; and
+ - evaluate narrowly delegated supersession declarations without granting
+   general write authority.
+@@ -98,6 +176,11 @@ Navigation Context Packs are Engine artifacts, not GKOS Layer-6 Context
+ Manifests. The integration fixture pack tests Engine compatibility only and
+ does not create GKOS or GCP conformance standing.
+ 
++The released library path requires caller-built snapshots. The CLI
++`nav context` path at the recorded base is subject to the bounded-frontmatter
++defect gate above and must not be used to enforce confidentiality until its fix
++is independently qualified.
++
+ ### Try the read-only CLI
+ 
+ ```sh
+@@ -107,10 +190,11 @@ npm run build
+ node bin/gkx.mjs nav scan ./my-notes
+ node bin/gkx.mjs nav audit ./my-notes
+ node bin/gkx.mjs nav render ./my-notes --stdout
+-node bin/gkx.mjs nav context ./my-notes \
+-  --recipient alice --purpose research --stdout
+ ```
+ 
++The CLI `nav context` example is intentionally omitted pending the exact
++qualified bounded-frontmatter repair coordinate.
++
+ For a first walkthrough, see [BEGINNERS_GUIDE.md](BEGINNERS_GUIDE.md). API and
+ architecture details are in [TECHNICAL_README.md](TECHNICAL_README.md), with
+ the normative Engine integration surface in
+@@ -243,6 +327,9 @@ an optional `Gkx23ProjectionOptions`.
+   and `new GkxIndex(options?)` apply the same option to full and incremental
+   builds.
+ 
++This option controls projection metadata. It does not authenticate a caller,
++grant or deny access, filter the desktop API, or replace host authorization.
++
+ The engine ships no PII or sensitive-content detector. A deployment that adds one
+ may only raise effective sensitivity; it may never lower an authored value.
+ 
+@@ -264,7 +351,7 @@ The folder-oriented validation, assessment, graph, and export commands embed a
+ deterministic `build:` block in their output:
+ 
+ ```json
+-{ "engine_version": "2.1.1",
++{ "engine_version": "2.1.2",
+   "policy_hash": "sha256:…",
+   "corpus_hash": "…",
+   "generated_at": "2026-08-05T…Z" }
+@@ -294,7 +381,8 @@ node bin/gkx.mjs assess ./my-notes --json > assessments.json
+ 
+ ### `gkx retrieval eval|tune`
+ 
+-Phase 4 retrieval evaluation executes sealed offline fixtures through the actual
++On the draft uplift branch, Phase 4 retrieval evaluation executes sealed
++offline fixtures through the actual
+ public coordinator. The human golden TOML is the sole CLI fixture argument;
+ every JSON/corpus/manifest companion is an exact sealed sibling, never a
+ caller-directed path. Embedding and reranker roles are independent; any active
+@@ -363,6 +451,10 @@ retrieval semantics or the deterministic scan-presentation coordinate.
+ Builds the canonical graph with stable serialization. `--watch` rebuilds on
+ change.
+ 
++This legacy graph-rebuild flag is not the governed Phase 5 watcher/recovery
++service. It does not establish service activation, crash-recovery authority,
++or an external-effects plane.
++
+ ```sh
+ node bin/gkx.mjs graph ./my-notes -o graph.json
+ ```
+@@ -377,9 +469,10 @@ node bin/gkx.mjs export graphiti ./my-notes --episodes episodes.json --group-id
+ 
+ ## Desktop agent
+ 
+-`src/desktop-agent.ts` is built to `dist/gkos-desktop-agent.mjs` and compiled
+-per platform into the `gkos-agent` Node SEA binary. It watches a records folder
+-and serves a loopback-only read-only agent API.
++`src/desktop-agent.ts` is built to `dist/gkos-desktop-agent.mjs` and can be
++compiled per platform into the `gkos-agent` Node SEA binary. It monitors a
++records folder for projection refresh and serves a loopback-only, token-gated,
++read-only API. This released surface is not the draft Phase 5 governed watcher.
+ 
+ ```sh
+ npm run build
+@@ -393,7 +486,7 @@ node scripts/build-sea.mjs
+ | Flag | Required | Default | Notes |
+ | --- | --- | --- | --- |
+ | `--notes <dir>` | yes | — | Records folder to index and watch. |
+-| `--default-sensitivity <level>` | no | `secret` | One of the seven levels; invalid or missing values fail closed to `secret`. |
++| `--default-sensitivity <level>` | no | `secret` | Projection metadata default; it is not an access-control ceiling. |
+ | `--port <n>` | no | `4814` | Loopback port. |
+ | `--status-file <path>` | no | `<notes>/.gkx/desktop-agent.status.json` | Health and state location. |
+ 
+@@ -407,6 +500,11 @@ created with mode `0600`; Windows access follows the containing directory's
+ ACL. The token is reused while its file exists and rotates when the file is
+ removed and the agent restarts.
+ 
++The `/notes` and `/graph` handlers return indexed records with sensitivity
++metadata attached; they do not enforce a sensitivity ceiling. There is no MCP
++route on this released server. Applications must not describe the bearer token
++or sensitivity label as multi-agent authorization.
++
+ ### Endpoints
+ 
+ - `GET /` and `GET /health` — status document.
+-- 
+2.51.1
+

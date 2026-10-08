@@ -1,0 +1,2330 @@
+[
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\adjudication\\v1\\ADJUDICATION-CONTRACT.md",
+    "sha256": "d38710d24de85c4a4f94f47ae9424e4ef8b0d043225b716c7487ac23b826c886",
+    "bytes": 5715,
+    "duplicate_of": null,
+    "headings": "# Deterministic adjudication contract / ## Inputs and outputs / ## Monotonic decision table / ## Authority and effect boundary / ## Fail closed and replay / ## Open dependency",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\adjudication\\v1\\HASH-PREIMAGES.md",
+    "sha256": "e7c5a2185610124d98ad4038fc3a96c83c9b438fd8a5a6443c37f1e1371ecf91",
+    "bytes": 2275,
+    "duplicate_of": null,
+    "headings": "# Decision-artifact hash preimages",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\conformance\\v1\\CLI-PROTOCOL.md",
+    "sha256": "3e3974f544a5e5c765ab856cef3a311c6ac31f22e27d250f236c01a1fd20ec2b",
+    "bytes": 10520,
+    "duplicate_of": null,
+    "headings": "# Language-neutral conformance CLI protocol / ## Invocation / ## Operations / ## Exit status / ## Request binding and fail-closed validation / ## Determinism and comparison / ## Replay harness and assurance limit",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\database\\v1\\POSTGRESQL-LEDGER-PROFILE.md",
+    "sha256": "a0fb75d9957d972f3ba6210145373f5afb5c887ca6664b2184ec9730d5251c2c",
+    "bytes": 17202,
+    "duplicate_of": null,
+    "headings": "# PostgreSQL ledger, outbox, and checkpoint profile / ## Transaction boundary / ## Acyclic mutation and entry hashes / ## Outbox and dual write / ## Human review and retention / ## Checkpoints / ## Unresolved ratification gaps / ## Scope and privilege deployment denial",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\evd-002\\EVD-002-PYTHON-EVIDENCE-CHAIN-BUILD-INSTRUCTIONS.md",
+    "sha256": "e361ff7cd7e92bea21260ab5cb2cf2a12a61b94e6e52322f671318cde53de0e8",
+    "bytes": 20526,
+    "duplicate_of": null,
+    "headings": "# EVD-002 Python Evidence Chain — Build Instructions / ## 1. Outcome / ## 2. Authority gate: stop before implementation / ## 3. Repository findings that shape the design / ## 4. Target ownership and dependency direction / ## 5. Frozen canonical-byte profile / ## 6. Chain contract / ## 7. Persistence and atomic append / ## 8. Genesis without rewritten history / ## 9. Checkpoint anchors / ## 10. Read-only verification / ## 11. Test and qualification rings / ## 12. Evidence products and activation handoff / ## 13. Rollback and incident behavior / ## 14. Explicit stop conditions",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\fixtures\\v1\\PHASE-A-FIXTURE-CONTRACT.md",
+    "sha256": "161fa2e68e5fcb312f8c034d66d7f4846de235e77be9b3a8522b95c036f14a8f",
+    "bytes": 1810,
+    "duplicate_of": null,
+    "headings": "# Neutral Phase A fixture and lock contract / ## Locks / ## Public and confidential fixtures / ## Shadow vectors",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\gkx-checkpoint\\CODEX-RUNBOOK-GKX-CHECKPOINT-CONTRACT.md",
+    "sha256": "331be08c1b79193b594584597eac9c5ff0239a2dbfa04fdce6933a8d915524e2",
+    "bytes": 3964,
+    "duplicate_of": null,
+    "headings": "# Codex Runbook — GKX Checkpoint Contract v1.0 / ## Mission / ## Phase 0 — Authority and worktree / ## Phase 1 — Contract review / ## Phase 2 — Mechanical validation / ## Phase 3 — Negative and adversarial vectors / ## Phase 4 — Repository integration / ## Phase 5 — EVD-002 and Hindsight profiles / ## Phase 6 — Evidence and handoff",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\gkx-checkpoint\\GKX-CHECKPOINT-CONTRACT-v1.0.md",
+    "sha256": "23edee729a4a33ad60ab98dd984f44c50a9c13850be1d70a45ac795d1600cd8a",
+    "bytes": 10030,
+    "duplicate_of": null,
+    "headings": "# GKX Checkpoint Contract v1.0 / ## 1. Purpose / ## 2. Normative language / ## 3. Non-claims / ## 4. Objects / ## 5. Core semantics / ### 5.1 Identity and scope / ### 5.2 Covered range / ### 5.3 Continuity / ### 5.4 Verification statement / ## 6. Canonical bytes and hash / ## 7. Time / ## 8. Signatures / ## 9. Anchor delivery / ## 10. Cadence / ## 11. Verification algorithm / ## 12. Recovery and competing heads / ## 13. Storage profiles / ### 13.1 Marshal SQLite/Python / ### 13.2 Hindsight PostgreSQL clean-room / ## 14. Security and privacy / ## 15. Conformance / ## 16. Ratification and change control",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\gkx-checkpoint\\marshal-canonical-json-v1.md",
+    "sha256": "0f712b1b59d5b45a7ac88302077a63e2a8c4495966604a072221f2d661dd7563",
+    "bytes": 1844,
+    "duplicate_of": null,
+    "headings": "# `marshal-canonical-json/v1` / ## Data domain / ## Parsing / ## Schema normalization / ## Serialization / ## Domain separation / ## Failure behavior",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\gkx-checkpoint\\README.md",
+    "sha256": "6ed6106c59bb860eb4e12d0a329151bb8dfd1a7dfdc6432d7d33f8b1eae15caf",
+    "bytes": 1508,
+    "duplicate_of": null,
+    "headings": "# GKX Checkpoint Contract v1.0 — Handoff Bundle / ## Contents / ## Controlling rule",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\governance\\GKOS-Hindsight-Dream-Governance-Demonstrator.md",
+    "sha256": "e099b9736b5e054b87d351a15675862c98e4d64b8a75d387a04e3971ef828466",
+    "bytes": 34966,
+    "duplicate_of": null,
+    "headings": "# GKOS–Hindsight Governance Demonstrator / ## 1. Executive decision / ## 2. Why Hindsight is an unusually strong GKOS fixture / ## 3. Authority boundary / ### 3.1 Canonical responsibilities / ### 3.2 Non-negotiable invariants / ## 4. System architecture / ### 4.1 Deployment posture / ## 5. GKOS projection of Hindsight objects / ## 6. Minimum governance envelope / ## 7. Dream Adjudication Pipeline / ### 7.1 Input contract / ### 7.2 Stage 0 — validity gate / ### 7.3 Stage 1 — deterministic risk and eligibility checks / ### 7.4 Stage 2 — independent semantic review / ### 7.5 Stage 3 — deterministic adjudication / ### 7.6 The three substantive dispositions / ## 8. What “auto-approval” means / ## 9. Ledger and audit model / ## 10. Human review experience / ## 11. Audit sampling and calibration / ### Mode 0 — observe only / ### Mode 1 — shadow auto-admission / ### Mode 2 — reversible limited admission / ### Mode 3 — sampled operation / ## 12. Public demonstration experiments / ## 13. Acceptance tests / ## 14. Repository shape / ## 15. Minimal API surface / ## 16. Build sequence / ### Activation gate / ### Phase A — contracts and replayable fixtures / ### Phase B — Hindsight bridge / ### Phase C — independent Dream review / ### Phase D — shadow calibration / ### Phase E — limited auto-admission / ### Phase F — Rust qualification and Python retirement / ## 17. What to publish / ## 18. Ratified decision baseline / ## 19. References",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\governance\\README.md",
+    "sha256": "9c6d7d940ecd52c90a69322052e4ad27df401f4447d377795bc238fa950f53c4",
+    "bytes": 209,
+    "duplicate_of": null,
+    "headings": "# Governance contracts",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\hindsight\\v1\\HINDSIGHT-OPERATION-COMPATIBILITY.md",
+    "sha256": "1275ba7040af8fd3ad43d7de173631079a4708f746488cb29258273b6324b72f",
+    "bytes": 8950,
+    "duplicate_of": null,
+    "headings": "# Hindsight operation-compatibility contract / ## Evidence basis / ## Operation requirement classes / ### Core required / ### Conditional required / ### Optional diagnostic / ## Semantic invariants / ## Webhook and operation identity / ## Four-stage compatibility preflight / ## Non-claims",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\semantic-coherence\\v1\\SEMANTIC-COHERENCE-CONTRACT.md",
+    "sha256": "e18e2a98972e3b8fe1045db4a14b5293e62a7c92c6d91a9a756bea0d80960da6",
+    "bytes": 10214,
+    "duplicate_of": null,
+    "headings": "# Semantic Coherence Contract v1 / ## Purpose and boundary / ## Mounted inputs / ## Result precedence / ## Exact comparison semantics / ### Envelope mapping / ### Dream artifact integrity / ### Reviewer independence and assessment binding / ### Source closure and budgets / ### Validity receipt coherence / ### Disposition receipt coherence / ### Full-packet closure / ## Non-claims and unresolved activation inputs",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\ARCHITECTURE.md",
+    "sha256": "8f525628bebcbe3df17bdd8d7db05d7f944ccad97dff948e589bc8293c9d68e1",
+    "bytes": 11209,
+    "duplicate_of": null,
+    "headings": "# Architecture / ## Purpose and claim boundary / ## Authority and trust boundaries / ## Canonical mutation and projection flow / ## Dream review flow / ## Non-PHI and non-production boundary / ## Contract evidence achieved so far / ## Clean-room implementation lanes / ## Blocking identities and limits / ## Service and Compose posture / ## Gate sequence",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\DATABASE-CONTRACT.md",
+    "sha256": "eef4e016155ff402173072e093d6d985f277ed0b54870dd6e3e357b31ed068af",
+    "bytes": 3259,
+    "duplicate_of": null,
+    "headings": "# Database contract boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\OPERATIONS.md",
+    "sha256": "6b641b4237da8630c4daeef9aecc28ee52577fa0e59d703546c18c80e9817538",
+    "bytes": 6311,
+    "duplicate_of": null,
+    "headings": "# Operations / ## Verify the current checkout / ## Activation receipt interpretation / ## Current scaffold checks / ## Pre-ratification replay / ## PostgreSQL evidence / ## Stop and escalation conditions",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-CONTRACT-CI-GATE-REPORT.md",
+    "sha256": "b406511ba06f1957f3aadc6706bb8cd8f1fc498b7ae0d1521079983b53deaaa3",
+    "bytes": 4263,
+    "duplicate_of": null,
+    "headings": "# R2 contract CI static gate report / ## Delivered / ## Evidence boundary / ## Dependency boundary / ## Validation / ## Non-claims",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-FAILURE-MATRIX.md",
+    "sha256": "c95665346b8aac64d4120f9bf5a2d6654d2fe9af0b197ea1666f4dab756c56a5",
+    "bytes": 3046,
+    "duplicate_of": null,
+    "headings": "# R2 failure matrix / ## Coverage / ## Evidence semantics / ## Fail-closed interpretation",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-HINDSIGHT-COMPATIBILITY-REPORT.md",
+    "sha256": "b453b8b85619a9de3a1d8609491321d511c3c3ea73c78a9a056a8eebaf824a1a",
+    "bytes": 7327,
+    "duplicate_of": null,
+    "headings": "# R2 Hindsight operation-compatibility report / ## Result / ## Operation boundary / ## Replay evidence / ## Webhook repair / ## Source findings and unevaluated dependencies / ## Validation / ## Safe handoff",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-OPERATOR-DOCUMENTATION-REPORT.md",
+    "sha256": "a25859764afda29edef2e2dddbebffbf9055b4c79f500beb835260f0be27df69",
+    "bytes": 4653,
+    "duplicate_of": null,
+    "headings": "# R2 operator documentation report / ## Delivered / ## Explicit non-claims / ## Validation boundary / ## Material caveats",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-OWNER-DECISION-INTAKE-2026-08-27.md",
+    "sha256": "d894cce66c66b472f51923591c697f3fb7f000eecf6755f02f26a09d26d24c7c",
+    "bytes": 3743,
+    "duplicate_of": null,
+    "headings": "# R2 owner decision intake — 2026-08-27 / ## Key findings / ## Recommended owner choices / ## Ordered next work",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-PRE-RATIFICATION-CLI-CLEAN-ROOM-REPORT.md",
+    "sha256": "7a64953dc9194361ea65fe618b9c57e2933cefb6a5f38fabd1f4e53f07d4e9e9",
+    "bytes": 6765,
+    "duplicate_of": null,
+    "headings": "# R2 pre-ratification CLI and clean-room boundary report / ## Delivered static contract surface / ## Static assurance boundary / ## Validation and current integration state / ## Open runtime qualifications",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-SECTION-3-REPORT.md",
+    "sha256": "45d91b72b807ea14a05a5563ac8ca07eb931a430845fd166c9300f3e13e51cf0",
+    "bytes": 12251,
+    "duplicate_of": null,
+    "headings": "# R2 Section 3 implementation report / ## Delivered / ## Rewrites and review corrections / ### Structural ledger repair after the adversarial R2 audit / ## Important limitations and major issues / ## Scope integrity",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-SECTION-4-THREAT-FAILURE-REPORT.md",
+    "sha256": "1287c648727567594f957da0c47fecc56a81186ec8ff39490ac85578d48788b5",
+    "bytes": 4454,
+    "duplicate_of": null,
+    "headings": "# R2 Section 4 threat/failure report / ## Delivered / ## Evidence accounting / ## Validation / ## Major issues and limitations / ## Scope integrity",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-SECTION-5-SEMANTIC-COHERENCE-REPORT.md",
+    "sha256": "6c207a986b96ed4f2294eb298a5429a55a7e7c370624acb5878d3ebb4588e72f",
+    "bytes": 6945,
+    "duplicate_of": null,
+    "headings": "# R2 Section 5 semantic-coherence report / ## Delivered / ## Repaired audit counterexamples / ## Validation / ## Major issues and remaining ratification gaps / ## Scope integrity",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\R2-SECTION-6-PHASE-A-FIXTURES-REPORT.md",
+    "sha256": "6431fe64918a045d0c925eaf0d71996dc0ee213c3b254c1b8a5a37111fb2ec36",
+    "bytes": 7749,
+    "duplicate_of": null,
+    "headings": "# R2 Section 6 — Neutral Phase A fixtures and locks / ## Result / ## Lock findings / ## Fixture coverage / ## Fail-closed schema repair / ## Validation / ## Remaining blockers",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\sol-reports\\R2-ENGINE-PR31-INDEPENDENT-AUDIT-2026-08-27.md",
+    "sha256": "45967855662b45b66a198426802ef10f26ed3972be795c4ca85ab25101e933a1",
+    "bytes": 11266,
+    "duplicate_of": null,
+    "headings": "# R2 Engine PR #31 independent audit / ## Exact observed revision state / ## Findings / ### 1. High — exact merge conflicts and obsolete baseline / ### 2. High — ratification and merge authority are absent / ### 3. High — language-neutral schemas and runtime validation diverge / ### 4. Medium — receipt verification is self-consistency only / ## Provider contract content / ## CI evidence and boundary / ## Smallest authority-safe resolution order / ## Final disposition",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\sol-reports\\R2-EVD-002-INDEPENDENT-AUDIT-2026-08-27.md",
+    "sha256": "813bbe9757d457ddc5a57eaf8cd36e75faeda100c9a271ef6812bd1eb71b719e",
+    "bytes": 12347,
+    "duplicate_of": null,
+    "headings": "# R2 EVD-002 Contract-Only Pin Independent Audit / ## Scope and non-claims / ## Finding / ## Authoritative source provenance / ## Exact EVD-002 candidate identities / ## Authority and status facts / ## Marshal-specific exclusions / ## GKX checkpoint comparison / ## Target blocker / ## Smallest owner decision / ## Critical ordering and dependency risks",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\sol-reports\\R2-RUNTIME-LIMITS-IMPLEMENTATION-2026-08-27.md",
+    "sha256": "4a5d0bfb9ad1f2a703c306e2f22cbb8116ccd1b7a2baa8b655e17a7c0eb098a6",
+    "bytes": 4989,
+    "duplicate_of": null,
+    "headings": "# R2 runtime-limits corrective implementation report — 2026-08-27 / ## Outcome and correction boundary / ## Exact profile / ## Raw JSON and ordering rules / ## Declarative fixtures / ## Digest and whitespace evidence / ## Validation commands / ## Remaining authority step",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\THREAT-MODEL.md",
+    "sha256": "1eeb30b74ff91be1f4abe0515d100526a32b6ce11a5337d52f6ce76cebf6e9a7",
+    "bytes": 23437,
+    "duplicate_of": null,
+    "headings": "# R2 bounded demonstrator threat model / ## Security objective / ## Assets and unacceptable consequences / ## Data classes and routing / ## Trust and capability boundaries / ## Required four-way execution separation / ## Actors and assumptions / ## Attack surfaces / ## Threat inventory / ## Lane and precedence rules / ## Mitigation and verification map / ## Residual risks and open qualifications / ## Non-claims",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\WP1-COMPLETION-AUDIT-2026-08-27.md",
+    "sha256": "dfe023ce8c50ae1515ec9882dc62474e77c4641d4c097346ad9b565af93d60ff",
+    "bytes": 9257,
+    "duplicate_of": null,
+    "headings": "# WP1 full-demonstrator completion audit / ## Outcome / ## Critical authority and dependency findings / ## Phase B evidence boundary / ## Smallest ordered authorized progression / ## Review and validation record / ## Code and rewrite report",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\docs\\WP1-REQUIREMENTS-TRACEABILITY.md",
+    "sha256": "98695779945e3f96936d8864cd9925482c6da4390fc2f6e89a76c97aa548798e",
+    "bytes": 5854,
+    "duplicate_of": null,
+    "headings": "# WP1 requirements traceability / ## Authority posture / ## Coverage / ## Exact row disposition index / ## Remaining ratification and progression gates",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\adversarial\\README.md",
+    "sha256": "4b996a3a52c7e6ff75d1312e68c6e078ecf46db6ad7a9b2c6fdb8062be517edb",
+    "bytes": 120,
+    "duplicate_of": null,
+    "headings": "# Adversarial fixtures",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\confidential-local-manifest\\README.md",
+    "sha256": "dc5bd74400967f958cca4128384189167b04b214e595d2f4b08e902d4d511b27",
+    "bytes": 561,
+    "duplicate_of": null,
+    "headings": "# Confidential local qualification manifest",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\conformance\\README.md",
+    "sha256": "f3597937585a53fc607a8941f8218834f621065c56b02180c0eb74015397d462",
+    "bytes": 105,
+    "duplicate_of": null,
+    "headings": "# Conformance fixtures",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\public-synthetic\\README.md",
+    "sha256": "ac64ba4809ce27e0173ba7077a8631a454935ff52ed33ad6c0a45abc5798a072",
+    "bytes": 1503,
+    "duplicate_of": null,
+    "headings": "# Public synthetic demonstration fixtures",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\fixtures\\shadow\\README.md",
+    "sha256": "7d91e617bce7eac3e0114c70f1fd21596cf79bdec0de4e188219e439f1e9c521",
+    "bytes": 2977,
+    "duplicate_of": null,
+    "headings": "# Shadow qualification fixtures / ## Epoch binding / ## Deterministic sampling preimage",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\governance\\specifications\\GKOS-Hindsight-Dream-Governance-Demonstrator.md",
+    "sha256": "e099b9736b5e054b87d351a15675862c98e4d64b8a75d387a04e3971ef828466",
+    "bytes": 34966,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\contracts\\governance\\GKOS-Hindsight-Dream-Governance-Demonstrator.md",
+    "headings": "# GKOS–Hindsight Governance Demonstrator / ## 1. Executive decision / ## 2. Why Hindsight is an unusually strong GKOS fixture / ## 3. Authority boundary / ### 3.1 Canonical responsibilities / ### 3.2 Non-negotiable invariants / ## 4. System architecture / ### 4.1 Deployment posture / ## 5. GKOS projection of Hindsight objects / ## 6. Minimum governance envelope / ## 7. Dream Adjudication Pipeline / ### 7.1 Input contract / ### 7.2 Stage 0 — validity gate / ### 7.3 Stage 1 — deterministic risk and eligibility checks / ### 7.4 Stage 2 — independent semantic review / ### 7.5 Stage 3 — deterministic adjudication / ### 7.6 The three substantive dispositions / ## 8. What “auto-approval” means / ## 9. Ledger and audit model / ## 10. Human review experience / ## 11. Audit sampling and calibration / ### Mode 0 — observe only / ### Mode 1 — shadow auto-admission / ### Mode 2 — reversible limited admission / ### Mode 3 — sampled operation / ## 12. Public demonstration experiments / ## 13. Acceptance tests / ## 14. Repository shape / ## 15. Minimal API surface / ## 16. Build sequence / ### Activation gate / ### Phase A — contracts and replayable fixtures / ### Phase B — Hindsight bridge / ### Phase C — independent Dream review / ### Phase D — shadow calibration / ### Phase E — limited auto-admission / ### Phase F — Rust qualification and Python retirement / ## 17. What to publish / ## 18. Ratified decision baseline / ## 19. References",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\migrations\\README.md",
+    "sha256": "8bec568b58752df53421d224db018fa29b699e2a0ca4d6afaccf85b113e0759e",
+    "bytes": 1873,
+    "duplicate_of": null,
+    "headings": "# Migrations",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-hindsight-governance-snapshot\\README.md",
+    "sha256": "f0f87f6d8bf0d4277397b84e043e950814fba1e516bfb9afe6b4918928900d7d",
+    "bytes": 8152,
+    "duplicate_of": null,
+    "headings": "# GKOS–Hindsight Governance Demonstrator / ## Current posture / ## What is present / ## Repository layout / ## Run the existing static checks / ## Data and safety boundary / ## Remaining gates",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\.github\\PULL_REQUEST_TEMPLATE.md",
+    "sha256": "78cd9eb22449b91dfba676a954263d363da55adcb5be1aafe4a74825c80c8721",
+    "bytes": 680,
+    "duplicate_of": null,
+    "headings": "## Proposal metadata / ## Evidence and rationale / ## Checklist",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\ACKNOWLEDGMENTS.md",
+    "sha256": "fcc5a392600a8a6fd9142b140c73638782d399b94ef50d8840d022ec24ceaa3a",
+    "bytes": 582,
+    "duplicate_of": null,
+    "headings": "# Acknowledgments / ## Andrej Karpathy — LLM Wiki",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\CHANGELOG_pre_gkx2.md",
+    "sha256": "1270c8f1f7dd15b48bae882b34c60549c1eb1a3b5070ba795bd672bcd3f53ca2",
+    "bytes": 3484,
+    "duplicate_of": null,
+    "headings": "# Changelog / ## GKOS-2026-08-05 v0.78 / ## GKOS-2026-08-05 v0.77 / ## Unreleased — conformance-honesty remediation (implemented evidence) / ## GKOS-2026-07-20 v0.76 / ## GKOS-2026-07-17 v0.75",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\graphics\\README.md",
+    "sha256": "b81ba30b13a06fd75e46e8e8bfe6b08f8d0bad24e80ad8c08825002c1a4795bc",
+    "bytes": 1572,
+    "duplicate_of": null,
+    "headings": "# GKOS graphics / ## Version progression",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\illustrated\\GKOS-v0.76-Illustrated-Edition.md",
+    "sha256": "ea579da035ab6c1830658e4e0863dcbdc81a0fe6b95cd35c4cd079c49448c4c5",
+    "bytes": 24387,
+    "duplicate_of": null,
+    "headings": "# Governed Knowledge Operations Standard (GKOS) / ## GKOS-2026-07-20 v0.76 — Complete Illustrated Edition / # How to read this document / # Part I — The idea in plain language / ### The problem GKOS solves / ### The seven layers, without jargon / ### Why the OSI comparison is more than a slogan / ### Humans, agents, and systems each keep their lane / # Part II — The standard (complete normative text, annotated) / ## §0. Development status / ## §1–§2. Purpose and core thesis / ## §3. Architecture and version relationships / ## §4. Authority / ## §5. Epistemic model / ### §5.1 Epistemic state vocabulary / ## §6. Seven layer contracts / ### §6.1 Mechanical definitions (normative) / ## §7. Specialized Agents / ## §8. Conformance / ### §8.1 Progressive disclosure / ## §9. Security, privacy, and retention / ## §10–§11. Publication, maturity, and deferred mechanisms / # Part III — Annexes (condensed) / ## Conformance profiles / ## Layer interface contracts / ## Provisional authority-receipt field list (informative, not normative) / ## Security, privacy, and retention annex / ## Specialized Agent framework annex / ## Known limitations / # Document provenance",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\README.md",
+    "sha256": "d4a76b7251f2a903d1546b845a0f3312b54adfc6b49491ad45290ad83136c81c",
+    "bytes": 270,
+    "duplicate_of": null,
+    "headings": "# Historical archive",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\ROADMAP_pre_gkx2.md",
+    "sha256": "47feba2e8921c9fa16a326fa4877169be2ae75c50278679d49d35cac644cb8cf",
+    "bytes": 8653,
+    "duplicate_of": null,
+    "headings": "# GKOS ecosystem roadmap / ## Repository responsibilities / ## Phase A — Ecosystem cohesion / ## Phase B0 — Credible entry conformance / ## Phase B1 — Core standard engineering, v0.8–v0.9 / ## Phase B2 — Interoperability by reuse / ## Phase B3 — External validation and adoption / ## Phase B4 — Governance continuity / ## Phase C — v1.0 gates / ## Evidence dashboard / ## Coordination gates",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\standard\\00_GKOS_Master_Standard_pre_gkx2.md",
+    "sha256": "c7c99cc268f7767b8274618a84188187eddce078d58cea80dfab5488e265b0a0",
+    "bytes": 13646,
+    "duplicate_of": null,
+    "headings": "# Governed Knowledge Operations Standard / ## 0. Development status / ## 1. Purpose / ## 2. Core thesis / ## 3. Architecture and version relationships / ## 4. Authority / ## 5. Epistemic model / ### 5.1 Epistemic state vocabulary / ## 6. Seven layer contracts / ### 6.1 Mechanical definitions / ## 7. Specialized Agents / ## 8. Conformance / ### 8.1 Progressive disclosure / ## 9. Security, privacy, and retention / ## 10. Publication and maturity / ## 11. Deferred mechanisms",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\TECHNICAL_README_pre_gkx2.md",
+    "sha256": "bb6ed8d11394920d24d23586eaf9263e42a1b6b84698da8f6b8be539b1c16779",
+    "bytes": 20071,
+    "duplicate_of": null,
+    "headings": "# GKOS Technical Orientation / ## R14 GKX 2.0 breaking boundary / ## R13 development-decision boundary / ## 1. System boundary / ## 2. Controlling principles / ## 3. Layer contracts / ## 4. Object and state separation / ## 5. Authority and precedence / ## 6. Consequential-use minimum / ## 7. Determinism and canonical semantics / ### Engine-Lite contract / ## 8. GKX identity, dialects, and migration / ## 9. Google Cloud OKF interoperability boundary / ## 10. Security, privacy, and failure behavior / ## 11. AgenticOS integration pattern / ## 12. Conformance model and current executable coverage / ### Classification defaults and read ceilings / ## 13. Independent implementation rule / ## 14. Interoperability with adjacent standards / ## 15. Normative and informative authority / ## 16. Implementation checklist / ## 17. Open gates before v1.0 / ## 18. Primary repository references",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\CHANGELOG.md",
+    "sha256": "2152114be2f81951f59c9daec30e3adef4ef9ea3b548a984746a253041e4101b",
+    "bytes": 2866,
+    "duplicate_of": null,
+    "headings": "# Changelog / ## Unreleased development amendments / ## GKOS-2026-08-20 v0.80 / ## GKOS-2026-08-16 v0.79 / ## GKOS-2026-08-05 v0.78",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\CODE_OF_CONDUCT.md",
+    "sha256": "86f6a375d5a6d44f64290d95033221a018b30b697b6e79a6c4fb9096b98aa7ca",
+    "bytes": 816,
+    "duplicate_of": null,
+    "headings": "# Code of Conduct",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\COMPAT.md",
+    "sha256": "f038b1b98f20516c4efbc11a044885055641924a21c9f74a76286b31424cfff1",
+    "bytes": 2472,
+    "duplicate_of": null,
+    "headings": "# GKOS ecosystem compatibility matrix / ## How to update this file",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\evidence\\gcp6-replay-v0.1\\README.md",
+    "sha256": "a3de5a9b978e9506ef9e90e8a49c3ba7e7e24c02376e93cba5eb3e82acb5100b",
+    "bytes": 1080,
+    "duplicate_of": null,
+    "headings": "# GCP-6 replay mechanism evidence v0.1",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-1.md",
+    "sha256": "e0b07ebed84408d5fe1eef2de084bd33baaf983ccfaca43e279774cc71422073",
+    "bytes": 240,
+    "duplicate_of": null,
+    "headings": "# GCP-1 — Source preservation",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-2.md",
+    "sha256": "4b92a2fc9ed1b6da2cb88765e37ee711ae047c0f6f22d6f5ce2ba1c504f5f284",
+    "bytes": 234,
+    "duplicate_of": null,
+    "headings": "# GCP-2 — Structure and identity",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-3.md",
+    "sha256": "09915245419b6a1c56e927f2bd556403c0aa30a0da211052d32b0921a4537d2f",
+    "bytes": 241,
+    "duplicate_of": null,
+    "headings": "# GCP-3 — Relationships and lineage",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-4.md",
+    "sha256": "98411630c339f7c62681f9b88e7a8dd3dbb47db8cca629b08c5510c5e83f1a93",
+    "bytes": 233,
+    "duplicate_of": null,
+    "headings": "# GCP-4 — Validation and control",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-5.md",
+    "sha256": "a5399a992d9f1aa07fcd002305b6f7f328961991c55bb049105636b6c2e87f08",
+    "bytes": 251,
+    "duplicate_of": null,
+    "headings": "# GCP-5 — Review and workflow",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-6.md",
+    "sha256": "b5b794eff0ccc5410200b19b135b5aef7aa31875b9cb4560ab883ded572015e3",
+    "bytes": 275,
+    "duplicate_of": null,
+    "headings": "# GCP-6 — Context presentation",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-7.md",
+    "sha256": "d3e7a15d8c6d0205247e458d5ac9c3faca6d2f1d821f48e0fdda6963045ab91e",
+    "bytes": 246,
+    "duplicate_of": null,
+    "headings": "# GCP-7 — Authorized use",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\Viewer-Projection-Profile.md",
+    "sha256": "4d9bbed1c17d74e0b03c947a9bbc66cb38e7a51e7dae4e0af6a5d19c8c610911",
+    "bytes": 286,
+    "duplicate_of": null,
+    "headings": "# Viewer/Projection Profile",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\README.md",
+    "sha256": "3606f307a52b6b62730a57fc804b51dd54f344e9d198707ca7e4b0804995b707",
+    "bytes": 4753,
+    "duplicate_of": null,
+    "headings": "# GKOS conformance / ## Executable v0.80 evidence foundation / ## Provisional SRTP graph runner / ## Current qualification boundary",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\CONTRIBUTING.md",
+    "sha256": "1397f467711167ea8e6016acba7d49e53b1a683c1be22a08d13ece5a9f37603f",
+    "bytes": 1751,
+    "duplicate_of": null,
+    "headings": "# Contributing to GKOS / ## Pre-v1.0 development status / ## Change classes / ## Licensing and DCO",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\GKOS_Decision_Register.md",
+    "sha256": "689a59e9b1c40f81c34143140b755737ef695bcfd786902634df2809ccfe531c",
+    "bytes": 9087,
+    "duplicate_of": null,
+    "headings": "# GKOS development decision register / ## R18 — Track A GCP-4/GCP-5 closure and authorized independent review / ## R17 — Authority validity interval semantics / ## R16 — Required profiles and GCP-6/GCP-7 enablement / ## R15 — Governed state change, re-entry, and bounded delegation / ## R14 — GKX 2.0 breaking machine namespace / ## R13 — Conformance honesty and alignment / ## R12 — Ecosystem compatibility and provenance / ## R11 — GKX naming transition / ## R10 — Schema slice, fixture catalog, and conformance runner / ## R9 — v0.76 concept refinement and publication / ## R8 — Publication administration / ## R7 — Security, publication, and maturity / ## R6 — Specialized Agents / ## R5 — Conformance and interoperability / ## R4 — Layer contracts / ## R3 — Epistemic governance / ## R2 — Authority / ## R1 — Identity and publication",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\OPEN_QUESTIONS.md",
+    "sha256": "4eea368db2f60b190638dabe4481ec5e8f4c8040137871b7e146bc1460ecc3db",
+    "bytes": 2031,
+    "duplicate_of": null,
+    "headings": "# Open publication and governance questions / ## Resolved after the v0.76 release",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R10_Schema_Fixture_Conformance_Dev_Decision_Record.md",
+    "sha256": "9bceb05a9d1ee9680a64b3cf5f4b3d2e191568f420619f6cf855e03dac6f6963",
+    "bytes": 5078,
+    "duplicate_of": null,
+    "headings": "# R10 Schema, Fixture, and Conformance-Runner Development Decision Record / ## Governance status / ## Evidence reviewed / ## Review findings / ## Dispositions (proposed) / ## Compatibility statement / ## Supersession and correction",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R11_GKX_Naming_Transition_Development_Decision_Record.md",
+    "sha256": "4a305c8fe7c519cbd8da8f942da9745f019792a112de3efb6a2fd43fd63a9a59",
+    "bytes": 2268,
+    "duplicate_of": null,
+    "headings": "# R11 — GKX Naming Transition Development Decision Record / ## Decision / ## Compatibility rule / ## Required implementation work / ## Non-decision",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R12_Ecosystem_Compatibility_Development_Decision_Record.md",
+    "sha256": "1d813ea882e1e68f2161d58e07390cd5e5d1b7a4758d67d9e86d0fce1959d3d2",
+    "bytes": 6575,
+    "duplicate_of": null,
+    "headings": "# R12 — Ecosystem Compatibility Development Decision Record / ## Status limitation / ## Decision / ### R12-090 — Engine-Lite compatibility / ### R12-091 — What Lite removes / ### R12-092 — Field-test to standard loop / ### R12-093 — GKX version identity / ### R12-094 — Google OKF 0.2 interoperability / ### R12-095 — One deterministic semantics authority / ### R12-096 — Accurate interoperability provenance / ## Compatibility and security impact / ## Required evidence and follow-up",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R13_Conformance_Honesty_and_Alignment_Development_Decision_Record.md",
+    "sha256": "5eec756df96a7413f8d62f81c0179c32fba92cb25e69dd5f2754c2316c85ae6b",
+    "bytes": 4412,
+    "duplicate_of": null,
+    "headings": "# R13 — Conformance honesty and alignment development decision / ## Decision / ## Identity and lineage decision control / ## Conformance and catalog boundary / ## Evidence and implementation boundary / ## Compatibility and preservation / ## Publication boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R13_Conformance_Honesty_and_Alignment_Proposal.md",
+    "sha256": "9877bdb8315cfdb1373fa23c8d0db751fdbce4f3d17ec831f25c33691b862c13",
+    "bytes": 4010,
+    "duplicate_of": null,
+    "headings": "# R13 — Conformance honesty and documentation alignment proposal (superseded) / ## Original problem statement / ## Original proposed dispositions (superseded) / ## Evidence / ## Compatibility and security impact / ## Limitations and decision boundary / ## Rollback or supersession",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R14_GKX_2_0_Breaking_Machine_Namespace_Development_Decision_Record.md",
+    "sha256": "081cda6a5b11d9086a85a1fa1ed99e49af87ba1dfa1268000f28c817305be5a0",
+    "bytes": 1433,
+    "duplicate_of": null,
+    "headings": "# R14 — GKX 2.0 Breaking Machine Namespace Development Decision Record / ## Decision / ## Supersession and preservation / ## Conformance boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+    "sha256": "994c407fb0d9df7ea78b95095efe502b9503125723069acf67a90a8d22a2c1b5",
+    "bytes": 8362,
+    "duplicate_of": null,
+    "headings": "# R15 — Governed state change, re-entry, and bounded delegation / ## 1. Decision basis / ## 2. Adopted rulings / ### R15-103 — Standard vocabulary and deployment policy / ### R15-104 — State-Change Receipt role / ### R15-105 — Durable mutation binding / ### R15-106 — Re-entry standing / ### R15-107 — Predecessor preservation / ### R15-108 — Supersession semantics / ### R15-109 — Navigation standing / ### R15-110 — Bounded supersession delegation / ### R15-111 — Fixture accounting and SRTP reconciliation / ### R15-112 — GCP applicability / ### R15-113 — Engine release split / ### R15-114 — Retention scope / ### R15-115 — Zenodo archival direction / ### R15-116 — Directive and merge process / ## 3. Permanent requirement allocations / ## 4. Profile attachment / ## 5. Non-decisions and preserved boundaries / ## 6. Future-risk controls",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R16_Required_Conformance_Profiles_and_GCP67_Enablement_Development_Decision_Record.md",
+    "sha256": "523a215728e5c6913fc4f4d4fd91bdb6c014f682a2d2cf538401d478735b8638",
+    "bytes": 11014,
+    "duplicate_of": null,
+    "headings": "# R16 — Required conformance profiles and GCP-6/GCP-7 enablement / ## 1. Decision basis / ## 2. Adopted rulings / ### R16-117 — Core and Advanced tiers / ### R16-118 — GCP-6/GCP-7 binding and Context-Only Extension / ### R16-119 — Behavior-based fixture coverage / ### R16-120 — Gate and refusal fixtures / ### R16-121 — Diagnostic-code registry / ### R16-122 — Assessment vocabulary / ### R16-123 — Capability scope and non-excludable gates / ### R16-124 — Viewer/Projection independence / ### R16-125 — Exact release binding and post-v1.0 policy / ## 3. Layer semantics and bindings / ## 4. Canonical serialization / ## 5. Selection and replay boundary / ## 6. Actor and effect-scope separation / ## 7. Refusal Receipt role / ## 8. Conformance and fixture standing / ## 9. Release boundary / ## 10. Preserved claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R17_Authority_Validity_Interval_Development_Decision_Record.md",
+    "sha256": "bd1b659d4e41c0f03cef496d4ee43e2a408071edc39aafa33bedda252e0c0abc",
+    "bytes": 2543,
+    "duplicate_of": null,
+    "headings": "# R17 — Authority validity interval semantics / ## 1. R17-126 — Half-open authority interval / ## 2. Captured evaluation time / ## 3. Failure and evidence behavior / ## 4. Requirement allocation / ## 5. Release and claim boundary",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R18_Track_A_GCP45_and_Authorized_Independent_Review_Development_Decision_Record.md",
+    "sha256": "a01bc9813ff906d61a60ba5c5504fa2f5f83accdc4f78368da9fc33bdaa83ad3",
+    "bytes": 7891,
+    "duplicate_of": null,
+    "headings": "# R18 — Track A GCP-4/GCP-5 closure and authorized independent review / ## 1. Reconstruction and replacement provenance / ## 2. R18-127 — GCP-5 permanent requirements / ## 3. R18-128 — Authorized independent-agent Layer-5 review / ## 4. R18-129 — Protected disclosure and noninterference / ## 5. R18-130 — Evidence and qualification / ## 6. R18-131 — Automatic v0.81 publication / ## 7. Scope exclusions",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R9_V0.76_Development_Decision_Record.md",
+    "sha256": "15983fdcaf33a7c896f261bebbf53962911f86a1442d8af5284497a3cebd6a2c",
+    "bytes": 4713,
+    "duplicate_of": null,
+    "headings": "# R9 v0.76 Development Decision Record / ## Governance status / ## Evidence reviewed / ## Review findings / ## Dispositions / ## Authority basis / ## Conflict and independence disclosure / ## Compatibility and security impact / ## Rollback and supersession / ## Release authorization",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\ratification-questionnaires\\GKOS_2026-07-17_v0.75_Ratification_Questionnaire.md",
+    "sha256": "e0efa9191b3762088e8e8c9391281f8003849d4cbdce9b6bbb91d30e6ee49276",
+    "bytes": 587,
+    "duplicate_of": null,
+    "headings": "# GKOS-2026-07-17 v0.75 ratification questionnaire",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\ECOSYSTEM-ORGANIZATION_pre_gkx2.md",
+    "sha256": "0d1a290b1ccf9a538483bdd6f0dfdefac337e7897da39b0befe513aaac542b1b",
+    "bytes": 3447,
+    "duplicate_of": null,
+    "headings": "# GKOS ecosystem organization / ## Operating model / ## Decision rights / ## Cross-repository change protocol / ## Lifecycle policy / ## Documentation minimum",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md",
+    "sha256": "f3d52ad57f2c1ef571a1cd83634a2e72c097a492b1e40f8ac0cffdc44fe43748",
+    "bytes": 4825,
+    "duplicate_of": null,
+    "headings": "# GKOS-Engine → gkos-standard reconciliation record v0.2 / ## Authority and source lineage / ## Accepted v0.77 development allocations / ## Fixture and adapter disposition / ## Preserved open graph and temporal topics / ## Evidence limits and publication boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\GKX_REBRAND_REASSESSMENT_2026-08-02.md",
+    "sha256": "e5dc7f4c0e432e38ba66bdb44c2bc2ee469d98bf81803a96bcaeccc7a53d683f",
+    "bytes": 2657,
+    "duplicate_of": null,
+    "headings": "# GKX Rebrand and KRS Reassessment — 2026-08-02 / ## Finding / ## Coordinated update / ## Reassessment / ## Next required work",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\README.md",
+    "sha256": "9541ad8eadf22257a77290a1c633a3b46831341e5217fbe791efd4785b71430a",
+    "bytes": 191,
+    "duplicate_of": null,
+    "headings": "# Historical documentation archive",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\directives\\GKOS-DIRECTIVE-STD-079-r4.md",
+    "sha256": "de4a67deffccca4f6630b378e314a78ef936808bf9ad8a50ef88610d02b9c097",
+    "bytes": 4542,
+    "duplicate_of": null,
+    "headings": "# GKOS-DIRECTIVE-STD-079 r4 / ## 0. Controlling invariants / ## 1. Universal versus deployment-bound semantics / ## 2. State-change receipting / ## 3. Retention / ## 4. Re-entry and supersession / ## 5. Bounded delegation hierarchy / ## 6. Navigation / ## 7. Fixture standing / ## 8. Permanent requirements / ## 9. Deferred matters",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\ECOSYSTEM-ORGANIZATION.md",
+    "sha256": "9d5ba0244273d35512e67a56ec441cb26f4be4c74f614799c8ace60f3bc424cb",
+    "bytes": 255,
+    "duplicate_of": null,
+    "headings": "# Ecosystem organization",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\GKOS_LEGAL_AND_PROFESSIONAL_ORIENTATION.md",
+    "sha256": "44cb572e125bd72e314e7de0491fd3f52882445a64a732b922e25da694ffe6f8",
+    "bytes": 6020,
+    "duplicate_of": null,
+    "headings": "# GKOS for legal and non-technical professionals / ## The short version / ## The seven layers in plain language / ## What v0.80 adds / ## Why attorneys and reviewers should care / ## What this release does not prove / ## Primary reading",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+    "sha256": "8192b86e99499e14caff20ece35ed31322eb89b6c24f3565fd161738513c7c6b",
+    "bytes": 8538,
+    "duplicate_of": null,
+    "headings": "# GKOS and the Provenance Landscape: A Claim-Limited Crosswalk / ## 1. Short answer / ## 2. Scope comparison / ## 3. Layer mapping / ## 4. Proposed interoperability work / ### XW-P1 — PROV export profile / ### XW-P2 — in-toto statement envelope / ### XW-P3 — governed signing profiles / ### XW-P4 — C2PA evidence intake / ### XW-P5 — MCP authorization binding / ## 5. Claims that must not be made yet / ## 6. Verification requirements for each mapping / ## 7. Evaluation conclusion",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\archive\\OKF-Plus-2.3-Specialist-Reviewer-Role.md",
+    "sha256": "3e4ea496f080f90877e5dc1b0294e1f62b0cfe79e0b3031ee40040805dbcdad5",
+    "bytes": 5165,
+    "duplicate_of": null,
+    "headings": "# OKF+ 2.3 Specialist Reviewer Role / ## Assignment requirement / ## Required conduct / ## Prohibited conduct / ## Permitted advisory actions / ## Required output / ## Competence declaration / ## Instruction precedence / ## Related role family / ## Source relationship",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\archive\\README.md",
+    "sha256": "ca311272d65104b527208d6e288fd034eb402831a66bdc7445029d1247103da4",
+    "bytes": 196,
+    "duplicate_of": null,
+    "headings": "# Historical implementation material",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+    "sha256": "ea152f8d6dba2f4d5af4d15ff000dcb6f029a92546f25cc57765a6b99beb003a",
+    "bytes": 2405,
+    "duplicate_of": null,
+    "headings": "# GCP-6/GCP-7 executable evidence status / ## Implemented / ## Open evidence deficits / ## Governed decision docket / ## Claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\GKOS-DIRECTIVE-ENG-210-r4.md",
+    "sha256": "38672c5d5c6c7a2a158c6da58d8dfa01934ff2b4df225014da06d0d273dcc749",
+    "bytes": 6234,
+    "duplicate_of": null,
+    "headings": "# GKOS-DIRECTIVE-ENG-210 r4 — Engine 2.1 Navigation build contract / ## 1. Release contract / ## 2. Architecture / ## 3. Canonical-five and flag-and-promote / ## 4. Determinism / ## 5. Re-entry / ## 6. Bounded delegation / ## 7. Governance Store / ## 8. Public API and capability honesty / ## 9. Fixtures and evidence / ## 10. Versioning and release / ## 11. Stop-the-line conditions",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\GKOS-Engine-Implementation-Guide.md",
+    "sha256": "d53fd271f2cbd80fecac545abf70fce1591926c5c44845f065cdd68f5127c2d6",
+    "bytes": 591,
+    "duplicate_of": null,
+    "headings": "# GKOS-Engine implementation guide",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\README.md",
+    "sha256": "13a820ea256e6858432422113924e8c99ae1d7c4f56b2eb87ddbee2a8930b23e",
+    "bytes": 490,
+    "duplicate_of": null,
+    "headings": "# Implementation references",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\V081_RATIFIED_BASELINE.md",
+    "sha256": "6187c86038f90d12bda0821b29b59208f5cb5aee5be0364a3f3d3a89c7cd8cf5",
+    "bytes": 2918,
+    "duplicate_of": null,
+    "headings": "# GKOS v0.81 ratified baseline / ## Release gate / ## Scope boundaries",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\VERSION_COMPATIBILITY_MATRIX.md",
+    "sha256": "a286c7a2817e3b2dde6d3774fc2a122d404274b34b0784c5968187cd35fe7f15",
+    "bytes": 2600,
+    "duplicate_of": null,
+    "headings": "# GKOS/GKX implementation version compatibility matrix",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\NAMING.md",
+    "sha256": "b4be5484904bbba782e62a4a0ebf98e7b7b86c714f5e1c85e9f9c58328c899e2",
+    "bytes": 363,
+    "duplicate_of": null,
+    "headings": "# GKX 2.0 naming policy",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+    "sha256": "e3a95224575d5614beed1fa4e958ab4b89e73a0a627e2e15522432edc656c0e6",
+    "bytes": 4926,
+    "duplicate_of": null,
+    "headings": "# GKOS-DOCSTD-001 — Documentation and engineering alignment proposal / ## 1. Prohibited failure modes / ## 2. Requirement identity and adapter boundary / ## 3. Controlled derivation and comparison / ## 4. Intent review / ## 5. Synchronization gates / ## 6. First application",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\NAV-002_SELECTION_DISCOVERY_CONTRACT_DRAFT.md",
+    "sha256": "f2d7b2143e15c5fd307cc0394a12750af51d68c777d21f51f5a75ed8b4499853",
+    "bytes": 1483,
+    "duplicate_of": null,
+    "headings": "# NAV-002 selection and discovery contract — draft / ## Proposed contract / ## Promotion gates",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\SRTP_DRAFT_PROFILE.md",
+    "sha256": "05cf4be81fc37bdeff57d572669617a0e4ff26eaf4fa2e8084d55e58c0e10572",
+    "bytes": 1983,
+    "duplicate_of": null,
+    "headings": "# Scientific Research Trace Profile (SRTP) draft",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\SRTP_DRAFT_TRACEABILITY.md",
+    "sha256": "9034a0c29700994010f9069a929d4a68d6d880c8511bd8d243927d68d03859e5",
+    "bytes": 2876,
+    "duplicate_of": null,
+    "headings": "# SRTP draft field and fixture traceability",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\reviews\\2026-08-04_CRITIQUE_ASSESSMENT_AND_REMEDIATION.md",
+    "sha256": "8d66a2bd26bd82d637acc97cc8919ed61132c310e61dcf584dc9a720d690731c",
+    "bytes": 13206,
+    "duplicate_of": null,
+    "headings": "# GKOS Critique Assessment and Remediation Record / ## 1. Executive disposition / ## 2. Claim-by-claim assessment / ## 3. Assessment of the draft solution documents / ### 3.1 Draft conformance profiles / ### 3.2 Draft provenance landscape crosswalk / ### 3.3 Draft KRS-Lite implementation-independence attestation / ## 4. Solutions designed for industry scrutiny / ### A. Public orientation and stable terminology — immediate / ### B. Executable conformance before promotion — P0 technical gate / ### C. Honest implementation evidence — P0 claim gate / ### D. Governance continuity and legitimacy — P0 governance gate / ### E. Interoperability by reuse — P1 / ### F. External validation and adoption — P1 / ## 5. Changes enacted by this remediation / ## 6. Remaining decisions requiring explicit governance action",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\reviews\\2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+    "sha256": "b3356ee8623b5c32c7439eb2bdcee5cc2dba7986ef503b1aef3dad16732affda",
+    "bytes": 8659,
+    "duplicate_of": null,
+    "headings": "# Independent assessment — Engine graph semantics and standard drift / ## Executive disposition / ## Finding-by-finding assessment / ## Executed evidence / ## Controlled graph-clause derivation / ## Remaining decision gates",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\examples\\minimal-governed-lifecycle.md",
+    "sha256": "edbd0dffa8942577d6d1850ef7e045f115ab490a6abc24a45285ca4143f86801",
+    "bytes": 559,
+    "duplicate_of": null,
+    "headings": "# Minimal governed lifecycle",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\examples\\README.md",
+    "sha256": "c887a2e3ae0a6450c1c89cefd3db310cfdc12040078e02071bec1e304d7dccc1",
+    "bytes": 233,
+    "duplicate_of": null,
+    "headings": "# GKOS examples",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\archive\\DIVERGENCES.md",
+    "sha256": "2974728ca1bb950b451efc3cf634ca10765f9581189df0873b6ebf70bf1fed37",
+    "bytes": 2469,
+    "duplicate_of": null,
+    "headings": "# Historical divergences — fixture catalog 0.1.0 vs gkos-engine v1.0.5 / ## DIV-001 — Naive wall-clock timestamps pass projection silently / ## DIV-002 — Missing sensitivity defaults to `internal`, not a restricted value / ## DIV-003 — Invalid epistemic state flows into effective state as-authored",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\archive\\README.md",
+    "sha256": "530ccd5e5b23bbdd158ec2ecb64ce962f9fcae748f3209dfe6a746462f87b042",
+    "bytes": 190,
+    "duplicate_of": null,
+    "headings": "# Historical fixture evidence",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-b01-missing-sensitivity.md",
+    "sha256": "5ce02b7f854d6ca21bb4bf29303a16544f678da0c735a24e8ae5367f138869f5",
+    "bytes": 290,
+    "duplicate_of": null,
+    "headings": "# GCP1-B01",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-n01-missing-required.md",
+    "sha256": "59ee39705bfacf44e3e87b4eb67ec568d5f632168d494615ac29ffef89ef3b94",
+    "bytes": 185,
+    "duplicate_of": null,
+    "headings": "# GCP1-N01",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-n02-invalid-epistemic.md",
+    "sha256": "5ae7db919a6ef43b2c695b88505197327477ff91132210b2d0a4e39659fd9833",
+    "bytes": 300,
+    "duplicate_of": null,
+    "headings": "# GCP1-N02",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-n03-naive-timestamp.md",
+    "sha256": "4d168ae0d5cac33c5ff5e22c5140a36592bd1f489c50ca3f97b918f500c9e6f8",
+    "bytes": 285,
+    "duplicate_of": null,
+    "headings": "# GCP1-N03",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-p01-agent-ready-minimal.md",
+    "sha256": "2439fb70019f76484e5e8b7394f80022461e99f39892145d5c4b347073fde42a",
+    "bytes": 467,
+    "duplicate_of": null,
+    "headings": "# GCP1-P01",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-c01-claim.md",
+    "sha256": "2617639af76e8edf0ff5dfb0802716e7a6fd776907b4000de86f5ffdc8a7911f",
+    "bytes": 331,
+    "duplicate_of": null,
+    "headings": "# GCP3-C01",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-c02-counter.md",
+    "sha256": "4459a536296e0a42491eee48e48aa341d3da595ccc382874b2f45e8c36909b42",
+    "bytes": 273,
+    "duplicate_of": null,
+    "headings": "# GCP3-C02",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-l01-superseded.md",
+    "sha256": "b343c1b2cf961c0e62ea72df1421446fce4e58349efd04268423eef512af8a8e",
+    "bytes": 361,
+    "duplicate_of": null,
+    "headings": "# GCP3-L01",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-l02-successor.md",
+    "sha256": "84ddc4cf7a3ac9d6b077df1812f841df6ed9f672c3607c9f32a0da7f2754ea16",
+    "bytes": 413,
+    "duplicate_of": null,
+    "headings": "# GCP3-L02",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\provisional\\science\\R15_OVERLAP_TRACEABILITY.md",
+    "sha256": "d0e42462733c76a935ed1dcca3f34c18a17cac7e71127250ad54feb501c55e28",
+    "bytes": 1251,
+    "duplicate_of": null,
+    "headings": "# R15 overlap traceability for provisional SRTP fixtures",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\provisional\\science\\README.md",
+    "sha256": "98d646821ce0fc533c88c6458633b480dbfc92082ef6ad28b794a1647354f8ec",
+    "bytes": 741,
+    "duplicate_of": null,
+    "headings": "# SRTP draft graph fixtures",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\README.md",
+    "sha256": "28f9ddf9274235fe98d4984a1f528e0bc0d5e32491e4ac4a6031096dce8f388d",
+    "bytes": 2595,
+    "duplicate_of": null,
+    "headings": "# GKOS fixture catalog",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\GOVERNANCE.md",
+    "sha256": "d97ee7d0af0886dfece124262255597b913de2ca47d7df6586e1034408aa7a69",
+    "bytes": 3273,
+    "duplicate_of": null,
+    "headings": "# GKOS governance / ## Purpose / ## Development-phase authority / ## v0.x amendment path / ## Non-self-certification / ## v1.0 governance gate / ## Canonical publication",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\FINAL-ACCEPTANCE-MATRIX.md",
+    "sha256": "d22b72817072872f2b870c7080c55bd7099e35e4e95ba9954727358d0b780441",
+    "bytes": 1406,
+    "duplicate_of": null,
+    "headings": "# Final acceptance matrix",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\GKX-ADAPTER-LIMITS.md",
+    "sha256": "1eb70dace0ebb5f7a6760b1c7b7e6c6abadd426cc04055102fc4b9b122cb2519",
+    "bytes": 1837,
+    "duplicate_of": null,
+    "headings": "# GKX adapter limits / ## Allowed adapter scope / ## Prohibited adapter scope / ## Size and responsibility limit / ## Result rule / ## Change control",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\GKX-INDEPENDENT-IMPLEMENTATION-RULE.md",
+    "sha256": "df20c2bd9adb407e6801f31f8e705e13ae9ce56dc8ced041bb9e3910ba7df4da",
+    "bytes": 2293,
+    "duplicate_of": null,
+    "headings": "# GKX independent-implementation rule / ## Qualification / ## Independence criteria / ## Evidence procedure / ## Closure authority / ## What this rule does not permit",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\PORTFOLIO-ACCEPTANCE-TRACKS.md",
+    "sha256": "08f075f1fe285b9bbfce2ac0318fe922c5b86d3e0dea1ab56d6229fd72eb36f5",
+    "bytes": 1321,
+    "duplicate_of": null,
+    "headings": "# Portfolio acceptance tracks / ## Normative GKX release track / ## Portfolio-publication alignment track / ## Decision rule",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\PORTFOLIO-AUTHORITY-INDEX.md",
+    "sha256": "f83b93bb78b8291edff57dc5d5f0f358a177bc41bd3ea12ee0eb92b68f063388",
+    "bytes": 2214,
+    "duplicate_of": null,
+    "headings": "# Portfolio authority index / ## Controlling record / ## Amendment path / ## Supersession and conflict check / ## Assumptions and unresolved items",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\REPOSITORY-EVIDENCE-BASELINE.md",
+    "sha256": "4ca3b5284ee0d511be411fd003fb8e7a6e9beb26ce76db22ca9e7e082e1c3a49",
+    "bytes": 2941,
+    "duplicate_of": null,
+    "headings": "# Repository evidence baseline / ## Observations material to later gates / ## What this evidence does not prove",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\graphics\\README.md",
+    "sha256": "aadb692d4dd293d05b530922a6a5c827abd21b4113c7d6f57b2277d5728c82db",
+    "bytes": 657,
+    "duplicate_of": null,
+    "headings": "# Informative graphics",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\graphics\\social\\README.md",
+    "sha256": "ed3e8ded5c8766a6dc9d8b8ec3868a27213639d7958b0ad99abd53f1858460fe",
+    "bytes": 901,
+    "duplicate_of": null,
+    "headings": "# Social-preview graphics",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\LICENSE.md",
+    "sha256": "cb33978c8bf57e201ed476c78fc254b7bd6437452931b0476871848accaf1774",
+    "bytes": 792,
+    "duplicate_of": null,
+    "headings": "# Licensing / ## Documentation / ## Software-oriented materials / ## Attribution",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\LICENSES\\DOCUMENTATION-LICENSE.md",
+    "sha256": "7b3a7ba3c6fc7a6360c5ca7066d138b07d7d646105a923004c5a1d275d5ab874",
+    "bytes": 655,
+    "duplicate_of": null,
+    "headings": "# Creative Commons Attribution 4.0 International",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\LICENSES\\SOFTWARE-LICENSE.md",
+    "sha256": "c40538b67a5de4054b116e900b6bfcfeaec2fa4de594e28ca444ba952c5938d2",
+    "bytes": 553,
+    "duplicate_of": null,
+    "headings": "# Apache License 2.0",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\NOTICE.md",
+    "sha256": "4fc70e62ebe85ed35e75f5d91d9fc4dfcd4d3ccffbfdb10bd5985e04a7d8a9d3",
+    "bytes": 822,
+    "duplicate_of": null,
+    "headings": "# Notice and attribution",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\README.md",
+    "sha256": "a0d616684982af3765ecbc273479a0a1b4cb0cbc6d2c44bab5f3207ba5c76521",
+    "bytes": 14946,
+    "duplicate_of": null,
+    "headings": "# Governed Knowledge Operations Standard (GKOS) / ## Where GKOS helps / ## Why GKOS exists / ## The model in one minute / ## Seven cumulative responsibilities / ## A control plane—not another runtime / ## Required tiers and adoption paths / ## Four names are enough to get started / ## Implementations in the GKOS ecosystem / ## GKOS and ordinary RAG / ## Five rules to remember / ## Current maturity and claim boundary / ## Start here / ## Repository map / ## Publication, citation, and licensing",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-17-v0.75\\README.md",
+    "sha256": "afedfabedfffe7a5c684880afd67762fec693bc31b5053564bafbd6b16b0bd8e",
+    "bytes": 429,
+    "duplicate_of": null,
+    "headings": "# GKOS-2026-07-17 v0.75",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-17-v0.75\\RELEASE_NOTES.md",
+    "sha256": "39da06bc3fd0b9bf3fce8f1ac34666d2a376463a00ebb868b1da39313d4f7270",
+    "bytes": 634,
+    "duplicate_of": null,
+    "headings": "# Release notes — GKOS-2026-07-17 v0.75",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-20-v0.76\\README.md",
+    "sha256": "618e80f6d004389e6e054f627713fe8c992ded742862426afaf2035d1d8ed4e6",
+    "bytes": 690,
+    "duplicate_of": null,
+    "headings": "# GKOS-2026-07-20 v0.76",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-20-v0.76\\RELEASE_NOTES.md",
+    "sha256": "e69b3329fe490ee3c8e4215319002c31acc73f528220551cb2594a992afd250d",
+    "bytes": 944,
+    "duplicate_of": null,
+    "headings": "# Release notes — GKOS-2026-07-20 v0.76",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.77\\README.md",
+    "sha256": "ba5db295ad74c6cef0ab7053dfb1da5bcbf036138aa60bd629d64ca8f549a80b",
+    "bytes": 689,
+    "duplicate_of": null,
+    "headings": "# GKOS-2026-08-05 v0.77",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.77\\RELEASE_NOTES.md",
+    "sha256": "3f1a25be56474b9a7bc0a1e6b363dcf6004882364a7ca921a29b94f94a786f2f",
+    "bytes": 1178,
+    "duplicate_of": null,
+    "headings": "# Release notes — GKOS-2026-08-05 v0.77",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.78\\README.md",
+    "sha256": "15f6d52afbb0189d3da8d87496509c6b17597bc4454c814b42f5ff53c97528f5",
+    "bytes": 473,
+    "duplicate_of": null,
+    "headings": "# GKOS-2026-08-05 v0.78",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.78\\RELEASE_NOTES.md",
+    "sha256": "b6d30d034c9ca960df5e4b5ab0fc3012bc405549f089c7bb54403c0459cf7eef",
+    "bytes": 751,
+    "duplicate_of": null,
+    "headings": "# Release notes — GKOS-2026-08-05 v0.78 / ## Breaking change / ## Status and boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-16-v0.79\\README.md",
+    "sha256": "1964b0c08af3e5c8c7e2e4f70c3c0793b2db0b41ea0c2208e40172b5df00233f",
+    "bytes": 497,
+    "duplicate_of": null,
+    "headings": "# GKOS-2026-08-16 v0.79",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-16-v0.79\\RELEASE_NOTES.md",
+    "sha256": "4d69d68c8d62f0ecfd12f5774e557e8de77ce6dbd56c8563ce742f4ff98d7a9c",
+    "bytes": 1584,
+    "duplicate_of": null,
+    "headings": "# Release notes — GKOS-2026-08-16 v0.79 / ## Normative development changes / ## Preserved boundaries / ## Status",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-20-v0.80\\README.md",
+    "sha256": "5e9fe7c782e98449ef9d0500fccb9f051d45f949b778777fd237dbf6152a8340",
+    "bytes": 579,
+    "duplicate_of": null,
+    "headings": "# GKOS-2026-08-20 v0.80",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-20-v0.80\\RELEASE_NOTES.md",
+    "sha256": "7a0d9a18ceef6f2f13959b707b2fd03d4eb0136cd905ac294147628e13bad32c",
+    "bytes": 2061,
+    "duplicate_of": null,
+    "headings": "# Release notes — GKOS-2026-08-20 v0.80 / ## Breaking normative development changes / ## Impact and preservation / ## Preserved boundaries / ## Status",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\requirements\\PROFILE_APPLICABILITY.md",
+    "sha256": "52386a56a6920bc4ec79cdf19f47ba62c4413f0a28fa4ea847d72cda18079eb1",
+    "bytes": 3676,
+    "duplicate_of": null,
+    "headings": "# GKOS requirement profile applicability / ## 1. Required tiers / ## 2. Applicability / ## 3. Interpretation rules",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\requirements\\REGISTRY.md",
+    "sha256": "81d8898f9a294db69a8920d0fcefb674da692093e4c14d85320f1d344555e862",
+    "bytes": 20402,
+    "duplicate_of": null,
+    "headings": "# GKOS requirement registry / ## Active allocations / ## Accepted unpublished allocations / ## Append-only status and replacement ledger / ## Profile applicability for R15 allocations / ## Allocation boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\ROADMAP.md",
+    "sha256": "002b2337c95d71049acd769cb162ed77eeac0da95405fe8a7645c3a070c494df",
+    "bytes": 239,
+    "duplicate_of": null,
+    "headings": "# GKOS roadmap",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\schemas\\provisional\\README.md",
+    "sha256": "4a15908c21434242311d6a7a3fbd491b5f5511ed0a7a44a89d4890d993614461",
+    "bytes": 983,
+    "duplicate_of": null,
+    "headings": "# Provisional schemas (informative, not normative)",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\schemas\\provisional\\science\\README.md",
+    "sha256": "aa10248a475dc761f2be0317a9594ff7811174f6d6d6460600a83a512b8261ab",
+    "bytes": 1377,
+    "duplicate_of": null,
+    "headings": "# Scientific Research Trace Profile draft schemas",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\schemas\\README.md",
+    "sha256": "f16032299bb103980efc37c55e78049e664f0935ada05a1b8a4c891d4a272e1d",
+    "bytes": 2788,
+    "duplicate_of": null,
+    "headings": "# GKOS schemas / ## Canonicalization / ## Claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\SECURITY.md",
+    "sha256": "0fd0c291b9b5d20c7f0aa480092056ab322355b9ef9825f436a6205445543593",
+    "bytes": 794,
+    "duplicate_of": null,
+    "headings": "# Security policy",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\00_GKOS_Master_Standard.md",
+    "sha256": "9b590d6eb3ffc9aae9ac6941414846e1166aef8a9654f83815a4ba1363c04059",
+    "bytes": 2476,
+    "duplicate_of": null,
+    "headings": "# GKOS master standard / ## Normative surface / ## Current claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Authority_and_Refusal_Receipt_Fields.md",
+    "sha256": "6457ba35c2a9a59e35297349767364b81df978640434b40b82985ba244250dcc",
+    "bytes": 4155,
+    "duplicate_of": null,
+    "headings": "# Annex — Authority, authorized-use, and refusal receipt fields / ## 1. Semantic roles / ## 2. Authority Receipt / ## 3. Authorized Use Record / ## 4. Refusal Receipt / ## 5. Effect scope / ## 6. Existing security foundations / ## 7. Accepted post-v0.80 authority-interval amendment",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Canonical_Serialization.md",
+    "sha256": "81bc27f00e76d6986b93bfd6f2fd6d0b5a6451f32027f71eae1a568ab39adb0f",
+    "bytes": 13606,
+    "duplicate_of": null,
+    "headings": "# Annex — Canonical serialization / ## 1. Purpose and scope / ## 2. Canonical encoding profile / ## 3. Canonical payload identity / ## 4. Map key ordering, duplicates, arrays, and sets / ## 5. Numbers / ## 6. Timestamps and ordering / ### 6.1 Ordering / ## 7. Text and source preservation / ## 8. Artifact hash construction / ## 9. Human auditability and verifier obligation / ## 10. Layer-6 phase split / ### 10.1 Captured selection envelope / ### 10.2 Deterministic assembly / ## 11. Layer-5 and Layer-7 binding / ## 12. Required refusal diagnostics / ## 13. Conformance",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Conformance_Profiles.md",
+    "sha256": "b19f5a4e67c53fb487c79ded264c0e735979050999390bd603370ae6cdc3afcd",
+    "bytes": 2244,
+    "duplicate_of": null,
+    "headings": "# Annex — Conformance profiles / ## Required adoption tiers / ## Profiles / ## Claim evidence",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Diagnostic_Code_Registry.md",
+    "sha256": "c55c12e5ec4e31df1e8cde3d9e29a279e4285aeb7ff270d55a9b0b7cfce88454",
+    "bytes": 4338,
+    "duplicate_of": null,
+    "headings": "# Annex — Diagnostic-code registry / ## 1. Rules / ## 2. Active codes / ## 3. Retirement ledger / ## 4. R17 consolidation",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Governed_State_Change_Reentry_and_Bounded_Delegation.md",
+    "sha256": "5490f352f0a03ee707bb1ae4ccce7e1127e05b7ce826587c912e084c4f2a77de",
+    "bytes": 6090,
+    "duplicate_of": null,
+    "headings": "# Annex — Governed state change, re-entry, retention, and bounded delegation / ## 1. Universal state-change receipting / ## 2. Standard-owned vocabulary and deployment-owned policy / ## 3. Retention and disposition / ## 4. Re-entry / ## 5. Explicit semantic supersession / ## 6. Bounded supersession delegation / ## 7. Navigation standing / ## 8. Conformance and fixture standing",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Known_Limitations_and_Open_Issues.md",
+    "sha256": "dc686239270f1754ac37dade5a6041146f2eb63f3e298cd3f76dfc3827307c79",
+    "bytes": 1994,
+    "duplicate_of": null,
+    "headings": "# Annex — Known limitations and open issues",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Layer_Artifact_Mapping.md",
+    "sha256": "7981e3e5a9179e6c795b16f910bf09fd64c0c21f2385226b7c60ca73e51b45dc",
+    "bytes": 1736,
+    "duplicate_of": null,
+    "headings": "# Annex — Layer-to-artifact mapping (informative)",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Layer_Interface_Contracts.md",
+    "sha256": "b50030f06275dcdfde04740260377e5adf5dd98cd0fee4189db6e104c85c64e6",
+    "bytes": 2041,
+    "duplicate_of": null,
+    "headings": "# Annex — Layer interface contracts",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Provisional_Authority_Receipt_Fields.md",
+    "sha256": "1913e65598b007654c22177616daf4891e353530f1883b7445bb6a1d88b02934",
+    "bytes": 2045,
+    "duplicate_of": null,
+    "headings": "# Annex — Provisional authority-receipt field list",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Security_Privacy_Retention.md",
+    "sha256": "66dcb62bddcb52cf91da5b8994320073e2aceff0a8dc44ccab0a6f3d2c4882af",
+    "bytes": 712,
+    "duplicate_of": null,
+    "headings": "# Annex — Security, privacy, and retention",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Specialized_Agent_Framework.md",
+    "sha256": "8b14e952fa063cc85086c1b865291fa5ee1f4f98a68038dffe6623796c1a16e4",
+    "bytes": 981,
+    "duplicate_of": null,
+    "headings": "# Annex — Specialized Agent Framework",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\TECHNICAL_README.md",
+    "sha256": "6688c8ff1dab5234bca8046097bc8093222a99ee5f2201a530fbc32a03548526",
+    "bytes": 16372,
+    "duplicate_of": null,
+    "headings": "# GKOS technical orientation / ## Vocabulary and authority / ## Standard, exchange contract, and implementations / ## Layer contracts / ## Control-plane placement / ## Governed retrieval and context / ## Canonical serialization / ## Core records and receipts / ## Profiles and conformance / ## Provisional domain work / ## Implementation boundaries / ### GKOS Engine / ### Lite distributions / ### Kosmos-Oden and other viewers / ## Interoperability / ## Implementer path / ## Technical map / ## Claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\THIRD-PARTY-NOTICES.md",
+    "sha256": "4ee72c298bda38162fbaafb3b4bba5917a7eb6069271192894a0a64e0ab8006c",
+    "bytes": 555,
+    "duplicate_of": null,
+    "headings": "# Third-party notices",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\TRADEMARKS.md",
+    "sha256": "54a4895c8d963c64cddee571d4fb747aaa8b09ff466c06b8a5a3e63df79991d1",
+    "bytes": 1062,
+    "duplicate_of": null,
+    "headings": "# Trademark policy",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\VERSIONING.md",
+    "sha256": "3a99b56634e1062f6c45fbf12340a8d354262ef1d23a70b915f4168092e83571",
+    "bytes": 5754,
+    "duplicate_of": null,
+    "headings": "# GKOS ecosystem versioning policy — \"one train, four cars\" / ## Purpose / ## The model: one train, four cars / ## SemVer, sharpened / ## HEAD and tagging discipline / ## CI gates / ## Per-repository rules / ### GKOS-Engine-Lite (CLI) / ### Kosmos-Oden / ### Kosmos-Oden-Lite / ## Downstream consumers / ## Precedence / ## GKOS standard claim versions",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\ZENODO.md",
+    "sha256": "eea2c30f466c2ba486e00755c5e4fd321d35934e017e44e030ebaa33a766d4f2",
+    "bytes": 1869,
+    "duplicate_of": null,
+    "headings": "# Zenodo Release and DOI Policy / ## Release sequence / ## DOI use / ## Licensing",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\.github\\PULL_REQUEST_TEMPLATE.md",
+    "sha256": "78cd9eb22449b91dfba676a954263d363da55adcb5be1aafe4a74825c80c8721",
+    "bytes": 680,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\.github\\PULL_REQUEST_TEMPLATE.md",
+    "headings": "## Proposal metadata / ## Evidence and rationale / ## Checklist",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\ACKNOWLEDGMENTS.md",
+    "sha256": "fcc5a392600a8a6fd9142b140c73638782d399b94ef50d8840d022ec24ceaa3a",
+    "bytes": 582,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\ACKNOWLEDGMENTS.md",
+    "headings": "# Acknowledgments / ## Andrej Karpathy — LLM Wiki",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\archive\\CHANGELOG_pre_gkx2.md",
+    "sha256": "1270c8f1f7dd15b48bae882b34c60549c1eb1a3b5070ba795bd672bcd3f53ca2",
+    "bytes": 3484,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\CHANGELOG_pre_gkx2.md",
+    "headings": "# Changelog / ## GKOS-2026-08-05 v0.78 / ## GKOS-2026-08-05 v0.77 / ## Unreleased — conformance-honesty remediation (implemented evidence) / ## GKOS-2026-07-20 v0.76 / ## GKOS-2026-07-17 v0.75",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\archive\\graphics\\README.md",
+    "sha256": "b81ba30b13a06fd75e46e8e8bfe6b08f8d0bad24e80ad8c08825002c1a4795bc",
+    "bytes": 1572,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\graphics\\README.md",
+    "headings": "# GKOS graphics / ## Version progression",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\archive\\illustrated\\GKOS-v0.76-Illustrated-Edition.md",
+    "sha256": "ea579da035ab6c1830658e4e0863dcbdc81a0fe6b95cd35c4cd079c49448c4c5",
+    "bytes": 24387,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\illustrated\\GKOS-v0.76-Illustrated-Edition.md",
+    "headings": "# Governed Knowledge Operations Standard (GKOS) / ## GKOS-2026-07-20 v0.76 — Complete Illustrated Edition / # How to read this document / # Part I — The idea in plain language / ### The problem GKOS solves / ### The seven layers, without jargon / ### Why the OSI comparison is more than a slogan / ### Humans, agents, and systems each keep their lane / # Part II — The standard (complete normative text, annotated) / ## §0. Development status / ## §1–§2. Purpose and core thesis / ## §3. Architecture and version relationships / ## §4. Authority / ## §5. Epistemic model / ### §5.1 Epistemic state vocabulary / ## §6. Seven layer contracts / ### §6.1 Mechanical definitions (normative) / ## §7. Specialized Agents / ## §8. Conformance / ### §8.1 Progressive disclosure / ## §9. Security, privacy, and retention / ## §10–§11. Publication, maturity, and deferred mechanisms / # Part III — Annexes (condensed) / ## Conformance profiles / ## Layer interface contracts / ## Provisional authority-receipt field list (informative, not normative) / ## Security, privacy, and retention annex / ## Specialized Agent framework annex / ## Known limitations / # Document provenance",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\archive\\README.md",
+    "sha256": "d4a76b7251f2a903d1546b845a0f3312b54adfc6b49491ad45290ad83136c81c",
+    "bytes": 270,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\README.md",
+    "headings": "# Historical archive",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\archive\\ROADMAP_pre_gkx2.md",
+    "sha256": "47feba2e8921c9fa16a326fa4877169be2ae75c50278679d49d35cac644cb8cf",
+    "bytes": 8653,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\ROADMAP_pre_gkx2.md",
+    "headings": "# GKOS ecosystem roadmap / ## Repository responsibilities / ## Phase A — Ecosystem cohesion / ## Phase B0 — Credible entry conformance / ## Phase B1 — Core standard engineering, v0.8–v0.9 / ## Phase B2 — Interoperability by reuse / ## Phase B3 — External validation and adoption / ## Phase B4 — Governance continuity / ## Phase C — v1.0 gates / ## Evidence dashboard / ## Coordination gates",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\archive\\standard\\00_GKOS_Master_Standard_pre_gkx2.md",
+    "sha256": "c7c99cc268f7767b8274618a84188187eddce078d58cea80dfab5488e265b0a0",
+    "bytes": 13646,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\standard\\00_GKOS_Master_Standard_pre_gkx2.md",
+    "headings": "# Governed Knowledge Operations Standard / ## 0. Development status / ## 1. Purpose / ## 2. Core thesis / ## 3. Architecture and version relationships / ## 4. Authority / ## 5. Epistemic model / ### 5.1 Epistemic state vocabulary / ## 6. Seven layer contracts / ### 6.1 Mechanical definitions / ## 7. Specialized Agents / ## 8. Conformance / ### 8.1 Progressive disclosure / ## 9. Security, privacy, and retention / ## 10. Publication and maturity / ## 11. Deferred mechanisms",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\archive\\TECHNICAL_README_pre_gkx2.md",
+    "sha256": "bb6ed8d11394920d24d23586eaf9263e42a1b6b84698da8f6b8be539b1c16779",
+    "bytes": 20071,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\archive\\TECHNICAL_README_pre_gkx2.md",
+    "headings": "# GKOS Technical Orientation / ## R14 GKX 2.0 breaking boundary / ## R13 development-decision boundary / ## 1. System boundary / ## 2. Controlling principles / ## 3. Layer contracts / ## 4. Object and state separation / ## 5. Authority and precedence / ## 6. Consequential-use minimum / ## 7. Determinism and canonical semantics / ### Engine-Lite contract / ## 8. GKX identity, dialects, and migration / ## 9. Google Cloud OKF interoperability boundary / ## 10. Security, privacy, and failure behavior / ## 11. AgenticOS integration pattern / ## 12. Conformance model and current executable coverage / ### Classification defaults and read ceilings / ## 13. Independent implementation rule / ## 14. Interoperability with adjacent standards / ## 15. Normative and informative authority / ## 16. Implementation checklist / ## 17. Open gates before v1.0 / ## 18. Primary repository references",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\CHANGELOG.md",
+    "sha256": "2152114be2f81951f59c9daec30e3adef4ef9ea3b548a984746a253041e4101b",
+    "bytes": 2866,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\CHANGELOG.md",
+    "headings": "# Changelog / ## Unreleased development amendments / ## GKOS-2026-08-20 v0.80 / ## GKOS-2026-08-16 v0.79 / ## GKOS-2026-08-05 v0.78",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\CODE_OF_CONDUCT.md",
+    "sha256": "86f6a375d5a6d44f64290d95033221a018b30b697b6e79a6c4fb9096b98aa7ca",
+    "bytes": 816,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\CODE_OF_CONDUCT.md",
+    "headings": "# Code of Conduct",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\COMPAT.md",
+    "sha256": "f038b1b98f20516c4efbc11a044885055641924a21c9f74a76286b31424cfff1",
+    "bytes": 2472,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\COMPAT.md",
+    "headings": "# GKOS ecosystem compatibility matrix / ## How to update this file",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\evidence\\gcp6-replay-v0.1\\README.md",
+    "sha256": "a3de5a9b978e9506ef9e90e8a49c3ba7e7e24c02376e93cba5eb3e82acb5100b",
+    "bytes": 1080,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\evidence\\gcp6-replay-v0.1\\README.md",
+    "headings": "# GCP-6 replay mechanism evidence v0.1",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\provisional-requirements\\GCP-1.md",
+    "sha256": "e0b07ebed84408d5fe1eef2de084bd33baaf983ccfaca43e279774cc71422073",
+    "bytes": 240,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-1.md",
+    "headings": "# GCP-1 — Source preservation",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\provisional-requirements\\GCP-2.md",
+    "sha256": "4b92a2fc9ed1b6da2cb88765e37ee711ae047c0f6f22d6f5ce2ba1c504f5f284",
+    "bytes": 234,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-2.md",
+    "headings": "# GCP-2 — Structure and identity",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\provisional-requirements\\GCP-3.md",
+    "sha256": "09915245419b6a1c56e927f2bd556403c0aa30a0da211052d32b0921a4537d2f",
+    "bytes": 241,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-3.md",
+    "headings": "# GCP-3 — Relationships and lineage",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\provisional-requirements\\GCP-4.md",
+    "sha256": "98411630c339f7c62681f9b88e7a8dd3dbb47db8cca629b08c5510c5e83f1a93",
+    "bytes": 233,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-4.md",
+    "headings": "# GCP-4 — Validation and control",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\provisional-requirements\\GCP-5.md",
+    "sha256": "a5399a992d9f1aa07fcd002305b6f7f328961991c55bb049105636b6c2e87f08",
+    "bytes": 251,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-5.md",
+    "headings": "# GCP-5 — Review and workflow",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\provisional-requirements\\GCP-6.md",
+    "sha256": "b5b794eff0ccc5410200b19b135b5aef7aa31875b9cb4560ab883ded572015e3",
+    "bytes": 275,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-6.md",
+    "headings": "# GCP-6 — Context presentation",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\provisional-requirements\\GCP-7.md",
+    "sha256": "d3e7a15d8c6d0205247e458d5ac9c3faca6d2f1d821f48e0fdda6963045ab91e",
+    "bytes": 246,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\GCP-7.md",
+    "headings": "# GCP-7 — Authorized use",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\provisional-requirements\\Viewer-Projection-Profile.md",
+    "sha256": "4d9bbed1c17d74e0b03c947a9bbc66cb38e7a51e7dae4e0af6a5d19c8c610911",
+    "bytes": 286,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\provisional-requirements\\Viewer-Projection-Profile.md",
+    "headings": "# Viewer/Projection Profile",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\conformance\\README.md",
+    "sha256": "3606f307a52b6b62730a57fc804b51dd54f344e9d198707ca7e4b0804995b707",
+    "bytes": 4753,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\conformance\\README.md",
+    "headings": "# GKOS conformance / ## Executable v0.80 evidence foundation / ## Provisional SRTP graph runner / ## Current qualification boundary",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\CONTRIBUTING.md",
+    "sha256": "1397f467711167ea8e6016acba7d49e53b1a683c1be22a08d13ece5a9f37603f",
+    "bytes": 1751,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\CONTRIBUTING.md",
+    "headings": "# Contributing to GKOS / ## Pre-v1.0 development status / ## Change classes / ## Licensing and DCO",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\GKOS_Decision_Register.md",
+    "sha256": "0a795fd3002cd2520bf70d8bcd2592fd4bb61eafaca78c4fe4d617b76e270f62",
+    "bytes": 8212,
+    "duplicate_of": null,
+    "headings": "# GKOS development decision register / ## R17 — Authority validity interval semantics / ## R16 — Required profiles and GCP-6/GCP-7 enablement / ## R15 — Governed state change, re-entry, and bounded delegation / ## R14 — GKX 2.0 breaking machine namespace / ## R13 — Conformance honesty and alignment / ## R12 — Ecosystem compatibility and provenance / ## R11 — GKX naming transition / ## R10 — Schema slice, fixture catalog, and conformance runner / ## R9 — v0.76 concept refinement and publication / ## R8 — Publication administration / ## R7 — Security, publication, and maturity / ## R6 — Specialized Agents / ## R5 — Conformance and interoperability / ## R4 — Layer contracts / ## R3 — Epistemic governance / ## R2 — Authority / ## R1 — Identity and publication",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\OPEN_QUESTIONS.md",
+    "sha256": "4eea368db2f60b190638dabe4481ec5e8f4c8040137871b7e146bc1460ecc3db",
+    "bytes": 2031,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\OPEN_QUESTIONS.md",
+    "headings": "# Open publication and governance questions / ## Resolved after the v0.76 release",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R10_Schema_Fixture_Conformance_Dev_Decision_Record.md",
+    "sha256": "9bceb05a9d1ee9680a64b3cf5f4b3d2e191568f420619f6cf855e03dac6f6963",
+    "bytes": 5078,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R10_Schema_Fixture_Conformance_Dev_Decision_Record.md",
+    "headings": "# R10 Schema, Fixture, and Conformance-Runner Development Decision Record / ## Governance status / ## Evidence reviewed / ## Review findings / ## Dispositions (proposed) / ## Compatibility statement / ## Supersession and correction",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R11_GKX_Naming_Transition_Development_Decision_Record.md",
+    "sha256": "4a305c8fe7c519cbd8da8f942da9745f019792a112de3efb6a2fd43fd63a9a59",
+    "bytes": 2268,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R11_GKX_Naming_Transition_Development_Decision_Record.md",
+    "headings": "# R11 — GKX Naming Transition Development Decision Record / ## Decision / ## Compatibility rule / ## Required implementation work / ## Non-decision",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R12_Ecosystem_Compatibility_Development_Decision_Record.md",
+    "sha256": "1d813ea882e1e68f2161d58e07390cd5e5d1b7a4758d67d9e86d0fce1959d3d2",
+    "bytes": 6575,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R12_Ecosystem_Compatibility_Development_Decision_Record.md",
+    "headings": "# R12 — Ecosystem Compatibility Development Decision Record / ## Status limitation / ## Decision / ### R12-090 — Engine-Lite compatibility / ### R12-091 — What Lite removes / ### R12-092 — Field-test to standard loop / ### R12-093 — GKX version identity / ### R12-094 — Google OKF 0.2 interoperability / ### R12-095 — One deterministic semantics authority / ### R12-096 — Accurate interoperability provenance / ## Compatibility and security impact / ## Required evidence and follow-up",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R13_Conformance_Honesty_and_Alignment_Development_Decision_Record.md",
+    "sha256": "5eec756df96a7413f8d62f81c0179c32fba92cb25e69dd5f2754c2316c85ae6b",
+    "bytes": 4412,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R13_Conformance_Honesty_and_Alignment_Development_Decision_Record.md",
+    "headings": "# R13 — Conformance honesty and alignment development decision / ## Decision / ## Identity and lineage decision control / ## Conformance and catalog boundary / ## Evidence and implementation boundary / ## Compatibility and preservation / ## Publication boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R13_Conformance_Honesty_and_Alignment_Proposal.md",
+    "sha256": "9877bdb8315cfdb1373fa23c8d0db751fdbce4f3d17ec831f25c33691b862c13",
+    "bytes": 4010,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R13_Conformance_Honesty_and_Alignment_Proposal.md",
+    "headings": "# R13 — Conformance honesty and documentation alignment proposal (superseded) / ## Original problem statement / ## Original proposed dispositions (superseded) / ## Evidence / ## Compatibility and security impact / ## Limitations and decision boundary / ## Rollback or supersession",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R14_GKX_2_0_Breaking_Machine_Namespace_Development_Decision_Record.md",
+    "sha256": "081cda6a5b11d9086a85a1fa1ed99e49af87ba1dfa1268000f28c817305be5a0",
+    "bytes": 1433,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R14_GKX_2_0_Breaking_Machine_Namespace_Development_Decision_Record.md",
+    "headings": "# R14 — GKX 2.0 Breaking Machine Namespace Development Decision Record / ## Decision / ## Supersession and preservation / ## Conformance boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+    "sha256": "994c407fb0d9df7ea78b95095efe502b9503125723069acf67a90a8d22a2c1b5",
+    "bytes": 8362,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R15_Governed_State_Change_Reentry_and_Bounded_Delegation_Development_Decision_Record.md",
+    "headings": "# R15 — Governed state change, re-entry, and bounded delegation / ## 1. Decision basis / ## 2. Adopted rulings / ### R15-103 — Standard vocabulary and deployment policy / ### R15-104 — State-Change Receipt role / ### R15-105 — Durable mutation binding / ### R15-106 — Re-entry standing / ### R15-107 — Predecessor preservation / ### R15-108 — Supersession semantics / ### R15-109 — Navigation standing / ### R15-110 — Bounded supersession delegation / ### R15-111 — Fixture accounting and SRTP reconciliation / ### R15-112 — GCP applicability / ### R15-113 — Engine release split / ### R15-114 — Retention scope / ### R15-115 — Zenodo archival direction / ### R15-116 — Directive and merge process / ## 3. Permanent requirement allocations / ## 4. Profile attachment / ## 5. Non-decisions and preserved boundaries / ## 6. Future-risk controls",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R16_Required_Conformance_Profiles_and_GCP67_Enablement_Development_Decision_Record.md",
+    "sha256": "523a215728e5c6913fc4f4d4fd91bdb6c014f682a2d2cf538401d478735b8638",
+    "bytes": 11014,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R16_Required_Conformance_Profiles_and_GCP67_Enablement_Development_Decision_Record.md",
+    "headings": "# R16 — Required conformance profiles and GCP-6/GCP-7 enablement / ## 1. Decision basis / ## 2. Adopted rulings / ### R16-117 — Core and Advanced tiers / ### R16-118 — GCP-6/GCP-7 binding and Context-Only Extension / ### R16-119 — Behavior-based fixture coverage / ### R16-120 — Gate and refusal fixtures / ### R16-121 — Diagnostic-code registry / ### R16-122 — Assessment vocabulary / ### R16-123 — Capability scope and non-excludable gates / ### R16-124 — Viewer/Projection independence / ### R16-125 — Exact release binding and post-v1.0 policy / ## 3. Layer semantics and bindings / ## 4. Canonical serialization / ## 5. Selection and replay boundary / ## 6. Actor and effect-scope separation / ## 7. Refusal Receipt role / ## 8. Conformance and fixture standing / ## 9. Release boundary / ## 10. Preserved claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R17_Authority_Validity_Interval_Development_Decision_Record.md",
+    "sha256": "bd1b659d4e41c0f03cef496d4ee43e2a408071edc39aafa33bedda252e0c0abc",
+    "bytes": 2543,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R17_Authority_Validity_Interval_Development_Decision_Record.md",
+    "headings": "# R17 — Authority validity interval semantics / ## 1. R17-126 — Half-open authority interval / ## 2. Captured evaluation time / ## 3. Failure and evidence behavior / ## 4. Requirement allocation / ## 5. Release and claim boundary",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\R9_V0.76_Development_Decision_Record.md",
+    "sha256": "15983fdcaf33a7c896f261bebbf53962911f86a1442d8af5284497a3cebd6a2c",
+    "bytes": 4713,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\R9_V0.76_Development_Decision_Record.md",
+    "headings": "# R9 v0.76 Development Decision Record / ## Governance status / ## Evidence reviewed / ## Review findings / ## Dispositions / ## Authority basis / ## Conflict and independence disclosure / ## Compatibility and security impact / ## Rollback and supersession / ## Release authorization",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\decisions\\ratification-questionnaires\\GKOS_2026-07-17_v0.75_Ratification_Questionnaire.md",
+    "sha256": "e0efa9191b3762088e8e8c9391281f8003849d4cbdce9b6bbb91d30e6ee49276",
+    "bytes": 587,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\decisions\\ratification-questionnaires\\GKOS_2026-07-17_v0.75_Ratification_Questionnaire.md",
+    "headings": "# GKOS-2026-07-17 v0.75 ratification questionnaire",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\archive\\ECOSYSTEM-ORGANIZATION_pre_gkx2.md",
+    "sha256": "0d1a290b1ccf9a538483bdd6f0dfdefac337e7897da39b0befe513aaac542b1b",
+    "bytes": 3447,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\ECOSYSTEM-ORGANIZATION_pre_gkx2.md",
+    "headings": "# GKOS ecosystem organization / ## Operating model / ## Decision rights / ## Cross-repository change protocol / ## Lifecycle policy / ## Documentation minimum",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\archive\\GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md",
+    "sha256": "f3d52ad57f2c1ef571a1cd83634a2e72c097a492b1e40f8ac0cffdc44fe43748",
+    "bytes": 4825,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\GKOS-ENGINE-TO-STANDARD-RECONCILIATION-v0.2.md",
+    "headings": "# GKOS-Engine → gkos-standard reconciliation record v0.2 / ## Authority and source lineage / ## Accepted v0.77 development allocations / ## Fixture and adapter disposition / ## Preserved open graph and temporal topics / ## Evidence limits and publication boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\archive\\GKX_REBRAND_REASSESSMENT_2026-08-02.md",
+    "sha256": "e5dc7f4c0e432e38ba66bdb44c2bc2ee469d98bf81803a96bcaeccc7a53d683f",
+    "bytes": 2657,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\GKX_REBRAND_REASSESSMENT_2026-08-02.md",
+    "headings": "# GKX Rebrand and KRS Reassessment — 2026-08-02 / ## Finding / ## Coordinated update / ## Reassessment / ## Next required work",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\archive\\README.md",
+    "sha256": "9541ad8eadf22257a77290a1c633a3b46831341e5217fbe791efd4785b71430a",
+    "bytes": 191,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\archive\\README.md",
+    "headings": "# Historical documentation archive",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\directives\\GKOS-DIRECTIVE-STD-079-r4.md",
+    "sha256": "de4a67deffccca4f6630b378e314a78ef936808bf9ad8a50ef88610d02b9c097",
+    "bytes": 4542,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\directives\\GKOS-DIRECTIVE-STD-079-r4.md",
+    "headings": "# GKOS-DIRECTIVE-STD-079 r4 / ## 0. Controlling invariants / ## 1. Universal versus deployment-bound semantics / ## 2. State-change receipting / ## 3. Retention / ## 4. Re-entry and supersession / ## 5. Bounded delegation hierarchy / ## 6. Navigation / ## 7. Fixture standing / ## 8. Permanent requirements / ## 9. Deferred matters",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\ECOSYSTEM-ORGANIZATION.md",
+    "sha256": "9d5ba0244273d35512e67a56ec441cb26f4be4c74f614799c8ace60f3bc424cb",
+    "bytes": 255,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\ECOSYSTEM-ORGANIZATION.md",
+    "headings": "# Ecosystem organization",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\GKOS_LEGAL_AND_PROFESSIONAL_ORIENTATION.md",
+    "sha256": "44cb572e125bd72e314e7de0491fd3f52882445a64a732b922e25da694ffe6f8",
+    "bytes": 6020,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\GKOS_LEGAL_AND_PROFESSIONAL_ORIENTATION.md",
+    "headings": "# GKOS for legal and non-technical professionals / ## The short version / ## The seven layers in plain language / ## What v0.80 adds / ## Why attorneys and reviewers should care / ## What this release does not prove / ## Primary reading",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+    "sha256": "8192b86e99499e14caff20ece35ed31322eb89b6c24f3565fd161738513c7c6b",
+    "bytes": 8538,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\GKOS_PROVENANCE_LANDSCAPE_CROSSWALK.md",
+    "headings": "# GKOS and the Provenance Landscape: A Claim-Limited Crosswalk / ## 1. Short answer / ## 2. Scope comparison / ## 3. Layer mapping / ## 4. Proposed interoperability work / ### XW-P1 — PROV export profile / ### XW-P2 — in-toto statement envelope / ### XW-P3 — governed signing profiles / ### XW-P4 — C2PA evidence intake / ### XW-P5 — MCP authorization binding / ## 5. Claims that must not be made yet / ## 6. Verification requirements for each mapping / ## 7. Evaluation conclusion",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\implementation\\archive\\OKF-Plus-2.3-Specialist-Reviewer-Role.md",
+    "sha256": "3e4ea496f080f90877e5dc1b0294e1f62b0cfe79e0b3031ee40040805dbcdad5",
+    "bytes": 5165,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\archive\\OKF-Plus-2.3-Specialist-Reviewer-Role.md",
+    "headings": "# OKF+ 2.3 Specialist Reviewer Role / ## Assignment requirement / ## Required conduct / ## Prohibited conduct / ## Permitted advisory actions / ## Required output / ## Competence declaration / ## Instruction precedence / ## Related role family / ## Source relationship",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\implementation\\archive\\README.md",
+    "sha256": "ca311272d65104b527208d6e288fd034eb402831a66bdc7445029d1247103da4",
+    "bytes": 196,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\archive\\README.md",
+    "headings": "# Historical implementation material",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\implementation\\GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+    "sha256": "ea152f8d6dba2f4d5af4d15ff000dcb6f029a92546f25cc57765a6b99beb003a",
+    "bytes": 2405,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\GCP67_EXECUTABLE_EVIDENCE_STATUS.md",
+    "headings": "# GCP-6/GCP-7 executable evidence status / ## Implemented / ## Open evidence deficits / ## Governed decision docket / ## Claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\implementation\\GKOS-DIRECTIVE-ENG-210-r4.md",
+    "sha256": "38672c5d5c6c7a2a158c6da58d8dfa01934ff2b4df225014da06d0d273dcc749",
+    "bytes": 6234,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\GKOS-DIRECTIVE-ENG-210-r4.md",
+    "headings": "# GKOS-DIRECTIVE-ENG-210 r4 — Engine 2.1 Navigation build contract / ## 1. Release contract / ## 2. Architecture / ## 3. Canonical-five and flag-and-promote / ## 4. Determinism / ## 5. Re-entry / ## 6. Bounded delegation / ## 7. Governance Store / ## 8. Public API and capability honesty / ## 9. Fixtures and evidence / ## 10. Versioning and release / ## 11. Stop-the-line conditions",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\implementation\\GKOS-Engine-Implementation-Guide.md",
+    "sha256": "d53fd271f2cbd80fecac545abf70fce1591926c5c44845f065cdd68f5127c2d6",
+    "bytes": 591,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\GKOS-Engine-Implementation-Guide.md",
+    "headings": "# GKOS-Engine implementation guide",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\implementation\\README.md",
+    "sha256": "13a820ea256e6858432422113924e8c99ae1d7c4f56b2eb87ddbee2a8930b23e",
+    "bytes": 490,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\README.md",
+    "headings": "# Implementation references",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\implementation\\VERSION_COMPATIBILITY_MATRIX.md",
+    "sha256": "a286c7a2817e3b2dde6d3774fc2a122d404274b34b0784c5968187cd35fe7f15",
+    "bytes": 2600,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\implementation\\VERSION_COMPATIBILITY_MATRIX.md",
+    "headings": "# GKOS/GKX implementation version compatibility matrix",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\NAMING.md",
+    "sha256": "b4be5484904bbba782e62a4a0ebf98e7b7b86c714f5e1c85e9f9c58328c899e2",
+    "bytes": 363,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\NAMING.md",
+    "headings": "# GKX 2.0 naming policy",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\proposals\\GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+    "sha256": "e3a95224575d5614beed1fa4e958ab4b89e73a0a627e2e15522432edc656c0e6",
+    "bytes": 4926,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\GKOS-DOCSTD-001_Documentation_Engineering_Alignment.md",
+    "headings": "# GKOS-DOCSTD-001 — Documentation and engineering alignment proposal / ## 1. Prohibited failure modes / ## 2. Requirement identity and adapter boundary / ## 3. Controlled derivation and comparison / ## 4. Intent review / ## 5. Synchronization gates / ## 6. First application",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\proposals\\NAV-002_SELECTION_DISCOVERY_CONTRACT_DRAFT.md",
+    "sha256": "f2d7b2143e15c5fd307cc0394a12750af51d68c777d21f51f5a75ed8b4499853",
+    "bytes": 1483,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\NAV-002_SELECTION_DISCOVERY_CONTRACT_DRAFT.md",
+    "headings": "# NAV-002 selection and discovery contract — draft / ## Proposed contract / ## Promotion gates",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\proposals\\SRTP_DRAFT_PROFILE.md",
+    "sha256": "05cf4be81fc37bdeff57d572669617a0e4ff26eaf4fa2e8084d55e58c0e10572",
+    "bytes": 1983,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\SRTP_DRAFT_PROFILE.md",
+    "headings": "# Scientific Research Trace Profile (SRTP) draft",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\proposals\\SRTP_DRAFT_TRACEABILITY.md",
+    "sha256": "9034a0c29700994010f9069a929d4a68d6d880c8511bd8d243927d68d03859e5",
+    "bytes": 2876,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\proposals\\SRTP_DRAFT_TRACEABILITY.md",
+    "headings": "# SRTP draft field and fixture traceability",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\reviews\\2026-08-04_CRITIQUE_ASSESSMENT_AND_REMEDIATION.md",
+    "sha256": "8d66a2bd26bd82d637acc97cc8919ed61132c310e61dcf584dc9a720d690731c",
+    "bytes": 13206,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\reviews\\2026-08-04_CRITIQUE_ASSESSMENT_AND_REMEDIATION.md",
+    "headings": "# GKOS Critique Assessment and Remediation Record / ## 1. Executive disposition / ## 2. Claim-by-claim assessment / ## 3. Assessment of the draft solution documents / ### 3.1 Draft conformance profiles / ### 3.2 Draft provenance landscape crosswalk / ### 3.3 Draft KRS-Lite implementation-independence attestation / ## 4. Solutions designed for industry scrutiny / ### A. Public orientation and stable terminology — immediate / ### B. Executable conformance before promotion — P0 technical gate / ### C. Honest implementation evidence — P0 claim gate / ### D. Governance continuity and legitimacy — P0 governance gate / ### E. Interoperability by reuse — P1 / ### F. External validation and adoption — P1 / ## 5. Changes enacted by this remediation / ## 6. Remaining decisions requiring explicit governance action",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\docs\\reviews\\2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+    "sha256": "b3356ee8623b5c32c7439eb2bdcee5cc2dba7986ef503b1aef3dad16732affda",
+    "bytes": 8659,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\docs\\reviews\\2026-08-04_ENGINE_GRAPH_DRIFT_ASSESSMENT.md",
+    "headings": "# Independent assessment — Engine graph semantics and standard drift / ## Executive disposition / ## Finding-by-finding assessment / ## Executed evidence / ## Controlled graph-clause derivation / ## Remaining decision gates",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\examples\\minimal-governed-lifecycle.md",
+    "sha256": "edbd0dffa8942577d6d1850ef7e045f115ab490a6abc24a45285ca4143f86801",
+    "bytes": 559,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\examples\\minimal-governed-lifecycle.md",
+    "headings": "# Minimal governed lifecycle",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\examples\\README.md",
+    "sha256": "c887a2e3ae0a6450c1c89cefd3db310cfdc12040078e02071bec1e304d7dccc1",
+    "bytes": 233,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\examples\\README.md",
+    "headings": "# GKOS examples",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\archive\\DIVERGENCES.md",
+    "sha256": "2974728ca1bb950b451efc3cf634ca10765f9581189df0873b6ebf70bf1fed37",
+    "bytes": 2469,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\archive\\DIVERGENCES.md",
+    "headings": "# Historical divergences — fixture catalog 0.1.0 vs gkos-engine v1.0.5 / ## DIV-001 — Naive wall-clock timestamps pass projection silently / ## DIV-002 — Missing sensitivity defaults to `internal`, not a restricted value / ## DIV-003 — Invalid epistemic state flows into effective state as-authored",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\archive\\README.md",
+    "sha256": "530ccd5e5b23bbdd158ec2ecb64ce962f9fcae748f3209dfe6a746462f87b042",
+    "bytes": 190,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\archive\\README.md",
+    "headings": "# Historical fixture evidence",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\corpus\\gcp1-b01-missing-sensitivity.md",
+    "sha256": "5ce02b7f854d6ca21bb4bf29303a16544f678da0c735a24e8ae5367f138869f5",
+    "bytes": 290,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-b01-missing-sensitivity.md",
+    "headings": "# GCP1-B01",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\corpus\\gcp1-n01-missing-required.md",
+    "sha256": "59ee39705bfacf44e3e87b4eb67ec568d5f632168d494615ac29ffef89ef3b94",
+    "bytes": 185,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-n01-missing-required.md",
+    "headings": "# GCP1-N01",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\corpus\\gcp1-n02-invalid-epistemic.md",
+    "sha256": "5ae7db919a6ef43b2c695b88505197327477ff91132210b2d0a4e39659fd9833",
+    "bytes": 300,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-n02-invalid-epistemic.md",
+    "headings": "# GCP1-N02",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\corpus\\gcp1-n03-naive-timestamp.md",
+    "sha256": "4d168ae0d5cac33c5ff5e22c5140a36592bd1f489c50ca3f97b918f500c9e6f8",
+    "bytes": 285,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-n03-naive-timestamp.md",
+    "headings": "# GCP1-N03",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\corpus\\gcp1-p01-agent-ready-minimal.md",
+    "sha256": "2439fb70019f76484e5e8b7394f80022461e99f39892145d5c4b347073fde42a",
+    "bytes": 467,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp1-p01-agent-ready-minimal.md",
+    "headings": "# GCP1-P01",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\corpus\\gcp3-c01-claim.md",
+    "sha256": "2617639af76e8edf0ff5dfb0802716e7a6fd776907b4000de86f5ffdc8a7911f",
+    "bytes": 331,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-c01-claim.md",
+    "headings": "# GCP3-C01",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\corpus\\gcp3-c02-counter.md",
+    "sha256": "4459a536296e0a42491eee48e48aa341d3da595ccc382874b2f45e8c36909b42",
+    "bytes": 273,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-c02-counter.md",
+    "headings": "# GCP3-C02",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\corpus\\gcp3-l01-superseded.md",
+    "sha256": "b343c1b2cf961c0e62ea72df1421446fce4e58349efd04268423eef512af8a8e",
+    "bytes": 361,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-l01-superseded.md",
+    "headings": "# GCP3-L01",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\corpus\\gcp3-l02-successor.md",
+    "sha256": "84ddc4cf7a3ac9d6b077df1812f841df6ed9f672c3607c9f32a0da7f2754ea16",
+    "bytes": 413,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\corpus\\gcp3-l02-successor.md",
+    "headings": "# GCP3-L02",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\provisional\\science\\R15_OVERLAP_TRACEABILITY.md",
+    "sha256": "d0e42462733c76a935ed1dcca3f34c18a17cac7e71127250ad54feb501c55e28",
+    "bytes": 1251,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\provisional\\science\\R15_OVERLAP_TRACEABILITY.md",
+    "headings": "# R15 overlap traceability for provisional SRTP fixtures",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\provisional\\science\\README.md",
+    "sha256": "98d646821ce0fc533c88c6458633b480dbfc92082ef6ad28b794a1647354f8ec",
+    "bytes": 741,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\provisional\\science\\README.md",
+    "headings": "# SRTP draft graph fixtures",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\fixtures\\README.md",
+    "sha256": "28f9ddf9274235fe98d4984a1f528e0bc0d5e32491e4ac4a6031096dce8f388d",
+    "bytes": 2595,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\fixtures\\README.md",
+    "headings": "# GKOS fixture catalog",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\GOVERNANCE.md",
+    "sha256": "d97ee7d0af0886dfece124262255597b913de2ca47d7df6586e1034408aa7a69",
+    "bytes": 3273,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\GOVERNANCE.md",
+    "headings": "# GKOS governance / ## Purpose / ## Development-phase authority / ## v0.x amendment path / ## Non-self-certification / ## v1.0 governance gate / ## Canonical publication",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\governance\\portfolio\\FINAL-ACCEPTANCE-MATRIX.md",
+    "sha256": "d22b72817072872f2b870c7080c55bd7099e35e4e95ba9954727358d0b780441",
+    "bytes": 1406,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\FINAL-ACCEPTANCE-MATRIX.md",
+    "headings": "# Final acceptance matrix",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\governance\\portfolio\\GKX-ADAPTER-LIMITS.md",
+    "sha256": "1eb70dace0ebb5f7a6760b1c7b7e6c6abadd426cc04055102fc4b9b122cb2519",
+    "bytes": 1837,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\GKX-ADAPTER-LIMITS.md",
+    "headings": "# GKX adapter limits / ## Allowed adapter scope / ## Prohibited adapter scope / ## Size and responsibility limit / ## Result rule / ## Change control",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\governance\\portfolio\\GKX-INDEPENDENT-IMPLEMENTATION-RULE.md",
+    "sha256": "df20c2bd9adb407e6801f31f8e705e13ae9ce56dc8ced041bb9e3910ba7df4da",
+    "bytes": 2293,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\GKX-INDEPENDENT-IMPLEMENTATION-RULE.md",
+    "headings": "# GKX independent-implementation rule / ## Qualification / ## Independence criteria / ## Evidence procedure / ## Closure authority / ## What this rule does not permit",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\governance\\portfolio\\PORTFOLIO-ACCEPTANCE-TRACKS.md",
+    "sha256": "08f075f1fe285b9bbfce2ac0318fe922c5b86d3e0dea1ab56d6229fd72eb36f5",
+    "bytes": 1321,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\PORTFOLIO-ACCEPTANCE-TRACKS.md",
+    "headings": "# Portfolio acceptance tracks / ## Normative GKX release track / ## Portfolio-publication alignment track / ## Decision rule",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\governance\\portfolio\\PORTFOLIO-AUTHORITY-INDEX.md",
+    "sha256": "f83b93bb78b8291edff57dc5d5f0f358a177bc41bd3ea12ee0eb92b68f063388",
+    "bytes": 2214,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\PORTFOLIO-AUTHORITY-INDEX.md",
+    "headings": "# Portfolio authority index / ## Controlling record / ## Amendment path / ## Supersession and conflict check / ## Assumptions and unresolved items",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\governance\\portfolio\\REPOSITORY-EVIDENCE-BASELINE.md",
+    "sha256": "4ca3b5284ee0d511be411fd003fb8e7a6e9beb26ce76db22ca9e7e082e1c3a49",
+    "bytes": 2941,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\governance\\portfolio\\REPOSITORY-EVIDENCE-BASELINE.md",
+    "headings": "# Repository evidence baseline / ## Observations material to later gates / ## What this evidence does not prove",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\graphics\\README.md",
+    "sha256": "aadb692d4dd293d05b530922a6a5c827abd21b4113c7d6f57b2277d5728c82db",
+    "bytes": 657,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\graphics\\README.md",
+    "headings": "# Informative graphics",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\graphics\\social\\README.md",
+    "sha256": "ed3e8ded5c8766a6dc9d8b8ec3868a27213639d7958b0ad99abd53f1858460fe",
+    "bytes": 901,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\graphics\\social\\README.md",
+    "headings": "# Social-preview graphics",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\LICENSE.md",
+    "sha256": "cb33978c8bf57e201ed476c78fc254b7bd6437452931b0476871848accaf1774",
+    "bytes": 792,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\LICENSE.md",
+    "headings": "# Licensing / ## Documentation / ## Software-oriented materials / ## Attribution",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\LICENSES\\DOCUMENTATION-LICENSE.md",
+    "sha256": "7b3a7ba3c6fc7a6360c5ca7066d138b07d7d646105a923004c5a1d275d5ab874",
+    "bytes": 655,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\LICENSES\\DOCUMENTATION-LICENSE.md",
+    "headings": "# Creative Commons Attribution 4.0 International",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\LICENSES\\SOFTWARE-LICENSE.md",
+    "sha256": "c40538b67a5de4054b116e900b6bfcfeaec2fa4de594e28ca444ba952c5938d2",
+    "bytes": 553,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\LICENSES\\SOFTWARE-LICENSE.md",
+    "headings": "# Apache License 2.0",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\NOTICE.md",
+    "sha256": "4fc70e62ebe85ed35e75f5d91d9fc4dfcd4d3ccffbfdb10bd5985e04a7d8a9d3",
+    "bytes": 822,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\NOTICE.md",
+    "headings": "# Notice and attribution",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\README.md",
+    "sha256": "ff1f1ddbbe71ee281865ad7de3b1319d41b88b330e1b64157f7fe20df68327db",
+    "bytes": 16657,
+    "duplicate_of": null,
+    "headings": "# Governed Knowledge Operations Standard (GKOS) / ## Where GKOS helps / ## Why GKOS exists / ## The model in one minute / ## Seven cumulative responsibilities / ## A control plane—not another runtime / ## Use the tools you already have / ## Required tiers and adoption paths / ## Four names are enough to get started / ## Implementations in the GKOS ecosystem / ## GKOS and ordinary RAG / ## Five rules to remember / ## Current maturity and claim boundary / ## Start here / ## Repository map / ## Publication, citation, and licensing",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-07-17-v0.75\\README.md",
+    "sha256": "afedfabedfffe7a5c684880afd67762fec693bc31b5053564bafbd6b16b0bd8e",
+    "bytes": 429,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-17-v0.75\\README.md",
+    "headings": "# GKOS-2026-07-17 v0.75",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-07-17-v0.75\\RELEASE_NOTES.md",
+    "sha256": "39da06bc3fd0b9bf3fce8f1ac34666d2a376463a00ebb868b1da39313d4f7270",
+    "bytes": 634,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-17-v0.75\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-07-17 v0.75",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-07-20-v0.76\\README.md",
+    "sha256": "618e80f6d004389e6e054f627713fe8c992ded742862426afaf2035d1d8ed4e6",
+    "bytes": 690,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-20-v0.76\\README.md",
+    "headings": "# GKOS-2026-07-20 v0.76",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-07-20-v0.76\\RELEASE_NOTES.md",
+    "sha256": "e69b3329fe490ee3c8e4215319002c31acc73f528220551cb2594a992afd250d",
+    "bytes": 944,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-07-20-v0.76\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-07-20 v0.76",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-08-05-v0.77\\README.md",
+    "sha256": "ba5db295ad74c6cef0ab7053dfb1da5bcbf036138aa60bd629d64ca8f549a80b",
+    "bytes": 689,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.77\\README.md",
+    "headings": "# GKOS-2026-08-05 v0.77",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-08-05-v0.77\\RELEASE_NOTES.md",
+    "sha256": "3f1a25be56474b9a7bc0a1e6b363dcf6004882364a7ca921a29b94f94a786f2f",
+    "bytes": 1178,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.77\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-08-05 v0.77",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-08-05-v0.78\\README.md",
+    "sha256": "15f6d52afbb0189d3da8d87496509c6b17597bc4454c814b42f5ff53c97528f5",
+    "bytes": 473,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.78\\README.md",
+    "headings": "# GKOS-2026-08-05 v0.78",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-08-05-v0.78\\RELEASE_NOTES.md",
+    "sha256": "b6d30d034c9ca960df5e4b5ab0fc3012bc405549f089c7bb54403c0459cf7eef",
+    "bytes": 751,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-05-v0.78\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-08-05 v0.78 / ## Breaking change / ## Status and boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-08-16-v0.79\\README.md",
+    "sha256": "1964b0c08af3e5c8c7e2e4f70c3c0793b2db0b41ea0c2208e40172b5df00233f",
+    "bytes": 497,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-16-v0.79\\README.md",
+    "headings": "# GKOS-2026-08-16 v0.79",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-08-16-v0.79\\RELEASE_NOTES.md",
+    "sha256": "4d69d68c8d62f0ecfd12f5774e557e8de77ce6dbd56c8563ce742f4ff98d7a9c",
+    "bytes": 1584,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-16-v0.79\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-08-16 v0.79 / ## Normative development changes / ## Preserved boundaries / ## Status",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-08-20-v0.80\\README.md",
+    "sha256": "5e9fe7c782e98449ef9d0500fccb9f051d45f949b778777fd237dbf6152a8340",
+    "bytes": 579,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-20-v0.80\\README.md",
+    "headings": "# GKOS-2026-08-20 v0.80",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\releases\\2026-08-20-v0.80\\RELEASE_NOTES.md",
+    "sha256": "7a0d9a18ceef6f2f13959b707b2fd03d4eb0136cd905ac294147628e13bad32c",
+    "bytes": 2061,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\releases\\2026-08-20-v0.80\\RELEASE_NOTES.md",
+    "headings": "# Release notes — GKOS-2026-08-20 v0.80 / ## Breaking normative development changes / ## Impact and preservation / ## Preserved boundaries / ## Status",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\requirements\\PROFILE_APPLICABILITY.md",
+    "sha256": "b3650fef5d1eca73d9a342c4639aa10440a4adb5eb25c78edf4abd3101c444d2",
+    "bytes": 3516,
+    "duplicate_of": null,
+    "headings": "# GKOS requirement profile applicability / ## 1. Required tiers / ## 2. Applicability / ## 3. Interpretation rules",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\requirements\\REGISTRY.md",
+    "sha256": "266002e62dadf6d69c4d89b066b4b51faae975976ca2233ead0d1936a240b447",
+    "bytes": 18013,
+    "duplicate_of": null,
+    "headings": "# GKOS requirement registry / ## Active allocations / ## Accepted unpublished allocations / ## Append-only status and replacement ledger / ## Profile applicability for R15 allocations / ## Allocation boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\ROADMAP.md",
+    "sha256": "002b2337c95d71049acd769cb162ed77eeac0da95405fe8a7645c3a070c494df",
+    "bytes": 239,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\ROADMAP.md",
+    "headings": "# GKOS roadmap",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\schemas\\provisional\\README.md",
+    "sha256": "4a15908c21434242311d6a7a3fbd491b5f5511ed0a7a44a89d4890d993614461",
+    "bytes": 983,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\schemas\\provisional\\README.md",
+    "headings": "# Provisional schemas (informative, not normative)",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\schemas\\provisional\\science\\README.md",
+    "sha256": "aa10248a475dc761f2be0317a9594ff7811174f6d6d6460600a83a512b8261ab",
+    "bytes": 1377,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\schemas\\provisional\\science\\README.md",
+    "headings": "# Scientific Research Trace Profile draft schemas",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\schemas\\README.md",
+    "sha256": "f16032299bb103980efc37c55e78049e664f0935ada05a1b8a4c891d4a272e1d",
+    "bytes": 2788,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\schemas\\README.md",
+    "headings": "# GKOS schemas / ## Canonicalization / ## Claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\SECURITY.md",
+    "sha256": "0fd0c291b9b5d20c7f0aa480092056ab322355b9ef9825f436a6205445543593",
+    "bytes": 794,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\SECURITY.md",
+    "headings": "# Security policy",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\00_GKOS_Master_Standard.md",
+    "sha256": "9b590d6eb3ffc9aae9ac6941414846e1166aef8a9654f83815a4ba1363c04059",
+    "bytes": 2476,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\00_GKOS_Master_Standard.md",
+    "headings": "# GKOS master standard / ## Normative surface / ## Current claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Authority_and_Refusal_Receipt_Fields.md",
+    "sha256": "6457ba35c2a9a59e35297349767364b81df978640434b40b82985ba244250dcc",
+    "bytes": 4155,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Authority_and_Refusal_Receipt_Fields.md",
+    "headings": "# Annex — Authority, authorized-use, and refusal receipt fields / ## 1. Semantic roles / ## 2. Authority Receipt / ## 3. Authorized Use Record / ## 4. Refusal Receipt / ## 5. Effect scope / ## 6. Existing security foundations / ## 7. Accepted post-v0.80 authority-interval amendment",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Canonical_Serialization.md",
+    "sha256": "81bc27f00e76d6986b93bfd6f2fd6d0b5a6451f32027f71eae1a568ab39adb0f",
+    "bytes": 13606,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Canonical_Serialization.md",
+    "headings": "# Annex — Canonical serialization / ## 1. Purpose and scope / ## 2. Canonical encoding profile / ## 3. Canonical payload identity / ## 4. Map key ordering, duplicates, arrays, and sets / ## 5. Numbers / ## 6. Timestamps and ordering / ### 6.1 Ordering / ## 7. Text and source preservation / ## 8. Artifact hash construction / ## 9. Human auditability and verifier obligation / ## 10. Layer-6 phase split / ### 10.1 Captured selection envelope / ### 10.2 Deterministic assembly / ## 11. Layer-5 and Layer-7 binding / ## 12. Required refusal diagnostics / ## 13. Conformance",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Conformance_Profiles.md",
+    "sha256": "b19f5a4e67c53fb487c79ded264c0e735979050999390bd603370ae6cdc3afcd",
+    "bytes": 2244,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Conformance_Profiles.md",
+    "headings": "# Annex — Conformance profiles / ## Required adoption tiers / ## Profiles / ## Claim evidence",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Diagnostic_Code_Registry.md",
+    "sha256": "63222165c343224d719e831bb207e0b25bb056db6ba56293ee6049cbb75ed67b",
+    "bytes": 3559,
+    "duplicate_of": null,
+    "headings": "# Annex — Diagnostic-code registry / ## 1. Rules / ## 2. Active codes / ## 3. Retirement ledger / ## 4. Accepted unpublished R17 mapping overlay",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Governed_State_Change_Reentry_and_Bounded_Delegation.md",
+    "sha256": "5490f352f0a03ee707bb1ae4ccce7e1127e05b7ce826587c912e084c4f2a77de",
+    "bytes": 6090,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Governed_State_Change_Reentry_and_Bounded_Delegation.md",
+    "headings": "# Annex — Governed state change, re-entry, retention, and bounded delegation / ## 1. Universal state-change receipting / ## 2. Standard-owned vocabulary and deployment-owned policy / ## 3. Retention and disposition / ## 4. Re-entry / ## 5. Explicit semantic supersession / ## 6. Bounded supersession delegation / ## 7. Navigation standing / ## 8. Conformance and fixture standing",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Known_Limitations_and_Open_Issues.md",
+    "sha256": "dc686239270f1754ac37dade5a6041146f2eb63f3e298cd3f76dfc3827307c79",
+    "bytes": 1994,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Known_Limitations_and_Open_Issues.md",
+    "headings": "# Annex — Known limitations and open issues",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Layer_Artifact_Mapping.md",
+    "sha256": "7981e3e5a9179e6c795b16f910bf09fd64c0c21f2385226b7c60ca73e51b45dc",
+    "bytes": 1736,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Layer_Artifact_Mapping.md",
+    "headings": "# Annex — Layer-to-artifact mapping (informative)",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Layer_Interface_Contracts.md",
+    "sha256": "b50030f06275dcdfde04740260377e5adf5dd98cd0fee4189db6e104c85c64e6",
+    "bytes": 2041,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Layer_Interface_Contracts.md",
+    "headings": "# Annex — Layer interface contracts",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Provisional_Authority_Receipt_Fields.md",
+    "sha256": "1913e65598b007654c22177616daf4891e353530f1883b7445bb6a1d88b02934",
+    "bytes": 2045,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Provisional_Authority_Receipt_Fields.md",
+    "headings": "# Annex — Provisional authority-receipt field list",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Security_Privacy_Retention.md",
+    "sha256": "66dcb62bddcb52cf91da5b8994320073e2aceff0a8dc44ccab0a6f3d2c4882af",
+    "bytes": 712,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Security_Privacy_Retention.md",
+    "headings": "# Annex — Security, privacy, and retention",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\standard\\annexes\\Specialized_Agent_Framework.md",
+    "sha256": "8b14e952fa063cc85086c1b865291fa5ee1f4f98a68038dffe6623796c1a16e4",
+    "bytes": 981,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\standard\\annexes\\Specialized_Agent_Framework.md",
+    "headings": "# Annex — Specialized Agent Framework",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\TECHNICAL_README.md",
+    "sha256": "13193869984aabf3b2534cafb3674327cf137a4e3f5a96623edb48dcbeaa4315",
+    "bytes": 29768,
+    "duplicate_of": null,
+    "headings": "# GKOS technical orientation / ## Vocabulary and authority / ## Standard, exchange contract, and implementations / ## Layer contracts / ## Control-plane placement / ## Open-source and product ecosystem mapping / ### Layer-by-layer component mapping / ### Product and vendor coverage snapshot / ### What changed in 2026 / ### Adapter priorities / ### Data-science review path / ## Governed retrieval and context / ## Canonical serialization / ## Core records and receipts / ## Profiles and conformance / ## Provisional domain work / ## Implementation boundaries / ### GKOS Engine / ### Lite distributions / ### Kosmos-Oden and other viewers / ## Interoperability / ## Implementer path / ## Technical map / ## Claim boundary",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\THIRD-PARTY-NOTICES.md",
+    "sha256": "4ee72c298bda38162fbaafb3b4bba5917a7eb6069271192894a0a64e0ab8006c",
+    "bytes": 555,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\THIRD-PARTY-NOTICES.md",
+    "headings": "# Third-party notices",
+    "review": "full-text read (identical SHA256 duplicates reviewed once)"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\TRADEMARKS.md",
+    "sha256": "54a4895c8d963c64cddee571d4fb747aaa8b09ff466c06b8a5a3e63df79991d1",
+    "bytes": 1062,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\TRADEMARKS.md",
+    "headings": "# Trademark policy",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\VERSIONING.md",
+    "sha256": "3a99b56634e1062f6c45fbf12340a8d354262ef1d23a70b915f4168092e83571",
+    "bytes": 5754,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\VERSIONING.md",
+    "headings": "# GKOS ecosystem versioning policy — \"one train, four cars\" / ## Purpose / ## The model: one train, four cars / ## SemVer, sharpened / ## HEAD and tagging discipline / ## CI gates / ## Per-repository rules / ### GKOS-Engine-Lite (CLI) / ### Kosmos-Oden / ### Kosmos-Oden-Lite / ## Downstream consumers / ## Precedence / ## GKOS standard claim versions",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  },
+  {
+    "path": "orchestration/2026-08-31/standard-audit\\gkos-standard\\ZENODO.md",
+    "sha256": "eea2c30f466c2ba486e00755c5e4fd321d35934e017e44e030ebaa33a766d4f2",
+    "bytes": 1869,
+    "duplicate_of": "orchestration/2026-08-31/standard-audit\\gkos-standard-r18\\ZENODO.md",
+    "headings": "# Zenodo Release and DOI Policy / ## Release sequence / ## DOI use / ## Licensing",
+    "review": "screened headings and extracted status/authority/decision clauses; not full line-by-line review"
+  }
+]

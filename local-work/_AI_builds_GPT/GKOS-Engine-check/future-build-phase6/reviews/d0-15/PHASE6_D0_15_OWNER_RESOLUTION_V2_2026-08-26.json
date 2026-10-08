@@ -1,0 +1,134 @@
+{
+  "record_type": "gkos-phase6-d0-15-owner-resolution",
+  "record_version": "2.0.0",
+  "resolved_at_utc": "2026-08-26T10:31:28.0404044Z",
+  "status": "AWAITING_FIVE_CONCURRENCES",
+  "owner_statement": "Ratify Q1–Q6 as proposed.",
+  "supersession": {
+    "superseded_artifact": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_2026-08-26.json",
+    "superseded_sha256": "07a257bc5cb37ffaa7c9fe61c1b46179fee946cc02643216aa0e0c6eb51e40b8",
+    "superseded_bytes": 3295,
+    "rule": "The prior resolution remains immutable historical evidence but grants no current successor-F1 product-correction authority. This V2 resolution controls prospectively."
+  },
+  "ratified_replacement_correction_map": {
+    "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_2026-08-26.json",
+    "sha256": "87da54d22f72e27625144143e15dcc6a38264b856af51bdaf5d26055a92c2a29",
+    "bytes": 21418,
+    "record_digest": "fe8809604c862a7fbf4d2638802ac6eb6157c920407efbc5998f3b7e6adbc338",
+    "normative_effect": "The exact replacement bytes are ratified. R01 through R15 selections, the Q1 through Q6 amendments, vector accounting, mapping deferral, five-review gate, preservation targets, and authorization boundary are normative only at this exact hash and byte length."
+  },
+  "ratified_exhaustive_fixture_registry": {
+    "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_2026-08-26.json",
+    "sha256": "e878b6906559e91a7d4acf34d375b8de43b140549c673f50f8e164b5a333bd90",
+    "bytes": 90098,
+    "record_digest": "e65c98badb2fcb8399149034edacc40c15d5a6b6d58df86af60229c06f2af732",
+    "status": "CLOSED_CONCURRENCE_EVIDENCE_ONLY",
+    "exact_accounting": {
+      "official_mcp_vectors_unchanged": 67,
+      "named_core": 8,
+      "named_recovery": 10,
+      "named_subtotal": 18,
+      "additional_canonical": 219,
+      "overall_canonical_non_mcp": 237,
+      "aliases": 12,
+      "families": 16
+    },
+    "normative_effect": "The exact registry bytes enumerate and freeze all 237 canonical non-MCP fixtures and 12 non-counting aliases. Any byte, ID, alias, family, expectation, count, or source-trace change invalidates dependent receipts and requires a new owner decision."
+  },
+  "ratified_questions": [
+    {
+      "id": "Q1",
+      "decision": "Require five fresh, independent, zero-contribution concurrences in serial waves: C1 migration plus security, C2 authority/concurrency, then C3 Full-contract plus Lite-conformance, before any separate owner authorization for successor-F1 product correction."
+    },
+    {
+      "id": "Q2",
+      "decision": "Reference-bound cursors fail closed after process restart with the existing CURSOR_STALE projection GKOS_P6_REQUEST_STALE_AUTHORITY and require fresh live opaque-reference rediscovery. Restart invalidation takes precedence over simultaneously dead or invalid references before reference lookup. No durable resolver, raw path, new table, new operation, or restart-continuation exception is permitted."
+    },
+    {
+      "id": "Q3",
+      "decision": "Eighteen is the exact named 8+10 subtotal, not the total. Preserve 67 official MCP IDs. The exact hash-bound companion registry enumerates 219 additional canonical fixtures, producing exactly 237 overall canonical non-MCP fixtures across 16 families, plus 12 non-counting aliases. The five fresh concurrences must bind and accept those exact registry bytes and accounting before separate owner product-correction authorization."
+    },
+    {
+      "id": "Q4",
+      "decision": "Defer the cryptographic mapping evidence and subject-digest-collision qualification to a separately ratified adapter contract. Preserve exactly 53 error codes including GKOS_P6_IDENTITY_COLLISION, zero mutation, no retry or overwrite, content-free evidence, and GKOS_P6_PLATFORM_UNAVAILABLE mapping behavior before that adapter exists."
+    },
+    {
+      "id": "Q5",
+      "decision": "Normatively adopt corrected D015-DC01 through D015-DC13 by ID at the exact replacement correction-map hash."
+    },
+    {
+      "id": "Q6",
+      "decision": "Authorize corrected decision and concurrence records only. After all five accept, return to the Product Owner for a separate explicit successor-F1 product-correction authorization. F2 receives no restart authority."
+    }
+  ],
+  "normatively_adopted_derived_correction_ids": [
+    "D015-DC01",
+    "D015-DC02",
+    "D015-DC03",
+    "D015-DC04",
+    "D015-DC05",
+    "D015-DC06",
+    "D015-DC07",
+    "D015-DC08",
+    "D015-DC09",
+    "D015-DC10",
+    "D015-DC11",
+    "D015-DC12",
+    "D015-DC13"
+  ],
+  "required_pre_product_correction_gate": {
+    "serial_waves": ["C1", "C2", "C3"],
+    "all_required": true,
+    "concurrences": [
+      {"wave": "C1", "role": "migration", "fresh": true, "zero_contribution": true},
+      {"wave": "C1", "role": "security", "fresh": true, "zero_contribution": true},
+      {"wave": "C2", "role": "authority/concurrency", "fresh": true, "zero_contribution": true},
+      {"wave": "C3", "role": "Full-contract", "fresh": true, "zero_contribution": true},
+      {"wave": "C3", "role": "Lite-conformance", "fresh": true, "zero_contribution": true}
+    ],
+    "binding_rule": "Each concurrence must bind every exact-input SHA-256 and byte length, the exact replacement correction-map SHA-256 and byte length, this owner-resolution V2 SHA-256 and byte length, and the materialized exhaustive closed fixture-registry SHA-256 and byte length. Each must accept the same exact final accounting without reviewer contribution to the decision bytes, implementation, fixtures, or expected outcomes. Any byte change invalidates every dependent receipt and restarts C1 through C3.",
+    "failure_rule": "Any reject, conditional accept, ambiguity, byte drift, missing role, fixture-registry disagreement, or independence defect keeps successor F1 and F2 stopped and returns the issue to the Product Owner.",
+    "success_rule": "Five accepting concurrences permit preparation of a separate owner authorization request only. They do not authorize product correction."
+  },
+  "registry_gate_transition": {
+    "prior_state": "BLOCKED_PENDING_EXHAUSTIVE_FIXTURE_REGISTRY",
+    "satisfied_by_registry_sha256": "e878b6906559e91a7d4acf34d375b8de43b140549c673f50f8e164b5a333bd90",
+    "satisfied_by_registry_bytes": 90098,
+    "current_state": "AWAITING_FIVE_CONCURRENCES",
+    "product_authority_effect": "none"
+  },
+  "authorization": {
+    "authorized": [
+      "preserve these detached evidence records",
+      "obtain the five fresh zero-contribution concurrence records against the exact replacement bytes",
+      "prepare an exhaustive hash-bound fixture registry as concurrence evidence without editing product or accepted contract bytes",
+      "return the five exact verdict hashes and closed fixture-registry hash to the Product Owner"
+    ],
+    "not_authorized": [
+      "successor-F1 product correction",
+      "product or accepted-F1 byte edits",
+      "contract or fixture regeneration",
+      "F2 restart, repair, commit, push, qualification, or grandfathering",
+      "F3 through F5 implementation",
+      "Lite implementation or repin",
+      "commit",
+      "push",
+      "hosted workflow",
+      "pull request creation or update",
+      "merge",
+      "release",
+      "deployment",
+      "activation",
+      "publication"
+    ]
+  },
+  "preservation": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_state": "immutable historical evidence",
+    "stopped_f2_state": "uncommitted, unqualified, preserved, and not authorized",
+    "prior_artifacts": "immutable"
+  },
+  "terminal_statement": "Q1 THROUGH Q6 ARE RATIFIED AT THE EXACT REPLACEMENT CORRECTION-MAP AND CLOSED FIXTURE-REGISTRY HASHES. FIVE FRESH ZERO-CONTRIBUTION CONCURRENCES IN C1 THROUGH C3 AND A SEPARATE SUBSEQUENT PRODUCT-OWNER AUTHORIZATION ARE REQUIRED BEFORE SUCCESSOR-F1 PRODUCT CORRECTION. NO PRODUCT EDIT, REGENERATION, COMMIT, PUSH, WORKFLOW, PR, OR F2 RESTART IS AUTHORIZED. F2 REMAINS STOPPED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "7271bdbe92e4ae634bd03d33bb2532c52dfc495f972910fc3ffa81b5284ea441"
+}

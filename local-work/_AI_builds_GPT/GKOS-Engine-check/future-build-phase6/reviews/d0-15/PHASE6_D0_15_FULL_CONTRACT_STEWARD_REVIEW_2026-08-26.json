@@ -1,0 +1,760 @@
+{
+  "record_type": "gkos-phase6-d0-15-full-contract-steward-review",
+  "record_version": "1.0.0",
+  "recorded_date": "2026-08-26",
+  "role": "/root/phase6_full_contract_steward",
+  "verdict": "CORRECTION_REQUIRED",
+  "acceptance": false,
+  "implementation_authorization": false,
+  "f2_restart_authorization": false,
+  "summary": "All four F2 D0-15 contract-stop claims reproduce. The accepted F1 pack also has additional blocker-level contradictions against ratified D0: stale bootstrap states, no request stale state, no durable page-snapshot payload or complete graph binding, the wrong standalone error envelope, and absent restore/bootstrap recovery vectors. The current F2 worktree separately contains implementation defects. It must not be accepted, and the accepted F1 contract bytes must be corrected and independently requalified before F2 restarts.",
+  "independence_and_no_contribution_attestation": {
+    "zero_contribution_to_d0_f1_f2_bytes": true,
+    "product_repository_read_only": true,
+    "contract_expectations_edited": false,
+    "product_files_edited": false,
+    "product_branch_or_commit_created": false,
+    "runtime_executed": false,
+    "tests_or_generators_executed": false,
+    "only_authored_artifact": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_FULL_CONTRACT_STEWARD_REVIEW_2026-08-26.json",
+    "statement": "I read the ratified D0 proposal set, the exact accepted F1 pack at e29e04bdad1cd192a25eba2d682a4c46774def28, the F1 acceptance evidence, the F2 stop, and the uncommitted F2 worktree. I did not author, repair, normalize, format, stage, commit, push, execute, or otherwise contribute to D0, F1, F2, product, workflow, expected outcomes, or runtime bytes."
+  },
+  "coordinates": {
+    "accepted_f1_result_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_tree_sha": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+    "accepted_f1_pack_diff_against_current_worktree": 0,
+    "accepted_f1_independent_review": {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_FULL_INDEPENDENT_REVIEW_V3_2026-08-26.json",
+      "sha256": "ee027811dd29826883f736c0f018de552979d2418762e69fa7988aff635aaa70",
+      "bytes": 33708,
+      "lines": 479
+    },
+    "accepted_f1_gate": {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_ACCEPTANCE_GATE_2026-08-26.json",
+      "sha256": "1c01ba32ccd18c04667dd1cad12916f0df806ac2de20575739e16b0844bcc9ff"
+    },
+    "f2_stop": {
+      "path": "future-build-phase6/reviews/implementer/PHASE6_F2_FULL_D0_15_STOP_2026-08-26.json",
+      "sha256": "5d192bd3cb1ddb4f0a8a0d8148d16c605ed80fe2078b5591c2a79c258dcd52ea",
+      "bytes": 6663,
+      "lines": 97
+    },
+    "ratified_d0": {
+      "core_spec": {
+        "path": "future-build-phase6/proposals/core/GKOS_PHASE6_D0_CORE_SPEC_PROPOSAL_2026-08-25.md",
+        "sha256": "168d686594952786c55e255483847ce29d5c6e712d792a6534d1e78d8010163c",
+        "bytes": 117722,
+        "lines": 1771
+      },
+      "decision_record": {
+        "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_DECISION_RECORD_PROPOSAL_2026-08-25.json",
+        "sha256": "29f49ac280f87311841deb21dc5c0e07d6c126d6840c41875ee0053b2600c5c5",
+        "bytes": 28582,
+        "lines": 358
+      },
+      "operation_inventory": {
+        "path": "future-build-phase6/proposals/core/PHASE6_D0_CORE_OPERATION_INVENTORY_PROPOSAL_2026-08-25.json",
+        "sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87",
+        "bytes": 45471,
+        "lines": 307
+      },
+      "closed_error_registry": {
+        "path": "future-build-phase6/proposals/core/PHASE6_D0_CLOSED_ERROR_REGISTRY_1.0.0-draft.1.json",
+        "sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5",
+        "bytes": 17606,
+        "lines": 140
+      },
+      "interface_proposal": {
+        "path": "future-build-phase6/proposals/kosmos-oden/PHASE6_D0_INTERFACE_PROPOSAL.md",
+        "sha256": "476e839fb81f2f936785a38278846d33c7a680a84069607b1188c5ca2609e427"
+      },
+      "governance": {
+        "path": "future-build-phase6/proposals/governance/PHASE6_SOL_ASSIGNMENT_AND_ACCEPTANCE_MATRIX.md",
+        "sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f"
+      },
+      "owner_ratification_sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929",
+      "cross_register_acceptance_sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb"
+    },
+    "accepted_pack": {
+      "root": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1",
+      "manifest_sha256": "e6e045abe5ec77d96f747c5358dca62deca212940f3b32a170099dcddf321463",
+      "manifest_aggregate_digest": "sha256:e3dab5b4ee3da62a845cc92bc9dc9b831ed492f34371104b503587c566300380",
+      "generation_input_digest": "sha256:ec3ece84c71114b0d97cfa23376d37d35fde2f4e6105815d5c5e967ff886cc18",
+      "generator_digest": "sha256:95fcdb91814ecf683461a791f4a4dc99ede9d279abba87ee59a9d08cce23ba68",
+      "pack_leaves": 34,
+      "manifest_hashed_leaves": 33
+    },
+    "accepted_leaf_evidence": [
+      {
+        "path": "audit-receipt.schema.json",
+        "sha256": "d1967a7b49129774ccd15e2122da328d2a8a8da4bb82b861fe5f560ab4e9187d",
+        "bytes": 45913,
+        "lines": 1651
+      },
+      {
+        "path": "operation-inventory.json",
+        "sha256": "2b021e831a53384e551b5719e06c469ed349a8e4888099024fa580caec58c5fc",
+        "bytes": 23609,
+        "lines": 550
+      },
+      {
+        "path": "operation-inventory.schema.json",
+        "sha256": "5f6270b0af34ede781198de2b4a88ae2c11a78c2fdabf6b7df0674c26b2b27b7",
+        "bytes": 35124,
+        "lines": 1498
+      },
+      {
+        "path": "bootstrap-migration.schema.json",
+        "sha256": "e4962ba09df469091bf8e66067c44dbab353ca4a64318264d2b337c5bb3cd15d",
+        "bytes": 897,
+        "lines": 42
+      },
+      {
+        "path": "migration.schema.json",
+        "sha256": "b3763d21252af01cc49d1e23fdddcaae642d97b3970b7e7923d2b6dd601fe7da",
+        "bytes": 3600,
+        "lines": 147
+      },
+      {
+        "path": "request.schema.json",
+        "sha256": "71daa507a5942bce57fd02a4dc2d38044a339d45827f573829c8a7467c5b7959",
+        "bytes": 6877,
+        "lines": 257
+      },
+      {
+        "path": "activity.schema.json",
+        "sha256": "dca4bc32cb69c82a9cec146459cc5b17d6a9d91a049757e531ecae4f7229b5ef",
+        "bytes": 6570,
+        "lines": 241
+      },
+      {
+        "path": "error.schema.json",
+        "sha256": "9cbbd1d83decfc59859e3d6ac541e7d3ecfae25a51f21d2b2a5a31bdce832d70",
+        "bytes": 3238,
+        "lines": 121
+      },
+      {
+        "path": "limits.schema.json",
+        "sha256": "4b5d67074fdf324776d52ba1f11b8837a1954d41a652d1ddc108707511ac7097",
+        "bytes": 7120,
+        "lines": 335
+      },
+      {
+        "path": "canonical-fixture.json",
+        "sha256": "07224c5d20a44bd86de7de7828ba43ccea840e6ebef3084eb07f3c53b80f4eb9",
+        "bytes": 3813,
+        "lines": 150
+      },
+      {
+        "path": "race-fixture.json",
+        "sha256": "a4d4bc27162b331df1c54f73bba66b3792f21776bbabd653364b568a5b51f4a1",
+        "bytes": 1172,
+        "lines": 42
+      },
+      {
+        "path": "security-fixture.json",
+        "sha256": "52d9010f76d77245202b97271a46de3ef8021651073f32bb0264f0dc097191d3",
+        "bytes": 1011,
+        "lines": 42
+      },
+      {
+        "path": "migration-fixture.json",
+        "sha256": "409046ba9ef75370098a2fba436b64c5d565506d52f139da4aa6209c340816fe",
+        "bytes": 1064,
+        "lines": 42
+      },
+      {
+        "path": "conformance.schema.json",
+        "sha256": "380fda1fab5ce397b95ebdc51c1da69079de39581f037f1be8712437233306eb",
+        "bytes": 1330,
+        "lines": 65
+      },
+      {
+        "path": "mcp-conformance-fixture.json",
+        "sha256": "f3dde86c43973a55c72d804ab46bbcbca96d5431da4824243614415467dc7f23",
+        "bytes": 61620,
+        "lines": 1782
+      },
+      {
+        "path": "tool-registry.schema.json",
+        "sha256": "b41530d92655f52634584db0436b6e3d9bd55aece72bb6ae48cc05878db50087",
+        "bytes": 51538,
+        "lines": 2094
+      }
+    ],
+    "f2_read_only_snapshot": {
+      "product_head": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+      "operations": {
+        "path": "src/identity-authority/operations.ts",
+        "sha256": "78e2a9de7148ff80445a106da55395948784a3f66afb35a0367a27631fbb9d51",
+        "bytes": 82586,
+        "lines": 203
+      },
+      "sqlite": {
+        "path": "src/identity-authority/sqlite.ts",
+        "sha256": "f8a4a105bac3aafe3827638237dc05e5bd28d981e6e6f372b9a766c62879ab01",
+        "bytes": 13548,
+        "lines": 46
+      },
+      "filesystem": {
+        "path": "src/identity-authority/filesystem.ts",
+        "sha256": "15b22aee9f4c9c82f8a8c0fae43b9bcbb7e89ac51ab4ec7b859315c71dc71cb7",
+        "bytes": 4730,
+        "lines": 75
+      },
+      "validation": {
+        "path": "src/identity-authority/validation.ts",
+        "sha256": "872f8a075679077e40404195470028d45c4f5af172213529ceff073ebe8ee492",
+        "bytes": 3605,
+        "lines": 15
+      },
+      "test": {
+        "path": "test/phase6-f2-authority.test.mjs",
+        "sha256": "590f6d612ee4ea585e799d03d6afd7ffad28e0c281569946e73812a7d38722d2",
+        "bytes": 7527,
+        "lines": 55
+      }
+    }
+  },
+  "method": [
+    "Verified every supplied input hash and the accepted product commit locally.",
+    "Verified that the current worktree has zero differences from e29e04bdad1cd192a25eba2d682a4c46774def28 under the accepted identity-contract pack root.",
+    "Compared ratified D0 core-spec controlling sections, the decision record, the exact operation proposal, and the closed error registry to every relevant accepted schema, instance, fixture, and manifest leaf.",
+    "Read the uncommitted F2 source only to classify the stop's implementation observations; no runtime or qualification command was executed."
+  ],
+  "reported_contract_stop_claims": [
+    {
+      "id": "F2-D0-15-ANCHOR-RECORD-UNDERBOUND",
+      "determination": "REPRODUCED",
+      "severity": "BLOCKER",
+      "classification": "TRUE_F1_CONTRACT_GENERATION_GAP; D0 semantics are substantially clear, with a few field-name/variant questions needing owner ratification",
+      "d0_evidence": [
+        "core spec lines 239-242 requires database header, state, candidate event/database, and predecessor anchor digest",
+        "core spec lines 262-271 requires mutation intent expected committed anchor, old event head, proposed next event head, and committed predecessor anchor digest",
+        "core spec lines 947-949 declares these the exact external authority_anchor fields"
+      ],
+      "accepted_evidence": [
+        "audit-receipt.schema.json lines 3-51 closes authority_anchor with only ten properties",
+        "audit-receipt.schema.json lines 53-64 requires only those ten properties",
+        "accepted leaf sha256 d1967a7b49129774ccd15e2122da328d2a8a8da4bb82b861fe5f560ab4e9187d"
+      ],
+      "conclusion": "additionalProperties:false makes every required intent/predecessor/database binding unrepresentable."
+    },
+    {
+      "id": "F2-D0-15-RESTORE-EVENT-UNDERBOUND",
+      "determination": "REPRODUCED",
+      "severity": "BLOCKER",
+      "classification": "TRUE_F1_CONTRACT_GENERATION_GAP",
+      "d0_evidence": [
+        "core spec lines 314-327 freezes authority_restore actor/request, old/new authority, replacement owner/credential/auth epoch/locator, aggregate, database, and head bindings",
+        "core spec lines 357-377 freezes the mutually exclusive authority_restore_abort fields and tombstone semantics",
+        "core spec line 937 requires discriminated variants that reject each other's fields",
+        "decision record lines 131-140 independently repeats the same restore/abort contract"
+      ],
+      "accepted_evidence": [
+        "audit-receipt.schema.json lines 1221-1390 has one undifferentiated closed property set",
+        "audit-receipt.schema.json lines 1392-1423 requires only generic coordinates plus restore_plan_digest, backup_digest, candidate_credential_digest, three booleans, and nullable tombstone_digest",
+        "it has no request_id, actor credential, old/new named coordinates, replacement owner identity/auth epoch/locator, revoked/closed/invalidated aggregates, restored database digest, expected temporary identity/content/protection, disposition, or abort-intent digest"
+      ],
+      "conclusion": "Neither restore variant can be represented, and the accepted schema does not reject cross-variant hybrids."
+    },
+    {
+      "id": "F2-D0-15-RETENTION-STATE-ABSENT",
+      "determination": "REPRODUCED",
+      "severity": "BLOCKER",
+      "classification": "TRUE_D0_COMPLETENESS_GAP_AND_F1_SCHEMA_GAP",
+      "d0_evidence": [
+        "core spec lines 976-981 freezes one prospective vault-wide owner override of 7..365 days",
+        "core spec lines 1377-1379 freezes the batch, default, and override limits",
+        "operation inventory proposal line 303 and accepted inventory lines 498-508 make retention.set an F2 owner mutation"
+      ],
+      "accepted_evidence": [
+        "audit-receipt.schema.json authority_meta lines 145-219 has no retention_days or retention_effective_from property",
+        "authority_meta required list lines 220-236 has no durable retention value",
+        "none of the other exact 16 table-record schemas stores the current value; retention receipts and batches retain digests only"
+      ],
+      "conclusion": "The current override cannot be reconstructed after restart. D0 requires durability but did not name its exact storage fields, so the owner must ratify those names rather than treating an F2 choice as authority."
+    },
+    {
+      "id": "F2-D0-15-RESTORE-HANDOFF-RECOVERY-DISCOVERY",
+      "determination": "REPRODUCED",
+      "severity": "BLOCKER",
+      "classification": "TRUE_D0_OPERATION_INVENTORY_GAP",
+      "d0_evidence": [
+        "core spec lines 329-341 requires fail-closed recovery after RESTORE_PLAN_STAGED",
+        "core spec lines 343-355 says the authenticated old owner may invoke abort using the durable plan",
+        "core spec lines 389-404 requires missing/corrupt temporary recovery and abort vectors"
+      ],
+      "accepted_evidence": [
+        "accepted inventory has exactly 32 operations and 24 OWNER_ONLY operations at lines 4-8",
+        "authority.restore is at lines 304-314, authority.restore.abort at 319-328, and authority.status at 333-343",
+        "restore_abort_request requires restore_plan_id at operation-inventory.schema.json lines 944-949",
+        "authority.status_result has no active restore-plan coordinate, and no operation discovers or inspects a restore plan"
+      ],
+      "conclusion": "A call that fails after plan fsync can return no success result, the six-field error envelope cannot carry a plan ID, and the owner has no ratified way to learn the required abort input."
+    }
+  ],
+  "additional_contract_findings": [
+    {
+      "id": "D0-15-ADD-RESTORE-PLAN-RECORD-UNSCHEMATIZED",
+      "severity": "BLOCKER",
+      "classification": "D0_SEMANTIC_RECORD_WITH_NO_F1_MACHINE_SCHEMA",
+      "evidence": [
+        "core spec lines 295-304 freezes durable RESTORE_PLAN_STAGED and RESTORE_OWNER_LOCATOR_STAGED external records",
+        "core spec lines 343-375 freezes RESTORE_ABORT_INTENT and the paired ABORTED external tombstone",
+        "the accepted pack contains restore_plan_id request/result scalars but no restore_plan or restore_abort_intent schema; pack-wide search finds no RESTORE_PLAN_STAGED, RESTORE_OWNER_LOCATOR_STAGED, or RESTORE_ABORT_INTENT token"
+      ],
+      "impact": "F2 cannot validate, digest, recover, or prove the external plan/abort bytes against accepted contract bytes."
+    },
+    {
+      "id": "D0-15-ADD-BOOTSTRAP-STATE-CONTRADICTION",
+      "severity": "BLOCKER",
+      "classification": "F1_GENERATED_STATE_MODEL_CONTRADICTS_RATIFIED_D0",
+      "evidence": [
+        "core spec lines 499-513 and 1148-1160 requires DB_COMMITTED, ANCHOR_COMMITTED, LEGACY_ACTIVE, LEGACY_REVOKED, and BLOCKED",
+        "decision record line 140 freezes the same sequence",
+        "bootstrap-migration.schema.json lines 15-27 and migration.schema.json lines 99-111 instead use DB_PUBLISHED, LEGACY_REMOVED, and RECOVERY_REQUIRED and omit ANCHOR_COMMITTED, LEGACY_ACTIVE, LEGACY_REVOKED, and BLOCKED",
+        "authority_meta.bootstrap_state is an arbitrary 1..64 character string at audit-receipt.schema.json lines 157-160"
+      ],
+      "impact": "The accepted machine contract cannot express the ratified migration state machine and permits unratified states."
+    },
+    {
+      "id": "D0-15-ADD-REQUEST-STALE-STATE-ABSENT",
+      "severity": "BLOCKER",
+      "classification": "F1_SCHEMA_OMISSION",
+      "evidence": [
+        "core spec line 1050 requires request state stale when disable wins before the final gate",
+        "request.schema.json lines 204-212 permits only admitted, executing, committed, rejected, failed, and cancelled"
+      ],
+      "impact": "The deterministic race winner cannot be persisted through the accepted closed request record."
+    },
+    {
+      "id": "D0-15-ADD-SNAPSHOT-PAYLOAD-AND-BINDING-ABSENT",
+      "severity": "BLOCKER",
+      "classification": "D0_FIELD_TYPE_AMBIGUITY_AND_F1_SCHEMA_OMISSION",
+      "evidence": [
+        "core spec lines 553-558 says page snapshots materialize authorized redacted summary bytes and survive as rows until receipted expiry",
+        "core spec lines 709-719 and operation proposal line 25 require graph snapshots to bind scope-ref digest, session, agent, auth epoch, generation, policy decision, physical identity, at, state, and ordering",
+        "audit-receipt.schema.json lines 854-963 stores only an integer canonical_bytes count, digest, and generic filter/order fields; required list lines 964-985 has no payload, policy_decision_id, scope_ref_digest, physical_identity_digest, at, or state"
+      ],
+      "impact": "A restart cannot reconstruct a page, and the graph authorization tuple is not independently machine-bound. Cursor rows are structurally complete but depend on this deficient snapshot."
+    },
+    {
+      "id": "D0-15-ADD-SOLE-ERROR-ENVELOPE-CONTRADICTION",
+      "severity": "BLOCKER",
+      "classification": "F1_SCHEMA_CONTRADICTS_D0_AND_ITS_OWN_MCP_SCHEMA",
+      "evidence": [
+        "core spec lines 1217-1230 and the error registry envelope require exactly contract_version, error_code, request_id, retryable, retry_after_ms, error_digest and forbid message/detail",
+        "accepted error.schema.json lines 6-109 declares code, message, details and omits error_code and error_digest; lines 110-118 require the wrong seven fields",
+        "accepted tool-registry.schema.json lines 342-388 independently contains the correct six-field envelope"
+      ],
+      "impact": "CLI/HTTP/private-authority consumers and MCP consumers are governed by incompatible accepted error schemas."
+    },
+    {
+      "id": "D0-15-ADD-REQUIRED-RECOVERY-VECTORS-ABSENT",
+      "severity": "BLOCKER",
+      "classification": "D0_INTERNAL_COUNT_CONTRADICTION_AND_F1_FIXTURE_OMISSION",
+      "evidence": [
+        "core spec lines 389-407 and decision record lines 142-153 say F1 freezes RESTORE-OWNER-001 through RESTORE-OWNER-009 and BOOTSTRAP-LOCATOR-ROLLBACK-001",
+        "race-fixture.json contains only four generic race IDs at lines 6-39; migration-fixture.json contains only BOOTSTRAP-SOURCE-001..004 at lines 6-39",
+        "conformance.schema.json lines 23-50 requires only id, expect, and assertion strings, so the core fixtures do not carry exact setup, stimulus, bytes, crash point, code, state, mutation count, event count, reveal count, or digest outcomes",
+        "decision record lines 171-172 separately freezes an eight-vector F1 core-operation count, creating a ratified count/coverage ambiguity"
+      ],
+      "impact": "The most security-sensitive crash and abort semantics are prose-only and could not reject a nonconforming F2 implementation."
+    },
+    {
+      "id": "D0-15-ADD-VECTOR-ID-COORDINATE-CONTRADICTION",
+      "severity": "MAJOR",
+      "classification": "CROSS_REGISTER_COORDINATE_DRIFT_WITH_MOST_SEMANTICS_PRESENT",
+      "evidence": [
+        "decision record line 203 freezes 24 ERROR-* vector IDs, while accepted mcp-conformance-fixture.json uses MCP-HTTP-005..025, MCP-METHOD-001 and MCP-TOOL-001 at lines 339-1111",
+        "core spec lines 543-546 freezes CURSOR-CANONICAL-001, CURSOR-ALIAS-001 and CURSOR-ALIAS-002, while canonical-fixture.json lines 126-147 uses cursor-canonical-E, cursor-alias-B and cursor-alias-D; the MCP fixture separately uses SCHEMA-CURSOR-003..005"
+      ],
+      "impact": "The scenario semantics largely exist, but the ratified evidence coordinates do not resolve to accepted fixture IDs."
+    },
+    {
+      "id": "D0-15-ADD-POLICY-LIMIT-AND-IDENTIFIER-DOMAIN-DRIFT",
+      "severity": "MAJOR",
+      "classification": "F1_SCHEMA_CONTRADICTION",
+      "evidence": [
+        "core spec line 1336 and limits.schema.json lines 168-170 freeze 16 policy reason codes, but audit-receipt.schema.json lines 1043-1051 permits 32",
+        "core spec line 1331 and operation proposal lines 71-81 freeze operation/capability identifiers at 64 ASCII characters, while request.schema.json lines 163-167 and audit-receipt.schema.json lines 771-774, 911-914, and 1011-1014 permit 128-character strings; several are not restricted to ASCII"
+      ],
+      "impact": "Schemas accept records beyond ratified hard ceilings."
+    },
+    {
+      "id": "D0-15-ADD-RATE-AND-ACTIVITY-DOMAINS-UNDERBOUND",
+      "severity": "MAJOR",
+      "classification": "D0_MACHINE_DOMAIN_INCOMPLETE",
+      "evidence": [
+        "core spec lines 1301-1316 freezes four distinct bucket classes and exact persistence/refill behavior, but rate_bucket.bucket_class is an arbitrary string at audit-receipt.schema.json lines 1150-1153",
+        "core spec lines 959-963 freezes six base activity metadata keys, but activity.schema.json lines 120-139 permits any integer/string/null value under those keys without per-key domains",
+        "policy reason sorting is normative at core spec line 929 but the schema only enforces uniqueness, not order"
+      ],
+      "impact": "Machine records cannot prove the exact bucket class, per-key metadata type, or sorted policy reasons."
+    },
+    {
+      "id": "D0-15-ADD-EVENT-KIND-TABLE-MAPPING-UNDERBOUND",
+      "severity": "MAJOR",
+      "classification": "D0_OWNER_DECISION_REQUIRED",
+      "evidence": [
+        "core spec lines 218-237 requires one event chain and rejection of an event outside its declared kind table",
+        "event_kind is an arbitrary 1..64 string in the accepted identity audit, retention, outbox, and restore definitions, including restore_event lines 1315-1318",
+        "D0 does not freeze the exact event_kind spelling for each table"
+      ],
+      "impact": "The required kind-to-table invariant has no closed machine discriminator."
+    }
+  ],
+  "requested_dependency_coverage": {
+    "authority_anchor": "BLOCKED: intent, database, predecessor and head transition fields absent",
+    "restore_event": "BLOCKED: both variants underbound and not discriminated",
+    "retention": "BLOCKED: durable current policy absent",
+    "restore_plan_and_abort_callable_path": "BLOCKED: plan/abort-intent schema and discovery path absent",
+    "bootstrap": "BLOCKED: accepted state vocabulary contradicts D0",
+    "global_event_chain": "PARTIAL: global sequence, predecessor and before/after coordinates exist, but event_kind/table closure and several event-specific payloads do not",
+    "request": "BLOCKED: dependencies exist, but the required stale terminal state is absent and operation limit is too wide",
+    "activity": "PARTIAL: request/policy/input/result dependencies exist, but metadata value domains are underbound",
+    "policy": "PARTIAL: request/session/agent/authority dependencies exist, but reason limit is wrong and sortedness is unproved",
+    "rate": "PARTIAL: authority/agent/token/refill fields exist, but bucket class and conditional agent binding are unclosed",
+    "outbox": "PARTIAL: request/policy/input/plan/effect/recovery fields and event coordinates exist; it still depends on the deficient anchor-intent contract and open event_kind",
+    "snapshot": "BLOCKED: no materialized bytes and incomplete graph authorization tuple",
+    "cursor": "STRUCTURALLY_ADEQUATE_BUT_DEPENDENCY_BLOCKED: cursor binds snapshot, identity, authority, operation/filter/page/order/time, but cannot survive restart without a complete durable snapshot"
+  },
+  "f2_implementation_observation_audit": [
+    {
+      "claim": "Current backup and anchor records use field names outside the accepted closed schemas.",
+      "determination": "REPRODUCED_MIXED",
+      "classification": "IMPLEMENTATION_BUG_PLUS_ANCHOR_CONTRACT_GAP",
+      "evidence": "operations.ts line 147 writes source_vault_id/source_authority_instance_id/source_restore_epoch/source_authority_generation/database_bytes/database_digest instead of accepted backup fields at audit-receipt.schema.json lines 68-140; operations.ts line 201 writes last_generation/state plus D0-required fields rejected by the accepted anchor schema."
+    },
+    {
+      "claim": "Current restore produces a hybrid database instead of publishing the fully qualified backup snapshot.",
+      "determination": "REPRODUCED",
+      "classification": "F2_IMPLEMENTATION_BUG",
+      "evidence": "operations.ts lines 154-160 deletes and repopulates only identity/mapping/session/page tables inside the current database while retaining current requests, activities, policy decisions, rate buckets, bootstrap rows, retention rows, outbox rows and other history; core spec lines 306-312 requires a fully built candidate and atomic database swap."
+    },
+    {
+      "claim": "Current bootstrap omits durable OWNER_PROVED and the legacy LEGACY_REMOVED branch.",
+      "determination": "PARTIALLY_REPRODUCED_AND_MISNAMED",
+      "classification": "F2_IMPLEMENTATION_BUG_PLUS_F1_D0_STATE_CONTRADICTION",
+      "evidence": "operations.ts lines 55-57 advances directly to PLAN_STAGED and lines 62-72 uses DB_PUBLISHED then OWNER_ACTIVE then COMPLETE. OWNER_PROVED is truly omitted. LEGACY_REMOVED is an accepted-F1 stale token, not the ratified D0 branch; D0 requires LEGACY_ACTIVE -> LEGACY_REVOKED -> COMPLETE."
+    },
+    {
+      "claim": "Current public final race check omits equality of authority_generation.",
+      "determination": "CLAIM_AS_WORDED_UNFOUNDED; ADJACENT_FINAL_GATE_BUG_REPRODUCED",
+      "classification": "NO_D0_REQUIREMENT_FOR_UNCONDITIONAL_GENERATION_EQUALITY",
+      "evidence": "core spec lines 1019-1025 expressly says an unrelated global generation change must not gratuitously stale this agent; equality would violate that rule. operations.ts line 174 does, however, omit final session-state and policy/configuration digest revalidation required by core spec lines 1037-1044."
+    },
+    {
+      "claim": "Current persisted policy reason_codes and activity metadata are SQL text rather than accepted JSON values.",
+      "determination": "REPRODUCED",
+      "classification": "F2_IMPLEMENTATION_BUG",
+      "evidence": "operations.ts line 172 seals reason_codes as the string \"[]\"; lines 195-196 seal metadata as \"{}\" or canonicalJson text. Accepted schemas require an array and object respectively."
+    },
+    {
+      "claim": "Current stale-lock takeover does not bind deletion to the originally inspected file identity.",
+      "determination": "REPRODUCED",
+      "classification": "F2_IMPLEMENTATION_BUG",
+      "evidence": "filesystem.ts line 62 reads the existing lock and later calls removePrivateExact(path); lines 47-49 re-lstat and unlink the then-current pathname without comparing it to the previously read handle identity."
+    },
+    {
+      "claim": "Current credential.issue advances auth_epoch and silently makes prior active credentials unusable.",
+      "determination": "REPRODUCED",
+      "classification": "F2_IMPLEMENTATION_BUG",
+      "evidence": "operations.ts lines 137-142 increments the agent epoch on issue while leaving earlier active credential issue coordinates unchanged; authenticate lines 77-80 and authenticateCredentialId line 194 require auth_epoch_issued to equal current_auth_epoch. This conflicts with D0's allowance of up to four concurrently active attributable credentials at core spec lines 842-844."
+    },
+    {
+      "claim": "Several frozen capacity and authentication-failure rate limits are not yet enforced.",
+      "determination": "REPRODUCED",
+      "classification": "F2_IMPLEMENTATION_BUG_WITH_ADJACENT_BUCKET_CLASS_CONTRACT_GAP",
+      "evidence": "operations.ts line 197 implements only per-operation global and agent request buckets; it has no per-selector authentication-failure bucket, global authentication-failure bucket, 4096 unknown-selector bound, or >300000 ms clock-divergence failure required by core spec lines 1301-1316."
+    },
+    {
+      "claim": "Persisted page cursor metadata depends on process-memory page entries and cannot survive restart.",
+      "determination": "REPRODUCED_MIXED",
+      "classification": "F2_IMPLEMENTATION_BUG_PLUS_SNAPSHOT_CONTRACT_GAP",
+      "evidence": "operations.ts line 40 holds pageEntries in a Map; lines 165-167 require that map on continuation and return stale when absent. The accepted page_snapshot schema itself has no payload field, so the runtime defect cannot be repaired without a contract correction."
+    }
+  ],
+  "bounded_contract_correction": {
+    "rule": "No item below is authorization to edit. The Product Owner must first ratify exact corrected semantics and machine fields. The correction must regenerate the accepted pack from corrected sources; F2 must not locally invent equivalent fields.",
+    "preferred_operation_count": {
+      "total": 32,
+      "PUBLIC_AUTHENTICATED": 7,
+      "LOCAL_BOOTSTRAP": 1,
+      "OWNER_ONLY": 24,
+      "method": "Keep the operation count unchanged by making existing owner-only authority.status recovery-callable and adding required nullable active_restore_plan_id, active_restore_plan_state, active_restore_plan_digest, and restore_abort_permitted fields to authority_status_result. Add request/result semantics stating that authenticated authority.status is callable with write_gate open, recovery_required, or blocked and returns the unique active plan. authority.restore.abort remains the only mutation and continues to require restore_plan_id.",
+      "alternative_requiring_owner_amendment": "If the owner rejects status-based discovery, add owner-only authority.restore.inspect. Counts become 33 total, 25 OWNER_ONLY; the operation proposal, schema constants, instances, documentation, tests, and evidence counts must all change. It remains unadvertised through MCP."
+    },
+    "schema_corrections": [
+      {
+        "surface": "audit-receipt.schema.json#/$defs/authority_anchor",
+        "shape": "closed oneOf discriminated by anchor_state",
+        "all_required_common_fields": {
+          "contract_version": "const 1.0.0-draft.1",
+          "vault_id": "uuidv7",
+          "authority_instance_id": "uuidv7",
+          "restore_epoch": "integer 1..MAX_SAFE_INTEGER",
+          "authority_generation": "integer 1..MAX_SAFE_INTEGER",
+          "global_event_seq": "integer 1..MAX_SAFE_INTEGER",
+          "global_event_head_digest": "sha256",
+          "database_header_digest": "sha256",
+          "anchor_state": "MUTATION_INTENT|RESTORE_INTENT|COMMITTED",
+          "candidate_event_digest": "sha256|null",
+          "candidate_database_digest": "sha256|null",
+          "expected_committed_anchor_digest": "sha256|null",
+          "old_event_head_digest": "sha256|null",
+          "proposed_next_event_head_digest": "sha256|null",
+          "predecessor_anchor_digest": "sha256|null",
+          "updated_at": "strict .sssZ timestamp",
+          "anchor_digest": "sha256"
+        },
+        "variant_rule": "Intent branches require non-null candidate/expected/old/proposed fields. COMMITTED requires the predecessor digest except at bootstrap genesis and rejects intent-only values. The owner must freeze whether the genesis predecessor is null or the empty-string digest and whether RESTORE_INTENT carries old or proposed top-level authority coordinates."
+      },
+      {
+        "surface": "audit-receipt.schema.json#/$defs/restore_event",
+        "shape": "two separately closed oneOf branches sharing event-common fields",
+        "authority_restore_required_fields": [
+          "action const authority_restore",
+          "target_type const authority_instance",
+          "target_id uuidv7 equal to new_authority_instance_id",
+          "request_id uuidv7",
+          "pre_restore_actor_agent_id uuidv7",
+          "pre_restore_actor_credential_id credential_id",
+          "restore_plan_id uuidv7 and restore_plan_digest sha256",
+          "backup_id uuidv7 and backup_manifest_digest sha256",
+          "old_authority_instance_id uuidv7, old_restore_epoch integer, old_authority_generation integer, old_global_event_seq integer, old_global_event_head_digest sha256",
+          "new_authority_instance_id uuidv7, new_restore_epoch integer, new_authority_generation integer",
+          "replacement_owner_agent_id uuidv7, replacement_owner_credential_id credential_id, replacement_owner_auth_epoch integer, replacement_locator_binding_digest sha256",
+          "revoked_credential_count integer and revoked_credentials_digest sha256",
+          "closed_session_count integer and closed_sessions_digest sha256",
+          "invalidated_request_count/cursor_count/snapshot_count/idempotency_count integers with matching sha256 aggregate digests",
+          "restored_database_digest sha256",
+          "replacement_credential_active const true, database_publication_started const true, anchor_publication_started const true"
+        ],
+        "authority_restore_abort_required_fields": [
+          "action const authority_restore_abort",
+          "target_type const restore_plan",
+          "target_id uuidv7 equal to restore_plan_id",
+          "request_id uuidv7 and authenticated actor agent/credential IDs",
+          "equal old before/after instance, restore epoch and pre-mutation authority coordinates",
+          "restore_plan_id/digest, backup_id/manifest digest, candidate_database_digest",
+          "proposed new authority instance/restore epoch/generation",
+          "abandoned_credential_id and abandoned_credential_digest",
+          "expected_temporary_path_binding_digest, expected_temporary_physical_identity_digest, expected_temporary_content_digest, expected_temporary_protection_digest, expected_temporary_owner_digest",
+          "temporary_disposition enum deleted_exact|absent|preserved_unsafe",
+          "replacement_credential_active const false, database_publication_started const false, anchor_publication_started const false",
+          "abort_intent_digest sha256 and tombstone_digest sha256"
+        ],
+        "exclusion_rule": "Each branch uses additionalProperties:false and rejects every field exclusive to the other branch. Exact aggregate partition and new-head representation require the owner decisions listed below."
+      },
+      {
+        "surface": "audit-receipt.schema.json new $defs restore_plan and restore_abort_intent",
+        "shape": "external protected canonical records; no new pack leaf",
+        "restore_plan_all_required_fields": [
+          "contract_version, vault_id, restore_plan_id, initiating_request_id",
+          "state enum RESTORE_PLAN_STAGED|RESTORE_OWNER_LOCATOR_STAGED|RESTORE_INTENT|COMMITTED|ABORTED",
+          "backup_id, backup_manifest_digest, candidate_database_digest, prior_anchor_digest",
+          "old and proposed authority instance/restore epoch/generation coordinates",
+          "replacement owner agent/credential/auth epoch and credential digest",
+          "canonical temporary locator name or path binding, physical identity digest, content digest, protection digest, owner digest, regular-file const true, no-link const true",
+          "final locator binding digest nullable",
+          "database_publication_started and anchor_publication_started booleans",
+          "created_at, updated_at, plan_digest"
+        ],
+        "restore_abort_intent_all_required_fields": [
+          "contract_version, vault_id, restore_plan_id, restore_plan_digest, abort_request_id",
+          "authenticated actor agent/credential IDs and old authority coordinates",
+          "the exact expected temporary locator identity/content/protection/owner bindings",
+          "candidate_database_digest, abort_started_at, abort_intent_digest"
+        ]
+      },
+      {
+        "surface": "audit-receipt.schema.json#/$defs/authority_meta",
+        "changes": [
+          "add required retention_days integer 7..365",
+          "add required retention_effective_from strict .sssZ timestamp",
+          "replace bootstrap_state free string with the owner-ratified exact enum",
+          "initialize retention_days=90; retention.set changes both fields in the receipted authority transaction"
+        ]
+      },
+      {
+        "surface": "bootstrap-migration.schema.json and migration.schema.json",
+        "changes": [
+          "replace DB_PUBLISHED with DB_COMMITTED",
+          "add ANCHOR_COMMITTED, LEGACY_ACTIVE, LEGACY_REVOKED and BLOCKED",
+          "remove LEGACY_REMOVED and RECOVERY_REQUIRED as state names",
+          "freeze exact transitions UNINITIALIZED -> OWNER_PROVED -> PLAN_STAGED -> OWNER_LOCATOR_STAGED -> DB_COMMITTED -> ANCHOR_COMMITTED -> OWNER_ACTIVE, then COMPLETE or LEGACY_ACTIVE -> LEGACY_REVOKED -> COMPLETE",
+          "represent the pre-database bootstrap plan as a closed external canonical record so OWNER_PROVED and locator staging are durable before a SQLite row exists"
+        ]
+      },
+      {
+        "surface": "request.schema.json",
+        "changes": [
+          "add stale to the required state enum",
+          "reduce operation to the D0 operation/capability grammar and maximum 64 ASCII characters"
+        ]
+      },
+      {
+        "surface": "audit-receipt.schema.json#/$defs/page_snapshot and page_cursor",
+        "changes": [
+          "replace ambiguous integer canonical_bytes with required canonical_byte_length integer 0..524288 plus required canonical_payload_base64url containing the actual canonical UTF-8 snapshot bytes, with strict decode length equality and canonical re-encode",
+          "add required policy_decision_id uuidv7, scope_ref_digest sha256|null, physical_identity_digest sha256|null, temporal_at timestamp|null, temporal_state valid|superseded|not_yet_created|all|null, and authorization_binding_digest sha256",
+          "freeze authorization_binding_digest preimage over session, agent, auth epoch, authority coordinates, policy decision, scope/physical/filter/temporal/order bindings",
+          "add policy_decision_id and authorization_binding_digest to page_cursor or require exact equality through its referenced snapshot; keep existing cursor/snapshot FK and all existing authority/page/time fields"
+        ]
+      },
+      {
+        "surface": "error.schema.json",
+        "changes": [
+          "replace code with required error_code enum of exactly 53 registered codes",
+          "remove message and details",
+          "add required error_digest sha256",
+          "retain required contract_version, request_id uuidv7|null, retryable boolean, retry_after_ms integer 0..60000|null",
+          "keep additionalProperties:false and make it byte/field-equivalent to tool-registry.schema.json#/$defs/error_envelope"
+        ]
+      },
+      {
+        "surface": "policy_decision, activity, rate_bucket and event schemas",
+        "changes": [
+          "policy reason_codes maxItems 16, ASCII <=64 bytes, unique and runtime-verified sorted",
+          "capability/operation fields use the exact 64-ASCII D0 grammar",
+          "activity metadata assigns nonnegative integer types to input_bytes/output_bytes/item_count/result_count and owner-ratified closed enums to cache_outcome/side_effect_class",
+          "rate_bucket.bucket_class becomes agent_request|global_request|credential_selector_auth_failure|global_auth_failure with conditional agent_id/auth_epoch nullability and a frozen bucket-id domain preimage",
+          "event_kind becomes a table-specific const for identity_audit_receipt, retention_batch, effect_outbox_event and restore_event after the owner freezes exact spellings"
+        ]
+      }
+    ],
+    "vector_corrections": {
+      "required_new_or_expanded_vectors": [
+        "RESTORE-OWNER-001 through RESTORE-OWNER-009 with exact pre-state, crash point, expected code/state, file disposition, database/anchor publication, reveal count, event count and digest bindings",
+        "BOOTSTRAP-LOCATOR-ROLLBACK-001 with durable OWNER_LOCATOR_STAGED retry and zero replacement IDs/secrets",
+        "RESTORE-PLAN-DISCOVERY-001 proving failed post-plan restore -> authenticated authority.status -> exact plan ID/digest -> abort",
+        "RETENTION-DURABLE-001 proving set -> restart -> get and prospective cutoff",
+        "REQUEST-STALE-001 proving the persisted stale state and no result/effect/success activity",
+        "SNAPSHOT-RESTART-001 proving a continuation page after process restart from SQLite bytes only",
+        "POLICY-REASONS-001 for 16 accept, 17 reject, duplicate reject, unsorted reject",
+        "RATE-AUTH-FAILURE-001 through 004 for selector/global buckets, unknown-selector cap, and clock divergence",
+        "ERROR-ENVELOPE-001 proving exact six fields and rejection of code/message/details"
+      ],
+      "existing_vector_repairs": [
+        "Give canonical fixture entries actual input_hex/input_json and exact expected canonical bytes/digest/code rather than repeated assertion prose.",
+        "Rename the canonical cursor entries to CURSOR-CANONICAL-001, CURSOR-ALIAS-001 and CURSOR-ALIAS-002, or ratify a closed alias mapping to SCHEMA-CURSOR-003..005.",
+        "Add a closed core_vector_id alias to the 24 existing semantically corresponding MCP cases so all ratified ERROR-* coordinates resolve without changing the 67 official MCP vector IDs.",
+        "Replace generic conformance vector objects with per-kind closed schemas requiring scenario-specific input and expected fields."
+      ],
+      "count_impact": "Declare 8 existing core operation vectors plus 10 required restore/bootstrap recovery vectors as separate counted classes, or amend the total core vector count from 8 to 18. Do not silently preserve the ratified contradiction. MCP vector count remains 67."
+    },
+    "error_registry_impact": {
+      "registry_code_count": 53,
+      "new_public_codes": 0,
+      "new_aliases_required": 0,
+      "rule": "Use existing GKOS_P6_AUTHORITY_CORRUPT, GKOS_P6_STATE_CONFLICT, GKOS_P6_REQUEST_STALE_AUTHORITY, GKOS_P6_INVALID_PARAMS and other ratified projections. No new public error is needed."
+    },
+    "path_manifest_workflow_evidence_impact": {
+      "new_product_paths_required": 0,
+      "pack_leaf_count_after_preferred_correction": 34,
+      "manifest_hashed_leaf_count_after_preferred_correction": 33,
+      "allowed_path_count_after_preferred_correction": 40,
+      "method": "Place restore_plan and restore_abort_intent under existing audit-receipt.schema.json $defs and expand existing fixtures, avoiding a 35th leaf or 41st path.",
+      "existing_paths_that_must_change_at_minimum": [
+        "scripts/generate-agent-identity-mcp-contract.mjs",
+        "test/agent-identity-mcp-contract.test.mjs",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/audit-receipt.schema.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/bootstrap-migration.schema.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration.schema.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/request.schema.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/activity.schema.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error.schema.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.schema.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/conformance.schema.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/canonical-fixture.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/race-fixture.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration-fixture.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/mcp-conformance-fixture.json",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/README.md",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/TECHNICAL_README.md",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
+        "docs/decisions/0006-phase6-agent-identity-mcp-contract.md",
+        "docs/phase6-agent-identity-mcp-contract.md"
+      ],
+      "conditional_existing_paths": [
+        ".github/workflows/phase6-identity-contract.yml if vector/count assertions or artifacts are hard-coded",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/hosted-artifact-inventory.json if its count assertions change",
+        "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.schema.json only if the correct six-field definition is deduplicated by reference rather than retained byte-equivalent",
+        "evidence/2026-08-25-functional-uplift-phase-6-f1.md only in the distinct evidence closeout commit"
+      ],
+      "manifest_rule": "Regenerate every changed leaf deterministically, regenerate pack-manifest.json last, keep it non-self-listing, recompute every size/hash plus generation_input_digest, generator_digest and aggregate_digest.",
+      "qualification_rule": "Create a new corrected F1 input commit and hosted qualification run, preserve the acyclic C_in -> R_q -> C_att protocol, rerun all 11 mandatory jobs plus ordinary CI, obtain a fresh zero-contribution F1 review and owner acceptance, and record new artifact hashes. The old e29 result and review digest cannot qualify corrected bytes."
+    },
+    "public_mcp_and_lite_impact": {
+      "public_mcp_required_tool_count_change": false,
+      "public_mcp_tool_name_or_catalog_change": false,
+      "public_mcp_input_result_semantic_change": false,
+      "public_error_contract_change": "The standalone CLI/HTTP/private-authority error schema must be corrected to the already-ratified six-field envelope; the MCP tool-registry envelope is already shaped correctly. MCP conformance fixture coordinates/aliases still change.",
+      "owner_only_contract_change": true,
+      "lite_rule": "Lite must later copy the entire corrected hosted-green Full pack byte-for-byte and repin the new accepted Full coordinate. No Lite implementation, L1-L4 work, semantic fork, or old-pack compatibility claim is authorized. A fresh Lite conformance reviewer must concur on the error/vector seam."
+    }
+  },
+  "owner_decision_questions": [
+    {
+      "id": "OWNER-Q-ANCHOR-VARIANTS",
+      "question": "Freeze the exact MUTATION_INTENT, RESTORE_INTENT and COMMITTED field names/nullability, including whether genesis predecessor_anchor_digest is null or the empty-string digest and whether RESTORE_INTENT top-level coordinates are old or proposed."
+    },
+    {
+      "id": "OWNER-Q-RESTORE-AGGREGATES",
+      "question": "Freeze the exact revoked/closed/invalidated aggregate partition and field names, plus whether event_digest alone is the new global head or a separate new_global_event_head_digest is required."
+    },
+    {
+      "id": "OWNER-Q-RESTORE-PLAN-PATH",
+      "question": "Freeze the external restore-plan/abort-intent record schema and decide whether it stores a canonical relative temporary locator name, a path-binding digest with derivable name, or a protected raw path. Recovery must not depend on an unspecified side channel."
+    },
+    {
+      "id": "OWNER-Q-RESTORE-DISCOVERY",
+      "question": "Ratify the preferred authority.status discovery design with unchanged 32/24 counts, or explicitly add authority.restore.inspect and amend counts to 33/25."
+    },
+    {
+      "id": "OWNER-Q-BOOTSTRAP-STATE",
+      "question": "Confirm the controlling D0 state vocabulary (DB_COMMITTED, ANCHOR_COMMITTED, LEGACY_ACTIVE, LEGACY_REVOKED, BLOCKED) and reject the generated DB_PUBLISHED/LEGACY_REMOVED/RECOVERY_REQUIRED vocabulary."
+    },
+    {
+      "id": "OWNER-Q-VECTOR-COUNT",
+      "question": "Resolve the decision record's eight-core-vector count against the ten separately required restore/bootstrap vectors by declaring separate counts or amending the total to 18."
+    },
+    {
+      "id": "OWNER-Q-SNAPSHOT-BYTES",
+      "question": "Freeze whether D0's canonical_bytes means the actual canonical payload or a byte count. The correction must store the actual materialized page bytes in the existing page_snapshots table and freeze the graph authorization-binding preimage."
+    },
+    {
+      "id": "OWNER-Q-EVENT-KINDS",
+      "question": "Freeze exact event_kind const values for each of the four event tables so startup can enforce the kind-to-table invariant."
+    },
+    {
+      "id": "OWNER-Q-FINAL-GATE",
+      "question": "Confirm that unrelated authority_generation changes do not stale a request; the required final gate revalidates affected agent/credential/session/policy/recovery bindings rather than requiring unconditional generation equality."
+    },
+    {
+      "id": "OWNER-Q-CREDENTIAL-ISSUE-EPOCH",
+      "question": "Confirm that credential.issue increments the agent epoch to stale work but does not make other status=active credentials unusable; auth_epoch_issued is an issuance coordinate, not a continuing-authentication equality gate."
+    }
+  ],
+  "required_concurrence_and_resume_gate": {
+    "required_roles": [
+      "Product Owner for every D0 semantic amendment and exact corrected schema",
+      "fresh /root/phase6_migration_reviewer for bootstrap, restore plan, crash and recovery state machine",
+      "fresh /root/phase6_security_reviewer for replacement credential, locator, abort, revocation and active-credential semantics",
+      "fresh /root/phase6_full_contract_steward for corrected Full protocol/closed-error bytes",
+      "fresh /root/phase6_lite_conformance_reviewer for error/vector/Lite copy consequences",
+      "fresh zero-contribution F1 independent reviewer for the regenerated exact result",
+      "evidence reviewer for the new hosted run and C_att evidence"
+    ],
+    "resume_conditions": [
+      "Owner decision record resolves every owner question above and ratifies corrected D0 sources.",
+      "Corrected F1 pack is generated without new semantic invention, strict-compiled, vector-complete, deterministically reproduced, manifest-verified, and hosted-green.",
+      "A detached independent review reaches zero blockers against the exact corrected F1 SHA and the Product Owner accepts that coordinate.",
+      "F2 is explicitly reauthorized from the exact corrected predecessor. The current uncommitted F2 bytes are not grandfathered or accepted."
+    ]
+  },
+  "final_statement": "CORRECTION_REQUIRED. This review concurs that the F2 D0-15 stop is necessary, but it is not acceptance of corrected contract bytes, not acceptance of F2, and not implementation authorization."
+}

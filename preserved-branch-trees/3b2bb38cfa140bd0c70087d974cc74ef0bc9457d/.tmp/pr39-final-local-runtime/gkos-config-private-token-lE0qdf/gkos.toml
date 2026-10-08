@@ -1,0 +1,16 @@
+config_version = 1
+[vectors]
+enabled = true
+provider = "openai_compatible"
+provider_id = "operator-vector"
+model_id = "operator-vector-model"
+dimensions = 2
+endpoint = "https://arbitrary.operator.example/embed"
+token_env = "GKOS_PRIVATE_PROVIDER_TOKEN"
+[reranker]
+enabled = true
+provider = "openai_compatible"
+provider_id = "operator-reranker"
+model_id = "operator-reranker-model"
+endpoint = "https://arbitrary.operator.example/rerank"
+token_env = "GKOS_PRIVATE_PROVIDER_TOKEN"

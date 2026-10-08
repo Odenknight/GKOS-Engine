@@ -1,0 +1,31 @@
+{
+  "catalog_version": "SRTP-DRAFT-FIXTURES-0.1.1",
+  "status": "provisional-draft-non-normative",
+  "profile": "SRTP-DRAFT-0.1",
+  "qualifying_profiles": [],
+  "description": "Graph-level SRTP proposal fixtures. Proposal handles are not permanent GKOS requirement IDs. Passing this suite supports only the developmental claim language in docs/proposals/SRTP_DRAFT_PROFILE.md.",
+  "fixtures": [
+    { "fixture_id": "SRTP-P01", "class": "positive-complete-trace", "proposal_handles": ["SRTP-PRESERVE", "SRTP-EXECUTION", "SRTP-ARTIFACT", "SRTP-REVIEW", "SRTP-REENTRY"], "file": "srtp-p01-complete.json", "expect": { "schema": "valid", "diagnostics": [] } },
+    { "fixture_id": "SRTP-P02", "class": "positive-failed-null-result", "proposal_handles": ["SRTP-RESULT"], "file": "srtp-p02-failed-null.json", "expect": { "schema": "valid", "diagnostics": [] } },
+    { "fixture_id": "SRTP-P03", "class": "positive-interrupted-recovered", "proposal_handles": ["SRTP-EXECUTION"], "file": "srtp-p03-interrupted-recovered.json", "expect": { "schema": "valid", "diagnostics": [] } },
+    { "fixture_id": "SRTP-P04", "class": "positive-branched-interpretations", "proposal_handles": ["SRTP-RESULT"], "file": "srtp-p04-branched-interpretations.json", "expect": { "schema": "valid", "diagnostics": [] } },
+    { "fixture_id": "SRTP-P05", "class": "positive-exact-rerun", "proposal_handles": ["SRTP-RERUN"], "file": "srtp-p05-exact-rerun.json", "expect": { "schema": "valid", "diagnostics": [] } },
+    { "fixture_id": "SRTP-P06", "class": "positive-tolerance-rerun", "proposal_handles": ["SRTP-RERUN"], "file": "srtp-p06-tolerance-rerun.json", "expect": { "schema": "valid", "diagnostics": [] } },
+    { "fixture_id": "SRTP-N01", "class": "negative-input-digest-changed", "proposal_handles": ["SRTP-PRESERVE", "SRTP-EXECUTION"], "file": "srtp-n01-input-changed.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-ARTIFACT-001", "SRTP-INPUT-001"] } },
+    { "fixture_id": "SRTP-N02", "class": "negative-missing-environment", "proposal_handles": ["SRTP-EXECUTION"], "file": "srtp-n02-missing-environment.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-ARTIFACT-001", "SRTP-EXEC-001", "SRTP-INPUT-001"] } },
+    { "fixture_id": "SRTP-N03", "class": "negative-missing-code", "proposal_handles": ["SRTP-EXECUTION"], "file": "srtp-n03-missing-code.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-ARTIFACT-001", "SRTP-EXEC-002", "SRTP-INPUT-001"] } },
+    { "fixture_id": "SRTP-N04", "class": "negative-figure-source-mismatch", "proposal_handles": ["SRTP-ARTIFACT"], "file": "srtp-n04-figure-mismatch.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-ARTIFACT-001"] } },
+    { "fixture_id": "SRTP-N05", "class": "negative-untraceable-numeric-claim", "proposal_handles": ["SRTP-REVIEW"], "file": "srtp-n05-untraceable-numeric-claim.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-CLAIM-001"] } },
+    { "fixture_id": "SRTP-N06", "class": "negative-reviewer-self-approval", "proposal_handles": ["SRTP-REVIEW"], "file": "srtp-n06-reviewer-self-approval.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-REVIEW-001"] } },
+    { "fixture_id": "SRTP-N07", "class": "negative-model-conflicts-deterministic", "proposal_handles": ["SRTP-REVIEW"], "file": "srtp-n07-model-conflicts-deterministic.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-REVIEW-002"] } },
+    { "fixture_id": "SRTP-N08", "class": "negative-incomplete-reentry", "proposal_handles": ["SRTP-REENTRY"], "file": "srtp-n08-incomplete-reentry.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-REENTRY-001"] } },
+    { "fixture_id": "SRTP-N09", "class": "negative-sensitivity-lowering", "proposal_handles": ["SRTP-PRESERVE"], "file": "srtp-n09-sensitivity-lowering.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-SENSITIVITY-001"] } },
+    { "fixture_id": "SRTP-N10", "class": "negative-expired-context", "proposal_handles": ["SRTP-EXECUTION"], "file": "srtp-n10-expired-context.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-CONTEXT-001"] } },
+    { "fixture_id": "SRTP-N11", "class": "negative-output-receipt-unavailable", "proposal_handles": ["SRTP-REENTRY"], "file": "srtp-n11-receipt-unavailable.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-REENTRY-002"] } },
+    { "fixture_id": "SRTP-N12", "class": "negative-incompatible-version-coordinate", "proposal_handles": ["SRTP-VERSION-MATRIX"], "file": "srtp-n12-incompatible-version.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-VERSION-001"] } },
+    { "fixture_id": "SRTP-N13", "class": "negative-reentry-omitted-source", "proposal_handles": ["SRTP-REENTRY"], "file": "srtp-n13-omitted-source-reentry.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-REENTRY-001"] } },
+    { "fixture_id": "SRTP-N14", "class": "negative-reentry-unexpected-source", "proposal_handles": ["SRTP-REENTRY"], "file": "srtp-n14-unexpected-source-reentry.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-REENTRY-001"] } },
+    { "fixture_id": "SRTP-N15", "class": "negative-reentry-omitted-artifact", "proposal_handles": ["SRTP-REENTRY"], "file": "srtp-n15-omitted-artifact-reentry.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-REENTRY-001"] } },
+    { "fixture_id": "SRTP-N16", "class": "negative-reentry-unexpected-artifact", "proposal_handles": ["SRTP-REENTRY"], "file": "srtp-n16-unexpected-artifact-reentry.json", "expect": { "schema": "valid", "diagnostics": ["SRTP-REENTRY-001"] } }
+  ]
+}

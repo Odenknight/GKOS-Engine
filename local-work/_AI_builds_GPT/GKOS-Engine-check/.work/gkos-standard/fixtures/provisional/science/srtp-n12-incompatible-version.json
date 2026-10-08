@@ -1,0 +1,1 @@
+{ "extends": "srtp-p01-complete.json", "mutations": [{ "op": "set", "path": "/version_coordinates/projection_profile", "value": "gkx-2.3-validating-projection" }] }

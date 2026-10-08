@@ -1,0 +1,21 @@
+name: Implementation feedback
+description: Report implementation experience against GKOS v0.75
+title: "[Implementation]: "
+labels: ["type:implementation"]
+body:
+  - type: input
+    id: implementation
+    attributes: {label: Implementation and version}
+    validations: {required: true}
+  - type: dropdown
+    id: profile
+    attributes:
+      label: Profile
+      options: [GCP-1, GCP-2, GCP-3, GCP-4, GCP-5, GCP-6, GCP-7, Viewer/Projection, Other]
+  - type: textarea
+    id: findings
+    attributes: {label: Findings and evidence}
+    validations: {required: true}
+  - type: textarea
+    id: interoperability
+    attributes: {label: Interoperability or fixture results}

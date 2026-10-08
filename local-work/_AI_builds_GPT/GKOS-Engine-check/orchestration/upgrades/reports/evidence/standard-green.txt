@@ -1,0 +1,329 @@
+
+> test
+> node --test "test/*.test.mjs" && npm run lint:registries
+
+✔ authority window uses inclusive start and exclusive end (0.8765ms)
+✔ missing, malformed, and inverted time evidence fails closed (0.1448ms)
+✔ exact-expiry refusal preserves protected state and emits a schema-valid receipt (106.1026ms)
+✔ clean-process replay produces identical canonical bytes and hash (236.2498ms)
+▶ known gate missing and mistyped required evidence always refuses without throwing
+  ✔ TA-L1-001 (1.4742ms)
+  ✔ TA-L3-001 (0.3678ms)
+  ✔ TA-L4-001 (0.3335ms)
+  ✔ TA-L4-002 (0.2732ms)
+  ✔ TA-L4-003 (0.2335ms)
+  ✔ TA-L4-004 (0.3244ms)
+  ✔ TA-L5-001 (0.217ms)
+  ✔ TA-L5-002 (0.2584ms)
+  ✔ TA-L5-003 (0.2782ms)
+  ✔ TA-L5-004 (0.6707ms)
+  ✔ TA-L5-005 (1.1759ms)
+  ✔ TA-L5-006 (0.3473ms)
+  ✔ TA-L6-001 (0.7351ms)
+  ✔ TA-L6-002 (0.1901ms)
+  ✔ TA-L6-003 (0.2723ms)
+  ✔ TA-L6-004 (0.4457ms)
+  ✔ TA-L6-005 (0.1572ms)
+  ✔ TA-L6-006 (0.148ms)
+  ✔ TA-L6-007 (0.1586ms)
+  ✔ TA-L6-008 (0.195ms)
+  ✔ TA-L6-009 (0.2007ms)
+  ✔ TA-L7-001 (0.4176ms)
+  ✔ TA-L7-002 (0.1686ms)
+  ✔ TA-L7-003 (0.1607ms)
+  ✔ TA-L7-004 (0.2036ms)
+  ✔ TA-L7-005 (0.1455ms)
+  ✔ TA-L7-006 (0.1431ms)
+  ✔ TA-L7-007 (0.2135ms)
+✔ known gate missing and mistyped required evidence always refuses without throwing (14.0206ms)
+✔ impossible timestamps refuse in encoder, verifier, gate and authority window (7.9086ms)
+✔ lone UTF-16 surrogates refuse instead of replacement encoding, including keys (0.3975ms)
+✔ valid leap dates, microsecond boundaries and Unicode preserve exact positive bytes (4.7565ms)
+✔ direct authority evaluation refuses absent records and coerced time evidence (0.1779ms)
+✔ held contradiction omission refuses with GKOS-GATE-L6-009 (18.5892ms)
+✔ rendered-field mutation refuses with GKOS-GATE-L6-008 (23.9847ms)
+✔ resolved-content mutation refuses with GKOS-GATE-L6-007 (7.1363ms)
+✔ machine-readable applicability and evidence vocabularies satisfy their schemas (50.6324ms)
+✔ unexecuted graph expectations block fixture and profile PASS (1755.8884ms)
+PASS  SRTP-P01 — diagnostics: none
+PASS  SRTP-P02 — diagnostics: none
+PASS  SRTP-P03 — diagnostics: none
+PASS  SRTP-P04 — diagnostics: none
+PASS  SRTP-P05 — diagnostics: none
+PASS  SRTP-P06 — diagnostics: none
+PASS  SRTP-N01 — diagnostics: SRTP-ARTIFACT-001, SRTP-INPUT-001
+PASS  SRTP-N02 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-001, SRTP-INPUT-001
+PASS  SRTP-N03 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-002, SRTP-INPUT-001
+PASS  SRTP-N04 — diagnostics: SRTP-ARTIFACT-001
+PASS  SRTP-N05 — diagnostics: SRTP-CLAIM-001
+PASS  SRTP-N06 — diagnostics: SRTP-REVIEW-001
+PASS  SRTP-N07 — diagnostics: SRTP-REVIEW-002
+PASS  SRTP-N08 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N09 — diagnostics: SRTP-SENSITIVITY-001
+PASS  SRTP-N10 — diagnostics: SRTP-CONTEXT-001
+PASS  SRTP-N11 — diagnostics: SRTP-REENTRY-002
+PASS  SRTP-N12 — diagnostics: SRTP-VERSION-001
+PASS  SRTP-N13 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N14 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N15 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N16 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-P01 — diagnostics: none
+PASS  SRTP-P02 — diagnostics: none
+PASS  SRTP-P03 — diagnostics: none
+PASS  SRTP-P04 — diagnostics: none
+PASS  SRTP-P05 — diagnostics: none
+PASS  SRTP-P06 — diagnostics: none
+PASS  SRTP-N01 — diagnostics: SRTP-ARTIFACT-001, SRTP-INPUT-001
+PASS  SRTP-N02 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-001, SRTP-INPUT-001
+PASS  SRTP-N03 — diagnostics: SRTP-ARTIFACT-001, SRTP-EXEC-002, SRTP-INPUT-001
+PASS  SRTP-N04 — diagnostics: SRTP-ARTIFACT-001
+PASS  SRTP-N05 — diagnostics: SRTP-CLAIM-001
+PASS  SRTP-N06 — diagnostics: SRTP-REVIEW-001
+PASS  SRTP-N07 — diagnostics: SRTP-REVIEW-002
+PASS  SRTP-N08 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N09 — diagnostics: SRTP-SENSITIVITY-001
+PASS  SRTP-N10 — diagnostics: SRTP-CONTEXT-001
+PASS  SRTP-N11 — diagnostics: SRTP-REENTRY-002
+PASS  SRTP-N12 — diagnostics: SRTP-VERSION-001
+PASS  SRTP-N13 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N14 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N15 — diagnostics: SRTP-REENTRY-001
+PASS  SRTP-N16 — diagnostics: SRTP-REENTRY-001
+✔ SRTP draft graph suite catches every declared negative and remains non-qualifying (153.0135ms)
+✔ complete SRTP trace preserves unknown extensions while validating (91.3779ms)
+✔ adversarial graph mutations cannot obtain a false PASS (1.4335ms)
+✔ schema rejects empty traces and tolerance reruns without a tolerance (57.1517ms)
+✔ materialization and evaluation preserve unknown extensions without mutation (1.0185ms)
+✔ declared expected codes cannot substitute for an executed rejecting mutation (5.6211ms)
+✔ missing, duplicate and falsely bound case declarations fail execution coverage (7.0953ms)
+▶ every Track A baseline remains open and its mutation closes the expected stable gate
+  ✔ TA-L1-001 (1.0414ms)
+  ✔ TA-L3-001 (0.1941ms)
+  ✔ TA-L4-001 (0.183ms)
+  ✔ TA-L4-002 (0.1457ms)
+  ✔ TA-L4-003 (0.1638ms)
+  ✔ TA-L4-004 (0.1685ms)
+  ✔ TA-L5-001 (0.1161ms)
+  ✔ TA-L5-002 (0.1395ms)
+  ✔ TA-L5-003 (0.1855ms)
+  ✔ TA-L5-004 (0.2472ms)
+  ✔ TA-L5-005 (0.3186ms)
+  ✔ TA-L5-006 (0.1299ms)
+  ✔ TA-L6-001 (0.0839ms)
+  ✔ TA-L6-002 (0.0717ms)
+  ✔ TA-L6-003 (1.0258ms)
+  ✔ TA-L6-004 (0.3727ms)
+  ✔ TA-L6-005 (0.0811ms)
+  ✔ TA-L6-006 (0.1165ms)
+  ✔ TA-L6-007 (0.1193ms)
+  ✔ TA-L6-008 (0.1062ms)
+  ✔ TA-L6-009 (0.3024ms)
+  ✔ TA-L7-001 (0.2758ms)
+  ✔ TA-L7-002 (0.0737ms)
+  ✔ TA-L7-003 (0.1474ms)
+  ✔ TA-L7-004 (0.061ms)
+  ✔ TA-L7-005 (0.0427ms)
+  ✔ TA-L7-006 (0.0355ms)
+  ✔ TA-L7-007 (0.055ms)
+✔ every Track A baseline remains open and its mutation closes the expected stable gate (10.0712ms)
+ℹ tests 78
+ℹ suites 0
+ℹ pass 78
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1881.5266
+
+> lint:registries
+> node registry-lint.mjs
+
+{
+  "result": "PASS",
+  "registry_version": "1.1.0-development",
+  "applicability_mapping_version": "1.1.0-development",
+  "applicability_overlay_version": "consolidated-into-base",
+  "requirement_count": 62,
+  "gate_code_count": 28,
+  "covered_gate_codes": {
+    "GKOS-GATE-L1-001": [
+      "TA-L1-001"
+    ],
+    "GKOS-GATE-L3-001": [
+      "TA-L3-001"
+    ],
+    "GKOS-GATE-L4-001": [
+      "TA-L4-001"
+    ],
+    "GKOS-GATE-L4-002": [
+      "TA-L4-002"
+    ],
+    "GKOS-GATE-L4-003": [
+      "TA-L4-003"
+    ],
+    "GKOS-GATE-L4-004": [
+      "TA-L4-004"
+    ],
+    "GKOS-GATE-L5-001": [
+      "TA-L5-001"
+    ],
+    "GKOS-GATE-L5-002": [
+      "TA-L5-002"
+    ],
+    "GKOS-GATE-L5-003": [
+      "TA-L5-003"
+    ],
+    "GKOS-GATE-L5-004": [
+      "TA-L5-004"
+    ],
+    "GKOS-GATE-L5-005": [
+      "TA-L5-005"
+    ],
+    "GKOS-GATE-L5-006": [
+      "TA-L5-006"
+    ],
+    "GKOS-GATE-L6-001": [
+      "TA-L6-001"
+    ],
+    "GKOS-GATE-L6-002": [
+      "TA-L6-002"
+    ],
+    "GKOS-GATE-L6-003": [
+      "TA-L6-003"
+    ],
+    "GKOS-GATE-L6-004": [
+      "TA-L6-004"
+    ],
+    "GKOS-GATE-L6-005": [
+      "TA-L6-005"
+    ],
+    "GKOS-GATE-L6-006": [
+      "TA-L6-006"
+    ],
+    "GKOS-GATE-L6-007": [
+      "GCP6-N-CONTENT-001",
+      "TA-L6-007"
+    ],
+    "GKOS-GATE-L6-008": [
+      "GCP6-N-RENDER-001",
+      "TA-L6-008"
+    ],
+    "GKOS-GATE-L6-009": [
+      "GCP6-N-CLOSURE-001",
+      "TA-L6-009"
+    ],
+    "GKOS-GATE-L7-001": [
+      "GCP7-N-AUTH-TIME-001",
+      "TA-L7-001"
+    ],
+    "GKOS-GATE-L7-002": [
+      "TA-L7-002"
+    ],
+    "GKOS-GATE-L7-003": [
+      "TA-L7-003"
+    ],
+    "GKOS-GATE-L7-004": [
+      "TA-L7-004"
+    ],
+    "GKOS-GATE-L7-005": [
+      "TA-L7-005"
+    ],
+    "GKOS-GATE-L7-006": [
+      "TA-L7-006"
+    ],
+    "GKOS-GATE-L7-007": [
+      "TA-L7-007"
+    ]
+  },
+  "uncovered_gate_codes": [],
+  "executed_predicate_gate_codes": {
+    "GKOS-GATE-L1-001": [
+      "TA-L1-001"
+    ],
+    "GKOS-GATE-L3-001": [
+      "TA-L3-001"
+    ],
+    "GKOS-GATE-L4-001": [
+      "TA-L4-001"
+    ],
+    "GKOS-GATE-L4-002": [
+      "TA-L4-002"
+    ],
+    "GKOS-GATE-L4-003": [
+      "TA-L4-003"
+    ],
+    "GKOS-GATE-L4-004": [
+      "TA-L4-004"
+    ],
+    "GKOS-GATE-L5-001": [
+      "TA-L5-001"
+    ],
+    "GKOS-GATE-L5-002": [
+      "TA-L5-002"
+    ],
+    "GKOS-GATE-L5-003": [
+      "TA-L5-003"
+    ],
+    "GKOS-GATE-L5-004": [
+      "TA-L5-004"
+    ],
+    "GKOS-GATE-L5-005": [
+      "TA-L5-005"
+    ],
+    "GKOS-GATE-L5-006": [
+      "TA-L5-006"
+    ],
+    "GKOS-GATE-L6-001": [
+      "TA-L6-001"
+    ],
+    "GKOS-GATE-L6-002": [
+      "TA-L6-002"
+    ],
+    "GKOS-GATE-L6-003": [
+      "TA-L6-003"
+    ],
+    "GKOS-GATE-L6-004": [
+      "TA-L6-004"
+    ],
+    "GKOS-GATE-L6-005": [
+      "TA-L6-005"
+    ],
+    "GKOS-GATE-L6-006": [
+      "TA-L6-006"
+    ],
+    "GKOS-GATE-L6-007": [
+      "TA-L6-007"
+    ],
+    "GKOS-GATE-L6-008": [
+      "TA-L6-008"
+    ],
+    "GKOS-GATE-L6-009": [
+      "TA-L6-009"
+    ],
+    "GKOS-GATE-L7-001": [
+      "TA-L7-001"
+    ],
+    "GKOS-GATE-L7-002": [
+      "TA-L7-002"
+    ],
+    "GKOS-GATE-L7-003": [
+      "TA-L7-003"
+    ],
+    "GKOS-GATE-L7-004": [
+      "TA-L7-004"
+    ],
+    "GKOS-GATE-L7-005": [
+      "TA-L7-005"
+    ],
+    "GKOS-GATE-L7-006": [
+      "TA-L7-006"
+    ],
+    "GKOS-GATE-L7-007": [
+      "TA-L7-007"
+    ]
+  },
+  "executable_uncovered_gate_codes": [],
+  "coverage_scope": "portable-predicate-twins-only; not cumulative profile qualification",
+  "errors": [],
+  "warnings": []
+}

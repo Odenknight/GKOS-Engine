@@ -1,0 +1,10 @@
+{
+  "extends": "srtp-p01-complete.json",
+  "mutations": [
+    { "op": "set", "path": "/research_objects", "value": [
+      { "id": "11000000-0000-4000-8000-000000000011", "srtp_type": "srtp:Hypothesis", "origin": "proposed", "sensitivity": "restricted", "created_at": "2026-08-08T13:32:00-04:00", "created_by": "human", "lineage": { "branch_id": "interpretation-a", "predecessors": [] }, "statement": "Interpretation A" },
+      { "id": "12000000-0000-4000-8000-000000000012", "srtp_type": "srtp:Hypothesis", "origin": "proposed", "sensitivity": "restricted", "created_at": "2026-08-08T13:32:00-04:00", "created_by": "human", "lineage": { "branch_id": "interpretation-b", "predecessors": [] }, "statement": "Interpretation B" }
+    ] },
+    { "op": "add", "path": "/relations/-", "value": { "type": "contradicts", "from": "11000000-0000-4000-8000-000000000011", "to": "12000000-0000-4000-8000-000000000012", "scope": "fixture interpretation", "recorded_at": "2026-08-08T13:33:00-04:00" } }
+  ]
+}

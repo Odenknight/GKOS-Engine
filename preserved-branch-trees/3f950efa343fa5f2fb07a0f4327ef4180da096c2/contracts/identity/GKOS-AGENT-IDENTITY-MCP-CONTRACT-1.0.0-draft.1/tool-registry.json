@@ -1,0 +1,409 @@
+{
+  "contract_version": "1.0.0-draft.1",
+  "core_error_registry": {
+    "contract_version": "1.0.0-draft.1",
+    "error_count": 53,
+    "proposal_sha256": "5dd45eaa90dee7a03b29e36131740e9480131307a6266d5f61eeeb0a5245e9a5"
+  },
+  "core_operation_inventory": {
+    "contract_version": "1.0.0-draft.1",
+    "product_instance_path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+    "product_schema_path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.schema.json",
+    "proposal_sha256": "d84f2e6ee6e3f7de0a6956d868fc0b2f1ae0ff7809f05ab85d52a0490bc69b87"
+  },
+  "deferred_tools": [
+    {
+      "name": "gkos_record_get",
+      "reason_code": "NO_CLOSED_SCHEMA",
+      "reconsideration_gate": "Freeze a content/result contract with no unbounded blob and an exact current Full source adapter."
+    },
+    {
+      "name": "gkos_record_search",
+      "reason_code": "OPTIONAL_ADAPTER_NOT_FOUNDATIONAL",
+      "reconsideration_gate": "Qualify lexical retrieval, stable scoring, snapshot ordering, and closed result schemas."
+    },
+    {
+      "name": "gkos_related_get",
+      "reason_code": "NO_CLOSED_SCHEMA",
+      "reconsideration_gate": "Freeze relationship kinds, discovery behavior, and exact policy-filtered output."
+    },
+    {
+      "name": "gkos_policy_get",
+      "reason_code": "NO_CURRENT_FULL_API",
+      "reconsideration_gate": "Ratify a public policy-view registry that cannot enumerate hidden rules or subjects."
+    },
+    {
+      "name": "gkos_navigation_context",
+      "reason_code": "NO_CLOSED_SCHEMA",
+      "reconsideration_gate": "Freeze atomic bounded artifact bytes, omission codes, and policy-visible source accounting."
+    },
+    {
+      "name": "gkos_navigation_diff",
+      "reason_code": "NO_CLOSED_SCHEMA",
+      "reconsideration_gate": "Freeze immutable qualified Navigation snapshot artifacts and exact diff result schemas."
+    },
+    {
+      "name": "gkos_reentry_plan",
+      "reason_code": "CALLER_BLOB_FORBIDDEN",
+      "reconsideration_gate": "Replace caller blob/new-identity inputs with authority-issued bounded references and close the proposal schema."
+    },
+    {
+      "name": "gkos_navigation_effect_plan",
+      "reason_code": "NO_CLOSED_SCHEMA",
+      "reconsideration_gate": "Freeze a server-issued proposal identity and exact pure planner result without caller idempotency."
+    },
+    {
+      "name": "gkos_navigation_effect_execute",
+      "reason_code": "IRREVERSIBLE_EFFECT_LOCAL_ONLY",
+      "reconsideration_gate": "Remain owner-CLI-only until a separately ratified governed MCP write package exists."
+    },
+    {
+      "name": "gkos_governance_append",
+      "reason_code": "AUTHORITY_LOCAL_ONLY",
+      "reconsideration_gate": "Remain owner-CLI-only unless governance authority and atomic receipt publication are separately ratified."
+    },
+    {
+      "name": "identity_administration",
+      "reason_code": "AUTHORITY_LOCAL_ONLY",
+      "reconsideration_gate": "Owner local CLI remains the only Phase-6 administration surface."
+    },
+    {
+      "name": "credential_administration",
+      "reason_code": "AUTHORITY_LOCAL_ONLY",
+      "reconsideration_gate": "Owner local CLI remains the only reveal-once issue and rotate surface."
+    },
+    {
+      "name": "graphiti_adapter",
+      "reason_code": "OPTIONAL_ADAPTER_NOT_FOUNDATIONAL",
+      "reconsideration_gate": "Qualify export/status schemas and keep inferred graph data non-authoritative."
+    },
+    {
+      "name": "retrieval_adapter",
+      "reason_code": "OPTIONAL_ADAPTER_NOT_FOUNDATIONAL",
+      "reconsideration_gate": "Qualify provider-independent retrieval, policy filtering, ranking, and pagination vectors."
+    },
+    {
+      "name": "model_invocation",
+      "reason_code": "NO_CURRENT_FULL_API",
+      "reconsideration_gate": "Requires a separate model/provider contract; it is outside the initial local tool surface."
+    },
+    {
+      "name": "provider_configuration",
+      "reason_code": "PROVIDER_SECRET_SURFACE_FORBIDDEN",
+      "reconsideration_gate": "Provider secrets and configuration remain outside MCP and all result envelopes."
+    }
+  ],
+  "full_source_commit": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+  "mcp_protocol_version": "2025-11-25",
+  "registry_version": "1.0.0-draft.7",
+  "required_tools": [
+    {
+      "_meta": {
+        "gkos.dev/contract-version": "1.0.0-draft.1",
+        "gkos.dev/registry-version": "1.0.0-draft.7"
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "authority": "PUBLIC_AUTHENTICATED",
+      "core_operation": "capability.list_effective",
+      "description": "Lists only effective capabilities for the authenticated session; it issues no references and reveals no paths, hidden adapters, or identity records.",
+      "full_api": [
+        "getNavigationCapabilities"
+      ],
+      "input_schema_ref": "tool-registry.schema.json#/$defs/input_capabilities",
+      "max_result_bytes": 262144,
+      "name": "gkos_capabilities",
+      "ordering": [
+        "capability_name:asc"
+      ],
+      "output_schema_ref": "tool-registry.schema.json#/$defs/result_capabilities",
+      "output_variants": [
+        "success",
+        "error_envelope"
+      ],
+      "pagination": "none",
+      "policy_operations": [
+        "capability.read.self"
+      ],
+      "private_dependencies": [],
+      "side_effect_class": "read",
+      "timeout_ms": 5000,
+      "title": "List effective GKOS capabilities"
+    },
+    {
+      "_meta": {
+        "gkos.dev/contract-version": "1.0.0-draft.1",
+        "gkos.dev/registry-version": "1.0.0-draft.7"
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "authority": "PUBLIC_AUTHENTICATED",
+      "core_operation": "record.validate",
+      "description": "Resolves an authority-issued record reference, physically qualifies the path, reads bounded source bytes, and returns closed diagnostic codes from the Full parser.",
+      "full_api": [
+        "parseGkx",
+        "parseGkx23Frontmatter"
+      ],
+      "input_schema_ref": "tool-registry.schema.json#/$defs/input_record_ref",
+      "max_result_bytes": 262144,
+      "name": "gkos_record_validate",
+      "ordering": [
+        "severity:desc",
+        "code:asc",
+        "record_ref:asc"
+      ],
+      "output_schema_ref": "tool-registry.schema.json#/$defs/result_record_validate",
+      "output_variants": [
+        "success",
+        "error_envelope"
+      ],
+      "pagination": "none",
+      "policy_operations": [
+        "record.discover",
+        "record.validate"
+      ],
+      "private_dependencies": [
+        "record_ref.resolve",
+        "physical_path.qualify"
+      ],
+      "side_effect_class": "compute_only",
+      "timeout_ms": 10000,
+      "title": "Validate one discovered GKX record"
+    },
+    {
+      "_meta": {
+        "gkos.dev/contract-version": "1.0.0-draft.1",
+        "gkos.dev/registry-version": "1.0.0-draft.7"
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "authority": "PUBLIC_AUTHENTICATED",
+      "core_operation": "record.assess",
+      "description": "Runs the deterministic Full projection and assessment on an already discovered, policy-visible record; the assessment is not truth or governance authority.",
+      "full_api": [
+        "buildGkx23Projection",
+        "assessGkx23"
+      ],
+      "input_schema_ref": "tool-registry.schema.json#/$defs/input_record_ref",
+      "max_result_bytes": 262144,
+      "name": "gkos_record_assess",
+      "ordering": [
+        "code:asc"
+      ],
+      "output_schema_ref": "tool-registry.schema.json#/$defs/result_record_assess",
+      "output_variants": [
+        "success",
+        "error_envelope"
+      ],
+      "pagination": "none",
+      "policy_operations": [
+        "record.discover",
+        "record.assess"
+      ],
+      "private_dependencies": [
+        "record_ref.resolve",
+        "physical_path.qualify"
+      ],
+      "side_effect_class": "compute_only",
+      "timeout_ms": 15000,
+      "title": "Assess one discovered GKX record"
+    },
+    {
+      "_meta": {
+        "gkos.dev/contract-version": "1.0.0-draft.1",
+        "gkos.dev/registry-version": "1.0.0-draft.7"
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "authority": "PUBLIC_AUTHENTICATED",
+      "core_operation": "record.lineage.read",
+      "description": "Projects the Full graph lineage for one discovered record and returns policy-filtered summaries through a bounded stateful snapshot cursor.",
+      "full_api": [
+        "GkxIndex.getRecords",
+        "GkxIndex.graph"
+      ],
+      "input_schema_ref": "tool-registry.schema.json#/$defs/input_lineage_get",
+      "max_result_bytes": 1048576,
+      "name": "gkos_lineage_get",
+      "ordering": [
+        "valid_at:asc",
+        "record_ref:asc"
+      ],
+      "output_schema_ref": "tool-registry.schema.json#/$defs/result_lineage_get",
+      "output_variants": [
+        "success",
+        "error_envelope"
+      ],
+      "pagination": "stateful_snapshot_cursor",
+      "policy_operations": [
+        "record.discover",
+        "record.lineage.read"
+      ],
+      "private_dependencies": [
+        "record_ref.resolve",
+        "physical_path.qualify",
+        "record_ref.issue",
+        "snapshot.create",
+        "cursor.issue"
+      ],
+      "side_effect_class": "read",
+      "timeout_ms": 10000,
+      "title": "Read discovered record lineage"
+    },
+    {
+      "_meta": {
+        "gkos.dev/contract-version": "1.0.0-draft.1",
+        "gkos.dev/registry-version": "1.0.0-draft.7"
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "authority": "PUBLIC_AUTHENTICATED",
+      "core_operation": "graph.temporal.read",
+      "description": "Requires a live same-session scope_ref issued by navigation discovery, resolves and physically requalifies that scope, then applies the Full temporal projector and returns bounded authorized record summaries; it never performs a fresh unscoped graph scan.",
+      "full_api": [
+        "projectAtTime"
+      ],
+      "input_schema_ref": "tool-registry.schema.json#/$defs/input_graph_at_time",
+      "max_result_bytes": 1048576,
+      "name": "gkos_graph_at_time",
+      "ordering": [
+        "valid_at:asc",
+        "record_ref:asc"
+      ],
+      "output_schema_ref": "tool-registry.schema.json#/$defs/result_graph_at_time",
+      "output_variants": [
+        "success",
+        "error_envelope"
+      ],
+      "pagination": "stateful_snapshot_cursor",
+      "policy_operations": [
+        "graph.temporal.read"
+      ],
+      "private_dependencies": [
+        "scope_ref.resolve",
+        "physical_path.qualify",
+        "snapshot.create",
+        "cursor.issue",
+        "record_ref.discover",
+        "record_ref.issue"
+      ],
+      "side_effect_class": "compute_only",
+      "timeout_ms": 20000,
+      "title": "Project the discovered graph at a time"
+    },
+    {
+      "_meta": {
+        "gkos.dev/contract-version": "1.0.0-draft.1",
+        "gkos.dev/registry-version": "1.0.0-draft.7"
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "authority": "PUBLIC_AUTHENTICATED",
+      "core_operation": "navigation.discover",
+      "description": "With scope_ref:null and cursor:null, performs policy and physical-root qualification and issues the authorized root scope_ref plus bounded policy-visible record_ref and child scope_ref values; later calls/pages reuse only a same-session issued scope_ref.",
+      "full_api": [
+        "discoverNavigation"
+      ],
+      "input_schema_ref": "tool-registry.schema.json#/$defs/input_navigation_discover",
+      "max_result_bytes": 1048576,
+      "name": "gkos_navigation_discover",
+      "ordering": [
+        "classification:asc",
+        "canonical_path:asc",
+        "record_ref:asc"
+      ],
+      "output_schema_ref": "tool-registry.schema.json#/$defs/result_navigation_discover",
+      "output_variants": [
+        "success",
+        "error_envelope"
+      ],
+      "pagination": "stateful_snapshot_cursor",
+      "policy_operations": [
+        "navigation.discover"
+      ],
+      "private_dependencies": [
+        "scope_ref.resolve",
+        "physical_path.qualify",
+        "record_ref.discover",
+        "record_ref.issue",
+        "scope_ref.issue",
+        "snapshot.create",
+        "cursor.issue"
+      ],
+      "side_effect_class": "compute_only",
+      "timeout_ms": 20000,
+      "title": "Discover qualified Navigation entries"
+    },
+    {
+      "_meta": {
+        "gkos.dev/contract-version": "1.0.0-draft.1",
+        "gkos.dev/registry-version": "1.0.0-draft.7"
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false,
+        "readOnlyHint": true
+      },
+      "authority": "PUBLIC_AUTHENTICATED",
+      "core_operation": "navigation.audit",
+      "description": "Runs the qualified Full Navigation audit after discovery and physical qualification, returning closed finding codes without filesystem-oracle detail.",
+      "full_api": [
+        "auditNavigation"
+      ],
+      "input_schema_ref": "tool-registry.schema.json#/$defs/input_navigation_audit",
+      "max_result_bytes": 1048576,
+      "name": "gkos_navigation_audit",
+      "ordering": [
+        "severity:desc",
+        "code:asc",
+        "record_ref:asc"
+      ],
+      "output_schema_ref": "tool-registry.schema.json#/$defs/result_navigation_audit",
+      "output_variants": [
+        "success",
+        "error_envelope"
+      ],
+      "pagination": "stateful_snapshot_cursor",
+      "policy_operations": [
+        "navigation.discover",
+        "navigation.audit"
+      ],
+      "private_dependencies": [
+        "scope_ref.resolve",
+        "physical_path.qualify",
+        "record_ref.discover",
+        "record_ref.issue",
+        "snapshot.create",
+        "cursor.issue"
+      ],
+      "side_effect_class": "compute_only",
+      "timeout_ms": 30000,
+      "title": "Audit a qualified Navigation scope"
+    }
+  ]
+}

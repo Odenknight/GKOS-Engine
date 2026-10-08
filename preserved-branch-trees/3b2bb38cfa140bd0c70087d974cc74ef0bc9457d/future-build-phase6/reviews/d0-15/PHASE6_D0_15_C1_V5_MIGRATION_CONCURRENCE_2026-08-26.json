@@ -1,0 +1,345 @@
+{
+  "artifact_type": "phase6_d0_15_c1_migration_concurrence",
+  "schema_version": "1.0.0",
+  "review_id": "PHASE6-D0-15-C1-V5-MIGRATION-CONCURRENCE-2026-08-26",
+  "reviewed_at_utc": "2026-08-26T15:14:15.6141074Z",
+  "wave": "C1",
+  "review_role": "migration",
+  "review_kind": "brand-new independent zero-contribution concurrence",
+  "reviewed_coordinate": "V11 exact primary coordinate plus V11 final raw receipt coordinate",
+  "verdict": "ACCEPT_CONCURRENCE",
+  "concurrence": true,
+  "status": "FRESH_C1_V5_MIGRATION_ACCEPTED_AWAITING_INDEPENDENT_SECURITY",
+  "terminal_statement": "UNCONDITIONAL ACCEPT_CONCURRENCE FOR THE EXACT V11 MIGRATION COORDINATE ONLY. THIS RECEIPT DOES NOT COMPLETE C1 BY ITSELF AND AUTHORIZES NO C2, C3, PRODUCT, PROPOSAL, F1, F2, IMPLEMENTATION, REPOSITORY, OR PUBLICATION ACTION.",
+  "zero_contribution_attestation": {
+    "reviewer_was_not_an_author_or_corrector_of_v8_v10_registry_v5_map_v5_or_v11": true,
+    "reviewed_bytes_edited": false,
+    "reviewed_bytes_regenerated": false,
+    "product_or_proposal_bytes_edited": false,
+    "fixture_or_contract_bytes_regenerated": false,
+    "verdict_derived_fresh": true,
+    "prior_c1_verdict_reused": false,
+    "new_artifact_created": "this detached concurrence receipt only"
+  },
+  "review_scope": [
+    "exact raw and canonical internal integrity of V8, V10, Registry V5, Map V5, and V11",
+    "acyclic provenance and historical noncarry",
+    "Q1 through Q20 and D015-R01 through R15 and D015-DC01 through DC13 migration semantics",
+    "V10 source-preserving event-matrix and observed-output-sink corrections",
+    "one-ID one-leaf closure, aliases, family accounting, error registry, and official MCP boundary",
+    "original restore/bootstrap meanings, Q17 recovery, Q18 multiprocess ordering, physical dispositions, rollback, anchor recovery, and replay",
+    "prospective retention, permanent policy history, complete-day and true-sequence behavior, backup/restore stability, and crash cuts",
+    "accepted-F1 source blob and call-site provenance",
+    "authority boundary and stopped-F2 preservation"
+  ],
+  "exact_input_ledger": [
+    {
+      "coordinate": "V8",
+      "role": "Q17-Q20 owner resolution and bounded standing source-preserving evidence authority",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_OWNER_RESOLUTION_V8_2026-08-26.json",
+      "sha256": "6b8a5b9fca8c72561ef1aee56c15911e34d0559edcae058f19631b71e16d9116",
+      "bytes": 18358,
+      "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2"
+    },
+    {
+      "coordinate": "V10",
+      "role": "ratified source-preserving mechanical disposition for C1-V4-SEC-001 and C1-V4-SEC-002",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_STANDING_SOURCE_PRESERVING_DISPOSITION_V10_2026-08-26.json",
+      "sha256": "2fc2da6a15308460c091624c5ccaa9ede2b3a17ac529b3fe401f9d9138f9814b",
+      "bytes": 28622,
+      "record_digest": "a560e9dbd92cd8e31fb6b05512c5c197bf92e2c3b8a204a7877bc7d5b2e89de7"
+    },
+    {
+      "coordinate": "Registry V5",
+      "role": "closed canonical non-MCP fixture registry",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CLOSED_NON_MCP_FIXTURE_REGISTRY_V5_2026-08-26.json",
+      "sha256": "de2a2f28ee0248b01644bf50328c8e1321790e5e0fd6f3b3c12d40adb92610c8",
+      "bytes": 254938,
+      "record_digest": "db1806b1edda3a8eaab27e9d1c2861d95fbd5cce61630412b52087a0232efde4"
+    },
+    {
+      "coordinate": "Map V5",
+      "role": "corrected decision and correction map",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_CORRECTED_DECISION_AND_CORRECTION_MAP_V5_2026-08-26.json",
+      "sha256": "7c9f4cb1fcd97dded263be39cc21bff1291968bd9d41747dcef68748d009fb56",
+      "bytes": 24737,
+      "record_digest": "380736841645b57bd6d31e2dab68c632f328efdc163e1d40fc48438494f1fda7"
+    },
+    {
+      "coordinate": "V11",
+      "role": "exact-coordinate receipt authorizing fresh C1 only",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_COORDINATE_RECEIPT_V11_2026-08-26.json",
+      "sha256": "7f091d1c1dde22c4adf060b166694fc112f7a7eadc24f4a82ae8a8d1cfde9aad",
+      "bytes": 12544,
+      "record_digest": "6d7725bd8b095daf9280882702aa075d55576ecffaf88d2fc8f1d624350e12a7"
+    }
+  ],
+  "input_integrity": {
+    "json_parse": "PASS_FOR_ALL_FIVE_PRIMARY_INPUTS",
+    "raw_sha256_and_byte_length": "PASS_FOR_ALL_FIVE_PRIMARY_INPUTS",
+    "canonical_internal_record_digest_recomputation": "PASS_FOR_ALL_FIVE_PRIMARY_INPUTS",
+    "referenced_coordinate_entries_checked": 45,
+    "unique_referenced_paths_checked": 22,
+    "referenced_path_hash_byte_or_digest_mismatches": 0,
+    "registry_v5_source_trace_entries_checked": 20,
+    "registry_v5_source_trace_mismatches": 0,
+    "byte_drift_found": false,
+    "input_mismatch_found": false
+  },
+  "source_graph_audit": {
+    "status": "PASS",
+    "acyclic_order": [
+      "immutable source, proposal, accepted-F1, and historical evidence parents",
+      "V8 Q17-Q20 semantic and bounded standing-disposition authority",
+      "V10 mechanical source-preserving disposition",
+      "Registry V5 materialized and derived-count descendant",
+      "Map V5 descendant binding already-existing V8, V10, and Registry V5 bytes",
+      "V11 exact-coordinate receipt binding already-existing V8, V10, Registry V5, and Map V5 bytes",
+      "this detached fresh C1 V5 migration concurrence"
+    ],
+    "chronology": {
+      "v8_before_v10": true,
+      "v10_before_registry_v5": true,
+      "registry_v5_before_map_v5": true,
+      "map_v5_before_v11": true,
+      "v11_before_this_receipt": true
+    },
+    "ancestor_prebinds_later_raw_hash_or_byte_length": false,
+    "cycle_or_forward_hash_reference_found": false,
+    "historical_c1_v3_and_v4_verdicts_carry": false,
+    "historical_rejection_recast_as_acceptance": false,
+    "fresh_v11_verdict_derived_independently": true
+  },
+  "accepted_f1_source_audit": {
+    "commit": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "tree": "1e186acc050eccdf933f5c1274670b76f342e5d2",
+    "commit_and_tree_verified": true,
+    "source_blobs": [
+      {
+        "path": "src/desktop-agent.ts",
+        "git_blob": "835f0d3e1231696d936b9ae1cb53bb67bda8fb30",
+        "bytes": 21774,
+        "sha256": "29a15df5efb1a0bdd469e9f36b43b5d50fffb00de542d2f7a19ae06bd09661d1",
+        "explicit_output_call_sites": 6,
+        "verified_methods": [
+          "console.log",
+          "console.error"
+        ]
+      },
+      {
+        "path": "scripts/generate-agent-identity-mcp-contract.mjs",
+        "git_blob": "899d825f6fd15dcde4c344f5f59abacd8d3ed992",
+        "bytes": 111170,
+        "sha256": "95fcdb91814ecf683461a791f4a4dc99ede9d279abba87ee59a9d08cce23ba68",
+        "explicit_output_call_sites": 3,
+        "verified_methods": [
+          "process.stdout.write",
+          "process.stderr.write",
+          "console.log"
+        ]
+      }
+    ],
+    "total_explicit_output_call_sites": 9,
+    "distinct_observed_methods": 4,
+    "v10_call_site_inventory_matches_source": true,
+    "new_logger_or_configuration_inferred": false,
+    "disposition": "immutable historical evidence only"
+  },
+  "registry_v4_to_v5_delta_audit": {
+    "status": "PASS_SOURCE_PRESERVING",
+    "registry_v4_canonical_rows": 413,
+    "registry_v5_canonical_rows": 468,
+    "removed_rows": 4,
+    "removed_ids": [
+      "GLOBAL-EVENT-DUPLICATE-ID-INSERT-001",
+      "GLOBAL-EVENT-DUPLICATE-ID-STARTUP-001",
+      "GLOBAL-EVENT-DUPLICATE-SEQUENCE-INSERT-001",
+      "GLOBAL-EVENT-DUPLICATE-SEQUENCE-STARTUP-001"
+    ],
+    "added_rows": 59,
+    "added_exact_global_event_rows": 44,
+    "added_observed_sink_sensitive_rows": 15,
+    "other_added_rows": 0,
+    "common_rows_with_changed_text": 5,
+    "changed_common_ids": [
+      "REDACTION-LOG-001",
+      "REDACTION-LOG-001-PATH",
+      "REDACTION-LOG-001-SQL",
+      "REDACTION-LOG-001-STACK",
+      "REDACTION-LOG-001-SUBJECT"
+    ],
+    "changed_common_disposition": "Replace unsupported configured error-level wording with the exact observed console.error method and existing stderr channel while preserving zero-sensitive-byte semantics.",
+    "all_other_common_rows_unchanged": true,
+    "alias_map_unchanged": true,
+    "named_subtotal_ids_unchanged": true,
+    "net_canonical_delta": 55,
+    "new_product_or_migration_semantic_selected": false
+  },
+  "exact_matrix_audit": {
+    "status": "PASS",
+    "event_tables": [
+      "effect_outbox_events",
+      "identity_audit_receipts",
+      "restore_events",
+      "retention_batches"
+    ],
+    "event_id_insertion_unequal_ordered_rows": 12,
+    "preserved_same_table_event_id_insertion_rows": 4,
+    "event_id_startup_distinct_unordered_rows": 6,
+    "global_event_seq_insertion_ordered_with_equal_rows": 16,
+    "global_event_seq_startup_unordered_with_replacement_rows": 10,
+    "new_exact_global_event_rows": 44,
+    "expected_and_actual_global_event_id_set_match": true,
+    "retired_generic_ids_present_as_canonical_or_alias": 0,
+    "insertion_event_id_projection": "GKOS_P6_IDENTITY_COLLISION with entropy_calls=1 and full transaction rollback",
+    "insertion_sequence_projection": "GKOS_P6_STATE_CONFLICT with full transaction rollback",
+    "startup_duplicate_projection": "GKOS_P6_AUTHORITY_CORRUPT with blocked write gate and zero repair or publication",
+    "observed_output_methods": [
+      "console.error",
+      "console.log",
+      "process.stdout.write",
+      "process.stderr.write"
+    ],
+    "existing_sensitive_classes": [
+      "credential",
+      "path",
+      "sql",
+      "stack",
+      "external_subject_preimage"
+    ],
+    "expected_and_actual_method_sensitive_cross_product_rows": 20,
+    "expected_and_actual_method_sensitive_id_set_match": true,
+    "result_and_error_serializer_sensitive_rows": 12,
+    "zero_named_sensitive_bytes_preserved": true
+  },
+  "migration_semantic_audits": {
+    "q1_q20_and_d015_map": {
+      "status": "PASS",
+      "evidence": "Map V5 carries all Q1 through Q20, D015-R01 through R15, and D015-DC01 through DC13. V10 changes only the two finite source-controlled C1 V4 security findings, while the Q17 protected-locator failure, Q18 two-process ordering, migration projections, recovery cuts, and later-wave boundary remain unchanged."
+    },
+    "q17_bootstrap_prepublication_failure": {
+      "status": "PASS",
+      "evidence": "BOOTSTRAP-HANDOFF-FAILURE-001 fixes the cut before final-locator creation, preserves PLAN_STAGED and the exact bound protected temporary with physical, content, and protection evidence, returns nonretryable GKOS_P6_STORAGE_PERMISSION_INVALID in the six-field content-free envelope with secret_revealed absent, discards exception text, forbids regeneration, overwrite, deletion, reveal, success activity, state advance, and hybrid publication, and requires later recovery to requalify and reuse that exact temporary. BOOTSTRAP-HANDOFF-LOST-001 remains distinct."
+    },
+    "q18_agent_disable_multiprocess_schedule": {
+      "status": "PASS",
+      "evidence": "RACE-MULTIPROCESS-001 names one initially enabled agent, distinct idempotency keys A and B, A as serialization winner, and B revalidation after A commits. A alone commits the existing result, one contiguous event, required generation and auth_epoch advances, one matching anchor, one success activity, and one idempotent result. B and retry B return identical nonretryable GKOS_P6_STATE_CONFLICT with zero mutation, event, coordinate advance, anchor, and success activity; no gap, fork, duplicate, or hybrid remains."
+    },
+    "c1_v3_mechanical_inventory": {
+      "status": "PASS",
+      "mech_001": "input_bytes, output_bytes, item_count, and result_count are separately materialized for -1, 1.5, and 9007199254740992, with field-specific zero-mutation GKOS_P6_INVALID_PARAMS leaves; both accepted boundaries are also field-specific.",
+      "mech_002": "The five committed-anchor intent-only fields each have a distinct non-null corruption leaf returning GKOS_P6_AUTHORITY_CORRUPT with blocked gate and zero mutation.",
+      "mech_003": "The full four-table event-ID and global-sequence matrices are exact and preserve collision, conflict, corruption, entropy, rollback, and no-retry rules.",
+      "mech_004": "Old session submission, admitted-request final gate, old cursor continuation, durable snapshot post-state, and fresh authentication remain distinct leaves with the frozen stale, inaccessible, and current-auth_epoch outcomes.",
+      "mech_005": "Result and error serializers retain six separate sensitive classes; four exact source-observed output methods are each crossed with the five existing output-sensitive classes without a new logger or channel.",
+      "mech_006": "Counts, family totals, hashes, byte lengths, and internal digests were derived after materialization and bound in acyclic descendants."
+    },
+    "original_named_restore_and_bootstrap_meanings": {
+      "status": "PASS",
+      "objects_compared_to_registry_v3": 10,
+      "differences": 0,
+      "evidence": "RESTORE-OWNER-001 through 009 and BOOTSTRAP-LOCATOR-ROLLBACK-001 remain object-identical to Registry V3. Normal replacement, old-credential denial and new-credential success, valid locator and intent resume, clean-target conflict, exact temporary reuse, separately authenticated abort, event/external-plan reconciliation, and same-locator bootstrap retry are preserved."
+    },
+    "valid_resume_and_separate_abort": {
+      "status": "PASS",
+      "evidence": "Valid staged restore and bootstrap cuts resume the exact plan automatically without replacement credential, locator, temporary, identity, secret, entropy, overwrite, or reveal. Abort remains separately authenticated by the exact pre-restore owner and is allowed only before publication; postpublication abort is GKOS_P6_STATE_CONFLICT with zero rollback or mutation."
+    },
+    "exact_physical_disposition": {
+      "status": "PASS",
+      "evidence": "Fourteen physical-disposition leaves distinguish absent, deleted_exact temporary, deleted_exact final, and preserved_unsafe. Physical identity is requalified before deletion; symlink, alias, owner, protection, content, physical-identity, race, and replacement attacker objects are preserved and never followed or mutated. A clean initial target is GKOS_P6_STATE_CONFLICT, while postqualification appearance is GKOS_P6_MIGRATION_RECOVERY_REQUIRED."
+    },
+    "rollback_anchor_and_replay": {
+      "status": "PASS",
+      "evidence": "Precommit request, restore, bootstrap, and retention cuts roll back or remain stale without result, effect, event, anchor, or success activity. Database-committed and anchor-committed cuts complete or replay the exact proven operation with no second mutation, deletion, event, anchor, result, or effect. Event insertion failures retain full transaction rollback and contiguous global sequencing."
+    },
+    "retention_history_and_restart": {
+      "status": "PASS",
+      "evidence": "The 15 retention leaves preserve prospective creation-time policy binding, permanent before-and-after setting history across restart and restore, complete UTC days, true noncontiguous source sequences, active-row exclusion, live 24-hour replay minimum, exact authorization, and intent, in-transaction, database-committed, anchor-committed, and post-result cuts without duplicate deletion or event."
+    },
+    "cursor_reference_restart_precedence": {
+      "status": "PASS",
+      "evidence": "A restarted reference-bound cursor returns CURSOR_STALE projected as GKOS_P6_REQUEST_STALE_AUTHORITY before reference or snapshot lookup and requires fresh opaque-reference rediscovery. Same-process post-resolution physical drift remains authenticated-redacted GKOS_P6_RESOURCE_NOT_FOUND with zero replacement-object access or mutation."
+    },
+    "backup_and_timestamp_migration_safety": {
+      "status": "PASS",
+      "evidence": "Backup integrity, foreign-key, and required-pragma failures use GKOS_P6_AUTHORITY_CORRUPT; byte-length and manifest-digest mismatches use GKOS_P6_EVIDENCE_MISMATCH. Failure leaves publish no accepted result or authority mutation and remove only an exact verified unpublished temporary. Timestamp leaves retain Gregorian UTC milliseconds for 1970 through 9999 and deterministic frozen-grammar rejects."
+    }
+  },
+  "registry_and_count_audit": {
+    "status": "PASS",
+    "canonical_fixture_rows": 468,
+    "unique_canonical_ids": 468,
+    "canonical_ids_lexicographically_sorted": true,
+    "rows_with_missing_or_extra_executable_fields": 0,
+    "rows_with_empty_executable_fields": 0,
+    "named_core_operation_rows": 8,
+    "named_restore_bootstrap_recovery_rows": 10,
+    "named_non_mcp_subtotal": 18,
+    "additional_canonical_non_mcp_rows": 450,
+    "accounting_formula": "8 + 10 = 18; 18 + 450 = 468",
+    "aliases": 12,
+    "unique_aliases": 12,
+    "aliases_colliding_with_canonical_ids": 0,
+    "aliases_with_missing_targets": 0,
+    "coverage_families": 16,
+    "family_total_sum": 468,
+    "declared_family_counts_match_recomputed_counts": true,
+    "source_error_registry_codes": 53,
+    "per_registered_code_error_envelope_leaves": 53,
+    "unique_materialized_error_codes": 53,
+    "source_and_materialized_error_code_set_differences": 0,
+    "official_mcp_vector_source_rows": 67,
+    "official_mcp_unique_ids": 67,
+    "official_mcp_ids_or_valid_wire_semantics_changed_by_v11_coordinate": false,
+    "mapping_adapter_deferral_preserved": true
+  },
+  "findings": [],
+  "migration_concurrence_summary": {
+    "source_graph_reproducible_and_acyclic": true,
+    "exact_v11_coordinate_matches_reviewed_bytes": true,
+    "historical_c1_verdicts_noncarrying": true,
+    "q17_bootstrap_result_state_evidence_and_recovery_closed": true,
+    "q18_winner_loser_retry_and_poststate_closed": true,
+    "v10_source_preserving_corrections_exactly_materialized": true,
+    "original_named_restore_and_bootstrap_meanings_preserved": true,
+    "physical_dispositions_valid_resume_abort_and_rollback_closed": true,
+    "retention_history_crash_anchor_and_replay_closed": true,
+    "counts_aliases_families_errors_and_mcp_recomputed": true,
+    "migration_high_or_blocker_present": false,
+    "acceptance_permitted": true,
+    "verdict": "ACCEPT_CONCURRENCE"
+  },
+  "authorization_boundary": {
+    "this_artifact_is_fresh_c1_v5_migration_evidence_only": true,
+    "this_artifact_authorizes_or_substitutes_for_security_concurrence": false,
+    "this_artifact_completes_c1_by_itself": false,
+    "c2_authorized": false,
+    "c3_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f1_authorized": false,
+    "f2_authorized": false,
+    "f2_restart_repair_grandfathering_or_qualification_authorized": false,
+    "product_or_proposal_edit_or_regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_authorized": false,
+    "push_authorized": false,
+    "workflow_authorized": false,
+    "pr_authorized": false,
+    "merge_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "activation_authorized": false,
+    "publication_authorized": false,
+    "next_state": "Preserve this unconditional acceptance and await the independently assigned fresh C1 V5 security verdict on the identical V11 coordinate. C1 completes only if that reviewer also returns unconditional ACCEPT_CONCURRENCE. Even two C1 acceptances require separate explicit Product Owner authorization before C2."
+  },
+  "preservation": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_disposition": "immutable historical evidence only",
+    "stopped_f2_disposition": "dirty, uncommitted, unqualified, and preserved exactly; no reset, discard, repair, qualification, commit, push, or restart",
+    "primary_coordinate_bytes_unchanged_by_review": true,
+    "new_artifact_only": true
+  },
+  "artifact_raw_receipt_rule": "This artifact cannot embed its own final raw SHA-256 or byte length without changing those bytes. Report its final raw SHA-256 and byte length externally after write and verification. The internal record_digest is self-verifying under the declared omission rule.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "6fd4af09f4bbf7bcdca8920bc97e913b148a32e0287335d2a49b74722d8067b6"
+}

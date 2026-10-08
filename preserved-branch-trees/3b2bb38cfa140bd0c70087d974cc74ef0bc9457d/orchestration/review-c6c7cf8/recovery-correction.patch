@@ -1,0 +1,200 @@
+diff --git a/contracts/runtime-qualification/v1/change-inventory.json b/contracts/runtime-qualification/v1/change-inventory.json
+index bbfae3d..fea9289 100644
+--- a/contracts/runtime-qualification/v1/change-inventory.json
++++ b/contracts/runtime-qualification/v1/change-inventory.json
+@@ -668,7 +668,7 @@
+     {
+       "path": "src/navigation-effects/node/executor.ts",
+       "before": null,
+-      "after": "0c18d09b8dbc8fa46507af9dc641b85f336b4d8902c8d178d49ca3a5fd3bac63",
++      "after": "1f666418f604b17532f7db94157c6c9009d73a6912c44dbe76b7d082cdd9ba44",
+       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+     },
+     {
+@@ -764,7 +764,7 @@
+     {
+       "path": "test/navigation-effects-node.test.mjs",
+       "before": null,
+-      "after": "6b99b51fe94fd83fd6c24d17a008ceba723de8116b8feb64ff954e11034b117a",
++      "after": "3db867bd4309bbfdc67a644cf083286e6cc8d6b9a8047ec4a7e8f3df2263cd90",
+       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
+     },
+     {
+diff --git a/src/navigation-effects/node/executor.ts b/src/navigation-effects/node/executor.ts
+index e67a603..cb943b6 100644
+--- a/src/navigation-effects/node/executor.ts
++++ b/src/navigation-effects/node/executor.ts
+@@ -650,7 +650,7 @@ export class NodeNavigationEffectsExecutor {
+     } catch { return { valid: false }; }
+   }
+ 
+-  private async validateCommittedOperation(entries: readonly Awaited<ReturnType<DurableEffectJournal["load"]>>[number][]): Promise<void> {
++  private async validateCommittedOperation(entries: readonly Awaited<ReturnType<DurableEffectJournal["load"]>>[number][], validateCurrentTarget = true): Promise<void> {
+     const plan = entries.find((entry) => entry.plan)?.plan;
+     if (!plan) throw new Error("JOURNAL_CORRUPT:committed-plan-missing");
+     const committed = entries.at(-1);
+@@ -683,8 +683,10 @@ export class NodeNavigationEffectsExecutor {
+       const archiveReceipt = await readFile(resolve(runRoot, "receipts", `${effectFileStem(plan.effectId)}.json`), "utf8");
+       if (archiveReceipt !== `${canonicalJson(receipt)}\n`) throw new Error(`RECEIPT_CORRUPT:${plan.effectId}`);
+     }
+-    const target = await this.readTarget(await this.safeAbsolute(plan.targetPath));
+-    if (target === null || await sha256Bytes(target) !== plan.proposedDigest) throw new Error(`COMMITTED_TARGET_CORRUPT:${plan.effectId}`);
++    if (validateCurrentTarget) {
++      const target = await this.readTarget(await this.safeAbsolute(plan.targetPath));
++      if (target === null || await sha256Bytes(target) !== plan.proposedDigest) throw new Error(`COMMITTED_TARGET_CORRUPT:${plan.effectId}`);
++    }
+   }
+ 
+   execute(request: EffectExecutionRequest): Promise<EffectExecutionResult> {
+@@ -708,7 +710,12 @@ export class NodeNavigationEffectsExecutor {
+       await this.validateReceiptHistory(priorEntries);
+       const latest = priorEntries.at(-1)!;
+       if (latest.state === "COMMITTED") {
+-        await this.validateCommittedOperation(priorEntries);
++        const allEntries = await this.journal.load();
++        const plans = new Map<string, NavigationEffectPlan>();
++        for (const entry of allEntries) if (entry.plan) plans.set(entry.effectId, entry.plan);
++        const laterCommitted = allEntries.filter((entry) => entry.state === "COMMITTED" && entry.sequence > latest.sequence && plans.get(entry.effectId)?.targetPath === plan.targetPath).at(-1);
++        await this.validateCommittedOperation(priorEntries, !laterCommitted);
++        if (laterCommitted) await this.validateCommittedOperation(allEntries.filter((entry) => entry.effectId === laterCommitted.effectId));
+         const receipt = await this.readReceipt(plan.effectId);
+         if (!receipt) return { status: "recovery-required", effectId: plan.effectId, reasonCodes: ["COMMITTED_RECEIPT_MISSING"] };
+         return { status: receipt.status === "no-op" ? "no-op" : "committed", effectId: plan.effectId, receipt, reasonCodes: ["IDEMPOTENT_REPLAY"] };
+@@ -893,6 +900,21 @@ export class NodeNavigationEffectsExecutor {
+     const entries = [...await this.journal.load()];
+     const byEffect = new Map<string, typeof entries>();
+     for (const entry of entries) byEffect.set(entry.effectId, [...(byEffect.get(entry.effectId) ?? []), entry]);
++    const liveCommittedEffectByTarget = new Map<string, { effectId: string; sequence: number }>();
++    for (const [effectId, operationEntries] of byEffect) {
++      const plan = operationEntries.find((entry) => entry.plan)?.plan;
++      const latest = operationEntries.at(-1);
++      if (!plan || latest?.state !== "COMMITTED") continue;
++      const prior = liveCommittedEffectByTarget.get(plan.targetPath);
++      if (!prior || latest.sequence > prior.sequence) liveCommittedEffectByTarget.set(plan.targetPath, { effectId, sequence: latest.sequence });
++    }
++    for (const [effectId, operationEntries] of byEffect) {
++      const plan = operationEntries.find((entry) => entry.plan)?.plan;
++      const latest = operationEntries.at(-1);
++      if (!plan || !latest || ["COMMITTED", "ABORTED", "STALE"].includes(latest.state)) continue;
++      const committed = liveCommittedEffectByTarget.get(plan.targetPath);
++      if (committed && operationEntries[0].sequence > committed.sequence) liveCommittedEffectByTarget.delete(plan.targetPath);
++    }
+     const results: RecoveryResult[] = [];
+     for (const effectId of [...byEffect.keys()].sort(codeUnitCompare)) {
+       const operationEntries = byEffect.get(effectId)!;
+@@ -901,7 +923,10 @@ export class NodeNavigationEffectsExecutor {
+       if (!plan) throw new Error(`JOURNAL_CORRUPT:missing-plan:${effectId}`);
+       if (!CANONICAL_EFFECT_ID.test(plan.effectId) || plan.effectId !== effectId) throw new Error(`JOURNAL_CORRUPT:effect-id:${effectId}`);
+       await this.validateReceiptHistory(operationEntries);
+-      if (latest.state === "COMMITTED") { await this.validateCommittedOperation(operationEntries); continue; }
++      if (latest.state === "COMMITTED") {
++        await this.validateCommittedOperation(operationEntries, liveCommittedEffectByTarget.get(plan.targetPath)?.effectId === effectId);
++        continue;
++      }
+       await this.cleanupStaleTargetLock(plan);
+       const planDigest = await canonicalSha256(plan);
+       if (latest.state === "STALE") {
+diff --git a/test/navigation-effects-node.test.mjs b/test/navigation-effects-node.test.mjs
+index c438bbf..50c09ca 100644
+--- a/test/navigation-effects-node.test.mjs
++++ b/test/navigation-effects-node.test.mjs
+@@ -32,11 +32,11 @@ function authority(capability = "moc:apply", root = "topics") {
+   };
+ }
+ 
+-async function makePlan(currentBytes, targetPath = "topics/index.md", runId = "run-node") {
++async function makePlan(currentBytes, targetPath = "topics/index.md", runId = "run-node", candidateBytes = "# Topics\n\n<!-- gkos-navigation:managed:start -->\n- [[topics/A|A]]\n<!-- gkos-navigation:managed:end -->\n") {
+   const result = await planMocApply({
+     candidate: {
+       artifactKind: "engine.moc-candidate", candidateId: "candidate:node", directory: "topics", targetPath,
+-      candidateBytes: "# Topics\n\n<!-- gkos-navigation:managed:start -->\n- [[topics/A|A]]\n<!-- gkos-navigation:managed:end -->\n",
++      candidateBytes,
+       digest: "candidate-digest", sourceSnapshotDigest: H.source,
+       configRef: { id: "config", version: 1, digest: H.config },
+       policy: { id: "effects", version: "1", digest: H.policy }, sourceRefs: [],
+@@ -240,6 +240,74 @@ test("sequential shared-run commits retain immutable per-effect receipt bindings
+   await executor.releaseVaultLease();
+ });
+ 
++test("startup recovery accepts successive committed effects on the same target", async (t) => {
++  const root = await fixture(t, "same-target-successors");
++  const target = join(root, "topics/index.md");
++  await writeFile(target, "original");
++  const first = await makePlan("original", "topics/index.md", "run-successor-1", "first revision");
++  const executor = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
++  assert.equal((await executor.execute({ plan: first.plan, proposedBytes: first.proposedBytes })).status, "committed");
++  const second = await makePlan(first.proposedBytes, "topics/index.md", "run-successor-2", "second revision");
++  assert.equal((await executor.execute({ plan: second.plan, proposedBytes: second.proposedBytes })).status, "committed");
++  await executor.releaseVaultLease();
++
++  const restarted = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
++  assert.deepEqual(await restarted.recoverStartup(), { safeToEnableWrites: true, results: [] });
++  assert.equal(await readFile(target, "utf8"), second.proposedBytes);
++  assert.equal((await restarted.execute({ plan: first.plan, proposedBytes: first.proposedBytes })).status, "committed");
++  await writeFile(target, "external tamper");
++  await assert.rejects(restarted.execute({ plan: first.plan, proposedBytes: first.proposedBytes }), /COMMITTED_TARGET_CORRUPT/);
++  await restarted.releaseVaultLease();
++});
++
++test("startup recovery completes an interrupted successor without treating its predecessor as corrupt", async (t) => {
++  const root = await fixture(t, "same-target-interrupted-successor");
++  const target = join(root, "topics/index.md");
++  await writeFile(target, "original");
++  const first = await makePlan("original", "topics/index.md", "run-interrupted-1", "first revision");
++  const initial = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
++  assert.equal((await initial.execute({ plan: first.plan, proposedBytes: first.proposedBytes })).status, "committed");
++  await initial.releaseVaultLease();
++  const second = await makePlan(first.proposedBytes, "topics/index.md", "run-interrupted-2", "second revision");
++  let armed = true;
++  const crashing = new NodeNavigationEffectsExecutor({
++    vaultRoot: root,
++    preconditionValidator: () => [],
++    faultInjector: (point) => { if (armed && point === "after-replace") { armed = false; throw new SimulatedEffectCrash(point); } },
++  });
++  await assert.rejects(crashing.execute({ plan: second.plan, proposedBytes: second.proposedBytes }), /SIMULATED_EFFECT_CRASH:after-replace/);
++  await crashing.releaseVaultLease();
++
++  const restarted = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
++  const recovery = await restarted.recoverStartup();
++  assert.equal(recovery.safeToEnableWrites, true);
++  assert.equal(recovery.results.some((result) => result.effectId === second.plan.effectId && result.classification === "effect-present-verified"), true);
++  assert.equal(await readFile(target, "utf8"), second.proposedBytes);
++  await restarted.releaseVaultLease();
++});
++
++test("terminal successor attempts cannot mask corruption of the committed target head", async (t) => {
++  for (const terminal of ["stale", "aborted"]) await t.test(terminal, async (t) => {
++    const root = await fixture(t, `terminal-successor-${terminal}`);
++    const target = join(root, "topics/index.md");
++    await writeFile(target, "original");
++    const first = await makePlan("original", "topics/index.md", `run-${terminal}-1`, "first revision");
++    const initial = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
++    assert.equal((await initial.execute({ plan: first.plan, proposedBytes: first.proposedBytes })).status, "committed");
++    const second = await makePlan(first.proposedBytes, "topics/index.md", `run-${terminal}-2`, "second revision");
++    if (terminal === "stale") await writeFile(target, "external tamper");
++    if (terminal === "aborted") await initial.releaseVaultLease();
++    const attempted = terminal === "stale" ? initial : new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => ["POLICY_REVOKED"] });
++    assert.equal((await attempted.execute({ plan: second.plan, proposedBytes: second.proposedBytes })).status, terminal === "aborted" ? "denied" : "stale");
++    if (terminal === "aborted") await writeFile(target, "external tamper");
++    await attempted.releaseVaultLease();
++
++    const restarted = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
++    await assert.rejects(restarted.recoverStartup(), /COMMITTED_TARGET_CORRUPT/);
++    await restarted.releaseVaultLease();
++  });
++});
++
+ test("concurrent executeMany batches share one queue and merge a common archive", async (t) => {
+   const root = await fixture(t, "concurrent-batches");
+   await writeFile(join(root, "topics/a.md"), "a-before");
+@@ -293,6 +361,10 @@ test("rollback is a separately authorized, preconditioned, archived effect", asy
+   assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
+   assert.equal(await readFile(join(root, "_archive/moc-runs/2026-08-20/run-rollback/before/topics/index.md"), "utf8"), planned.proposedBytes);
+   await executor.releaseVaultLease();
++  const restarted = new NodeNavigationEffectsExecutor({ vaultRoot: root, preconditionValidator: () => [] });
++  assert.deepEqual(await restarted.recoverStartup(), { safeToEnableWrites: true, results: [] });
++  assert.equal(await readFile(join(root, "topics/index.md"), "utf8"), before);
++  await restarted.releaseVaultLease();
+ });
+ 
+ test("startup recovery classifies every injected transition without silent overwrite", async (t) => {

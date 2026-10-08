@@ -1,0 +1,18 @@
+{
+  "artifacts": [
+    "gkos-p6-d2-linux-node22-receipt",
+    "gkos-p6-d2-linux-node23-receipt",
+    "gkos-p6-d2-linux-node24-receipt",
+    "gkos-p6-d2-windows-node22-receipt",
+    "gkos-p6-d2-windows-node23-receipt",
+    "gkos-p6-d2-windows-node24-receipt",
+    "gkos-p6-d2-macos-node22-receipt",
+    "gkos-p6-d2-adversarial-receipt",
+    "gkos-p6-d2-contract-pack",
+    "gkos-p6-d2-secret-scan-receipt",
+    "gkos-p6-d2-terminal-audit-receipt"
+  ],
+  "contract_version": "1.0.0-draft.2",
+  "retention_days": 90,
+  "workflow": "GKOS Phase 6 identity/MCP Draft.2 qualification"
+}

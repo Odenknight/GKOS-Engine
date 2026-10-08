@@ -1,0 +1,244 @@
+{
+  "record_type": "gkos-phase6-d0-15-owner-resolution",
+  "record_version": "8.0.0",
+  "resolved_at_utc": "2026-08-26T13:50:54.0181197Z",
+  "status": "STANDING_EVIDENCE_DISPOSITION_AUTHORITY_AWAITING_DESCENDANTS",
+  "owner_statements": [
+    "Ratify Q17–Q20 as proposed.",
+    "Ratify all future dispositions."
+  ],
+  "purpose": "Resolve the bootstrap-handoff and multiprocess owner choices opened by C1 V3 security, authorize bounded evidence-only mechanical expansion, make the C1 V3 migration acceptance historical and noncarrying, and establish tightly scoped standing authority for future source-preserving D0-15 evidence dispositions. This V8 is not a corrected registry, map, product specification, concurrence acceptance, or product authorization.",
+  "exact_existing_inputs": [
+    {
+      "role": "V7 exact expanded-coordinate owner ratification and C1-only authorization",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_EXACT_BYTE_OWNER_RATIFICATION_V7_2026-08-26.json",
+      "sha256": "bade7af1ef173bb7039afaea265d9f38fe4f7871209cd4dbe2975ed4f8570bc7",
+      "bytes": 10768,
+      "record_digest": "5e6965b59e02295f733b3a7215e30ec9a6a6cff435269cc0f547a73d5d34be77",
+      "status": "EXACT_EXPANDED_BYTES_OWNER_RATIFIED_FRESH_C1_ONLY"
+    },
+    {
+      "role": "C1 V3 migration acceptance of the V7 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V3_MIGRATION_CONCURRENCE_2026-08-26.json",
+      "sha256": "8ae7046263f73df945dc354589de6b0403c8ae4c8c8e13ceebc14b1b20b35dd6",
+      "bytes": 19940,
+      "record_digest": "ad9e2513535e69a3617542c8699684fa1830bd9c89e6d23376da780d0a8be4f8",
+      "verdict": "ACCEPT_CONCURRENCE"
+    },
+    {
+      "role": "C1 V3 security rejection of the V7 coordinate",
+      "path": "future-build-phase6/reviews/d0-15/PHASE6_D0_15_C1_V3_SECURITY_CONCURRENCE_2026-08-26.json",
+      "sha256": "b8060ba76b759ad8ee871cb4f66696cc08e7f237483c007e111a181888a86981",
+      "bytes": 32134,
+      "record_digest": "92298b88abf726ef16bdebe2b89cd33aa9611248c57970a812df16b3b0296a01",
+      "verdict": "REJECT_CONCURRENCE"
+    }
+  ],
+  "mixed_c1_v3_disposition": {
+    "migration": "The C1 V3 migration acceptance remains immutable historical evidence for the V7 coordinate only and does not carry as acceptance of any later registry, map, exact-coordinate receipt, or C1 rerun.",
+    "security": "The C1 V3 security rejection remains immutable defect evidence, stops C1, and controls the bounded Q17 through Q20 correction wave. It cannot be rewritten or waived as acceptance.",
+    "c1_complete": false,
+    "later_wave_eligible": false,
+    "rule": "Because the ratified fixture bytes and derived counts must change, both migration and security must rerun fresh against the same later exact coordinate after the bounded descendants and their exact-coordinate receipt exist."
+  },
+  "ratified_q17_q20_decisions": [
+    {
+      "id": "Q17",
+      "title": "Bootstrap protected-locator publication failure",
+      "affected_fixture": "BOOTSTRAP-HANDOFF-FAILURE-001",
+      "exact_cut": "Protected-locator publication fails before the final locator exists, after the bootstrap plan and exact bound temp are durable.",
+      "state_disposition": {
+        "bootstrap_state": "PLAN_STAGED",
+        "bound_temp": "preserve the exact already-bound temp object and its physical/content/protection evidence",
+        "final_locator": "absent",
+        "secret_revealed_field": "absent because the response is the six-field error envelope, not a successful secret-bearing result"
+      },
+      "response": {
+        "error_code": "GKOS_P6_STORAGE_PERMISSION_INVALID",
+        "envelope": "the existing exact six-field content-free error envelope",
+        "retryable": false
+      },
+      "evidence": "Persist one content-free failed locator-publication evidence record bound to the existing plan and exact temp. Discard and never serialize, log, persist, echo, or rethrow exception text, secret, locator, path, pipe, native message, stack, SQL, or implementation detail.",
+      "forbidden": [
+        "new or replacement secret generation",
+        "new temp generation",
+        "overwrite or deletion of the protected target or bound temp",
+        "secret reveal or re-reveal",
+        "bootstrap state advance",
+        "new mutation or success activity",
+        "publication of a partial or hybrid final locator"
+      ],
+      "recovery": "A later authenticated or local-bootstrap recovery attempt reuses the exact preserved bound temp and plan; it does not regenerate identity, locator, credential, or secret.",
+      "lost_ack_separation": "BOOTSTRAP-HANDOFF-LOST-001 remains a distinct case for a successfully published final locator whose acknowledgment is lost. It must not be combined with this prepublication failure."
+    },
+    {
+      "id": "Q18",
+      "title": "Exact agent.disable multiprocess schedule",
+      "schedule": {
+        "operation_a": "agent.disable for the same target agent using idempotency key A",
+        "operation_b": "agent.disable for the same target agent using distinct idempotency key B",
+        "serialization": "A obtains serialization first; B waits and then revalidates the committed state",
+        "retry": "The same B request is retried with idempotency key B after its first conflict response"
+      },
+      "operation_a_outcome": [
+        "commit exactly one agent.disable mutation and its existing nonsecret successful result",
+        "publish exactly one disable event with one new contiguous global_event_seq",
+        "advance the exact generation and auth-epoch coordinates required by the frozen agent.disable rule",
+        "publish exactly one matching committed authority anchor",
+        "record exactly one success activity and one idempotent result for key A"
+      ],
+      "operation_b_outcome": {
+        "revalidation": "observe that the target agent is already disabled after A commits",
+        "error_code": "GKOS_P6_STATE_CONFLICT",
+        "retryable": false,
+        "mutation": "zero",
+        "event": "zero",
+        "generation_or_auth_epoch_advance": "zero",
+        "anchor": "zero",
+        "success_activity": "zero"
+      },
+      "operation_b_retry_outcome": "Return the same deterministic GKOS_P6_STATE_CONFLICT, retryable=false, with zero mutation, event, generation/auth-epoch advance, anchor, and success activity. The retry must not convert into replay of A because A and B use distinct idempotency keys.",
+      "global_invariants": [
+        "one accepted mutation total",
+        "one successful result total",
+        "one disable event total",
+        "no duplicate event",
+        "no global sequence gap or fork",
+        "no hybrid database and anchor coordinate",
+        "no generic admission retry permission",
+        "no new operation or error code"
+      ]
+    },
+    {
+      "id": "Q19",
+      "title": "Evidence-only C1-V3 mechanical expansion",
+      "decision": "Authorize C1-V3-MECH-001 through C1-V3-MECH-006 as source-controlled mechanical expansion in new detached evidence descendants only. The actual canonical, additional, alias, and family counts are derived after materialization and must not be predetermined or target-fit.",
+      "mechanical_inventory": [
+        {
+          "id": "C1-V3-MECH-001",
+          "rule": "For each of -1, 1.5, and 9007199254740992, materialize input_bytes, output_bytes, item_count, and result_count as separate exact negative leaves. Preserve one current ID for one named field and allocate distinct IDs for other fields. Every leaf returns GKOS_P6_INVALID_PARAMS with zero mutation."
+        },
+        {
+          "id": "C1-V3-MECH-002",
+          "rule": "Enumerate every committed-anchor intent-only field as a distinct exact non-null corruption leaf. Every leaf returns GKOS_P6_AUTHORITY_CORRUPT with blocked gate and zero mutation."
+        },
+        {
+          "id": "C1-V3-MECH-003",
+          "rule": "Materialize generated event_id collision against each exact member table of the four-table global union as a distinct case, or a closed parameterization explicitly counted as four cases. Each uses GKOS_P6_IDENTITY_COLLISION, entropy_calls=1, full transaction rollback, and no retry, overwrite, event, or authority mutation."
+        },
+        {
+          "id": "C1-V3-MECH-004",
+          "rule": "Separate old session submission, admitted-request final gate, cursor continuation, durable snapshot invalidation/post-state, and fresh authentication into distinct executable cases. Preserve the existing exact session-stale, request-stale-authority, invalidated inaccessible snapshot, and current-auth-epoch success outcomes."
+        },
+        {
+          "id": "C1-V3-MECH-005",
+          "rule": "Materialize result versus error serialization and every sensitive field class separately; materialize each configured log level and sensitive content class separately. Preserve closed schemas, closed IDs/codes/digests, and zero sensitive bytes without new fields or errors."
+        },
+        {
+          "id": "C1-V3-MECH-006",
+          "rule": "After Q17, Q18, and C1-V3-MECH-001 through 005 are materialized, derive canonical IDs, additional and overall counts, all 16 family totals, aliases, raw hashes, byte lengths, and internal digests. Build later acyclic descendants and apply an exact-coordinate receipt before fresh C1 reruns."
+        }
+      ],
+      "count_rule": {
+        "v7_overall_count": 372,
+        "v7_count_valid_for_corrected_descendants": false,
+        "named_non_mcp_subtotal_preserved": 18,
+        "official_mcp_vectors_preserved": 67,
+        "coverage_families_preserved": 16,
+        "expanded_additional_count": "DERIVE_AFTER_MATERIALIZATION",
+        "expanded_overall_count": "DERIVE_AFTER_MATERIALIZATION",
+        "expanded_alias_count": "RECOMPUTE_AFTER_MATERIALIZATION"
+      }
+    },
+    {
+      "id": "Q20",
+      "title": "Noncarrying C1 V3 migration acceptance and fresh C1 rerun",
+      "decision": "The C1 V3 migration acceptance is historical and noncarrying. After Q17, Q18, and C1-V3-MECH-001 through 006 are embodied in new source-preserving evidence descendants and an exact-coordinate receipt applies the standing authority to their final existing bytes, rerun both fresh zero-contribution C1 roles: migration and security.",
+      "fresh_c1_rule": "Both reviewers independently assess the same exact coordinate. Neither prior verdict carries. Any rejection, conditional acceptance, ambiguity, input mismatch, source-trace mismatch, or byte drift stops and returns to the Product Owner unless the issue is a source-preserving evidence disposition within the standing authority below.",
+      "later_wave_rule": "This V8 does not authorize C2 or C3. Even after both fresh C1 roles accept, preserve their receipts and require an explicit next-wave authorization."
+    }
+  ],
+  "standing_future_disposition_authority": {
+    "owner_statement": "Ratify all future dispositions.",
+    "authorized_scope": [
+      "future source-preserving, evidence-only D0-15 correction dispositions that mechanically apply Q1 through Q20 without selecting or changing public, security, migration, concurrency, or product semantics",
+      "derived-count registry descendants whose final canonical, additional, alias, and 16-family totals are computed from fully materialized deterministic leaves rather than target-fit",
+      "derived-hash and byte-length descendants, internal record digests, immutable source-trace repair, and acyclic evidence-chain applications",
+      "correction-map descendants that faithfully consolidate the already-ratified Q1 through Q20 semantics and exact derived registry bytes",
+      "exact-coordinate owner-receipt applications to completed, independently validated existing descendant bytes when those bytes contain no new owner choice or semantic drift",
+      "fresh C1 migration and security evidence reruns after such an exact-coordinate receipt, with both roles fresh, zero-contribution, independent, and bound to the same coordinate",
+      "repeat evidence-only correction, count/hash derivation, exact-coordinate receipt, and fresh-C1 cycles when a C1 finding is purely source-preserving and mechanically resolvable under Q1 through Q20"
+    ],
+    "conditions": [
+      "Every disposition must cite the exact Q1 through Q20 rule or source-controlled invariant it applies.",
+      "Every descendant must bind only immutable exact parents that already exist and must include verified raw SHA-256, byte length, and canonical internal digest.",
+      "No reviewer or implementer may select a new error projection, response shape, retry rule, state transition, operation representative, public behavior, security boundary, or count target under standing authority.",
+      "Any genuine ambiguity, conflict, new owner choice, or semantic change falls outside standing authority and must return to the Product Owner.",
+      "Fresh C1 reruns authorized under this standing scope produce concurrence evidence only; they do not authorize C2, C3, or product work."
+    ],
+    "explicitly_not_authorized": [
+      "any disposition that contradicts or weakens Q1 through Q20",
+      "new public MCP tool, input, successful result, transport, admission, error code, error envelope, or valid wire semantic",
+      "new security, privacy, redaction, non-enumeration, collision, credential, secret, reference, cursor, policy, rate, restore, bootstrap, retention, or concurrency semantic",
+      "C2 authority/concurrency concurrence",
+      "C3 Full-contract or Lite-conformance concurrence",
+      "successor-F1 product correction",
+      "F2 restart, repair, grandfathering, or qualification",
+      "product or proposal edits",
+      "product contract or fixture regeneration",
+      "implementation",
+      "commit",
+      "push",
+      "hosted workflow",
+      "pull request creation or update",
+      "merge",
+      "release",
+      "deployment",
+      "activation",
+      "publication"
+    ],
+    "stop_rule": "If an issue cannot be resolved as a deterministic, source-preserving evidence transformation under Q1 through Q20, stop and request a new explicit Product Owner decision."
+  },
+  "source_controlled_semantics_preserved": {
+    "q1_q16": "All prior Q1 through Q16 decisions remain unchanged except that the V7 372-case count is historical and must be mechanically recomputed after Q17 through Q19 expansion.",
+    "r01_r15": "All corrected R01 through R15 selections remain unchanged, including R06 subtotal semantics, R07 restart precedence, Q14 committed credential handoff, and R15 mapping deferral.",
+    "dc01_dc13": "All D015-DC01 through D015-DC13 remain; DC06 uses the later mechanically derived registry coordinate.",
+    "frozen_counts": "The named 18-case non-MCP subtotal, 67 official MCP vectors, 16 normalized tables, 32 operations, 24 owner-only operations, and 53-code registry remain frozen. The later additional, overall, alias, and per-family case counts are derived."
+  },
+  "acyclic_descendant_sequence": [
+    "this immutable V8 semantic and standing-disposition basis",
+    "new registry evidence descendant materializing Q17, Q18, and C1-V3-MECH-001 through 005 and deriving counts under C1-V3-MECH-006",
+    "new correction-map evidence descendant binding only already-existing immutable parents",
+    "exact-coordinate receipt application under the standing authority to completed and validated existing descendant bytes",
+    "fresh zero-contribution C1 migration review",
+    "fresh zero-contribution C1 security review"
+  ],
+  "acyclic_rule": "No ancestor identifies, predicts, reserves, or binds a later artifact hash or byte length. Every descendant binds only exact immutable parents that already exist. Any byte change invalidates only dependent later evidence and never edits an ancestor.",
+  "authority_boundary": {
+    "preserve_v8_evidence_authorized": true,
+    "standing_source_preserving_evidence_dispositions_authorized": true,
+    "detached_registry_and_map_evidence_descendants_authorized": true,
+    "derived_count_hash_and_digest_evidence_authorized": true,
+    "exact_coordinate_receipt_applications_authorized_within_standing_scope": true,
+    "fresh_c1_evidence_reruns_authorized_after_exact_coordinate_receipt": true,
+    "c2_authorized": false,
+    "c3_authorized": false,
+    "successor_f1_product_correction_authorized": false,
+    "f2_restart_authorized": false,
+    "product_or_proposal_edit_authorized": false,
+    "product_contract_or_fixture_regeneration_authorized": false,
+    "implementation_authorized": false,
+    "commit_push_workflow_pr_merge_release_deploy_activate_publish_authorized": false,
+    "rule": "Authority is limited to source-preserving D0-15 evidence dispositions, derived evidence coordinates, exact-coordinate receipt applications, and fresh C1 evidence reruns within Q1 through Q20. No later wave or product mutation is authorized."
+  },
+  "preservation": {
+    "accepted_f1_sha": "e29e04bdad1cd192a25eba2d682a4c46774def28",
+    "accepted_f1_disposition": "immutable historical evidence only",
+    "stopped_f2_disposition": "uncommitted, unqualified, preserved exactly, and not authorized for reset, discard, repair, grandfathering, qualification, commit, push, or restart",
+    "v7_and_c1_v3_receipts": "immutable exact historical parents",
+    "prior_d0_15_artifacts": "immutable historical evidence"
+  },
+  "terminal_statement": "Q17 THROUGH Q20 AND ALL FUTURE DISPOSITIONS ARE RATIFIED WITHIN THE EXACT STANDING SCOPE OF THIS V8. SOURCE-PRESERVING D0-15 EVIDENCE CORRECTIONS, DERIVED COUNT/HASH DESCENDANTS, EXACT-COORDINATE RECEIPT APPLICATIONS, AND FRESH C1 EVIDENCE RERUNS ARE AUTHORIZED WHEN THEY MECHANICALLY APPLY Q1 THROUGH Q20. NEW OR CONTRADICTORY PUBLIC OR SECURITY SEMANTICS, C2, C3, PRODUCT OR PROPOSAL EDITS, SUCCESSOR-F1 CORRECTION, F2 RESTART, PRODUCT REGENERATION, IMPLEMENTATION, COMMIT, PUSH, WORKFLOW, PR, MERGE, RELEASE, DEPLOYMENT, ACTIVATION, AND PUBLICATION REMAIN UNAUTHORIZED.",
+  "record_digest_method": "sha256 of UTF-8 JSON canonicalized recursively by lexicographically sorting every object key, preserving array order, emitting JSON primitives with JSON.stringify semantics, and omitting only the top-level record_digest member",
+  "record_digest": "274e80a10215210309c7bda60877fdf77027ce9418756aa33b47bec6df84e8b2"
+}

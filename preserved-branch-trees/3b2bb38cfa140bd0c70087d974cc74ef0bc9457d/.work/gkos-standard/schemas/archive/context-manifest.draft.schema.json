@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/context-manifest.draft.schema.json",
+  "title": "Context Manifest (L6) — PROVISIONAL DRAFT, informative only",
+  "description": "A purpose-bound, versioned export bundling accepted assertions, evidence anchors, contradictions, warnings, and reproduction metadata.",
+  "type": "object",
+  "required": ["manifest_id", "purpose", "compiled_at", "compiled_by", "corpus_hash", "engine_version", "members"],
+  "properties": {
+    "manifest_id": { "type": "string", "minLength": 1 },
+    "purpose": { "type": "string", "minLength": 1 },
+    "compiled_at": { "$ref": "../okf-common.defs.json#/$defs/timestamp" },
+    "compiled_by": { "$ref": "../okf-common.defs.json#/$defs/actorIdentity" },
+    "corpus_hash": { "type": "string" },
+    "policy_hash": { "type": "string" },
+    "engine_version": { "type": "string" },
+    "sensitivity_ceiling": { "$ref": "../okf-common.defs.json#/$defs/sensitivity" },
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["uid", "content_hash", "epistemic_state"],
+        "properties": {
+          "uid": { "$ref": "../okf-common.defs.json#/$defs/uid" },
+          "content_hash": { "$ref": "../okf-common.defs.json#/$defs/contentHash" },
+          "epistemic_state": { "$ref": "../okf-common.defs.json#/$defs/epistemicState" },
+          "included_as": { "type": "string", "enum": ["accepted-assertion", "evidence-anchor", "contradiction", "warning", "context"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "contradictions_present": { "type": "boolean" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false
+}

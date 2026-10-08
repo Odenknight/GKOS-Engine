@@ -1,0 +1,19 @@
+{
+  "fixtureId": "effects-ambiguous-lineage-preserved",
+  "category": "ambiguous-lineage",
+  "input": {
+    "stableId": "018f22c8-4b63-7a12-9f45-8d91c734beef",
+    "branches": [
+      { "path": "branch-a.md", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+      { "path": "branch-b.md", "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }
+    ],
+    "timestampOrderAvailable": true,
+    "similarityScoreAvailable": true
+  },
+  "expected": {
+    "outcome": "review-required",
+    "sourceWrite": false,
+    "reasonCodes": ["AMBIGUOUS_LINEAGE"],
+    "preserveBranches": true
+  }
+}

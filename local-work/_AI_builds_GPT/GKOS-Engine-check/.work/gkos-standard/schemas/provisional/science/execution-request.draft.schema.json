@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Odenknight/gkos-standard/schemas/provisional/science/execution-request.draft.schema.json",
+  "title": "SRTP Execution Request — PROVISIONAL DRAFT, informative only",
+  "allOf": [
+    { "$ref": "research-object.draft.schema.json" },
+    {
+      "type": "object",
+      "required": ["code_digest", "dataset_ids", "environment_id", "parameters_digest", "context_manifest_id", "authorized_use_id", "requested_state"],
+      "properties": {
+        "srtp_type": { "const": "srtp:ExecutionRequest" },
+        "code_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+        "dataset_ids": { "type": "array", "minItems": 1, "items": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" } },
+        "environment_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" },
+        "parameters_digest": { "$ref": "../../gkx-common.defs.json#/$defs/contentHash" },
+        "seed": { "type": ["integer", "string", "null"] },
+        "context_manifest_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" },
+        "authorized_use_id": { "$ref": "../../gkx-common.defs.json#/$defs/relationshipTarget" },
+        "requested_state": { "const": "requested" }
+      },
+      "additionalProperties": true
+    }
+  ]
+}

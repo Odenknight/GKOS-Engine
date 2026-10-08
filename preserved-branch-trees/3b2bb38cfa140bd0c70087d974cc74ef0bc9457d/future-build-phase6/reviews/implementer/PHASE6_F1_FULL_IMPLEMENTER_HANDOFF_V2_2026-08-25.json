@@ -1,0 +1,271 @@
+{
+  "record_type": "gkos-phase6-f1-full-implementer-remediation-handoff",
+  "record_version": "2.0.0",
+  "generated_at_utc": "2026-08-26T04:35:08.313Z",
+  "state": "READY_FOR_INDEPENDENT_REVIEW",
+  "verdict": "F1_IMPLEMENTATION_HANDOFF_READY",
+  "explicit_non_verdict": "F1_NOT_ACCEPTED",
+  "package": {
+    "package_id": "F1",
+    "contract_name": "GKOS-AGENT-IDENTITY-MCP-CONTRACT",
+    "contract_version": "1.0.0-draft.1",
+    "contract_root": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1",
+    "repository": "https://github.com/Odenknight/GKOS-Engine",
+    "branch": "codex/phase6-f1-contract-pack",
+    "entry_sha": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+    "predecessor_f1_sha": "25acd484c6f804c8e4a6cfdef21849aa397cb47a",
+    "remediated_result_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "origin_branch_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "local_remote_equal": true,
+    "worktree_clean": true,
+    "scope": "Ratified F1 evidence-contract remediation only"
+  },
+  "authority_chain": {
+    "owner_ratification": {
+      "path": "future-build-phase6/reviews/final/PHASE6_D0_OWNER_RATIFICATION_2026-08-25.json",
+      "sha256": "3fb6b1faa26856a64564342cdfe6f231df7eddc735132949281cc4bebaf94929",
+      "bytes": 2842
+    },
+    "independent_d0_acceptance_sha256": "ac8d4ab2ee960b4a6b8af50da85c0b24f271b97cb9ef977bd7ed031ea87099fb",
+    "governance_matrix_sha256": "6bbbe8c4c20df32598777909619ddd003af46cdcda7c732060df0f0a9e8dda4f",
+    "predecessor_implementer_handoff": {
+      "path": "future-build-phase6/reviews/implementer/PHASE6_F1_FULL_IMPLEMENTER_HANDOFF_2026-08-25.json",
+      "sha256": "c79d609e362b9ba8d378fd9f8f13e161ea79501e128b7ba2a084c8a2e336e164",
+      "bytes": 29376,
+      "lines": 402
+    },
+    "independent_f1_review": {
+      "path": "future-build-phase6/reviews/f1/PHASE6_F1_FULL_INDEPENDENT_REVIEW_2026-08-25.json",
+      "sha256": "c6575487648d263c916022bcf99ecb3d2e7e973ec87163bf23e5cc943cdab895",
+      "bytes": 17823,
+      "lines": 500,
+      "verdict": "REJECT",
+      "gate": "F1_NO_GO",
+      "blocking_finding": "F1-EVIDENCE-RECEIPT-CONTRACT-UNDERBINDS-HOSTED-EVIDENCE"
+    }
+  },
+  "remediation": {
+    "changed_paths_from_predecessor_count": 5,
+    "changed_paths_from_predecessor": [
+      ".github/workflows/phase6-identity-contract.yml",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/qualification-receipt.schema.json",
+      "scripts/generate-agent-identity-mcp-contract.mjs",
+      "test/agent-identity-mcp-contract.test.mjs"
+    ],
+    "changed_path_hashes": {
+      ".github/workflows/phase6-identity-contract.yml": "927c9b832dee98383f020e4607a02b77783aa6c85e1004c10c7677243600361b",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json": "57086d298bff6b48a01cb32db5914e16df0482a5013505b0aded6c538b9a32ea",
+      "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/qualification-receipt.schema.json": "3c459b901854758ac187de5141672e854580151ec5feada437f29a0540995d59",
+      "scripts/generate-agent-identity-mcp-contract.mjs": "7229c774ed1fc96188538f7d6e6a6114b25a00d4f16a81cb5696d1980ca5f8ab",
+      "test/agent-identity-mcp-contract.test.mjs": "6afd8b9c4761202f06d12392b933a0a59824888811cc7f7ad314c0da000f8bff"
+    },
+    "closure": [
+      "CPU is required and nonempty in every receipt.",
+      "Node, npm, TypeScript, Ajv, ajv-formats, and SQLite versions are exact named semantic versions; placeholders such as 10 and contract-only are rejected.",
+      "Every command records exact exit, result, test_count, pass_count, fail_count, and skip_count, with coherent arithmetic and fail_count zero for PASS.",
+      "Every receipt binds nonempty, unique predecessor input and produced output SHA-256 digest arrays.",
+      "Real retained TAP and output bytes, rather than synthetic counts, are hashed and bound.",
+      "The terminal audit recursively downloads the real artifact set, validates every strict receipt/evidence/log basename, extracts the real TAR under a fresh physical root, recomputes all 33 leaf hashes and the non-self aggregate, and publishes a bound terminal report.",
+      "Negative focused tests reject omitted CPU/tool/count/digest fields, placeholder tool versions, incoherent or synthetic counts, and empty/duplicate digest arrays."
+    ],
+    "first_failed_hosted_attempt": {
+      "run_id": 32928755011,
+      "result": "FAIL",
+      "cause": "Retained TAP files were placed in the immutable checkout and correctly tripped the clean-tree gate.",
+      "correction": "Evidence logs moved to the runner physical temp root; no immutable-tree weakening."
+    },
+    "second_failed_hosted_attempt": {
+      "run_id": 32928960588,
+      "result": "FAIL",
+      "predecessor_jobs_green": 10,
+      "cause": "Downloaded runner-temp evidence used nested artifact paths and the terminal audit assumed a flat artifact layout.",
+      "correction": "Terminal audit now walks nested artifact files, rejects nonregular entries and duplicate/alias basenames, and binds exact recursive paths and digests."
+    }
+  },
+  "path_boundary": {
+    "allowed_ceiling": 40,
+    "entry_to_result_changed_path_count": 40,
+    "changed_inventory_equals_frozen_allowed_bytes": true,
+    "allowed_paths_digest": "sha256:7e75c1b8cbd96aa80405f981995e3691e3b073c4929d0c0cb84db615ed694fce",
+    "protected_path_count": 22,
+    "protected_paths_digest": "sha256:f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948",
+    "protected_diff_result": "PASS_ZERO_DIFF",
+    "runtime_or_watcher_protected_bytes_changed": false
+  },
+  "pack": {
+    "leaf_count": 34,
+    "manifest_hashed_leaf_count": 33,
+    "manifest_sha256": "57086d298bff6b48a01cb32db5914e16df0482a5013505b0aded6c538b9a32ea",
+    "manifest_bytes": 5718,
+    "aggregate_digest": "sha256:a807a0d15cad146e833de3e7dc0fef1ed2f8b520dd6a1d3e00afa7070700c8e7",
+    "generation_input_digest": "sha256:ec3ece84c71114b0d97cfa23376d37d35fde2f4e6105815d5c5e967ff886cc18",
+    "generator_digest": "sha256:7229c774ed1fc96188538f7d6e6a6114b25a00d4f16a81cb5696d1980ca5f8ab",
+    "hosted_archive": {
+      "name": "GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1.tar",
+      "bytes": 350208,
+      "sha256": "cecaba53d3940b9296e743872d972d3f2313ddfd6fb9fcda0a449678013065ac",
+      "sidecar_sha256": "c01da8653600202a3bc5d0d25616d01f0bb570331c70c01845ad3e0d259a77f7",
+      "sidecar_value_matches": true,
+      "independent_extract_leaf_count": 34,
+      "independent_manifest_leaf_matches": "33_OF_33",
+      "independent_aggregate_match": true,
+      "manifest_self_hashed": false
+    }
+  },
+  "local_qualification": {
+    "focused_contract": {"tests": 8, "pass": 8, "fail": 0, "skip": 0},
+    "full_suite": {"tests": 875, "pass": 869, "fail": 0, "skip": 6, "duration_ms": 777705.903},
+    "navigation": {"tests": 128, "pass": 127, "fail": 0, "skip": 1},
+    "intelligence": {"tests": 4, "pass": 4, "fail": 0, "skip": 0},
+    "typecheck": "PASS",
+    "build": "PASS",
+    "license": "PASS",
+    "nomenclature": "PASS",
+    "pack_check": {"result": "PASS", "files": 466, "bytes": 3108162},
+    "deterministic_generator_check": "PASS",
+    "real_local_receipt_simulation": {
+      "result": "PASS",
+      "cpu_exact": true,
+      "node": "v24.18.0",
+      "npm": "11.16.0",
+      "sqlite": "3.53.1",
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "skip": 0,
+      "input_digests": 2,
+      "output_digests": 2
+    }
+  },
+  "mandatory_hosted_qualification": {
+    "workflow": "GKOS Phase 6 identity contract qualification",
+    "run_id": 32929771558,
+    "url": "https://github.com/Odenknight/GKOS-Engine/actions/runs/32929771558",
+    "head_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "status": "completed",
+    "conclusion": "success",
+    "job_count": 11,
+    "success_count": 11,
+    "failure_count": 0,
+    "jobs": [
+      {"name":"p6-f1-contract-windows-node23","id":98059648534,"conclusion":"success"},
+      {"name":"p6-f1-contract-macos-node22","id":98059648595,"conclusion":"success"},
+      {"name":"p6-f1-pack-reproducibility","id":98059648651,"conclusion":"success"},
+      {"name":"p6-f1-secret-scan","id":98059648667,"conclusion":"success"},
+      {"name":"p6-f1-contract-linux-node22","id":98059648669,"conclusion":"success"},
+      {"name":"p6-f1-contract-windows-node24","id":98059648698,"conclusion":"success"},
+      {"name":"p6-f1-contract-linux-node24","id":98059648721,"conclusion":"success"},
+      {"name":"p6-f1-schema-adversarial","id":98059648739,"conclusion":"success"},
+      {"name":"p6-f1-contract-windows-node22","id":98059648751,"conclusion":"success"},
+      {"name":"p6-f1-contract-linux-node23","id":98059648761,"conclusion":"success"},
+      {"name":"p6-f1-artifact-audit","id":98061446457,"conclusion":"success"}
+    ]
+  },
+  "hosted_artifact_audit": {
+    "outer_artifact_count": 11,
+    "all_expected_and_only_expected": true,
+    "expires_at": "2026-11-24T04:19:15Z",
+    "downloaded_file_count": 35,
+    "strict_receipt_validation": "PASS_11_OF_11",
+    "receipt_results": "PASS_11_OF_11",
+    "receipts_have_exact_cpu_and_six_tool_versions": true,
+    "receipts_have_command_count_arithmetic": true,
+    "receipts_have_nonempty_input_and_output_digests": true,
+    "terminal_receipt": {
+      "sha256": "876595150e5e0c2a5e4b9e241e37c2fd9bafd3a5fba7dfec13d304592776f744",
+      "bytes": 4997,
+      "input_artifact_digests": 34,
+      "output_artifact_digests": 2,
+      "result": "PASS"
+    },
+    "terminal_evidence": {
+      "sha256": "7000651c30d08bb1fbe1f4d07c3a98ddce816395b36ca9a4144eafba7a4ecf07",
+      "bytes": 8926
+    },
+    "terminal_report": {
+      "sha256": "bf12f3aac08067bdc949360d100452f207efc6042eeacb06ffe4926086673126",
+      "bytes": 11710,
+      "predecessor_artifacts": 10,
+      "leaf_count": 33,
+      "aggregate_digest": "sha256:a807a0d15cad146e833de3e7dc0fef1ed2f8b520dd6a1d3e00afa7070700c8e7",
+      "non_self_manifest": true,
+      "fresh_physical_root": true,
+      "result": "PASS"
+    },
+    "linux_node24_receipt": {
+      "sha256": "677fc1f83d5e1d8b719a6a5e7e59db9cff97a88ae24bdc7cd34c097421ee14bc",
+      "cpu": "Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz",
+      "node": "v24.19.0",
+      "npm": "10.9.4",
+      "typescript": "5.9.3",
+      "ajv": "8.20.0",
+      "ajv_formats": "3.0.1",
+      "sqlite": "3.53.3",
+      "command_count": 9,
+      "tests": 889,
+      "pass": 886,
+      "fail": 0,
+      "skip": 3,
+      "input_digests": 2,
+      "output_digests": 3,
+      "focused_tap_sha256": "172282c78c3d1ae02c0fcf6f6a4c33f7c3d7c58ccaae642b4c4863b984f0dd77",
+      "full_tap_sha256": "e6f55235d426b91388d526bd0547d9b6a92684034843bcf53181b495b4003f12"
+    }
+  },
+  "ordinary_ci": {
+    "run_id": 32929771562,
+    "url": "https://github.com/Odenknight/GKOS-Engine/actions/runs/32929771562",
+    "head_sha": "09fb9111d393395f8d50594d6fea802faa34fde7",
+    "status": "completed",
+    "conclusion": "success",
+    "success_jobs": 15,
+    "active_jobs": 0,
+    "skipped_jobs": 1,
+    "failure_jobs": 0,
+    "exact_result_ordinary_ci_green": true,
+    "previous_noncausal_protected_finding": {
+      "code": "GKX_WATCHER_QUALIFICATION_LATENCY_EXCEEDED",
+      "scope": "Protected Phase 5 Windows watcher qualification",
+      "f1_causality": "NONE_DEMONSTRATED",
+      "repeated_in_exact_result_ordinary_ci": false,
+      "disposition": "No protected watcher bytes, ordinary CI workflow, or thresholds were changed or waived. If repeated, route independently to the protected Phase 5 owner."
+    }
+  },
+  "commits": {
+    "count": 3,
+    "signature_scheme": "SSH ED25519",
+    "signature_fingerprint": "SHA256:dwwxvq69ZWPDlS6bzlvZ0uXo76ZKTRqvMSmDGhABhfM",
+    "github_signature_verification": "VALID_3_OF_3",
+    "dco_signoff": "PRESENT_3_OF_3",
+    "items": [
+      {"sha":"92ad258bd3f12f8d4d763bdd328e93995aba748a","subject":"fix(contracts): bind hosted F1 evidence","signature":"verified","dco":true},
+      {"sha":"3228ca445a3b341cf6abbd2bbc9b6cda4112df53","subject":"ci(contracts): isolate F1 evidence logs","signature":"verified","dco":true},
+      {"sha":"09fb9111d393395f8d50594d6fea802faa34fde7","subject":"ci(contracts): audit nested F1 artifacts","signature":"verified","dco":true}
+    ]
+  },
+  "forbidden_work_confirmed_absent": {
+    "F2_runtime_authority": true,
+    "F3_mcp_service_or_facade": true,
+    "F4_adversarial_runtime_execution": true,
+    "F5_platform_evidence_closeout": true,
+    "Lite_work": true,
+    "protected_watcher_change_or_waiver": true,
+    "README_reconciliation": true,
+    "merge": true,
+    "tag": true,
+    "release": true,
+    "deployment": true,
+    "activation": true,
+    "publication": true,
+    "pull_request_creation": true
+  },
+  "governance": {
+    "implementer": "Peirce (/root/compare_engine)",
+    "self_review_or_acceptance": false,
+    "required_independent_reviewer": "Beauvoir or the current governed independent F1 reviewer",
+    "implementer_recusal": "The implementer authored the remediation, workflow, tests, generated bytes, and this V2 handoff and must not accept F1.",
+    "next_package_authorization": "NONE_UNTIL_INDEPENDENT_F1_ACCEPTANCE",
+    "slot_release_on_delivery": true
+  }
+}

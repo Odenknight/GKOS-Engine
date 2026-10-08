@@ -1,0 +1,14 @@
+{
+  "fixtureId": "effects-byte-identical-no-op",
+  "category": "no-op",
+  "input": {
+    "targetPath": "topics/MOC.md",
+    "currentDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "candidateDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "expected": {
+    "outcome": "no-op",
+    "sourceWrite": false,
+    "reasonCodes": ["BYTE_IDENTICAL"]
+  }
+}
