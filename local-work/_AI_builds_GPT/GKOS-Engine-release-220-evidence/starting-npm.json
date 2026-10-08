@@ -1,0 +1,17 @@
+{
+  "versions": [
+    "1.3.0",
+    "2.0.0",
+    "2.0.1"
+  ],
+  "dist-tags": {
+    "latest": "2.0.1"
+  },
+  "maintainers": [
+    "odenknight <odenknight@gmail.com>"
+  ],
+  "repository": {
+    "url": "git+https://github.com/Odenknight/GKOS-Engine.git",
+    "type": "git"
+  }
+}

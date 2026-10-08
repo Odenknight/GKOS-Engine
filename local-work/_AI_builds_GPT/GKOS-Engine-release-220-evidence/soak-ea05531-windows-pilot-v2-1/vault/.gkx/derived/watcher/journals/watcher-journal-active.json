@@ -1,0 +1,8 @@
+{
+  "contract_version": "gkos-watcher-journal-active-pointer/1.0.0-draft.1",
+  "journal_generation_digest": "sha256:2a4b942339133ed0bf3c4aa2f405c788d31ddf3900dcfdbb88209e129b792a16",
+  "journal_generation_file": "watcher-journal-generation-2a4b942339133ed0bf3c4aa2f405c788d31ddf3900dcfdbb88209e129b792a16.json",
+  "kind": "watcher_journal",
+  "pointer_digest": "sha256:f0d4aa49f5a4b1e72e3aaa8d8556461fbf1c430ed0c888e1ae103ee8e979ab73",
+  "prior_pointer_digest": null
+}

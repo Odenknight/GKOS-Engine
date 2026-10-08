@@ -1,0 +1,9 @@
+{
+  "coherent_manifest_digest": "sha256:64afb1f58675f728bacc38a129cb4c3df671e45a4138e512245f11d1381fa91c",
+  "coherent_manifest_file": "watcher-coherent-64afb1f58675f728bacc38a129cb4c3df671e45a4138e512245f11d1381fa91c.json",
+  "contract_version": "gkos-watcher-active-pointer/1.0.0-draft.1",
+  "kind": "watcher_coherent",
+  "pointer_digest": "sha256:71fcffddd690f1169dbcfbe5b692673c6897c113c20d3a8c000e5755f12f5582",
+  "prior_pointer_digest": "sha256:369fdf1f7a6e1f972101fcd1d53d00960580c5d18646ddd2874ad68c37241e4c",
+  "service_generation_id": "watcher:01a0829e-0fde-7e51-9cf9-851823ec3d65"
+}

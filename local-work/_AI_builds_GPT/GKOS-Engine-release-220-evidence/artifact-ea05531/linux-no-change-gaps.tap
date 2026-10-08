@@ -1,0 +1,35 @@
+TAP version 13
+# \# artifact-sha256 f04705280acac74deab823683193a81a7c4dbf333791b33f6189226b709d593b node v22.23.2 platform linux
+# Subtest: unchanged execution stores fully bound NO_CHANGE and exact retries preserve receipt/sequence/source bytes
+ok 1 - unchanged execution stores fully bound NO_CHANGE and exact retries preserve receipt/sequence/source bytes
+  ---
+  duration_ms: 59.383172
+  type: 'test'
+  ...
+# Subtest: sealed NO_CHANGE missing audit refuses restart without rewriting evidence
+ok 2 - sealed NO_CHANGE missing audit refuses restart without rewriting evidence
+  ---
+  duration_ms: 36.735437
+  type: 'test'
+  ...
+# Subtest: sealed NO_CHANGE truncated audit refuses restart without rewriting evidence
+ok 3 - sealed NO_CHANGE truncated audit refuses restart without rewriting evidence
+  ---
+  duration_ms: 34.574386
+  type: 'test'
+  ...
+# Subtest: sealed NO_CHANGE corrupt audit refuses restart without rewriting evidence
+ok 4 - sealed NO_CHANGE corrupt audit refuses restart without rewriting evidence
+  ---
+  duration_ms: 36.236993
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 226.715926

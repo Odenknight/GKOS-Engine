@@ -1,0 +1,12 @@
+{
+  "authority_digest": "sha256:5ed8afacfa3c3712d44a841af69a2b61c926d19c4f5baa06abc96a38d861e614",
+  "configuration_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "contract_version": "gkos-watcher-authority/1.0.0-draft.1",
+  "effective_profile_digest": "sha256:9ab3b07da4cdfb584c2766762a32dc71653dffd87537ad0a4c9190e3a69015c5",
+  "first_coherent_manifest_digest": "sha256:34b97f3bb1349826faab59ad3eb16a0d238ddcd0dff9dedced024f5e3a8457ed",
+  "first_pointer_digest": "sha256:eadab00e6ae09e019e59a9a8c6d931eaf9e0eff54113e1cf29077fa80850863c",
+  "first_service_generation_id": "watcher:01a08308-e15c-7ddb-af1b-a78a5828a384",
+  "kind": "watcher_coherent_authority",
+  "policy_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "vault_id": "pointer-test"
+}

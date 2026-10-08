@@ -1,0 +1,4 @@
+
+> kosmos-oden@0.8.0 typecheck
+> tsc --noEmit
+

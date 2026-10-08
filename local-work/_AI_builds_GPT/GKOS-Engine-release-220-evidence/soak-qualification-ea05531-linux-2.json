@@ -1,0 +1,19 @@
+{
+  "mode": "qualification",
+  "sourceCommit": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "tarballSha256": "f04705280acac74deab823683193a81a7c4dbf333791b33f6189226b709d593b",
+  "tarball": "/home/observatory-admin/gkos-engine-220-qualification/ea05531/consumer/gkos-engine-2.2.0.tgz",
+  "inventory": "/home/observatory-admin/gkos-engine-220-qualification/ea05531/consumer/content-inventory.json",
+  "consumer": "/home/observatory-admin/gkos-engine-220-qualification/ea05531/consumer",
+  "output": "/home/observatory-admin/gkos-engine-220-qualification/ea05531/soak-linux-24h-2",
+  "durationMs": 86400000,
+  "intervalMs": 120000,
+  "hostEnvironment": {
+    "filesystem": "zfs",
+    "blockSize": 131072,
+    "availableBlocks": 105601,
+    "hostType": "native_linux_lxc",
+    "os": "Debian 13",
+    "environmentCommand": "stat -f -c %T,%S,%a; systemd-detect-virt"
+  }
+}

@@ -1,0 +1,2991 @@
+{
+  "gkos-engine": {
+    "id": "gkos-engine@2.2.0",
+    "name": "gkos-engine",
+    "version": "2.2.0",
+    "size": 6684898,
+    "unpackedSize": 63563396,
+    "shasum": "c064ccf0f827de6ccb91f968317048efa189996b",
+    "integrity": "sha512-nLcN76J69KYDBWY/N9eW44TMur2zWY/swopWgxDSnvreFf59SaBos+bx8UEvERfYRiQI+GJSDtW/D107fl3N6A==",
+    "filename": "gkos-engine-2.2.0.tgz",
+    "files": [
+      {
+        "path": "BEGINNERS_GUIDE.md",
+        "size": 6019,
+        "mode": 420
+      },
+      {
+        "path": "CHANGELOG.md",
+        "size": 7137,
+        "mode": 420
+      },
+      {
+        "path": "COMPAT.md",
+        "size": 5033,
+        "mode": 420
+      },
+      {
+        "path": "LICENSE",
+        "size": 1059,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 20308,
+        "mode": 420
+      },
+      {
+        "path": "TECHNICAL_README.md",
+        "size": 38431,
+        "mode": 420
+      },
+      {
+        "path": "TRACEABILITY.md",
+        "size": 4986,
+        "mode": 420
+      },
+      {
+        "path": "bin/gkos-mcp-stdio.mjs",
+        "size": 481,
+        "mode": 420
+      },
+      {
+        "path": "bin/gkos.mjs",
+        "size": 530,
+        "mode": 420
+      },
+      {
+        "path": "bin/gkx.mjs",
+        "size": 65836,
+        "mode": 420
+      },
+      {
+        "path": "bin/settings-inventory.mjs",
+        "size": 7404,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/artifact-manifest.json",
+        "size": 2106,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/decision-receipt.schema.json",
+        "size": 7012,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/policy.schema.json",
+        "size": 2874,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/reason-codes.json",
+        "size": 2418,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/request.schema.json",
+        "size": 4091,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/semantic-validation-rules.json",
+        "size": 1421,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/vectors/adversarial.json",
+        "size": 2738,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/vectors/manifest.json",
+        "size": 1988,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/vectors/policy.json",
+        "size": 1594,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/vectors/request-auto-admit.json",
+        "size": 1559,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/vectors/request-human-review.json",
+        "size": 1732,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/vectors/request-invalid.json",
+        "size": 1565,
+        "mode": 420
+      },
+      {
+        "path": "contracts/admission-policy/1.0.0/vectors/request-priority-review.json",
+        "size": 1892,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/activity.schema.json",
+        "size": 7807,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/agent-identity.schema.json",
+        "size": 2753,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/allowed-paths.txt",
+        "size": 3319,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/audit-receipt.schema.json",
+        "size": 63516,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/bootstrap-migration.schema.json",
+        "size": 940,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/canonical-fixture.json",
+        "size": 5213195,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/conformance.schema.json",
+        "size": 248798,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/credential.schema.json",
+        "size": 5394,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error-fixture.json",
+        "size": 33907,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/error.schema.json",
+        "size": 3820,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/external-mapping.schema.json",
+        "size": 2659,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/hosted-artifact-inventory.json",
+        "size": 577,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/lifecycle.schema.json",
+        "size": 1055,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/limits.schema.json",
+        "size": 7682,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/mcp-conformance-fixture.json",
+        "size": 61620,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration-fixture.json",
+        "size": 7308132,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/migration.schema.json",
+        "size": 3671,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.json",
+        "size": 23620,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/operation-inventory.schema.json",
+        "size": 37466,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/pack-manifest.json",
+        "size": 5734,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/platform-matrix.json",
+        "size": 4935,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/platform-matrix.schema.json",
+        "size": 1879,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/protected-paths.txt",
+        "size": 515,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/qualification-receipt.schema.json",
+        "size": 11286,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/race-fixture.json",
+        "size": 8829193,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/README.md",
+        "size": 301,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/request.schema.json",
+        "size": 7377,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/security-fixture.json",
+        "size": 14622603,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/session.schema.json",
+        "size": 3966,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/TECHNICAL_README.md",
+        "size": 436,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.json",
+        "size": 14604,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/tool-registry.schema.json",
+        "size": 51538,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.json",
+        "size": 1574,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.1/transport.schema.json",
+        "size": 2278,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/activity.schema.json",
+        "size": 6570,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/agent-identity.schema.json",
+        "size": 2711,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/allowed-paths.txt",
+        "size": 3710,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/audit-receipt.schema.json",
+        "size": 45913,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/bootstrap-migration.schema.json",
+        "size": 897,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/canonical-fixture.json",
+        "size": 3813,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/conformance.schema.json",
+        "size": 1330,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/credential.schema.json",
+        "size": 3862,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/error-fixture.json",
+        "size": 12362,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/error.schema.json",
+        "size": 3238,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/external-mapping.schema.json",
+        "size": 2711,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/hosted-artifact-inventory.json",
+        "size": 580,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/lifecycle.schema.json",
+        "size": 1041,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/limits.schema.json",
+        "size": 7120,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/mcp-conformance-fixture.json",
+        "size": 61620,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/migration-fixture.json",
+        "size": 1064,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/migration.schema.json",
+        "size": 3600,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/operation-inventory.json",
+        "size": 23609,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/operation-inventory.schema.json",
+        "size": 35124,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/pack-manifest.json",
+        "size": 5720,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/platform-matrix.json",
+        "size": 4935,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/platform-matrix.schema.json",
+        "size": 1879,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/protected-paths.txt",
+        "size": 1011,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/qualification-receipt.schema.json",
+        "size": 11233,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/race-fixture.json",
+        "size": 1172,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/README.md",
+        "size": 658,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/request.schema.json",
+        "size": 6877,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/security-fixture.json",
+        "size": 1011,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/session.schema.json",
+        "size": 3596,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/TECHNICAL_README.md",
+        "size": 682,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/tool-registry.json",
+        "size": 14604,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/tool-registry.schema.json",
+        "size": 51538,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/transport.json",
+        "size": 1933,
+        "mode": 420
+      },
+      {
+        "path": "contracts/identity/GKOS-AGENT-IDENTITY-MCP-CONTRACT-1.0.0-draft.2/transport.schema.json",
+        "size": 3011,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/activation-root.schema.json",
+        "size": 1607,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/active-pointer.schema.json",
+        "size": 884,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/attempt-status.schema.json",
+        "size": 1391,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/authority-lock.schema.json",
+        "size": 2725,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/authority-witness.schema.json",
+        "size": 1762,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/cli-conformance-fixture.json",
+        "size": 14150,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/conformance-fixture.json",
+        "size": 33037,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/contract.json",
+        "size": 29295,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/finding.schema.json",
+        "size": 15817,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/index-result.schema.json",
+        "size": 3788,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/legacy-tombstone.schema.json",
+        "size": 1046,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/migration.schema.json",
+        "size": 1486,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/normalized-profile.schema.json",
+        "size": 17631,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/owner-generation.schema.json",
+        "size": 2738,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/profile-coordinate.schema.json",
+        "size": 2498,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/README.md",
+        "size": 17680,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/rejection-journal.schema.json",
+        "size": 1124,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/rejection.schema.json",
+        "size": 2780,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/result.schema.json",
+        "size": 5030,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/state-common.schema.json",
+        "size": 3331,
+        "mode": 420
+      },
+      {
+        "path": "contracts/ingest/gkos-ingest-validation-1.0.0-draft.1/storage-conformance-fixture.json",
+        "size": 88279,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures.manifest.json",
+        "size": 1099,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/ambiguous-lineage.json",
+        "size": 652,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/conflict.json",
+        "size": 537,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/denied.json",
+        "size": 432,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/malformed-markers.json",
+        "size": 595,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/no-op.json",
+        "size": 428,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/path-escape.json",
+        "size": 394,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/recovery.json",
+        "size": 582,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/stale.json",
+        "size": 434,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/fixtures/success.json",
+        "size": 500,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/manifest.json",
+        "size": 1008,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/agent-grant.schema.json",
+        "size": 1492,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/agent-write-request.schema.json",
+        "size": 2156,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/agent-write-result.schema.json",
+        "size": 1179,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/archive-diff.schema.json",
+        "size": 1189,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/archive-manifest.schema.json",
+        "size": 1579,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/capabilities.schema.json",
+        "size": 1747,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/checkpoint.schema.json",
+        "size": 766,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/contract-fixture.schema.json",
+        "size": 1176,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/effect-plan.schema.json",
+        "size": 3789,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/journal-entry.schema.json",
+        "size": 1341,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/moc-ownership.schema.json",
+        "size": 2163,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/receipt.schema.json",
+        "size": 2067,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation-effects/ENGINE-NAV-EFFECTS-CONTRACT-1.0.0/schemas/recovery-result.schema.json",
+        "size": 1396,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation/ENGINE-NAV-CONTRACT-1.0.0/fixtures.manifest.json",
+        "size": 3141,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation/ENGINE-NAV-CONTRACT-1.0.0/manifest.json",
+        "size": 590,
+        "mode": 420
+      },
+      {
+        "path": "contracts/navigation/ENGINE-NAV-CONTRACT-1.0.0/standard-requirements.json",
+        "size": 887,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/canonical-fixture.json",
+        "size": 2111,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/chunk.schema.json",
+        "size": 2000,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/conformance-fixture.json",
+        "size": 17469,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/contract.json",
+        "size": 9367,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/gkos-config.schema.json",
+        "size": 7028,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/gkos-toml-lexical-fixture.json",
+        "size": 3630,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/projection.schema.json",
+        "size": 1792,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/README.md",
+        "size": 6798,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.1/result.schema.json",
+        "size": 5661,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.2/chunk.schema.json",
+        "size": 3535,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.2/conformance-fixture.json",
+        "size": 35230,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.2/contract.json",
+        "size": 9657,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.2/projection.schema.json",
+        "size": 2512,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.2/provenance.schema.json",
+        "size": 3014,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.2/README.md",
+        "size": 11601,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.2/result.schema.json",
+        "size": 5940,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-1.0.0-draft.2/stored-provenance.schema.json",
+        "size": 4798,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/aggregate-metrics.schema.json",
+        "size": 2757,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/base-configuration.schema.json",
+        "size": 652,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/baseline.schema.json",
+        "size": 2950,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/common.schema.json",
+        "size": 3751,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/comparison.schema.json",
+        "size": 1363,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/conformance-fixture.json",
+        "size": 180488,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/contract.json",
+        "size": 7547,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/environment-set.schema.json",
+        "size": 1680,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/environment.schema.json",
+        "size": 6315,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/evaluation-input.schema.json",
+        "size": 3271,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/fixed-provider.json",
+        "size": 3829125,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/fixed-provider.schema.json",
+        "size": 19480,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/fixture-catalog.json",
+        "size": 6686,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/fixture-catalog.schema.json",
+        "size": 5368,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/generate-ndcg-discount.py",
+        "size": 1035,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/golden-fixture.toml",
+        "size": 10001,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/metric-computation-fixture.json",
+        "size": 699823,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/metric-computation-fixture.schema.json",
+        "size": 2557,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/metrics-set.schema.json",
+        "size": 2396,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/ndcg-discount-table.json",
+        "size": 2231,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/ndcg-discount-table.schema.json",
+        "size": 1193,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/normalized-golden.schema.json",
+        "size": 2111,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/observation-report.schema.json",
+        "size": 2722,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/query-metrics.schema.json",
+        "size": 3369,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/README.md",
+        "size": 14561,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/reviewed-bundle.json",
+        "size": 72449,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/reviewed-bundle.schema.json",
+        "size": 9437,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/scenario-comparison.schema.json",
+        "size": 945,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/scenario-conformance-fixture.json",
+        "size": 8287,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/scenario-outcome.schema.json",
+        "size": 10417,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/source-corpus.json",
+        "size": 4215,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/source-corpus.schema.json",
+        "size": 1783,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/tune-priority-fixture.json",
+        "size": 19088,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/tune-priority-fixture.schema.json",
+        "size": 3657,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/tune-selection.schema.json",
+        "size": 2650,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/tuning-axes.schema.json",
+        "size": 1052,
+        "mode": 420
+      },
+      {
+        "path": "contracts/retrieval/gkos-retrieval-evaluation-1.0.0-draft.1/tuning-grid.schema.json",
+        "size": 1051,
+        "mode": 420
+      },
+      {
+        "path": "contracts/runtime-qualification/v1/change-inventory.json",
+        "size": 72103,
+        "mode": 420
+      },
+      {
+        "path": "contracts/service/GKOS-LOCAL-SERVICE-1.0.0-draft.1/capabilities.schema.json",
+        "size": 1857,
+        "mode": 420
+      },
+      {
+        "path": "contracts/service/GKOS-LOCAL-SERVICE-1.0.0-draft.1/contract.json",
+        "size": 1276,
+        "mode": 420
+      },
+      {
+        "path": "contracts/service/GKOS-LOCAL-SERVICE-1.0.0-draft.1/README.md",
+        "size": 800,
+        "mode": 420
+      },
+      {
+        "path": "contracts/service/GKOS-LOCAL-SERVICE-1.0.0-draft.1/traversal-event.schema.json",
+        "size": 1539,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/authority.schema.json",
+        "size": 14987,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/batch.schema.json",
+        "size": 20573,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/coherent-manifest.schema.json",
+        "size": 28483,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/conformance.schema.json",
+        "size": 63094,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/journal.schema.json",
+        "size": 1539984,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/pack-manifest.json",
+        "size": 3250,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/README.md",
+        "size": 831,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/sample-plan.schema.json",
+        "size": 26617,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/source-removal.schema.json",
+        "size": 59857,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/status.schema.json",
+        "size": 39315,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/TECHNICAL_README.md",
+        "size": 8576,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/topology.schema.json",
+        "size": 11552,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/transition.schema.json",
+        "size": 169385,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-cli-fixture.json",
+        "size": 51700,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-conformance-fixture.json",
+        "size": 6825879,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-recovery-fixture.json",
+        "size": 18608,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-sample-plan.json",
+        "size": 4363,
+        "mode": 420
+      },
+      {
+        "path": "contracts/watcher/gkos-watcher-recovery-1.0.0-draft.1/watcher-storage-fixture.json",
+        "size": 23360,
+        "mode": 420
+      },
+      {
+        "path": "dist/adapter.d.ts",
+        "size": 1209,
+        "mode": 420
+      },
+      {
+        "path": "dist/adapter.mjs",
+        "size": 136404,
+        "mode": 420
+      },
+      {
+        "path": "dist/admission-policy.mjs",
+        "size": 33645,
+        "mode": 420
+      },
+      {
+        "path": "dist/admission-policy/index.d.ts",
+        "size": 53,
+        "mode": 420
+      },
+      {
+        "path": "dist/admission-policy/provider.d.ts",
+        "size": 2263,
+        "mode": 420
+      },
+      {
+        "path": "dist/admission-policy/types.d.ts",
+        "size": 4999,
+        "mode": 420
+      },
+      {
+        "path": "dist/candidate-view.d.ts",
+        "size": 1120,
+        "mode": 420
+      },
+      {
+        "path": "dist/canonical-candidates.d.ts",
+        "size": 2160,
+        "mode": 420
+      },
+      {
+        "path": "dist/canonical-declarations.d.ts",
+        "size": 722,
+        "mode": 420
+      },
+      {
+        "path": "dist/canonical.d.ts",
+        "size": 528,
+        "mode": 420
+      },
+      {
+        "path": "dist/colors.d.ts",
+        "size": 60,
+        "mode": 420
+      },
+      {
+        "path": "dist/demo.d.ts",
+        "size": 451,
+        "mode": 420
+      },
+      {
+        "path": "dist/desktop-agent.d.ts",
+        "size": 9156,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkos-desktop-agent.cjs",
+        "size": 1495294,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkos-desktop-agent.mjs",
+        "size": 1486315,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkos-engine.mjs",
+        "size": 428151,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx-blocked-review.d.ts",
+        "size": 904,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx-enrichment.d.ts",
+        "size": 4017,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx-exclusions.d.ts",
+        "size": 665,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx-migration.d.ts",
+        "size": 3805,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx-network.d.ts",
+        "size": 234,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx-parser.d.ts",
+        "size": 739,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx.d.ts",
+        "size": 672,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx.mjs",
+        "size": 137865,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx23-relationship-types.d.ts",
+        "size": 715,
+        "mode": 420
+      },
+      {
+        "path": "dist/gkx23.d.ts",
+        "size": 4185,
+        "mode": 420
+      },
+      {
+        "path": "dist/governance.mjs",
+        "size": 10180,
+        "mode": 420
+      },
+      {
+        "path": "dist/governance/deferred-review.d.ts",
+        "size": 990,
+        "mode": 420
+      },
+      {
+        "path": "dist/governance/index.d.ts",
+        "size": 125,
+        "mode": 420
+      },
+      {
+        "path": "dist/governance/state-change-receipt.d.ts",
+        "size": 667,
+        "mode": 420
+      },
+      {
+        "path": "dist/governance/store.d.ts",
+        "size": 1210,
+        "mode": 420
+      },
+      {
+        "path": "dist/governance/types.d.ts",
+        "size": 3281,
+        "mode": 420
+      },
+      {
+        "path": "dist/graph.d.ts",
+        "size": 2244,
+        "mode": 420
+      },
+      {
+        "path": "dist/graphiti-adapter.d.ts",
+        "size": 560,
+        "mode": 420
+      },
+      {
+        "path": "dist/graphiti-adapter.mjs",
+        "size": 14858,
+        "mode": 420
+      },
+      {
+        "path": "dist/graphiti.d.ts",
+        "size": 2845,
+        "mode": 420
+      },
+      {
+        "path": "dist/incremental.d.ts",
+        "size": 3408,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 1619,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest-host.mjs",
+        "size": 580142,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest-source-scan.mjs",
+        "size": 63791,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest/contracts.d.ts",
+        "size": 9619,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest/envelopes.d.ts",
+        "size": 755,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest/host.d.ts",
+        "size": 1715,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest/profile.d.ts",
+        "size": 2259,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest/source-scan.d.ts",
+        "size": 5925,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest/storage.d.ts",
+        "size": 8333,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest/types.d.ts",
+        "size": 13364,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingest/validation.d.ts",
+        "size": 594,
+        "mode": 420
+      },
+      {
+        "path": "dist/ingestion.d.ts",
+        "size": 875,
+        "mode": 420
+      },
+      {
+        "path": "dist/intelligence.d.ts",
+        "size": 2455,
+        "mode": 420
+      },
+      {
+        "path": "dist/lineage-receipts.d.ts",
+        "size": 2844,
+        "mode": 420
+      },
+      {
+        "path": "dist/lineage.d.ts",
+        "size": 2172,
+        "mode": 420
+      },
+      {
+        "path": "dist/markdown-receipts.d.ts",
+        "size": 406,
+        "mode": 420
+      },
+      {
+        "path": "dist/markdown.d.ts",
+        "size": 1523,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects-node.mjs",
+        "size": 125246,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects.mjs",
+        "size": 59110,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/assistance.d.ts",
+        "size": 1879,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/capabilities.d.ts",
+        "size": 650,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/coordinator.d.ts",
+        "size": 2078,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/in-memory-adapter.d.ts",
+        "size": 1073,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/index.d.ts",
+        "size": 435,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/markers.d.ts",
+        "size": 1059,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/moc-batch.d.ts",
+        "size": 1111,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/node/executor.d.ts",
+        "size": 4174,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/node/index.d.ts",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/node/journal.d.ts",
+        "size": 640,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/node/moc-host.d.ts",
+        "size": 2167,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/node/moc-runtime.d.ts",
+        "size": 828,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/path-policy.d.ts",
+        "size": 668,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/planner.d.ts",
+        "size": 799,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation-effects/types.d.ts",
+        "size": 8696,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation.mjs",
+        "size": 195518,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/archive-ignore.d.ts",
+        "size": 170,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/audit.d.ts",
+        "size": 815,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/candidate.d.ts",
+        "size": 717,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/capabilities.d.ts",
+        "size": 296,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/config.d.ts",
+        "size": 1016,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/context-pack.d.ts",
+        "size": 1073,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/delegation.d.ts",
+        "size": 640,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/determinism.d.ts",
+        "size": 458,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/diff.d.ts",
+        "size": 466,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/index.d.ts",
+        "size": 815,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/invalidation.d.ts",
+        "size": 808,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/names.d.ts",
+        "size": 828,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/reentry.d.ts",
+        "size": 548,
+        "mode": 420
+      },
+      {
+        "path": "dist/navigation/types.d.ts",
+        "size": 12934,
+        "mode": 420
+      },
+      {
+        "path": "dist/paths.d.ts",
+        "size": 2277,
+        "mode": 420
+      },
+      {
+        "path": "dist/resolver-internal.d.ts",
+        "size": 1432,
+        "mode": 420
+      },
+      {
+        "path": "dist/resolver.d.ts",
+        "size": 1023,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval-evaluation-host.mjs",
+        "size": 862260,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval-host.mjs",
+        "size": 437503,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval-path-security.mjs",
+        "size": 4528,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval.mjs",
+        "size": 474989,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/authorized-view.d.ts",
+        "size": 1231,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/candidate-types.d.ts",
+        "size": 3076,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/chunker.d.ts",
+        "size": 1337,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/confidence.d.ts",
+        "size": 447,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/config.d.ts",
+        "size": 2561,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/contracts.d.ts",
+        "size": 2257,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/coordinator.d.ts",
+        "size": 5698,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/digest.d.ts",
+        "size": 374,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-bounds.d.ts",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-capability.d.ts",
+        "size": 1261,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-executor.d.ts",
+        "size": 3840,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-fixtures.d.ts",
+        "size": 15044,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-golden.d.ts",
+        "size": 413,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-host.d.ts",
+        "size": 2171,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-output.d.ts",
+        "size": 1971,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-presentation.d.ts",
+        "size": 956,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-reviewed-bundle.d.ts",
+        "size": 6492,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-reviewed-result.d.ts",
+        "size": 2255,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation-tune-priority.d.ts",
+        "size": 1587,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/evaluation.d.ts",
+        "size": 29801,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/filters.d.ts",
+        "size": 634,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/fusion.d.ts",
+        "size": 872,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/gkx-provenance.d.ts",
+        "size": 4790,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/host.d.ts",
+        "size": 1664,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/index.d.ts",
+        "size": 4296,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/lexical.d.ts",
+        "size": 1896,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/manifest.d.ts",
+        "size": 671,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/path-security.d.ts",
+        "size": 1204,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/provenance.d.ts",
+        "size": 2146,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/providers.d.ts",
+        "size": 1623,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/sqlite-store.d.ts",
+        "size": 8527,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/state-writer-lock.d.ts",
+        "size": 2750,
+        "mode": 420
+      },
+      {
+        "path": "dist/retrieval/types.d.ts",
+        "size": 14166,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/artifacts.d.ts",
+        "size": 490,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/canonicalize.d.ts",
+        "size": 339,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/events.d.ts",
+        "size": 579,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/fixtures.d.ts",
+        "size": 1414,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/index.d.ts",
+        "size": 490,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/parser.d.ts",
+        "size": 374,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/reentry.d.ts",
+        "size": 528,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/rerun.d.ts",
+        "size": 325,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/trace.d.ts",
+        "size": 608,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/types.d.ts",
+        "size": 8909,
+        "mode": 420
+      },
+      {
+        "path": "dist/science/validate.d.ts",
+        "size": 756,
+        "mode": 420
+      },
+      {
+        "path": "dist/service-node.mjs",
+        "size": 192002,
+        "mode": 420
+      },
+      {
+        "path": "dist/service-stdio.mjs",
+        "size": 27595,
+        "mode": 420
+      },
+      {
+        "path": "dist/service.mjs",
+        "size": 41603,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/auth.d.ts",
+        "size": 941,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/authorized-view.d.ts",
+        "size": 1962,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/capabilities.d.ts",
+        "size": 1185,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/events.d.ts",
+        "size": 1173,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/index.d.ts",
+        "size": 143,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/local-embedding.d.ts",
+        "size": 423,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/mcp.d.ts",
+        "size": 2454,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/node.d.ts",
+        "size": 235,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/paths.d.ts",
+        "size": 162,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/retrieval.d.ts",
+        "size": 544,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/server.d.ts",
+        "size": 1605,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/stdio.d.ts",
+        "size": 1589,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/types.d.ts",
+        "size": 3175,
+        "mode": 420
+      },
+      {
+        "path": "dist/service/work-scheduler.d.ts",
+        "size": 697,
+        "mode": 420
+      },
+      {
+        "path": "dist/sha256-sync.d.ts",
+        "size": 62,
+        "mode": 420
+      },
+      {
+        "path": "dist/temporal.d.ts",
+        "size": 2372,
+        "mode": 420
+      },
+      {
+        "path": "dist/timestamps.d.ts",
+        "size": 1499,
+        "mode": 420
+      },
+      {
+        "path": "dist/types.d.ts",
+        "size": 9764,
+        "mode": 420
+      },
+      {
+        "path": "dist/validation-receipts.d.ts",
+        "size": 2576,
+        "mode": 420
+      },
+      {
+        "path": "dist/version.d.ts",
+        "size": 1193,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher-contracts.mjs",
+        "size": 262697,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher-host.mjs",
+        "size": 1327414,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/cli.d.ts",
+        "size": 599,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/contracts.d.ts",
+        "size": 6527,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/coordinator.d.ts",
+        "size": 9232,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/fs-authority.d.ts",
+        "size": 9992,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/host.d.ts",
+        "size": 5251,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/index-validation-hook.d.ts",
+        "size": 3736,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/journal.d.ts",
+        "size": 22658,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/pointer.d.ts",
+        "size": 3077,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/removal-adapter.d.ts",
+        "size": 1557,
+        "mode": 420
+      },
+      {
+        "path": "dist/watcher/service.d.ts",
+        "size": 2489,
+        "mode": 420
+      },
+      {
+        "path": "docs/ADMISSION-POLICY-PROVIDER-V1.md",
+        "size": 6692,
+        "mode": 420
+      },
+      {
+        "path": "docs/adr/0001-additive-navigation-effects-plane.md",
+        "size": 3675,
+        "mode": 420
+      },
+      {
+        "path": "docs/citations.md",
+        "size": 4329,
+        "mode": 420
+      },
+      {
+        "path": "docs/CURRENT_CAPABILITIES.md",
+        "size": 10167,
+        "mode": 420
+      },
+      {
+        "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
+        "size": 4004,
+        "mode": 420
+      },
+      {
+        "path": "docs/decisions/0000-record-decisions-as-adrs.md",
+        "size": 3154,
+        "mode": 420
+      },
+      {
+        "path": "docs/decisions/0001-adopt-hybrid-retrieval-with-gkx-canonical.md",
+        "size": 8624,
+        "mode": 420
+      },
+      {
+        "path": "docs/decisions/0002-storage-and-provider-topology.md",
+        "size": 7953,
+        "mode": 420
+      },
+      {
+        "path": "docs/decisions/0003-multi-agent-identity-and-authentication.md",
+        "size": 4119,
+        "mode": 420
+      },
+      {
+        "path": "docs/decisions/0004-graph-projection-sinks.md",
+        "size": 3551,
+        "mode": 420
+      },
+      {
+        "path": "docs/decisions/0005-lite-packaging.md",
+        "size": 5884,
+        "mode": 420
+      },
+      {
+        "path": "docs/decisions/0006-phase6-agent-identity-mcp-contract.md",
+        "size": 5311,
+        "mode": 420
+      },
+      {
+        "path": "docs/decisions/0007-activate-agent-identity-mcp-draft2.md",
+        "size": 741,
+        "mode": 420
+      },
+      {
+        "path": "docs/DETERMINISTIC-MOC-ASSISTANCE.md",
+        "size": 6837,
+        "mode": 420
+      },
+      {
+        "path": "docs/GKOS-REQUIREMENT-ADAPTER.md",
+        "size": 6224,
+        "mode": 420
+      },
+      {
+        "path": "docs/GRAPH-CONVERGENCE-REMEDIATION-20260908.md",
+        "size": 1926,
+        "mode": 420
+      },
+      {
+        "path": "docs/HANDOFF_2026-08-27.md",
+        "size": 3779,
+        "mode": 420
+      },
+      {
+        "path": "docs/INGESTION-CONTRACT.md",
+        "size": 1206,
+        "mode": 420
+      },
+      {
+        "path": "docs/MANAGED-MOC-NO-CHANGE-AUDIT.md",
+        "size": 2734,
+        "mode": 420
+      },
+      {
+        "path": "docs/mcp-invalid-params-draft3.schema.json",
+        "size": 2023,
+        "mode": 420
+      },
+      {
+        "path": "docs/MCP-PARAM-ERRORS.md",
+        "size": 5105,
+        "mode": 420
+      },
+      {
+        "path": "docs/moc-build-review-2026-09-05/ENGINE-RUST-MOC-BUILD-PLAN.md",
+        "size": 12731,
+        "mode": 420
+      },
+      {
+        "path": "docs/moc-build-review-2026-09-05/ENGINE-TS-MOC-BUILD-PLAN.md",
+        "size": 11252,
+        "mode": 420
+      },
+      {
+        "path": "docs/moc-build-review-2026-09-05/EXECUTION-REPORT-2026-09-06.md",
+        "size": 1951,
+        "mode": 420
+      },
+      {
+        "path": "docs/moc-build-review-2026-09-05/REVIEW.md",
+        "size": 5814,
+        "mode": 420
+      },
+      {
+        "path": "docs/NAVIGATION-AUTHORITY-BOUNDARY.md",
+        "size": 2018,
+        "mode": 420
+      },
+      {
+        "path": "docs/NAVIGATION-CONSUMER-MATRIX.md",
+        "size": 1546,
+        "mode": 420
+      },
+      {
+        "path": "docs/NAVIGATION-CONTRACT.md",
+        "size": 2865,
+        "mode": 420
+      },
+      {
+        "path": "docs/NAVIGATION-EFFECTS-CONTRACT.md",
+        "size": 7200,
+        "mode": 420
+      },
+      {
+        "path": "docs/navigation-effects/RECONCILIATION-20260827.md",
+        "size": 4448,
+        "mode": 420
+      },
+      {
+        "path": "docs/NPM-2.2-OWNER-ACTIONS.md",
+        "size": 3286,
+        "mode": 420
+      },
+      {
+        "path": "docs/OBSERVATION-2.2-QUALIFICATION.md",
+        "size": 3281,
+        "mode": 420
+      },
+      {
+        "path": "docs/phase5-watcher-host.md",
+        "size": 7581,
+        "mode": 420
+      },
+      {
+        "path": "docs/phase6-agent-identity-mcp-contract.md",
+        "size": 5759,
+        "mode": 420
+      },
+      {
+        "path": "docs/phase6-agent-identity-mcp-draft2.md",
+        "size": 900,
+        "mode": 420
+      },
+      {
+        "path": "docs/RELEASE-STATUS.md",
+        "size": 2875,
+        "mode": 420
+      },
+      {
+        "path": "docs/SETTINGS-TOML.md",
+        "size": 5941,
+        "mode": 420
+      },
+      {
+        "path": "docs/SETTINGS.md",
+        "size": 15087,
+        "mode": 420
+      },
+      {
+        "path": "docs/USEFULNESS-AUDIT-FOLLOWUP-20260908.md",
+        "size": 4021,
+        "mode": 420
+      },
+      {
+        "path": "docs/VERSION-PROFILE-COMPATIBILITY.md",
+        "size": 2369,
+        "mode": 420
+      },
+      {
+        "path": "docs/WINDOWS-QUALIFICATION-REMEDIATION-20260908.md",
+        "size": 2655,
+        "mode": 420
+      },
+      {
+        "path": "evidence/2026-08-16-navigation-2.1.0-verification.md",
+        "size": 7958,
+        "mode": 420
+      },
+      {
+        "path": "evidence/2026-08-20-navigation-2.1.2-corrective-verification.md",
+        "size": 3030,
+        "mode": 420
+      },
+      {
+        "path": "evidence/2026-08-26-admission-policy-provider-v1.md",
+        "size": 5163,
+        "mode": 420
+      },
+      {
+        "path": "evidence/2026-08-27-sol-pr31-repair.md",
+        "size": 5910,
+        "mode": 420
+      },
+      {
+        "path": "evidence/ENGINE-NAV-CONTRACT-1.0.0.json",
+        "size": 549,
+        "mode": 420
+      },
+      {
+        "path": "examples/managed-moc.mjs",
+        "size": 2493,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 4531,
+        "mode": 420
+      },
+      {
+        "path": "services/gkos-intelligence/pyproject.toml",
+        "size": 575,
+        "mode": 420
+      },
+      {
+        "path": "services/gkos-intelligence/README.md",
+        "size": 1196,
+        "mode": 420
+      },
+      {
+        "path": "services/gkos-intelligence/src/gkos_intelligence/__init__.py",
+        "size": 130,
+        "mode": 420
+      },
+      {
+        "path": "services/gkos-intelligence/src/gkos_intelligence/contracts.py",
+        "size": 1389,
+        "mode": 420
+      },
+      {
+        "path": "services/gkos-intelligence/src/gkos_intelligence/programs.py",
+        "size": 3204,
+        "mode": 420
+      },
+      {
+        "path": "services/gkos-intelligence/src/gkos_intelligence/server.py",
+        "size": 3956,
+        "mode": 420
+      },
+      {
+        "path": "services/gkos-intelligence/tests/test_contracts.py",
+        "size": 1590,
+        "mode": 420
+      },
+      {
+        "path": "services/gkos-intelligence/tests/test_settings.py",
+        "size": 1108,
+        "mode": 420
+      },
+      {
+        "path": "src/adapter.ts",
+        "size": 1643,
+        "mode": 420
+      },
+      {
+        "path": "src/admission-policy/index.ts",
+        "size": 53,
+        "mode": 420
+      },
+      {
+        "path": "src/admission-policy/provider.ts",
+        "size": 33161,
+        "mode": 420
+      },
+      {
+        "path": "src/admission-policy/types.ts",
+        "size": 4936,
+        "mode": 420
+      },
+      {
+        "path": "src/candidate-view.ts",
+        "size": 2079,
+        "mode": 420
+      },
+      {
+        "path": "src/canonical-candidates.ts",
+        "size": 12408,
+        "mode": 420
+      },
+      {
+        "path": "src/canonical-declarations.ts",
+        "size": 7037,
+        "mode": 420
+      },
+      {
+        "path": "src/canonical.ts",
+        "size": 2662,
+        "mode": 420
+      },
+      {
+        "path": "src/colors.ts",
+        "size": 2309,
+        "mode": 420
+      },
+      {
+        "path": "src/demo.ts",
+        "size": 7627,
+        "mode": 420
+      },
+      {
+        "path": "src/desktop-agent.ts",
+        "size": 35128,
+        "mode": 420
+      },
+      {
+        "path": "src/gkx-blocked-review.ts",
+        "size": 3994,
+        "mode": 420
+      },
+      {
+        "path": "src/gkx-enrichment.ts",
+        "size": 20815,
+        "mode": 420
+      },
+      {
+        "path": "src/gkx-exclusions.ts",
+        "size": 2101,
+        "mode": 420
+      },
+      {
+        "path": "src/gkx-migration.ts",
+        "size": 62189,
+        "mode": 420
+      },
+      {
+        "path": "src/gkx-network.ts",
+        "size": 1345,
+        "mode": 420
+      },
+      {
+        "path": "src/gkx-parser.ts",
+        "size": 4463,
+        "mode": 420
+      },
+      {
+        "path": "src/gkx.ts",
+        "size": 720,
+        "mode": 420
+      },
+      {
+        "path": "src/gkx23-relationship-types.ts",
+        "size": 876,
+        "mode": 420
+      },
+      {
+        "path": "src/gkx23.ts",
+        "size": 58140,
+        "mode": 420
+      },
+      {
+        "path": "src/governance/deferred-review.ts",
+        "size": 1157,
+        "mode": 420
+      },
+      {
+        "path": "src/governance/index.ts",
+        "size": 125,
+        "mode": 420
+      },
+      {
+        "path": "src/governance/state-change-receipt.ts",
+        "size": 3350,
+        "mode": 420
+      },
+      {
+        "path": "src/governance/store.ts",
+        "size": 5971,
+        "mode": 420
+      },
+      {
+        "path": "src/governance/types.ts",
+        "size": 3209,
+        "mode": 420
+      },
+      {
+        "path": "src/graph.ts",
+        "size": 28233,
+        "mode": 420
+      },
+      {
+        "path": "src/graphiti-adapter.ts",
+        "size": 592,
+        "mode": 420
+      },
+      {
+        "path": "src/graphiti.ts",
+        "size": 17567,
+        "mode": 420
+      },
+      {
+        "path": "src/incremental.ts",
+        "size": 20123,
+        "mode": 420
+      },
+      {
+        "path": "src/index.ts",
+        "size": 1656,
+        "mode": 420
+      },
+      {
+        "path": "src/ingest/contracts.ts",
+        "size": 9065,
+        "mode": 420
+      },
+      {
+        "path": "src/ingest/envelopes.ts",
+        "size": 35054,
+        "mode": 420
+      },
+      {
+        "path": "src/ingest/host.ts",
+        "size": 1793,
+        "mode": 420
+      },
+      {
+        "path": "src/ingest/profile.ts",
+        "size": 45521,
+        "mode": 420
+      },
+      {
+        "path": "src/ingest/source-scan.ts",
+        "size": 33695,
+        "mode": 420
+      },
+      {
+        "path": "src/ingest/storage.ts",
+        "size": 170265,
+        "mode": 420
+      },
+      {
+        "path": "src/ingest/types.ts",
+        "size": 12742,
+        "mode": 420
+      },
+      {
+        "path": "src/ingest/validation.ts",
+        "size": 45494,
+        "mode": 420
+      },
+      {
+        "path": "src/ingestion.ts",
+        "size": 1697,
+        "mode": 420
+      },
+      {
+        "path": "src/intelligence.ts",
+        "size": 9166,
+        "mode": 420
+      },
+      {
+        "path": "src/lineage-receipts.ts",
+        "size": 3751,
+        "mode": 420
+      },
+      {
+        "path": "src/lineage.ts",
+        "size": 9101,
+        "mode": 420
+      },
+      {
+        "path": "src/markdown-receipts.ts",
+        "size": 958,
+        "mode": 420
+      },
+      {
+        "path": "src/markdown.ts",
+        "size": 6856,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/assistance.ts",
+        "size": 10832,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/capabilities.ts",
+        "size": 1844,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/coordinator.ts",
+        "size": 6867,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/in-memory-adapter.ts",
+        "size": 2764,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/index.ts",
+        "size": 435,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/markers.ts",
+        "size": 4688,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/moc-batch.ts",
+        "size": 5845,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/node/executor.ts",
+        "size": 73705,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/node/index.ts",
+        "size": 198,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/node/journal.ts",
+        "size": 3486,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/node/moc-host.ts",
+        "size": 10961,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/node/moc-runtime.ts",
+        "size": 5193,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/path-policy.ts",
+        "size": 5710,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/planner.ts",
+        "size": 8683,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation-effects/types.ts",
+        "size": 8367,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/archive-ignore.ts",
+        "size": 368,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/audit.ts",
+        "size": 8427,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/candidate.ts",
+        "size": 6243,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/capabilities.ts",
+        "size": 973,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/config.ts",
+        "size": 4899,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/context-pack.ts",
+        "size": 7905,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/delegation.ts",
+        "size": 11205,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/determinism.ts",
+        "size": 1695,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/diff.ts",
+        "size": 8206,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/index.ts",
+        "size": 816,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/invalidation.ts",
+        "size": 2365,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/names.ts",
+        "size": 7826,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/reentry.ts",
+        "size": 4239,
+        "mode": 420
+      },
+      {
+        "path": "src/navigation/types.ts",
+        "size": 11794,
+        "mode": 420
+      },
+      {
+        "path": "src/paths.ts",
+        "size": 4466,
+        "mode": 420
+      },
+      {
+        "path": "src/resolver-internal.ts",
+        "size": 4702,
+        "mode": 420
+      },
+      {
+        "path": "src/resolver.ts",
+        "size": 5072,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/authorized-view.ts",
+        "size": 12413,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/candidate-types.ts",
+        "size": 15083,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/chunker.ts",
+        "size": 25181,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/confidence.ts",
+        "size": 2121,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/config.ts",
+        "size": 24970,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/contracts.ts",
+        "size": 2394,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/coordinator.ts",
+        "size": 61306,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/digest.ts",
+        "size": 4274,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-bounds.ts",
+        "size": 546,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-capability.ts",
+        "size": 33244,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-executor.ts",
+        "size": 60827,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-fixtures.ts",
+        "size": 115500,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-golden.ts",
+        "size": 9662,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-host.ts",
+        "size": 2219,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-output.ts",
+        "size": 37113,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-presentation.ts",
+        "size": 3240,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-reviewed-bundle.ts",
+        "size": 49246,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-reviewed-result.ts",
+        "size": 12973,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation-tune-priority.ts",
+        "size": 13254,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/evaluation.ts",
+        "size": 189675,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/filters.ts",
+        "size": 10399,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/fusion.ts",
+        "size": 5028,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/gkx-provenance.ts",
+        "size": 33091,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/host.ts",
+        "size": 2000,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/index.ts",
+        "size": 5456,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/lexical.ts",
+        "size": 10105,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/manifest.ts",
+        "size": 6176,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/path-security.ts",
+        "size": 6116,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/provenance.ts",
+        "size": 23740,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/providers.ts",
+        "size": 18548,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/sqlite-store.ts",
+        "size": 99433,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/state-writer-lock.ts",
+        "size": 34244,
+        "mode": 420
+      },
+      {
+        "path": "src/retrieval/types.ts",
+        "size": 13527,
+        "mode": 420
+      },
+      {
+        "path": "src/science/artifacts.ts",
+        "size": 7206,
+        "mode": 420
+      },
+      {
+        "path": "src/science/canonicalize.ts",
+        "size": 2078,
+        "mode": 420
+      },
+      {
+        "path": "src/science/events.ts",
+        "size": 6424,
+        "mode": 420
+      },
+      {
+        "path": "src/science/fixtures.ts",
+        "size": 15937,
+        "mode": 420
+      },
+      {
+        "path": "src/science/index.ts",
+        "size": 490,
+        "mode": 420
+      },
+      {
+        "path": "src/science/parser.ts",
+        "size": 6815,
+        "mode": 420
+      },
+      {
+        "path": "src/science/reentry.ts",
+        "size": 4562,
+        "mode": 420
+      },
+      {
+        "path": "src/science/rerun.ts",
+        "size": 7007,
+        "mode": 420
+      },
+      {
+        "path": "src/science/trace.ts",
+        "size": 21853,
+        "mode": 420
+      },
+      {
+        "path": "src/science/types.ts",
+        "size": 8651,
+        "mode": 420
+      },
+      {
+        "path": "src/science/validate.ts",
+        "size": 12935,
+        "mode": 420
+      },
+      {
+        "path": "src/service/auth.ts",
+        "size": 3812,
+        "mode": 420
+      },
+      {
+        "path": "src/service/authorized-view.ts",
+        "size": 17154,
+        "mode": 420
+      },
+      {
+        "path": "src/service/capabilities.ts",
+        "size": 5505,
+        "mode": 420
+      },
+      {
+        "path": "src/service/events.ts",
+        "size": 5803,
+        "mode": 420
+      },
+      {
+        "path": "src/service/index.ts",
+        "size": 143,
+        "mode": 420
+      },
+      {
+        "path": "src/service/local-embedding.ts",
+        "size": 6889,
+        "mode": 420
+      },
+      {
+        "path": "src/service/mcp.ts",
+        "size": 65576,
+        "mode": 420
+      },
+      {
+        "path": "src/service/node.ts",
+        "size": 236,
+        "mode": 420
+      },
+      {
+        "path": "src/service/paths.ts",
+        "size": 1058,
+        "mode": 420
+      },
+      {
+        "path": "src/service/retrieval.ts",
+        "size": 547,
+        "mode": 420
+      },
+      {
+        "path": "src/service/server.ts",
+        "size": 28578,
+        "mode": 420
+      },
+      {
+        "path": "src/service/stdio.ts",
+        "size": 14907,
+        "mode": 420
+      },
+      {
+        "path": "src/service/types.ts",
+        "size": 3088,
+        "mode": 420
+      },
+      {
+        "path": "src/service/work-scheduler.ts",
+        "size": 5393,
+        "mode": 420
+      },
+      {
+        "path": "src/sha256-sync.ts",
+        "size": 3133,
+        "mode": 420
+      },
+      {
+        "path": "src/temporal.ts",
+        "size": 3992,
+        "mode": 420
+      },
+      {
+        "path": "src/timestamps.ts",
+        "size": 4200,
+        "mode": 420
+      },
+      {
+        "path": "src/types.ts",
+        "size": 9403,
+        "mode": 420
+      },
+      {
+        "path": "src/validation-receipts.ts",
+        "size": 4308,
+        "mode": 420
+      },
+      {
+        "path": "src/version.ts",
+        "size": 1187,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/cli.ts",
+        "size": 7718,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/contracts.ts",
+        "size": 241958,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/coordinator.ts",
+        "size": 93883,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/fs-authority.ts",
+        "size": 90212,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/host.ts",
+        "size": 75392,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/index-validation-hook.ts",
+        "size": 8457,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/journal.ts",
+        "size": 300226,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/pointer.ts",
+        "size": 18851,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/removal-adapter.ts",
+        "size": 11881,
+        "mode": 420
+      },
+      {
+        "path": "src/watcher/service.ts",
+        "size": 17527,
+        "mode": 420
+      }
+    ],
+    "entryCount": 595,
+    "bundled": []
+  }
+}

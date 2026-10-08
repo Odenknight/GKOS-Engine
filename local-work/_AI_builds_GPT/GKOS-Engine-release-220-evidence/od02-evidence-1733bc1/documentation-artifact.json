@@ -1,0 +1,31 @@
+{
+  "documentation_version_identifier": "GKOS-Engine-v2.1.1-profile-doc.1",
+  "supersedes": "none",
+  "version_identifier": {
+    "tag": "v2.1.1",
+    "package_version": "2.1.1",
+    "commit": "f4dfda16eac746c667cf042f908a918d9acc6713"
+  },
+  "digest_method": {
+    "algorithm": "sha256",
+    "object": "raw Git blob bytes at the pinned Engine v2.1.1 commit; no newline conversion",
+    "manifest_format": "GNU sha256sum lines '<hex>  <file>\\n', in listed order, LF",
+    "files": [
+      "package.json",
+      "README.md",
+      "CHANGELOG.md",
+      "LICENSE",
+      "NOTICE",
+      "VERSIONING.md"
+    ],
+    "per_file_sha256": {
+      "package.json": "0caa2a6f19f4084cbf839e8f7643632bef13ed0ad6326d714aef024a67e1b97f",
+      "README.md": "59160952ee0300c020b6d2cbb6c90235ba736e52616aa66b8d26f97c189e0fe0",
+      "CHANGELOG.md": "fc0cd4d63f5fc0bcc15432cfdb06f59a3632f8bcf5e3399c2fdf2f8f74f706e6",
+      "LICENSE": "34d0c901bc4ac593bc23871166c4d8b7d1293ae00a95c43ae33d9f40717a7fcd",
+      "NOTICE": "d561803781c9fe59d3ef5b37f28711a6eaf673d8835b978c4996813d40b42050",
+      "VERSIONING.md": "4a7feb514a7da59136619ede59146ce357984c835718e25cacb7d44a231fd612"
+    },
+    "manifest_sha256": "1d2ae51f89ce52714e318ff5a0246cc885442c87d985de2752aec00031edd754"
+  }
+}

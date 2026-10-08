@@ -1,0 +1,26 @@
+{
+  "sourceCommit": "35644f103771d1edf3634c160d381370bea883aa",
+  "engineCommit": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "tarballSha256": "f04705280acac74deab823683193a81a7c4dbf333791b33f6189226b709d593b",
+  "platform": "win32",
+  "node": "v24.18.0",
+  "tests": 327,
+  "chromiumDesktopMobile": 38,
+  "firefoxWebkit": 36,
+  "status": "PASS",
+  "scope": "Controlled no-save artifact substitution; final dependency pin and full consumer platform/runtime qualification pending",
+  "logs": [
+    {
+      "file": "kosmos-ea05531-tests.log",
+      "sha256": "481e51aa46fd68f4b157e70731168a9785e7f19a4d676984ca93c20b88d37bd0"
+    },
+    {
+      "file": "kosmos-ea05531-browser.log",
+      "sha256": "1a9818f2021faaae64bf689368f33c43238e8b022fccc08dd76c37439692e29a"
+    },
+    {
+      "file": "kosmos-ea05531-browser-full.log",
+      "sha256": "2b1e9ded05ca24f5a3c6d98d11d013051ef9336258733a2097b6a2cb2b6b9a45"
+    }
+  ]
+}

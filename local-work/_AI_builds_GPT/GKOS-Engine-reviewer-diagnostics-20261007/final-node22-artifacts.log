@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: five adopted artifact roles have exact CBOR identity and complete readable packets
+ok 1 - five adopted artifact roles have exact CBOR identity and complete readable packets
+  ---
+  duration_ms: 226.7695
+  type: 'test'
+  ...
+# Subtest: context exists before proposal and exact reviewed bytes survive action-time and revocation changes
+ok 2 - context exists before proposal and exact reviewed bytes survive action-time and revocation changes
+  ---
+  duration_ms: 55.2905
+  type: 'test'
+  ...
+# Subtest: actual context selector and proposing actor retain distinct identities and classes
+ok 3 - actual context selector and proposing actor retain distinct identities and classes
+  ---
+  duration_ms: 47.2609
+  type: 'test'
+  ...
+# Subtest: V2 refuses canonical artifact substitution, private JSON alternate path, unimplemented required recovery and stale escalation
+ok 4 - V2 refuses canonical artifact substitution, private JSON alternate path, unimplemented required recovery and stale escalation
+  ---
+  duration_ms: 271.8023
+  type: 'test'
+  ...
+# Subtest: V2 product readiness holds retain refusal evidence without fabricating supersession diagnostics
+ok 5 - V2 product readiness holds retain refusal evidence without fabricating supersession diagnostics
+  ---
+  duration_ms: 58.9469
+  type: 'test'
+  ...
+# Subtest: generic control failures remain restrictive product evidence without claiming supersession applicability
+ok 6 - generic control failures remain restrictive product evidence without claiming supersession applicability
+  ---
+  duration_ms: 83.932
+  type: 'test'
+  ...
+# Subtest: N19 malformed wire variants fail canonical gates before establishing an artifact
+ok 7 - N19 malformed wire variants fail canonical gates before establishing an artifact
+  ---
+  duration_ms: 123.4191
+  type: 'test'
+  ...
+# Subtest: N19 schema integers, declared sets, timestamps, null/absent fields, hashes and full rendering are enforced
+ok 8 - N19 schema integers, declared sets, timestamps, null/absent fields, hashes and full rendering are enforced
+  ---
+  duration_ms: 15.2719
+  type: 'test'
+  ...
+# Subtest: opaque captured source bytes preserve non-NFC and CRLF, without silently repairing surrogate evidence
+ok 9 - opaque captured source bytes preserve non-NFC and CRLF, without silently repairing surrogate evidence
+  ---
+  duration_ms: 6.9491
+  type: 'test'
+  ...
+# Subtest: mandatory retention evidence, conflicts, expiry and authorized disposition fail closed
+ok 10 - mandatory retention evidence, conflicts, expiry and authorized disposition fail closed
+  ---
+  duration_ms: 7.5292
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3238.6503

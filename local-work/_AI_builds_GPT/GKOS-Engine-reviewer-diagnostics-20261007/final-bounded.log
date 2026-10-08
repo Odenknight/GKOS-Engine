@@ -1,0 +1,32 @@
+✔ actual runtime text capability either validates Unicode17 or refuses closed without skips (205.0772ms)
+ℹ {"node":"24.18.0","unicode":"17.0","text_expectation":"Unicode17 validation"}
+✔ actual runtime refuses decomposed text and malformed text without normalization repair (9.156ms)
+✔ isolated capability loss refuses encode decode digest and map text while numeric values remain usable (3726.864ms)
+✔ numeric integer values keep shortest heads bigint type and unsigned64 bounds on any runtime (0.8608ms)
+✔ numeric float values retain float type shortest exact width and prohibited-value refusal on any runtime (114.9491ms)
+✔ nontext assembly and digest remain canonical without any Unicode requirement (4.8793ms)
+✔ private codec stays private alongside the explicit host artifact subpath and legacy JSON (68.9125ms)
+✔ current runtime includes canonical artifacts and V2 admission without profile exemptions (2.3725ms)
+✔ five adopted artifact roles have exact CBOR identity and complete readable packets (240.9088ms)
+✔ context exists before proposal and exact reviewed bytes survive action-time and revocation changes (138.8401ms)
+✔ actual context selector and proposing actor retain distinct identities and classes (47.0518ms)
+✔ V2 refuses canonical artifact substitution, private JSON alternate path, unimplemented required recovery and stale escalation (314.0194ms)
+✔ V2 product readiness holds retain refusal evidence without fabricating supersession diagnostics (26.2124ms)
+✔ generic control failures remain restrictive product evidence without claiming supersession applicability (125.1255ms)
+✔ N19 malformed wire variants fail canonical gates before establishing an artifact (458.4935ms)
+✔ N19 schema integers, declared sets, timestamps, null/absent fields, hashes and full rendering are enforced (44.6646ms)
+✔ opaque captured source bytes preserve non-NFC and CRLF, without silently repairing surrogate evidence (194.4749ms)
+✔ mandatory retention evidence, conflicts, expiry and authorized disposition fail closed (12.5017ms)
+✔ context captures exact source bytes, deterministic corpus order and ordered selection closure (18.7455ms)
+✔ admission binds authoritative roles, state, exact context, time, review and typed scope before effects (76.2778ms)
+✔ authorized correction creates fresh evidence and requires fresh review and authority (3.4449ms)
+✔ canonical evidence retains hostile JSON keys (7.6207ms)
+✔ governance adapter serializes concurrent append and rejects duplicate record identities (10.4753ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12926.9984

@@ -1,0 +1,7 @@
+Scheduled retrieval observation used frozen Engine 2.1.2 projection identities against Engine 2.2.0, failing initial indexing before performance could be measured. This adds a separately versioned 2.2 fixture and qualification runner with fixed, independently reconstructed projection digests, complete manifest comparison, source/version binding and native SQLite vector-reuse verification. The historical generator remains byte-identical, and its scheduled replay now checks out the exact last successful 2.1.2 source.
+
+Includes the reviewed three-file diagnostic/documentation change from #47 and reseals the governed source inventory that its CI rejected. The 10k corpus, 313-call batching ledger, one changed item, 9,999 reused vectors, query determinism, rebuild convergence and strict p95 <500ms are retained.
+
+Validation: native Windows Node 24.18.0 observation tests 16/16, including real SQLite initial/incremental/rebuild checks; typecheck, license, nomenclature, audit and inventory pass. Hosted exact-head observation and CI/runtime matrices are in progress. Initial CRLF environment and reuse-check failures are retained in local evidence and corrected without relaxing assertions.
+
+This is a qualification repair, not a release approval receipt. Issue #44 remains open: durable managed-MOC no-op receipts, comprehensive native durability/performance, 24-hour soak, exact-tarball consumer checks, trusted publishing and final immutable release gates remain mandatory. No tag, npm publication, release or consumer pin has been created.

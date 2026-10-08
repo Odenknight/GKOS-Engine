@@ -1,0 +1,62 @@
+{
+  "recordedAt": "2026-09-08T18:51:28.176Z",
+  "failedCandidate": "6e4e937f5bf6b3b49809072e49beafee71c3fcd8",
+  "repairedCandidate": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+  "qualificationStatus": "PENDING",
+  "releaseQualified": false,
+  "environment": {
+    "platform": "native Windows 11 Pro",
+    "version": "10.0.26200",
+    "filesystem": "NTFS",
+    "node": "22.23.2"
+  },
+  "diagnosis": {
+    "baselineShutdownRetryScanMs": 6178.8936,
+    "postFixCompleteShutdownMs": 3039.9729,
+    "shutdownDeadlineMs": 10000,
+    "qualificationCommandTimeoutMs": 1800000,
+    "limitsChanged": false
+  },
+  "tests": [
+    {
+      "command": "npx --yes --package=node@22.23.2 node --test test/watcher-source-scan.test.mjs",
+      "pass": 5,
+      "fail": 0
+    },
+    {
+      "command": "npx --yes --package=node@22.23.2 node --test --test-concurrency=1 test/watcher-large-restart.test.mjs test/watcher-service-cli.test.mjs test/retrieval-windows-path-security.test.mjs test/ingest-cli.test.mjs test/runtime-qualification.test.mjs",
+      "pass": 47,
+      "fail": 0,
+      "durationMs": 212739.657
+    }
+  ],
+  "testScope": "Focused tests ran against the repair working tree before commit; full exact-commit qualification remains pending.",
+  "logs": [
+    {
+      "path": "windows22-large-restart-local.log",
+      "sha256": "727a499a94aa85c4468f92a31b612ba6bb407d6b0af231b0d5c1abc05d34ecbc"
+    },
+    {
+      "path": "windows22-large-restart-phases.log",
+      "sha256": "363b19e9de05a35aa67d6e97356f685b77073c32ea14d31b6e7d8384a0488bfb"
+    },
+    {
+      "path": "windows22-scan-fix-focused.log",
+      "sha256": "7df84667b5c9e9737343303184ab11abe4224b8174b900e4c125ed97ae6c2e1f"
+    },
+    {
+      "path": "windows22-scan-fix-bound.log",
+      "sha256": "bbe5a63f8798783f5aeaf39b547f36f62eb2bf0d02f65af6eb961337b2e48ab1"
+    },
+    {
+      "path": "windows22-scan-fix-regressions.log",
+      "sha256": "bc1b13f4c9e3689f7a7809e49a515dd05196181ec726ea4232aca8e49295b1b8"
+    }
+  ],
+  "pushRuns": {
+    "runtime": 34265283849,
+    "ci": 34265283664,
+    "observation": 34265283840,
+    "audit": 34265283649
+  }
+}

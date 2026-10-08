@@ -1,0 +1,23 @@
+{
+  "commit": "f7d80e6fce1b905a42c54423ef8ec4b7fc18fc22",
+  "parent": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "pr": "https://github.com/Odenknight/GKOS-Engine/pull/49",
+  "status": "ISOLATED_REPAIR_UNDER_QUALIFICATION",
+  "sourcePinsMatchCommit": true,
+  "implementationReceiptSha256": "db3014ef3d697ae9fe15ae609d8cebd49acc3a07218d4f745b262c5475da149b",
+  "windowsNode22Tests": 87,
+  "windowsNode24Tests": 87,
+  "tests": [
+    {
+      "path": "native-read-regressions.log",
+      "sha256": "85d4d59ef8bc3e2e48f456dacb0378cbbf5238f3be1cc8800a1eed8877a8a5fe"
+    },
+    {
+      "path": "native-read-regressions-node22.log",
+      "sha256": "311be340855db271d20f9504247ab8255216a2e93fe51ca0bef6e178418c01bd"
+    }
+  ],
+  "fullQualification": false,
+  "releaseCandidateUnchanged": true,
+  "limitations": "Old Windows tail remains unexplained. Static all-public experiment measured improvement with identical results; complete exact-commit native/observation/consumer/soak qualification remains required."
+}

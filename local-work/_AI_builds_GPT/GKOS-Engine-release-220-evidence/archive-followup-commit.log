@@ -1,0 +1,28 @@
+[archive/local-project-state-20260909 8908096] archive: retain remaining historical worktree deltas and source bindings
+ 27 files changed, 2240 insertions(+)
+ create mode 100644 other-working-trees/.work_deterministic-moc/SNAPSHOT.json
+ create mode 100644 other-working-trees/.work_deterministic-moc/docs/DETERMINISTIC-MOC-ASSISTANCE.md
+ create mode 100644 other-working-trees/.work_deterministic-moc/evidence/2026-09-05-deterministic-moc-assistance.md
+ create mode 100644 other-working-trees/.work_deterministic-moc/package.json
+ create mode 100644 other-working-trees/.work_deterministic-moc/src/navigation-effects/assistance.ts
+ create mode 100644 other-working-trees/.work_deterministic-moc/src/navigation-effects/coordinator.ts
+ create mode 100644 other-working-trees/.work_deterministic-moc/src/navigation-effects/index.ts
+ create mode 100644 other-working-trees/.work_deterministic-moc/src/navigation-effects/moc-batch.ts
+ create mode 100644 other-working-trees/.work_deterministic-moc/test/navigation-effects-assistance.test.mjs
+ create mode 100644 other-working-trees/.work_deterministic-moc/test/navigation-effects-contract.test.mjs
+ create mode 100644 other-working-trees/.work_pr39-coverage/SNAPSHOT.json
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/README.md
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/SNAPSHOT.json
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/scripts/build.mjs
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/scripts/check-phase6-f2-scope.mjs
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/scripts/phase6-f2-qualification.mjs
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/canonical.ts
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/credential.ts
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/errors.ts
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/filesystem.ts
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/index.ts
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/operations.ts
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/sqlite.ts
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/types.ts
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/src/identity-authority/validation.ts
+ create mode 100644 other-working-trees/GKOS-functional-uplift_GKOS-Engine/test/phase6-f2-authority.test.mjs

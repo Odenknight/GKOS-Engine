@@ -1,0 +1,41 @@
+TAP version 13
+# {"phase":"runOne:startup_reconciliation","at":3796.565}
+# {"phase":"scan:start","at":3801.3651}
+# (node:31984) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# {"phase":"scan:end","at":19434.7897}
+# {"phase":"runOne:event","at":50186.0339}
+# {"phase":"scan:start","at":50325.9343}
+# {"phase":"failure:derive","at":56202.8427}
+# {"phase":"failure:persist","at":56204.0328}
+# {"phase":"failure:journal","at":56747.2749}
+# {"phase":"failure:done","at":56759.046}
+# {"phase":"shutdown:stopping","at":56759.952}
+# {"phase":"shutdown:callback","at":56761.156}
+# {"phase":"runOne:failure_reconciliation","at":56761.2215}
+# {"phase":"scan:start","at":56894.098}
+# {"phase":"failure:derive","at":63072.9916}
+# {"phase":"failure:persist","at":63073.7319}
+# {"phase":"failure:journal","at":63680.314}
+# {"phase":"failure:done","at":63687.7614}
+# {"phase":"runOne:failure_reconciliation","at":65636.4495}
+# {"phase":"scan:start","at":65768.2519}
+# {"phase":"scan:end","at":77976.3522}
+# {"phase":"shutdown:stopping","at":156400.909}
+# {"phase":"shutdown:callback","at":156402.6583}
+# Subtest: restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority
+ok 1 - restart and unchanged retry reopen coherent topology/graph larger than 1 MiB without changing authority
+  ---
+  duration_ms: 156688.3768
+  type: 'test'
+  ...
+# {"topology_bytes":1552042,"graph_bytes":30764374}
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 157251.0777

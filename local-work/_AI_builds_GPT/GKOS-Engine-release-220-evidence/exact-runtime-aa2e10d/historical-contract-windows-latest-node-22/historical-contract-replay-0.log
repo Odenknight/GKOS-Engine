@@ -1,0 +1,220 @@
+TAP version 13
+# Subtest: generator check and exact manifest closure
+ok 1 - generator check and exact manifest closure
+  ---
+  duration_ms: 7355.6498
+  type: 'test'
+  ...
+# Subtest: all schemas compile strictly and product instances validate
+ok 2 - all schemas compile strictly and product instances validate
+  ---
+  duration_ms: 926.6252
+  type: 'test'
+  ...
+# Subtest: conformance rejects wrong partitions, duplicate coordinates, and incomplete absence records
+ok 3 - conformance rejects wrong partitions, duplicate coordinates, and incomplete absence records
+  ---
+  duration_ms: 36154.2825
+  type: 'test'
+  ...
+# Subtest: every abstract durable row is complete and validates against its exact product-row schema
+ok 4 - every abstract durable row is complete and validates against its exact product-row schema
+  ---
+  duration_ms: 583.4142
+  type: 'test'
+  ...
+# Subtest: event mutation is append-only and advances the product event chain, committed head, and anchor atomically
+ok 5 - event mutation is append-only and advances the product event chain, committed head, and anchor atomically
+  ---
+  duration_ms: 110.2876
+  type: 'test'
+  ...
+# Subtest: each RETENTION vector proves its distinct V5 qualification, policy, sweep, deletion, batch, crash, and restore semantics
+ok 6 - each RETENTION vector proves its distinct V5 qualification, policy, sweep, deletion, batch, crash, and restore semantics
+  ---
+  duration_ms: 120.1261
+  type: 'test'
+  ...
+# Subtest: operation, schema-ref, tool, error and vector inventories are exact
+ok 7 - operation, schema-ref, tool, error and vector inventories are exact
+  ---
+  duration_ms: 64.5585
+  type: 'test'
+  ...
+# Subtest: every canonical fixture request validates against its declared exact operation schema
+ok 8 - every canonical fixture request validates against its declared exact operation schema
+  ---
+  duration_ms: 214.1222
+  type: 'test'
+  ...
+# Subtest: request and activity rows bind exact request bytes and complete-success result bytes
+ok 9 - request and activity rows bind exact request bytes and complete-success result bytes
+  ---
+  duration_ms: 224.6217
+  type: 'test'
+  ...
+# Subtest: Q21 and Q22 fixture embodiment has exact closed shape, lineage, aliases and counts
+ok 10 - Q21 and Q22 fixture embodiment has exact closed shape, lineage, aliases and counts
+  ---
+  duration_ms: 182.409
+  type: 'test'
+  ...
+# Subtest: fixture wire bytes and every exposed digest are independently reproducible
+ok 11 - fixture wire bytes and every exposed digest are independently reproducible
+  ---
+  duration_ms: 698.4418
+  type: 'test'
+  ...
+# Subtest: every exposed fixture-domain derivation uses an authorized V15 tag and its exact unprefixed preimage
+ok 12 - every exposed fixture-domain derivation uses an authorized V15 tag and its exact unprefixed preimage
+  ---
+  duration_ms: 1300.1822
+  type: 'test'
+  ...
+# Subtest: declared mutation sets are canonical and equal the actual durable and physical diff
+ok 13 - declared mutation sets are canonical and equal the actual durable and physical diff
+  ---
+  duration_ms: 319.4423
+  type: 'test'
+  ...
+# Subtest: global-event and observed-sink cross-products are exact
+ok 14 - global-event and observed-sink cross-products are exact
+  ---
+  duration_ms: 106.1578
+  type: 'test'
+  ...
+# Subtest: redaction schema negatives have no response and serializer/sink cases stay closed and unique
+ok 15 - redaction schema negatives have no response and serializer/sink cases stay closed and unique
+  ---
+  duration_ms: 98.8886
+  type: 'test'
+  ...
+# Subtest: all RESTORE cases carry exact recovery, publication, invalidation, and physical disposition evidence
+ok 16 - all RESTORE cases carry exact recovery, publication, invalidation, and physical disposition evidence
+  ---
+  duration_ms: 172.1121
+  type: 'test'
+  ...
+# Subtest: Q17, Q18, mapping.add and restart-stale cursor semantics are exact
+ok 17 - Q17, Q18, mapping.add and restart-stale cursor semantics are exact
+  ---
+  duration_ms: 118.4237
+  type: 'test'
+  ...
+# Subtest: session auth-epoch admission and closed-session reuse fail before durable request creation
+ok 18 - session auth-epoch admission and closed-session reuse fail before durable request creation
+  ---
+  duration_ms: 93.1859
+  type: 'test'
+  ...
+# Subtest: cursor continuations are non-null, REQUEST cases are durable, and RSR prestates remain distinct
+ok 19 - cursor continuations are non-null, REQUEST cases are durable, and RSR prestates remain distinct
+  ---
+  duration_ms: 132.5391
+  type: 'test'
+  ...
+# Subtest: credential and entropy oracles implement the exact RATE, GLOBAL-EVENT, and COLLISION programs
+ok 20 - credential and entropy oracles implement the exact RATE, GLOBAL-EVENT, and COLLISION programs
+  ---
+  duration_ms: 94.2161
+  type: 'test'
+  ...
+# Subtest: all seven credential-auth non-enumeration cases charge only the exact auth-failure buckets
+ok 21 - all seven credential-auth non-enumeration cases charge only the exact auth-failure buckets
+  ---
+  duration_ms: 109.0324
+  type: 'test'
+  ...
+# Subtest: all nine BACKUP leaves bind verification, protected manifest, temporary deletion, publication, and replay semantics
+ok 22 - all nine BACKUP leaves bind verification, protected manifest, temporary deletion, publication, and replay semantics
+  ---
+  duration_ms: 113.2754
+  type: 'test'
+  ...
+# Subtest: all 22 credential issue/rotate leaves bind product credentials, receipts, handoff dispositions, replay, sessions, and stale work
+ok 23 - all 22 credential issue/rotate leaves bind product credentials, receipts, handoff dispositions, replay, sessions, and stale work
+  ---
+  duration_ms: 120.0007
+  type: 'test'
+  ...
+# Subtest: all 20 non-Q18 RACE leaves prove their distinct final-gate, competing mutation, crash cut, wire, and product-row effects
+ok 24 - all 20 non-Q18 RACE leaves prove their distinct final-gate, competing mutation, crash cut, wire, and product-row effects
+  ---
+  duration_ms: 203.5591
+  type: 'test'
+  ...
+# Subtest: all 39 BOOTSTRAP leaves use the ratified product-state vocabulary and prove distinct source, plan, handoff, publication, and recovery semantics
+ok 25 - all 39 BOOTSTRAP leaves use the ratified product-state vocabulary and prove distinct source, plan, handoff, publication, and recovery semantics
+  ---
+  duration_ms: 144.0241
+  type: 'test'
+  ...
+# Subtest: all seven TIMESTAMP leaves validate distinct exact inputs at the schema, range, or Gregorian stage
+ok 26 - all seven TIMESTAMP leaves validate distinct exact inputs at the schema, range, or Gregorian stage
+  ---
+  duration_ms: 96.542
+  type: 'test'
+  ...
+# Subtest: all 37 ACTIVITY metadata leaves bind the exact metadata value, key count, byte count, and persistence outcome
+ok 27 - all 37 ACTIVITY metadata leaves bind the exact metadata value, key count, byte count, and persistence outcome
+  ---
+  duration_ms: 127.9914
+  type: 'test'
+  ...
+# Subtest: all 18 policy/dependency/transport leaves prove their exact reasons, ordered decisions, traces, boundary, and persistence
+ok 28 - all 18 policy/dependency/transport leaves prove their exact reasons, ordered decisions, traces, boundary, and persistence
+  ---
+  duration_ms: 110.8817
+  type: 'test'
+  ...
+# Subtest: collision candidates bind an existing owning product row and never commit
+ok 29 - collision candidates bind an existing owning product row and never commit
+  ---
+  duration_ms: 106.1406
+  type: 'test'
+  ...
+# Subtest: Q23 rational accumulator is integer exact and restart preserving
+ok 30 - Q23 rational accumulator is integer exact and restart preserving
+  ---
+  duration_ms: 107.2155
+  type: 'test'
+  ...
+# Subtest: canonical identifiers, cursors, bootstrap and secret results fail closed
+ok 31 - canonical identifiers, cursors, bootstrap and secret results fail closed
+  ---
+  duration_ms: 83.9965
+  type: 'test'
+  ...
+# Subtest: two fresh roots, execution-backed receipts, and deterministic tar are valid
+ok 32 - two fresh roots, execution-backed receipts, and deterministic tar are valid
+  ---
+  duration_ms: 67523.9754
+  type: 'test'
+  ...
+# Subtest: diff is all-and-only allowed and protected paths are byte-identical
+ok 33 - diff is all-and-only allowed and protected paths are byte-identical
+  ---
+  duration_ms: 43.8201
+  type: 'test'
+  ...
+# Subtest: generated and qualification inputs contain no secret material
+ok 34 - generated and qualification inputs contain no secret material
+  ---
+  duration_ms: 71.6797
+  type: 'test'
+  ...
+# Subtest: hosted workflow freezes all-and-only 11 jobs and artifacts
+ok 35 - hosted workflow freezes all-and-only 11 jobs and artifacts
+  ---
+  duration_ms: 4.1499
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 118196.6828

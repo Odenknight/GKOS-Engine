@@ -1,0 +1,57 @@
+{
+  "schema": "gkos-documentation-digest-verification/1",
+  "supersedes": "none",
+  "status": "MATCH",
+  "code": "DOCUMENTATION_DIGEST_MATCH",
+  "scope": "exact-file-bytes-and-ordered-sha256sum-manifest",
+  "manifest": {
+    "expected": "1d2ae51f89ce52714e318ff5a0246cc885442c87d985de2752aec00031edd754",
+    "actual": "1d2ae51f89ce52714e318ff5a0246cc885442c87d985de2752aec00031edd754",
+    "matches": true
+  },
+  "files": [
+    {
+      "index": 0,
+      "bytes": 2840,
+      "expected": "0caa2a6f19f4084cbf839e8f7643632bef13ed0ad6326d714aef024a67e1b97f",
+      "actual": "0caa2a6f19f4084cbf839e8f7643632bef13ed0ad6326d714aef024a67e1b97f",
+      "matches": true
+    },
+    {
+      "index": 1,
+      "bytes": 11892,
+      "expected": "59160952ee0300c020b6d2cbb6c90235ba736e52616aa66b8d26f97c189e0fe0",
+      "actual": "59160952ee0300c020b6d2cbb6c90235ba736e52616aa66b8d26f97c189e0fe0",
+      "matches": true
+    },
+    {
+      "index": 2,
+      "bytes": 3162,
+      "expected": "fc0cd4d63f5fc0bcc15432cfdb06f59a3632f8bcf5e3399c2fdf2f8f74f706e6",
+      "actual": "fc0cd4d63f5fc0bcc15432cfdb06f59a3632f8bcf5e3399c2fdf2f8f74f706e6",
+      "matches": true
+    },
+    {
+      "index": 3,
+      "bytes": 1059,
+      "expected": "34d0c901bc4ac593bc23871166c4d8b7d1293ae00a95c43ae33d9f40717a7fcd",
+      "actual": "34d0c901bc4ac593bc23871166c4d8b7d1293ae00a95c43ae33d9f40717a7fcd",
+      "matches": true
+    },
+    {
+      "index": 4,
+      "bytes": 632,
+      "expected": "d561803781c9fe59d3ef5b37f28711a6eaf673d8835b978c4996813d40b42050",
+      "actual": "d561803781c9fe59d3ef5b37f28711a6eaf673d8835b978c4996813d40b42050",
+      "matches": true
+    },
+    {
+      "index": 5,
+      "bytes": 677,
+      "expected": "4a7feb514a7da59136619ede59146ce357984c835718e25cacb7d44a231fd612",
+      "actual": "4a7feb514a7da59136619ede59146ce357984c835718e25cacb7d44a231fd612",
+      "matches": true
+    }
+  ],
+  "refusalReceipt": false
+}

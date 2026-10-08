@@ -1,0 +1,18 @@
+✔ exact six historical raw blobs reproduce independently pinned annex manifest (4.792ms)
+✔ one deliberate byte alteration matches independent annex negative digests (4.1845ms)
+✔ newline conversion is an alteration; inputs are never normalized (2.8074ms)
+✔ reject missing, substituted, string-valued and oversized byte inputs (13.1251ms)
+✔ invalid declarations fail before reads, including traversal and self-inconsistent manifest (15.8943ms)
+✔ CLI returns bounded match/mismatch/error JSON and correct exit codes (227.7295ms)
+✔ file loader rejects hard-linked source bytes (3.3336ms)
+✔ synthetic receipt validates only against exact pinned v0.81 schema (69.7169ms)
+✔ confidence NO_ELIGIBLE_RESULTS is not a RefusalReceipt (0.3544ms)
+✔ reject annex draft structural errors and each missing required receipt field (1.2801ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1718.2368

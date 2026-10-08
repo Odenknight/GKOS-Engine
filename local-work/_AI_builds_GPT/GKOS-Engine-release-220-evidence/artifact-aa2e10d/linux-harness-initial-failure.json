@@ -1,0 +1,6 @@
+{
+  "stage": "shell harness",
+  "code": "CRLF_REDIRECT_SYNTAX",
+  "remediation": "Normalize the prepared shell script to LF and rerun; artifact and production source unchanged",
+  "qualified": false
+}

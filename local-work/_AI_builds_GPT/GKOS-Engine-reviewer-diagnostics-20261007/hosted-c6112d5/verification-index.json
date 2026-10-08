@@ -1,0 +1,633 @@
+{
+  "schema_id": "observatory.engine-hosted-source-qualification.v1",
+  "verified_at": "2026-10-07T06:16:15.609217+00:00",
+  "candidate_commit": "c6112d59b4219cae1293ff543fd487382420e5fb",
+  "candidate_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+  "runs": {
+    "pr": 37577860192,
+    "push": 37577856013
+  },
+  "receipts": [
+    {
+      "lane": "pr/current-runtime-ubuntu-24.04-node-22",
+      "status": "PASS",
+      "source_head": "fc7db812dabce7a6a46b6211ecbc0ea16fe1f411",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v22.23.3",
+      "platform": "linux",
+      "counts": {
+        "tests": 1198,
+        "pass": 1198,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:26.850Z",
+      "ended_at": "2026-10-07T05:55:43.378Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "pr/current-runtime-ubuntu-24.04-node-24",
+      "status": "PASS",
+      "source_head": "fc7db812dabce7a6a46b6211ecbc0ea16fe1f411",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v24.21.0",
+      "platform": "linux",
+      "counts": {
+        "tests": 1198,
+        "pass": 1198,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:28.170Z",
+      "ended_at": "2026-10-07T06:00:35.534Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "pr/current-runtime-ubuntu-24.04-node-26",
+      "status": "PASS",
+      "source_head": "fc7db812dabce7a6a46b6211ecbc0ea16fe1f411",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v26.10.0",
+      "platform": "linux",
+      "counts": {
+        "tests": 1198,
+        "pass": 1198,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:30.783Z",
+      "ended_at": "2026-10-07T06:00:02.189Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "pr/current-runtime-windows-latest-node-22",
+      "status": "PASS",
+      "source_head": "fc7db812dabce7a6a46b6211ecbc0ea16fe1f411",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v22.23.3",
+      "platform": "win32",
+      "counts": {
+        "tests": 1188,
+        "pass": 1188,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:39.588Z",
+      "ended_at": "2026-10-07T06:04:05.451Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "pr/current-runtime-windows-latest-node-24",
+      "status": "PASS",
+      "source_head": "fc7db812dabce7a6a46b6211ecbc0ea16fe1f411",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v24.21.0",
+      "platform": "win32",
+      "counts": {
+        "tests": 1188,
+        "pass": 1188,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:51.779Z",
+      "ended_at": "2026-10-07T06:12:50.559Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "pr/current-runtime-windows-latest-node-26",
+      "status": "PASS",
+      "source_head": "fc7db812dabce7a6a46b6211ecbc0ea16fe1f411",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v26.10.0",
+      "platform": "win32",
+      "counts": {
+        "tests": 1188,
+        "pass": 1188,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:42.153Z",
+      "ended_at": "2026-10-07T06:03:31.103Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "push/current-runtime-ubuntu-24.04-node-22",
+      "status": "PASS",
+      "source_head": "c6112d59b4219cae1293ff543fd487382420e5fb",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v22.23.3",
+      "platform": "linux",
+      "counts": {
+        "tests": 1198,
+        "pass": 1198,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:23.328Z",
+      "ended_at": "2026-10-07T06:01:12.010Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "push/current-runtime-ubuntu-24.04-node-24",
+      "status": "PASS",
+      "source_head": "c6112d59b4219cae1293ff543fd487382420e5fb",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v24.21.0",
+      "platform": "linux",
+      "counts": {
+        "tests": 1198,
+        "pass": 1198,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:24.755Z",
+      "ended_at": "2026-10-07T06:00:27.422Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "push/current-runtime-ubuntu-24.04-node-26",
+      "status": "PASS",
+      "source_head": "c6112d59b4219cae1293ff543fd487382420e5fb",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v26.10.0",
+      "platform": "linux",
+      "counts": {
+        "tests": 1198,
+        "pass": 1198,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:26.831Z",
+      "ended_at": "2026-10-07T05:59:43.246Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "push/current-runtime-windows-latest-node-22",
+      "status": "PASS",
+      "source_head": "c6112d59b4219cae1293ff543fd487382420e5fb",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v22.23.3",
+      "platform": "win32",
+      "counts": {
+        "tests": 1188,
+        "pass": 1188,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:47.379Z",
+      "ended_at": "2026-10-07T06:15:38.999Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "push/current-runtime-windows-latest-node-24",
+      "status": "PASS",
+      "source_head": "c6112d59b4219cae1293ff543fd487382420e5fb",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v24.21.0",
+      "platform": "win32",
+      "counts": {
+        "tests": 1188,
+        "pass": 1188,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:45.792Z",
+      "ended_at": "2026-10-07T06:04:52.431Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    },
+    {
+      "lane": "push/current-runtime-windows-latest-node-26",
+      "status": "PASS",
+      "source_head": "c6112d59b4219cae1293ff543fd487382420e5fb",
+      "source_tree": "3fc3fab024d74152ecb8a554d278dc2a9ca86b55",
+      "source_files": 714,
+      "node": "v26.10.0",
+      "platform": "win32",
+      "counts": {
+        "tests": 1188,
+        "pass": 1188,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "started_at": "2026-10-07T05:48:54.280Z",
+      "ended_at": "2026-10-07T06:12:15.255Z",
+      "log_hashes_verified": true,
+      "test_denominators_verified": true,
+      "source_file_hashes_verified": true
+    }
+  ],
+  "checks": [
+    {
+      "name": "phase5-watcher-artifact-audit",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "phase5-watcher-artifact-audit",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "current-runtime (windows-latest, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (ubuntu-24.04, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (ubuntu-24.04, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (ubuntu-24.04, 26)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (windows-latest, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (windows-latest, 26)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (windows-latest, 26)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (windows-latest, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (windows-latest, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (ubuntu-24.04, 26)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (ubuntu-24.04, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "current-runtime (ubuntu-24.04, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "historical-contract-replay (macos-14, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "historical-contract-replay (macos-14, 23)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "native-no-change (windows-latest, 22)",
+      "state": "SUCCESS",
+      "workflow": "Managed MOC 2.2 native audit qualification"
+    },
+    {
+      "name": "historical-contract-replay (ubuntu-24.04, 23)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "historical-contract-replay (macos-14, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "historical-contract-replay (ubuntu-24.04, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "native-no-change (windows-latest, 24)",
+      "state": "SUCCESS",
+      "workflow": "Managed MOC 2.2 native audit qualification"
+    },
+    {
+      "name": "native-no-change (ubuntu-24.04, 24)",
+      "state": "SUCCESS",
+      "workflow": "Managed MOC 2.2 native audit qualification"
+    },
+    {
+      "name": "historical-contract-replay (ubuntu-24.04, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "historical-contract-replay (macos-14, 23)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "historical-contract-replay (macos-14, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "historical-contract-replay (macos-14, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "phase5-watcher-windows (26)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "phase5-watcher-linux (22)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "historical-contract-replay (windows-latest, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "phase5-watcher-linux (26)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "phase5-watcher-windows (24)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "phase5-watcher-windows (22)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "historical-contract-replay (windows-latest, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "windows-retrieval-path-security (24)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "windows-retrieval-path-security (22)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "phase5-watcher-linux (24)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "historical-contract-replay (windows-latest, 23)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "windows-retrieval-path-security (26)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "native-no-change (ubuntu-24.04, 22)",
+      "state": "SUCCESS",
+      "workflow": "Managed MOC 2.2 native audit qualification"
+    },
+    {
+      "name": "build (24)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "build (22)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "build (26)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "windows-retrieval-path-security (22)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "current-2-2",
+      "state": "SUCCESS",
+      "workflow": "Engine 2.2 retrieval observation"
+    },
+    {
+      "name": "phase5-watcher-linux (24)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "phase5-watcher-linux (22)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "historical-contract-replay (ubuntu-24.04, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "phase5-watcher-linux (26)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "windows-retrieval-path-security (24)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "historical-contract-replay (windows-latest, 24)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "build (22)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "historical-contract-replay (windows-latest, 23)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "build (26)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "build (24)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "phase4-retrieval-observation-manual",
+      "state": "SKIPPED",
+      "workflow": "CI"
+    },
+    {
+      "name": "windows-retrieval-path-security (26)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "phase5-watcher-windows (22)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "historical-contract-replay (ubuntu-24.04, 23)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "phase5-watcher-windows (24)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "historical-contract-replay (ubuntu-24.04, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "phase5-watcher-windows (26)",
+      "state": "SUCCESS",
+      "workflow": "CI"
+    },
+    {
+      "name": "historical-contract-replay (windows-latest, 22)",
+      "state": "SUCCESS",
+      "workflow": "Historical and current runtime qualification"
+    },
+    {
+      "name": "phase4-retrieval-observation-manual",
+      "state": "SKIPPED",
+      "workflow": "CI"
+    }
+  ],
+  "file_sha256": {
+    "pr/current-runtime-ubuntu-24.04-node-22/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "pr/current-runtime-ubuntu-24.04-node-22/current-runtime-1.log": "52aae9416af05a89045d4b95c5327f43aad1fa6af20f9035353f84315f09b6b7",
+    "pr/current-runtime-ubuntu-24.04-node-22/current-runtime.json": "3bb8904ca354aff4184a1487387292854376349a756b70df6f2fab589a2ba71b",
+    "pr/current-runtime-ubuntu-24.04-node-24/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "pr/current-runtime-ubuntu-24.04-node-24/current-runtime-1.log": "eaef9f113cad9acba85aa1def486bee59ee243476ac9edfd64e7ea225a0f8279",
+    "pr/current-runtime-ubuntu-24.04-node-24/current-runtime.json": "c0f5fe6805de6c48a2efb7011055e8459c188d3b938678ebfbc4a06202051685",
+    "pr/current-runtime-ubuntu-24.04-node-26/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "pr/current-runtime-ubuntu-24.04-node-26/current-runtime-1.log": "ff442bbd8f7c57b9ccc4ebf37775ad74746d4f8062c0d817de2b134539d39ca0",
+    "pr/current-runtime-ubuntu-24.04-node-26/current-runtime.json": "d2be4405003b52d27e84b47c27223d5953a86ee7b732f2c9528d2bc9dec49288",
+    "pr/current-runtime-windows-latest-node-22/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "pr/current-runtime-windows-latest-node-22/current-runtime-1.log": "c3dcfc8f9b1803623eac6c5f34c743dc2e78587b975b96dd8042669a119dcfd8",
+    "pr/current-runtime-windows-latest-node-22/current-runtime.json": "9567d0158174c77d37953c3286f1dd8c28383b793dae1ccb2ae3004eb7af2745",
+    "pr/current-runtime-windows-latest-node-24/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "pr/current-runtime-windows-latest-node-24/current-runtime-1.log": "38e617fd1feba83696288343d10f67e71d2842f65283d9707443d4ce1729dc49",
+    "pr/current-runtime-windows-latest-node-24/current-runtime.json": "7dce356b1bfe7a037bc3463415af6209cf3f28a4babef825701e0a74c48876cd",
+    "pr/current-runtime-windows-latest-node-26/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "pr/current-runtime-windows-latest-node-26/current-runtime-1.log": "6351057f57ce1aaaa58d46664e049d37c4b4cdc29c831c6158b5389421d1ce81",
+    "pr/current-runtime-windows-latest-node-26/current-runtime.json": "1cea2d55fdb1c9b47e8d9beb5858e8a5422fe41e8b9f7ceb41f0ad4bd77b74a0",
+    "push/current-runtime-ubuntu-24.04-node-22/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "push/current-runtime-ubuntu-24.04-node-22/current-runtime-1.log": "c6832aed5334201c60cb3bb0da93e93a8e200c6184f876416c5db91b55fb899d",
+    "push/current-runtime-ubuntu-24.04-node-22/current-runtime.json": "010188a1c6d1bc735d486393ccc2f8161649f15507742b18730afcaf833ce4c8",
+    "push/current-runtime-ubuntu-24.04-node-24/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "push/current-runtime-ubuntu-24.04-node-24/current-runtime-1.log": "68efd9c63475cc91bb1bc5a255b031b38970d1387599a67087f381b5fac4ffa9",
+    "push/current-runtime-ubuntu-24.04-node-24/current-runtime.json": "58db94cbaec31710c72fd90ddb837db8c1eee0bfdfe4468ab0c1798d362fedb1",
+    "push/current-runtime-ubuntu-24.04-node-26/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "push/current-runtime-ubuntu-24.04-node-26/current-runtime-1.log": "f20e5011fdac2eb07722076e1856346f1e47c1ac8f09b2abf6b80a5a8ed4203a",
+    "push/current-runtime-ubuntu-24.04-node-26/current-runtime.json": "3c53501aac9a52fdb9cb2ab925448be8aeaf8f6d66a4e73d58c2b99546f83547",
+    "push/current-runtime-windows-latest-node-22/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "push/current-runtime-windows-latest-node-22/current-runtime-1.log": "0233237e4a37f3c7846bb06a290124c80c7386d84a56d7bcf998f4a903a97da9",
+    "push/current-runtime-windows-latest-node-22/current-runtime.json": "3f22a18dd19bea887439fd4f9ac9ad7891e8babba874bb11bcde395b957a5ce6",
+    "push/current-runtime-windows-latest-node-24/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "push/current-runtime-windows-latest-node-24/current-runtime-1.log": "842cfc5a81906d2f44438c0b8cf68d06abe25cabc9aac0233075465cdc66f0b2",
+    "push/current-runtime-windows-latest-node-24/current-runtime.json": "a8550768d32351082723ec55a0f11f4a1c5b7a83f4e3f1acdf1d363c67846fc1",
+    "push/current-runtime-windows-latest-node-26/current-runtime-0.log": "262d85d001046bb41dd268786da0255808ffb3cd7480622ea8da761f3d458a52",
+    "push/current-runtime-windows-latest-node-26/current-runtime-1.log": "2e16e885d4ddec8c936440cffe1b8ccb33dfd3853c33936392340a5c90cf4600",
+    "push/current-runtime-windows-latest-node-26/current-runtime.json": "ff64d6df1b420a4edd41361adc6a92c08a33a162ae4babd6d78eb8233f843c5f"
+  },
+  "sanitization": "Successful build/test outputs and source-hash receipts only; private-key material scan negative; original bytes retained so recorded hashes remain verifiable. No credential payloads included.",
+  "scope": "Source-qualified runtime tests, not full normative profile, human assessment, retrieval workload or release approval."
+}

@@ -1,0 +1,43 @@
+✔ generator check and exact manifest closure (4905.334291ms)
+✔ all schemas compile strictly and product instances validate (587.32575ms)
+✔ conformance rejects wrong partitions, duplicate coordinates, and incomplete absence records (36865.266458ms)
+✔ every abstract durable row is complete and validates against its exact product-row schema (494.548792ms)
+✔ event mutation is append-only and advances the product event chain, committed head, and anchor atomically (108.791541ms)
+✔ each RETENTION vector proves its distinct V5 qualification, policy, sweep, deletion, batch, crash, and restore semantics (112.484084ms)
+✔ operation, schema-ref, tool, error and vector inventories are exact (76.828791ms)
+✔ every canonical fixture request validates against its declared exact operation schema (149.327166ms)
+✔ request and activity rows bind exact request bytes and complete-success result bytes (183.825125ms)
+✔ Q21 and Q22 fixture embodiment has exact closed shape, lineage, aliases and counts (136.056208ms)
+✔ fixture wire bytes and every exposed digest are independently reproducible (445.524708ms)
+✔ every exposed fixture-domain derivation uses an authorized V15 tag and its exact unprefixed preimage (863.369458ms)
+✔ declared mutation sets are canonical and equal the actual durable and physical diff (247.63575ms)
+✔ global-event and observed-sink cross-products are exact (76.753458ms)
+✔ redaction schema negatives have no response and serializer/sink cases stay closed and unique (114.54075ms)
+✔ all RESTORE cases carry exact recovery, publication, invalidation, and physical disposition evidence (135.245125ms)
+✔ Q17, Q18, mapping.add and restart-stale cursor semantics are exact (82.530041ms)
+✔ session auth-epoch admission and closed-session reuse fail before durable request creation (81.633834ms)
+✔ cursor continuations are non-null, REQUEST cases are durable, and RSR prestates remain distinct (109.179625ms)
+✔ credential and entropy oracles implement the exact RATE, GLOBAL-EVENT, and COLLISION programs (70.125292ms)
+✔ all seven credential-auth non-enumeration cases charge only the exact auth-failure buckets (66.227709ms)
+✔ all nine BACKUP leaves bind verification, protected manifest, temporary deletion, publication, and replay semantics (64.20625ms)
+✔ all 22 credential issue/rotate leaves bind product credentials, receipts, handoff dispositions, replay, sessions, and stale work (70.527458ms)
+✔ all 20 non-Q18 RACE leaves prove their distinct final-gate, competing mutation, crash cut, wire, and product-row effects (151.189042ms)
+✔ all 39 BOOTSTRAP leaves use the ratified product-state vocabulary and prove distinct source, plan, handoff, publication, and recovery semantics (89.368958ms)
+✔ all seven TIMESTAMP leaves validate distinct exact inputs at the schema, range, or Gregorian stage (72.129875ms)
+✔ all 37 ACTIVITY metadata leaves bind the exact metadata value, key count, byte count, and persistence outcome (77.969959ms)
+✔ all 18 policy/dependency/transport leaves prove their exact reasons, ordered decisions, traces, boundary, and persistence (95.197666ms)
+✔ collision candidates bind an existing owning product row and never commit (81.481458ms)
+✔ Q23 rational accumulator is integer exact and restart preserving (68.845167ms)
+✔ canonical identifiers, cursors, bootstrap and secret results fail closed (77.717417ms)
+✔ two fresh roots, execution-backed receipts, and deterministic tar are valid (40755.156625ms)
+✔ diff is all-and-only allowed and protected paths are byte-identical (56.371416ms)
+✔ generated and qualification inputs contain no secret material (107.592459ms)
+✔ hosted workflow freezes all-and-only 11 jobs and artifacts (7.402875ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 87788.819667

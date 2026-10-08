@@ -1,0 +1,53 @@
+{
+  "schema": "gkos-native-performance-sample/1",
+  "sourceCommit": "6e4e937f5bf6b3b49809072e49beafee71c3fcd8",
+  "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a",
+  "platform": "win32",
+  "osRelease": "10.0.26200",
+  "node": "v24.18.0",
+  "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+  "startedAt": "2026-09-08T17:58:04.519Z",
+  "status": "PASS",
+  "releaseQualified": false,
+  "rows": [
+    {
+      "notes": 2000,
+      "targetCount": 1,
+      "targetScopeNotes": 100,
+      "status": "PASS",
+      "filesystemType": 0,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "initialParseGraphMs": 297.7306,
+      "initialMocMs": 162.22449999999998,
+      "unchangedParseMs": 132.85040000000004,
+      "noopMocMs": 101.95680000000004,
+      "oneFile": {
+        "reparsed": 1,
+        "parseGraphMs": 122.9135,
+        "endToEndMocMs": 246.95389999999998
+      },
+      "fiftyFiles": {
+        "reparsed": 50,
+        "parseGraphMs": 112.58249999999998,
+        "endToEndMocMs": 475.37069999999994
+      },
+      "cleanGraphRebuildMs": 217.43470000000002,
+      "graphDigest": "sha256:868b46338e3d6b3872285dae676bba8f0ad5f7854ee5ba08c6ca3cbecfd2b37d",
+      "restartRecoveryMs": 151.64499999999998,
+      "memory": {
+        "rss": 260149248,
+        "heapTotal": 179892224,
+        "heapUsed": 72223248,
+        "external": 15069794,
+        "arrayBuffers": 12565797
+      }
+    }
+  ],
+  "limitations": [
+    "One scoped MOC target includes 100 notes; full corpus is supplied to snapshot and graph indexing.",
+    "Single samples per tier do not establish end-to-end p95 or soak qualification.",
+    "Retrieval p50/p95 and embedding reuse are qualified separately by the frozen 10000-chunk observation workload."
+  ],
+  "coldImportProcessMs": 57.12480000000001,
+  "finishedAt": "2026-09-08T17:58:06.429Z"
+}

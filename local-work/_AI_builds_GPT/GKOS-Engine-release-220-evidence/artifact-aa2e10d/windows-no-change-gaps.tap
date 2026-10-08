@@ -1,0 +1,13 @@
+# artifact-sha256 8b4cc0eb16be7c07b61f66d684e4b50810f94dd4a766b7a82195d48baed6c48a node v24.18.0 platform win32
+✔ unchanged execution stores fully bound NO_CHANGE and exact retries preserve receipt/sequence/source bytes (308.1673ms)
+✔ sealed NO_CHANGE missing audit refuses restart without rewriting evidence (257.0622ms)
+✔ sealed NO_CHANGE truncated audit refuses restart without rewriting evidence (302.7707ms)
+✔ sealed NO_CHANGE corrupt audit refuses restart without rewriting evidence (290.611ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1359.1597

@@ -1,0 +1,4 @@
+[archive/local-project-state-20260909 b8f0690] archive: record completed main consolidation and mandatory gate results
+ 2 files changed, 264 insertions(+)
+ create mode 100644 CONSOLIDATION-RESULT.md
+ create mode 100644 pr50-premerge-checks.json

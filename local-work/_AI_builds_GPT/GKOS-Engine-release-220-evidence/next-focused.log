@@ -1,0 +1,27 @@
+✔ current capability guide names the exact executable MCP tool inventory (1.9206ms)
+✔ capability guide covers every Effects flag without inventing a live writer (0.7987ms)
+✔ current audience guides have resolvable repository-relative Markdown links (5.8046ms)
+✔ pack report accepts npm 12 and legacy single-package reports and rejects ambiguity (2.2023ms)
+✔ release approval rejects omitted/failed/duplicate gates, short soak, different commit or artifact (6.1697ms)
+✔ artifact verification binds both digests and exact bounded inventory (2.9268ms)
+✔ versioned current inventory binds actual candidate and unchanged historical artifacts (2812.5046ms)
+✔ an unlisted new source or edited reviewed bytes fails the current gate (6094.4497ms)
+✔ frozen evidence cannot be edited or omitted from the versioned inventory (2745.7673ms)
+✔ test receipt counts refuse missing, duplicate, empty and incoherent execution summaries (1.3516ms)
+✔ current test selection exposes only the owner-supplied local-model observation exemption (0.2955ms)
+✔ strict timing and shutdown oracles run before exhaustive suite load without changing coverage (0.1777ms)
+✔ current qualification retries only the first isolated watcher latency failure (0.3668ms)
+✔ dedicated watcher retry requires an empty artifact root and one normal latency failure (0.1328ms)
+✔ hosted current qualification restores canonical Engine and Standard bytes (0.7785ms)
+✔ runtime policy admits maintained even releases and preserves the historical matrix (1.461ms)
+✔ command-scope Git configuration overrides autocrlf before checkout (287.556ms)
+✔ preflight rejection replaces a stale PASS receipt with a bound FAIL receipt (397.3727ms)
+✔ source identity changes when HEAD changes even if file bytes are identical (899.271ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14723.5014

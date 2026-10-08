@@ -1,0 +1,53 @@
+{
+  "schema": "gkos-native-performance-sample/1",
+  "sourceCommit": "6e4e937f5bf6b3b49809072e49beafee71c3fcd8",
+  "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a",
+  "platform": "linux",
+  "osRelease": "7.0.14-14-pve",
+  "node": "v22.23.2",
+  "cpu": "AMD Ryzen 7 8845HS w/ Radeon 780M Graphics",
+  "startedAt": "2026-09-08T17:57:41.124Z",
+  "status": "PASS",
+  "releaseQualified": false,
+  "rows": [
+    {
+      "notes": 2000,
+      "targetCount": 1,
+      "targetScopeNotes": 100,
+      "status": "PASS",
+      "filesystemType": 801189825,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "initialParseGraphMs": 233.781969,
+      "initialMocMs": 76.07714800000002,
+      "unchangedParseMs": 90.627859,
+      "noopMocMs": 50.14053300000006,
+      "oneFile": {
+        "reparsed": 1,
+        "parseGraphMs": 80.20778600000006,
+        "endToEndMocMs": 135.68465600000002
+      },
+      "fiftyFiles": {
+        "reparsed": 50,
+        "parseGraphMs": 76.22312899999997,
+        "endToEndMocMs": 181.20770800000003
+      },
+      "cleanGraphRebuildMs": 160.19113500000003,
+      "graphDigest": "sha256:868b46338e3d6b3872285dae676bba8f0ad5f7854ee5ba08c6ca3cbecfd2b37d",
+      "restartRecoveryMs": 57.91404299999999,
+      "memory": {
+        "rss": 172605440,
+        "heapTotal": 112041984,
+        "heapUsed": 88648400,
+        "external": 12490256,
+        "arrayBuffers": 10302892
+      }
+    }
+  ],
+  "limitations": [
+    "One scoped MOC target includes 100 notes; full corpus is supplied to snapshot and graph indexing.",
+    "Single samples per tier do not establish end-to-end p95 or soak qualification.",
+    "Retrieval p50/p95 and embedding reuse are qualified separately by the frozen 10000-chunk observation workload."
+  ],
+  "coldImportProcessMs": 24.484128999999996,
+  "finishedAt": "2026-09-08T17:57:42.173Z"
+}

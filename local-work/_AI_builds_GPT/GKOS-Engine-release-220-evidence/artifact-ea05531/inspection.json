@@ -1,0 +1,13 @@
+{
+  "schema": "gkos-package-inspection/1",
+  "sourceCommit": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "status": "PASS",
+  "fileCount": 595,
+  "unpackedBytes": 63563396,
+  "sha256": "f04705280acac74deab823683193a81a7c4dbf333791b33f6189226b709d593b",
+  "integrity": "sha512-nLcN76J69KYDBWY/N9eW44TMur2zWY/swopWgxDSnvreFf59SaBos+bx8UEvERfYRiQI+GJSDtW/D107fl3N6A==",
+  "findings": [],
+  "limitations": [
+    "Pattern scanning is not proof that arbitrary secrets are absent; package inventory and intended public fixture review remain required."
+  ]
+}

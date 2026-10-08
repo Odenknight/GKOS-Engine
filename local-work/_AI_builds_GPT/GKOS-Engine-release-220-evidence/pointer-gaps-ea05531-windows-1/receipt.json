@@ -1,0 +1,36 @@
+{
+  "sourceCommit": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "tarballSha256": "f04705280acac74deab823683193a81a7c4dbf333791b33f6189226b709d593b",
+  "node": "v24.18.0",
+  "platform": "win32",
+  "rows": [
+    {
+      "namespace": "outer",
+      "damage": "missing",
+      "code": "GKX_WATCHER_AUTHORITY_MISMATCH",
+      "status": "PASS",
+      "originalPointerSha256": "e7f6e5bef26035f7fc2d2a49bfc6e5787bf41624de8295fe32592c9af1ede56f"
+    },
+    {
+      "namespace": "outer",
+      "damage": "corrupt",
+      "code": "UNEXPECTED_ERROR",
+      "status": "OBSERVED_REFUSAL",
+      "originalPointerSha256": "1bb4e35211c3c07ef0601ecc70d5e1ea0e581c03a3619510f8000826b2771a34"
+    },
+    {
+      "namespace": "journal",
+      "damage": "missing",
+      "code": "GKX_WATCHER_GLOBAL_GENESIS_INVALID",
+      "status": "PASS",
+      "originalPointerSha256": "dba745bfcbc7f678bf6295fae5e075f8b05848312de628142b5a273888fdafc7"
+    },
+    {
+      "namespace": "journal",
+      "damage": "corrupt",
+      "code": "UNEXPECTED_ERROR",
+      "status": "OBSERVED_REFUSAL",
+      "originalPointerSha256": "73b227a07928682938ba9cb8edda3bf12a37107ed002ad79aec5966ceef55138"
+    }
+  ]
+}

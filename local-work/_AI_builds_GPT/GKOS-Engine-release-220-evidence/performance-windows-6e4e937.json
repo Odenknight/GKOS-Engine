@@ -1,0 +1,149 @@
+{
+  "schema": "gkos-native-performance-sample/1",
+  "sourceCommit": "6e4e937f5bf6b3b49809072e49beafee71c3fcd8",
+  "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a",
+  "platform": "win32",
+  "osRelease": "10.0.26200",
+  "node": "v24.18.0",
+  "cpu": "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz",
+  "startedAt": "2026-09-08T16:57:25.776Z",
+  "status": "PASS",
+  "releaseQualified": false,
+  "rows": [
+    {
+      "notes": 100,
+      "targetCount": 1,
+      "targetScopeNotes": 100,
+      "status": "PASS",
+      "filesystemType": 0,
+      "fixtureDigest": "sha256:1f5cf6f384256ad7166f13dee88837abc38107ddd521d89b369c9ea24470afe0",
+      "initialParseGraphMs": 33.4344,
+      "initialMocMs": 102.48920000000001,
+      "unchangedParseMs": 8.604199999999992,
+      "noopMocMs": 48.93380000000002,
+      "oneFile": {
+        "reparsed": 1,
+        "parseGraphMs": 7.8151999999999475,
+        "endToEndMocMs": 80.74799999999999
+      },
+      "fiftyFiles": {
+        "reparsed": 50,
+        "parseGraphMs": 12.303899999999999,
+        "endToEndMocMs": 292.61990000000003
+      },
+      "cleanGraphRebuildMs": 14.595500000000015,
+      "graphDigest": "sha256:d4891878ecbb58d15cdb12121f985375447e42eb86f4608741cf045e06e67cda",
+      "restartRecoveryMs": 89.90210000000002,
+      "memory": {
+        "rss": 79826944,
+        "heapTotal": 29528064,
+        "heapUsed": 13402216,
+        "external": 9630888,
+        "arrayBuffers": 7193099
+      }
+    },
+    {
+      "notes": 2000,
+      "targetCount": 1,
+      "targetScopeNotes": 100,
+      "status": "PASS",
+      "filesystemType": 0,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "initialParseGraphMs": 245.07219999999995,
+      "initialMocMs": 137.356,
+      "unchangedParseMs": 140.11149999999998,
+      "noopMocMs": 88.70620000000008,
+      "oneFile": {
+        "reparsed": 1,
+        "parseGraphMs": 110.16390000000001,
+        "endToEndMocMs": 226.8804
+      },
+      "fiftyFiles": {
+        "reparsed": 50,
+        "parseGraphMs": 110.11079999999993,
+        "endToEndMocMs": 441.2747999999999
+      },
+      "cleanGraphRebuildMs": 200.3784999999998,
+      "graphDigest": "sha256:868b46338e3d6b3872285dae676bba8f0ad5f7854ee5ba08c6ca3cbecfd2b37d",
+      "restartRecoveryMs": 138.55180000000018,
+      "memory": {
+        "rss": 233930752,
+        "heapTotal": 169017344,
+        "heapUsed": 45555088,
+        "external": 10261498,
+        "arrayBuffers": 7823541
+      }
+    },
+    {
+      "notes": 10000,
+      "targetCount": 1,
+      "targetScopeNotes": 100,
+      "status": "PASS",
+      "filesystemType": 0,
+      "fixtureDigest": "sha256:d5589706f08fbe0d946b176af73807c49af65c2909c34f169d1e21ee38035b9c",
+      "initialParseGraphMs": 1030.2607999999996,
+      "initialMocMs": 299.8483000000001,
+      "unchangedParseMs": 638.4862999999996,
+      "noopMocMs": 246.61809999999969,
+      "oneFile": {
+        "reparsed": 1,
+        "parseGraphMs": 564.6202999999996,
+        "endToEndMocMs": 862.0348000000004
+      },
+      "fiftyFiles": {
+        "reparsed": 50,
+        "parseGraphMs": 572.3514999999998,
+        "endToEndMocMs": 1051.5328
+      },
+      "cleanGraphRebuildMs": 998.4937,
+      "graphDigest": "sha256:70e58d501858307db30b9228d2e8b38b50ee862a708c514fe7e6dbdd12600f00",
+      "restartRecoveryMs": 287.4364999999998,
+      "memory": {
+        "rss": 459776000,
+        "heapTotal": 362250240,
+        "heapUsed": 278248272,
+        "external": 23105126,
+        "arrayBuffers": 20667041
+      }
+    },
+    {
+      "notes": 50000,
+      "targetCount": 1,
+      "targetScopeNotes": 100,
+      "status": "PASS",
+      "filesystemType": 0,
+      "fixtureDigest": "sha256:27dd367344c3d7c68d4577bbb71e67e2fac435439a0cb225da39c329c628b5b9",
+      "initialParseGraphMs": 5218.3205,
+      "initialMocMs": 1239.9521000000004,
+      "unchangedParseMs": 3645.7459000000017,
+      "noopMocMs": 1195.143,
+      "oneFile": {
+        "reparsed": 1,
+        "parseGraphMs": 3499.8708000000006,
+        "endToEndMocMs": 4680.077999999998
+      },
+      "fiftyFiles": {
+        "reparsed": 50,
+        "parseGraphMs": 3381.1725000000006,
+        "endToEndMocMs": 4917.457399999999
+      },
+      "cleanGraphRebuildMs": 5830.9022,
+      "graphDigest": "sha256:32cb5d5f48f8bad812214cb6bb15d78045bc14155591f2013477b11e50500ec9",
+      "restartRecoveryMs": 1195.0506000000023,
+      "memory": {
+        "rss": 1453391872,
+        "heapTotal": 801320960,
+        "heapUsed": 653957512,
+        "external": 11207147,
+        "arrayBuffers": 7171785
+      }
+    }
+  ],
+  "limitations": [
+    "One scoped MOC target includes 100 notes; full corpus is supplied to snapshot and graph indexing.",
+    "Single samples per tier do not establish end-to-end p95 or soak qualification.",
+    "Retrieval p50/p95 and embedding reuse are qualified separately by the frozen 10000-chunk observation workload."
+  ],
+  "coldImportProcessMs": 52.65559999999999,
+  "finishedAt": "2026-09-08T16:58:02.535Z"
+}

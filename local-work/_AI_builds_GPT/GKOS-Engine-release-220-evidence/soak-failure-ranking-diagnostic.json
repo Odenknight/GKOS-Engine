@@ -1,0 +1,48 @@
+{
+  "sourceCommit": "ea055319a50d93e0f1b181e478731b437a152f17",
+  "fixtureRevision": "10",
+  "stages": {
+    "lexical": {
+      "kind": "sqlite_fts5",
+      "state": "active",
+      "reason_codes": []
+    },
+    "vector": {
+      "kind": "local_onnx",
+      "state": "active",
+      "provider_id": "soak.deterministic-fixture",
+      "model_id": "fixture-2d-v1",
+      "reason_codes": []
+    },
+    "reranker": {
+      "kind": "none",
+      "state": "skipped",
+      "reason_codes": [
+        "RERANKER_NOT_CONFIGURED"
+      ]
+    }
+  },
+  "topFive": [
+    {
+      "rank": 1,
+      "literalQuerySpan": false
+    },
+    {
+      "rank": 2,
+      "literalQuerySpan": true
+    },
+    {
+      "rank": 3,
+      "literalQuerySpan": false
+    },
+    {
+      "rank": 4,
+      "literalQuerySpan": false
+    },
+    {
+      "rank": 5,
+      "literalQuerySpan": false
+    }
+  ],
+  "providerDefinition": "Synthetic vector depends on text length and first character; it does not encode the intended query relevance."
+}

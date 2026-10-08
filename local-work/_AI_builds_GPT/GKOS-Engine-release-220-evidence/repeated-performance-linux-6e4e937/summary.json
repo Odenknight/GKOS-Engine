@@ -1,0 +1,234 @@
+{
+  "schema": "gkos-repeated-performance/1",
+  "sourceCommit": "6e4e937f5bf6b3b49809072e49beafee71c3fcd8",
+  "harnessSha256": "725d6948f072f295a969167d748ee97d14d5a88225bbe5a49c58764a1db2cea1",
+  "node": "v22.23.2",
+  "platform": "linux",
+  "status": "PASS",
+  "releaseQualified": false,
+  "samples": [
+    {
+      "trial": 0,
+      "receiptSha256": "4416228578389fe7aaa034b03bd4445152223fb23fbf13f2c89bdaa27f0550ee",
+      "oneFileMs": 136.11524399999996,
+      "fiftyFilesMs": 183.42837999999995,
+      "noOpMs": 45.38405499999999,
+      "recoveryMs": 57.654240999999956,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 1,
+      "receiptSha256": "c4176860a9efb0826cb8feda8a8a62f779174772391d8452bdc61dc5bb387995",
+      "oneFileMs": 135.68465600000002,
+      "fiftyFilesMs": 181.20770800000003,
+      "noOpMs": 50.14053300000006,
+      "recoveryMs": 57.91404299999999,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 2,
+      "receiptSha256": "6493ea580bca0ee3e3a863116432e70b6cff7976b295535e0291eeffa7ef4063",
+      "oneFileMs": 128.31302099999994,
+      "fiftyFilesMs": 172.633732,
+      "noOpMs": 51.20784500000008,
+      "recoveryMs": 53.91707399999996,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 3,
+      "receiptSha256": "54ecb5103eb5f00453bb07c1e9ccd87a932747c353296618b01e6127a14df454",
+      "oneFileMs": 128.614221,
+      "fiftyFilesMs": 181.02790399999992,
+      "noOpMs": 44.80014,
+      "recoveryMs": 52.607152999999926,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 4,
+      "receiptSha256": "ab27e15a44628c2ff3504b19997b7c2b35f619fac918087582375078b1538cca",
+      "oneFileMs": 124.28061600000001,
+      "fiftyFilesMs": 170.583937,
+      "noOpMs": 45.386459,
+      "recoveryMs": 54.02812000000006,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 5,
+      "receiptSha256": "3b46d506b8e4c9da045af027a5df84517a310ed0b103c96e875523339314e4bd",
+      "oneFileMs": 127.39806399999998,
+      "fiftyFilesMs": 170.09841600000004,
+      "noOpMs": 48.732579999999984,
+      "recoveryMs": 53.530505999999946,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 6,
+      "receiptSha256": "810b8bec48717c3da91be96613aa749e92d3420da7e8c548789f67ed1dd140a9",
+      "oneFileMs": 122.97100599999999,
+      "fiftyFilesMs": 174.00704100000007,
+      "noOpMs": 43.13454899999999,
+      "recoveryMs": 52.72794600000009,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 7,
+      "receiptSha256": "f649e7d3476b28b30ac36f23a3a3db258206b77c48e11a269424116c19519fee",
+      "oneFileMs": 125.10657000000003,
+      "fiftyFilesMs": 175.901929,
+      "noOpMs": 45.459724999999935,
+      "recoveryMs": 51.951505,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 8,
+      "receiptSha256": "327590e6a50c0d50b69b0b4029e862d4062d9a5c4b189eab551627e185e6b2d6",
+      "oneFileMs": 124.14081699999997,
+      "fiftyFilesMs": 173.936059,
+      "noOpMs": 45.91931900000003,
+      "recoveryMs": 50.49349899999993,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 9,
+      "receiptSha256": "c06b593bf20d7aed3f4584a1d35abcc083c2942064e70456193a88f0c80cd7c4",
+      "oneFileMs": 124.59350699999999,
+      "fiftyFilesMs": 177.19616200000007,
+      "noOpMs": 44.773371,
+      "recoveryMs": 54.34755300000006,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 10,
+      "receiptSha256": "f83bde4ed182c76883d46c0c576f48134a4328b2bdd513ea22bbd2e221fea0e1",
+      "oneFileMs": 121.73565299999996,
+      "fiftyFilesMs": 166.845688,
+      "noOpMs": 46.21315299999998,
+      "recoveryMs": 54.098650999999904,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 11,
+      "receiptSha256": "6900a5752120310a1c6f07808f2220b484f9135cf45f8918e20a38ffb4887835",
+      "oneFileMs": 121.91537599999998,
+      "fiftyFilesMs": 173.512784,
+      "noOpMs": 44.98387100000002,
+      "recoveryMs": 56.171379,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 12,
+      "receiptSha256": "d489106dcadafa008c44383d1d4829275d7bc7cbf9ca914ec95400278d3df976",
+      "oneFileMs": 124.42858100000001,
+      "fiftyFilesMs": 175.03482899999995,
+      "noOpMs": 45.837376000000006,
+      "recoveryMs": 52.951192000000106,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 13,
+      "receiptSha256": "407dcaee038393687bb22d13b58288280500210e65c1fd7a98cb4ac7df2cac16",
+      "oneFileMs": 125.80781200000007,
+      "fiftyFilesMs": 166.18265800000006,
+      "noOpMs": 45.789777000000015,
+      "recoveryMs": 56.07530100000008,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 14,
+      "receiptSha256": "8ffbcbaa2042c5010f7bf76defc849acd5fd6a0d7c0d710ba9dd3fef9f56c6e5",
+      "oneFileMs": 124.46508900000003,
+      "fiftyFilesMs": 172.93500200000005,
+      "noOpMs": 46.109549999999956,
+      "recoveryMs": 54.17182700000012,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 15,
+      "receiptSha256": "15bad97fd8c49f423eff7d38eaab908b993260d62cbb5f357d028b8daec811ac",
+      "oneFileMs": 124.88798399999996,
+      "fiftyFilesMs": 178.32053900000005,
+      "noOpMs": 45.025608999999974,
+      "recoveryMs": 54.32014200000003,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 16,
+      "receiptSha256": "ae21e6d49614fcf01590d84765182eee61ea2e5f724baaf3496d4f9c96c3b750",
+      "oneFileMs": 122.72896599999996,
+      "fiftyFilesMs": 175.30576199999996,
+      "noOpMs": 43.86540500000001,
+      "recoveryMs": 57.05350500000009,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 17,
+      "receiptSha256": "74509c93016c2cc5419db1fdf6be67d01b60d262efe2c9f2ff99b84dca31eda8",
+      "oneFileMs": 127.8974,
+      "fiftyFilesMs": 169.817184,
+      "noOpMs": 47.77366999999998,
+      "recoveryMs": 52.19509699999992,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 18,
+      "receiptSha256": "c8b3ab347a75175985c1b327e8699891e889179ac77263fe35afacda8a42b5c0",
+      "oneFileMs": 126.42010799999997,
+      "fiftyFilesMs": 176.544622,
+      "noOpMs": 44.60150200000004,
+      "recoveryMs": 50.491895,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    },
+    {
+      "trial": 19,
+      "receiptSha256": "50db7b2c4a6e729c22383134b27ed7e936c7e5e6b48c42b00fccc08d3cc2a2c0",
+      "oneFileMs": 126.33066199999996,
+      "fiftyFilesMs": 184.63513,
+      "noOpMs": 46.37609600000002,
+      "recoveryMs": 53.66103799999996,
+      "fixtureDigest": "sha256:312589959226fbab6c85e71775cb4a14bf2693793afa0a3a43a54d6b563c7445",
+      "tarballSha256": "f5075e0c63f795f7996482640073e9b4bdb3d69b55ac6268313080d08e04d48a"
+    }
+  ],
+  "scope": "2000 source records, one 100-note MOC target; direct library input, not filesystem scan/watcher latency",
+  "percentiles": {
+    "oneFileMs": {
+      "p50": 124.88798399999996,
+      "p95": 135.68465600000002
+    },
+    "fiftyFilesMs": {
+      "p50": 174.00704100000007,
+      "p95": 183.42837999999995
+    },
+    "noOpMs": {
+      "p50": 45.459724999999935,
+      "p95": 50.14053300000006
+    },
+    "recoveryMs": {
+      "p50": 53.91707399999996,
+      "p95": 57.654240999999956
+    }
+  },
+  "thresholds": {
+    "oneFileP95Ms": 2000,
+    "fiftyFilesP95Ms": 5000
+  }
+}

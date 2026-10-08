@@ -1,0 +1,220 @@
+{
+  "hosted": [
+    {
+      "lane": "current-runtime-ubuntu-24.04-node-22",
+      "status": "PASS",
+      "source": "ea055319a50d93e0f1b181e478731b437a152f17",
+      "commands": [
+        {
+          "executable": "/opt/hostedtoolcache/node/22.23.2/x64/bin/node",
+          "args": [
+            "scripts/build.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 7369.000349999999,
+          "log": "current-runtime-0.log",
+          "log_sha256": "380790783a0d7fab9129ffc20f41474a537920886874e47db1ca596850cf25a1"
+        },
+        {
+          "executable": "/opt/hostedtoolcache/node/22.23.2/x64/bin/node",
+          "args": [
+            "scripts/run-current-tests.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 791407.07289,
+          "log": "current-runtime-1.log",
+          "log_sha256": "76696c5d3eed732d268e9ab40b8737d15e07e8ed468a7a53600c276eeebcafba",
+          "counts": {
+            "tests": 1103,
+            "pass": 1103,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        }
+      ]
+    },
+    {
+      "lane": "current-runtime-ubuntu-24.04-node-24",
+      "status": "PASS",
+      "source": "ea055319a50d93e0f1b181e478731b437a152f17",
+      "commands": [
+        {
+          "executable": "/opt/hostedtoolcache/node/24.20.0/x64/bin/node",
+          "args": [
+            "scripts/build.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 5373.93099,
+          "log": "current-runtime-0.log",
+          "log_sha256": "380790783a0d7fab9129ffc20f41474a537920886874e47db1ca596850cf25a1"
+        },
+        {
+          "executable": "/opt/hostedtoolcache/node/24.20.0/x64/bin/node",
+          "args": [
+            "scripts/run-current-tests.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 768927.762063,
+          "log": "current-runtime-1.log",
+          "log_sha256": "f8b76a0acfbabd02134aabef4339fe147488a2e864900731e86cd6aea3207ce7",
+          "counts": {
+            "tests": 1103,
+            "pass": 1103,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        }
+      ]
+    },
+    {
+      "lane": "current-runtime-ubuntu-24.04-node-26",
+      "status": "PASS",
+      "source": "ea055319a50d93e0f1b181e478731b437a152f17",
+      "commands": [
+        {
+          "executable": "/opt/hostedtoolcache/node/26.8.1/x64/bin/node",
+          "args": [
+            "scripts/build.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 5239.574743,
+          "log": "current-runtime-0.log",
+          "log_sha256": "380790783a0d7fab9129ffc20f41474a537920886874e47db1ca596850cf25a1"
+        },
+        {
+          "executable": "/opt/hostedtoolcache/node/26.8.1/x64/bin/node",
+          "args": [
+            "scripts/run-current-tests.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 660482.7491520001,
+          "log": "current-runtime-1.log",
+          "log_sha256": "e97763227ccf54eab71a11cd163127c7c791388fbf0b327c680327df296a4585",
+          "counts": {
+            "tests": 1103,
+            "pass": 1103,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        }
+      ]
+    },
+    {
+      "lane": "current-runtime-windows-latest-node-22",
+      "status": "PASS",
+      "source": "ea055319a50d93e0f1b181e478731b437a152f17",
+      "commands": [
+        {
+          "executable": "C:\\hostedtoolcache\\windows\\node\\22.23.2\\x64\\node.exe",
+          "args": [
+            "scripts/build.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 7615.0946,
+          "log": "current-runtime-0.log",
+          "log_sha256": "380790783a0d7fab9129ffc20f41474a537920886874e47db1ca596850cf25a1"
+        },
+        {
+          "executable": "C:\\hostedtoolcache\\windows\\node\\22.23.2\\x64\\node.exe",
+          "args": [
+            "scripts/run-current-tests.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 1469776.7423,
+          "log": "current-runtime-1.log",
+          "log_sha256": "8567a8f9c815216e4b56af419bd46d809fa4a981436f8f500983614ce3ea082b",
+          "counts": {
+            "tests": 1093,
+            "pass": 1093,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        }
+      ]
+    },
+    {
+      "lane": "current-runtime-windows-latest-node-24",
+      "status": "PASS",
+      "source": "ea055319a50d93e0f1b181e478731b437a152f17",
+      "commands": [
+        {
+          "executable": "C:\\hostedtoolcache\\windows\\node\\24.19.0\\x64\\node.exe",
+          "args": [
+            "scripts/build.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 7551.7264000000005,
+          "log": "current-runtime-0.log",
+          "log_sha256": "380790783a0d7fab9129ffc20f41474a537920886874e47db1ca596850cf25a1"
+        },
+        {
+          "executable": "C:\\hostedtoolcache\\windows\\node\\24.19.0\\x64\\node.exe",
+          "args": [
+            "scripts/run-current-tests.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 1360329.0976999998,
+          "log": "current-runtime-1.log",
+          "log_sha256": "3f8b307e6252f1c72874fc899cae167b1540e35d9360285fe80a5c593a54ef1d",
+          "counts": {
+            "tests": 1093,
+            "pass": 1093,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        }
+      ]
+    },
+    {
+      "lane": "current-runtime-windows-latest-node-26",
+      "status": "PASS",
+      "source": "ea055319a50d93e0f1b181e478731b437a152f17",
+      "commands": [
+        {
+          "executable": "C:\\hostedtoolcache\\windows\\node\\26.8.1\\x64\\node.exe",
+          "args": [
+            "scripts/build.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 5662.1335,
+          "log": "current-runtime-0.log",
+          "log_sha256": "380790783a0d7fab9129ffc20f41474a537920886874e47db1ca596850cf25a1"
+        },
+        {
+          "executable": "C:\\hostedtoolcache\\windows\\node\\26.8.1\\x64\\node.exe",
+          "args": [
+            "scripts/run-current-tests.mjs"
+          ],
+          "exit_code": 0,
+          "duration_ms": 1459968.6998,
+          "log": "current-runtime-1.log",
+          "log_sha256": "b744fb58ab0d12aeee3f34f76799d3f6a4912e729e1f525beaab8b7f01951b57",
+          "counts": {
+            "tests": 1093,
+            "pass": 1093,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        }
+      ]
+    }
+  ],
+  "local": {
+    "source": "ea055319a50d93e0f1b181e478731b437a152f17",
+    "status": "PASS",
+    "commands": 11,
+    "finishedAt": "2026-09-08T20:54:17.601Z"
+  }
+}

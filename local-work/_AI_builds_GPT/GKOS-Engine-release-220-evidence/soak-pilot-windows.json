@@ -1,0 +1,11 @@
+{
+  "mode": "pilot",
+  "sourceCommit": "aa2e10d16983b6cbd4107464f376d87d3c546db3",
+  "tarballSha256": "8b4cc0eb16be7c07b61f66d684e4b50810f94dd4a766b7a82195d48baed6c48a",
+  "tarball": "C:/Users/FAC/Documents/_AI_builds_GPT/GKOS-Engine-release-220-evidence/artifact-aa2e10d/gkos-engine-2.2.0.tgz",
+  "inventory": "C:/Users/FAC/Documents/_AI_builds_GPT/GKOS-Engine-release-220-evidence/artifact-aa2e10d/content-inventory.json",
+  "consumer": "C:/Users/FAC/Documents/_AI_builds_GPT/gkos-engine-220-consumer-aa2e10d-windows",
+  "output": "C:/Users/FAC/Documents/_AI_builds_GPT/GKOS-Engine-release-220-evidence/soak-aa2e10d-windows-pilot-1",
+  "durationMs": 180000,
+  "intervalMs": 15000
+}

@@ -1,0 +1,17 @@
+{
+  "authority_digest": "sha256:9bd5e5d8ebf91572904e5f93969137e48d27f29332e3296b1d7480f22ac19953",
+  "committed_at": "2026-09-08T20:02:55.494Z",
+  "contract_version": "gkos-watcher-journal-bootstrap-authority/1.0.0-draft.2",
+  "host_lock_witness": {
+    "watcher_host_lock_digest": "sha256:43029cb6630ff167ab886e23c65489b0e2c257af8c60f276a26f8466cf2d02a2",
+    "witness_byte_size": 1779,
+    "witness_digest": "sha256:82f1b6b12d8a4778977813d5950d22d4892011ae5e773a607772aa3641cf011d",
+    "witness_file": "watcher-journal-bootstrap-host-lock-82f1b6b12d8a4778977813d5950d22d4892011ae5e773a607772aa3641cf011d.json",
+    "witness_raw_sha256": "sha256:27762e29e71ea0dd5e1e76ca3f11f9444852133ff3e59942e27639e06d7eeedf"
+  },
+  "journal_generation_digest": "sha256:abbd9dc0ce95e66ba14567280f5f537f2ee6fac388f8516618c09ea304057947",
+  "journal_generation_file": "watcher-journal-generation-abbd9dc0ce95e66ba14567280f5f537f2ee6fac388f8516618c09ea304057947.json",
+  "journal_meta_digest": "sha256:5b05fd991328b10651eb6e7d90da955ffe2fb0dcfebf4c1f8c5634bdcf293a7c",
+  "target_journal_pointer_digest": "sha256:d3b7fdab3599b454d92c436d27f9b5dd451adb51ecb7cf06d90ac6445f5b2142",
+  "target_journal_pointer_file": "watcher-journal-pointer-d3b7fdab3599b454d92c436d27f9b5dd451adb51ecb7cf06d90ac6445f5b2142.json"
+}

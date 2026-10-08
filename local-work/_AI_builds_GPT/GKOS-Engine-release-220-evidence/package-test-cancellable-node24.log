@@ -1,0 +1,22 @@
+✔ package setup cancellation terminates the spawned process (11.7922ms)
+✔ npm pack JSON accepts one array or object report and refuses unsafe filenames (1.3906ms)
+✔ npm CLI discovery works outside an npm lifecycle (2.7257ms)
+✔ packed installation runs the stdio bridge against one authenticated real process (19741.4502ms)
+ℹ {"phase":"clone","status":"START"}
+ℹ {"phase":"clone","status":"PASS","elapsed_ms":1011.6399}
+ℹ {"phase":"install_source","status":"START"}
+ℹ {"phase":"install_source","status":"PASS","elapsed_ms":2772.6198}
+ℹ {"phase":"build_source","status":"START"}
+ℹ {"phase":"build_source","status":"PASS","elapsed_ms":4870.4827}
+ℹ {"phase":"pack","status":"START"}
+ℹ {"phase":"pack","status":"PASS","elapsed_ms":2390.2685}
+ℹ {"phase":"install_consumer","status":"START"}
+ℹ {"phase":"install_consumer","status":"PASS","elapsed_ms":7996.9061}
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19840.4222

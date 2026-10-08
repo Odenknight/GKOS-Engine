@@ -1,0 +1,41 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync,writeFileSync,mkdtempSync,mkdirSync,readdirSync,unlinkSync,existsSync,chmodSync} from 'node:fs';
+import {join,resolve} from 'node:path';
+import {createHash} from 'node:crypto';
+import {pathToFileURL} from 'node:url';
+const [consumer,artifact,output]=process.argv.slice(2);
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const record=JSON.parse(readFileSync(join(artifact,'artifact.json')));
+assert.equal(record.sourceCommit,'ea055319a50d93e0f1b181e478731b437a152f17');
+assert.equal(hash(readFileSync(join(artifact,'gkos-engine-2.2.0.tgz'))),record.sha256);
+for(const row of JSON.parse(readFileSync(join(artifact,'content-inventory.json'))))assert.equal(hash(readFileSync(join(consumer,'node_modules/gkos-engine',row.path))),row.sha256);
+assert.ok(!existsSync(output));mkdirSync(output,{recursive:true,mode:0o700});
+const w=await import(pathToFileURL(resolve(consumer,'node_modules/gkos-engine/dist/watcher-host.mjs')).href);
+const rows=[];
+const digest='sha256:'+'a'.repeat(64);
+for(const namespace of ['outer','journal'])for(const damage of ['missing','corrupt'])test(namespace+' '+damage+' pointer refuses restart without canonical promotion',async()=>{
+ const root=mkdtempSync(join(output,'fixture-'));if(process.platform!=='win32')chmodSync(root,0o700);
+ const vault=join(root,'vault'),status=join(root,'status');mkdirSync(vault,{mode:0o700});mkdirSync(status,{mode:0o700});
+ writeFileSync(join(status,'desktop-agent.token'),'1'.repeat(64)+'\n',{mode:0o600});
+ const source='---\ngkx_version: "2.3"\nuid: "019b2d14-4230-7db7-87d4-000000000001"\ntitle: "Pointer test"\ntype: "note"\ncreated_at: "2026-09-08T00:00:00Z"\nepistemic_state: "reported"\nsensitivity: "public"\n---\n# Pointer test\npointerneedle deterministic fixture.\n';
+ writeFileSync(join(vault,'note.md'),source,{mode:0o600});
+ const options={vault_root:vault,status_file:join(status,'status.json'),vault_id:'pointer-test',configuration_digest:digest,policy_digest:digest,coordinator_options:{discoverability_policy:()=> 'allow',source_discoverability_policy:()=> 'allow'}};
+ const host=await w.startWatcherHost(options);host.closed.catch(()=>{});assert.equal(host.status().document_count,1);await host.shutdown();await host.closed;
+ const directory=host.watcher_directory.path;const journal=join(directory,'journals');
+ const target=namespace==='outer'?join(directory,'watcher-active.json'):join(journal,'watcher-journal-active.json');
+ const original=readFileSync(target);const immutable=new Map();for(const d of [directory,journal])for(const name of readdirSync(d))if(/^(watcher-pointer-|watcher-coherent-|watcher-journal-pointer-)/.test(name))immutable.set(join(d,name),hash(readFileSync(join(d,name))));
+ if(damage==='missing')unlinkSync(target);else writeFileSync(target,'{}\n',{mode:0o600});
+ let failure=null;let unexpected;
+ try{unexpected=await w.startWatcherHost(options);unexpected.closed.catch(()=>{});}catch(error){failure=error;}
+ if(unexpected){await unexpected.shutdown();await unexpected.closed;}
+ assert.ok(failure,'restart must refuse damaged authority');const value=failure.code??failure.message;const code=/^GKX_[A-Z0-9_]+$/.test(value)?value:'UNEXPECTED_ERROR';
+ rows.push({namespace,damage,code,status:'OBSERVED_REFUSAL',originalPointerSha256:hash(original)});
+ writeFileSync(join(output,'receipt.json'),JSON.stringify({sourceCommit:record.sourceCommit,tarballSha256:record.sha256,node:process.version,platform:process.platform,rows},null,2));
+ assert.equal(code,damage==='corrupt'?'GKX_WATCHER_CONTRACT_VERSION_INVALID':namespace==='outer'?'GKX_WATCHER_AUTHORITY_MISMATCH':'GKX_WATCHER_GLOBAL_GENESIS_INVALID');
+ if(damage==='missing')assert.equal(existsSync(target),false);else assert.equal(readFileSync(target,'utf8'),'{}\n');
+ for(const [p,d]of immutable)assert.equal(hash(readFileSync(p)),d);
+ const after=[];for(const d of[directory,journal])for(const name of readdirSync(d))if(/^(watcher-pointer-|watcher-coherent-|watcher-journal-pointer-)/.test(name))after.push(join(d,name));assert.deepEqual(after.sort(),[...immutable.keys()].sort());
+ assert.equal(readFileSync(join(vault,'note.md'),'utf8'),source);rows.at(-1).status='PASS';
+ writeFileSync(join(output,'receipt.json'),JSON.stringify({sourceCommit:record.sourceCommit,tarballSha256:record.sha256,node:process.version,platform:process.platform,rows},null,2));
+});

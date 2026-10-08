@@ -1,0 +1,7 @@
+Add owner-approved OD-02 exact-byte documentation digest verification and pinned upstream v0.81 refusal-receipt schema validation. Bounds and refusal tests cover altered content, invalid declarations, path escapes, file size, hardlinks, schema tampering and CLI results. This does not claim release or profile qualification.
+
+Integrated with main 4cacab66c4b53ff9935356024c1ddbad4195e469. The only merge conflict was the qualification inventory; both reviewed entry sets were preserved and the resulting inventory verified. Eleven focused tests pass. Integrated typecheck, build, package-content, license and nomenclature checks pass; hosted checks must finish before merge.
+
+Preserved local source, plans, failures, receipts and diagnostic work are available in the separate historical archive at https://github.com/Odenknight/GKOS-Engine/tree/8908096223749e8f76e252b47f31001ea3f1d6ef . Its manifest verifies 1,194 files and distinguishes path-redacted public copies from original evidence. Cache, credential and runtime-state files are excluded. Historical source is not substituted for current main. The handoff document links the initial archive snapshot; the archive branch also contains the follow-up working-tree snapshots above.
+
+Release remains gated on the exact resulting source and artifact, native platform evidence, 24-hour soak, consumer verification and owner publisher/environment configuration. No tag or publication is authorized by a passing PR alone. The next owner directive may alter subsequent work.
