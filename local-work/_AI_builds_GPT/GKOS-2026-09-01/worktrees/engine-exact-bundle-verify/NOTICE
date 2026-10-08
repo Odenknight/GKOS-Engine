@@ -1,0 +1,15 @@
+GKOS Engine
+Copyright 2026 Shaun “Oden” Marshall
+
+This product includes software developed for the Governed Knowledge Operations
+Standard (GKOS) project.
+
+First-party software in this repository is licensed under the Apache License,
+Version 2.0. Documentation and original graphics are licensed under CC BY 4.0
+where the repository licensing structure identifies them as such.
+
+Third-party components retain their own copyright and license notices. See
+THIRD-PARTY-NOTICES.md and dependency metadata for those terms.
+
+GKOS, GKX, Kosmos-Oden, and KRS names and marks are not licensed under the
+Apache License. See TRADEMARKS.md.

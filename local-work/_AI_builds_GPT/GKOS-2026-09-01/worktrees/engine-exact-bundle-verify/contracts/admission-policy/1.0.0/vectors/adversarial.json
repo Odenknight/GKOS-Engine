@@ -1,0 +1,96 @@
+{
+  "schema": "gkos.admission-policy.adversarial-vectors.v1",
+  "contractVersion": "1.0.0",
+  "cases": [
+    {
+      "id": "schema-rejects-unknown-request-field",
+      "document": "request",
+      "basePath": "request-auto-admit.json",
+      "patches": [
+        { "op": "add", "path": "/authorityState", "value": "APPROVED" }
+      ],
+      "schemaValid": false,
+      "semanticValid": false
+    },
+    {
+      "id": "semantic-rules-reject-duplicate-input-name",
+      "document": "request",
+      "basePath": "request-auto-admit.json",
+      "patches": [
+        {
+          "op": "add",
+          "path": "/inputHashes/-",
+          "value": {
+            "name": "source-packet",
+            "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        }
+      ],
+      "schemaValid": true,
+      "semanticValid": false
+    },
+    {
+      "id": "semantic-rules-reject-duplicate-trigger-code",
+      "document": "request",
+      "basePath": "request-priority-review.json",
+      "patches": [
+        {
+          "op": "add",
+          "path": "/deterministicChecks/detectedTriggers/-",
+          "value": {
+            "code": "suspected-secret",
+            "evidenceHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "schemaValid": true,
+      "semanticValid": false
+    },
+    {
+      "id": "schema-rejects-exact-duplicate-dependency",
+      "document": "policy",
+      "basePath": "policy.json",
+      "patches": [
+        {
+          "op": "add",
+          "path": "/dependencyClosure/-",
+          "value": {
+            "id": "fixture:governance-standard",
+            "version": "0.0.1",
+            "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+          }
+        }
+      ],
+      "schemaValid": false,
+      "semanticValid": false
+    },
+    {
+      "id": "semantic-rules-reject-duplicate-dependency-identity",
+      "document": "policy",
+      "basePath": "policy.json",
+      "patches": [
+        {
+          "op": "add",
+          "path": "/dependencyClosure/-",
+          "value": {
+            "id": "fixture:governance-standard",
+            "version": "0.0.1",
+            "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        }
+      ],
+      "schemaValid": true,
+      "semanticValid": false
+    },
+    {
+      "id": "semantic-rules-reject-overlapping-trigger-lanes",
+      "document": "policy",
+      "basePath": "policy.json",
+      "patches": [
+        { "op": "add", "path": "/humanReviewTriggerCodes/-", "value": "suspected-secret" }
+      ],
+      "schemaValid": true,
+      "semanticValid": false
+    }
+  ]
+}

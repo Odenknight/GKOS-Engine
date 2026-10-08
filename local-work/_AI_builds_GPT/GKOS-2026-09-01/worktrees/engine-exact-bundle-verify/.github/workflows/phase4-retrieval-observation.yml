@@ -1,0 +1,68 @@
+name: Phase 4 Retrieval Observation
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase4-retrieval-observation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install (clean, from lockfile)
+        run: npm ci
+
+      - name: Type check, build, and release gates
+        run: |
+          npm run typecheck
+          npm run build
+          npm run pack:check
+          git diff --exit-code
+
+      - name: Bundle private observation runner outside the checkout
+        run: ./node_modules/.bin/esbuild scripts/run-retrieval-observation-qualification.mjs --bundle --platform=node --format=esm --target=node24 --outfile="$RUNNER_TEMP/phase4-retrieval-observation.mjs"
+
+      - name: Exact frozen pack, CLI, public, and Phase 0-3 immutability gates
+        run: node "$RUNNER_TEMP/phase4-retrieval-observation.mjs" --mode immutability
+
+      - name: Create private observation artifact root
+        run: mkdir -m 700 "$RUNNER_TEMP/phase4-retrieval-observation-artifacts"
+
+      - name: Real FTS5 10k temporal and performance observation
+        run: node "$RUNNER_TEMP/phase4-retrieval-observation.mjs" --mode observation --artifact-root "$RUNNER_TEMP/phase4-retrieval-observation-artifacts"
+
+      - name: Upload bounded observation receipts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: phase4-retrieval-observation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/phase4-retrieval-observation-artifacts/performance-sample-plan.json
+            ${{ runner.temp }}/phase4-retrieval-observation-artifacts/observation-receipt.json
+            ${{ runner.temp }}/phase4-retrieval-observation-artifacts/observation-report.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+          overwrite: false
+          include-hidden-files: false
+
+      - name: Clean tracked tree after observation
+        if: always()
+        run: git diff --exit-code

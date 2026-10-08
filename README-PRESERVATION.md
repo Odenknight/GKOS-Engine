@@ -1,0 +1,1 @@
+Owner-directed source preservation, 2026-10-08. Original relative paths retained under local-work/_AI_builds_GPT. Secrets, dependencies, runtime state and large generated artifacts excluded and retained separately on R:. This archive branch is not a release or integration claim.

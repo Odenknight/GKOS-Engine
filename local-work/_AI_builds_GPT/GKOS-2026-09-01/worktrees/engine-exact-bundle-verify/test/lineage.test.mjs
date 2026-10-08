@@ -1,0 +1,160 @@
+/** Canonical lineage tests (§3, §24) — including the critical one-sided supersedes case. */
+import test from "node:test";
+import assert from "node:assert/strict";
+import { buildGraph } from "../dist/gkos-engine.mjs";
+
+const note = (path, fm, body = "x") => ({
+  relativePath: path,
+  content: `---\n${fm}\n---\n${body}`,
+});
+
+const byId = (graph, id) => graph.nodes.find((n) => n.id === id);
+
+test("CRITICAL: one-sided `supersedes` invalidates the predecessor (§3.1)", () => {
+  const graph = buildGraph(
+    [
+      note("Ideas/Engine v1.md", "type: idea\ntimestamp: 2026-01-01T00:00:00Z"),
+      note("Ideas/Engine v2.md", "type: idea\ntimestamp: 2026-03-01T00:00:00Z\nsupersedes:\n  - Engine v1"),
+    ],
+    ["Ideas"]
+  );
+  const v1 = byId(graph, "file:Ideas/Engine v1.md");
+  const v2 = byId(graph, "file:Ideas/Engine v2.md");
+  // v1 never declared superseded_by, yet the canonical model derives it:
+  assert.deepEqual(v1.gkx.supersededByIds, ["file:Ideas/Engine v2.md"]);
+  assert.equal(v1.gkx.invalidAt, v2.validAt);
+  assert.equal(v1.gkx.head, false);
+  assert.equal(v2.gkx.head, true);
+  assert.equal(graph.diagnostics.lineageEdges, 1);
+});
+
+test("one-sided `superseded_by` produces the same canonical lineage", () => {
+  const graph = buildGraph(
+    [
+      note("a v1.md", "type: idea\ntimestamp: 2026-01-01\nsuperseded_by:\n  - a v2"),
+      note("a v2.md", "type: idea\ntimestamp: 2026-02-01"),
+    ],
+    []
+  );
+  const v1 = byId(graph, "file:a v1.md");
+  const v2 = byId(graph, "file:a v2.md");
+  assert.deepEqual(v1.gkx.supersededByIds, ["file:a v2.md"]);
+  assert.deepEqual(v2.gkx.supersedesIds, ["file:a v1.md"]);
+  assert.equal(v1.gkx.invalidAt, v2.validAt);
+  assert.equal(v2.gkx.head, true);
+});
+
+test("both sides declared -> ONE deduplicated canonical edge", () => {
+  const graph = buildGraph(
+    [
+      note("v1.md", "type: idea\ntimestamp: 2026-01-01\nsuperseded_by:\n  - v2"),
+      note("v2.md", "type: idea\ntimestamp: 2026-02-01\nsupersedes:\n  - v1"),
+    ],
+    []
+  );
+  assert.equal(graph.diagnostics.lineageEdges, 1);
+  assert.equal(graph.links.filter((l) => l.kind === "lineage").length, 1);
+});
+
+test("duplicate declarations warn but do not duplicate edges", () => {
+  const graph = buildGraph(
+    [
+      note("v1.md", "type: idea\ntimestamp: 2026-01-01"),
+      note("v2.md", "type: idea\ntimestamp: 2026-02-01\nsupersedes:\n  - v1\n  - v1"),
+    ],
+    []
+  );
+  assert.equal(graph.diagnostics.lineageEdges, 1);
+  assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("duplicate-declaration")));
+});
+
+test("self-supersession is ignored with a warning", () => {
+  const graph = buildGraph([note("self.md", "type: idea\ntimestamp: 2026-01-01\nsupersedes:\n  - self")], []);
+  assert.equal(graph.diagnostics.lineageEdges, 0);
+  assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("self-supersession")));
+  assert.equal(byId(graph, "file:self.md").gkx.head, false); // no lineage participation
+});
+
+test("cycles are detected and reported, graph survives (§3.5)", () => {
+  const graph = buildGraph(
+    [
+      note("a.md", "type: idea\ntimestamp: 2026-01-01\nsupersedes:\n  - b"),
+      note("b.md", "type: idea\ntimestamp: 2026-02-01\nsupersedes:\n  - a"),
+    ],
+    []
+  );
+  assert.ok(graph.diagnostics.lineageCycles >= 1);
+  assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("cycle")));
+  assert.equal(graph.nodes.filter((n) => n.kind === "file").length, 2); // not destroyed
+});
+
+test("unresolved lineage target warns and is skipped", () => {
+  const graph = buildGraph([note("v2.md", "type: idea\ntimestamp: 2026-02-01\nsupersedes:\n  - Ghost Note")], []);
+  assert.equal(graph.diagnostics.lineageEdges, 0);
+  assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("unresolved-target")));
+});
+
+test("multiple direct successors preserve every branch; earliest valid time sets invalid_at without a winner", () => {
+  const graph = buildGraph(
+    [
+      note("v1.md", "type: idea\ntimestamp: 2026-01-01"),
+      note("v2a.md", "type: idea\ntimestamp: 2026-03-01\nsupersedes:\n  - v1"),
+      note("v2b.md", "type: idea\ntimestamp: 2026-02-01\nsupersedes:\n  - v1"),
+    ],
+    []
+  );
+  const v1 = byId(graph, "file:v1.md");
+  const v2a = byId(graph, "file:v2a.md");
+  const v2b = byId(graph, "file:v2b.md");
+  assert.equal(v1.gkx.invalidAt, v2b.validAt);
+  assert.deepEqual(v1.gkx.supersededByIds, ["file:v2a.md", "file:v2b.md"]);
+  assert.equal(v2a.gkx.head, true);
+  assert.equal(v2b.gkx.head, true);
+  assert.equal(graph.links.filter((link) => link.kind === "lineage").length, 2);
+  assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("multiple-successors")));
+  assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("without selecting an authoritative branch")));
+});
+
+test("successor timestamp earlier than predecessor remains a branch but cannot set invalid_at", () => {
+  const graph = buildGraph(
+    [
+      note("v1.md", "type: idea\ntimestamp: 2026-05-01"),
+      note("v2.md", "type: idea\ntimestamp: 2026-01-01\nsupersedes:\n  - v1"),
+    ],
+    []
+  );
+  const v1 = byId(graph, "file:v1.md");
+  assert.equal(v1.gkx.invalidAt, null);
+  assert.deepEqual(v1.gkx.supersededByIds, ["file:v2.md"]);
+  assert.equal(graph.links.filter((link) => link.kind === "lineage").length, 1);
+  assert.ok(graph.diagnostics.lineageWarnings.some((w) => w.includes("successor-before-predecessor")));
+});
+
+test("earliest temporally valid successor excludes an invalid earlier branch", () => {
+  const graph = buildGraph(
+    [
+      note("v1.md", "type: idea\ntimestamp: 2026-05-01"),
+      note("invalid-earlier.md", "type: idea\ntimestamp: 2026-01-01\nsupersedes:\n  - v1"),
+      note("valid-later.md", "type: idea\ntimestamp: 2026-06-01\nsupersedes:\n  - v1"),
+    ],
+    []
+  );
+  const v1 = byId(graph, "file:v1.md");
+  assert.equal(v1.gkx.invalidAt, byId(graph, "file:valid-later.md").validAt);
+  assert.deepEqual(v1.gkx.supersededByIds, ["file:invalid-earlier.md", "file:valid-later.md"]);
+  assert.equal(graph.links.filter((link) => link.kind === "lineage").length, 2);
+});
+
+test("HEAD is derived from lineage participation, never from a frontmatter field (§3.4)", () => {
+  const graph = buildGraph(
+    [
+      note("plain.md", "type: idea\ntimestamp: 2026-01-01"), // no lineage -> not HEAD
+      note("v1.md", "type: idea\ntimestamp: 2026-01-01"),
+      note("v2.md", "type: idea\ntimestamp: 2026-02-01\nsupersedes:\n  - v1"),
+    ],
+    []
+  );
+  assert.equal(byId(graph, "file:plain.md").gkx.head, false);
+  assert.equal(byId(graph, "file:v1.md").gkx.head, false);
+  assert.equal(byId(graph, "file:v2.md").gkx.head, true);
+});

@@ -1,0 +1,72 @@
+{
+  "contract_version": "1.0.0-draft.1",
+  "http_predispatch": [
+    {
+      "error_code": "GKOS_P6_PEER_FORBIDDEN",
+      "name": "physical_peer",
+      "request_id": null,
+      "stage": 1
+    },
+    {
+      "error_code": "GKOS_P6_HOST_FORBIDDEN",
+      "name": "host",
+      "request_id": null,
+      "stage": 2
+    },
+    {
+      "error_code": "GKOS_P6_ORIGIN_FORBIDDEN",
+      "name": "origin",
+      "request_id": null,
+      "stage": 3
+    },
+    {
+      "error_code": "GKOS_P6_METHOD_NOT_ALLOWED",
+      "name": "method",
+      "request_id": null,
+      "stage": 4
+    },
+    {
+      "error_code": "GKOS_P6_UNSUPPORTED_MEDIA_TYPE",
+      "name": "content_type_or_delete_shape",
+      "request_id": null,
+      "stage": 5
+    },
+    {
+      "error_code": "GKOS_P6_PROTOCOL_VERSION_INVALID",
+      "name": "protocol_version",
+      "request_id": null,
+      "stage": 6
+    },
+    {
+      "error_code": "GKOS_P6_NOT_ACCEPTABLE",
+      "name": "accept",
+      "request_id": null,
+      "stage": 7
+    },
+    {
+      "error_code": "GKOS_P6_SESSION_UNKNOWN",
+      "name": "session",
+      "request_id": null,
+      "stage": 8
+    },
+    {
+      "error_code": "GKOS_P6_AUTH_FAILED",
+      "name": "authentication",
+      "request_id": null,
+      "stage": 9
+    }
+  ],
+  "protocol_version": "2025-11-25",
+  "transports": [
+    {
+      "availability": "contract_only",
+      "name": "native_stdio",
+      "request_timeout_ms": 30000
+    },
+    {
+      "availability": "contract_only",
+      "name": "loopback_streamable_http",
+      "request_timeout_ms": 30000
+    }
+  ]
+}

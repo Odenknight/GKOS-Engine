@@ -1,0 +1,608 @@
+{
+  "nodes": [
+    {
+      "id": "folder:.",
+      "kind": "folder",
+      "path": "",
+      "label": "Vault",
+      "area": "Vault",
+      "depth": 0,
+      "tags": [],
+      "aliases": [],
+      "color": "#f8fafc",
+      "outgoing": 0,
+      "incoming": 0
+    },
+    {
+      "id": "folder:Notes",
+      "kind": "folder",
+      "path": "Notes",
+      "label": "Notes",
+      "area": "Notes",
+      "depth": 1,
+      "tags": [],
+      "aliases": [],
+      "color": "#fb7971",
+      "outgoing": 0,
+      "incoming": 0
+    },
+    {
+      "id": "file:Notes/A.md",
+      "kind": "file",
+      "path": "Notes/A.md",
+      "label": "A",
+      "area": "Notes",
+      "depth": 2,
+      "extension": "md",
+      "size": 271,
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "gkx": {
+        "gkxVersion": "2.3",
+        "uid": "019b2d14-4230-7db7-87d4-7d81cfaeca01",
+        "type": "note",
+        "title": "A",
+        "epistemicState": "hypothesis",
+        "sensitivity": "internal",
+        "supersedes": [],
+        "supersededBy": [],
+        "forkedFrom": [],
+        "forkedTo": [],
+        "relations": {},
+        "related": [],
+        "projection": {
+          "profile": "gkx-2.3-validating-projection",
+          "conformanceClaim": "reader-and-deterministic-assessor",
+          "mode": "strict-v2.3",
+          "sourceVersion": "2.3",
+          "sourcePath": "Notes/A.md",
+          "contentHash": "xmaay5:7j",
+          "rawFrontmatter": {
+            "gkx_version": "2.3",
+            "uid": "019b2d14-4230-7db7-87d4-7d81cfaeca01",
+            "title": "A",
+            "type": "note",
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-01-01T12:00:00Z",
+            "epistemic_state": "hypothesis",
+            "sensitivity": "internal",
+            "authorship_origin": "authored"
+          },
+          "extensions": {},
+          "authored": {
+            "tags": [],
+            "labels": [],
+            "relationships": {},
+            "uid": "019b2d14-4230-7db7-87d4-7d81cfaeca01",
+            "title": "A",
+            "type": "note",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T12:00:00Z",
+            "authorship": {
+              "origin": "authored"
+            },
+            "assertionOrigin": "authored",
+            "epistemic": {},
+            "epistemicState": "hypothesis",
+            "sensitivityBlock": {},
+            "sensitivity": "internal",
+            "provenance": {},
+            "evidence": {},
+            "lineage": {},
+            "review": {},
+            "assessmentReference": {},
+            "authorization": {}
+          },
+          "derived": {
+            "tags": [],
+            "labels": [
+              "assessment:weakly-supported",
+              "epistemic:hypothesis",
+              "identity:stable",
+              "provenance:missing",
+              "sensitivity:internal"
+            ],
+            "relationships": {},
+            "sensitivity": "internal",
+            "effectiveSensitivityReason": "authored-source-classification"
+          },
+          "proposed": {
+            "tags": [],
+            "labels": [],
+            "relationships": {}
+          },
+          "approved": {
+            "tags": [],
+            "labels": [],
+            "relationships": {}
+          },
+          "effective": {
+            "tags": [],
+            "labels": [
+              "assessment:weakly-supported",
+              "epistemic:hypothesis",
+              "identity:stable",
+              "provenance:missing",
+              "sensitivity:internal"
+            ],
+            "relationships": {},
+            "epistemicState": "hypothesis",
+            "epistemicStateDefaulted": false,
+            "sensitivity": "internal",
+            "evidence": {
+              "supports": [],
+              "contradicts": []
+            }
+          },
+          "diagnostics": [
+            {
+              "code": "GKX-PROVENANCE-001",
+              "severity": "warning",
+              "field": "provenance.source_refs",
+              "message": "No source reference is declared.",
+              "deterministic": true,
+              "sourcePath": "Notes/A.md"
+            }
+          ],
+          "assessment": {
+            "assessmentId": "assessment:xmaay5-7j",
+            "targetUid": "019b2d14-4230-7db7-87d4-7d81cfaeca01",
+            "profile": "gkx-2.3-validating-projection",
+            "policy": {
+              "id": "policy:gkx23-default-v1",
+              "version": "1.0.0",
+              "hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+              "weights": {
+                "structural_completeness": 0.15,
+                "provenance_quality": 0.2,
+                "evidence_support": 0.2,
+                "relationship_integrity": 0.15,
+                "temporal_freshness": 0.1,
+                "contradiction_status": 0.1,
+                "review_readiness": 0.1
+              },
+              "missingValueBehavior": "exclude-null-and-renormalize"
+            },
+            "assessor": {
+              "id": "tool:gkos-engine",
+              "engineVersion": "2.1.2"
+            },
+            "inputHash": "fnv1a32:xmaay5:7j",
+            "calculatedAt": "2026-01-01T12:00:00Z",
+            "scores": {
+              "structural_completeness": 0.6,
+              "provenance_quality": 0,
+              "evidence_support": null,
+              "relationship_integrity": 1,
+              "temporal_freshness": null,
+              "contradiction_status": null,
+              "review_readiness": 0.2,
+              "overall": 0.4333
+            },
+            "exclusions": [
+              "evidence_support",
+              "temporal_freshness",
+              "contradiction_status"
+            ],
+            "labels": {
+              "derived": [
+                "assessment:weakly-supported"
+              ]
+            },
+            "diagnostics": [
+              {
+                "code": "GKX-PROVENANCE-001",
+                "severity": "warning",
+                "field": "provenance.source_refs",
+                "message": "No source reference is declared.",
+                "deterministic": true,
+                "sourcePath": "Notes/A.md"
+              }
+            ],
+            "interpretation": "documentation-and-support-quality-not-truth"
+          }
+        },
+        "supersedesIds": [],
+        "supersededByIds": [],
+        "invalidAt": null,
+        "head": false
+      },
+      "validAt": "2026-01-01T00:00:00.000Z",
+      "type": "note",
+      "tags": [],
+      "aliases": [],
+      "color": "#fb7971",
+      "outgoing": 1,
+      "incoming": 0
+    },
+    {
+      "id": "file:Notes/B.md",
+      "kind": "file",
+      "path": "Notes/B.md",
+      "label": "B",
+      "area": "Notes",
+      "depth": 2,
+      "extension": "md",
+      "size": 259,
+      "updatedAt": "2026-01-02T12:00:00.000Z",
+      "createdAt": "2026-01-02T00:00:00.000Z",
+      "gkx": {
+        "gkxVersion": "2.3",
+        "uid": "019b2d14-4230-7db7-87d4-7d81cfaeca02",
+        "type": "note",
+        "title": "B",
+        "epistemicState": "hypothesis",
+        "sensitivity": "internal",
+        "supersedes": [],
+        "supersededBy": [],
+        "forkedFrom": [],
+        "forkedTo": [],
+        "relations": {},
+        "related": [],
+        "projection": {
+          "profile": "gkx-2.3-validating-projection",
+          "conformanceClaim": "reader-and-deterministic-assessor",
+          "mode": "strict-v2.3",
+          "sourceVersion": "2.3",
+          "sourcePath": "Notes/B.md",
+          "contentHash": "hiturv:77",
+          "rawFrontmatter": {
+            "gkx_version": "2.3",
+            "uid": "019b2d14-4230-7db7-87d4-7d81cfaeca02",
+            "title": "B",
+            "type": "note",
+            "created_at": "2026-01-02T00:00:00Z",
+            "updated_at": "2026-01-02T12:00:00Z",
+            "epistemic_state": "hypothesis",
+            "sensitivity": "internal",
+            "authorship_origin": "authored"
+          },
+          "extensions": {},
+          "authored": {
+            "tags": [],
+            "labels": [],
+            "relationships": {},
+            "uid": "019b2d14-4230-7db7-87d4-7d81cfaeca02",
+            "title": "B",
+            "type": "note",
+            "createdAt": "2026-01-02T00:00:00Z",
+            "updatedAt": "2026-01-02T12:00:00Z",
+            "authorship": {
+              "origin": "authored"
+            },
+            "assertionOrigin": "authored",
+            "epistemic": {},
+            "epistemicState": "hypothesis",
+            "sensitivityBlock": {},
+            "sensitivity": "internal",
+            "provenance": {},
+            "evidence": {},
+            "lineage": {},
+            "review": {},
+            "assessmentReference": {},
+            "authorization": {}
+          },
+          "derived": {
+            "tags": [],
+            "labels": [
+              "assessment:weakly-supported",
+              "epistemic:hypothesis",
+              "identity:stable",
+              "provenance:missing",
+              "sensitivity:internal"
+            ],
+            "relationships": {},
+            "sensitivity": "internal",
+            "effectiveSensitivityReason": "authored-source-classification"
+          },
+          "proposed": {
+            "tags": [],
+            "labels": [],
+            "relationships": {}
+          },
+          "approved": {
+            "tags": [],
+            "labels": [],
+            "relationships": {}
+          },
+          "effective": {
+            "tags": [],
+            "labels": [
+              "assessment:weakly-supported",
+              "epistemic:hypothesis",
+              "identity:stable",
+              "provenance:missing",
+              "sensitivity:internal"
+            ],
+            "relationships": {},
+            "epistemicState": "hypothesis",
+            "epistemicStateDefaulted": false,
+            "sensitivity": "internal",
+            "evidence": {
+              "supports": [],
+              "contradicts": []
+            }
+          },
+          "diagnostics": [
+            {
+              "code": "GKX-PROVENANCE-001",
+              "severity": "warning",
+              "field": "provenance.source_refs",
+              "message": "No source reference is declared.",
+              "deterministic": true,
+              "sourcePath": "Notes/B.md"
+            }
+          ],
+          "assessment": {
+            "assessmentId": "assessment:hiturv-77",
+            "targetUid": "019b2d14-4230-7db7-87d4-7d81cfaeca02",
+            "profile": "gkx-2.3-validating-projection",
+            "policy": {
+              "id": "policy:gkx23-default-v1",
+              "version": "1.0.0",
+              "hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+              "weights": {
+                "structural_completeness": 0.15,
+                "provenance_quality": 0.2,
+                "evidence_support": 0.2,
+                "relationship_integrity": 0.15,
+                "temporal_freshness": 0.1,
+                "contradiction_status": 0.1,
+                "review_readiness": 0.1
+              },
+              "missingValueBehavior": "exclude-null-and-renormalize"
+            },
+            "assessor": {
+              "id": "tool:gkos-engine",
+              "engineVersion": "2.1.2"
+            },
+            "inputHash": "fnv1a32:hiturv:77",
+            "calculatedAt": "2026-01-02T12:00:00Z",
+            "scores": {
+              "structural_completeness": 0.6,
+              "provenance_quality": 0,
+              "evidence_support": null,
+              "relationship_integrity": 1,
+              "temporal_freshness": null,
+              "contradiction_status": null,
+              "review_readiness": 0.2,
+              "overall": 0.4333
+            },
+            "exclusions": [
+              "evidence_support",
+              "temporal_freshness",
+              "contradiction_status"
+            ],
+            "labels": {
+              "derived": [
+                "assessment:weakly-supported"
+              ]
+            },
+            "diagnostics": [
+              {
+                "code": "GKX-PROVENANCE-001",
+                "severity": "warning",
+                "field": "provenance.source_refs",
+                "message": "No source reference is declared.",
+                "deterministic": true,
+                "sourcePath": "Notes/B.md"
+              }
+            ],
+            "interpretation": "documentation-and-support-quality-not-truth"
+          }
+        },
+        "supersedesIds": [],
+        "supersededByIds": [],
+        "invalidAt": null,
+        "head": false
+      },
+      "validAt": "2026-01-02T00:00:00.000Z",
+      "type": "note",
+      "tags": [],
+      "aliases": [],
+      "color": "#fb7971",
+      "outgoing": 0,
+      "incoming": 1
+    }
+  ],
+  "links": [
+    {
+      "id": "contains:folder:.->folder:Notes",
+      "source": "folder:.",
+      "target": "folder:Notes",
+      "kind": "contains"
+    },
+    {
+      "id": "contains:folder:Notes->file:Notes/A.md",
+      "source": "folder:Notes",
+      "target": "file:Notes/A.md",
+      "kind": "contains"
+    },
+    {
+      "id": "contains:folder:Notes->file:Notes/B.md",
+      "source": "folder:Notes",
+      "target": "file:Notes/B.md",
+      "kind": "contains"
+    },
+    {
+      "id": "wikilink:file:Notes/A.md->file:Notes/B.md:3",
+      "source": "file:Notes/A.md",
+      "target": "file:Notes/B.md",
+      "kind": "wikilink",
+      "sourcePath": "Notes/A.md"
+    }
+  ],
+  "stats": {
+    "files": 2,
+    "folders": 2,
+    "unresolved": 0,
+    "links": 4,
+    "wikilinks": 1,
+    "markdownLinks": 0,
+    "propertyLinks": 0,
+    "orphans": 0
+  },
+  "areas": [
+    "Notes",
+    "Vault"
+  ],
+  "tags": [],
+  "statuses": [],
+  "types": [
+    "note"
+  ],
+  "diagnostics": {
+    "notes": 2,
+    "folders": 2,
+    "attachments": 0,
+    "unresolvedLinks": 0,
+    "ambiguousLinks": 0,
+    "lineageEdges": 0,
+    "lineageCycles": 0,
+    "lineageWarnings": [],
+    "residualCollisions": 0
+  },
+  "__timeSpan": {
+    "min": 1767225600000,
+    "max": 1767312000000
+  },
+  "gkxProfile": "GKX 2.3 Validating Projection Profile",
+  "gkxUidIndex": {
+    "019b2d14-4230-7db7-87d4-7d81cfaeca01": "file:Notes/A.md",
+    "019b2d14-4230-7db7-87d4-7d81cfaeca02": "file:Notes/B.md"
+  },
+  "gkxAssessments": [
+    {
+      "assessmentId": "assessment:xmaay5-7j",
+      "targetUid": "019b2d14-4230-7db7-87d4-7d81cfaeca01",
+      "profile": "gkx-2.3-validating-projection",
+      "policy": {
+        "id": "policy:gkx23-default-v1",
+        "version": "1.0.0",
+        "hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "weights": {
+          "structural_completeness": 0.15,
+          "provenance_quality": 0.2,
+          "evidence_support": 0.2,
+          "relationship_integrity": 0.15,
+          "temporal_freshness": 0.1,
+          "contradiction_status": 0.1,
+          "review_readiness": 0.1
+        },
+        "missingValueBehavior": "exclude-null-and-renormalize"
+      },
+      "assessor": {
+        "id": "tool:gkos-engine",
+        "engineVersion": "2.1.2"
+      },
+      "inputHash": "fnv1a32:xmaay5:7j",
+      "calculatedAt": "2026-01-01T12:00:00Z",
+      "scores": {
+        "structural_completeness": 0.6,
+        "provenance_quality": 0,
+        "evidence_support": null,
+        "relationship_integrity": 1,
+        "temporal_freshness": null,
+        "contradiction_status": null,
+        "review_readiness": 0.2,
+        "overall": 0.4333
+      },
+      "exclusions": [
+        "evidence_support",
+        "temporal_freshness",
+        "contradiction_status"
+      ],
+      "labels": {
+        "derived": [
+          "assessment:weakly-supported"
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "GKX-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs",
+          "message": "No source reference is declared.",
+          "deterministic": true,
+          "sourcePath": "Notes/A.md"
+        }
+      ],
+      "interpretation": "documentation-and-support-quality-not-truth"
+    },
+    {
+      "assessmentId": "assessment:hiturv-77",
+      "targetUid": "019b2d14-4230-7db7-87d4-7d81cfaeca02",
+      "profile": "gkx-2.3-validating-projection",
+      "policy": {
+        "id": "policy:gkx23-default-v1",
+        "version": "1.0.0",
+        "hash": "sha256:2c2d8ec1e6481cbd4476bcc544c4fd19be03d8f21e317e44d889ea46e940ec8b",
+        "weights": {
+          "structural_completeness": 0.15,
+          "provenance_quality": 0.2,
+          "evidence_support": 0.2,
+          "relationship_integrity": 0.15,
+          "temporal_freshness": 0.1,
+          "contradiction_status": 0.1,
+          "review_readiness": 0.1
+        },
+        "missingValueBehavior": "exclude-null-and-renormalize"
+      },
+      "assessor": {
+        "id": "tool:gkos-engine",
+        "engineVersion": "2.1.2"
+      },
+      "inputHash": "fnv1a32:hiturv:77",
+      "calculatedAt": "2026-01-02T12:00:00Z",
+      "scores": {
+        "structural_completeness": 0.6,
+        "provenance_quality": 0,
+        "evidence_support": null,
+        "relationship_integrity": 1,
+        "temporal_freshness": null,
+        "contradiction_status": null,
+        "review_readiness": 0.2,
+        "overall": 0.4333
+      },
+      "exclusions": [
+        "evidence_support",
+        "temporal_freshness",
+        "contradiction_status"
+      ],
+      "labels": {
+        "derived": [
+          "assessment:weakly-supported"
+        ]
+      },
+      "diagnostics": [
+        {
+          "code": "GKX-PROVENANCE-001",
+          "severity": "warning",
+          "field": "provenance.source_refs",
+          "message": "No source reference is declared.",
+          "deterministic": true,
+          "sourcePath": "Notes/B.md"
+        }
+      ],
+      "interpretation": "documentation-and-support-quality-not-truth"
+    }
+  ],
+  "gkxDiagnostics": [
+    {
+      "code": "GKX-PROVENANCE-001",
+      "severity": "warning",
+      "field": "provenance.source_refs",
+      "message": "No source reference is declared.",
+      "deterministic": true,
+      "sourcePath": "Notes/A.md"
+    },
+    {
+      "code": "GKX-PROVENANCE-001",
+      "severity": "warning",
+      "field": "provenance.source_refs",
+      "message": "No source reference is declared.",
+      "deterministic": true,
+      "sourcePath": "Notes/B.md"
+    }
+  ]
+}
