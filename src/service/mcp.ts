@@ -111,9 +111,9 @@ interface McpSession {
   lastUsedAt: number;
   secret: Buffer;
   records: Map<string, string>;
-  recordBindings: Map<string, { generation: number; sourceDigest: string | null }>;
+  recordBindings: Map<string, { generation: number; sourceDigest: string | null; identityDigest: string }>;
   scopes: Map<string, string>;
-  cursors: Map<string, { kind: string; scopeRef: string; offset: number; generation: number; snapshotId: string; queryKey: string }>;
+  cursors: Map<string, { kind: string; scopeRef: string; offset: number; generation: number; snapshotId: string; queryKey: string; snapshotBinding: string }>;
 }
 
 export interface ServiceMcpExecutionContext {
@@ -121,6 +121,8 @@ export interface ServiceMcpExecutionContext {
   view: GkosAuthorizedView;
   generation: number;
   policyDecisionId: string;
+  /** Actual host policy coordinate; decision IDs alone need not change with policy. */
+  policyDigest?: string;
   sourceRecords?: readonly SourceFile[];
   retrievalSearch?: ServiceRetrievalSearch;
   navigationConfig?: VaultNavigationConfig;
@@ -252,44 +254,112 @@ function authorizedNavigationSnapshot(context: ServiceMcpExecutionContext): Navi
   };
 }
 
-function issuedCursor(session: McpSession, kind: string, scopeRef: string, offset: number, generation: number, snapshotId: string, queryKey = ""): string {
+function issuedCursor(session: McpSession, kind: string, scopeRef: string, offset: number, generation: number, snapshotId: string, queryKey = "", snapshotBinding = ""): string {
   const payload = createHmac("sha256", session.secret).update(`cursor\0${kind}\0${scopeRef}\0${offset}\0${generation}\0${snapshotId}\0${queryKey}`, "utf8").digest().toString("base64url");
   const cursor = `gkcur1_${payload}`;
   if (!session.cursors.has(cursor) && session.cursors.size >= SESSION_REFERENCE_LIMIT) throw new Error("GKOS_OBS_CONTENT_LIMIT");
-  session.cursors.set(cursor, { kind, scopeRef, offset, generation, snapshotId, queryKey });
+  session.cursors.set(cursor, { kind, scopeRef, offset, generation, snapshotId, queryKey, snapshotBinding });
   return cursor;
 }
 
-function page(limit: number, generation: number, snapshotId: string, session?: McpSession, kind?: string, scopeRef?: string, nextOffset?: number, queryKey = ""): Record<string, unknown> {
+function page(limit: number, generation: number, snapshotId: string, session?: McpSession, kind?: string, scopeRef?: string, nextOffset?: number, queryKey = "", snapshotBinding = ""): Record<string, unknown> {
   const hasMore = session !== undefined && kind !== undefined && scopeRef !== undefined && nextOffset !== undefined;
-  return { limit, has_more: hasMore, next_cursor: hasMore ? issuedCursor(session, kind, scopeRef, nextOffset, generation, snapshotId, queryKey) : null, snapshot_id: snapshotId };
+  return { limit, has_more: hasMore, next_cursor: hasMore ? issuedCursor(session, kind, scopeRef, nextOffset, generation, snapshotId, queryKey, snapshotBinding) : null, snapshot_id: snapshotId };
 }
 
-function paginationStart(session: McpSession, cursorValue: unknown, kind: string, scopeRef: string, generation: number): { offset: number; snapshotId: string } | null {
+function paginationStart(session: McpSession, cursorValue: unknown, kind: string, scopeRef: string, generation: number, snapshotBinding = ""): { offset: number; snapshotId: string } | null {
   if (cursorValue === null) return { offset: 0, snapshotId: uuidV7() };
   if (typeof cursorValue !== "string") return null;
   const cursor = session.cursors.get(cursorValue);
-  if (!cursor || cursor.kind !== kind || cursor.scopeRef !== scopeRef || cursor.generation !== generation) return null;
+  if (!cursor || cursor.kind !== kind || cursor.scopeRef !== scopeRef || cursor.generation !== generation || cursor.snapshotBinding !== snapshotBinding) return null;
   return { offset: cursor.offset, snapshotId: cursor.snapshotId };
 }
 
 function sourceDigest(content: string): string { return `sha256:${createHash("sha256").update(content, "utf8").digest("hex")}`; }
 
-function issueRecord(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext): string {
+function authorityBinding(context: ServiceMcpExecutionContext): unknown {
+  return { vault: context.vaultId, policy: context.policyDecisionId, policyDigest: context.policyDigest ?? null,
+    credential: context.identity.credentialId, agent: context.identity.agentId, ceiling: context.identity.sensitivityCeiling,
+    capabilities: [...context.identity.capabilities].sort() };
+}
+
+interface ReferenceBindings {
+  notes: Map<string, GkosAuthorizedView["notes"][number]>;
+  sources: Map<string, SourceFile | null>;
+}
+
+function referenceBindings(context: ServiceMcpExecutionContext): ReferenceBindings {
+  let notes: ReferenceBindings["notes"], sources: ReferenceBindings["sources"];
+  // Request-local and lazy: parameter/refusal paths must not access source state.
+  return {
+    get notes() {
+      if (!notes) {
+        notes = new Map();
+        for (const note of context.view.notes) notes.set(`${note.id}\0${note.path}`, note);
+      }
+      return notes;
+    },
+    get sources() {
+      if (!sources) {
+        sources = new Map();
+        for (const source of context.sourceRecords ?? []) {
+          // Null preserves duplicate-source refusal without retaining duplicate arrays.
+          sources.set(source.relativePath, sources.has(source.relativePath) ? null : source);
+        }
+      }
+      return sources;
+    },
+  };
+}
+
+function recordIdentity(node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): string {
+  // Source-backed hosts may reconstruct generic filesystem times on every scan.
+  // Bind authored/projection identity and source bytes, not that scan clock.
+  const { createdAt: _createdAt, updatedAt: _updatedAt, ...projection } = node;
+  return digest({ authority: authorityBinding(context), node: context.sourceRecords ? projection : node,
+    admission: bindings.notes.get(`${node.id}\0${node.path}`) ?? null,
+    sourceAdapter: context.sourceRecords !== undefined });
+}
+
+function boundSourceDigest(node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): string | null {
+  if (!context.sourceRecords) return null;
+  const source = bindings.sources.get(node.path);
+  if (!source || typeof source.content !== "string") return null;
+  const content = source.content;
+  if (Buffer.byteLength(content, "utf8") > CONTENT_MAX_READ_BYTES) return null;
+  if (Buffer.from(content, "utf8").toString("utf8") !== content) return null;
+  return sourceDigest(content);
+}
+
+function candidateSnapshot(context: ServiceMcpExecutionContext, nodes: readonly GkxNode[], bindings: ReferenceBindings): string {
+  // Store only a digest in each bounded cursor; retain the exact authorized order.
+  // Hidden sources never enter the binding or invalidation diagnostics.
+  return digest({ authority: authorityBinding(context), records: nodes.map(node => {
+    const source = boundSourceDigest(node, context, bindings);
+    if (context.sourceRecords && source === null) throw new Error("GKOS_P6_CAPABILITY_UNAVAILABLE");
+    return [recordIdentity(node, context, bindings), source];
+  }) });
+}
+
+function issueRecord(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): string {
   // Callers supply only a node already inside the authorized view. Never read
   // content for a source that does not match that authorized canonical path.
-  const sources = context.sourceRecords?.filter((source) => source.relativePath === node.path) ?? [];
-  const content = sources.length === 1 && typeof sources[0].content === "string" ? sources[0].content : null;
-  const boundDigest = content !== null && Buffer.byteLength(content, "utf8") <= CONTENT_MAX_READ_BYTES ? sourceDigest(content) : null;
-  const recordRef = issuedRef(session, "gkrec1", `${node.id}\0${context.generation}\0${boundDigest ?? "unavailable"}`);
+  const boundDigest = boundSourceDigest(node, context, bindings);
+  const identityDigest = recordIdentity(node, context, bindings);
+  const coordinate = `${node.id}\0${context.generation}\0${boundDigest ?? "unavailable"}`;
+  let recordRef = issuedRef(session, "gkrec1", coordinate);
+  // Preserve existing stable-state wire bytes. A changed identity/policy must
+  // get a distinct ref rather than overwrite the binding of an issued ref.
+  const prior = session.recordBindings.get(recordRef);
+  if (prior && prior.identityDigest !== identityDigest) recordRef = issuedRef(session, "gkrec1", `${coordinate}\0${identityDigest}`);
   if (!session.records.has(recordRef) && session.records.size >= SESSION_REFERENCE_LIMIT) throw new Error("GKOS_OBS_CONTENT_LIMIT");
   session.records.set(recordRef, node.id);
-  session.recordBindings.set(recordRef, { generation: context.generation, sourceDigest: boundDigest });
+  session.recordBindings.set(recordRef, { generation: context.generation, sourceDigest: boundDigest, identityDigest });
   return recordRef;
 }
 
-function recordSummary(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext): Record<string, unknown> {
-  const recordRef = issueRecord(session, node, context);
+function recordSummary(session: McpSession, node: GkxNode, context: ServiceMcpExecutionContext, bindings: ReferenceBindings): Record<string, unknown> {
+  const recordRef = issueRecord(session, node, context, bindings);
   return {
     record_ref: recordRef,
     uid: typeof node.gkx?.uid === "string" ? node.gkx.uid : null,
@@ -488,6 +558,7 @@ export class ServiceMcpRuntime {
     if (!UUID_V7.test(context.identity.agentId) || !UUID_V7.test(context.policyDecisionId)) return fail("GKOS_P6_AUTH_FAILED");
     const issues = parameterIssues(tool, args);
     if (issues.length) return fail("GKOS_P6_INVALID_PARAMS", issues);
+    const bindings = referenceBindings(context);
     if (tool === "gkos_capabilities") {
       if (!exactObject(args, [])) return fail("GKOS_P6_INVALID_PARAMS");
       const navigationReady = !!context.navigationConfig && !!context.sourceRecords;
@@ -521,6 +592,7 @@ export class ServiceMcpRuntime {
       const snapshot = authorizedNavigationSnapshot(context);
       const artifactDigest = await navigationSnapshotDigest(snapshot);
       const queryKey = digest({ artifactDigest, config: context.navigationConfig.digest, detail, prefix, terms });
+      const snapshotBinding = digest({ authority: authorityBinding(context), config: context.navigationConfig });
       let scopeRef: string;
       let offset = 0;
       let snapshotId = uuidV7();
@@ -537,7 +609,7 @@ export class ServiceMcpRuntime {
       else return fail("GKOS_P6_REFERENCE_UNKNOWN");
       if (typeof input.cursor === "string") {
         const cursor = session.cursors.get(input.cursor);
-        if (!cursor || cursor.kind !== "navigation_discover" || cursor.scopeRef !== scopeRef || cursor.generation !== context.generation || cursor.queryKey !== queryKey) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+        if (!cursor || cursor.kind !== "navigation_discover" || cursor.scopeRef !== scopeRef || cursor.generation !== context.generation || cursor.queryKey !== queryKey || cursor.snapshotBinding !== snapshotBinding) return fail("GKOS_P6_REFERENCE_UNKNOWN");
         offset = cursor.offset;
         snapshotId = cursor.snapshotId;
       }
@@ -548,12 +620,12 @@ export class ServiceMcpRuntime {
       const items = entries.slice(offset, offset + limit).map((entry) => {
         const node = context.view.graph.nodes.find((candidate) => candidate.kind === "file" && candidate.path === entry.path);
         if (!node) throw new Error("GKOS_SERVICE_NAVIGATION_VIEW_MISMATCH");
-        const recordRef = issueRecord(session, node, context);
+        const recordRef = issueRecord(session, node, context, bindings);
         if (detail === "compact") return { record_ref: recordRef, canonical_path: entry.path };
         return { record_ref: recordRef, child_scope_ref: null, canonical_path: entry.path, classification: entry.classification, management: entry.management, name_standing: entry.nameStanding, recognized_moc_name: entry.recognizedMocName, evidence_codes: entry.evidence.map((item) => item.code).sort() };
       });
       const nextOffset = offset + items.length < entries.length ? offset + items.length : undefined;
-      return { result: seal({ ...common(context, requestId), scope_ref: scopeRef, artifact_digest: artifactDigest, items, page: page(limit, context.generation, snapshotId, session, "navigation_discover", scopeRef, nextOffset, queryKey) }), paths: items.map((item) => item.canonical_path), isError: false };
+      return { result: seal({ ...common(context, requestId), scope_ref: scopeRef, artifact_digest: artifactDigest, items, page: page(limit, context.generation, snapshotId, session, "navigation_discover", scopeRef, nextOffset, queryKey, snapshotBinding) }), paths: items.map((item) => item.canonical_path), isError: false };
     }
     const input = args as Record<string, unknown>;
     if (tool === "gkos_record_resolve") {
@@ -565,13 +637,21 @@ export class ServiceMcpRuntime {
       const record = authorizedContent(context, node).find(item => item.node.id === node.id);
       if (!record) return fail("GKOS_P6_REFERENCE_UNKNOWN");
       return { result: seal({ ...common(context, requestId), extension_version: CONTENT_EXTENSION_VERSION,
-        ...recordSummary(session, node, context), source_digest: record.sourceDigest }), paths: [node.path], isError: false };
+        ...recordSummary(session, node, context, bindings), source_digest: record.sourceDigest }), paths: [node.path], isError: false };
     }
     const recordNode = (value: unknown): GkxNode | null => {
       if (typeof value !== "string" || !REF.test(value)) return null;
-      if (session.recordBindings.get(value)?.generation !== context.generation) return null;
+      const binding = session.recordBindings.get(value);
+      if (!binding || binding.generation !== context.generation) return null;
       const nodeId = session.records.get(value);
-      return nodeId ? context.view.graph.nodes.find((node) => node.id === nodeId && node.kind === "file") ?? null : null;
+      const nodes = context.view.graph.nodes.filter(node => node.id === nodeId && node.kind === "file");
+      if (nodes.length !== 1) return null;
+      const node = nodes[0];
+      if (context.view.notes.filter(note => note.id === node.id && note.path === node.path).length !== 1 ||
+          binding.identityDigest !== recordIdentity(node, context, bindings)) return null;
+      const currentDigest = boundSourceDigest(node, context, bindings);
+      if (context.sourceRecords && currentDigest === null || binding.sourceDigest !== currentDigest) return null;
+      return node;
     };
     if (tool === "gkos_note_read") {
       if (!exactObject(args, ["record_ref", "cursor", "limit_bytes"]) || !(input.cursor === null || typeof input.cursor === "string") || !Number.isInteger(input.limit_bytes) || Number(input.limit_bytes) < 4 || Number(input.limit_bytes) > 16384) return fail("GKOS_P6_INVALID_PARAMS");
@@ -640,7 +720,7 @@ export class ServiceMcpRuntime {
             hit.chunk.source_path !== record.node.path || hit.chunk.source_digest !== record.sourceDigest) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
       }
       const selected = native.hits.slice(pagination.offset, pagination.offset + Number(input.limit));
-      const items = selected.map((hit) => ({ ...hit, record_ref: issueRecord(session, byPath.get(hit.citation.path)!.node, context), canonical_path: hit.citation.path }));
+      const items = selected.map((hit) => ({ ...hit, record_ref: issueRecord(session, byPath.get(hit.citation.path)!.node, context, bindings), canonical_path: hit.citation.path }));
       const nextOffset = pagination.offset + items.length < native.hits.length ? pagination.offset + items.length : undefined;
       const { hits: _hits, ...retrieval } = native;
       return { result: seal({ ...common(context, requestId), extension_version: "observatory.mcp-retrieval.v0",
@@ -666,22 +746,21 @@ export class ServiceMcpRuntime {
       if (!exactObject(args, ["cursor", "limit", "record_ref"]) || !(input.cursor === null || typeof input.cursor === "string") || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 100) return fail("GKOS_P6_INVALID_PARAMS");
       const root = recordNode(input.record_ref);
       if (!root) return fail("GKOS_P6_REFERENCE_UNKNOWN");
-      const pagination = paginationStart(session, input.cursor, "lineage", String(input.record_ref), context.generation);
-      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
       const ids = new Set([root.id]);
       for (const link of context.view.graph.links) if (link.kind === "lineage" && (link.source === root.id || link.target === root.id)) { ids.add(link.source); ids.add(link.target); }
       const candidates = context.view.graph.nodes.filter((node) => ids.has(node.id) && node.kind === "file");
-      const items = candidates.slice(pagination.offset, pagination.offset + Number(input.limit)).map((node) => recordSummary(session, node, context));
+      const paginationScope = String(input.record_ref);
+      const snapshotBinding = candidateSnapshot(context, candidates, bindings);
+      const pagination = paginationStart(session, input.cursor, "lineage", paginationScope, context.generation, snapshotBinding);
+      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+      const items = candidates.slice(pagination.offset, pagination.offset + Number(input.limit)).map((node) => recordSummary(session, node, context, bindings));
       const nextOffset = pagination.offset + items.length < candidates.length ? pagination.offset + items.length : undefined;
-      return { result: seal({ ...common(context, requestId), root_record_ref: input.record_ref, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "lineage", String(input.record_ref), nextOffset) }), paths: items.map((item) => String(item.canonical_path)), isError: false };
+      return { result: seal({ ...common(context, requestId), root_record_ref: input.record_ref, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "lineage", paginationScope, nextOffset, "", snapshotBinding) }), paths: items.map((item) => String(item.canonical_path)), isError: false };
     }
     if (tool === "gkos_graph_at_time") {
       if (!exactObject(args, ["at", "cursor", "limit", "scope_ref", "state"]) || !(input.cursor === null || typeof input.cursor === "string") || typeof input.scope_ref !== "string" || !session.scopes.has(input.scope_ref) || typeof input.at !== "string" || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 100 || !["valid", "superseded", "not_yet_created", "all"].includes(String(input.state))) return fail("GKOS_P6_INVALID_PARAMS");
       const at = queryInstant(input.at);
       if (!at) return fail("GKOS_P6_INVALID_PARAMS", [{ field: "at", code: "INVALID_TIMESTAMP" }]);
-      const paginationScope = `${input.scope_ref}\0${at.toISOString()}\0${input.state}`;
-      const pagination = paginationStart(session, input.cursor, "graph_at_time", paginationScope, context.generation);
-      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
       const temporalInputs = context.view.graph.nodes.filter((node) => node.kind === "file" && typeof node.validAt === "string").map((node) => {
         const validAt = new Date(node.validAt!);
         const invalidAt = typeof node.gkx?.invalidAt === "string" ? new Date(node.gkx.invalidAt) : null;
@@ -693,26 +772,32 @@ export class ServiceMcpRuntime {
       const projection = projectAtTime(temporalInputs, at.getTime());
       const selected = input.state === "all" ? [...projection.notYetCreated, ...projection.valid, ...projection.superseded] : input.state === "not_yet_created" ? projection.notYetCreated : input.state === "valid" ? projection.valid : projection.superseded;
       const candidates = context.view.graph.nodes.filter((node) => selected.includes(node.id));
-      const items = candidates.slice(pagination.offset, pagination.offset + Number(input.limit)).map((node) => recordSummary(session, node, context));
+      const paginationScope = `${input.scope_ref}\0${at.toISOString()}\0${input.state}`;
+      const snapshotBinding = candidateSnapshot(context, candidates, bindings);
+      const pagination = paginationStart(session, input.cursor, "graph_at_time", paginationScope, context.generation, snapshotBinding);
+      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
+      const items = candidates.slice(pagination.offset, pagination.offset + Number(input.limit)).map((node) => recordSummary(session, node, context, bindings));
       const nextOffset = pagination.offset + items.length < candidates.length ? pagination.offset + items.length : undefined;
-      return { result: seal({ ...common(context, requestId), scope_ref: input.scope_ref, at: input.at, state: input.state, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "graph_at_time", paginationScope, nextOffset) }), paths: items.map((item) => String(item.canonical_path)), isError: false };
+      return { result: seal({ ...common(context, requestId), scope_ref: input.scope_ref, at: input.at, state: input.state, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "graph_at_time", paginationScope, nextOffset, "", snapshotBinding) }), paths: items.map((item) => String(item.canonical_path)), isError: false };
     }
     if (tool === "gkos_navigation_audit") {
       if (!exactObject(args, ["cursor", "limit", "scope_ref", "severity_at_least"]) || !(input.cursor === null || typeof input.cursor === "string") || typeof input.scope_ref !== "string" || !session.scopes.has(input.scope_ref) || !Number.isInteger(input.limit) || Number(input.limit) < 1 || Number(input.limit) > 100 || !["info", "warning", "error"].includes(String(input.severity_at_least))) return fail("GKOS_P6_INVALID_PARAMS");
       if (!context.navigationConfig || !context.sourceRecords) return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
-      const paginationScope = `${input.scope_ref}\0${input.severity_at_least}`;
-      const pagination = paginationStart(session, input.cursor, "navigation_audit", paginationScope, context.generation);
-      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
       const snapshot = authorizedNavigationSnapshot(context);
       const ranks = { info: 0, warning: 1, error: 2 } as const;
       const candidates = (await auditNavigation(snapshot, context.navigationConfig)).filter((finding) => ranks[finding.severity] >= ranks[input.severity_at_least as keyof typeof ranks]);
+      const artifactDigest = await navigationSnapshotDigest(snapshot);
+      const paginationScope = `${input.scope_ref}\0${input.severity_at_least}`;
+      const snapshotBinding = digest({ artifactDigest, authority: authorityBinding(context), config: context.navigationConfig, candidates });
+      const pagination = paginationStart(session, input.cursor, "navigation_audit", paginationScope, context.generation, snapshotBinding);
+      if (!pagination) return fail("GKOS_P6_REFERENCE_UNKNOWN");
       const findings = candidates.slice(pagination.offset, pagination.offset + Number(input.limit));
       const items = findings.map((finding) => {
         const node = context.view.graph.nodes.find(node => node.kind === "file" && node.path === finding.path);
-        return { code: finding.code.replace(/-/gu, "_"), severity: finding.severity, record_ref: node ? issueRecord(session, node, context) : null };
+        return { code: finding.code.replace(/-/gu, "_"), severity: finding.severity, record_ref: node ? issueRecord(session, node, context, bindings) : null };
       });
       const nextOffset = pagination.offset + items.length < candidates.length ? pagination.offset + items.length : undefined;
-      return { result: seal({ ...common(context, requestId), scope_ref: input.scope_ref, artifact_digest: await navigationSnapshotDigest(snapshot), items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "navigation_audit", paginationScope, nextOffset) }), paths: findings.map((finding) => finding.path).filter(Boolean), isError: false };
+      return { result: seal({ ...common(context, requestId), scope_ref: input.scope_ref, artifact_digest: artifactDigest, items, page: page(Number(input.limit), context.generation, pagination.snapshotId, session, "navigation_audit", paginationScope, nextOffset, "", snapshotBinding) }), paths: findings.map((finding) => finding.path).filter(Boolean), isError: false };
     }
     return fail("GKOS_P6_CAPABILITY_UNAVAILABLE");
   }
