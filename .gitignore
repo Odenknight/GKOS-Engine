@@ -9,3 +9,8 @@
 **/target-*/
 **/cargo-target*/
 **/node_modules/
+
+*.tar
+*.gz
+*.xz
+*.7z
