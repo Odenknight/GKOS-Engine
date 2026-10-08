@@ -1,8 +1,14 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createHash } from 'node:crypto';
-import { REQUIRED_GATES, validateApproval, verifyArtifact } from '../scripts/release-220-preflight.mjs';
+import { REQUIRED_GATES, validateApproval, verifyArtifact, parsePackReport } from '../scripts/release-220-preflight.mjs';
 const commit = 'a'.repeat(40), hash = 'b'.repeat(64);
+test('pack report accepts npm 12 and legacy single-package reports and rejects ambiguity', () => {
+  const report = { name:'gkos-engine', version:'2.2.0' };
+  assert.deepEqual(parsePackReport(JSON.stringify({'gkos-engine':report})), report);
+  assert.deepEqual(parsePackReport(JSON.stringify([report])), report);
+  for (const value of [null, {}, [], [report, report], {other:report}, {'gkos-engine':report, other:report}, {'gkos-engine':{...report,version:'2.2.1'}}]) assert.throws(()=>parsePackReport(JSON.stringify(value)));
+});
 function approval() {
   return { schema:'gkos-engine-release-approval/2.2.0',package:'gkos-engine',version:'2.2.0',tag:'v2.2.0',sourceCommit:commit,tarballSha256:hash,tarballIntegrity:'sha512-'+'A'.repeat(86)+'==',fileInventorySha256:hash,evidenceBundleSha256:hash,evidenceArtifactId:123,ownerNpmLogin:'odenknight',gates:REQUIRED_GATES.map(name=>({name,status:'PASS',sourceCommit:commit,receiptSha256:hash,evidenceUrl:'https://github.com/Odenknight/GKOS-Engine/actions/runs/123',...(name==='soak-24h'?{durationSeconds:86400,unexplainedFailures:0}:{})}))};
 }
