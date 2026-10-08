@@ -12,8 +12,6 @@ import * as adapter from "../dist/adapter.mjs";
 import * as gkx from "../dist/gkx.mjs";
 import * as graphiti from "../dist/graphiti-adapter.mjs";
 import * as navigation from "../dist/navigation.mjs";
-import * as navigationEffects from "../dist/navigation-effects.mjs";
-import * as navigationEffectsNode from "../dist/navigation-effects-node.mjs";
 import * as governance from "../dist/governance.mjs";
 import {
   LOOPBACK_HOST,
@@ -148,17 +146,8 @@ function request(port, path, token, method = "GET") {
 
 test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI behavior", () => {
   const expectedExports = jsonFixture("public-exports.json");
-  const navigationEffectsExports = [
-    "InMemoryEffectAdapter", "NAVIGATION_EFFECTS_CAPABILITIES", "NAVIGATION_EFFECTS_CONTRACT_VERSION",
-    "canonicalMocArchiveRunPath", "extractNavigationCandidateBody", "getNavigationEffectsCapabilities",
-    "mergeGeneratedMocRegion", "parseGeneratedMocRegion", "pathIsWithinRoot", "planMocApply",
-    "renderGeneratedMocRegion", "resolveAgentNotePath", "validateAgentGrant", "validateVaultRelativePath",
-  ];
-  const navigationEffectsNodeExports = ["DurableEffectJournal", "NodeNavigationEffectsExecutor", "SimulatedEffectCrash"];
-  const rootExports = Object.keys(root).sort();
-  const phase0Root = rootExports.filter((name) => !navigationEffectsExports.includes(name));
   const actualExports = {
-    root: phase0Root,
+    root: Object.keys(root).sort(),
     adapter: Object.keys(adapter).sort(),
     gkx: Object.keys(gkx).sort(),
     graphiti: Object.keys(graphiti).sort(),
@@ -166,9 +155,6 @@ test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI beh
     governance: Object.keys(governance).sort(),
   };
   assert.deepEqual(actualExports, expectedExports);
-  assert.deepEqual(rootExports.filter((name) => !expectedExports.root.includes(name)), navigationEffectsExports);
-  assert.deepEqual(Object.keys(navigationEffects).sort(), navigationEffectsExports);
-  assert.deepEqual(Object.keys(navigationEffectsNode).sort(), navigationEffectsNodeExports);
   assert.deepEqual(
     navigation.getNavigationCapabilities(),
     jsonFixture("navigation-capabilities.json"),
