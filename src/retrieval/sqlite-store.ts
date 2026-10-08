@@ -1,6 +1,6 @@
 import { DatabaseSync } from "node:sqlite";
 import { chmodSync, linkSync, lstatSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
-import { basename, dirname, join, parse, resolve, toNamespacedPath } from "node:path";
+import { basename, dirname, join, parse, resolve } from "node:path";
 import { types as utilTypes } from "node:util";
 import { ENGINE_VERSION } from "../version";
 import {
@@ -32,7 +32,7 @@ import { retrievalCanonicalDigest, retrievalCodeUnitCompare, stableJson } from "
 import { cosineSimilarity } from "./fusion";
 import { lexicalQueryClauses, lexicalScanMatches, lexicalSignal } from "./lexical";
 import { canonicalPathSync, sameCanonicalPath } from "./path-security";
-import { assertRetrievalProjectionManifest, isGkxRetrievalProjectionManifest, isCompatibleRetrievalProducerVersion } from "./manifest";
+import { assertRetrievalProjectionManifest, isGkxRetrievalProjectionManifest } from "./manifest";
 import {
   acquireLegacyRetrievalWriter,
   assertLegacyRetrievalWriterCapability,
@@ -45,16 +45,6 @@ import {
 } from "./state-writer-lock";
 import type { RankedInput } from "./fusion";
 import type { AnyRetrievalProjectionManifest, GkxRetrievalProjectionManifest, GkxRetrievalStoredSourceProvenance, RetrievalChunk, RetrievalProjectionManifest, SqliteLexicalBackend } from "./types";
-
-const RETRIEVAL_EVALUATION_DATABASE = Symbol("gkos.retrieval.evaluation-database");
-
-function databaseRuntimePath(path: string, evaluation: boolean): string {
-  return evaluation && process.platform === "win32" ? toNamespacedPath(path) : path;
-}
-
-function openBuiltStore(path: string, evaluation: boolean): SqliteRetrievalStore {
-  return new SqliteRetrievalStore(path, evaluation ? RETRIEVAL_EVALUATION_DATABASE : undefined);
-}
 
 interface SqliteRow { [key: string]: unknown }
 export interface StoredVector { chunk_id: string; vector: readonly number[] }
@@ -613,7 +603,7 @@ function projectionManifest(input: RetrievalGenerationInput, lexicalBackend: Sql
   return { ...base, projection_id: `retrieval:${digest.slice("sha256:".length, "sha256:".length + 24)}`, projection_digest: digest };
 }
 
-function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBackend: SqliteLexicalBackend, producerVersion: string = ENGINE_VERSION): GkxRetrievalProjectionManifest {
+function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBackend: SqliteLexicalBackend): GkxRetrievalProjectionManifest {
   const validated = validateCandidateGenerationBindings(input, false);
   const base: Omit<GkxRetrievalProjectionManifest, "projection_id" | "projection_digest"> = {
     contract_version: RETRIEVAL_LINEAGE_CONTRACT_VERSION,
@@ -621,7 +611,7 @@ function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBa
     provenance_contract_version: RETRIEVAL_PROVENANCE_CONTRACT_VERSION,
     gkx_standard_commit: RETRIEVAL_GKX_STANDARD_COMMIT,
     gkx_projection_profile: RETRIEVAL_GKX_PROJECTION_PROFILE,
-    engine_version: producerVersion,
+    engine_version: ENGINE_VERSION,
     vault_id: input.vault_id,
     source_snapshot_digest: input.source_snapshot_digest,
     configuration_digest: input.configuration_digest,
@@ -646,22 +636,18 @@ function lineageProjectionManifest(input: GkxRetrievalGenerationInput, lexicalBa
  * Trusted-host, no-I/O manifestation of Full's schema-3 projection authority.
  * Phase-4 fixture qualification uses this exact production digest algebra
  * instead of reimplementing or shallowly resealing manifest coordinates.
- * producerVersion is only for no-I/O replay of qualified historical evidence;
- * ordinary generation writers never pass an override and emit the current version.
  */
 export function deriveGkxRetrievalProjectionManifest(
   value: Omit<GkxRetrievalGenerationInput, "state_directory" | "lexical_backend">,
   lexicalBackend: SqliteLexicalBackend,
-  producerVersion: string = ENGINE_VERSION,
 ): GkxRetrievalProjectionManifest {
-  if (!isCompatibleRetrievalProducerVersion(producerVersion) ||
-      lexicalBackend !== "sqlite_fts5" && lexicalBackend !== "sqlite_lexical_scan" ||
+  if (lexicalBackend !== "sqlite_fts5" && lexicalBackend !== "sqlite_lexical_scan" ||
       typeof value.vault_id !== "string" || value.vault_id.length < 1 || value.vault_id.length > 512 ||
       [value.source_snapshot_digest, value.configuration_digest, value.policy_digest].some((entry) =>
         typeof entry !== "string" || !GENERATION_DIGEST_RE.test(entry))) {
     throw new TypeError("RETRIEVAL_MANIFEST_DERIVATION_INPUT_INVALID");
   }
-  return lineageProjectionManifest({ ...value, state_directory: ".", lexical_backend: lexicalBackend }, lexicalBackend, producerVersion);
+  return lineageProjectionManifest({ ...value, state_directory: ".", lexical_backend: lexicalBackend }, lexicalBackend);
 }
 
 function sourceEnvelope(chunk: RetrievalChunk): string {
@@ -1155,7 +1141,6 @@ function buildGenerationArtifact(
   input: RetrievalGenerationInput | GkxRetrievalGenerationInput,
   lineage: boolean,
   immutableNoReplace = false,
-  replayManifest?: GkxRetrievalProjectionManifest,
 ): BuiltUnactivatedRetrievalGeneration {
   // Validate every record before creating or touching derived state. A single
   // malformed chunk rejects the whole source generation and cannot advance the
@@ -1165,12 +1150,9 @@ function buildGenerationArtifact(
   const lexicalBackend = resolveLexicalBackend(input.lexical_backend);
   const requestedDirectory = validateStateDirectory(input.state_directory);
   const manifest = lineage
-    ? lineageProjectionManifest(input as GkxRetrievalGenerationInput, lexicalBackend, replayManifest?.engine_version)
+    ? lineageProjectionManifest(input as GkxRetrievalGenerationInput, lexicalBackend)
     : projectionManifest(input as RetrievalGenerationInput, lexicalBackend);
   assertRetrievalProjectionManifest(manifest);
-  if (replayManifest && (!lineage || !immutableNoReplace || stableJson(manifest) !== stableJson(replayManifest))) {
-    throw new Error("RETRIEVAL_EVALUATION_REPLAY_MANIFEST_MISMATCH");
-  }
   const directory = canonicalPathSync(requestedDirectory, { allow_missing: true, alias_error: "RETRIEVAL_STATE_ANCESTOR_ALIAS_REJECTED" });
   mkdirSync(directory, { recursive: true, mode: 0o700 });
   assertRealStateDirectory(directory);
@@ -1187,7 +1169,7 @@ function buildGenerationArtifact(
   if (!needsBuild) {
     try {
       hardenFilePermissions(finalPath);
-      const existing = openBuiltStore(finalPath, immutableNoReplace);
+      const existing = new SqliteRetrievalStore(finalPath);
       existing.close();
     } catch {
       if (immutableNoReplace) throw new Error("RETRIEVAL_IMMUTABLE_GENERATION_CONFLICT");
@@ -1213,7 +1195,7 @@ function buildGenerationArtifact(
     // inherit a permissive process umask before note text is inserted.
     writeFileSync(temporary, Buffer.alloc(0), { flag: "wx", mode: 0o600 });
     hardenFilePermissions(temporary);
-    const database = new DatabaseSync(databaseRuntimePath(temporary, immutableNoReplace));
+    const database = new DatabaseSync(temporary);
     try {
       if (lineage) insertCandidateGeneration(database, manifest as GkxRetrievalProjectionManifest, input as GkxRetrievalGenerationInput);
       else insertGeneration(database, manifest as RetrievalProjectionManifest, (input as RetrievalGenerationInput).chunks, undefined, undefined, (input as RetrievalGenerationInput).vectors ?? []);
@@ -1225,7 +1207,7 @@ function buildGenerationArtifact(
       catch (error) {
         unlinkSync(temporary);
         if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
-        const winner = openBuiltStore(finalPath, immutableNoReplace);
+        const winner = new SqliteRetrievalStore(finalPath);
         try {
           if (stableJson(winner.manifest) !== stableJson(manifest)) {
             throw new Error("RETRIEVAL_IMMUTABLE_GENERATION_CONFLICT");
@@ -1236,7 +1218,7 @@ function buildGenerationArtifact(
     } else renameSync(temporary, finalPath);
     hardenFilePermissions(finalPath);
   }
-  const verified = openBuiltStore(finalPath, immutableNoReplace);
+  const verified = new SqliteRetrievalStore(finalPath);
   try {
     const expectedChunks = isGkxRetrievalProjectionManifest(manifest) ? manifest.candidate_chunk_count : manifest.chunk_count;
     if (verified.manifest.projection_digest !== manifest.projection_digest || verified.countChunks() !== expectedChunks ||
@@ -1329,28 +1311,6 @@ export function buildGkxRetrievalGenerationUnactivated(
   return buildGenerationArtifact(input, true, true);
 }
 
-/** Internal evaluation-only restoration of an already derived projection.
- * Recomputes every binding under the qualified original producer identity;
- * never activates a pointer or changes an ordinary generation writer's version.
- * A replayed manifest describes historical data, not the current process.
- */
-export function restoreGkxRetrievalGenerationForEvaluation(
-  input: GkxRetrievalGenerationInput,
-  expectedManifest: GkxRetrievalProjectionManifest,
-): BuiltUnactivatedRetrievalGeneration {
-  if (!expectedManifest || typeof expectedManifest !== "object" || utilTypes.isProxy(expectedManifest)
-      || Object.getPrototypeOf(expectedManifest) !== Object.prototype
-      || Reflect.ownKeys(expectedManifest).some(key => {
-        const descriptor = Object.getOwnPropertyDescriptor(expectedManifest, key);
-        return typeof key !== "string" || !descriptor?.enumerable || !("value" in descriptor)
-          || (descriptor.value !== null && !["string", "number", "boolean"].includes(typeof descriptor.value));
-      })) throw new Error("RETRIEVAL_EVALUATION_REPLAY_MANIFEST_INVALID");
-  assertRetrievalProjectionManifest(expectedManifest);
-  if (!isGkxRetrievalProjectionManifest(expectedManifest)) throw new Error("RETRIEVAL_EVALUATION_REPLAY_MANIFEST_INVALID");
-  preflightGenerationInput(input, true, false);
-  return buildGenerationArtifact(input, true, true, { ...expectedManifest });
-}
-
 function statSafe(path: string): boolean {
   try { return statSync(path).isFile(); } catch { return false; }
 }
@@ -1378,7 +1338,7 @@ export class SqliteRetrievalStore {
   readonly manifest: AnyRetrievalProjectionManifest;
   readonly fts5_available: boolean;
   readonly database_path: string;
-  constructor(database_path: string, authority?: typeof RETRIEVAL_EVALUATION_DATABASE) {
+  constructor(database_path: string) {
     if (database_path.includes("\0") || !statSafe(resolve(database_path))) throw new Error("RETRIEVAL_DATABASE_MISSING");
     const databasePath = canonicalPathSync(database_path, { alias_error: "RETRIEVAL_DATABASE_ALIAS_REJECTED" });
     this.database_path = databasePath;
@@ -1389,10 +1349,7 @@ export class SqliteRetrievalStore {
     // Published generations are immutable derived artifacts.  Open them
     // read-only so verification and search cannot create WAL/SHM sidecars or
     // mutate a generation after its manifest digest has been accepted.
-    this.#database = new DatabaseSync(databaseRuntimePath(
-      databasePath,
-      authority === RETRIEVAL_EVALUATION_DATABASE,
-    ), { readOnly: true });
+    this.#database = new DatabaseSync(databasePath, { readOnly: true });
     try {
       this.#database.exec("PRAGMA foreign_keys = ON; PRAGMA temp_store = MEMORY;");
       const version = Number((this.#database.prepare("PRAGMA user_version").get() as SqliteRow).user_version);
@@ -1755,9 +1712,4 @@ export class SqliteRetrievalStore {
     const insert = this.#database.prepare("INSERT OR IGNORE INTO retrieval_candidate_records(record_key) VALUES (?)");
     for (const recordKey of [...recordKeys].sort(retrievalCodeUnitCompare)) insert.run(recordKey);
   }
-}
-
-/** Trusted private-evaluation seam: preserve canonical identity while opening long Windows paths. */
-export function openRetrievalEvaluationSqliteStore(databasePath: string): SqliteRetrievalStore {
-  return new SqliteRetrievalStore(databasePath, RETRIEVAL_EVALUATION_DATABASE);
 }

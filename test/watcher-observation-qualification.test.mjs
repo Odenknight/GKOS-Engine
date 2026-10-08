@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { spawnSync } from "node:child_process";
 import { chmodSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -33,20 +32,6 @@ test("watcher observation runner emits exactly one sealed governed measurement",
       logLevel: "silent",
     });
     const runner = await import(pathToFileURL(bundlePath).href);
-    assert.deepEqual(runner.EXTERNAL_SEARCH_NODE_WARNING_ARGS, [
-      "--disable-warning=ExperimentalWarning", "--disable-warning=UNDICI-EHPA",
-    ]);
-    const ownedWarningProbe = spawnSync(process.execPath, [
-      ...runner.EXTERNAL_SEARCH_NODE_WARNING_ARGS, "-e",
-      "process.emitWarning('sqlite probe', 'ExperimentalWarning'); process.emitWarning('proxy probe', {code:'UNDICI-EHPA'})",
-    ], { encoding: "utf8" });
-    assert.equal(ownedWarningProbe.status, 0);
-    assert.equal(ownedWarningProbe.stderr, "", "known Node-owned warnings cannot corrupt the strict child stderr channel");
-    const unrelatedWarningProbe = spawnSync(process.execPath, [
-      ...runner.EXTERNAL_SEARCH_NODE_WARNING_ARGS, "-e", "process.emitWarning('application probe')",
-    ], { encoding: "utf8" });
-    assert.match(unrelatedWarningProbe.stderr, /application probe/u,
-      "unrelated warnings remain visible to the fail-closed stderr check");
     assert.deepEqual(runner.parseExternalSearchChildOutputForTest(
       Buffer.from('{"hits":[]}\n', "utf8"), Buffer.alloc(0),
     ), { hits: [] });
@@ -70,7 +55,7 @@ test("watcher observation runner emits exactly one sealed governed measurement",
     assert.equal(measurement.sample_plan_digest, "sha256:75b011dc253a445ec9c5fc192f600f57ec62411e8125dfa20c74a08f5faf301b");
 
     if (failure !== null) {
-      assert.equal(Number.parseInt(process.versions.node.split(".")[0], 10) >= 24, true);
+      assert.equal(Number.parseInt(process.versions.node.split(".")[0], 10), 24);
       assert.equal(failure.message, "GKX_WATCHER_QUALIFICATION_FTS5_REQUIRED");
       assert.equal(measurement.status, "unavailable");
       return;
@@ -125,8 +110,8 @@ test("terminal watcher observation audit accepts all-and-only six exact governed
     const qualified = fixture.schema_cases.find((row) => row.case_id === "measurement-valid").value;
     const unavailable = fixture.semantic_cases.find((row) => row.case_id === "measurement-unavailable-zero-work").input.arguments[0];
     const lanes = [
-      ["Linux", "linux", 22], ["Linux", "linux", 24], ["Linux", "linux", 26],
-      ["Windows", "windows", 22], ["Windows", "windows", 24], ["Windows", "windows", 26],
+      ["Linux", "linux", 22], ["Linux", "linux", 23], ["Linux", "linux", 24],
+      ["Windows", "windows", 22], ["Windows", "windows", 23], ["Windows", "windows", 24],
     ];
     for (const [archiveOs, recordOs, node] of lanes) {
       const template = archiveOs === "Linux" && node === 22 ? unavailable : qualified;

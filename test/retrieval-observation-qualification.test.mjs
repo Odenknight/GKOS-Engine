@@ -312,10 +312,6 @@ test("Slice-C Observation pass authority is Linux x64 only", async () => {
   const artifactRoot = join(BUILD_ROOT, `non-linux-observation-${randomUUID().replaceAll("-", "")}`);
   await mkdir(artifactRoot, { mode: 0o700 });
   const priorExitCode = process.exitCode;
-  const priorGithubActions = process.env.GITHUB_ACTIONS;
-  const priorGithubEventName = process.env.GITHUB_EVENT_NAME;
-  process.env.GITHUB_ACTIONS = "false";
-  delete process.env.GITHUB_EVENT_NAME;
   try {
     await runner.main(["--mode", "observation", "--artifact-root", artifactRoot]);
     assert.equal(process.exitCode, 1);
@@ -329,10 +325,6 @@ test("Slice-C Observation pass authority is Linux x64 only", async () => {
     await assert.rejects(readFile(join(artifactRoot, "performance-sample-plan.json")), (error) => error.code === "ENOENT");
   } finally {
     process.exitCode = priorExitCode;
-    if (priorGithubActions === undefined) delete process.env.GITHUB_ACTIONS;
-    else process.env.GITHUB_ACTIONS = priorGithubActions;
-    if (priorGithubEventName === undefined) delete process.env.GITHUB_EVENT_NAME;
-    else process.env.GITHUB_EVENT_NAME = priorGithubEventName;
   }
 });
 
@@ -378,10 +370,8 @@ test("Slice-C temp capability cleans exact roots and fail-retains identity subst
   }
 });
 
-test("Slice-C historical workflow bytes and supplementary cross-runtime lanes remain replayable", async () => {
-  // The original workflow is immutable history. Current dispatch now names the
-  // exact historical implementation; its successor contract is tested separately.
-  const observation = execFileSync("git", ["show", "650eab4a6752227cae336d7556a57826c22a0d5a:.github/workflows/phase4-retrieval-observation.yml"], { cwd: ROOT, encoding: "utf8" });
+test("Slice-C workflows freeze scheduled Observation and supplementary cross-runtime lanes", async () => {
+  const observation = await readFile(join(ROOT, ".github", "workflows", "phase4-retrieval-observation.yml"), "utf8");
   const continuous = await readFile(join(ROOT, ".github", "workflows", "ci.yml"), "utf8");
   const bridgeJob = workflowJobBody(continuous, "phase4-retrieval-observation-manual");
   const packageJson = JSON.parse(await readFile(join(ROOT, "package.json"), "utf8"));
@@ -403,7 +393,7 @@ test("Slice-C historical workflow bytes and supplementary cross-runtime lanes re
   }
 
   assert.doesNotMatch(continuous, /phase4-retrieval-cli-qualification:/u);
-  assert.match(continuous, /node: \[22, 24, 26\]/u);
+  assert.match(continuous, /node: \[22, 23, 24\]/u);
   assert.equal((continuous.match(/fetch-depth: 0/gu) ?? []).length, 3);
   assert.equal((continuous.match(/timeout-minutes: 15/gu) ?? []).length, 2);
   assert.equal((continuous.match(/GKOS_PHASE4_SOURCE_HEAD_COMMIT:/gu) ?? []).length, 3);
@@ -419,7 +409,7 @@ test("Slice-C historical workflow bytes and supplementary cross-runtime lanes re
   assert.equal(JSON.stringify(packageJson.exports).includes("observation"), false);
   assert.equal(JSON.stringify(packageJson.exports).includes("qualification"), false);
 
-  assert.equal(retrievalSha256(observation), "sha256:033df13af0bfb9f02b1c8679b8d04cf5c32b348718022386b1f919e389254662");
+  assert.equal(retrievalSha256(observation), "sha256:d072360963e0b080bb03495971fc342f567f05b0bf17285830a7418ac3c3f5fa");
   assert.equal((continuous.match(/^  phase4-retrieval-observation-manual:$/gmu) ?? []).length, 1);
   assert.equal((continuous.match(/^    if: github\.event_name == 'workflow_dispatch'$/gmu) ?? []).length, 1);
   assert.equal((continuous.match(/^      phase4_observation_expected_head:$/gmu) ?? []).length, 1);
@@ -433,7 +423,7 @@ test("Slice-C historical workflow bytes and supplementary cross-runtime lanes re
   const standaloneJob = workflowJobBody(observation, "observe");
   assert.deepEqual(bridgeObservationProjection(bridgeJob), standaloneJob);
   const bindIndex = bridgeJob.indexOf("      - name: Bind exact manual observation source");
-  const setupIndex = bridgeJob.indexOf("      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0");
+  const setupIndex = bridgeJob.indexOf("      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4");
   const artifactRootIndex = bridgeJob.indexOf("      - name: Create private observation artifact root");
   assert.equal(bindIndex > 0 && bindIndex < setupIndex && setupIndex < artifactRootIndex, true);
 });

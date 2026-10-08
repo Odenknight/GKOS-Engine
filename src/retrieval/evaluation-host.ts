@@ -20,7 +20,6 @@ export {
 export { buildGkxRetrievalProvenance } from "./provenance";
 export {
   buildGkxRetrievalGenerationUnactivated,
-  restoreGkxRetrievalGenerationForEvaluation,
   deriveGkxRetrievalProjectionManifest,
   detectSqliteLexicalCapability,
 } from "./sqlite-store";

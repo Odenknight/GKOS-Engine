@@ -822,8 +822,7 @@ const absentManifest = retrievalHost.deriveGkxRetrievalProjectionManifest({
   embedding_provider_id: temporalPresent.manifest.embedding_provider_id,
   embedding_model_id: temporalPresent.manifest.embedding_model_id,
   embedding_dimensions: temporalPresent.manifest.embedding_dimensions,
-// Replay the frozen fixture's producer identity; physical writers remain current-version.
-}, temporalPresent.manifest.lexical_backend, temporalPresent.manifest.engine_version);
+}, temporalPresent.manifest.lexical_backend);
 const absentCandidateByKey = new Map(absentCandidates.map((candidate) => [candidate.candidate_chunk_key, candidate]));
 const absentArtifact = {
   ...temporalPresent,

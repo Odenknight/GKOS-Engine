@@ -16,17 +16,16 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.node == 26 }}
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 24, 26]
+        node: [22, 23, 24]
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -102,20 +101,19 @@ jobs:
 
   windows-retrieval-path-security:
     runs-on: windows-latest
-    continue-on-error: ${{ matrix.node == 26 }}
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 24, 26]
+        node: [22, 23, 24]
     env:
       GKOS_REQUIRE_ALIAS_FIXTURE: "1"
       GKOS_REQUIRE_SHORT_PATH_FIXTURE: "1"
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -171,7 +169,7 @@ jobs:
       group: phase4-retrieval-observation-${{ github.ref }}
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
 
@@ -184,7 +182,7 @@ jobs:
           test "$GITHUB_SHA" = "$EXPECTED_SOURCE_HEAD"
           test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE_HEAD"
 
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
           cache: npm
@@ -234,18 +232,17 @@ jobs:
 
   phase5-watcher-linux:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.node == 26 }}
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 24, 26]
+        node: [22, 23, 24]
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: "0"
 
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -278,7 +275,7 @@ jobs:
         run: mkdir -m 700 "$RUNNER_TEMP/phase5-watcher-observation-node-${{ matrix.node }}"
 
       - name: Exact watcher observation qualification
-        run: node scripts/run-watcher-observation-with-retry.mjs "$RUNNER_TEMP/phase5-watcher-qualification.mjs" "$RUNNER_TEMP/phase5-watcher-observation-node-${{ matrix.node }}"
+        run: node "$RUNNER_TEMP/phase5-watcher-qualification.mjs" --artifact-root "$RUNNER_TEMP/phase5-watcher-observation-node-${{ matrix.node }}"
 
       - name: Reopen exact one-leaf observation artifact
         run: >-
@@ -306,21 +303,20 @@ jobs:
 
   phase5-watcher-windows:
     runs-on: windows-latest
-    continue-on-error: ${{ matrix.node == 26 }}
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 24, 26]
+        node: [22, 23, 24]
     env:
       GKOS_REQUIRE_ALIAS_FIXTURE: "1"
       GKOS_REQUIRE_SHORT_PATH_FIXTURE: "1"
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: "0"
 
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -343,7 +339,7 @@ jobs:
 
       - name: Exact watcher observation qualification
         shell: pwsh
-        run: node scripts/run-watcher-observation-with-retry.mjs "$env:RUNNER_TEMP/phase5-watcher-qualification.mjs" (Join-Path $env:RUNNER_TEMP "phase5-watcher-observation-node-${{ matrix.node }}")
+        run: node "$env:RUNNER_TEMP/phase5-watcher-qualification.mjs" --artifact-root (Join-Path $env:RUNNER_TEMP "phase5-watcher-observation-node-${{ matrix.node }}")
 
       - name: Reopen exact one-leaf observation artifact
         shell: pwsh
@@ -396,11 +392,11 @@ jobs:
       actions: read
       contents: read
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: "0"
 
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
           cache: npm
@@ -413,10 +409,10 @@ jobs:
           import { readFileSync } from 'node:fs';
           const expected = [
             'phase5-watcher-recovery-observation-Linux-node-22',
-            'phase5-watcher-recovery-observation-Linux-node-26',
+            'phase5-watcher-recovery-observation-Linux-node-23',
             'phase5-watcher-recovery-observation-Linux-node-24',
             'phase5-watcher-recovery-observation-Windows-node-22',
-            'phase5-watcher-recovery-observation-Windows-node-26',
+            'phase5-watcher-recovery-observation-Windows-node-23',
             'phase5-watcher-recovery-observation-Windows-node-24',
           ].sort();
           const headers = {

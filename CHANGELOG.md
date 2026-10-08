@@ -1,39 +1,6 @@
 # Changelog
 
-## 2.2.0
-
-Development candidate; not yet a tagged or published release.
-
-- Reconciled broad-audience README, current capability inventory, technical and
-  beginner guides, version/profile notes and future roadmap with implemented
-  MOC host behavior and ten read-only MCP tools (seven Draft.2 plus three
-  Observatory extensions). Kept experimental and downstream gates explicit.
-- Corrected MCP initialization to report the current Engine package version,
-  with a runtime regression assertion; frozen contract fixtures are unchanged.
-
-- Added deterministic managed-MOC batch planning and optional bounded model
-  suggestions for tags, links and MOC organization; model output requires review.
-- Added durable host coordination, coalesced event admission, explicit Node
-  execution, ownership advancement and interrupted-commit ownership recovery.
-- Preserved Navigation 1.0 read-only semantics and default-disabled effects.
-
-- Watcher qualification retries one isolated observation in a fresh process
-  only after the exact latency-ceiling failure and no artifact publication; all
-  other failures and a repeated latency failure remain terminal.
-- Qualified maintained even-numbered Node.js releases: Node 22 and Node 24 are
-  blocking CI lanes, while Node 26 is an informative current-release lane until
-  it reaches LTS. Node 23 and Node 25 are unsupported.
-- Moved sidecar SEA release builds to Node 24 and pinned the release workflow
-  actions to their reviewed v5 commits.
-- Added the separately versioned, opt-in Navigation Effects 1.0 contract,
-  deterministic MOC apply planner, generated-region merger, path/grant
-  validation, and fault-injectable in-memory adapter.
-- Added an optional Node executor with a single-writer lease, hash-chained
-  journal, scoped locks, exact MOC archives, flushed temporary writes,
-  same-volume replacement, after-read verification, receipts, rollback,
-  checkpoints, and startup recovery.
-- Navigation 1.0 remains source-content read-only. This unreleased work makes no
-  release, deployment, or GKOS conformance claim.
+## Unreleased
 
 ## 2.1.2
 

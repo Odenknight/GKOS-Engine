@@ -1617,7 +1617,6 @@ export async function main(argv = process.argv.slice(2)) {
       ? error.message
       : "OBS_REPORT_INVALID";
     await writeObservationFailureReceipt(artifactRoot, source, code);
-    process.stderr.write(`phase4 retrieval observation: ${code}; inspect observation-receipt.json\n`);
     process.exitCode = 1;
   }
 }

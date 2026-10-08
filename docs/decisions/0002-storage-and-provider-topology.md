@@ -12,8 +12,7 @@ contract and a useful local-first path.
 
 The current package has no runtime dependency and builds a Node SEA desktop
 sidecar. On the Phase 0 host, Node 24.18.0 exposes SQLite 3.53.1 with FTS5
-enabled. Current CI covers Node 22 and 24, with Node 26 informative until LTS.
-Qualification previously proved that
+enabled. CI covers current Node 22, 23, and 24. Qualification later proved that
 official Node 23.11.1's bundled `node:sqlite` exposes no FTS3, FTS4, or FTS5
 module, while the tested Node 22 and 24 runtimes expose FTS5. Runtime version
 inference is therefore insufficient; the actual virtual-table capability must
@@ -111,8 +110,7 @@ ledger anchoring.
   approximate-search performance; performance evidence may justify an additive
   adapter later.
 - SQLite schema, WAL behavior, migrations, generation swaps, and SEA behavior
-  must pass blocking Node 22/24 and target-platform qualification; Node 26 is
-  informative until LTS.
+  must pass Node 22/23/24 and target-platform qualification.
 - External adapters remain unavailable until their operators provide a verified
   contract and authority. GKOS-Engine does not provision them.
 - Lite local ONNX remains opt-in and unqualified until packaging and CPU tests
@@ -136,7 +134,7 @@ or its semantics.
   probes failed identically. The compatibility regression exercises indexing,
   search, exact citations, manifest identity, tamper recovery, and CLI output
   without skipping or mocking retrieval.
-- .github/workflows/ci.yml tests Node 22 and 24 plus informative Node 26.
+- .github/workflows/ci.yml tests Node 22, 23, and 24.
 - No verified external store, durable ledger, or provider contract was found in
   the inspected repository evidence.
 - Phase 0 report:

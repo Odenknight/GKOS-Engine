@@ -12,8 +12,6 @@ import * as adapter from "../dist/adapter.mjs";
 import * as gkx from "../dist/gkx.mjs";
 import * as graphiti from "../dist/graphiti-adapter.mjs";
 import * as navigation from "../dist/navigation.mjs";
-import * as navigationEffects from "../dist/navigation-effects.mjs";
-import * as navigationEffectsNode from "../dist/navigation-effects-node.mjs";
 import * as governance from "../dist/governance.mjs";
 import {
   LOOPBACK_HOST,
@@ -65,38 +63,11 @@ const jsonFixture = (name) =>
   JSON.parse(readFileSync(resolve(FIXTURE_ROOT, name), "utf8"));
 const textFixture = (name) =>
   readFileSync(resolve(FIXTURE_ROOT, name), "utf8");
-const bytesFixture = (name) => {
-  const bytes = readFileSync(resolve(FIXTURE_ROOT, name));
-  if (name !== "gkx-index-graph.json") return bytes;
-  // Explicit 2.2 package-provenance delta only; frozen fixture remains intact.
-  // All graph semantics and every other serialized byte stay locked.
-  const graph = JSON.parse(bytes.toString("utf8"));
-  let changed = 0;
-  const visit = value => {
-    if (!value || typeof value !== "object") return;
-    if (value.assessor?.id === "tool:gkos-engine") {
-      assert.equal(value.assessor.engineVersion, "2.1.2");
-      value.assessor.engineVersion = "2.2.0";
-      changed++;
-    }
-    for (const child of Object.values(value)) visit(child);
-  };
-  visit(graph);
-  assert.equal(changed, 4, "only four known assessor provenance coordinates may change");
-  return Buffer.from(JSON.stringify(graph, null, 2) + "\n");
-};
+const bytesFixture = (name) => readFileSync(resolve(FIXTURE_ROOT, name));
 const jsonBytes = (value) =>
   Buffer.from(JSON.stringify(value, null, 2) + "\n", "utf8");
 
 function withoutPhase1SearchHelp(help) {
-  // Strip only exact additive settings-help lines; legacy help remains frozen.
-  for (const line of [
-    '  gkx settings [--runtime desktop|cli-search|cli-index] [--config <file>] [--json]\n',
-    '            [--config <file>] [--trust-cwd-config]\n',
-  ]) {
-    assert.equal(help.split(line).length - 1, 1, 'additive settings help must occur exactly once');
-    help = help.replace(line, '');
-  }
   assert.equal(help.split(ADDITIVE_RETRIEVAL_SEARCH_HELP).length - 1, 1, "additive retrieval search help must occur exactly once");
   assert.equal(help.split(ADDITIVE_INGEST_HELP).length - 1, 1, "additive ingest help must occur exactly once");
   return help.replace(ADDITIVE_RETRIEVAL_SEARCH_HELP, "").replace(ADDITIVE_INGEST_HELP, "");
@@ -175,18 +146,8 @@ function request(port, path, token, method = "GET") {
 
 test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI behavior", () => {
   const expectedExports = jsonFixture("public-exports.json");
-  const navigationEffectsExports = [
-    "InMemoryEffectAdapter", "NAVIGATION_EFFECTS_CAPABILITIES", "NAVIGATION_EFFECTS_CONTRACT_VERSION",
-    "canonicalMocArchiveRunPath", "extractNavigationCandidateBody", "getNavigationEffectsCapabilities",
-    "mergeGeneratedMocRegion", "parseGeneratedMocRegion", "pathIsWithinRoot", "planMocApply",
-    "renderGeneratedMocRegion", "resolveAgentNotePath", "validateAgentGrant", "validateVaultRelativePath",
-    "ManagedMocCoordinator", "buildDeterministicMocAssistance", "buildMocAssistance", "planManagedMocBatch",
-  ].sort();
-  const navigationEffectsNodeExports = ["DurableEffectJournal", "NodeNavigationEffectsExecutor", "SimulatedEffectCrash", "NodeManagedMocHost", "NodeManagedMocRuntime"].sort();
-  const rootExports = Object.keys(root).sort();
-  const phase0Root = rootExports.filter((name) => !navigationEffectsExports.includes(name));
   const actualExports = {
-    root: phase0Root,
+    root: Object.keys(root).sort(),
     adapter: Object.keys(adapter).sort(),
     gkx: Object.keys(gkx).sort(),
     graphiti: Object.keys(graphiti).sort(),
@@ -194,9 +155,6 @@ test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI beh
     governance: Object.keys(governance).sort(),
   };
   assert.deepEqual(actualExports, expectedExports);
-  assert.deepEqual(rootExports.filter((name) => !expectedExports.root.includes(name)), navigationEffectsExports);
-  assert.deepEqual(Object.keys(navigationEffects).sort(), navigationEffectsExports);
-  assert.deepEqual(Object.keys(navigationEffectsNode).sort(), navigationEffectsNodeExports);
   assert.deepEqual(
     navigation.getNavigationCapabilities(),
     jsonFixture("navigation-capabilities.json"),
@@ -206,9 +164,7 @@ test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI beh
   const help = invoke("bin/gkx.mjs", ["--help"]);
   assert.equal(help.status, expectedCli.help_exit_code);
   assert.equal(help.stderr, "");
-  const legacyHelp = textFixture("cli-help.txt");
-  assert.ok(legacyHelp.startsWith("gkx (GKOS-Engine) v2.1.2\n"));
-  assert.equal(withoutPhase1SearchHelp(help.stdout), legacyHelp.replace(/^gkx \(GKOS-Engine\) v2\.1\.2\n/, "gkx (GKOS-Engine) v2.2.0\n"));
+  assert.equal(withoutPhase1SearchHelp(help.stdout), textFixture("cli-help.txt"));
 
   const missing = invoke("bin/gkx.mjs", []);
   assert.equal(missing.status, expectedCli.missing_command_exit_code);
@@ -220,7 +176,7 @@ test("Phase 0 fixture locks public exports, Navigation capabilities, and CLI beh
 
   const desktopHelp = invoke("dist/gkos-desktop-agent.mjs", ["--help"]);
   assert.equal(desktopHelp.status, expectedCli.desktop_help_exit_code);
-  assert.match(desktopHelp.stdout, /gkos-agent \(GKOS-Engine desktop helper\) v2\.2\.0/);
+  assert.match(desktopHelp.stdout, /gkos-agent \(GKOS-Engine desktop helper\) v2\.1\.2/);
   assert.match(desktopHelp.stdout, /This helper reads notes but never edits them\./);
 });
 

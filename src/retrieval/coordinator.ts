@@ -1,4 +1,3 @@
-import { readNativeSourcesBounded } from "./native-read";
 import { lstat, readFile, stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import { isValidRetrievalSourcePath, retrievalLineCoordinates } from "./chunker";
@@ -12,7 +11,7 @@ import { lexicalCitationSpans, lexicalQueryClauses } from "./lexical";
 import { canonicalPath, canonicalPathContains } from "./path-security";
 import { buildGkxRetrievalProvenance, normalizeRetrievalAsOf } from "./provenance";
 import { buildGkxRetrievalAuthorizedCandidateView } from "./authorized-view";
-import { buildGkxRetrievalGenerationWithWriter, buildRetrievalGenerationWithWriter, type BuiltRetrievalGeneration, type GkxRetrievalGenerationInput, type RetrievalGenerationInput, isGkxRetrievalProjectionManifest, openActiveRetrievalStore, openRetrievalEvaluationSqliteStore, preflightGkxRetrievalIndexInput, preflightRetrievalIndexInput, SqliteRetrievalStore } from "./sqlite-store";
+import { buildGkxRetrievalGenerationWithWriter, buildRetrievalGenerationWithWriter, type BuiltRetrievalGeneration, type GkxRetrievalGenerationInput, type RetrievalGenerationInput, isGkxRetrievalProjectionManifest, openActiveRetrievalStore, preflightGkxRetrievalIndexInput, preflightRetrievalIndexInput, SqliteRetrievalStore } from "./sqlite-store";
 import { openIngestAwareActiveRetrievalStore } from "../ingest/storage";
 import {
   acquireLegacyRetrievalWriter,
@@ -713,8 +712,6 @@ export async function indexGkxRetrievalGeneration(
   return indexCandidateGeneration(input, vectorProvider);
 }
 
-const nativeVaultSourceReaders = new WeakSet<object>();
-
 export function vaultSourceReader(vaultRoot: string): (sourcePath: string) => Promise<Uint8Array> {
   const requestedRoot = resolve(vaultRoot);
   const rootPromise = (async () => {
@@ -723,7 +720,7 @@ export function vaultSourceReader(vaultRoot: string): (sourcePath: string) => Pr
     if (!rootState.isDirectory() || rootState.isSymbolicLink()) throw new Error("SOURCE_ROOT_ALIAS_REJECTED");
     return actualRoot;
   })();
-  const reader = async (sourcePath: string): Promise<Uint8Array> => {
+  return async (sourcePath) => {
     if (!isValidRetrievalSourcePath(sourcePath)) throw new Error("SOURCE_PATH_INVALID");
     const root = await rootPromise;
     const requestedPath = resolve(root, sourcePath);
@@ -735,8 +732,6 @@ export function vaultSourceReader(vaultRoot: string): (sourcePath: string) => Pr
     if ((await stat(actual)).nlink > 1) throw new Error("SOURCE_HARDLINK_REJECTED");
     return readFile(actual);
   };
-  nativeVaultSourceReaders.add(reader);
-  return reader;
 }
 
 export class RetrievalCoordinator {
@@ -910,28 +905,12 @@ export class RetrievalCoordinator {
     const sourceBytes = new Map<string, Uint8Array>();
     const eligible: RetrievalChunk[] = [];
     let staleCitation = false;
-    const sourceGroups = [...new Map(policyEligible.map((chunk) => [chunk.source_id, chunksBySource.get(chunk.source_id)!])).values()];
-    const sourcePaths = sourceGroups.map((group) => group[0].source_path);
-    // Only Engine-created native readers can run concurrently. Arbitrary caller
-    // callbacks and repeated-path retry semantics keep the existing serial path.
-    // Admission above has already applied source/chunk policy and temporal filters.
-    const prefetched = nativeVaultSourceReaders.has(this.#options.source_reader)
-      && new Set(sourcePaths).size === sourcePaths.length
-      ? await readNativeSourcesBounded(sourcePaths, this.#options.source_reader)
-      : null;
-    for (const group of sourceGroups) {
+    for (const group of new Map(policyEligible.map((chunk) => [chunk.source_id, chunksBySource.get(chunk.source_id)!])).values()) {
       const first = group[0];
       let bytes = sourceBytes.get(first.source_path);
       if (!bytes) {
-        if (prefetched !== null) {
-          const value = prefetched.get(first.source_path);
-          if (value === null || value === undefined) { staleCitation = true; continue; }
-          bytes = value;
-          sourceBytes.set(first.source_path, bytes);
-        } else {
-          try { bytes = await this.#options.source_reader(first.source_path); sourceBytes.set(first.source_path, bytes); }
-          catch { staleCitation = true; continue; }
-        }
+        try { bytes = await this.#options.source_reader(first.source_path); sourceBytes.set(first.source_path, bytes); }
+        catch { staleCitation = true; continue; }
       }
       if (retrievalSha256(bytes) !== first.source_digest || group.some((chunk) => {
         if (Buffer.from(bytes!).subarray(chunk.start_byte, chunk.end_byte).toString("utf8") !== chunk.text) return true;
@@ -1174,7 +1153,7 @@ export function coordinatorFromRetrievalEvaluationDatabase(
       typeof scanPresentationFts5Available !== "boolean") {
     throw new TypeError("RETRIEVAL_EVALUATION_OBSERVER_INVALID");
   }
-  const store = openRetrievalEvaluationSqliteStore(databasePath);
+  const store = new SqliteRetrievalStore(databasePath);
   EVALUATION_STORE_CONTEXTS.set(store, {
     observer,
     scan_presentation_fts5_available: scanPresentationFts5Available,

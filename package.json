@@ -1,6 +1,6 @@
 {
   "name": "gkos-engine",
-  "version": "2.2.0",
+  "version": "2.1.2",
   "description": "Deterministic GKX validation, projection, graph, and source-content-read-only Navigation with explicit governance boundaries.",
   "type": "module",
   "main": "./dist/gkos-engine.mjs",
@@ -30,16 +30,6 @@
       "types": "./dist/navigation/index.d.ts",
       "import": "./dist/navigation.mjs",
       "default": "./dist/navigation.mjs"
-    },
-    "./navigation-effects": {
-      "types": "./dist/navigation-effects/index.d.ts",
-      "import": "./dist/navigation-effects.mjs",
-      "default": "./dist/navigation-effects.mjs"
-    },
-    "./navigation-effects/node": {
-      "types": "./dist/navigation-effects/node/index.d.ts",
-      "import": "./dist/navigation-effects-node.mjs",
-      "default": "./dist/navigation-effects-node.mjs"
     },
     "./governance": {
       "types": "./dist/governance/index.d.ts",
@@ -71,7 +61,6 @@
     "src/",
     "contracts/",
     "docs/",
-    "examples/",
     "evidence/ENGINE-NAV-CONTRACT-1.0.0.json",
     "evidence/2026-08-16-navigation-2.1.0-verification.md",
     "evidence/2026-08-20-navigation-2.1.2-corrective-verification.md",
@@ -89,20 +78,17 @@
     "!services/gkos-intelligence/**/*.pyo"
   ],
   "engines": {
-    "node": ">=22 <23 || >=24 <25 || >=26 <27",
+    "node": ">=22 <25",
     "npm": ">=10"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "example:moc": "node examples/managed-moc.mjs",
-    "bench:moc": "node scripts/benchmark-managed-moc.mjs",
     "build": "node scripts/build.mjs",
     "prepare": "node scripts/build.mjs",
     "pretest": "node scripts/build.mjs",
-    "test": "node scripts/run-current-tests.mjs",
-    "qualify:current": "node scripts/runtime-qualification.mjs",
+    "test": "node --test \"test/*.test.mjs\"",
     "pretest:navigation": "node scripts/build.mjs",
-    "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-effects-contract.test.mjs test/navigation-effects-planner.test.mjs test/navigation-effects-node.test.mjs test/navigation-effects-performance.test.mjs test/navigation-effects-reconciliation.test.mjs test/navigation-effects-assistance.test.mjs test/navigation-effects-host.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
+    "test:navigation": "node --test test/governance.test.mjs test/navigation.test.mjs test/navigation-determinism.test.mjs test/navigation-architecture.test.mjs test/navigation-cli.test.mjs test/public-api.test.mjs",
     "test:intelligence": "node scripts/test-intelligence.mjs",
     "pack:check": "node scripts/check-pack.mjs",
     "check:license": "node scripts/check-license.mjs",
