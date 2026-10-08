@@ -390,6 +390,18 @@
       "rationale": "Q-GUARD: separate exact historical replay and versioned current-runtime evidence; no release qualification."
     },
     {
+      "path": "README.md",
+      "before": "d14be2d540c012f0cd8a5d52ad68142b7d35b9d3",
+      "after": "e3affe2cab0a26bbd0453c5d87e469903d0c620d6c867fe9eb7e7ed0044b961a",
+      "rationale": "Successor qualification standing: bind the review candidate coordinate and preserve mandatory hosted and ownership-capable promotion gates."
+    },
+    {
+      "path": "ROADMAP.md",
+      "before": "b2aeccae39da71c9f60cee76a3553481c65ccd93",
+      "after": "59dc3484282cad9af1195985f30524081c5d6f49908762b5b19304f98d8de8ca",
+      "rationale": "Successor qualification roadmap: record remaining TypeScript-oracle, hosted platform, and ownership-capable evidence without claiming promotion."
+    },
+    {
       "path": "docs/CURRENT-RUNTIME-QUALIFICATION.md",
       "before": null,
       "after": "bd5332cc6c1a7b75ef2be0084a05337eaf1ee596b4e6cfaf3406ce19afc296ad",
