@@ -1,19 +1,27 @@
-# GKOS Engine
+# GKOS-Engine
 
-The canonical deterministic engine implementing **OKF+ 2.3** — parse, validate,
-project, assess, graph, and export — under **GKOS** governance.
+> **Portfolio position** · Product: GKOS-Engine · Repository: `Odenknight/GKOS-Engine`
+> Tier: T1 · GKX schema: GKX current (2.3 line)
+> Engine dependency: is the Engine
+> Lifecycle: Active · Relationships: canonical deterministic reference implementation and manifestation of `gkos-standard`
+> Authority for this block: GKOS-REGISTRY-001
+
+The canonical deterministic reference implementation and manifestation of
+`gkos-standard`. It implements **GKX current (2.3 line)**: parse, validate,
+project, assess, graph, and export under **GKOS** governance.
 
 This repository is the single source of truth for the engine. It is
 **Obsidian-free, DOM-free, platform-neutral** TypeScript: a reusable core that
 downstream products consume rather than re-vendor.
 
 - **Kosmos-Oden** (the Obsidian plugin) consumes this package.
-- **GKOS-Engine-Lite** consumes this package.
+- **GKOS-Engine-Lite** embeds a pinned frozen historical version; it does not
+  track current GKOS-Engine upgrades.
 
 This is an *implementation*, not the GKOS standard itself. The standard lives at
 [github.com/Odenknight/gkos-standard](https://github.com/Odenknight/gkos-standard).
 
-## OKF+ 2.3 dialects
+## GKX 2.3 profiles
 
 Both OKF+ 2.3 dialects are supported:
 
