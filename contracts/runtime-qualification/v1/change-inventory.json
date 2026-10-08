@@ -692,8 +692,8 @@
     {
       "path": "contracts/reviewer-development-v1.md",
       "before": null,
-      "after": "f223b925c96b056619bbf9036d72ddc0e089e7f9264368c456959bd717d707c0",
-      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+      "after": "1e62e189eecfdd592c186b729e88f2894dfcb3133449191159c52c4a694f5a99",
+      "rationale": "Root-reviewed448f3df documentation attribution correction: exact Carson codec/vector/verifier reuse and adapted test provenance, partial authorship/non-author review boundary; historical next-slice narrative references existing V2 without extending qualification. No runtime or canonical bytes changed."
     },
     {
       "path": "contracts/reviewer-diagnostic-map-v1.json",
@@ -908,8 +908,8 @@
     {
       "path": "docs/canonical-cbor-development.md",
       "before": null,
-      "after": "0d1c519dccba7c6b753f04dd5de98788d2c83102e3e33f06946f55ac88553cdc",
-      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+      "after": "a4ff57880d1c3634ce5d7e7f5c0d2ed465009cba52abc55867673de247504d45",
+      "rationale": "Root-reviewed448f3df documentation attribution correction: exact Carson codec/vector/verifier reuse and adapted test provenance, partial authorship/non-author review boundary; historical next-slice narrative references existing V2 without extending qualification. No runtime or canonical bytes changed."
     },
     {
       "path": "docs/classifier/GKOS-Classifier-Rust-TypeScript-Build-Plan.md",
