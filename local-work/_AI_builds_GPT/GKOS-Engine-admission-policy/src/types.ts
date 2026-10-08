@@ -1,0 +1,335 @@
+/**
+ * GKOS-Engine — shared types.
+ *
+ * Every downstream surface consumes these types so the same source collection produces
+ * materially the same nodes, links, lineage, HEAD status, temporal state and
+ * Graphiti episode structure no matter how it is accessed.
+ */
+
+/** A source file discovered by any source (workspace, directory scan, CLI, or application adapter). */
+export interface SourceFile {
+  relativePath: string;
+  /** File name including extension. */
+  name?: string;
+  extension?: string;
+  size?: number;
+  /** Last-modified time (ms since epoch), when the source can provide it. */
+  modifiedTime?: number;
+  /** Creation time (ms since epoch), when the source can provide it. */
+  createdTime?: number;
+  /** Raw markdown content. Attachments may omit content. */
+  content?: string;
+  kind?: "note" | "attachment";
+}
+
+export interface SourceDirectory {
+  relativePath: string;
+}
+
+/** A parsed inline/property link before resolution. */
+export interface ParsedLink {
+  kind: "wikilink" | "markdown" | "property";
+  target: string;
+  raw: string;
+  alias?: string;
+  heading?: string;
+}
+
+export type GkxSensitivity =
+  | "public"
+  | "internal"
+  | "restricted"
+  | "confidential"
+  | "regulated"
+  | "phi"
+  | "secret";
+
+export type GkxOrigin = "authored" | "derived" | "proposed" | "approved";
+
+export interface GkxDiagnostic {
+  code: string;
+  severity: "info" | "warning" | "error" | "critical";
+  field?: string;
+  message: string;
+  deterministic: boolean;
+  remediation?: string;
+  sourcePath?: string;
+  targetUid?: string;
+}
+
+export interface GkxOriginProjection {
+  /** Source navigation/discovery tags. These are not governed labels. */
+  tags?: string[];
+  labels: unknown[];
+  relationships: Record<string, unknown[]>;
+  epistemicState?: string | null;
+  sensitivity?: GkxSensitivity | null;
+  [field: string]: unknown;
+}
+
+export interface GkxAssessmentScores {
+  structural_completeness: number | null;
+  provenance_quality: number | null;
+  evidence_support: number | null;
+  relationship_integrity: number | null;
+  temporal_freshness: number | null;
+  contradiction_status: number | null;
+  review_readiness: number | null;
+  overall: number | null;
+}
+
+export interface GkxAssessment {
+  assessmentId: string;
+  targetUid: string | null;
+  profile: "gkx-2.3-validating-projection";
+  policy: { id: string; version: string; hash: string; weights: Record<string, number>; missingValueBehavior: string };
+  assessor: { id: "tool:gkos-engine"; engineVersion: string };
+  inputHash: string;
+  calculatedAt: string;
+  scores: GkxAssessmentScores;
+  exclusions: string[];
+  labels: { derived: string[] };
+  diagnostics: GkxDiagnostic[];
+  interpretation: "documentation-and-support-quality-not-truth";
+}
+
+/** GKX 2.3 validating projection attached to a source note. */
+export interface GkxProjection {
+  profile: "gkx-2.3-validating-projection";
+  /**
+   * Compatibility field describing the Engine's projection capability.
+   * This is not a GKOS GCP conformance claim or qualification result.
+   */
+  conformanceClaim: "reader-and-deterministic-assessor";
+  mode: "strict-v2.3" | "compatible" | "legacy";
+  sourceVersion: string | null;
+  sourcePath: string;
+  contentHash: string;
+  rawFrontmatter: Record<string, unknown>;
+  extensions: Record<string, unknown>;
+  authored: GkxOriginProjection;
+  derived: GkxOriginProjection;
+  proposed: GkxOriginProjection;
+  approved: GkxOriginProjection;
+  effective: GkxOriginProjection;
+  diagnostics: GkxDiagnostic[];
+  assessment: GkxAssessment;
+}
+
+export type GkxRelation =
+  | "depends_on"
+  | "supports"
+  | "derives_from"
+  | "derived_from"
+  | "contradicts"
+  | "refines"
+  | "implements"
+  | "blocks"
+  | "documents"
+  | "cites"
+  | "quotes"
+  | "interprets"
+  | "tests"
+  | "replicates"
+  | "fails_to_replicate"
+  | "extends"
+  | "narrows"
+  | "generalizes"
+  | "governed_by"
+  | "reviewed_by"
+  | "approved_by"
+  | "supersedes"
+  | "superseded_by"
+  | "part_of"
+  | "has_part"
+  | "related_to";
+
+/** Canonical GKX data parsed from one note. */
+export interface GkxData {
+  gkxVersion?: string;
+  /** Stable external identity. Legacy flat GKX 2.2 records use a lowercase UUIDv4. */
+  uid?: string;
+  type?: string;
+  title?: string;
+  description?: string;
+  timestamp?: string;
+  epistemicState?: string;
+  scope?: string;
+  scopeId?: string;
+  sensitivity?: GkxSensitivity;
+  resource?: string;
+  /** As authored in frontmatter (titles/paths, unresolved). */
+  supersedes: string[];
+  supersededBy: string[];
+  forkedFrom: string[];
+  forkedTo: string[];
+  /** Explicit typed relationships from legacy flat GKX 2.2 records, separate from body wikilinks. */
+  relations: Partial<Record<GkxRelation, string[]>>;
+  /** Titles from the footer `**Related:**` line. */
+  related: string[];
+  /** Origin-preserving GKX 2.3 validation and assessment projection. */
+  projection?: GkxProjection;
+}
+
+/** Node-level GKX projection attached to graph nodes after lineage/temporal passes. */
+export interface GkxNodeState extends GkxData {
+  /** Resolved node ids this note supersedes (canonical: this note is NEWER). */
+  supersedesIds?: string[];
+  /** Resolved node ids that supersede this note (canonical projection). */
+  supersededByIds?: string[];
+  /** ISO time at which this note stopped being current (earliest successor valid_at), or null. */
+  invalidAt?: string | null;
+  /** True when the note participates in a lineage and has no successor. */
+  head?: boolean;
+}
+
+export type NodeKind = "file" | "folder" | "unresolved";
+
+export interface GkxNode {
+  id: string;
+  kind: NodeKind;
+  path: string;
+  label: string;
+  area: string;
+  depth: number;
+  extension?: string;
+  size?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  /** ISO time from which this note is valid (GKX timestamp or documented fallback). */
+  validAt?: string;
+  gkx?: GkxNodeState | null;
+  type?: string;
+  status?: string;
+  priority?: string;
+  tags: string[];
+  aliases: string[];
+  color: string;
+  outgoing: number;
+  incoming: number;
+  unresolved?: boolean;
+  [extra: string]: unknown;
+}
+
+export type LinkKind =
+  | "wikilink"
+  | "markdown"
+  | "property"
+  | "semantic"
+  | "lineage"
+  | "contains";
+
+export interface GkxLink {
+  id: string;
+  source: string;
+  target: string;
+  kind: LinkKind;
+  label?: string;
+  sourcePath?: string;
+}
+
+export interface GraphStats {
+  indexedAt: string;
+  durationMs: number;
+  files: number;
+  folders: number;
+  unresolved: number;
+  links: number;
+  wikilinks: number;
+  markdownLinks: number;
+  propertyLinks: number;
+  orphans: number;
+}
+
+/** Diagnostics surface (build directive §32). Exposed via the Agent API,
+ *  the standalone diagnostics panel and debug hooks. Never contains secrets. */
+export interface GkxDiagnostics {
+  notes: number;
+  folders: number;
+  attachments: number;
+  unresolvedLinks: number;
+  ambiguousLinks: number;
+  lineageEdges: number;
+  lineageCycles: number;
+  lineageWarnings: string[];
+  residualCollisions: number;
+  lastFullBuildMs?: number;
+  lastIncrementalUpdateMs?: number;
+}
+
+export interface GkxGraph {
+  nodes: GkxNode[];
+  links: GkxLink[];
+  stats: GraphStats;
+  areas: string[];
+  tags: string[];
+  statuses: string[];
+  types: string[];
+  diagnostics: GkxDiagnostics;
+  /** Populated lazily by the renderer. */
+  nodeById?: Map<string, GkxNode>;
+  [extra: string]: unknown;
+}
+
+/** One warning produced while normalizing lineage (§3.5). */
+export interface LineageWarning {
+  code:
+    | "self-supersession"
+    | "cycle"
+    | "unresolved-target"
+    | "multiple-successors"
+    | "successor-before-predecessor"
+    | "duplicate-declaration"
+    | "ambiguous-resolution";
+  message: string;
+  nodeId?: string;
+}
+
+/** Result of canonical lineage normalization (§3.2–§3.3). */
+export interface LineageModel {
+  /** Canonical directed edges: NEWER --supersedes--> OLDER, deduplicated. */
+  edges: Array<{ newer: string; older: string }>;
+  /** Projection: node id -> ids it supersedes (older notes). */
+  supersedes: Map<string, string[]>;
+  /** Projection: node id -> ids that supersede it (newer notes). */
+  supersededBy: Map<string, string[]>;
+  warnings: LineageWarning[];
+  /** Node ids taking part in at least one lineage edge. */
+  members: Set<string>;
+  cycles: number;
+}
+
+/** Graphiti episode (getzep/graphiti `EpisodeType.json` compatible). */
+export interface GraphitiEpisode {
+  /** Stable episode identity: GKX uid when valid, deterministic fallback otherwise. */
+  uuid: string;
+  name: string;
+  episode_body: string;
+  source: "json" | "fact_triple";
+  source_description: string;
+  reference_time: string;
+  group_id: string;
+  /** Graphiti filtering metadata. This is derived adapter state, never authored note data. */
+  episode_metadata: Record<string, string | number | boolean | null>;
+}
+
+/** Point-in-time projection buckets (§4.1). */
+export interface TemporalProjection {
+  at: string;
+  notYetCreated: string[];
+  valid: string[];
+  superseded: string[];
+}
+
+/** A delta produced by the incremental index (§10). */
+export interface GraphDelta {
+  addedNodes: string[];
+  removedNodes: string[];
+  changedNodes: string[];
+  /** True when link topology changed (edges added/removed/rewired). */
+  topologyChanged: boolean;
+  /** Number of notes actually re-parsed for this update. */
+  reparsed: number;
+  /** True when the whole index was rebuilt (structural threshold, §10.2). */
+  fullRebuild: boolean;
+}

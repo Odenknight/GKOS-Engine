@@ -1,0 +1,43 @@
+{
+  "schema": "gkos.admission-policy.vectors.v1",
+  "contractVersion": "1.0.0",
+  "canonicalization": "GKOS-Engine canonicalJson: UTF-8 JSON, object keys in UTF-16 code-unit order, CR/CRLF normalized to LF, no insignificant whitespace",
+  "policy": {
+    "path": "policy.json",
+    "canonicalHash": "sha256:15a839802b373661c54d3a97b268db49291d84e0ac8aa9b42aaeed9eac4b94a4"
+  },
+  "cases": [
+    {
+      "id": "auto-admit-derived",
+      "requestPath": "request-auto-admit.json",
+      "requestHash": "sha256:5184e987085c69c6ff20a412675e491da688f2184019aa011a5f07d5f5dd3151",
+      "outcome": "AUTO_ADMIT_DERIVED",
+      "reasonCodes": ["AUTO_ALLOWLIST_MATCH"],
+      "decisionReceiptHash": "sha256:833cff33894e4e93bacd826eeaa56c8152dc323b63647a1a26693028b7ea2821"
+    },
+    {
+      "id": "ordinary-human-review",
+      "requestPath": "request-human-review.json",
+      "requestHash": "sha256:703ea48f8b6a2236728ac5fee09911496b1f90f5ca4fdc0cf8a04918c0c3989f",
+      "outcome": "HUMAN_REVIEW",
+      "reasonCodes": ["HUMAN_REVIEW_TRIGGER"],
+      "decisionReceiptHash": "sha256:0e0167b7c20076ad60a76537431a99534230c029a2999b324d488e5c7db2aaab"
+    },
+    {
+      "id": "priority-dominates-human",
+      "requestPath": "request-priority-review.json",
+      "requestHash": "sha256:60ae374e7a4c3fddb2f15045742b94229cf27d8175d19055e1f0eeec90771fba",
+      "outcome": "PRIORITY_HUMAN_REVIEW",
+      "reasonCodes": ["PRIORITY_TRIGGER"],
+      "decisionReceiptHash": "sha256:b3eb4b29016c1f35a324feb280ea7368fae0079995fe1c3bc98e4f6f10267eea"
+    },
+    {
+      "id": "invalid-pre-adjudication",
+      "requestPath": "request-invalid.json",
+      "requestHash": "sha256:6524442baabf2c985b0f7936c55fa495098843a9c5c177d985945c7535a5833f",
+      "outcome": "REVIEW_INVALID",
+      "reasonCodes": ["VALIDITY_GATE_FAILED"],
+      "decisionReceiptHash": "sha256:4df4337943e161cc1d4f2cd94b71c624afff78f9db0ad39a0512360eca990ec1"
+    }
+  ]
+}

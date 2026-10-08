@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gkos.dev/contracts/admission-policy/1.0.0/request.schema.json",
+  "title": "GKOS generic admission-policy evaluation request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "contract", "contractVersion", "requestId", "idempotencyKey",
+    "subject", "policyRef", "inputHashes", "validity", "artifact",
+    "deterministicChecks", "reviewer"
+  ],
+  "properties": {
+    "schema": { "const": "gkos.admission-policy.request.v1" },
+    "contract": { "const": "gkos.admission-policy.v1" },
+    "contractVersion": { "const": "1.0.0" },
+    "requestId": { "$ref": "#/$defs/token" },
+    "idempotencyKey": { "$ref": "#/$defs/token" },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "contentHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/token" },
+        "type": { "$ref": "#/$defs/token" },
+        "contentHash": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "policyRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "digest"],
+      "properties": {
+        "id": { "$ref": "#/$defs/token" },
+        "version": { "$ref": "#/$defs/token" },
+        "digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "inputHashes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/namedHash" }
+    },
+    "validity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid", "receiptHash"],
+      "properties": {
+        "valid": { "type": "boolean" },
+        "receiptHash": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "reversible", "reconstructable"],
+      "properties": {
+        "type": { "$ref": "#/$defs/token" },
+        "reversible": { "type": "boolean" },
+        "reconstructable": { "type": "boolean" }
+      }
+    },
+    "deterministicChecks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receiptHash", "detectedTriggers"],
+      "properties": {
+        "receiptHash": { "$ref": "#/$defs/sha256" },
+        "detectedTriggers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/trigger" }
+        }
+      }
+    },
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assessmentHash", "independent", "conflictsWithDeterministicChecks",
+        "unsupportedClaimIds", "contradictionIds", "scopeMatch", "recommendedLane"
+      ],
+      "properties": {
+        "assessmentHash": { "$ref": "#/$defs/sha256" },
+        "independent": { "type": "boolean" },
+        "conflictsWithDeterministicChecks": { "type": "boolean" },
+        "unsupportedClaimIds": {
+          "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/token" }
+        },
+        "contradictionIds": {
+          "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/token" }
+        },
+        "scopeMatch": { "type": "boolean" },
+        "recommendedLane": {
+          "enum": ["AUTO_ADMIT_CANDIDATE", "HUMAN_REVIEW", "PRIORITY_HUMAN_REVIEW"]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,254}$"
+    },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "namedHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "digest"],
+      "properties": {
+        "name": { "$ref": "#/$defs/token" },
+        "digest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "trigger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "evidenceHash"],
+      "properties": {
+        "code": { "$ref": "#/$defs/token" },
+        "evidenceHash": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

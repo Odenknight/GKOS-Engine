@@ -1,0 +1,177 @@
+{
+  "aggregate_digest": "sha256:5f78d4b93fbe8c382056382532d083b984fc0fcadd7012dc2fb63500af79f9dc",
+  "contract_name": "GKOS-AGENT-IDENTITY-MCP-CONTRACT",
+  "contract_version": "1.0.0-draft.1",
+  "generation_input_digest": "sha256:2c829815bdf138cb49a2a2e2ddc7e5a1b3f317a1d3feddb746101e9161c383bc",
+  "generator_digest": "sha256:d8f1a8827c482a9f60852be6df2cb4a9e1a5ff02b2378edf3f82aed70ce219e8",
+  "leaf_count": 33,
+  "leaves": [
+    {
+      "path": "README.md",
+      "sha256": "98a77be95bad3be62e95389b88fa595619090de88ca2d5f9e04feaeab2b099f8",
+      "size": 301
+    },
+    {
+      "path": "TECHNICAL_README.md",
+      "sha256": "6f8da7d8b8fcce480cbd031e34ea6aafa56a8702390284f29892ee0359fa6520",
+      "size": 436
+    },
+    {
+      "path": "activity.schema.json",
+      "sha256": "2f6bdf0621b3b2b12b16a97d9f1e40d485839a7c92b24f7b59bb2f5843e7835f",
+      "size": 7807
+    },
+    {
+      "path": "agent-identity.schema.json",
+      "sha256": "c6a7fc8cc654022b5d639fb7234cbeae2dc2a17f0d63ea128030b8900c10b63d",
+      "size": 2753
+    },
+    {
+      "path": "allowed-paths.txt",
+      "sha256": "79e454975e981e59b53b9ddca672bb113d9762cbe2fe81a5c04f7498514f0c5f",
+      "size": 3319
+    },
+    {
+      "path": "audit-receipt.schema.json",
+      "sha256": "49bdd99a2415ab14c067f6dfe1a07e971b69e76316bfa85785651c87f572650c",
+      "size": 63516
+    },
+    {
+      "path": "bootstrap-migration.schema.json",
+      "sha256": "64b9a5572e53d3b8135b7b77ee358f6ee4d8ca8024bad32fe0333b0d26002bc3",
+      "size": 940
+    },
+    {
+      "path": "canonical-fixture.json",
+      "sha256": "643fd0f1860a19a04ff9da27e28539e34b6979346bcdcee0ba5033fab2d9d976",
+      "size": 5213195
+    },
+    {
+      "path": "conformance.schema.json",
+      "sha256": "f3cf04a75745460c8a743d0524e5e37806434e616360064602cc6e5394c3944c",
+      "size": 248798
+    },
+    {
+      "path": "credential.schema.json",
+      "sha256": "0cb96e6cb1bb7950751b5daaae61bb0a4da73689ba8c5d3257127ce719ac468c",
+      "size": 5394
+    },
+    {
+      "path": "error-fixture.json",
+      "sha256": "94ae8850e7b6feb6899e6574612c87dc81a8d1a87a9b568a2554c7c8a193ecad",
+      "size": 33907
+    },
+    {
+      "path": "error.schema.json",
+      "sha256": "60790458e9ee7872e23e3d5d234d67e3f6456ddab00305bb0d2c20fbddd7c657",
+      "size": 3820
+    },
+    {
+      "path": "external-mapping.schema.json",
+      "sha256": "0b74d9a9385f7511e42c37da2b4c258edd3f9c2ecf92351767ca4180639fd019",
+      "size": 2659
+    },
+    {
+      "path": "hosted-artifact-inventory.json",
+      "sha256": "1a1ac34857c4a0e08408670e3d4858e9dea8368b9b14966fb5cc83edaefcc37f",
+      "size": 577
+    },
+    {
+      "path": "lifecycle.schema.json",
+      "sha256": "1865446cb023a43668f930947f69532b4a072c8bbd35f530edc9692ad5803b1a",
+      "size": 1055
+    },
+    {
+      "path": "limits.schema.json",
+      "sha256": "b2f8276b05707d5b61e51fb57ae551425baa0ca936e64f29e5f913bafa1d3059",
+      "size": 7682
+    },
+    {
+      "path": "mcp-conformance-fixture.json",
+      "sha256": "f3dde86c43973a55c72d804ab46bbcbca96d5431da4824243614415467dc7f23",
+      "size": 61620
+    },
+    {
+      "path": "migration-fixture.json",
+      "sha256": "8907862bf250726990577a86b9d5ae07385b953ab3b3d22c57ce367f0ee7fc96",
+      "size": 7308132
+    },
+    {
+      "path": "migration.schema.json",
+      "sha256": "8cdc0ccc0fb1cb2b7ae2cc4d7439c233499bf9a2a562ded476663765c4b4eaa5",
+      "size": 3671
+    },
+    {
+      "path": "operation-inventory.json",
+      "sha256": "9d9436b31a5ee84cea972b07fccac0b442179ad7b3847e30bd35c459bbb2abec",
+      "size": 23620
+    },
+    {
+      "path": "operation-inventory.schema.json",
+      "sha256": "e6a710af7c64b3617cc4b9d0a6e8e193b45937b1e8da4d43347d2d04a5781229",
+      "size": 37466
+    },
+    {
+      "path": "platform-matrix.json",
+      "sha256": "16928aa94d9369f1e231467749b9eefb2f6ad079626eff86ca698e6c68dc4e81",
+      "size": 4935
+    },
+    {
+      "path": "platform-matrix.schema.json",
+      "sha256": "f99aefdf82ffe833fcfa851cd238d151ee42c79b0ee7e44920d47c3f33b3079d",
+      "size": 1879
+    },
+    {
+      "path": "protected-paths.txt",
+      "sha256": "f920a006015ac77920dcbb611fd1a2c19e711d9002eb778a056137f50b2cc948",
+      "size": 515
+    },
+    {
+      "path": "qualification-receipt.schema.json",
+      "sha256": "e1129ba01e666a9d5c21599b8754195b8a4ae3b4abae8d643debb19a8aa6e916",
+      "size": 11286
+    },
+    {
+      "path": "race-fixture.json",
+      "sha256": "35f960cb2bce43624f4fb0334e4d3b4ec4a731c59e6b9c346e162de0fa768e22",
+      "size": 8829193
+    },
+    {
+      "path": "request.schema.json",
+      "sha256": "0b71e24f0aeb9b6c4b7482a0c45b30349a1ba2f62f9e2992b65f8848eb29dc77",
+      "size": 7377
+    },
+    {
+      "path": "security-fixture.json",
+      "sha256": "d0a870439d2a3cef2dc05a484b07f728241c0e4fd49cbd6ddc5f62e0b78becbf",
+      "size": 14622603
+    },
+    {
+      "path": "session.schema.json",
+      "sha256": "fef93d873b8211284304be7f3e68df566ba0deb9e04c46f6a6a949a151f9c8a5",
+      "size": 3966
+    },
+    {
+      "path": "tool-registry.json",
+      "sha256": "433d3e9881833b15dbb72b40accaa9591f8b022149148dc5962d501a3d61cea5",
+      "size": 14604
+    },
+    {
+      "path": "tool-registry.schema.json",
+      "sha256": "b41530d92655f52634584db0436b6e3d9bd55aece72bb6ae48cc05878db50087",
+      "size": 51538
+    },
+    {
+      "path": "transport.json",
+      "sha256": "01067e32bc3df781744309429c8d0b174ab711aa39ff8daa48f5a03aad881276",
+      "size": 1574
+    },
+    {
+      "path": "transport.schema.json",
+      "sha256": "c9a824276a569acdd9f2229964f19e4c9f4ca0a99de1ae443d8e9bac514509f1",
+      "size": 2278
+    }
+  ],
+  "source_base_commit": "808d875b557f4cfd2bb0addccba44d70c9748f35",
+  "source_repository": "https://github.com/Odenknight/GKOS-Engine"
+}

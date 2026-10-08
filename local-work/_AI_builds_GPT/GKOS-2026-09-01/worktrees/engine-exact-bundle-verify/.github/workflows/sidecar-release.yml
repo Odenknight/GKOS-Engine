@@ -1,0 +1,176 @@
+name: Sidecar release
+
+# Builds the desktop-agent SEA single binary (`gkos-agent`) and attaches the
+# binaries to the tag's GitHub Release. Binaries are UNSIGNED (build spec
+# decision 1). Downstream consumers choose and verify their own exact pins;
+# publishing an Engine release does not advance any frozen consumer.
+#
+# Runner policy (issue #9): SEA cannot cross-compile across OSes, so Windows
+# and macOS each build on their own runner. Across ARCHES on macOS it now can:
+# both mac targets are produced on `macos-latest` (arm64), with the Intel leg
+# passing `--target-arch x64` so build-sea.mjs downloads and checksum-verifies
+# the official darwin-x64 node instead of copying the host binary. This removes
+# all dependence on the Intel macOS runner pool, whose queue times caused the
+# x86_64-apple-darwin asset to be missing from v1.0.8 and v1.0.9.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            arch: x64
+            sea_args: ""
+            expect_asset: gkos-agent-x86_64-pc-windows-msvc.exe
+          - os: macos-latest
+            arch: arm64
+            sea_args: ""
+            expect_asset: gkos-agent-aarch64-apple-darwin
+          # Intel macOS, cross-built on the arm64 runner — no macos-13 /
+          # macos-15-intel dependency. See the runner policy note above.
+          - os: macos-latest
+            arch: x64
+            sea_args: "--target-arch x64"
+            expect_asset: gkos-agent-x86_64-apple-darwin
+    name: ${{ matrix.os }} → ${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Verify release identity
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag_version="${GITHUB_REF_NAME#v}"
+          package_version="$(node -p "require('./package.json').version")"
+          lock_version="$(node -p "require('./package-lock.json').version")"
+          lock_root_version="$(node -p "require('./package-lock.json').packages[''].version")"
+          engine_version="$(
+            sed -n 's/^export const ENGINE_VERSION = "\([^"]*\)";$/\1/p' \
+              src/version.ts
+          )"
+          python_package_version="$(
+            sed -n 's/^version = "\([^"]*\)"$/\1/p' \
+              services/gkos-intelligence/pyproject.toml |
+            head -n 1
+          )"
+          python_program_version="$(
+            sed -n 's/^PROGRAM_VERSION = "\([^"]*\)"$/\1/p' \
+              services/gkos-intelligence/src/gkos_intelligence/__init__.py
+          )"
+          identities=(
+            "$package_version"
+            "$lock_version"
+            "$lock_root_version"
+            "$engine_version"
+            "$python_package_version"
+            "$python_program_version"
+          )
+          for identity in "${identities[@]}"; do
+            if [[ -z "$identity" || "$identity" != "$tag_version" ]]; then
+              echo "::error::release identity mismatch"
+              printf '%s\n' \
+                "tag=$tag_version" \
+                "package=$package_version" \
+                "lock=$lock_version" \
+                "lock-root=$lock_root_version" \
+                "engine=$engine_version" \
+                "python-package=$python_package_version" \
+                "python-program=$python_program_version"
+              exit 1
+            fi
+          done
+          echo "Release identity verified: $tag_version"
+
+      - name: Install (clean, from lockfile)
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build bundles
+        run: npm run build
+
+      - name: Tests
+        run: npm test
+
+      - name: Build SEA binary
+        run: node scripts/build-sea.mjs ${{ matrix.sea_args }}
+
+      - name: Smoke-test SEA binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The expected asset must exist by exact name — no globbing to
+          # whatever happened to be produced, so a wrong-arch build fails here
+          # instead of shipping under the right name.
+          binary="dist/${{ matrix.expect_asset }}"
+          test -f "$binary"
+
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            file "$binary"
+            expect_macho='${{ matrix.arch == 'x64' && 'x86_64' || 'arm64' }}'
+            file "$binary" | grep -q "Mach-O 64-bit executable $expect_macho"
+            # Injection invalidates the upstream signature; the build re-signs
+            # ad-hoc. A binary that fails this will be killed by the loader.
+            codesign --verify --verbose=2 "$binary"
+          fi
+
+          native=1
+          if [ "$RUNNER_OS" = "macOS" ] && [ "${{ matrix.arch }}" = "x64" ] && [ "$(uname -m)" = "arm64" ]; then
+            # Cross-built Intel binary on an arm64 host: executing it needs
+            # Rosetta 2. Probe for it explicitly and record the outcome — the
+            # functional gate is enforced whenever it is available.
+            if arch -x86_64 /usr/bin/true >/dev/null 2>&1; then
+              echo "Rosetta 2 available — enforcing functional smoke test."
+            else
+              native=0
+              echo "::warning::Rosetta 2 unavailable on this runner; the x86_64 binary passed its Mach-O arch and ad-hoc signature gates but could not be executed here."
+            fi
+          fi
+          if [ "$native" = "1" ]; then
+            "$binary" --help | grep -q "protected, read-only note map"
+            echo "functional smoke test passed"
+          fi
+
+      - name: Collect binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          cp "dist/${{ matrix.expect_asset }}" out/
+          ls -la out/
+
+      - name: Upload run artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gkos-agent-${{ matrix.os }}-${{ matrix.arch }}
+          path: out/*
+
+      - name: Attach to release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*
+          fail_on_unmatched_files: true
+          body: |
+            Unsigned pre-release sidecar binaries (`gkos-agent`). See the
+            GKOS Engine Desktop install guide for the open-anyway steps
+            (macOS right-click → Open / `xattr`; Windows SmartScreen
+            "More info → Run anyway").

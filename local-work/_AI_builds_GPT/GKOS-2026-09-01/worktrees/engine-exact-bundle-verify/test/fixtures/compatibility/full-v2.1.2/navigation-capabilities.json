@@ -1,0 +1,20 @@
+{
+  "navigation_contract": "1.0.0",
+  "navigation": {
+    "discover": true,
+    "classify": true,
+    "candidate": true,
+    "diff": true,
+    "audit": true,
+    "context": true,
+    "reentry_plan": true,
+    "bounded_supersession_evaluation": true,
+    "governance_store_adapter": true,
+    "apply_moc": false,
+    "source_content_write": false,
+    "archive_delete": false,
+    "reentry_write": false,
+    "rollback_execution": false,
+    "reentry_record": false
+  }
+}

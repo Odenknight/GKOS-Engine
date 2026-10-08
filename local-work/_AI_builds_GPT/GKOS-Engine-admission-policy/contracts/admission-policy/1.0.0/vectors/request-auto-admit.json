@@ -1,0 +1,43 @@
+{
+  "schema": "gkos.admission-policy.request.v1",
+  "contract": "gkos.admission-policy.v1",
+  "contractVersion": "1.0.0",
+  "requestId": "fixture:auto-admit",
+  "idempotencyKey": "fixture:auto-admit:1",
+  "subject": {
+    "id": "fixture:artifact:auto",
+    "type": "derived_summary",
+    "contentHash": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+  },
+  "policyRef": {
+    "id": "fixture:bounded-derived-memory",
+    "version": "1.0.0",
+    "digest": "sha256:15a839802b373661c54d3a97b268db49291d84e0ac8aa9b42aaeed9eac4b94a4"
+  },
+  "inputHashes": [
+    { "name": "source-packet", "digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666" },
+    { "name": "semantic-assessment", "digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777" }
+  ],
+  "validity": {
+    "valid": true,
+    "receiptHash": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+  },
+  "artifact": {
+    "type": "derived_summary",
+    "reversible": true,
+    "reconstructable": true
+  },
+  "deterministicChecks": {
+    "receiptHash": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+    "detectedTriggers": []
+  },
+  "reviewer": {
+    "assessmentHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+    "independent": true,
+    "conflictsWithDeterministicChecks": false,
+    "unsupportedClaimIds": [],
+    "contradictionIds": [],
+    "scopeMatch": true,
+    "recommendedLane": "HUMAN_REVIEW"
+  }
+}
