@@ -116,6 +116,12 @@ try {
   writeFileSync(resolve(root, "dist/navigation-effects-node.mjs"), navigationEffectsNode);
   console.log("built dist/navigation-effects-node.mjs");
 
+  // Phase-6 F2 reference authority is a repository-private Node host boundary.
+  // It is intentionally absent from package exports and all F3 transports.
+  const identityAuthority = await bundle("src/identity-authority/index.ts", { platform: "node", format: "esm" });
+  writeFileSync(resolve(root, "dist/identity-authority.mjs"), identityAuthority);
+  console.log("built dist/identity-authority.mjs");
+
   // Invoke TypeScript's JS entry point directly via node (not the .cmd/.sh
   // shim) so this works identically across platforms with no shell involved.
   const tscJs = resolve(root, "node_modules/typescript/bin/tsc");
