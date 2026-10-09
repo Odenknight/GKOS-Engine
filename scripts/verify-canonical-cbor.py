@@ -152,6 +152,10 @@ class Decoder:
             previous = None
             for _ in range(value):
                 start = self.pos
+                # Match the typed decoder: the map-key grammar is checked before
+                # interpreting a forbidden key's floating/nested payload.
+                if self.pos >= len(self.data) or self.data[self.pos] >> 5 != 3:
+                    raise Refusal(1, 'nontext_map_key')
                 key = self.node(depth + 1)
                 if key['kind'] != 'text':
                     raise Refusal(1, 'nontext_map_key')

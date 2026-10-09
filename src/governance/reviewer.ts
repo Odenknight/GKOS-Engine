@@ -62,7 +62,11 @@ function instant(value: string): number {
   return normalized.slice(0, 19) === value.slice(0, 19) ? parsed : NaN;
 }
 function text(value: unknown): value is string { return typeof value === "string" && value.trim().length > 0 && !/[\r\n\u0000]/.test(value); }
-function snapshot<T>(value: T): T { return JSON.parse(JSON.stringify(value)); }
+function snapshot<T>(value: T): T { return JSON.parse(reviewerCanonicalBytes(value)); }
+function identity(value: unknown): value is string {
+  return text(value) && value === value.trim() && value === value.normalize("NFC")
+    && wellFormed(value) && !/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/.test(value);
+}
 function wellFormed(value: string): boolean {
   for (let i = 0; i < value.length; i++) {
     const unit = value.charCodeAt(i);
@@ -207,7 +211,8 @@ export async function evaluateReviewerAdmission(request: ReviewerAdmissionReques
   reject(!v || !["human", "agent"].includes(v.reviewerClass) || !text(v.reviewAuthorityId) || v.reviewAuthorityId === a?.id
     || !DIGEST.test(v.sealedEvidenceDigest) || !DIGEST.test(r.expectedReviewEvidenceDigest) || v.sealedEvidenceDigest !== r.expectedReviewEvidenceDigest, "REVIEW_AUTHORITY_INVALID");
   reject(!Number.isFinite(instant(v?.validUntil)) || !Number.isFinite(now) || now >= instant(v?.validUntil), "REVIEW_EXPIRED");
-  reject(v?.reviewerClass === "agent" && (!text(v.reviewerModelFamily) || !text(v.proposerModelFamily) || v.reviewerModelFamily === v.proposerModelFamily), "REVIEW_MODEL_FAMILY_INVALID");
+  reject(v?.reviewerClass === "agent" && (!identity(v.reviewerModelFamily) || !identity(v.proposerModelFamily)
+    || v.reviewerModelFamily.toLowerCase() === v.proposerModelFamily.toLowerCase()), "REVIEW_MODEL_FAMILY_INVALID");
   reject(typeof v?.mandatoryEscalation !== "boolean" || typeof v?.humanEscalationResolved !== "boolean"
     || (v?.mandatoryEscalation === true && v?.humanEscalationResolved !== true), "HUMAN_ESCALATION_REQUIRED");
   const scopeKeys = ["purpose", "audience", "environment", "sensitivity", "operation", "targetId", "maxAffected"];
@@ -223,7 +228,7 @@ export async function evaluateReviewerAdmission(request: ReviewerAdmissionReques
   reject(a?.contextDigest !== c?.contextDigest || p?.contextDigest !== c?.contextDigest || v?.contextDigest !== c?.contextDigest
     || a?.proposalDigest !== p?.digest || v?.proposalDigest !== p?.digest, "DECISION_BINDING_MISMATCH");
   const roles = [p?.proposerId, v?.reviewerId, a?.authorizerId, r?.actor?.id];
-  reject(!roles.every(text) || new Set(roles).size !== roles.length, "ROLE_SEPARATION_FAILED");
+  reject(!roles.every(identity) || new Set(roles).size !== roles.length, "ROLE_SEPARATION_FAILED");
   reject(!DIGEST.test(r?.targetDigest) || !DIGEST.test(r?.expectedTargetDigest) || r.targetDigest !== r.expectedTargetDigest, "TARGET_PRECONDITION_FAILED");
   reject(r?.receiptAvailable !== true, "RECEIPT_UNAVAILABLE");
   const reasonCodes = [...reasons].sort();

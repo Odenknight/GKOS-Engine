@@ -45,9 +45,20 @@ The readable format is `gkos.cbor.typed-json.v1`. Integer values render as decim
 
 ## Evidence and outstanding gates
 
-Reuse note (2026-10-07): this source and the codec/tests/verifier were imported
-from `6842051ff697dd65a8fc0072c078dc81bc8a9bd9`. The historical evidence and
-review descriptions below refer to that upstream commit, not execution at this
+Reuse note (2026-10-07): `src/canonical-cbor.ts`,
+`test/canonical-cbor-vectors.json`, `scripts/verify-canonical-cbor.py` and
+`scripts/verify-canonical-cbor-cross-language.mjs` were imported byte-identically
+from Carson commit `6842051ff697dd65a8fc0072c078dc81bc8a9bd9`. The Python decoder
+now checks nontext map-key grammar before interpreting the forbidden payload,
+matching TypeScript refusal precedence; accepted bytes and identities are unchanged.
+The imported runtime test
+`test/canonical-cbor-runtime.test.mjs` was subsequently adapted in its test title
+and expected package exports to include `./governance/artifacts`.
+
+Carson is a partial author of this reused CBOR slice and cannot be its sole
+non-author reviewer. A different model family does not remove that authorship
+relationship or establish independent assessment. The historical evidence and
+review descriptions below refer to the upstream commit, not execution at this
 checkout. This checkout's reviewer test evidence is recorded separately; no
 upstream qualification is inherited. The upstream development workflow and
 historical evidence directory were not copied.
@@ -56,4 +67,4 @@ Development evidence is under `evidence/canonical-cbor-development/`, including 
 
 A Kimi K2.6/OpenRouter counter-review is different-model-family **internal developer review**. Neither it nor separately written Python creates organizational independence or external-assessor standing. Full baseline/current regression results and GitHub CI must be recorded from their real completion output before publication can be called regression-clean or CI-green.
 
-The next governed slice still needs schema-declared Selection Envelope/Context Manifest fields and digest-bound applicability, followed by action-time authority, effect/receipt binding, durable evidence, independently observed target state, and correction/recovery. Existing N00-N19/P01-P10 cases remain unevaluated by this byte-codec work.
+At the upstream codec-only stage, the next governed slice still needed schema-declared Selection Envelope/Context Manifest fields and digest-bound applicability, followed by action-time authority, effect/receipt binding, durable evidence, independently observed target state, and correction/recovery. The subsequent [reviewer artifact V2 contract](../contracts/reviewer-artifacts-v2.md) describes the implemented five adopted artifact roles and bounded admission boundary. Durable host effects and replay belong to the consumer implementation. Neither the byte codec nor that later V2 implementation alone establishes full profile qualification or completion of all N00-N19/P01-P10 obligations.

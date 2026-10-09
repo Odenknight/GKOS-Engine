@@ -397,6 +397,9 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
           if (isWork && !validWork()) { send(response, 403, GENERIC_FORBIDDEN, requestOrigin); return; }
           const checkedIdentity = token ? options.credentials.resolve(token) : null;
           if (!checkedIdentity || checkedIdentity.revoked || checkedIdentity.credentialId !== currentIdentity.credentialId || checkedIdentity.agentId !== currentIdentity.agentId || checkedIdentity.sensitivityCeiling !== currentIdentity.sensitivityCeiling || JSON.stringify(checkedIdentity.capabilities) !== JSON.stringify(currentIdentity.capabilities)) { send(response, 401, GENERIC_DENIAL, requestOrigin); return; }
+          // Initialization must not allocate a session after asynchronous setup
+          // has outlived the client connection.
+          if (disconnected.signal.aborted || response.destroyed) return;
           const reply = await mcp.handle(body, sessionId, {
             identity: checkedIdentity, view: authorized.view, generation: Math.max(1, Number(authorized.authorization.generation)),
             policyDecisionId: POLICY_DECISION_ID, policyDigest: authorized.authorization.policyDigest, sourceRecords: snapshot.sourceRecords,
@@ -436,7 +439,10 @@ export function createLocalServiceRequestHandler(options: LocalServiceOptions):
           const finalIdentity = token ? options.credentials.resolve(token) : null;
           if (!finalIdentity || finalIdentity.revoked || finalIdentity.credentialId !== checkedIdentity.credentialId || finalIdentity.agentId !== checkedIdentity.agentId || finalIdentity.sensitivityCeiling !== checkedIdentity.sensitivityCeiling || JSON.stringify(finalIdentity.capabilities) !== JSON.stringify(checkedIdentity.capabilities)) { mcp.closeCredentialSessions(checkedIdentity.credentialId); send(response, 401, GENERIC_DENIAL, requestOrigin); return; }
           if (isWork && !validWork()) { if (!response.destroyed) send(response, 403, GENERIC_FORBIDDEN, requestOrigin); return; }
-          if (response.destroyed) return;
+          if (response.destroyed) {
+            if (!sessionId && reply.sessionId) mcp.delete(reply.sessionId, checkedIdentity);
+            return;
+          }
           if (reply.body === null) { cors(response, requestOrigin); response.writeHead(reply.status ?? 202); response.end(); return; }
           const bytes = jsonBytes(reply.body);
           if (bytes.length > MCP_RESULT_BYTES) { send(response, 500, { error: "result_too_large" }, requestOrigin); return; }
