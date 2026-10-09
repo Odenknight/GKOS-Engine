@@ -22,8 +22,32 @@ CR/LF remain significant in every string. Object keys sort by UTF-16 code units;
 arrays preserve order. Only safe integers (not negative zero), booleans, null,
 well-formed strings, arrays and plain objects are supported. Undefined values,
 sparse/cyclic arrays, nonfinite/floating numbers and lone surrogates are rejected.
-Identity fields reject newlines. Hostile keys including `__proto__` are retained.
+Role identities require well-formed NFC text without leading/trailing whitespace,
+control characters or Unicode line separators. Noncanonical IDs are refused rather
+than silently normalized. Agent model-family labels have the same grammar and
+are compared case-insensitively for separation; labels are not model attestations.
+Hostile keys including `__proto__` are retained.
 Legacy Engine `canonicalJson` keeps its established newline normalization.
+
+The generic Engine canonicalizer now retains an own `__proto__` key; the older
+plain-object implementation discarded it. Digests for values containing that key
+therefore differ from historical digests. Ordinary values are unaffected. Do not
+reinterpret old evidence with a new digest or infer cross-version hash parity.
+This generic normalized JSON profile is separate from reviewer exact JSON and CBOR.
+
+All reviewer inputs must first be representable in this exact JSON profile.
+Unrepresentable values (including nonfinite numbers, negative zero, fractions,
+undefined, cycles, dates and lone surrogates) reject with `TypeError` before a
+decision or binding digest is produced. They are not repaired by JSON conversion
+and cannot be treated as admission. Representable semantic errors yield refusals.
+This is an API representability boundary, not a normative GKOS refusal receipt.
+
+The in-memory governance adapter captures deeply frozen record/precondition clones
+before queueing. Availability callbacks receive immutable snapshots and must be
+synchronous boolean providers. A semantic refusal returns `committed:false`;
+unrepresentable adapter inputs or a thrown provider error reject the promise without
+publishing state. Provider rejection identity is preserved and later queue entries
+remain usable; callers must not turn a rejection into an authorization result.
 
 `evaluateReviewerAdmission(request)` binds the exact context to run, corpus,
 policy, authenticated executor, proposal, completed approving review, current
@@ -36,8 +60,10 @@ codes are implementation diagnostics, not allocated GKOS normative codes.
 `reviewer-diagnostic-map-v1.json` maps their related requirements and registered
 gates as implementation evidence; a map does not make a product receipt normative.
 
-Admission also verifies supplied authoritative source revisions and exact raw
-bytes against the captured inventory; authoritative required source IDs and
+Admission also verifies supplied authoritative source revisions and the exact
+UTF-8 encoding of supplied well-formed JavaScript text against the captured
+inventory. It does not read original files or validate an earlier decoding step;
+callers must preserve and validate that boundary. Authoritative required source IDs and
 warning codes must be present in selection/closure. Captured warnings remain
 visible without claiming user acknowledgement. Context construction performs
 no retrieval or semantic contradiction inference: the host's pinned fixture
@@ -102,8 +128,11 @@ missing decision gate without changing those APIs or claiming broader standing.
 The private CBOR codec (`src/canonical-cbor.ts`), vectors
 (`test/canonical-cbor-vectors.json`), Python verifier and cross-language script
 (`scripts/verify-canonical-cbor.py` and
-`scripts/verify-canonical-cbor-cross-language.mjs`) are byte-identical to Carson
-commit `6842051ff697dd65a8fc0072c078dc81bc8a9bd9`. The imported runtime test
+`scripts/verify-canonical-cbor-cross-language.mjs`) were imported byte-identically
+from Carson commit `6842051ff697dd65a8fc0072c078dc81bc8a9bd9`. The Python decoder
+now checks nontext map-key grammar before its forbidden payload, matching the
+TypeScript refusal precedence; accepted bytes and identities are unchanged.
+The imported runtime test
 was subsequently adapted in its title and expected package exports for the
 `./governance/artifacts` subpath. Carson is a partial author of the reused CBOR
 slice and cannot be its sole non-author reviewer; different-family technical

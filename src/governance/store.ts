@@ -50,7 +50,7 @@ export class InMemoryGovernanceStore implements GovernanceStore {
 
   async append<T>(record: GovernedRecord<T>, options: GovernanceAppendOptions): Promise<GovernanceAppendResult<T>> {
     // Snapshot before queueing: callers cannot mutate an awaiting proposal.
-    const proposal = clone(record), preconditions = clone(options);
+    const proposal = deepFreeze(clone(record)), preconditions = deepFreeze(clone(options));
     const operation = this.appendQueue.then(() => this.appendSerialized(proposal, preconditions));
     this.appendQueue = operation.catch(() => undefined);
     return operation;

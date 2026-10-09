@@ -692,8 +692,8 @@
     {
       "path": "contracts/reviewer-development-v1.md",
       "before": null,
-      "after": "1e62e189eecfdd592c186b729e88f2894dfcb3133449191159c52c4a694f5a99",
-      "rationale": "Root-reviewed448f3df documentation attribution correction: exact Carson codec/vector/verifier reuse and adapted test provenance, partial authorship/non-author review boundary; historical next-slice narrative references existing V2 without extending qualification. No runtime or canonical bytes changed."
+      "after": "00b9b68b57a41f8352ec676622c6ef30d06b1a049434542c416a0639c80bf25a",
+      "rationale": "Root-reviewed448f3df documentation attribution correction: exact Carson codec/vector/verifier reuse and adapted test provenance, partial authorship/non-author review boundary; historical next-slice narrative references existing V2 without extending qualification. No runtime or canonical bytes changed. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
     },
     {
       "path": "contracts/reviewer-diagnostic-map-v1.json",
@@ -908,8 +908,8 @@
     {
       "path": "docs/canonical-cbor-development.md",
       "before": null,
-      "after": "a4ff57880d1c3634ce5d7e7f5c0d2ed465009cba52abc55867673de247504d45",
-      "rationale": "Root-reviewed448f3df documentation attribution correction: exact Carson codec/vector/verifier reuse and adapted test provenance, partial authorship/non-author review boundary; historical next-slice narrative references existing V2 without extending qualification. No runtime or canonical bytes changed."
+      "after": "40116385564f1e8c2f2d016c6b88876701c04ac64e66c0e93acc65dd8ac38326",
+      "rationale": "Root-reviewed448f3df documentation attribution correction: exact Carson codec/vector/verifier reuse and adapted test provenance, partial authorship/non-author review boundary; historical next-slice narrative references existing V2 without extending qualification. No runtime or canonical bytes changed. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
     },
     {
       "path": "docs/classifier/GKOS-Classifier-Rust-TypeScript-Build-Plan.md",
@@ -1268,8 +1268,8 @@
     {
       "path": "scripts/verify-canonical-cbor.py",
       "before": null,
-      "after": "2cb05b58ab9ca5e0d57b8b835396f26456d676a99142fd8126daa5127bf6f176",
-      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification."
+      "after": "99a8f13864435f68e910e5bb819102171850b1afd1f0a62835884f502c4aa784",
+      "rationale": "Reuse bounded private Carson 6842051 CBOR source/tests/verifier; new current execution required, no inherited qualification. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
     },
     {
       "path": "scripts/verify-documentation-artifact.mjs",
@@ -1442,14 +1442,14 @@
     {
       "path": "src/governance/reviewer.ts",
       "before": null,
-      "after": "5f68e72442a9977281260337da1ec117f2fcbbc4141001323ec81da4c25c12f5",
-      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+      "after": "2b56a51dab7e62f4a452f71dd1c92cbf5ab0b4baf0dff792ddd3585d0edec231",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
     },
     {
       "path": "src/governance/store.ts",
       "before": "8d6e05bed5ca4b93f7d52643912c56844727c5a5",
-      "after": "1305acddf300ee5f97850a60c19db6f76259571ddf639f1cfa371d93d582089a",
-      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+      "after": "c77bba1f30513010815cb1a818a252f5ff1381e7420e3476b2e1213b4b115c89",
+      "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
     },
     {
       "path": "src/graphiti-adapter.ts",
@@ -1764,6 +1764,12 @@
       "rationale": "Reviewed Navigation Effects integration: additive, default-disabled implementation, contract, evidence, or qualification coverage; no activation or release authority."
     },
     {
+      "path": "test/canonical-cbor-key-parity.test.mjs",
+      "before": null,
+      "after": "cc57dc65e57176778345dfdfbdf737bf4437342a7b148efb505cc3111c956743",
+      "rationale": "Bounded generic integrity regression; requires current-runtime checks. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
+    },
+    {
       "path": "test/canonical-cbor-runtime.test.mjs",
       "before": null,
       "after": "e01100a7325667826848c4b35eb62d081e1236313c43fdb7fc465982b4f76f33",
@@ -1870,6 +1876,12 @@
       "before": null,
       "after": "750d77bb1368aabf81251ad4776d196426fbe692ac48e9e80b7758bbd76fb803",
       "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+    },
+    {
+      "path": "test/governance-callback-integrity.test.mjs",
+      "before": null,
+      "after": "7624854977d16c40e95171ac29f953277b6520738a94758b0f07e14ca1886f0a",
+      "rationale": "Bounded generic integrity regression; requires current-runtime checks. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
     },
     {
       "path": "test/graphiti-broker.test.mjs",
@@ -2062,6 +2074,12 @@
       "before": null,
       "after": "47c48270210bd8c1cbb6ddc0cc68345a5bfb37ca7d42c043e43b2e05eb9ba3ca",
       "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
+    },
+    {
+      "path": "test/reviewer-integrity.test.mjs",
+      "before": null,
+      "after": "0b0294d79db00bbd34e3517037a1eab35372f262834108ad16c6c2705ceea69b",
+      "rationale": "Bounded generic integrity regression; requires current-runtime checks. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
     },
     {
       "path": "test/runtime-qualification.test.mjs",

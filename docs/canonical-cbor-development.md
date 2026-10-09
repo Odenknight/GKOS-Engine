@@ -47,8 +47,11 @@ The readable format is `gkos.cbor.typed-json.v1`. Integer values render as decim
 
 Reuse note (2026-10-07): `src/canonical-cbor.ts`,
 `test/canonical-cbor-vectors.json`, `scripts/verify-canonical-cbor.py` and
-`scripts/verify-canonical-cbor-cross-language.mjs` are byte-identical to Carson
-commit `6842051ff697dd65a8fc0072c078dc81bc8a9bd9`. The imported runtime test
+`scripts/verify-canonical-cbor-cross-language.mjs` were imported byte-identically
+from Carson commit `6842051ff697dd65a8fc0072c078dc81bc8a9bd9`. The Python decoder
+now checks nontext map-key grammar before interpreting the forbidden payload,
+matching TypeScript refusal precedence; accepted bytes and identities are unchanged.
+The imported runtime test
 `test/canonical-cbor-runtime.test.mjs` was subsequently adapted in its test title
 and expected package exports to include `./governance/artifacts`.
 
