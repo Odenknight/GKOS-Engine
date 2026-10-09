@@ -152,3 +152,50 @@ must pin the intended standard edition and keep unexecuted broader obligations
 explicit. Host compromise, organizational independence, human outcomes,
 production qualification and full normative Context Manifest/authority schemas
 remain outside this implementation's demonstrated scope.
+
+## Complete proposal basis for new V2 authority
+
+New `buildReviewerArtifactsV2` and `evaluateReviewerAdmissionV2` calls require
+`proposalBasis: {profile: 'gkos-reviewer-proposal-basis/1', schemaVersion: '1.0.0',
+record: ...}`. `record` is the complete captured host proposal or correction
+before its top-level `proposal_digest` is added. This is an implementation
+producer profile, not a sixth adopted GKOS artifact role. The executable
+accepted field and nested-shape contract is `src/governance/proposal-basis.ts`.
+Only top-level `proposal_digest` is excluded; legitimate nested digest fields
+remain committed. Unknown fields, profiles, versions, absent basis, malformed
+base targets, and opaque legacy substitutes cannot establish new authority.
+
+The builder verifies SHA-256 over the complete exact-JSON record against the
+asserted private proposal digest and SHA-256 over the exact well-formed UTF-8
+markdown against the intended result digest. The full record is capped at
+262,144 UTF-8 bytes; markdown at 65,536. Proposal identity, proposer, run,
+context and intended result must match admission inputs. Captured context IDs,
+sequence, time, stimulus, expected outcome, base target and correction fields
+remain in the commitment. Binding does not itself establish epistemic validity.
+
+`buildReviewerProposalBasisV1` emits a custom canonical payload containing
+`canonical_profile`, `artifact_type: reviewer-proposal-basis`, `schema_version`,
+`profile`, `proposal_id`, `proposal_kind`, `context_manifest_ref`, and
+`record_bytes`. The last field is a CBOR byte string containing the complete
+exact-JSON UTF-8 record; non-NFC and CRLF source text is preserved. Other fields
+use canonical text/maps. SHA-256 over these canonical CBOR bytes establishes
+the authority receipt's `authority_source_ref`. This custom source commitment
+is distinct from an adopted role and does not claim full profile qualification.
+
+Correction records require a captured successful evaluation, and admission
+independently recomputes the correction evaluator and compares its complete
+result. Private basis rejection is `PROPOSAL_BASIS_INVALID`, a product refusal
+without an invented registered GKOS diagnostic. Existing canonical artifact
+validation retains its applicable registered diagnostics. The complete basis
+is snapshotted before asynchronous admission work.
+
+Hosts adopting this API must declare the exact `proposal_basis_contract`
+marker and independently reproduce the same full record and custom source
+commitment in replay. Markerless historical captures retain their original
+read-only verifier dispatch; they cannot be supplied as a weaker alternative
+for new authority. This source change does not adopt or rewrite the frozen
+c611 runtime or its historical qualification.
+
+Nonrepresentable full-basis values (including NaN, negative zero, fractions,
+lone surrogates and nonplain objects) reject with TypeError before a decision
+or binding digest, consistently with the exact-JSON request boundary.

@@ -692,8 +692,8 @@
     {
       "path": "contracts/reviewer-development-v1.md",
       "before": null,
-      "after": "00b9b68b57a41f8352ec676622c6ef30d06b1a049434542c416a0639c80bf25a",
-      "rationale": "Root-reviewed448f3df documentation attribution correction: exact Carson codec/vector/verifier reuse and adapted test provenance, partial authorship/non-author review boundary; historical next-slice narrative references existing V2 without extending qualification. No runtime or canonical bytes changed. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
+      "after": "b4a9091cc9790cfbad414d7f901e9df33a3c8e38e00b793c5c1a239656abe1f5",
+      "rationale": "Root-reviewed448f3df documentation attribution correction: exact Carson codec/vector/verifier reuse and adapted test provenance, partial authorship/non-author review boundary; historical next-slice narrative references existing V2 without extending qualification. No runtime or canonical bytes changed. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption. Require complete captured producer bytes and independently checked correction standing, no opaque fallback or frozen adoption."
     },
     {
       "path": "contracts/reviewer-diagnostic-map-v1.json",
@@ -1412,8 +1412,8 @@
     {
       "path": "src/governance/artifact-index.ts",
       "before": null,
-      "after": "102b9259ddf9a7e5006b68559099904931038f698fac60ef8f5a3363ad2fb46b",
-      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+      "after": "45a1b123379e34f492360171eb5593ef8476abae2a6ff4f1d509b043b919c1a1",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs. Require complete captured producer bytes and independently checked correction standing, no opaque fallback or frozen adoption."
     },
     {
       "path": "src/governance/artifact-schemas.ts",
@@ -1434,10 +1434,16 @@
       "rationale": "Owner-authorized reviewer contract completion: exact evidence, deterministic authority/review/closure/effect/recovery gates or explicit additive API regression checks; historical frozen fixtures preserved."
     },
     {
+      "path": "src/governance/proposal-basis.ts",
+      "before": null,
+      "after": "b1653ea0668066f1e1c31956038a9fcd99c21be4a03e008694d2b54caf4ebf75",
+      "rationale": "Versioned complete proposal-basis authority binding; current-runtime validation required. Require complete captured producer bytes and independently checked correction standing, no opaque fallback or frozen adoption."
+    },
+    {
       "path": "src/governance/reviewer-v2.ts",
       "before": null,
-      "after": "69975a0dd03c3a884eaa8defbcc4d58e6e925a966c3986322c1fa495b788bb77",
-      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+      "after": "052f934a488d0a5ca21c75979c7e93486a71b9837c00580d8380214b1ecb5a75",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs. Require complete captured producer bytes and independently checked correction standing, no opaque fallback or frozen adoption."
     },
     {
       "path": "src/governance/reviewer.ts",
@@ -1868,8 +1874,8 @@
     {
       "path": "test/fixtures/reviewer-artifact-basis.mjs",
       "before": null,
-      "after": "af43e886706bf4248193089f12bca8353c1d8817699ab02d1c22c40b2482e206",
-      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+      "after": "25ef3a04a70bcb801bff9528c6f33c9e106c79f877ec98bd52c5a4049cddb2b4",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs. Require complete captured producer bytes and independently checked correction standing, no opaque fallback or frozen adoption."
     },
     {
       "path": "test/fixtures/reviewer-v2.mjs",
@@ -2066,8 +2072,8 @@
     {
       "path": "test/reviewer-artifacts.test.mjs",
       "before": null,
-      "after": "b417776857eec1bea2f555b0b971a58ea644c224013ca362120c8bb82ca456c9",
-      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs."
+      "after": "ae8075ba74b9d39af26e8560a4748b6cee41a1e81408be0b5c03e093a4ef501d",
+      "rationale": "Reviewer V2 corrective slice: adopted pinned artifact validation, canonical CBOR identities, bounded admission and capability coverage, or explicit qualification evidence/export inputs. Require complete captured producer bytes and independently checked correction standing, no opaque fallback or frozen adoption."
     },
     {
       "path": "test/reviewer-contract.test.mjs",
@@ -2080,6 +2086,12 @@
       "before": null,
       "after": "0b0294d79db00bbd34e3517037a1eab35372f262834108ad16c6c2705ceea69b",
       "rationale": "Bounded generic integrity regression; requires current-runtime checks. Generic identity/callback and canonical representability/diagnostic parity correction; no frozen runtime adoption."
+    },
+    {
+      "path": "test/reviewer-proposal-basis.test.mjs",
+      "before": null,
+      "after": "3fed0361f44d3fffa3ba9b156e87f5cde16d1a350fb498c4e2bad589f7af5ba9",
+      "rationale": "Versioned complete proposal-basis authority binding; current-runtime validation required. Require complete captured producer bytes and independently checked correction standing, no opaque fallback or frozen adoption."
     },
     {
       "path": "test/runtime-qualification.test.mjs",

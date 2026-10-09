@@ -100,7 +100,7 @@ test('opaque captured source bytes preserve non-NFC and CRLF, without silently r
   assert.notDeepEqual(gkosCapturedInputDigest('x\r\n'),gkosCapturedInputDigest('x\n'));
   assert.throws(()=>gkosCapturedInputDigest('\ud800'));
   const b=clone(basis),sources=clone(contextInput.sources);sources[0].content='e\u0301\r\n';b.request.context=await buildReviewerContext({...contextInput,sources});
-  b.request.authoritativeSources=sources;assert.doesNotThrow(()=>buildReviewerArtifactsV2(b));
+  b.request.authoritativeSources=sources;b.proposalBasis.record.context_digest=b.request.context.contextDigest;b.request.proposal.contextDigest=b.request.context.contextDigest;b.request.proposal.digest=await reviewerCanonicalDigest(b.proposalBasis.record);assert.doesNotThrow(()=>buildReviewerArtifactsV2(b));
 });
 test('mandatory retention evidence, conflicts, expiry and authorized disposition fail closed',async()=>{
   assert.equal((await evaluateReviewerRetention(retention)).admitted,true);

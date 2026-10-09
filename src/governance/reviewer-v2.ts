@@ -1,4 +1,5 @@
-import { evaluateReviewerAdmission, ReviewerAdmissionRequest, reviewerCanonicalDigest } from './reviewer';
+import { buildReviewerProposalBasisV1, ReviewerProposalBasis, ReviewerProposalBasisError } from './proposal-basis';
+import { evaluateReviewerAdmission, evaluateReviewerCorrection, reviewerCanonicalBytes, ReviewerAdmissionRequest, reviewerCanonicalDigest } from './reviewer';
 import { sha256Bytes } from '../canonical';
 import { registeredDiagnosticPairs, reviewerRegisteredDiagnostics } from './artifact-diagnostics';
 import { GkosArtifactError, GkosArtifactPacket, gkosArtifactEncode, gkosArtifactValidate, gkosCapturedInputDigest, GKOS_ARTIFACT_STANDARD } from './artifacts';
@@ -8,6 +9,7 @@ export type ReviewerRecoveryKind = 'correction'|'compensation'|'rollback'|'escal
 export interface ReviewerRecoveryRoute { kind:ReviewerRecoveryKind; procedureRef:string; evidenceRef:string; available:boolean }
 export interface ReviewerArtifactBasisV2 {
   request:ReviewerAdmissionRequest;
+  proposalBasis:ReviewerProposalBasis;
   issuedAt:string;
   issuer:{actor_id:string;actor_class:'human'|'agent'|'service'|'tool'|'organization'};
   proofMechanism:string;
@@ -46,7 +48,7 @@ export function buildReviewerArtifactsV2(input:ReviewerArtifactBasisV2) {
   const b=structuredClone(input),r=b.request,a=r.authority;
   const {selection,context}=buildReviewerContextArtifactsV2({...r,purpose:r.requestedEffect.purpose,recipientId:r.actor.id,selectedById:b.selectedById||r.proposal.proposerId,selectedByClass:b.selectedByClass,compilerRef:b.compilerRef});
   const policy=context.document.policy_ref;
-  const proposal=inputRef(r.proposal.id,'1',{...r.proposal,context_manifest_ref:context.reference,intended_result_digest:r.intendedResultDigest});
+  const proposal=buildReviewerProposalBasisV1(b.proposalBasis,r,context).reference;
   const authority=gkosArtifactEncode({canonical_profile:'GKX-CBOR-1',artifact_type:'authority-receipt',schema_version:'1.0.0',receipt_id:a.id,receipt_version:String(r.expectedAuthorityRevision),issuer:b.issuer,grantor:actor(a.authorizerId,'human'),grantee:actor(a.actorId,r.actor.class),authority_source_ref:proposal,permitted_action_classes:a.operations,effect_scope:nativeScope(a.effectScope),purpose_scope:[a.effectScope.purpose],delegation_permitted:false,issued_at:micro(b.issuedAt),valid_from:micro(a.validFrom),valid_until:micro(a.validUntil),policy_ref:policy,revocation:{status:'not-revoked',checked_at:micro(b.issuedAt),method:'serialized-authoritative-host-state'},nonce:a.id,proof_mechanism:b.proofMechanism});
   return {selection,context,authority};
 }
@@ -54,6 +56,7 @@ export interface ReviewerAdmissionRequestV2 extends ReviewerArtifactBasisV2 { ar
 /** New authority requires canonical artifacts; legacy evaluator remains for historical replay. */
 export async function evaluateReviewerAdmissionV2(input:ReviewerAdmissionRequestV2) {
   const b=structuredClone(input),r=b.request;
+  if(b.proposalBasis!==undefined)b.proposalBasis=JSON.parse(reviewerCanonicalBytes(b.proposalBasis));
   const base=await evaluateReviewerAdmission(r);
   const reasons=base.reasonCodes.filter(code=>code!=='RECOVERY_ROUTE_UNAVAILABLE');
   const readinessPredicates=[{id:'engine:reviewer-v2-execution-state-ready',version:'2.0.0',input:r.executionState,outcome:r.executionState==='ready'?'pass':'held'},
@@ -65,11 +68,15 @@ export async function evaluateReviewerAdmissionV2(input:ReviewerAdmissionRequest
   const reject=(code:string,requirementId:string,reason:string)=>{diagnostics.push({code,requirementId,reason});reasons.push(reason);};
   try {
     const expected=buildReviewerArtifactsV2(b);
+    if(b.proposalBasis.record.kind==='correction') {
+      const actual=await evaluateReviewerCorrection(b.proposalBasis.record.correction_request);
+      if(!actual.admitted||reviewerCanonicalBytes(actual)!==reviewerCanonicalBytes(b.proposalBasis.record.correction_evaluation))throw new ReviewerProposalBasisError();
+    }
     for(const role of ['selection','context','authority'] as const) {
       const artifact=gkosArtifactValidate(b.artifacts?.[role]);
       if(artifact.canonicalHex!==expected[role].canonicalHex)reject('GKOS-GATE-L6-006','GKOS-CANON-006','CANONICAL_ARTIFACT_BINDING_MISMATCH');
     }
-  } catch(error) {reject((error as any).code||'GKOS-GATE-L6-006',(error as any).requirementId||'GKOS-CANON-006','CANONICAL_ARTIFACT_INVALID');}
+  } catch(error) {if(error instanceof ReviewerProposalBasisError){reasons.push(error.implementationCode);productRefusals.push({reason:error.implementationCode,scope:'implementation proposal-basis validation; no registered GKOS predicate asserted'});}else reject((error as any).code||'GKOS-GATE-L6-006',(error as any).requirementId||'GKOS-CANON-006','CANONICAL_ARTIFACT_INVALID');}
   const kinds=['correction','compensation','rollback','escalation'];
   if(!Array.isArray(b.requiredRecoveryKinds)||!b.requiredRecoveryKinds.length||new Set(b.requiredRecoveryKinds).size!==b.requiredRecoveryKinds.length||!Array.isArray(b.recoveryRoutes)||new Set(b.recoveryRoutes.map(v=>v.kind)).size!==b.recoveryRoutes.length||b.recoveryRoutes.some(v=>!kinds.includes(v.kind)||typeof v.available!=='boolean'||!v.procedureRef||!v.evidenceRef)||b.requiredRecoveryKinds.some(kind=>!kinds.includes(kind)||!b.recoveryRoutes.some(route=>route.kind===kind&&route.available)))reject('GKOS-GATE-L7-006','GKOS-AUTHUSE-006','RECOVERY_ROUTE_UNAVAILABLE');
   const e=b.escalation,needed=r.review.mandatoryEscalation||r.controls.checker.recommendation==='escalate';
