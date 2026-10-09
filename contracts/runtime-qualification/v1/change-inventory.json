@@ -1724,8 +1724,8 @@
     {
       "path": "src/service/server.ts",
       "before": "d98402ff8f9f4c1400339b7e4f578422262b61b8",
-      "after": "aec79df1cebdb571245d5ae4c36764b5e813c425351f923601dfa6ed6115a0ea",
-      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72)."
+      "after": "923869f7524b87d1c56869508d6c5ac11f9ac0d5d624d7b1a71d7e23e2fd261f",
+      "rationale": "Scoped lineage inspection for host-authorized node sets, MOC rename self-write guard, lone-surrogate refusal in Graphiti query text, per-response REST credential recheck and watcher latency diagnostics (landed from #72). Native initialization refuses allocation after client disconnect during asynchronous setup and deletes only an undeliverable reply-owned new session; existing sessions remain untouched."
     },
     {
       "path": "src/types.ts",
@@ -2086,6 +2086,12 @@
       "before": null,
       "after": "7a0c036ac2e100d73540d5d04e2a9f9781b88227d4f7b3255f5caeb644d14e71",
       "rationale": "Add an opt-in Graphiti MCP search bound to server-derived authorization, clearance-scoped source attestations, post-await revocation and generation checks, bounded verified citations, and adversarial isolation tests; no native fallback or client-selected scope."
+    },
+    {
+      "path": "test/service-init-disconnect.test.mjs",
+      "before": null,
+      "after": "00eaf7724cd2ff37b31564d4c39b53c8fc180d386f0eee5103496bcf5ec40a2b",
+      "rationale": "Held-snapshot actual HTTP disconnect regression proves no lost native initialization slot, preserves an existing session, and retains the eight-session ceiling."
     },
     {
       "path": "test/service-param-errors.test.mjs",
