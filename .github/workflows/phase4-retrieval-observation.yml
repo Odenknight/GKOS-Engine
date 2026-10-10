@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   observe:
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) && 'ubuntu-latest' || fromJSON('["self-hosted","Linux","X64","r720-ci"]') }}
     timeout-minutes: 45
     env:
       GIT_CONFIG_COUNT: 1
